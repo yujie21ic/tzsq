@@ -3,7 +3,6 @@ import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
 import { get笔Index, 合并后的K线, get线段 } from './lib/缠中说禅'
 import { 线段Layer } from './lib/Chart/Layer/线段Layer'
 import { 合并后的Layer } from './lib/Chart/Layer/合并后的Layer'
-import { 缠中说禅Layer } from './lib/Chart/Layer/缠中说禅Layer'
 import { LineLayer } from './lib/Chart/Layer/LineLayer'
 import { 笔Layer } from './lib/Chart/Layer/笔Layer'
 import { BarLayer } from './lib/Chart/Layer/BarLayer'
@@ -29,7 +28,7 @@ const load = async () => {
     const arr = (await DBClient.func.getKLine({
         type: '1m',
         symbol: nowSymbol,
-        startTime: Date.now() - 24 * 60 * 60 * 1000,
+        startTime: Date.now() - 24 * 60 * 60 * 1000 * 4,
         endTime: Date.now(),
     })).data
     if (arr === undefined) {
@@ -112,7 +111,6 @@ chartInit(({ layer }) => {
                 heightPercentage: 0.4,
                 layerList: [
                     layer(KLineLayer, { data: klineData }),
-                    layer(缠中说禅Layer, {}),
                     layer(笔Layer, { data: get笔Index(klineData), color: 0xffff00 }),
                     layer(线段Layer, { data: get线段(get笔Index(klineData)), color: 0xaa0000 }),
                     layer(合并后的Layer, { data: 合并后的K线(klineData), color: 0xffff00 }),
