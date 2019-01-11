@@ -1,0 +1,64 @@
+import * as Sequelize from 'sequelize'
+import { BaseType } from '../lib/BaseType'
+import { SyncKLine } from './SyncKLine'
+import { DB } from './DB'
+import { timeID } from '../lib/F/timeID'
+import { sleep } from '../lib/C/sleep'
+
+
+export const syncBinance1M = (symbol: BaseType.BinanceSymbol) =>
+    new SyncKLine({
+        getTable: () => DB.getKLine('1m', symbol).table,
+        get采集start: async (lastItemID: number) => {
+            if (isNaN(lastItemID)) {
+                return 0
+            } else {
+                const timestamp = timeID.oneMinuteIDToTimestamp((lastItemID + 1))
+
+                const obj = await DB.getTrades(symbol).table.findOne({
+                    raw: true,
+                    where: {
+                        timestamp: {
+                            [Sequelize.Op.gte]: timestamp,
+                        }
+                    },
+                    order: ['id'],
+                })
+
+                if (obj) {
+                    return obj.id
+                } else {
+                    return 0 //<---------
+                }
+            }
+        },
+        getData: async (start: number) => {
+            const tickArr = (await DB.getTrades(symbol).table.findAll({
+                raw: true,
+                where: {
+                    id: {
+                        [Sequelize.Op.gte]: start,
+                    }
+                },
+                order: ['id'],
+                limit: 1000
+            })).map(v => ({
+                id: timeID.timestampToOneMinuteID(v.timestamp),
+                open: v.price,
+                high: v.price,
+                low: v.price,
+                close: v.price,
+                buySize: v.size > 0 ? Math.abs(v.size) : 0,
+                sellSize: v.size < 0 ? Math.abs(v.size) : 0,
+                buyCount: 1,
+                sellCount: 1,
+            }))
+            const newStart = tickArr.length > 0 ? tickArr[tickArr.length - 1].id + 1 : start
+            if (tickArr.length < 100) {
+                await sleep(1000 * 60) //休息60s
+            } else {
+                await sleep(1000 * 0.1) //休息0.1s
+            }
+            return { tickArr, newStart }
+        }
+    })
