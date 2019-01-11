@@ -20,6 +20,8 @@ export class KLineLayer extends Layer<{ data: { open: number, close: number, hig
         const { left, right } = viewport
         const { data } = this.props
 
+        if (data.length === 0) return
+
         this.g.clear()
 
         //start

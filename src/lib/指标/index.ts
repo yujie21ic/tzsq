@@ -1,3 +1,5 @@
+import { 画线LayerItem } from '../Chart/Layer/画线Layer'
+
 export namespace 指标 {
 
     const 指标 = (f: (p: {
@@ -496,6 +498,106 @@ export namespace 指标 {
 
 
 
+
+    const get趋势 = (price: ArrayLike<number>, index: number) => {
+
+        let type: '' | '上涨' | '下跌' = ''
+        let counter = 0
+        let value = price[index]
+        let endIndex = index
+
+
+        for (let i = index + 1; i < price.length; i++) {
+            const newValue = price[i]
+
+            //初始化type
+            if (type === '') {
+                if (value < newValue) type = '上涨'
+                else if (value > newValue) type = '下跌'
+                else if (value === newValue) return index //起始不能是平
+            }
+
+            if (
+                (type === '上涨' && value < newValue) ||
+                (type === '下跌' && value > newValue)
+            ) {
+                value = newValue
+                endIndex = i
+            }
+            else if (value === newValue) {
+                counter += 1
+                if (counter >= 4) { //2秒
+                    break
+                }
+            }
+            else {
+                break
+            }
+        }
+        return endIndex
+    }
+
+
+    export const 阻力笔 = (price: ArrayLike<number>): ArrayLike<画线LayerItem> => {
+
+        const cache: 画线LayerItem[] = []
+        let last笔index: number | undefined = undefined //没缓存
+
+        const get = (_: any, key: any): any => {
+            const length = price.length
+
+            if (key === 'length') {
+                return length
+            } else {
+                key = parseInt(String(key))
+
+                if (last笔index !== undefined && key < last笔index) return cache[key]
+                let nowIndex = last笔index === undefined ? 0 : last笔index
+
+                while (true) {
+                    const endIndex = get趋势(price, nowIndex)
+
+                    //没有
+                    if (endIndex === nowIndex) {
+                        cache[endIndex] = {
+                            leftDrawLineIndex: last笔index,
+                        }
+                    }
+                    else if (endIndex !== nowIndex) {
+                        //
+                        cache[nowIndex] = {
+                            drawLine: {
+                                color: 0xff0000,
+                                y1: price[nowIndex],
+                                x2: endIndex,
+                                y2: price[endIndex],
+                            },
+                            leftDrawLineIndex: nowIndex === last笔index ? cache[nowIndex].leftDrawLineIndex : last笔index,
+                        }
+
+                        //没有
+                        for (let i = nowIndex + 1; i <= endIndex; i++) {
+                            cache[i] = {
+                                leftDrawLineIndex: last笔index,
+                            }
+                        }
+
+                        last笔index = nowIndex
+                        nowIndex = endIndex
+                    }
+
+
+                    nowIndex += 1
+                    if (nowIndex > price.length - 1) break
+                }
+
+
+                // console.log(cache)
+                return cache[key]
+            }
+        }
+        return new Proxy({}, { get })
+    }
 
 
 

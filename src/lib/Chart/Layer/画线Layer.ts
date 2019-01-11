@@ -3,7 +3,7 @@ import { Graphics } from 'pixi.js'
 import { Viewport, To } from '../type'
 
 export type 画线LayerItem = {
-    drawLine: {
+    drawLine?: {
         color: number
         // x1 is index
         y1: number
@@ -11,11 +11,10 @@ export type 画线LayerItem = {
         y2: number
     }
     leftDrawLineIndex?: number
-    righDrawLineIndex?: number
 }
 
 export class 画线Layer extends Layer<{
-    data: 画线LayerItem[]
+    data: ArrayLike<画线LayerItem>
 }>{
 
     private g = new Graphics()
@@ -31,39 +30,39 @@ export class 画线Layer extends Layer<{
 
         g.clear()
 
+        if (data.length === 0) return
+
         const startIndex = Math.max(0, Math.floor(left))
         const endIndex = Math.min(Math.round(right), data.length - 1)
 
-        const { drawLine, leftDrawLineIndex, righDrawLineIndex } = data[startIndex]
+        const { drawLine, leftDrawLineIndex } = data[endIndex]
 
         let i: number
 
-        if (leftDrawLineIndex !== undefined) {
+        if (drawLine !== undefined) {
+            i = endIndex
+        }
+        else if (leftDrawLineIndex !== undefined) {
             i = leftDrawLineIndex
         }
-        else if (drawLine !== undefined) {
-            i = startIndex
-        }
-        else if (righDrawLineIndex !== undefined) {
-            i = righDrawLineIndex
-        } else {
+        else {
             return
         }
 
         while (true) {
-            if (i > endIndex) break
+            const { drawLine, leftDrawLineIndex } = data[i]
 
-            const { drawLine, righDrawLineIndex } = data[i]
-            if (drawLine === undefined) break
+            if (drawLine !== undefined) {
+                g.lineStyle(2, drawLine.color)
+                g.moveTo(to.x(i), to.y(drawLine.y1))
+                g.lineTo(to.x(drawLine.x2), to.y(drawLine.y2))
+            }
 
-            g.lineStyle(1, drawLine.color)
-            g.moveTo(to.x(i), to.y(drawLine.y1))
-            g.lineTo(to.x(drawLine.x2), to.y(drawLine.y2))
+            if (leftDrawLineIndex === undefined) break
 
-            if (righDrawLineIndex === undefined) break
-            i = righDrawLineIndex
+            if (i < startIndex) break
+            i = leftDrawLineIndex
         }
-
     }
 }
 

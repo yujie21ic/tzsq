@@ -16,6 +16,8 @@ export class 竖线Layer extends Layer<{ data: ArrayLike<number>, color: number 
 
         const { data, color } = this.props
 
+        if (data.length === 0) return
+
         g.clear()
         g.lineStyle(1, color)
 

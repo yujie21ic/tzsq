@@ -18,6 +18,8 @@ export class BarLayer extends Layer<{ data: ArrayLike<number>, color: number }> 
 
         const { data, color } = this.props
 
+        if (data.length === 0) return
+
         g.clear()
         g.lineStyle(0)
         g.beginFill(color)

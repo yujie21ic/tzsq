@@ -181,9 +181,11 @@ export class RealDataBase {
         const 多少秒均线 = this.默认期货波动率
 
         const 价格 = 盘口算价格 ?
+
             指标.lazyMapCache(() => orderBook.length, i =>
                 (orderBook[i].buy && orderBook[i].buy.length > 0 && orderBook[i].sell && orderBook[i].sell.length > 0) ?
                     ((orderBook[i].buy[0].price + orderBook[i].sell[0].price) / 2) : NaN) :
+
             指标.lazyMapCache(() => data.length, i => data[i].close)
 
         const 价格均线 = 指标.均线(价格, 300, RealDataBase.单位时间) //300s
@@ -266,6 +268,8 @@ export class RealDataBase {
         const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 100000 && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > 7) ? 1 : 0)
         const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 > -100000 && 阻力3[i].价钱增量 > 7) ? 1 : 0)
 
+        const 阻力笔 = 指标.阻力笔(价格)
+
         return {
             价格, 价格均线, 波动率, 成交量买, 成交量买均线, 成交量卖, 成交量卖均线, 净成交量, 净成交量均线, 盘口买, 盘口卖, 净盘口, 净盘口均线,
             成交次数买, 成交次数卖,
@@ -275,7 +279,8 @@ export class RealDataBase {
             真空, 真空涨, 真空跌,
             真空信号涨,
             真空信号跌,
-            成交量波动率比值
+            成交量波动率比值,
+            阻力笔,
         }
     }
 
