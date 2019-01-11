@@ -208,7 +208,7 @@ export class RealDataBase {
             RealDataBase.单位时间
         )
         const 净成交量均线 = 指标.均线(净成交量, 多少秒均线, RealDataBase.单位时间)
-        const 成交量波动率比值 = 指标.lazyMapCache(() => Math.min(净成交量.length,波动率.length), i => 净成交量[i]/波动率[i])
+        const 成交量波动率比值 = 指标.lazyMapCache(() => Math.min(净成交量.length, 波动率.length), i => 净成交量[i] / 波动率[i])
 
 
         const 净盘口 = 指标.累加(
@@ -252,9 +252,9 @@ export class RealDataBase {
         const 阻力3涨 = 指标.lazyMapCache(() => 阻力3.length, i => Math.max(0, 阻力3[i].阻力))
         let 阻力3跌 = 指标.lazyMapCache(() => 阻力3.length, i => Math.min(0, 阻力3[i].阻力))
         //if(阻力3跌<-2000000)阻力3跌=-2000000
-        
 
-        const 真空 = 指标.真空({ 
+
+        const 真空 = 指标.真空({
             price: 价格,
             volumeBuy: 成交量买,
             volumeSell: 成交量卖,
@@ -263,8 +263,8 @@ export class RealDataBase {
         const 真空跌 = 指标.lazyMapCache(() => 真空.length, i => Math.min(0, 真空[i]))
 
         //真空信号  阻力小于10万，价差大于5
-        const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 100000 &&阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > 7) ? 1 : 0)
-        const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 &&阻力3[i].阻力 > -100000 && 阻力3[i].价钱增量 >7) ? 1 : 0)
+        const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 100000 && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > 7) ? 1 : 0)
+        const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 > -100000 && 阻力3[i].价钱增量 > 7) ? 1 : 0)
 
         return {
             价格, 价格均线, 波动率, 成交量买, 成交量买均线, 成交量卖, 成交量卖均线, 净成交量, 净成交量均线, 盘口买, 盘口卖, 净盘口, 净盘口均线,
