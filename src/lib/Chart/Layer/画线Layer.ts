@@ -2,20 +2,20 @@ import { Layer } from './Layer'
 import { Graphics } from 'pixi.js'
 import { Viewport, To } from '../type'
 
+export type 画线LayerItem = {
+    drawLine: {
+        color: number
+        // x1 is index
+        y1: number
+        x2: number
+        y2: number
+    }
+    leftDrawLineIndex?: number
+    righDrawLineIndex?: number
+}
+
 export class 画线Layer extends Layer<{
-    data: (
-        {
-            drawLine: {
-                color: number
-                // x1 is index
-                y1: number
-                x2: number
-                y2: number
-            }
-            leftDrawLineIndex?: number
-            righDrawLineIndex?: number
-        }
-    )[]
+    data: 画线LayerItem[]
 }>{
 
     private g = new Graphics()
