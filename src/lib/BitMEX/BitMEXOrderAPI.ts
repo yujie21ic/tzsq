@@ -4,7 +4,8 @@ import { sleep } from '../C/sleep'
 
 export namespace BitMEXOrderAPI {
 
-    export const 重试几次 = 10
+    const 重试几次 = 10
+    const 重试休息多少毫秒 = 10
 
     export const maker = async (
         cookie: string,
@@ -33,7 +34,7 @@ export namespace BitMEXOrderAPI {
                 success = true
                 break
             }
-            await sleep(10)
+            await sleep(重试休息多少毫秒)
         }
         return success
     }
@@ -63,7 +64,7 @@ export namespace BitMEXOrderAPI {
                 success = true
                 break
             }
-            await sleep(10)
+            await sleep(重试休息多少毫秒)
         }
         return success
     }
@@ -98,7 +99,7 @@ export namespace BitMEXOrderAPI {
                 success = true
                 break
             }
-            await sleep(10)
+            await sleep(重试休息多少毫秒)
         }
         return success
     }
@@ -120,7 +121,7 @@ export namespace BitMEXOrderAPI {
                 success = true
                 break
             }
-            await sleep(10)
+            await sleep(重试休息多少毫秒)
         }
         return success
     }
@@ -153,7 +154,7 @@ export namespace BitMEXOrderAPI {
                 success = true
                 break
             }
-            await sleep(10)
+            await sleep(重试休息多少毫秒)
         }
         return success
     }
@@ -171,7 +172,7 @@ export namespace BitMEXOrderAPI {
                 success = true
                 break
             }
-            await sleep(10)
+            await sleep(重试休息多少毫秒)
         }
         return success
     }
