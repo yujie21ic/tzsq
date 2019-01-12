@@ -2,7 +2,7 @@ import * as request from 'request'
 import { safeJSONParse } from '../F/safeJSONParse'
 const Agent = require('socks5-https-client/lib/Agent')
 
-export type JSONRequestError = '网络错误' | '服务器返回statusCode不是200' | '服务器返回不是JSON'
+export type JSONRequestError = '网络错误' | '服务器返回错误'
 
 //不会有异常
 export const JSONRequest = <T>({
@@ -50,30 +50,17 @@ export const JSONRequest = <T>({
         if (response === undefined) {
             resolve({
                 error: '网络错误',
-                msg: JSON.stringify({ error })
+                msg: JSON.stringify({ error }),
             })
         }
         else if (response.statusCode !== 200) {
             resolve({
-                error: '服务器返回statusCode不是200',
-                msg: JSON.stringify({
-                    statusCode: response.statusCode,
-                    body: response.body
-                })
+                error: '服务器返回错误',
+                msg: String(response.body),
             })
         }
         else {
-            const data = safeJSONParse(response.body)
-            if (data === undefined) {
-                resolve({
-                    error: '服务器返回不是JSON',
-                    msg: JSON.stringify({
-                        body: response.body
-                    })
-                })
-            } else {
-                resolve({ data })
-            }
+            resolve({ data: safeJSONParse(response.body) })
         }
     })
 

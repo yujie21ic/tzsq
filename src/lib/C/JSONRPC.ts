@@ -14,7 +14,7 @@ type FuncList = {
 export class JSONRPCServer<T extends FuncList> {
 
     func: {
-        [K in keyof T]?: (req: T[K]['req']) => Promise<T[K]['res'] | undefined>
+        [K in keyof T]?: (req: T[K]['req']) => Promise<T[K]['res']>
     } = {}
 
     constructor(p: {
@@ -31,7 +31,7 @@ export class JSONRPCServer<T extends FuncList> {
             req.on('data', chunk => data += chunk)
 
             req.on('end', async () => {
-                let ret: any = undefined
+
 
                 const arr = safeJSONParse(data)
 
@@ -43,16 +43,21 @@ export class JSONRPCServer<T extends FuncList> {
                     const define = p.funcList[name]
 
                     if (f !== undefined && define !== undefined) {
-                        ret = await f(typeObjectParse(define.req)(param))
+                        try {
+                            const ret = await f(typeObjectParse(define.req)(param))
+                            res.write(JSON.stringify(ret))
+                            res.end()
+                        } catch (e) {
+                            res.writeHead(404)
+                            res.write(e)
+                            res.end()
+                        }
+                        return
                     }
                 }
 
-                if (ret !== undefined) {
-                    res.write(JSON.stringify(ret))
-                } else {
-                    res.writeHead(404)
-                    res.write('error')
-                }
+                res.writeHead(404)
+                res.write('error')
                 res.end()
             })
 
