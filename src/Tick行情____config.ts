@@ -78,7 +78,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ]
         },
         {
-            heightPercentage: 0.6,
+            heightPercentage: 0.2,
             layerList: 成交量买卖(d)
         },
         // {
