@@ -4,7 +4,6 @@ const Agent = require('socks5-https-client/lib/Agent')
 
 export type JSONRequestError = '网络错误' | '服务器返回错误'
 
-//不会有异常
 export const JSONRequest = <T>({
     url,
     method = 'GET',

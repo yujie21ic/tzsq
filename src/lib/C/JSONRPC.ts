@@ -25,23 +25,15 @@ export class JSONRPCServer<T extends FuncList> {
         http.createServer(async (req, res) => {
 
             let data = ''
-
             req.setEncoding('utf8')
-
             req.on('data', chunk => data += chunk)
-
             req.on('end', async () => {
-
-
                 const arr = safeJSONParse(data)
-
                 if (Array.isArray(arr) && arr.length === 2 && typeof arr[0] === 'string') {
                     const name = arr[0]
                     const param = arr[1]
-
                     const f = this.func[name]
                     const define = p.funcList[name]
-
                     if (f !== undefined && define !== undefined) {
                         try {
                             const ret = await f(typeObjectParse(define.req)(param))
@@ -55,12 +47,10 @@ export class JSONRPCServer<T extends FuncList> {
                         return
                     }
                 }
-
                 res.writeHead(404)
                 res.write('error')
                 res.end()
             })
-
         }).listen(p.port)
     }
 }
@@ -93,7 +83,7 @@ export class JSONRPCClient<T extends FuncList> {
                     return {
                         error: error,
                         data: error ? undefined : typeObjectParse(value.res)(data),
-                        msg
+                        msg,
                     }
                 },
             p.funcList
