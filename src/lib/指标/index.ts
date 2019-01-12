@@ -562,6 +562,7 @@ export namespace 指标 {
                         cache[endIndex] = {
                             leftDrawLineIndex: last笔index,
                         }
+                        nowIndex += 1
                     }
                     else if (endIndex !== nowIndex) {
                         //
@@ -586,8 +587,6 @@ export namespace 指标 {
                         nowIndex = endIndex
                     }
 
-
-                    nowIndex += 1
                     if (nowIndex > price.length - 1) break
                 }
 
