@@ -163,9 +163,7 @@ export namespace DataClient {
             this.data.binance.ethusdt.data = []
 
             this.get_bitmex_orderBook('XBTUSD', startTime)
-
-            // this.get_bitmex_tick('XBTUSD', startTime)
-            // this.get_bitmex_tick('ETHUSD', startTime)
+            this.get_bitmex_orderBook('ETHUSD', startTime)
 
             this.data.bitmex.XBTUSD.data = await this.getBitmex500msKLine('XBTUSD', startTime)
             this.data.bitmex.ETHUSD.data = await this.getBitmex500msKLine('ETHUSD', startTime)
