@@ -4,7 +4,6 @@ import { BaseType } from './lib/BaseType'
 import { config } from './config'
 import { YJMM, getAccountName } from './ConfigType'
 import { JSONRequestError } from './lib/C/JSONRequest'
-import { remote } from 'electron'
 import { OrderClient } from './OrderServer/OrderClient'
 import { Table } from './lib/UI/Table'
 import { dialog } from './lib/UI/dialog'
@@ -140,7 +139,6 @@ class XXXX extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
 
 
 
-remote.getCurrentWindow().setTitle('一键买卖 ' + getAccountName())
 const { cookie, 一键买卖 } = config.account![getAccountName()]
 
 ReactDOM.render(<Table

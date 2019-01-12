@@ -1,12 +1,10 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { config } from './config'
-import { remote } from 'electron'
 import { getAccountName } from './ConfigType'
 import { OrderClient } from './OrderServer/OrderClient'
 import { Table } from './lib/UI/Table'
 
-remote.getCurrentWindow().setTitle('计分板 ' + getAccountName())
 const 计分板倍数 = config.account![getAccountName()].计分板倍数 || 1
 
 const accountClient = new OrderClient.AccountClient(config.account![getAccountName()].cookie)

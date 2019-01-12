@@ -41,7 +41,7 @@ const show = (name: string, accountName: string) => {
   const win = new BrowserWindow({
     width: 550,
     height: 400,
-    title: name
+    title: accountName === '' ? name : name + ' ' + accountName,
   })
   win.loadURL(base64URL(path.join(__dirname, `../build/${name}.js`), accountName))
 }
