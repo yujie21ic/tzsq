@@ -5,7 +5,7 @@ import { TextLayer } from './lib/Chart/Layer/TextLayer'
 import { lastNumber } from './lib/F/lastNumber'
 import { BarLayer } from './lib/Chart/Layer/BarLayer'
 import { 竖线Layer } from './lib/Chart/Layer/竖线Layer'
-import { 画线Layer } from './lib/Chart/Layer/画线Layer'
+// import { 画线Layer } from './lib/Chart/Layer/画线Layer'
 
 
 type D = RealDataBase['dataExt']['XBTUSD']
@@ -61,8 +61,16 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         },
         {
             heightPercentage: 0.4,
+            和下一张重叠: true,
             layerList: [
                 layer(LineLayer, { data: d.期货.阻力4涨, color: 买颜色 }),
+                // layer(LineLayer, { data: d.期货.阻力4跌, color: 卖颜色 }),
+            ]
+        },
+        {
+            heightPercentage: 0.4,
+            layerList: [
+                // layer(LineLayer, { data: d.期货.阻力4涨, color: 买颜色 }),
                 layer(LineLayer, { data: d.期货.阻力4跌, color: 卖颜色 }),
             ]
         },
@@ -82,7 +90,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             yCoordinate: '对数',
             layerList: 成交量买卖(d)
         },
-     
+
     ],
     双价格图和成交量: d => [
         {
