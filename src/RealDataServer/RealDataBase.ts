@@ -256,6 +256,17 @@ export class RealDataBase {
         //if(阻力3跌<-2000000)阻力3跌=-2000000
 
 
+
+        const 阻力4 = 指标.阻力4({
+            price: 价格,
+            volumeBuy: 成交量买,
+            volumeSell: 成交量卖,
+        })
+        const 阻力4涨 = 指标.lazyMapCache(() => 阻力4.length, i => Math.max(0, 阻力4[i].阻力))
+        let 阻力4跌 = 指标.lazyMapCache(() => 阻力4.length, i => Math.min(0, 阻力4[i].阻力))
+
+
+
         const 真空 = 指标.真空({
             price: 价格,
             volumeBuy: 成交量买,
@@ -276,6 +287,7 @@ export class RealDataBase {
             阻力1涨, 阻力1跌,
             阻力2涨, 阻力2跌,
             阻力3涨, 阻力3跌,
+            阻力4涨, 阻力4跌,
             真空, 真空涨, 真空跌,
             真空信号涨,
             真空信号跌,

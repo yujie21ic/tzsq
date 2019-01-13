@@ -607,4 +607,137 @@ export namespace 指标 {
 
 
 
+
+
+
+
+
+
+    //
+    export const 配置 = {
+        type: 'none' as 'none' | '涨' | '跌',
+        startIndex: 0
+    }
+
+
+    //TODO
+    export const 阻力4 = (p: {
+        price: ArrayLike<number>
+        volumeBuy: ArrayLike<number>
+        volumeSell: ArrayLike<number>
+    }): {
+        type: '无' | '涨' | '跌'
+        开始点价格: number
+        成交量累计: number
+        价钱增量: number
+        阻力: number
+    }[] => {
+
+        const cache: {
+            type: '无' | '涨' | '跌'
+            开始点价格: number
+            成交量累计: number
+            价钱增量: number
+            阻力: number
+        }[] = []
+
+        const 初始化涨 = (i: number) => {
+            const 开始点价格 = p.price[i - 1]
+            const 成交量累计 = p.volumeBuy[i]
+            const 价钱增量 = Math.abs(p.price[i] - 开始点价格)
+            cache[i] = {
+                type: '涨',
+                开始点价格,
+                成交量累计,
+                价钱增量,
+                阻力: 成交量累计 / 价钱增量 > 1000000 ? 1000000 : 成交量累计 / 价钱增量,
+            }
+        }
+
+        const 继续涨 = (i: number) => {
+            const { 开始点价格 } = cache[i - 1]
+            const 成交量累计 = cache[i - 1].成交量累计 + p.volumeBuy[i]
+            const 价钱增量 = Math.abs(p.price[i] - 开始点价格)
+            cache[i] = {
+                type: '涨',
+                开始点价格,
+                成交量累计,
+                价钱增量,
+                阻力: 成交量累计 / 价钱增量 > 1000000 ? 1000000 : 成交量累计 / 价钱增量,
+            }
+        }
+
+        const 初始化跌 = (i: number) => {
+            const 开始点价格 = p.price[i - 1]
+            const 成交量累计 = -p.volumeSell[i]
+            const 价钱增量 = Math.abs(p.price[i] - 开始点价格)
+            cache[i] = {
+                type: '跌',
+                开始点价格,
+                成交量累计,
+                价钱增量,
+                阻力: 成交量累计 / 价钱增量 < -1000000 ? -1000000 : 成交量累计 / 价钱增量,
+            }
+        }
+
+        const 继续跌 = (i: number) => {
+            const { 开始点价格 } = cache[i - 1]
+            const 成交量累计 = cache[i - 1].成交量累计 - p.volumeSell[i]
+            const 价钱增量 = Math.abs(p.price[i] - 开始点价格)
+            cache[i] = {
+                type: '跌',
+                开始点价格,
+                成交量累计,
+                价钱增量,
+                阻力: 成交量累计 / 价钱增量 < -1000000 ? -1000000 : 成交量累计 / 价钱增量,
+            }
+        }
+
+        const get = (_: any, key: any): any => {
+            const length = Math.min(p.price.length, p.volumeBuy.length, p.volumeSell.length)
+
+            if (key === 'length') {
+                return length
+            } else {
+                key = parseInt(String(key))
+                if (key < cache.length - 1) return cache[key]
+
+                //没点
+                if (配置.type === 'none') {
+                    return {
+                        type: '无',
+                        开始点价格: NaN,
+                        成交量累计: NaN,
+                        价钱增量: NaN,
+                        阻力: NaN,
+                    }
+                }
+
+                for (let i = Math.max(0, cache.length - 1); i <= key; i++) {
+                    if (i < 配置.startIndex) {
+                        cache[i] = {
+                            type: '无',
+                            开始点价格: NaN,
+                            成交量累计: NaN,
+                            价钱增量: NaN,
+                            阻力: NaN,
+                        }
+                    }
+                    else if (i === 配置.startIndex) {
+                        (配置.type === '涨' ? 初始化涨 : 初始化跌)(i)
+                    }
+                    else if (i > 配置.startIndex) {
+                        (配置.type === '涨' ? 继续涨 : 继续跌)(i)
+                    }
+                }
+
+                return cache[key]
+            }
+        }
+        return new Proxy({}, { get })
+    }
+
+
+
+
 }
