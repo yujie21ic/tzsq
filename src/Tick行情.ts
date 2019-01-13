@@ -1,4 +1,4 @@
-import { chartInit } from './lib/Chart'
+import { chartInit, getIndex } from './lib/Chart'
 import { lastNumber } from './lib/F/lastNumber'
 import { RealDataBase } from './RealDataServer/RealDataBase'
 import { formatDate } from './lib/F/formatDate'
@@ -58,6 +58,7 @@ window.addEventListener('mousedown', e => {
                 checked: 指标.配置.type === v,
                 onClick: () => {
                     指标.配置.type = v as any
+                    指标.配置.startIndex = getIndex()
                 }
             })),
             undefined,

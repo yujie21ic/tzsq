@@ -22,6 +22,7 @@ type LayerClass<P> = {
 
 export type LayerItem = [LayerClass<any>, any, '__用layer函数创建__']
 
+export const getIndex = () => indexX
 
 export const layer = <P>(a: LayerClass<P>, b: P): LayerItem => [a, b] as any
 
