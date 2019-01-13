@@ -6,6 +6,7 @@ import { DataClient } from './RealDataServer/DataClient'
 import { dialog } from './lib/UI/dialog'
 import { registerCommand } from './lib/UI/registerCommand'
 import { Tick行情____config } from './Tick行情____config'
+import { 指标 } from './lib/指标'
 
 
 const realTickClient = new DataClient.RealData__Client()
@@ -52,6 +53,14 @@ window.addEventListener('mousedown', e => {
     }
     else if (e.button === 2) {
         dialog.popupMenu([
+            ...['涨', '跌', '结束'].map(v => ({
+                label: v,
+                checked: 指标.配置.type === v,
+                onClick: () => {
+                    指标.配置.type = v as any
+                }
+            })),
+            undefined,
             ...Object.keys(real.dataExt).map(v => ({
                 label: v,
                 checked: v === nowTickSymbol,

@@ -615,7 +615,7 @@ export namespace 指标 {
 
     //
     export const 配置 = {
-        type: 'none' as 'none' | '涨' | '跌',
+        type: '结束' as '结束' | '涨' | '跌',
         startIndex: 0
     }
 
@@ -703,7 +703,7 @@ export namespace 指标 {
                 if (key < cache.length - 1) return cache[key]
 
                 //没点
-                if (配置.type === 'none') {
+                if (配置.type === '结束') {
                     return {
                         type: '无',
                         开始点价格: NaN,
