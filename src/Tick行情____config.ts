@@ -17,7 +17,7 @@ type ItemFunc = (d: D) => {
 }[]
 
 
-const 现货颜色 = 0xffff00
+const 现货颜色 = 0xaaaa00
 const 期货颜色 = 0xcc66ff
 const 买颜色 = 0x48aa65
 const 卖颜色 = 0xe56546
@@ -79,6 +79,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         },
         {
             heightPercentage: 0.2,
+            yCoordinate: '对数',
             layerList: 成交量买卖(d)
         },
         // {
@@ -102,6 +103,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         },
         {
             heightPercentage: 0.5,
+            yCoordinate: '对数',
             layerList: 成交量买卖(d)
         },
     ],

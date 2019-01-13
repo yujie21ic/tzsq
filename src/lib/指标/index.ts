@@ -566,12 +566,16 @@ export namespace 指标 {
                     }
                     else if (endIndex !== nowIndex) {
                         //
+
+                        const y1 = price[nowIndex]
+                        const y2 = price[endIndex]
+
                         cache[nowIndex] = {
                             drawLine: {
-                                color: 0xff0000,
-                                y1: price[nowIndex],
+                                color: y2 > y1 ? 0x00ff00 : 0xff0000,
+                                y1,
                                 x2: endIndex,
-                                y2: price[endIndex],
+                                y2,
                             },
                             leftDrawLineIndex: nowIndex === last笔index ? cache[nowIndex].leftDrawLineIndex : last笔index,
                         }

@@ -57,7 +57,7 @@ export class Coordinate extends Container {
 
     drawTemp(x: number, height: number, msg: string) {
         const { g } = this
-        g.lineStyle(1, 0x333333)
+        g.lineStyle(1, 0x222222)
         g.moveTo(x, 0)
         g.lineTo(x, height)
 
@@ -105,7 +105,7 @@ export class Coordinate extends Container {
         const { g } = this
 
         //图表刻度 
-        g.lineStyle(1, 0x333333)
+        g.lineStyle(1, 0x222222)
         arr.forEach(({ value, y }) => {
             g.moveTo(0, y)
             g.lineTo(width, y)
