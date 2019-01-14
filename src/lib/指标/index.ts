@@ -621,7 +621,8 @@ export namespace 指标 {
     }
 
 
-    const NaNToInfinity = (n: number) => Infinity
+    const NaNToInfinity = (n: number) => isNaN(n) ? Infinity : n
+    const NaNTo_Infinity = (n: number) => isNaN(n) ? -Infinity : n
 
     //TODO
     export const 阻力4 = (p: {
@@ -629,7 +630,6 @@ export namespace 指标 {
         volumeBuy: ArrayLike<number>
         volumeSell: ArrayLike<number>
     }): {
-        type: '无' | '涨' | '跌'
         开始点价格: number
         成交量累计: number
         价钱增量: number
@@ -655,6 +655,7 @@ export namespace 指标 {
                 价钱增量,
                 阻力: Math.min(NaNToInfinity(成交量累计 / 价钱增量), 1000000),
             }
+            // console.log('初始化涨', i, cache[i])
         }
 
         const 继续涨 = (i: number) => {
@@ -677,8 +678,9 @@ export namespace 指标 {
                 开始点价格,
                 成交量累计,
                 价钱增量,
-                阻力: Math.max(NaNToInfinity(成交量累计 / 价钱增量), -1000000),
+                阻力: Math.max(NaNTo_Infinity(成交量累计 / 价钱增量), -1000000),
             }
+            // console.log('初始化跌', i, cache[i])
         }
 
         const 继续跌 = (i: number) => {
@@ -689,7 +691,7 @@ export namespace 指标 {
                 开始点价格,
                 成交量累计,
                 价钱增量,
-                阻力: Math.max(NaNToInfinity(成交量累计 / 价钱增量), -1000000),
+                阻力: Math.max(NaNTo_Infinity(成交量累计 / 价钱增量), -1000000),
             }
         }
 
