@@ -635,7 +635,6 @@ export namespace 指标 {
     }[] => {
 
         const cache: {
-            type: '无' | '涨' | '跌'
             开始点价格: number
             成交量累计: number
             价钱增量: number
@@ -649,7 +648,6 @@ export namespace 指标 {
             const 成交量累计 = p.volumeBuy[i]
             const 价钱增量 = Math.abs(p.price[i] - 开始点价格)
             cache[i] = {
-                type: '涨',
                 开始点价格,
                 成交量累计,
                 价钱增量,
@@ -662,7 +660,6 @@ export namespace 指标 {
             const 成交量累计 = cache[i - 1].成交量累计 + p.volumeBuy[i]
             const 价钱增量 = Math.abs(p.price[i] - 开始点价格)
             cache[i] = {
-                type: '涨',
                 开始点价格,
                 成交量累计,
                 价钱增量,
@@ -675,7 +672,6 @@ export namespace 指标 {
             const 成交量累计 = -p.volumeSell[i]
             const 价钱增量 = Math.abs(p.price[i] - 开始点价格)
             cache[i] = {
-                type: '跌',
                 开始点价格,
                 成交量累计,
                 价钱增量,
@@ -688,7 +684,6 @@ export namespace 指标 {
             const 成交量累计 = cache[i - 1].成交量累计 - p.volumeSell[i]
             const 价钱增量 = Math.abs(p.price[i] - 开始点价格)
             cache[i] = {
-                type: '跌',
                 开始点价格,
                 成交量累计,
                 价钱增量,
@@ -703,18 +698,11 @@ export namespace 指标 {
                 return length
             } else {
                 key = parseInt(String(key))
-
-                //删除缓存
-                if (配置.type !== '结束' && 配置.startIndex <= key) {
-                    cache.length = 配置.startIndex + 1
-                }
-
                 if (key < cache.length - 1) return cache[key]
 
                 //没点
                 if (配置.type === '结束') {
                     return {
-                        type: '无',
                         开始点价格: NaN,
                         成交量累计: NaN,
                         价钱增量: NaN,
@@ -726,7 +714,6 @@ export namespace 指标 {
                 for (let i = Math.max(0, cache.length - 1); i <= key; i++) {
                     if (i < 配置.startIndex) {
                         cache[i] = {
-                            type: '无',
                             开始点价格: NaN,
                             成交量累计: NaN,
                             价钱增量: NaN,
@@ -736,14 +723,17 @@ export namespace 指标 {
                     }
                     else if (i === 配置.startIndex) {
                         (配置.type === '涨' ? 初始化涨 : 初始化跌)(i)
+                        // console.log('初始化涨', i)
                         初始化涨跌 = true
                     }
                     else if (i > 配置.startIndex) {
                         if (初始化涨跌 === false) {
                             (配置.type === '涨' ? 初始化涨 : 初始化跌)(i)
                             初始化涨跌 = true
+                        } else {
+                            // console.log('继续涨', i);
+                            (配置.type === '涨' ? 继续涨 : 继续跌)(i)
                         }
-                        (配置.type === '涨' ? 继续涨 : 继续跌)(i)
                     }
                 }
 
