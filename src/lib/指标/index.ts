@@ -703,6 +703,12 @@ export namespace 指标 {
                 return length
             } else {
                 key = parseInt(String(key))
+
+                //删除缓存
+                if (配置.type !== '结束' && 配置.startIndex <= key) {
+                    cache.length = 配置.startIndex + 1
+                }
+
                 if (key < cache.length - 1) return cache[key]
 
                 //没点
