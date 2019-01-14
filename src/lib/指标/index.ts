@@ -621,6 +621,8 @@ export namespace 指标 {
     }
 
 
+    const NaNToInfinity = (n: number) => Infinity
+
     //TODO
     export const 阻力4 = (p: {
         price: ArrayLike<number>
@@ -651,7 +653,7 @@ export namespace 指标 {
                 开始点价格,
                 成交量累计,
                 价钱增量,
-                阻力: Math.min(成交量累计 / 价钱增量, 1000000),
+                阻力: Math.min(NaNToInfinity(成交量累计 / 价钱增量), 1000000),
             }
         }
 
@@ -663,7 +665,7 @@ export namespace 指标 {
                 开始点价格,
                 成交量累计,
                 价钱增量,
-                阻力: Math.min(成交量累计 / 价钱增量, 1000000),
+                阻力: Math.min(NaNToInfinity(成交量累计 / 价钱增量), 1000000),
             }
         }
 
@@ -675,7 +677,7 @@ export namespace 指标 {
                 开始点价格,
                 成交量累计,
                 价钱增量,
-                阻力: Math.max(成交量累计 / 价钱增量, -1000000),
+                阻力: Math.max(NaNToInfinity(成交量累计 / 价钱增量), -1000000),
             }
         }
 
@@ -687,7 +689,7 @@ export namespace 指标 {
                 开始点价格,
                 成交量累计,
                 价钱增量,
-                阻力: Math.max(成交量累计 / 价钱增量, -1000000),
+                阻力: Math.max(NaNToInfinity(成交量累计 / 价钱增量), -1000000),
             }
         }
 
