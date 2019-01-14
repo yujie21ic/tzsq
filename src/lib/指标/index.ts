@@ -642,6 +642,8 @@ export namespace 指标 {
             阻力: number
         }[] = []
 
+        let 初始化涨跌 = false
+
         const 初始化涨 = (i: number) => {
             const 开始点价格 = p.price[i - 1]
             const 成交量累计 = p.volumeBuy[i]
@@ -712,6 +714,7 @@ export namespace 指标 {
                         价钱增量: NaN,
                         阻力: NaN,
                     }
+                    初始化涨跌 = false
                 }
 
                 for (let i = Math.max(0, cache.length - 1); i <= key; i++) {
@@ -723,11 +726,17 @@ export namespace 指标 {
                             价钱增量: NaN,
                             阻力: NaN,
                         }
+                        初始化涨跌 = false
                     }
                     else if (i === 配置.startIndex) {
                         (配置.type === '涨' ? 初始化涨 : 初始化跌)(i)
+                        初始化涨跌 = true
                     }
                     else if (i > 配置.startIndex) {
+                        if (初始化涨跌 === false) {
+                            (配置.type === '涨' ? 初始化涨 : 初始化跌)(i)
+                            初始化涨跌 = true
+                        }
                         (配置.type === '涨' ? 继续涨 : 继续跌)(i)
                     }
                 }
