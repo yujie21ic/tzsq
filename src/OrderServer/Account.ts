@@ -2,8 +2,7 @@ import { BitMEXWSAPI } from '../lib/BitMEX/BitMEXWSAPI'
 import { BaseType } from '../lib/BaseType'
 import { lastNumber } from '../lib/F/lastNumber'
 import { createJSONSync } from './____API____'
-import { realData, 下单 } from './realData'
-import { 现货走平X, 期货走平X } from './走平'
+import { realData, 下单, 现货走平X, 期货走平X } from './realData'
 import * as fs from 'fs'
 
 
