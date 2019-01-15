@@ -2,9 +2,9 @@ import { BaseType } from '../BaseType'
 import { BitMEXRESTAPI } from '../BitMEX/BitMEXRESTAPI'
 import { sleep } from '../C/sleep'
 
-const typeFuck = <A extends string, B extends string>(a: A, b: B) => <A | B>(a + ',' + b)
-
 export namespace BitMEXOrderAPI {
+
+    const BitMEXOptions = <A extends string, B extends string>(a: A, b: B) => <A | B>(a + ',' + b)
 
     const 重试几次 = 10
     const 重试休息多少毫秒 = 10
@@ -90,7 +90,7 @@ export namespace BitMEXOrderAPI {
                     price: p.price(),
                     orderQty: p.size,
                     side: p.side,
-                    execInst: typeFuck('ParticipateDoNotInitiate', 'ReduceOnly'),
+                    execInst: BitMEXOptions('ParticipateDoNotInitiate', 'ReduceOnly'),
                 })
 
             if (ret.error === '网络错误') {
@@ -145,7 +145,7 @@ export namespace BitMEXOrderAPI {
                     stopPx: p.price(),
                     orderQty: 100000,
                     side: p.side,
-                    execInst: typeFuck('Close', 'LastPrice'),
+                    execInst: BitMEXOptions('Close', 'LastPrice'),
                 })
 
             if (ret.error === '网络错误') {
