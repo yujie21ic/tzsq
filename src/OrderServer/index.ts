@@ -10,7 +10,8 @@ import { 下单 } from './realData'
 
 
 //运行的账户  需要到 orderServiceCookie 设置
-const accountDic = new Map<string, Account>()      // cookie --> Account
+//cookie --> Account
+const accountDic = new Map<string, Account>()
 if (config.orderServiceCookie !== undefined) {
     config.orderServiceCookie.forEach(cookie => accountDic.set(cookie, new Account(cookie)))
 } else {
@@ -18,14 +19,11 @@ if (config.orderServiceCookie !== undefined) {
 }
 
 
-//ws
-const online = new Map<WebSocket, { unsubscribe: () => void }>()         // ws --> unsubscribe
+//ws --> unsubscribe
+const online = new Map<WebSocket, { unsubscribe: () => void }>()
 const wss = new WebSocket.Server({ port: 4567 })
-
 wss.on('connection', ws => {
-
     online.set(ws, { unsubscribe: () => { } })
-
     ws.onmessage = e => {
         ws.onmessage = () => { }
         const account = accountDic.get(typeObjectParse({ cookie: '' })(safeJSONParse(e.data + '')).cookie)
@@ -51,13 +49,12 @@ wss.on('connection', ws => {
         }
     }
 })
-//
 
 
 //http
 const server = new JSONRPCServer({
     funcList,
-    port: 3456
+    port: 3456,
 })
 
 server.func.下单 = async req => await 下单(req.cookie, req)
