@@ -20,5 +20,5 @@ export type YJMM = {
     symbol: BaseType.BitmexSymbol
     size: number
     止损点: number
-    延迟下单: typeof funcList.走平挂单.req.延迟下单
+    延迟下单: typeof funcList.走平挂单_____过时.req.延迟下单
 }

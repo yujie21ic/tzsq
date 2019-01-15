@@ -22,7 +22,6 @@ export const funcList = {
         res: ''
     },
 
-
     //
     市价平仓全部: {
         req: {
@@ -31,7 +30,6 @@ export const funcList = {
         },
         res: ''
     },
-
 
     //挂单 吃单
     下单: {
@@ -45,10 +43,29 @@ export const funcList = {
         res: ''
     },
 
-
-
     //走平挂单
     走平挂单: {
+        req: {
+            cookie: '',
+            side: '' as BaseType.Side,
+            size: 0,
+            现货: {
+                symbol: '' as BaseType.BinanceSymbol,
+                超时秒: 0,
+                偏移: 0,
+            },
+            期货: {
+                symbol: '' as BaseType.BitmexSymbol,
+                超时秒: 0,
+                偏移: 0,
+            },
+        },
+        res: ''
+    },
+
+
+    //走平挂单_____过时_____过时_____过时_____过时_____过时_____过时_____过时_____过时_____过时_____过时_____过时_____过时_____过时_____过时_____过时
+    走平挂单_____过时: {
         req: {
             cookie: '',
             symbol: '' as BaseType.BitmexSymbol,

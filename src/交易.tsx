@@ -76,7 +76,7 @@ class Button extends React.Component<ButtonProps, ButtonState> {
 
 
 
-const 买卖 = (cookie: string, p: YJMM) => (side: BaseType.Side, type: 'maker' | 'taker') => () => OrderClient.rpc.func.走平挂单({
+const 买卖 = (cookie: string, p: YJMM) => (side: BaseType.Side, type: 'maker' | 'taker') => () => OrderClient.rpc.func.走平挂单_____过时({
     cookie: cookie,
     symbol: p.symbol,
     side: side,

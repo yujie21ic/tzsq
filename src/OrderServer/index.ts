@@ -60,7 +60,7 @@ const server = new JSONRPCServer({
     port: 3456
 })
 
-server.func.走平挂单 = async req => {
+server.func.走平挂单_____过时 = async req => {
     const account = accountDic.get(req.cookie)
     if (account === undefined) return 'cookie不存在'
 
