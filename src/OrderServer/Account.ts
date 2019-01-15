@@ -40,9 +40,51 @@ export class Account {
                         开仓均价.____set(0)
                     }
                 })
+                console.log('仓位数量',
+                    this.jsonSync.rawData.symbol.XBTUSD.仓位数量,
+                    '开仓均价', this.jsonSync.rawData.symbol.XBTUSD.开仓均价
+                )
             }
             else if (frame.table === 'order') {
-                //委托列表
+
+                console.log('委托列表', JSON.stringify(this.ws.data.order, undefined, 4))
+
+
+                const 只减仓 = this.ws.data.order.filter(v =>
+                    v.symbol === 'XBTUSD' &&
+                    v.ordType === 'Limit' &&
+                    v.execInst === 'ParticipateDoNotInitiate,ReduceOnly'
+                ).map(v => ({
+                    side: v.side,
+                    price: v.price,
+                    orderQty: v.orderQty,
+                }))
+
+
+                const 挂单 = this.ws.data.order.filter(v =>
+                    v.symbol === 'XBTUSD' &&
+                    v.ordType === 'Limit' &&
+                    v.execInst === 'ParticipateDoNotInitiate'
+                ).map(v => ({
+                    side: v.side,
+                    price: v.price,
+                    orderQty: v.orderQty,
+                }))
+
+
+                const 市价止损 = this.ws.data.order.filter(v =>
+                    v.symbol === 'XBTUSD' &&
+                    v.ordType === 'Stop' &&
+                    v.execInst === 'Close,LastPrice'
+                ).map(v => ({
+                    side: v.side,
+                    stopPx: v.stopPx,
+                    orderQty: v.orderQty,
+                }))
+
+                console.log('只减仓', JSON.stringify(只减仓, undefined, 4))
+                console.log('挂单', JSON.stringify(挂单, undefined, 4))
+                console.log('市价止损', JSON.stringify(市价止损, undefined, 4))
             }
         }
     }
