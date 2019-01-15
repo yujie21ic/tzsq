@@ -25,10 +25,10 @@ const 卖颜色 = 0xe56546
 
 
 const 双价格 = (d: D) => [
-    layer(LineLayer, { data: d.现货减去价格, color: 现货颜色 }),
+    //layer(LineLayer, { data: d.现货减去价格, color: 现货颜色 }),
     layer(LineLayer, { data: d.期货.价格, color: 期货颜色 }),
-    layer(竖线Layer, { data: d.期货.真空信号涨, color: 0x1B5E20 }),
-    layer(竖线Layer, { data: d.期货.真空信号跌, color: 0xff0000 }),
+    // layer(竖线Layer, { data: d.期货.真空信号涨, color: 买颜色 }),
+    // layer(竖线Layer, { data: d.期货.真空信号跌, color: 卖颜色 }),
     // layer(画线Layer, { data: d.期货.阻力笔 }),
     layer(TextLayer, {
         text:
@@ -50,34 +50,49 @@ const 成交量买卖 = (d: D) => [
         color: 期货颜色
     })
 ]
+const 成交量买卖曲线 = (d: D) => [
+     layer(LineLayer, { data: d.期货.成交量均线1, color: 现货颜色 }),
+    layer(LineLayer, { data: d.期货.成交量买, color: 买颜色 }),
+    layer(LineLayer, { data: d.期货.成交量卖, color: 卖颜色 }),
+    //layer(LineLayer, { data: d.期货.净成交量均线, color: 现货颜色 }),
+    layer(TextLayer, {
+        text:
+            `30秒成交量曲线`,
+        color: 现货颜色
+    })
+]
 
 export const Tick行情____config: { [key in string]: ItemFunc } = {
 
     图表1: d => [
         {
-            heightPercentage: 0.4,
+            heightPercentage: 0.5,
             和下一张重叠: true,
             layerList: 双价格(d)
         },
+       
+        // {
+        //     heightPercentage: 0.4,
+        //     yCoordinate: '对数',
+        //     和下一张重叠: true,
+        //     layerList: [
+        //         layer(LineLayer, { data: d.期货.阻力4涨, color: 买颜色 }),
+        //         // layer(LineLayer, { data: d.期货.阻力4跌, color: 卖颜色 }),
+        //     ]
+        // },
+        // {
+        //     heightPercentage: 0.4,
+        //     yCoordinate: '对数',
+        //     layerList: [
+        //         // layer(LineLayer, { data: d.期货.阻力4涨, color: 买颜色 }),
+        //         layer(LineLayer, { data: d.期货.阻力4跌, color: 卖颜色 }),
+        //     ]
+        // },
         {
-            heightPercentage: 0.4,
+            heightPercentage: 0.5,
+            yCoordinate: '对数',
             和下一张重叠: true,
             layerList: [
-                layer(LineLayer, { data: d.期货.阻力4涨, color: 买颜色 }),
-                // layer(LineLayer, { data: d.期货.阻力4跌, color: 卖颜色 }),
-            ]
-        },
-        {
-            heightPercentage: 0.4,
-            layerList: [
-                // layer(LineLayer, { data: d.期货.阻力4涨, color: 买颜色 }),
-                layer(LineLayer, { data: d.期货.阻力4跌, color: 卖颜色 }),
-            ]
-        },
-        {
-            heightPercentage: 0.4,
-            layerList: [
-                layer(LineLayer, { data: d.期货.阻力3跌, color: 卖颜色 }),
                 layer(LineLayer, { data: d.期货.阻力3涨, color: 买颜色 }),
                 layer(TextLayer, {
                     text: `涨跌动力`,
@@ -86,9 +101,22 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ]
         },
         {
-            heightPercentage: 0.2,
+            heightPercentage: 0.5,
+            layerList: [
+                layer(LineLayer, { data: d.期货.阻力3跌, color: 卖颜色 }),
+            ]
+        },
+        {
+            heightPercentage: 0.5,
             yCoordinate: '对数',
-            layerList: 成交量买卖(d)
+            和下一张重叠: true,
+            layerList: 成交量买卖曲线(d)
+        },
+        {
+            heightPercentage: 0.5,
+            layerList: [
+                layer(LineLayer, { data: d.期货.波动率, color: 期货颜色 }),
+            ]
         },
 
     ],

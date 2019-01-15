@@ -288,7 +288,7 @@ export namespace 指标 {
                 开始点价格,
                 成交量累计,
                 价钱增量,
-                阻力: Math.min(成交量累计 / 价钱增量, 1000000),
+                阻力: Math.min(成交量累计 / 价钱增量, 10000000),
             }
         }
 
@@ -301,7 +301,7 @@ export namespace 指标 {
                 开始点价格,
                 成交量累计,
                 价钱增量,
-                阻力: Math.min(成交量累计 / 价钱增量, 1000000),
+                阻力: Math.min(成交量累计 / 价钱增量, 10000000),
             }
         }
 
@@ -314,7 +314,7 @@ export namespace 指标 {
                 开始点价格,
                 成交量累计,
                 价钱增量,
-                阻力: Math.max(成交量累计 / 价钱增量, -1000000),
+                阻力: Math.max(成交量累计 / 价钱增量, -10000000),
             }
         }
 
@@ -327,7 +327,7 @@ export namespace 指标 {
                 开始点价格,
                 成交量累计,
                 价钱增量,
-                阻力: Math.max(成交量累计 / 价钱增量, -1000000),
+                阻力: Math.max(成交量累计 / 价钱增量, -10000000),
             }
         }
 
@@ -655,7 +655,7 @@ export namespace 指标 {
                 开始点价格,
                 成交量累计,
                 价钱增量,
-                阻力: Math.min(NaNToInfinity(成交量累计 / 价钱增量), 1000000),
+                阻力: Math.min(NaNToInfinity(成交量累计 / 价钱增量), 10000000),
             }
             // console.log('初始化涨', i, cache[i])
         }
@@ -668,7 +668,7 @@ export namespace 指标 {
                 开始点价格,
                 成交量累计,
                 价钱增量,
-                阻力: Math.min(NaNToInfinity(成交量累计 / 价钱增量), 1000000),
+                阻力: Math.min(NaNToInfinity(成交量累计 / 价钱增量), 10000000),
             }
         }
 
@@ -680,7 +680,7 @@ export namespace 指标 {
                 开始点价格,
                 成交量累计,
                 价钱增量,
-                阻力: Math.max(NaNTo_Infinity(成交量累计 / 价钱增量), -1000000),
+                阻力: Math.max(NaNTo_Infinity(成交量累计 / 价钱增量), -10000000),
             }
             // console.log('初始化跌', i, cache[i])
         }
@@ -693,7 +693,7 @@ export namespace 指标 {
                 开始点价格,
                 成交量累计,
                 价钱增量,
-                阻力: Math.max(NaNTo_Infinity(成交量累计 / 价钱增量), -1000000),
+                阻力: Math.max(NaNTo_Infinity(成交量累计 / 价钱增量), -10000000),
             }
         }
 
