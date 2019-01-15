@@ -7,7 +7,7 @@ import { Table } from './lib/UI/Table'
 
 const 计分板倍数 = config.account![getAccountName()].计分板倍数 || 1
 
-const accountClient = new OrderClient.AccountClient(config.account![getAccountName()].cookie)
+const accountClient = new OrderClient(config.account![getAccountName()].cookie)
 
 class APP extends React.Component {
 

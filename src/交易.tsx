@@ -76,7 +76,7 @@ class Button extends React.Component<ButtonProps, ButtonState> {
 
 
 
-const 买卖 = (cookie: string, p: YJMM) => (side: BaseType.Side, type: 'maker' | 'taker') => () => OrderClient.OrderServer__Client.func.下单和止损({
+const 买卖 = (cookie: string, p: YJMM) => (side: BaseType.Side, type: 'maker' | 'taker') => () => OrderClient.rpc.func.下单和止损({
     cookie: cookie,
     symbol: p.symbol,
     side: side,
@@ -86,12 +86,12 @@ const 买卖 = (cookie: string, p: YJMM) => (side: BaseType.Side, type: 'maker' 
     延迟下单: p.延迟下单
 })
 
-const 市价平仓 = (cookie: string, symbol: BaseType.BitmexSymbol) => () => OrderClient.OrderServer__Client.func.市价平仓({
+const 市价平仓 = (cookie: string, symbol: BaseType.BitmexSymbol) => () => OrderClient.rpc.func.市价平仓({
     cookie: cookie,
     symbol: symbol,
 })
 
-const 取消委托 = (cookie: string, symbol: BaseType.BitmexSymbol) => () => OrderClient.OrderServer__Client.func.取消全部委托({
+const 取消委托 = (cookie: string, symbol: BaseType.BitmexSymbol) => () => OrderClient.rpc.func.取消全部委托({
     cookie: cookie,
     symbol: symbol,
 })
@@ -102,7 +102,7 @@ const 取消委托 = (cookie: string, symbol: BaseType.BitmexSymbol) => () => Or
 
 
 
-const accountClient = new OrderClient.AccountClient(config.account![getAccountName()].cookie)
+const accountClient = new OrderClient(config.account![getAccountName()].cookie)
 
 class XXXX extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
 
