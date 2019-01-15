@@ -1,11 +1,13 @@
 import { JSONRPCServer } from '../lib/C/JSONRPC'
 import { funcList } from './____API____'
-import { Account, 下单和止损, realData } from './Account'
+import { Account } from './Account'
 import * as WebSocket from 'ws'
 import { config } from '../config'
 import { typeObjectParse } from '../lib/F/typeObjectParse'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
 import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
+import { realData } from './realData'
+import { 下单和止损 } from './下单和止损'
 
 const accountDic = new Map<string, Account>()      // cookie --> Account
 
