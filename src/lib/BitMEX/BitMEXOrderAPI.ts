@@ -4,8 +4,6 @@ import { sleep } from '../C/sleep'
 
 export namespace BitMEXOrderAPI {
 
-    const BitMEXOptions = <A extends string, B extends string>(a: A, b: B) => <A | B>(a + ',' + b)
-
     const 重试几次 = 10
     const 重试休息多少毫秒 = 10
 
@@ -90,7 +88,7 @@ export namespace BitMEXOrderAPI {
                     price: p.price(),
                     orderQty: p.size,
                     side: p.side,
-                    execInst: BitMEXOptions('ParticipateDoNotInitiate', 'ReduceOnly'),
+                    execInst: ['ParticipateDoNotInitiate', 'ReduceOnly'],
                 })
 
             if (ret.error === '网络错误') {
@@ -145,7 +143,7 @@ export namespace BitMEXOrderAPI {
                     stopPx: p.price(),
                     orderQty: 100000,
                     side: p.side,
-                    execInst: BitMEXOptions('Close', 'LastPrice'),
+                    execInst: ['Close', 'LastPrice'],
                 })
 
             if (ret.error === '网络错误') {
