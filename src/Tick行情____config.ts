@@ -4,7 +4,7 @@ import { LineLayer } from './lib/Chart/Layer/LineLayer'
 import { TextLayer } from './lib/Chart/Layer/TextLayer'
 import { lastNumber } from './lib/F/lastNumber'
 import { BarLayer } from './lib/Chart/Layer/BarLayer'
-import { 竖线Layer } from './lib/Chart/Layer/竖线Layer'
+// import { 竖线Layer } from './lib/Chart/Layer/竖线Layer'
 // import { 画线Layer } from './lib/Chart/Layer/画线Layer'
 
 
@@ -51,7 +51,7 @@ const 成交量买卖 = (d: D) => [
     })
 ]
 const 成交量买卖曲线 = (d: D) => [
-     layer(LineLayer, { data: d.期货.成交量均线1, color: 现货颜色 }),
+    layer(LineLayer, { data: d.期货.成交量均线1, color: 现货颜色 }),
     layer(LineLayer, { data: d.期货.成交量买, color: 买颜色 }),
     layer(LineLayer, { data: d.期货.成交量卖, color: 卖颜色 }),
     //layer(LineLayer, { data: d.期货.净成交量均线, color: 现货颜色 }),
@@ -70,7 +70,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             和下一张重叠: true,
             layerList: 双价格(d)
         },
-       
+
         // {
         //     heightPercentage: 0.4,
         //     yCoordinate: '对数',

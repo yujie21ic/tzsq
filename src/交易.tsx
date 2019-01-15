@@ -1,189 +1,212 @@
-// import * as React from 'react'
-// import * as ReactDOM from 'react-dom'
-// import { BaseType } from './lib/BaseType'
-// import { config } from './config'
-// import { getAccountName } from './ConfigType'
-// import { JSONRequestError } from './lib/C/JSONRequest'
-// import { OrderClient } from './OrderServer/OrderClient'
-// import { Table } from './lib/UI/Table'
-// import { dialog } from './lib/UI/dialog'
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
+import { style } from 'typestyle'
 
-// type ButtonProps = {
-//     color: string
-//     textArr: string[]
-//     leftAPI?: () => Promise<{ error?: JSONRequestError, msg?: string, data?: boolean }>
-//     rightAPI?: () => Promise<{ error?: JSONRequestError, msg?: string, data?: boolean }>
-// }
+const boxButton = style({
+    margin: '15px auto',
+    width: '149px',
+    height: '36px',
+    lineHeight: '36px',
+    borderRadius: '2px 2px 2px 2px',
+    fontSize: '18px',
+    textAlign: 'center',
+    boxShadow: '0px 8px 8px 0px rgba(0, 0, 0, 0.24)',
+    $nest: {
+        '&:active': {
+            boxShadow: '2px 2px 2px #999 inset'
+        }
+    }
+})
+type Props = {
+    xbtusd1: number,
+    xbtusd2: number,
+    delete1: number,
+    task1: number,
+    task2: number,
+    ping1: number,
+    data1: {
+        number1: number,
+        number2: number,
+        color: string
+    }[],
+    data2: {
+        number1: number,
+        number2: number,
+        color: string
+    }[],
+}
+type State = {
 
-// type ButtonState = {
-//     loading: boolean
-// }
+}
 
-// class Button extends React.Component<ButtonProps, ButtonState> {
+class APP extends React.Component<Props, State> {
+    componentWillMount() {
+        this.setState({
 
-//     componentWillMount() {
-//         this.setState({
-//             loading: false
-//         })
-//     }
+        })
+    }
+    render() {
+        return <div style={{
+            margin: 'auto auto',
+            width: '300px',
+            height: '100%',
+            position: 'relative',
+            overflow: 'hidden'
+        }}>
+            <div style={{
+                backgroundColor: 'black',
+                position: 'absolute',
+                left: '0',
+                top: '0',
+                right: '-17px',
+                bottom: '0',
+                lineHeight: '200%',
+                fontFamily: 'SourceHanSansSC-regular',
+                color: 'white',
+                fontSize: '24px',
+                overflow: 'scroll'
+            }}>
+                <div style={{
+                    padding: '10px 5px'
+                }}>
+                    <span>XBTUSD</span><br />
+                    <span style={{ color: '#E56546', fontSize: '24px' }}>{this.props.xbtusd1}</span><br />
+                    <span style={{ fontSize: '24px' }}>{this.props.xbtusd2}</span><br />
+                    <span style={{ fontSize: '20px', marginRight: '5px' }}>STOP</span><input type='checkbox' name='stop' value='Bike' style={{ marginRight: '50px', }} />
+                    <span style={{ color: '#48AA65', fontSize: '20px', marginRight: '5px' }}>{this.props.delete1}</span>
+                    <button style={{ color: 'white', fontSize: '20px', margin: '0', padding: '0', border: '1px solid black', outline: 'none', backgroundColor: 'black' }}>X</button>
+                </div>
+                <div style={{
+                    height: '5px',
+                    width: '100%',
+                    backgroundColor: '#BBBBBB'
+                }}></div>
+                <div
+                    style={{
+                        padding: '10px 5px'
+                    }}>
+                    <span>接针任务</span>
+                    <div className={boxButton} style={{
 
-//     onClick = async (f?: () => Promise<{ error?: JSONRequestError, msg?: string, data?: boolean }>) => {
-//         if (f !== undefined) {
-//             this.setState({ loading: true })
-//             const v = await f()
-//             this.setState({ loading: false })
-//             if (v.error !== undefined) {
-//                 dialog.showMessageBox({
-//                     title: v.error,
-//                     contentText: v.msg || ''
-//                 })
-//             }
-//         }
-//     }
+                        backgroundColor: 'rgba(229, 101, 70, 1)',
 
-//     render() {
-//         return <button
-//             style={{
-//                 cursor: this.state.loading ? 'default' : 'pointer',
-//                 width: '100%',
-//                 height: '100%',
-//                 color: 'white',
-//                 fontSize: '24px',
-//                 lineHeight: '35px',
-//                 opacity: this.state.loading ? 0.75 : 1,
-//                 backgroundColor: this.props.color
-//             }}
-//             disabled={this.state.loading}
-//             onMouseUp={e => {
-//                 if (e.button === 0) {
-//                     this.onClick(this.props.leftAPI)
-//                 }
-//                 else if (e.button === 2) {
-//                     this.onClick(this.props.rightAPI)
-//                 }
-//             }}
-//         >
-//             <div style={{ alignItems: 'center' }}>{this.props.textArr.map((v, i) => <p key={i}>{v}</p>)}</div>
-//         </button>
-//     }
-// }
+                    }}>
+                        {this.props.task1}</div>
+                    <div className={boxButton} style={{
 
+                        backgroundColor: 'rgba(72, 170, 101, 1)',
 
+                    }}>
+                        {this.props.task2}</div>
+                </div>
+                <div style={{
+                    height: '5px',
+                    width: '100%',
+                    backgroundColor: '#BBBBBB'
+                }}></div>
+                <div style={{
+                    padding: '10px 5px'
+                }}>
+                    <span>平仓任务</span>
+                    <div className={boxButton} style={{
+                        backgroundColor: 'rgba(150, 155, 174, 1)',
 
-// const 买卖 = (cookie: string, p: YJMM) => (side: BaseType.Side, type: 'maker' | 'taker') => () => OrderClient.rpc.func.走平挂单_____过时({
-//     cookie: cookie,
-//     symbol: p.symbol,
-//     side: side,
-//     size: p.size,
-//     止损点: p.止损点,
-//     type,
-//     延迟下单: p.延迟下单
-// })
+                    }}>
+                        平{this.props.task2}</div>
+                </div>
+                <div style={{
+                    height: '5px',
+                    width: '100%',
+                    backgroundColor: '#BBBBBB'
+                }}></div>
+                <div
+                    style={{
+                        padding: '10px 5px'
+                    }}>
+                    <span>活动委托</span>
+                    <table >
+                        <tbody>
+                            {this.props.data1.map((v, i) =>
+                                <tr style={{
+                                    fontSize: '20px'
+                                }}>
+                                    <td style={{ color: v.color, textIndent: '20px' }}>{v.number1.toFixed(2)}</td>
+                                    <td style={{ color: v.color, textIndent: '20px' }}>{v.number1.toFixed(2)}</td>
+                                    <td style={{ textIndent: '20px' }}><button style={{ color: 'white', fontSize: '18px', margin: '0', padding: '0', border: '1px solid black', outline: 'none', backgroundColor: 'black' }}>X</button></td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                    <div className={boxButton} style={{
 
-// const 市价平仓 = (cookie: string, symbol: BaseType.BitmexSymbol) => () => OrderClient.rpc.func.市价平仓全部({
-//     cookie: cookie,
-//     symbol: symbol,
-// })
+                        backgroundColor: 'rgba(229, 101, 70, 1)',
 
-// const 取消委托 = (cookie: string, symbol: BaseType.BitmexSymbol) => () => OrderClient.rpc.func.取消全部活动委托({
-//     cookie: cookie,
-//     symbol: symbol,
-// })
+                    }}>
+                        {this.props.task1}</div>
+                    <div className={boxButton} style={{
 
+                        backgroundColor: 'rgba(72, 170, 101, 1)',
 
+                    }}>
+                        {this.props.task2}</div>
+                    <table >
+                        <tbody>
+                            {this.props.data2.map((v, i) =>
+                                <tr style={{
+                                    fontSize: '20px'
+                                }}>
+                                    <td style={{ color: v.color, textIndent: '20px' }}>{v.number1.toFixed(2)}</td>
+                                    <td style={{ color: v.color, textIndent: '20px' }}>{v.number1.toFixed(2)}</td>
+                                    <td style={{ textIndent: '20px' }}><button style={{ color: 'white', fontSize: '18px', margin: '0', padding: '0', border: '1px solid black', outline: 'none', backgroundColor: 'black' }}>X</button></td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div >
+        </div>
+    }
+}
 
-
-
-
-
-// const accountClient = new OrderClient(config.account![getAccountName()].cookie)
-
-// class XXXX extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
-
-//     componentWillMount() {
-//         const f = () => {
-//             requestAnimationFrame(f)
-//             this.forceUpdate()
-//         }
-//         f()
-//     }
-
-//     render() {
-//         return <button
-//             style={{
-//                 cursor: 'default',
-//                 width: '100%',
-//                 height: '100%',
-//                 color: 'white',
-//                 fontSize: '24px',
-//                 lineHeight: '35px',
-//                 opacity: 1,
-//                 backgroundColor: 'black'
-//             }}
-//         >
-//             <div style={{ alignItems: 'center' }}>
-//                 <p>{accountClient.isConnected ? '连上' : '断开'}:{accountClient.jsonSync.rawData.symbol[this.props.symbol as 'XBTUSD'].状态}</p>
-//                 <p>msg:{accountClient.jsonSync.rawData.symbol[this.props.symbol as 'XBTUSD'].msg} </p>
-//             </div>
-//         </button>
-//     }
-// }
-
-
-
-
-
-// const { cookie, 一键买卖 } = config.account![getAccountName()]
-
-// ReactDOM.render(<Table
-//     dataSource={一键买卖}
-//     columns={[
-//         {
-//             title: 'A',
-//             render: v => <Button
-//                 color='#48aa65'
-//                 textArr={[
-//                     v.symbol,
-//                     (v.延迟下单.length === 1 ? '延迟下单' : '直接下单') + v.size.toString(),
-//                 ]}
-//                 leftAPI={买卖(cookie, v)('Buy', 'maker')}
-//                 rightAPI={买卖(cookie, v)('Buy', 'taker')}
-//             />
-//         },
-//         {
-//             title: 'B',
-//             render: v => <Button
-//                 color='#e56546'
-//                 textArr={[
-//                     v.symbol,
-//                     (v.延迟下单.length === 1 ? '延迟下单' : '直接下单') + (-v.size).toString(),
-//                 ]}
-//                 leftAPI={买卖(cookie, v)('Sell', 'maker')}
-//                 rightAPI={买卖(cookie, v)('Sell', 'taker')}
-//             />
-//         },
-//         {
-//             title: 'C',
-//             render: v => <Button
-//                 color='#005F91'
-//                 textArr={['市价平仓']}
-//                 leftAPI={市价平仓(cookie, v.symbol)}
-//                 rightAPI={undefined}
-//             />
-//         },
-//         {
-//             title: 'D',
-//             render: v => <Button
-//                 color='#005F91'
-//                 textArr={['取消委托']}
-//                 leftAPI={取消委托(cookie, v.symbol)}
-//                 rightAPI={undefined}
-//             />
-//         },
-//         {
-//             title: 'E',
-//             render: v => <XXXX symbol={v.symbol} />
-//         }
-//     ]}
-//     rowKey={(_, index) => index}
-// />, document.querySelector('#root')) 
+ReactDOM.render(<APP
+    xbtusd1={-500}
+    xbtusd2={3725.25}
+    delete1={3780}
+    task1={-500}
+    task2={+500}
+    ping1={500}
+    data1={[
+        {
+            number1: 3750,
+            number2: -500,
+            color: 'rgba(229, 101, 70, 1)',
+        },
+        {
+            number1: 3750,
+            number2: -500,
+            color: 'rgba(229, 101, 70, 1)',
+        },
+        {
+            number1: 3750,
+            number2: -500,
+            color: 'rgba(229, 101, 70, 1)',
+        }
+    ]}
+    data2={[
+        {
+            number1: 3720,
+            number2: +460,
+            color: 'rgba(72, 170, 101, 1)',
+        },
+        {
+            number1: 3720,
+            number2: +500,
+            color: 'rgba(72, 170, 101, 1)',
+        },
+        {
+            number1: 3720,
+            number2: +500,
+            color: 'rgba(255, 239, 85, 1)',
+        }
+    ]}
+/>, document.querySelector('#root'))
