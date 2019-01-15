@@ -220,7 +220,7 @@ Note that this method will always return item keys, even when not specified, so 
 
         new: (cookie: string, req: {
             symbol: string /* ''  Instrument symbol. e.g. 'XBTUSD'.*/
-            side?: string /* ''  Order side. Valid options: Buy, Sell. Defaults to 'Buy' unless `orderQty` is negative.*/
+            side?: 'Buy' | 'Sell' /* ''  Order side. Valid options: Buy, Sell. Defaults to 'Buy' unless `orderQty` is negative.*/
             simpleOrderQty?: number /* 'double'  Deprecated: simple orders are not supported after 2018/10/26*/
             orderQty?: number /* 'int32'  Order quantity in units of the instrument (i.e. contracts).*/
             price?: number /* 'double'  Optional limit price for 'Limit', 'StopLimit', and 'LimitIfTouched' orders.*/
@@ -229,10 +229,10 @@ Note that this method will always return item keys, even when not specified, so 
             clOrdID?: string /* ''  Optional Client Order ID. This clOrdID will come back on the order and any related executions.*/
             clOrdLinkID?: string /* ''  Deprecated: linked orders are not supported after 2018/11/10.*/
             pegOffsetValue?: number /* 'double'  Optional trailing offset from the current price for 'Stop', 'StopLimit', 'MarketIfTouched', and 'LimitIfTouched' orders; use a negative offset for stop-sell orders and buy-if-touched orders. Optional offset from the peg price for 'Pegged' orders.*/
-            pegPriceType?: string /* ''  Optional peg price type. Valid options: LastPeg, MidPricePeg, MarketPeg, PrimaryPeg, TrailingStopPeg.*/
-            ordType?: string /* ''  Order type. Valid options: Market, Limit, Stop, StopLimit, MarketIfTouched, LimitIfTouched, MarketWithLeftOverAsLimit, Pegged. Defaults to 'Limit' when `price` is specified. Defaults to 'Stop' when `stopPx` is specified. Defaults to 'StopLimit' when `price` and `stopPx` are specified.*/
-            timeInForce?: string /* ''  Time in force. Valid options: Day, GoodTillCancel, ImmediateOrCancel, FillOrKill. Defaults to 'GoodTillCancel' for 'Limit', 'StopLimit', 'LimitIfTouched', and 'MarketWithLeftOverAsLimit' orders.*/
-            execInst?: string /* ''  Optional execution instructions. Valid options: ParticipateDoNotInitiate, AllOrNone, MarkPrice, IndexPrice, LastPrice, Close, ReduceOnly, Fixed. 'AllOrNone' instruction requires `displayQty` to be 0. 'MarkPrice', 'IndexPrice' or 'LastPrice' instruction valid for 'Stop', 'StopLimit', 'MarketIfTouched', and 'LimitIfTouched' orders.*/
+            pegPriceType?: 'LastPeg' | 'MidPricePeg' | 'MarketPeg' | 'PrimaryPeg' | 'TrailingStopPeg' /* ''  Optional peg price type. Valid options: LastPeg, MidPricePeg, MarketPeg, PrimaryPeg, TrailingStopPeg.*/
+            ordType?: 'Market' | 'Limit' | 'Stop' | 'StopLimit' | 'MarketIfTouched' | 'LimitIfTouched' | 'MarketWithLeftOverAsLimit' | 'Pegged' /* ''  Order type. Valid options: Market, Limit, Stop, StopLimit, MarketIfTouched, LimitIfTouched, MarketWithLeftOverAsLimit, Pegged. Defaults to 'Limit' when `price` is specified. Defaults to 'Stop' when `stopPx` is specified. Defaults to 'StopLimit' when `price` and `stopPx` are specified.*/
+            timeInForce?: 'Day' | 'GoodTillCancel' | 'ImmediateOrCancel' | 'FillOrKill' /* ''  Time in force. Valid options: Day, GoodTillCancel, ImmediateOrCancel, FillOrKill. Defaults to 'GoodTillCancel' for 'Limit', 'StopLimit', 'LimitIfTouched', and 'MarketWithLeftOverAsLimit' orders.*/
+            execInst?: 'ParticipateDoNotInitiate' | 'AllOrNone' | 'MarkPrice' | 'IndexPrice' | 'LastPrice' | 'Close' | 'ReduceOnly' | 'Fixed' /* ''  Optional execution instructions. Valid options: ParticipateDoNotInitiate, AllOrNone, MarkPrice, IndexPrice, LastPrice, Close, ReduceOnly, Fixed. 'AllOrNone' instruction requires `displayQty` to be 0. 'MarkPrice', 'IndexPrice' or 'LastPrice' instruction valid for 'Stop', 'StopLimit', 'MarketIfTouched', and 'LimitIfTouched' orders.*/
             contingencyType?: string /* ''  Deprecated: linked orders are not supported after 2018/11/10.*/
             text?: string /* ''  Optional order annotation. e.g. 'Take profit'.*/
         }) => BitMEXRESTAPI__http<BitMEXMessage.Order>({ cookie, method: 'POST', path: '/api/v1/order', req }),

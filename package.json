@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "build/main.js",
   "scripts": {
-    "greate": "ts-node ./src/WebService/BitMEXGreate",
+    "greate": "ts-node ./src/lib/BitMEX/BitMEXGreate",
     "order_server": "ts-node ./src/OrderServer",
     "db_server": "ts-node ./src/DBServer",
     "i": "install-app-deps",
