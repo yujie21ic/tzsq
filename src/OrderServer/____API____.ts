@@ -51,19 +51,8 @@ const symbol = () => ({
         止损: false,
         止盈: false,
     },
-    限价委托: [] as {
-        id: string
-        side: BaseType.Side
-        size: number
-        price: number
-    }[],   
-    止盈委托: [] as {
-        id: string
-        side: BaseType.Side
-        size: number
-        price: number
-    }[],
-    止损委托: [] as {
+    活动委托: [] as {
+        type: '限价' | '限价只减仓' | '止损'
         id: string
         side: BaseType.Side
         size: number

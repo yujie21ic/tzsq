@@ -7,7 +7,7 @@ import { Table } from './lib/UI/Table'
 
 const 计分板倍数 = config.account![getAccountName()].计分板倍数 || 1
 
-const accountClient = new OrderClient(config.account![getAccountName()].cookie)
+const orderClient = new OrderClient(config.account![getAccountName()].cookie)
 
 class APP extends React.Component {
 
@@ -20,7 +20,7 @@ class APP extends React.Component {
     }
 
     render() {
-        const wallet = accountClient.jsonSync.rawData.wallet.filter(v => v.time > Date.now() - 12 * 60 * 60 * 1000)
+        const wallet = orderClient.jsonSync.rawData.wallet.filter(v => v.time > Date.now() - 12 * 60 * 60 * 1000)
 
         const data = [] as {
             id: number

@@ -1,6 +1,13 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { style } from 'typestyle'
+import { OrderClient } from './OrderServer/OrderClient'
+import { config } from './config'
+import { getAccountName } from './ConfigType'
+
+const orderClient = new OrderClient(config.account![getAccountName()].cookie)
+
+//数据全在  orderClient.jsonSync.rawData.symbol 
 
 const boxButton = style({
     margin: '15px auto',

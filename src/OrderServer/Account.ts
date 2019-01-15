@@ -61,43 +61,45 @@ export class Account {
     private updateOrder() {
         keys(this.jsonSync.rawData.symbol).forEach(symbol => {
 
-            this.jsonSync.data.symbol[symbol].限价委托.____set(
-                this.ws.data.order.filter(v =>
-                    v.symbol === symbol &&
-                    v.ordType === 'Limit' &&
-                    v.execInst === 'ParticipateDoNotInitiate' &&
-                    v.workingIndicator === true
-                ).map(v => ({
-                    id: v.orderID,
-                    side: v.side as BaseType.Side,
-                    size: v.orderQty,
-                    price: v.price,
-                }))
-            )
+            const arr = [] as {
+                type: '限价' | '限价只减仓' | '止损'
+                id: string
+                side: BaseType.Side
+                size: number
+                price: number
+            }[]
 
-            this.jsonSync.data.symbol[symbol].止盈委托.____set(this.ws.data.order.filter(v =>
-                v.symbol === symbol &&
-                v.ordType === 'Limit' &&
-                v.execInst === 'ParticipateDoNotInitiate,ReduceOnly' &&
-                v.workingIndicator === true
-            ).map(v => ({
-                id: v.orderID,
-                side: v.side as BaseType.Side,
-                size: v.orderQty,
-                price: v.price,
-            })))
+            this.ws.data.order.filter(v => v.symbol === symbol && v.workingIndicator).forEach(v => {
+                if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate') {
+                    arr.push({
+                        type: '限价',
+                        id: v.orderID,
+                        side: v.side as BaseType.Side,
+                        size: v.orderQty,
+                        price: v.price,
+                    })
+                }
+                else if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate,ReduceOnly') {
+                    arr.push({
+                        type: '限价只减仓',
+                        id: v.orderID,
+                        side: v.side as BaseType.Side,
+                        size: v.orderQty,
+                        price: v.price,
+                    })
+                }
+                else if (v.ordType === 'Stop' && v.execInst === 'Close,LastPrice') {
+                    arr.push({
+                        type: '止损',
+                        id: v.orderID,
+                        side: v.side as BaseType.Side,
+                        size: v.orderQty,
+                        price: v.stopPx,
+                    })
+                }
+            })
 
-            this.jsonSync.data.symbol[symbol].止损委托.____set(this.ws.data.order.filter(v =>
-                v.symbol === symbol &&
-                v.ordType === 'Stop' &&
-                v.execInst === 'Close,LastPrice' &&
-                v.workingIndicator === true
-            ).map(v => ({
-                id: v.orderID,
-                side: v.side as BaseType.Side,
-                size: v.orderQty,
-                price: v.stopPx,
-            })))
+            this.jsonSync.data.symbol[symbol].活动委托.____set(arr)
         })
     }
 
