@@ -1,5 +1,5 @@
 import { BaseType } from './lib/BaseType'
-import { funcList } from './OrderServer/funcList'
+import { funcList } from './OrderServer/____API____'
 
 export type ConfigType = {
     ss: boolean

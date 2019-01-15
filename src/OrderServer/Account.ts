@@ -3,9 +3,9 @@ import { BaseType } from '../lib/BaseType'
 import { lastNumber } from '../lib/F/lastNumber'
 import * as fs from 'fs'
 import { sleep } from '../lib/C/sleep'
-import { AccountBase } from './AccountBase'
 import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
 import { RealData } from '../RealDataServer/RealData'
+import { createJSONSync } from './____API____'
 
 
 export const realData = new RealData(false)
@@ -154,13 +154,13 @@ const get止损成本价 = (p: { side: BaseType.Side, price: number, gridPoint: 
 
 let IDCounter = 0
 
-export class Account extends AccountBase {
+export class Account {
+    jsonSync = createJSONSync()
     private ws: BitMEXWSAPI
     private cookie: string
     ID = '' + (IDCounter++)
 
     constructor(cookie: string) {
-        super()
         this.cookie = cookie
         this.ws = new BitMEXWSAPI(cookie, [
             { theme: 'order' },

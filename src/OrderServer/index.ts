@@ -1,5 +1,5 @@
 import { JSONRPCServer } from '../lib/C/JSONRPC'
-import { funcList } from './funcList'
+import { funcList } from './____API____'
 import { Account, 下单和止损, realData } from './Account'
 import * as WebSocket from 'ws'
 import { config } from '../config'
