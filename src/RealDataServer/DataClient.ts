@@ -2,8 +2,7 @@ import { RealDataBase } from './RealDataBase'
 import { WebSocketClient } from '../lib/C/WebSocketClient'
 import { deepMapNullToNaN } from '../lib/F/deepMapNullToNaN'
 import { config } from '../config'
-import { BaseType } from '../lib/BaseType'
-// import { BitMEXRESTAPI } from '../lib/BitMEX/BitMEXRESTAPI'
+import { BaseType } from '../lib/BaseType' 
 import { DBClient } from '../DBServer/DBClient'
 import { timeID } from '../lib/F/timeID'
 
@@ -31,45 +30,6 @@ export namespace DataClient {
     const 加载多少秒数据 = config.tick历史加载多少秒 || 300
 
     export class RealData__History extends RealDataBase {
-
-        // private get_bitmex_tick = async (symbol: BaseType.BitmexSymbol, startTime: number) => {
-        //     startTime -= 30 * 1000 //30秒前 
-        //     let start = 0
-
-        //     while (true) {
-
-        //         const { data, error, msg } = (await BitMEXRESTAPI.Trade.get('', {
-        //             start,
-        //             symbol,
-        //             count: 500,
-        //             startTime: new Date(startTime).toISOString()
-        //         }))
-
-        //         if (data === undefined || data.length === 0) {
-        //             console.info(`get_bitmex_tick ${symbol} 错误`, { error, msg, data })
-        //             this.重新初始化()
-        //             return
-        //         }
-
-        //         for (let i = 0; i < data.length; i++) {
-        //             const { timestamp, side, size, price } = data[i]
-        //             this.on着笔({
-        //                 symbol,
-        //                 xxxxxxxx: this.jsonSync.data.bitmex[symbol as 'XBTUSD'].data,
-        //                 timestamp: new Date(timestamp).getTime(),
-        //                 side: side as BaseType.Side,
-        //                 price,
-        //                 size
-        //             })
-        //             //5min
-        //             if (this.jsonSync.rawData.bitmex[symbol as 'XBTUSD'].data.length >= 加载多少秒数据 * (1000 / RealDataBase.单位时间)) {
-        //                 this.重新初始化()
-        //                 return
-        //             }
-        //         }
-        //         start += data.length
-        //     }
-        // }
 
         private get_binance_tick = async (symbol: BaseType.BinanceSymbol, startTime: number) => {
 
