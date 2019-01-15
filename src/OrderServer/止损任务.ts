@@ -30,3 +30,30 @@
 //         gridPoint: symbol === 'ETHUSD' ? 0.05 : 0.5
 //     })
 // }
+
+
+
+
+
+
+
+
+// const nowPrice = () => realData.getOrderPrice(p.symbol, p.side, p.type)
+
+// const side = p.side === 'Buy' ? 'Sell' : 'Buy'
+
+// let 止损点 = p.止损点
+
+// const item = realData.dataExt[p.symbol as 'XBTUSD']
+
+// if (止损点 === 0 && item !== undefined) {
+//     止损点 = Math.max(lastNumber(item.期货.波动率) / 15, 3)
+//     const gridPoint = p.symbol === 'ETHUSD' ? 0.05 : 0.5
+//     止损点 = Math.floor(止损点 / gridPoint) * gridPoint
+// }
+
+// return await BitMEXOrderAPI.stop(cookie, {
+//     symbol: p.symbol,
+//     side,
+//     price: () => nowPrice() + 止损点 * (side === 'Buy' ? 1 : -1),
+// })

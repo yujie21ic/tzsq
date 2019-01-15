@@ -2,9 +2,8 @@ import { BitMEXWSAPI } from '../lib/BitMEX/BitMEXWSAPI'
 import { BaseType } from '../lib/BaseType'
 import { lastNumber } from '../lib/F/lastNumber'
 import { createJSONSync } from './____API____'
-import { realData } from './realData'
+import { realData, 下单 } from './realData'
 import { 现货走平X, 期货走平X } from './走平'
-import { 下单和止损 } from './下单和止损'
 import * as fs from 'fs'
 
 
@@ -113,12 +112,11 @@ export class Account {
         if (this.get仓位(req.期货.symbol) !== undefined) return '有仓位了'
 
 
-        const 下单 = async () => await 下单和止损(this.cookie, {
+        const 下单2 = async () => await 下单(this.cookie, {
             symbol: req.期货.symbol,
             side: req.side,
             size: req.size,
             type: req.type,
-            止损点: req.止损点,
         })
 
         const xxx = realData.dataExt[symbol]
@@ -173,7 +171,7 @@ export class Account {
 
 
         log(`现货走平后__下单`)
-        if (await 下单() === false) {
+        if (await 下单2() === false) {
             this.jsonSync.data.symbol[symbol].状态.____set('--')
             return log(`现货走平后__下单失败`)
         }
@@ -204,7 +202,7 @@ export class Account {
         }
 
         log(`期货走平后__下单`)
-        if (await 下单() === false) {
+        if (await 下单2() === false) {
             this.jsonSync.data.symbol[symbol].状态.____set('--')
             return log(`期货走平后__下单失败`)
         } else {

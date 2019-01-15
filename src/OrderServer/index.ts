@@ -6,8 +6,7 @@ import { config } from '../config'
 import { typeObjectParse } from '../lib/F/typeObjectParse'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
 import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
-import { realData } from './realData'
-import { 下单和止损 } from './下单和止损'
+import { realData, 下单 } from './realData'
 
 const accountDic = new Map<string, Account>()      // cookie --> Account
 
@@ -71,7 +70,7 @@ server.func.走平挂单_____过时 = async req => {
     }
 
     if (req.延迟下单.length === 0) {
-        const success = await 下单和止损(req.cookie, req)
+        const success = await 下单(req.cookie, req)
         return success ? '' : '下单和止损失败'
     }
     else if (req.延迟下单.length === 1) {
