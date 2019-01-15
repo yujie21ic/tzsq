@@ -17,29 +17,19 @@ export class Account {
         this.cookie = p.cookie
 
         this.ws = new BitMEXWSAPI(p.cookie, [
-            { theme: 'order' },
+            { theme: 'margin' },
             { theme: 'position' },
-            { theme: 'margin' }
+            { theme: 'order' },
         ])
         this.ws.onmessage = frame => {
             if (frame.table === 'margin' && this.ws.data.margin.length > 0) {
-                //总: walletBalance,
-                //可用: availableMargin
-                const 总 = this.ws.data.margin[0].walletBalance
+                const { walletBalance } = this.ws.data.margin[0]
                 const { wallet } = this.jsonSync.rawData
-
-                if (wallet.length === 0) {
+                if (wallet.length === 0 || wallet[wallet.length - 1].total !== walletBalance) {
                     this.jsonSync.data.wallet.____push({
                         time: new Date(this.ws.data.margin[0].timestamp).getTime(),
-                        total: 总
+                        total: walletBalance
                     })
-                } else {
-                    if (wallet[wallet.length - 1].total !== 总) {
-                        this.jsonSync.data.wallet.____push({
-                            time: new Date(this.ws.data.margin[0].timestamp).getTime(),
-                            total: 总
-                        })
-                    }
                 }
             }
             else if (frame.table === 'position') {
@@ -54,6 +44,9 @@ export class Account {
                         开仓均价.____set(0)
                     }
                 })
+            }
+            else if (frame.table === 'order') {
+                //委托列表
             }
         }
     }
