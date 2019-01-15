@@ -1,5 +1,4 @@
 import { BaseType } from './lib/BaseType'
-import { funcList } from './OrderServer/____API____'
 
 export type ConfigType = {
     ss: boolean
@@ -10,17 +9,13 @@ export type ConfigType = {
     account?: {
         [name: string]: {
             cookie: string
-            一键买卖: YJMM[]
+            一键买卖: {
+                symbol: BaseType.BitmexSymbol
+                size: number
+            }[]
             计分板倍数?: number
         }
     }
 }
 
-export const getAccountName = () => (window as any)['accountName']
-
-export type YJMM = {
-    symbol: BaseType.BitmexSymbol
-    size: number
-    止损点: number
-    延迟下单: typeof funcList.走平挂单_____过时.req.延迟下单
-}
+export const getAccountName = () => (window as any)['accountName'] 

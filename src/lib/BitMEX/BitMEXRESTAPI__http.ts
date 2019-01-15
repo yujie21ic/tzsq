@@ -7,7 +7,9 @@ export const BitMEXRESTAPI__http = async <T>(obj: { method: string, path: string
 
     const { method } = obj
 
-    //数组 改成 用逗号分隔
+
+    //'JSON' 没处理
+    //enum数组 改成 用逗号分隔
     const req = mapObjIndexed(v => Array.isArray(v) ? v.join(',') : v, obj)
 
     const url = 'https://www.bitmex.com' + (

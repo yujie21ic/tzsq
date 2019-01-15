@@ -272,3 +272,32 @@ export const 期货走平X = 走平<BaseType.BitmexSymbol>(symbol => {
 
 //     return ''
 // }
+
+
+
+
+
+
+
+// 有委托(symbol: BaseType.BitmexSymbol) {
+//     return this.ws.data.order.some(v => v.symbol === symbol)
+// }
+
+// get止损side(symbol: BaseType.BitmexSymbol) {
+//     return (this.jsonSync.rawData.symbol[symbol].仓位数量 > 0) ? 'Sell' : 'Buy'
+// }
+
+
+// get浮盈点数(symbol: BaseType.BitmexSymbol) {
+//     const 最新价 = realData.期货价格dic.get(symbol)
+//     if (最新价 === undefined) return NaN
+//     const { 仓位数量, 开仓均价 } = this.jsonSync.rawData.symbol[symbol]
+//     if (仓位数量 === 0) return NaN
+//     if (仓位数量 > 0) {
+//         return 最新价 - 开仓均价
+//     } else if (仓位数量 < 0) {
+//         return 开仓均价 - 最新价
+//     } else {
+//         return 0
+//     }
+// }
