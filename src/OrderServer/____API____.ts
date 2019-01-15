@@ -10,9 +10,9 @@ export const funcList = {
             key: '' as '止盈' | '止损',
             isOpen: false,
         },
-        res: ''
+        res: false,
     },
-    
+
 
     //TODO  止损 和 止盈(减仓)  不取消
     取消全部活动委托: {
@@ -20,7 +20,7 @@ export const funcList = {
             cookie: '',
             symbol: '' as BaseType.BitmexSymbol,
         },
-        res: ''
+        res: false,
     },
 
     //
@@ -29,7 +29,7 @@ export const funcList = {
             cookie: '',
             symbol: '' as BaseType.BitmexSymbol,
         },
-        res: ''
+        res: false,
     },
 
     //挂单 吃单
@@ -41,7 +41,7 @@ export const funcList = {
             side: '' as BaseType.Side,
             size: 0,
         },
-        res: ''
+        res: false,
     },
 
     //走平挂单
@@ -61,7 +61,7 @@ export const funcList = {
                 偏移: 0,
             },
         },
-        res: ''
+        res: false,
     },
 
 
@@ -86,7 +86,7 @@ export const funcList = {
                 }
             }]
         },
-        res: ''
+        res: false,
     },
 }
 

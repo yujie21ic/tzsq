@@ -15,12 +15,20 @@ export const 下单 = async (
         size: number
         type: 'taker' | 'maker'
     }
-) =>
-    p.type === 'taker' ?
+) => {
+
+    const getPrice = () => realData.getOrderPrice(p.symbol, p.side, p.type)
+
+    if (isNaN(getPrice())) {
+        throw '服务器还没有 买1 卖1 价格'
+    }
+
+    return p.type === 'taker' ?
         await BitMEXOrderAPI.taker(cookie, p) :
         await BitMEXOrderAPI.maker(cookie, {
             symbol: p.symbol,
             side: p.side,
             size: p.size,
-            price: () => realData.getOrderPrice(p.symbol, p.side, p.type)
+            price: getPrice,
         })
+}
