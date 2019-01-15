@@ -624,6 +624,7 @@ export namespace 指标 {
     const NaNToInfinity = (n: number) => isNaN(n) ? Infinity : n
     const NaNTo_Infinity = (n: number) => isNaN(n) ? -Infinity : n
 
+
     //TODO
     export const 阻力4 = (p: {
         price: ArrayLike<number>
@@ -643,7 +644,8 @@ export namespace 指标 {
             阻力: number
         }[] = []
 
-        let 初始化涨跌 = false
+        let 初始化涨了 = false
+        let 初始化跌了 = false
 
         const 初始化涨 = (i: number) => {
             const 开始点价格 = p.price[i - 1]
@@ -712,7 +714,8 @@ export namespace 指标 {
                         价钱增量: NaN,
                         阻力: NaN,
                     }
-                    初始化涨跌 = false
+                    初始化涨了 = false
+                    初始化跌了 = false
                 }
 
                 for (let i = Math.max(0, cache.length - 1); i <= key; i++) {
@@ -723,20 +726,33 @@ export namespace 指标 {
                             价钱增量: NaN,
                             阻力: NaN,
                         }
-                        初始化涨跌 = false
+                        初始化涨了 = false
+                        初始化跌了 = false
                     }
                     else if (i === 配置.startIndex) {
-                        (配置.type === '涨' ? 初始化涨 : 初始化跌)(i)
-                        // console.log('初始化涨', i)
-                        初始化涨跌 = true
+                        if (配置.type === '涨') {
+                            初始化涨(i)
+                            初始化涨了 = true
+                        } else {
+                            初始化跌(i)
+                            初始化跌了 = true
+                        }
                     }
                     else if (i > 配置.startIndex) {
-                        if (初始化涨跌 === false) {
-                            (配置.type === '涨' ? 初始化涨 : 初始化跌)(i)
-                            初始化涨跌 = true
+                        if (配置.type === '涨') {
+                            if (初始化涨了 === false) {
+                                初始化涨(i)
+                                初始化涨了 = true
+                            } else {
+                                继续涨(i)
+                            }
                         } else {
-                            // console.log('继续涨', i);
-                            (配置.type === '涨' ? 继续涨 : 继续跌)(i)
+                            if (初始化跌了 === false) {
+                                初始化跌(i)
+                                初始化跌了 = true
+                            } else {
+                                继续跌(i)
+                            }
                         }
                     }
                 }
