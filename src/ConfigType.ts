@@ -1,10 +1,12 @@
 import { BaseType } from './lib/BaseType'
-import { funcList } from './OrderServer/funcList'
+import { funcList } from './OrderServer/____API____'
 
 export type ConfigType = {
     ss: boolean
     tick历史加载多少秒?: number
-    orderServiceCookie?: string[]
+    orderServer?: {
+        [name: string]: string //cookie
+    }
     account?: {
         [name: string]: {
             cookie: string
@@ -20,5 +22,5 @@ export type YJMM = {
     symbol: BaseType.BitmexSymbol
     size: number
     止损点: number
-    延迟下单: typeof funcList.下单和止损.req.延迟下单
+    延迟下单: typeof funcList.走平挂单_____过时.req.延迟下单
 }

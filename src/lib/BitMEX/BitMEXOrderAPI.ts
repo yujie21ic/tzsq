@@ -88,7 +88,7 @@ export namespace BitMEXOrderAPI {
                     price: p.price(),
                     orderQty: p.size,
                     side: p.side,
-                    execInst: 'ParticipateDoNotInitiate,ReduceOnly'
+                    execInst: ['ParticipateDoNotInitiate', 'ReduceOnly'],
                 })
 
             if (ret.error === '网络错误') {
@@ -143,7 +143,7 @@ export namespace BitMEXOrderAPI {
                     stopPx: p.price(),
                     orderQty: 100000,
                     side: p.side,
-                    execInst: 'Close,LastPrice'
+                    execInst: ['Close', 'LastPrice'],
                 })
 
             if (ret.error === '网络错误') {
