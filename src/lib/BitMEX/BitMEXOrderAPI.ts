@@ -30,7 +30,7 @@ export namespace BitMEXOrderAPI {
                 success = false
                 break
             }
-            else if (ret.error === undefined && ret.data !== undefined && ret.data.ordStatus !== 'Canceled') {
+            else if (ret.error === undefined && ret.data !== undefined && ret.data.workingIndicator) {
                 success = true
                 break
             }
@@ -95,7 +95,7 @@ export namespace BitMEXOrderAPI {
                 success = false
                 break
             }
-            else if (ret.error === undefined && ret.data !== undefined && ret.data.ordStatus !== 'Canceled') {
+            else if (ret.error === undefined && ret.data !== undefined && ret.data.workingIndicator) {
                 success = true
                 break
             }
