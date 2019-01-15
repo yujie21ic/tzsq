@@ -1,20 +1,16 @@
 import { BitMEXWSAPI } from '../lib/BitMEX/BitMEXWSAPI'
-import { BaseType } from '../lib/BaseType'
-import { lastNumber } from '../lib/F/lastNumber'
 import { createJSONSync } from './____API____'
-import { realData, 下单, 现货走平X, 期货走平X } from './realData'
-import * as fs from 'fs'
 import { keys } from 'ramda'
 
 export class Account {
     jsonSync = createJSONSync()
     private ws: BitMEXWSAPI
-    private cookie: string
-    private accountName: string
+    // private cookie: string
+    // private accountName: string
 
     constructor(p: { accountName: string, cookie: string }) {
-        this.accountName = p.accountName
-        this.cookie = p.cookie
+        // this.accountName = p.accountName
+        // this.cookie = p.cookie
 
         this.ws = new BitMEXWSAPI(p.cookie, [
             { theme: 'margin' },
@@ -50,7 +46,4 @@ export class Account {
             }
         }
     }
-
-
-
 }
