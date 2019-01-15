@@ -66,3 +66,12 @@ server.func.取消全部活动委托 = async req => {
     }
     return await BitMEXOrderAPI.close(req.cookie, req.symbol)
 }
+
+server.func.走平挂单 = async req => {
+    const account = accountDic.get(req.cookie)
+    if (account === undefined) {
+        throw 'cookie不存在'
+    }
+    account.走平挂单(req)
+    return true
+}

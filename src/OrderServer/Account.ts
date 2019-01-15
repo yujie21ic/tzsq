@@ -87,11 +87,9 @@ export class Account {
     }
 
 
-    async 开仓回合(req: {
-        type: 'taker' | 'maker',
+    async 走平挂单(req: {
         side: BaseType.Side,
         size: number,
-        止损点: number,
         现货: {
             symbol: BaseType.BinanceSymbol
             超时秒: number
@@ -114,7 +112,7 @@ export class Account {
             symbol: req.期货.symbol,
             side: req.side,
             size: req.size,
-            type: req.type,
+            type: 'maker',
         })
 
         const xxx = realData.dataExt[symbol]
