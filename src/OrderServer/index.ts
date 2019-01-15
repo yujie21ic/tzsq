@@ -7,15 +7,16 @@ import { typeObjectParse } from '../lib/F/typeObjectParse'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
 import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
 import { 下单 } from './realData'
+import { kvs } from '../lib/F/kvs'
 
 
-//运行的账户  需要到 orderServiceCookie 设置
+//运行的账户
 //cookie --> Account
 const accountDic = new Map<string, Account>()
-if (config.orderServiceCookie !== undefined) {
-    config.orderServiceCookie.forEach(cookie => accountDic.set(cookie, new Account(cookie)))
+if (config.orderServer !== undefined) {
+    kvs(config.orderServer).forEach(({ k, v }) => accountDic.set(v, new Account({ accountName: k, cookie: v })))
 } else {
-    console.log('orderServiceCookie 没有设置')
+    console.log('运行的账户 没有设置')
 }
 
 
@@ -52,10 +53,7 @@ wss.on('connection', ws => {
 
 
 //http
-const server = new JSONRPCServer({
-    funcList,
-    port: 3456,
-})
+const server = new JSONRPCServer({ funcList, port: 3456 })
 
 server.func.下单 = async req => await 下单(req.cookie, req)
 

@@ -4,7 +4,9 @@ import { funcList } from './OrderServer/____API____'
 export type ConfigType = {
     ss: boolean
     tick历史加载多少秒?: number
-    orderServiceCookie?: string[]
+    orderServer?: {
+        [name: string]: string //cookie
+    }
     account?: {
         [name: string]: {
             cookie: string

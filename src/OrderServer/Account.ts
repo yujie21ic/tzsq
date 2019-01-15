@@ -5,18 +5,17 @@ import { createJSONSync } from './____API____'
 import { realData, 下单, 现货走平X, 期货走平X } from './realData'
 import * as fs from 'fs'
 
-
-let IDCounter = 0
-
 export class Account {
     jsonSync = createJSONSync()
     private ws: BitMEXWSAPI
     private cookie: string
-    ID = '' + (IDCounter++)
+    private accountName: string
 
-    constructor(cookie: string) {
-        this.cookie = cookie
-        this.ws = new BitMEXWSAPI(cookie, [
+    constructor(p: { accountName: string, cookie: string }) {
+        this.accountName = p.accountName
+        this.cookie = p.cookie
+
+        this.ws = new BitMEXWSAPI(p.cookie, [
             { theme: 'order' },
             { theme: 'position' },
             { theme: 'margin' }
@@ -145,7 +144,7 @@ export class Account {
         //        
         const log = (msg: string) => {
             this.jsonSync.data.symbol[symbol].msg.____set(msg)
-            fs.writeFileSync(`./db/${this.ID}_${req.期货.symbol}_开仓回合.txt`, new Date().toLocaleString() + '  ' + msg + '\n', {
+            fs.writeFileSync(`./db/${this.accountName}_${req.期货.symbol}_开仓回合.txt`, new Date().toLocaleString() + '  ' + msg + '\n', {
                 encoding: 'utf-8',
                 flag: 'a+'
             })
