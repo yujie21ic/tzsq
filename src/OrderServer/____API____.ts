@@ -15,16 +15,16 @@ export const funcList = {
 
 
     //TODO  止损 和 止盈(减仓)  不取消
-    取消全部活动委托: {
+    取消委托: {
         req: {
             cookie: '',
-            symbol: '' as BaseType.BitmexSymbol,
+            orderID: '',
         },
         res: false,
     },
 
     //
-    市价平仓全部: {
+    市价平仓: {
         req: {
             cookie: '',
             symbol: '' as BaseType.BitmexSymbol,

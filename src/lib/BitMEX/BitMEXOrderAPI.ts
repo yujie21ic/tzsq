@@ -159,6 +159,24 @@ export namespace BitMEXOrderAPI {
         return success
     }
 
+    export const cancel = async (cookie: string, orderID: string) => {
+        let success = false
+        for (let i = 0; i < 重试几次; i++) {
+            const ret = await BitMEXRESTAPI.Order.cancel(cookie, { orderID })
+
+            if (ret.error === '网络错误') {
+                success = false
+                break
+            }
+            else if (ret.error === undefined) {
+                success = true
+                break
+            }
+            await sleep(重试休息多少毫秒)
+        }
+        return success
+    }
+
     export const cancelAll = async (cookie: string, symbol: BaseType.BitmexSymbol) => {
         let success = false
         for (let i = 0; i < 重试几次; i++) {

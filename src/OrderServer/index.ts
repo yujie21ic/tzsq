@@ -57,12 +57,11 @@ const server = new JSONRPCServer({ funcList, port: 3456 })
 
 server.func.下单 = async req => await 下单(req.cookie, req)
 
-server.func.市价平仓全部 = async req => await BitMEXOrderAPI.close(req.cookie, req.symbol)
+server.func.市价平仓 = async req => await BitMEXOrderAPI.close(req.cookie, req.symbol)
 
-server.func.取消全部活动委托 = async req => {
-    const account = accountDic.get(req.cookie)
-    if (account === undefined) {
-        throw 'cookie不存在'
-    }
-    return await BitMEXOrderAPI.close(req.cookie, req.symbol)
-}
+server.func.取消委托 = async req => await BitMEXOrderAPI.cancel(req.cookie, req.orderID)
+
+// const account = accountDic.get(req.cookie)
+// if (account === undefined) {
+//     throw 'cookie不存在'
+// }
