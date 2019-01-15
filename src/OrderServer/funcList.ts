@@ -2,7 +2,53 @@ import { BaseType } from '../lib/BaseType'
 
 export const funcList = {
 
-    下单和止损: {
+    //TODO
+    任务开关: {
+        req: {
+            cookie: '',
+            symbol: '' as BaseType.BitmexSymbol,
+            key: '' as '止盈' | '止损',
+            isOpen: false,
+        },
+        res: ''
+    },
+
+    //TODO  止损 和 止盈(减仓)  不取消
+    取消全部活动委托: {
+        req: {
+            cookie: '',
+            symbol: '' as BaseType.BitmexSymbol,
+        },
+        res: ''
+    },
+
+
+    //
+    市价平仓全部: {
+        req: {
+            cookie: '',
+            symbol: '' as BaseType.BitmexSymbol,
+        },
+        res: ''
+    },
+
+
+    //挂单 吃单
+    下单: {
+        req: {
+            cookie: '',
+            symbol: '' as BaseType.BitmexSymbol,
+            type: '' as 'taker' | 'maker',
+            side: '' as BaseType.Side,
+            size: 0,
+        },
+        res: ''
+    },
+
+
+
+    //走平挂单
+    走平挂单: {
         req: {
             cookie: '',
             symbol: '' as BaseType.BitmexSymbol,
@@ -25,19 +71,5 @@ export const funcList = {
         res: ''
     },
 
-    市价平仓: {
-        req: {
-            cookie: '',
-            symbol: '' as BaseType.BitmexSymbol
-        },
-        res: ''
-    },
 
-    取消全部委托: {
-        req: {
-            cookie: '',
-            symbol: '' as BaseType.BitmexSymbol
-        },
-        res: ''
-    }
 }

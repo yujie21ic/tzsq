@@ -60,7 +60,7 @@ const server = new JSONRPCServer({
     port: 3456
 })
 
-server.func.下单和止损 = async req => {
+server.func.走平挂单 = async req => {
     const account = accountDic.get(req.cookie)
     if (account === undefined) return 'cookie不存在'
 
@@ -91,12 +91,12 @@ server.func.下单和止损 = async req => {
     }
 }
 
-server.func.市价平仓 = async req => {
+server.func.市价平仓全部 = async req => {
     const success = await BitMEXOrderAPI.close(req.cookie, req.symbol)
-    return success ? '' : '市价平仓失败'
+    return success ? '' : '市价平仓全部失败'
 }
 
-server.func.取消全部委托 = async req => {
+server.func.取消全部活动委托 = async req => {
     const success = await BitMEXOrderAPI.cancelAll(req.cookie, req.symbol)
-    return success ? '' : '取消全部委托失败'
+    return success ? '' : '取消全部活动委托'
 }
