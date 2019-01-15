@@ -11,8 +11,8 @@ import { dialog } from './lib/UI/dialog'
 type ButtonProps = {
     color: string
     textArr: string[]
-    leftAPI?: () => Promise<{ error?: JSONRequestError, msg?: string, data?: string }>
-    rightAPI?: () => Promise<{ error?: JSONRequestError, msg?: string, data?: string }>
+    leftAPI?: () => Promise<{ error?: JSONRequestError, msg?: string, data?: boolean }>
+    rightAPI?: () => Promise<{ error?: JSONRequestError, msg?: string, data?: boolean }>
 }
 
 type ButtonState = {
@@ -27,7 +27,7 @@ class Button extends React.Component<ButtonProps, ButtonState> {
         })
     }
 
-    onClick = async (f?: () => Promise<{ error?: JSONRequestError, msg?: string, data?: string }>) => {
+    onClick = async (f?: () => Promise<{ error?: JSONRequestError, msg?: string, data?: boolean }>) => {
         if (f !== undefined) {
             this.setState({ loading: true })
             const v = await f()
@@ -36,12 +36,6 @@ class Button extends React.Component<ButtonProps, ButtonState> {
                 dialog.showMessageBox({
                     title: v.error,
                     contentText: v.msg || ''
-                })
-            }
-            else if (v.data !== undefined && v.data !== '') {
-                dialog.showMessageBox({
-                    title: '失败',
-                    contentText: v.data
                 })
             }
         }

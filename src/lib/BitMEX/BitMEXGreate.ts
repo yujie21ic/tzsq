@@ -38,7 +38,7 @@ const getTypeString = (obj: any, tab = 1): string => {
 }
 
 
-const xx = (v: any) => {
+const xx = (v: { description: string, type: string }) => {
     const xx = (v.description || '').match(/Valid options:.*?\./g)
     if (xx && xx[0]) {
         return (xx[0] as string).replace('Valid options:', '').replace(/[ \.]+/g, '').split(',').map(v => `'${v}'`).join(' | ')
