@@ -47,14 +47,16 @@ export class Account {
             }
             else if (frame.table === 'order') {
 
-                console.log('委托列表', JSON.stringify(this.ws.data.order, undefined, 4))
+                console.log('委托列表', JSON.stringify(this.ws.data.order.map(v => v.ordStatus), undefined, 4))
 
 
                 const 只减仓 = this.ws.data.order.filter(v =>
                     v.symbol === 'XBTUSD' &&
                     v.ordType === 'Limit' &&
-                    v.execInst === 'ParticipateDoNotInitiate,ReduceOnly'
+                    v.execInst === 'ParticipateDoNotInitiate,ReduceOnly' &&
+                    v.workingIndicator === true
                 ).map(v => ({
+                    orderID: v.orderID,
                     side: v.side,
                     price: v.price,
                     orderQty: v.orderQty,
@@ -64,8 +66,10 @@ export class Account {
                 const 挂单 = this.ws.data.order.filter(v =>
                     v.symbol === 'XBTUSD' &&
                     v.ordType === 'Limit' &&
-                    v.execInst === 'ParticipateDoNotInitiate'
+                    v.execInst === 'ParticipateDoNotInitiate' &&
+                    v.workingIndicator === true
                 ).map(v => ({
+                    orderID: v.orderID,
                     side: v.side,
                     price: v.price,
                     orderQty: v.orderQty,
@@ -75,8 +79,10 @@ export class Account {
                 const 市价止损 = this.ws.data.order.filter(v =>
                     v.symbol === 'XBTUSD' &&
                     v.ordType === 'Stop' &&
-                    v.execInst === 'Close,LastPrice'
+                    v.execInst === 'Close,LastPrice' &&
+                    v.workingIndicator === true
                 ).map(v => ({
+                    orderID: v.orderID,
                     side: v.side,
                     stopPx: v.stopPx,
                     orderQty: v.orderQty,
