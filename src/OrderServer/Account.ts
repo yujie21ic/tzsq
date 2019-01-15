@@ -4,6 +4,7 @@ import { lastNumber } from '../lib/F/lastNumber'
 import { createJSONSync } from './____API____'
 import { realData, 下单, 现货走平X, 期货走平X } from './realData'
 import * as fs from 'fs'
+import { keys } from 'ramda'
 
 export class Account {
     jsonSync = createJSONSync()
@@ -41,6 +42,19 @@ export class Account {
                     }
                 }
             }
+            else if (frame.table === 'position') {
+                keys(this.jsonSync.rawData.symbol).forEach(symbol => {
+                    const item = this.ws.data.position.find(v => v.symbol === symbol && v.isOpen)
+                    const { 仓位数量, 开仓均价 } = this.jsonSync.data.symbol[symbol]
+                    if (item !== undefined) {
+                        仓位数量.____set(item.currentQty)
+                        开仓均价.____set(item.avgCostPrice)
+                    } else {
+                        仓位数量.____set(0)
+                        开仓均价.____set(0)
+                    }
+                })
+            }
         }
     }
 
@@ -49,34 +63,16 @@ export class Account {
         return this.ws.data.order.some(v => v.symbol === symbol)
     }
 
-
-
-    get仓位(symbol: BaseType.BitmexSymbol) {
-        const item = this.ws.data.position.find(v => v.symbol === symbol && v.isOpen)
-        if (item === undefined) return undefined
-
-        return {
-            仓位数量: item.currentQty,
-            开仓均价: item.avgCostPrice
-        }
-    }
-
     get止损side(symbol: BaseType.BitmexSymbol) {
-        const p = this.get仓位(symbol)
-        return (p && p.仓位数量 > 0) ? 'Sell' : 'Buy'
+        return (this.jsonSync.rawData.symbol[symbol].仓位数量 > 0) ? 'Sell' : 'Buy'
     }
-
 
 
     get浮盈点数(symbol: BaseType.BitmexSymbol) {
         const 最新价 = realData.期货价格dic.get(symbol)
         if (最新价 === undefined) return NaN
-
-        const item = this.get仓位(symbol)
-        if (item === undefined) return NaN
-
-        const { 仓位数量, 开仓均价 } = item
-
+        const { 仓位数量, 开仓均价 } = this.jsonSync.rawData.symbol[symbol]
+        if (仓位数量 === 0) return NaN
         if (仓位数量 > 0) {
             return 最新价 - 开仓均价
         } else if (仓位数量 < 0) {
@@ -105,7 +101,7 @@ export class Account {
 
         if (this.ws.isConnected === false) return 'ws断开了'
         if (this.有委托(req.期货.symbol)) return '有委托了'
-        if (this.get仓位(req.期货.symbol) !== undefined) return '有仓位了'
+        if (this.jsonSync.rawData.symbol[req.期货.symbol].仓位数量 !== 0) return '有仓位了'
 
 
         const 下单2 = async () => await 下单(this.cookie, {
@@ -188,7 +184,7 @@ export class Account {
 
         //没有委托 没有仓位 
         const 期货走平后__下单条件 =
-            this.有委托(req.期货.symbol) === false && this.get仓位(req.期货.symbol) === undefined &&
+            this.有委托(req.期货.symbol) === false && this.jsonSync.rawData.symbol[req.期货.symbol].仓位数量 === 0 &&
             ((时间点B价差 > 时间点A价差 && req.side === 'Buy') || (时间点B价差 < 时间点A价差 && req.side === 'Sell'))
 
 

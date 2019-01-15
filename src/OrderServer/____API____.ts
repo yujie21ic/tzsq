@@ -91,6 +91,21 @@ export const funcList = {
 }
 
 
+const symbol = () => ({
+    //过时
+    状态: '--' as '--' | '开仓中' | '平仓中',
+    msg: '',
+    //新
+    任务: {
+        止损: false,
+        止盈: false,
+    },
+    仓位数量: 0,
+    开仓均价: 0,
+    委托列表: [] as {
+        type: '活动' | '止盈' | '止损',
+    }[]
+})
 
 export const createJSONSync = () =>
     new JSONSync(
@@ -102,36 +117,8 @@ export const createJSONSync = () =>
             }[],
             //
             symbol: {
-                XBTUSD: {
-                    //过时
-                    状态: '--' as '--' | '开仓中' | '平仓中',
-                    msg: '',
-                    //新
-                    任务: {
-                        止损: false,
-                        止盈: false,
-                    },
-                    委托: {
-                        活动委托: [] as {}[],
-                        止损委托: [] as {}[],
-                        止盈委托: [] as {}[],
-                    }
-                },
-                ETHUSD: {
-                    //过时
-                    状态: '--' as '--' | '开仓中' | '平仓中',
-                    msg: '',
-                    //新
-                    任务: {
-                        止损: false,
-                        止盈: false,
-                    },
-                    委托: {
-                        活动委托: [] as {}[],
-                        止损委托: [] as {}[],
-                        止盈委托: [] as {}[],
-                    }
-                },
+                XBTUSD: symbol(),
+                ETHUSD: symbol(),
             }
         }
     )
