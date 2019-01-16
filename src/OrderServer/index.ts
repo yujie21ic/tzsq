@@ -6,7 +6,7 @@ import { config } from '../config'
 import { typeObjectParse } from '../lib/F/typeObjectParse'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
 import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
-import { 下单 } from './realData'
+import { realData } from './realData'
 import { kvs } from '../lib/F/kvs'
 
 
@@ -91,4 +91,19 @@ server.func.取消委托 = async req => await BitMEXOrderAPI.cancel(req.cookie, 
 
 server.func.市价平仓 = async req => await BitMEXOrderAPI.close(req.cookie, req.symbol)
 
-server.func.下单 = async req => await 下单(req.cookie, req)
+server.func.下单 = async req => {
+    const getPrice = () => realData.getOrderPrice(req.symbol, req.side, req.type)
+
+    if (isNaN(getPrice())) {
+        throw '服务器还没有 买1 卖1 价格'
+    }
+
+    return req.type === 'taker' ?
+        await BitMEXOrderAPI.taker(req.cookie, req) :
+        await BitMEXOrderAPI.maker(req.cookie, {
+            symbol: req.symbol,
+            side: req.side,
+            size: req.size,
+            price: getPrice,
+        })
+}
