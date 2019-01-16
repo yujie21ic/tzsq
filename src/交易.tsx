@@ -7,13 +7,14 @@ import { getAccountName } from './ConfigType'
 import { Switch } from '@material-ui/core'
 import { JSONRequestError } from './lib/C/JSONRequest'
 import { dialog } from './lib/UI/dialog'
+import none from 'ramda/es/none'
 
 const cookie = config.account![getAccountName()].cookie
 const orderClient = new OrderClient(cookie)
 const d = () => orderClient.jsonSync.rawData.symbol.XBTUSD
 const rpc = OrderClient.rpc.func
 
-;(window as any)['d']=d
+    ; (window as any)['d'] = d
 
 
 const boxButton = style({
@@ -33,8 +34,53 @@ const boxButton = style({
 })
 
 
+class Table extends React.Component<{
+
+    side: string
+
+}, {}> {
+
+    componentWillMount() {
+
+    }
+    render() {
+        return <table style={{
+            width: '150px',
+            margin: '15px auto',
+        }}
+        >
+            <tbody>
+                {d().活动委托.filter(v => v.side === this.props.side).map((v, i) =>
+                    <tr key={v.id}
+
+                        style={{
+                            fontSize: '20px',
+                            width: '100%',
+                            color: v.type === '限价只减仓' ?
+                                'rgba(255, 239, 85, 1)'
+                                : v.type === '止损' ?
+                                    this.props.side === 'Buy' ? 'rgba(229, 101, 70, 1)' : 'rgba(72, 170, 101, 1)'
+                                    : this.props.side === 'Buy' ? 'rgba(72, 170, 101, 1)' : 'rgba(72, 170, 101, 1)'
+                        }}>
+                        <td style={{ width: '50%' }}>{v.price}</td>
+                        <td style={{ width: '35%' }}>{v.size}</td>
+                        <td style={{ width: '15%', display: 'none' }} >
+                            <Button                  
+                                bgColor='#24292d'
+                                text='X'
+                                width='100%'
+                                func={() => rpc.取消委托({ cookie, orderID: [v.id] })} />
+                        </td>
+                    </tr>
+                )}
+            </tbody>
+        </table>
+    }
+}
+
 
 class Button extends React.Component<{
+
     bgColor: string
     text: string
     width?: string
@@ -70,7 +116,7 @@ class Button extends React.Component<{
     render() {
         return <div className={boxButton} style={{
             backgroundColor: this.props.bgColor,
-            width:this.props.width
+            width: this.props.width
         }}>
             {this.props.text}</div>
     }
@@ -114,7 +160,9 @@ class APP extends React.Component<{}, { quxiao: string }> {
                 <span style={{ color: d().仓位数量 < 0 ? 'rgba(229, 101, 70, 1)' : 'rgba(72, 170, 101, 1)', fontSize: '24px' }}>{d().仓位数量}</span>
                 <span style={{ paddingLeft: '50px', fontSize: '24px' }}>@{d().开仓均价}</span>
             </div>
-            <Button bgColor='rgba(229, 101, 70, 1)'
+            <Button
+
+                bgColor='rgba(229, 101, 70, 1)'
                 text='市价平仓'
                 func={() => rpc.市价平仓({ cookie, symbol: 'XBTUSD' })} />
             <div
@@ -135,69 +183,24 @@ class APP extends React.Component<{}, { quxiao: string }> {
 
                         width: '50%'
                     }}>
-                    <Button bgColor='rgba(72, 170, 101, 1)'
+                    <Button
+
+                        bgColor='rgba(72, 170, 101, 1)'
                         text='500'
                         func={() => { }} />
-                  
-                    <table style={{
-                        width: '150px',
-                        margin: '15px auto',
-                    }}>
-                        <tbody>
-                            {d().活动委托.filter(v => v.side === 'Buy').map((v, i) =>
-                                <tr key={v.id}
-                                    style={{
-                                        fontSize: '20px',
-                                        width: '100%',
-                                        color: v.type === '限价只减仓' ? 'rgba(255, 239, 85, 1)' : v.type === '止损' ? 'rgba(229, 101, 70, 1)' : 'rgba(72, 170, 101, 1)'
-                                    }}
-                                    onMouseOver={() => this.setState({ quxiao: 'a' + i })}
-                                    onMouseOut={() => this.setState({ quxiao: '0' })}>
-                                    <td style={{ width: '50%' }}>{v.price}</td>
-                                    <td style={{ width: '35%' }}>{v.size}</td>
-                                    <td style={{ width: '15%' }}>
-                                    <Button bgColor='#24292d'
-                                            text='X'
-                                            width='100%'
-                                            func={() => rpc.取消委托({ cookie, orderID: [v.id] })} />
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                    <Table side='Buy' />
+
                 </div>
                 <div
                     style={{
                         width: '50%'
                     }}>
-                    <Button bgColor='rgba(229, 101, 70, 1)'
+                    <Button
+
+                        bgColor='rgba(229, 101, 70, 1)'
                         text='-500'
                         func={() => { }} />
-                    <table style={{
-                        width: '150px',
-                        margin: '15px auto',
-                    }}>
-                        <tbody>
-                            {d().活动委托.filter(v => v.side === 'Sell').map((v, i) =>
-                                <tr key={v.id}
-                                    style={{
-                                        fontSize: '20px',
-                                        color: v.type === '限价只减仓' ? 'rgba(255, 239, 85, 1)' : v.type === '止损' ? 'rgba(229, 101, 70, 1)' : 'rgba(229, 101, 70, 1)'
-                                    }}
-                                    onMouseOver={() => this.setState({ quxiao: 'b' + i })}
-                                    onMouseOut={() => this.setState({ quxiao: '0' })}>
-                                    <td style={{ width: '50%' }}>{v.price}</td>
-                                    <td style={{ width: '35%' }}>{v.size}</td>
-                                    <td style={{ width: '15%' }}>
-                                        <Button bgColor='#24292d'
-                                            text='X'
-                                            width='100%'
-                                            func={() => rpc.取消委托({ cookie, orderID: [v.id] })} />
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                    <Table side='Sell' />
                 </div>
             </div>
         </div >
