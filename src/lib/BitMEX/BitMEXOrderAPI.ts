@@ -26,7 +26,7 @@ export namespace BitMEXOrderAPI {
         return success
     }
 
-    const xx_workingIndicator = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: { workingIndicator: boolean } }>) => async (cookie: string, p: P) => {
+    const xx_ordStatus = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: { ordStatus: string } }>) => async (cookie: string, p: P) => {
         let success = false
         for (let i = 0; i < 重试几次; i++) {
             const ret = await f(cookie, p)
@@ -34,7 +34,7 @@ export namespace BitMEXOrderAPI {
                 success = false
                 break
             }
-            else if (ret.error === undefined && ret.data !== undefined && ret.data.workingIndicator) {
+            else if (ret.error === undefined && ret.data !== undefined && ret.data.ordStatus === 'New') {
                 success = true
                 break
             }
@@ -44,7 +44,7 @@ export namespace BitMEXOrderAPI {
     }
 
     //需要判断 workingIndicator
-    export const maker = xx_workingIndicator<{
+    export const maker = xx_ordStatus<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         size: number
@@ -61,12 +61,12 @@ export namespace BitMEXOrderAPI {
         })
     )
 
-    export const updateStop = xx_workingIndicator<{
+    export const updateStop = xx_ordStatus<{
         orderID: string
         stopPx: number
     }>(BitMEXRESTAPI.Order.amend)
 
-    export const updateMaker = xx_workingIndicator<{
+    export const updateMaker = xx_ordStatus<{
         orderID: string
         price: number
     }>(BitMEXRESTAPI.Order.amend)

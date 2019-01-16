@@ -89,8 +89,8 @@ export class Account {
                 price: number
             }[]
 
-            this.ws.data.order.filter(v => v.symbol === symbol && v.workingIndicator).forEach(v => {
-                if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate') {
+            this.ws.data.order.filter(v => v.symbol === symbol).forEach(v => {
+                if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate' && v.workingIndicator) {
                     arr.push({
                         type: '限价',
                         id: v.orderID,
@@ -99,7 +99,7 @@ export class Account {
                         price: v.price,
                     })
                 }
-                else if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate,ReduceOnly') {
+                else if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && v.workingIndicator) {
                     arr.push({
                         type: '限价只减仓',
                         id: v.orderID,
@@ -117,7 +117,7 @@ export class Account {
                         price: v.stopPx,
                     })
                 }
-            })
+            }) 
 
             this.jsonSync.data.symbol[symbol].活动委托.____set(arr)
         })
