@@ -2,6 +2,7 @@ import { BitMEXWSAPI } from '../lib/BitMEX/BitMEXWSAPI'
 import { createJSONSync } from './____API____'
 import { keys } from 'ramda'
 import { BaseType } from '../lib/BaseType'
+import { sleep } from '../lib/C/sleep'
 
 export class Account {
     jsonSync = createJSONSync()
@@ -29,6 +30,7 @@ export class Account {
                 this.updateOrder()
             }
         }
+        this.XBTUSD止损任务()
     }
 
     private updateMargin() {
@@ -104,13 +106,31 @@ export class Account {
     }
 
 
+    async XBTUSD止损任务() {
+
+        while (true) {
 
 
-    // 止盈
-    // 大于5点，走平止盈一半   ( 平到 只剩 5000)           //  5000设置参数
-    // 止损
-    // 下单之后的止损，波动率/4，最高18
-    // 推止损
-    // 下单之后，盈利超过7点，推到成本价，超过15点，推到成本价+3
+            await sleep(500) //500ms
+        }
+        /*
+        止盈
+        大于5点，走平止盈一半   ( 平到 只剩 5000)           //  5000设置参数
+    
+    
+    
+        止损    
+        事件  
+            abs(仓位数量)   变大之后
+            盈利变化  
+        
+        盈利超过7点    止损 = 成本价，
+        盈利超过15点   止损 =  成本价 + 3
+        其他          止损  = min(期货波动率/4,18) 
+    
+        */
+    }
+
+
 
 }

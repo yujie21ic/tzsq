@@ -126,12 +126,40 @@ export namespace BitMEXOrderAPI {
         return success
     }
 
+    export const updateStop = async (
+        cookie: string,
+        p: {
+            orderID: string
+            price: number
+        }
+    ) => {
+        let success = false
+        for (let i = 0; i < 重试几次; i++) {
+            const ret = await BitMEXRESTAPI.Order.amend(cookie,
+                {
+                    orderID: p.orderID,
+                    stopPx: p.price,
+                })
+
+            if (ret.error === '网络错误') {
+                success = false
+                break
+            }
+            else if (ret.error === undefined) {
+                success = true
+                break
+            }
+            await sleep(重试休息多少毫秒)
+        }
+        return success
+    }
+
     export const stop = async (
         cookie: string,
         p: {
             symbol: BaseType.BitmexSymbol
             side: BaseType.Side
-            price: () => number
+            price: number
         }
     ) => {
         let success = false
@@ -140,7 +168,7 @@ export namespace BitMEXOrderAPI {
                 {
                     symbol: p.symbol,
                     ordType: 'Stop',
-                    stopPx: p.price(),
+                    stopPx: p.price,
                     orderQty: 100000,
                     side: p.side,
                     execInst: ['Close', 'LastPrice'],
