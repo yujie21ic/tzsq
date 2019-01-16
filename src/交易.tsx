@@ -4,20 +4,21 @@ import { style } from 'typestyle'
 import { OrderClient } from './OrderServer/OrderClient'
 import { config } from './config'
 import { getAccountName } from './ConfigType'
+import { Switch } from '@material-ui/core'
 
 const orderClient = new OrderClient(config.account![getAccountName()].cookie)
 
 //数据全在  orderClient.jsonSync.rawData.symbol 
 
-const boxButton = style({
-    margin: '15px auto',
-    width: '149px',
+const boxButton = style({  
+    width: '120px',
     height: '36px',
     lineHeight: '36px',
     borderRadius: '2px 2px 2px 2px',
     fontSize: '18px',
     textAlign: 'center',
     boxShadow: '0px 8px 8px 0px rgba(0, 0, 0, 0.24)',
+    cursor: 'pointer',
     $nest: {
         '&:active': {
             boxShadow: '2px 2px 2px #999 inset'
@@ -43,135 +44,145 @@ type Props = {
     }[],
 }
 type State = {
-
+    quxiao: string
 }
 
 class APP extends React.Component<Props, State> {
     componentWillMount() {
         this.setState({
-
+            quxiao: '0'
         })
     }
     render() {
         return <div style={{
+            backgroundColor: '#24292d',
             margin: 'auto auto',
-            width: '300px',
+            width: '350px',
             height: '100%',
-            position: 'relative',
-            overflow: 'hidden'
+            padding: '10px 5px',
+            overflow: 'hidden',
+            fontFamily: 'SourceHanSansSC-regular',
+            color: 'white',
+            fontSize: '24px',
+            userSelect: 'none',
+            cursor: 'default'
         }}>
+            <span>XBTUSD</span>
             <div style={{
-                backgroundColor: 'black',
-                position: 'absolute',
-                left: '0',
-                top: '0',
-                right: '-17px',
-                bottom: '0',
-                lineHeight: '200%',
-                fontFamily: 'SourceHanSansSC-regular',
-                color: 'white',
-                fontSize: '24px',
-                overflow: 'scroll'
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                margin: '20px 0'
             }}>
-                <div style={{
-                    padding: '10px 5px'
+                <span style={{ color: '#E56546', fontSize: '24px' }}>{this.props.xbtusd1}</span>
+                <span style={{ paddingLeft: '50px', fontSize: '24px' }}>@{this.props.xbtusd2}</span>
+            </div>
+            <div className={boxButton} style={{
+                margin: '15px auto',
+                backgroundColor: 'rgba(229, 101, 70, 1)'
+            }}>
+                市价平仓</div>
+            <div
+                style={{
+                    fontSize: '20px',
+                    
                 }}>
-                    <span>XBTUSD</span><br />
-                    <span style={{ color: '#E56546', fontSize: '24px' }}>{this.props.xbtusd1}</span><br />
-                    <span style={{ fontSize: '24px' }}>{this.props.xbtusd2}</span><br />
-                    <span style={{ fontSize: '20px', marginRight: '5px' }}>STOP</span><input type='checkbox' name='stop' value='Bike' style={{ marginRight: '50px', }} />
-                    <span style={{ color: '#48AA65', fontSize: '20px', marginRight: '5px' }}>{this.props.delete1}</span>
-                    <button style={{ color: 'white', fontSize: '20px', margin: '0', padding: '0', border: '1px solid black', outline: 'none', backgroundColor: 'black' }}>X</button>
-                </div>
-                <div style={{
-                    height: '5px',
-                    width: '100%',
-                    backgroundColor: '#BBBBBB'
-                }}></div>
+                <span>止损任务<Switch color='primary' /></span><br />
+                <span>止盈任务<Switch color='secondary' /></span>
+            </div>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between'
+            }}>
                 <div
                     style={{
-                        padding: '10px 5px'
+                        width: '50%'
                     }}>
-                    <span>接针任务</span>
                     <div className={boxButton} style={{
 
                         backgroundColor: 'rgba(229, 101, 70, 1)',
 
                     }}>
                         {this.props.task1}</div>
-                    <div className={boxButton} style={{
-
-                        backgroundColor: 'rgba(72, 170, 101, 1)',
-
+                    <table style={{
+                        width: '100%',
+                        marginTop:'20px'
                     }}>
-                        {this.props.task2}</div>
-                </div>
-                <div style={{
-                    height: '5px',
-                    width: '100%',
-                    backgroundColor: '#BBBBBB'
-                }}></div>
-                <div style={{
-                    padding: '10px 5px'
-                }}>
-                    <span>平仓任务</span>
-                    <div className={boxButton} style={{
-                        backgroundColor: 'rgba(150, 155, 174, 1)',
-
-                    }}>
-                        平{this.props.task2}</div>
-                </div>
-                <div style={{
-                    height: '5px',
-                    width: '100%',
-                    backgroundColor: '#BBBBBB'
-                }}></div>
-                <div
-                    style={{
-                        padding: '10px 5px'
-                    }}>
-                    <span>活动委托</span>
-                    <table >
                         <tbody>
                             {this.props.data1.map((v, i) =>
-                                <tr style={{
-                                    fontSize: '20px'
-                                }}>
-                                    <td style={{ color: v.color, textIndent: '20px' }}>{v.number1.toFixed(2)}</td>
-                                    <td style={{ color: v.color, textIndent: '20px' }}>{v.number1.toFixed(2)}</td>
-                                    <td style={{ textIndent: '20px' }}><button style={{ color: 'white', fontSize: '18px', margin: '0', padding: '0', border: '1px solid black', outline: 'none', backgroundColor: 'black' }}>X</button></td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                    <div className={boxButton} style={{
-
-                        backgroundColor: 'rgba(229, 101, 70, 1)',
-
-                    }}>
-                        {this.props.task1}</div>
-                    <div className={boxButton} style={{
-
-                        backgroundColor: 'rgba(72, 170, 101, 1)',
-
-                    }}>
-                        {this.props.task2}</div>
-                    <table >
-                        <tbody>
-                            {this.props.data2.map((v, i) =>
-                                <tr style={{
-                                    fontSize: '20px'
-                                }}>
-                                    <td style={{ color: v.color, textIndent: '20px' }}>{v.number1.toFixed(2)}</td>
-                                    <td style={{ color: v.color, textIndent: '20px' }}>{v.number1.toFixed(2)}</td>
-                                    <td style={{ textIndent: '20px' }}><button style={{ color: 'white', fontSize: '18px', margin: '0', padding: '0', border: '1px solid black', outline: 'none', backgroundColor: 'black' }}>X</button></td>
+                                <tr key={'a' + i}
+                                    style={{
+                                        fontSize: '20px'
+                                    }}
+                                    onMouseOver={() => this.setState({ quxiao: 'a' + i })}
+                                    onMouseOut={() => this.setState({ quxiao: '0' })}>
+                                    <td style={{ color: v.color, width: '45%' }}>{v.number1.toFixed(2)}</td>
+                                    <td style={{ color: v.color, width: '45%' }}>{v.number1.toFixed(2)}</td>
+                                    <td >
+                                        <button style={{
+                                            display: this.state.quxiao === 'a' + i ? '' : 'none',
+                                            color: 'white',
+                                            fontSize: '18px',
+                                            margin: '0',
+                                            padding: '0',
+                                            border: '0px solid #24292d',
+                                            outline: 'none',
+                                            backgroundColor: '#24292d',
+                                            cursor: 'pointer'
+                                        }}>
+                                            X</button>
+                                    </td>
                                 </tr>
                             )}
                         </tbody>
                     </table>
                 </div>
-            </div >
-        </div>
+                <div
+                    style={{
+                        width: '50%'
+                    }}>
+                    <div className={boxButton} style={{
+                        backgroundColor: 'rgba(72, 170, 101, 1)',
+
+                    }}>
+                        {this.props.task2}</div>
+                    <table style={{
+                        width: '100%',
+                        marginTop:'20px'
+                    }}>
+                        <tbody>
+                            {this.props.data2.map((v, i) =>
+                                <tr key={'b' + i}
+                                    style={{
+                                        fontSize: '20px',
+                                        width: '100%'
+                                    }}
+                                    onMouseOver={() => this.setState({ quxiao: 'b' + i })}
+                                    onMouseOut={() => this.setState({ quxiao: '0' })}>
+                                    <td style={{ color: v.color, width: '45%' }}>{v.number1.toFixed(2)}</td>
+                                    <td style={{ color: v.color, width: '45%' }}>{v.number1.toFixed(2)}</td>
+                                    <td >
+                                        <button style={{
+                                            display: this.state.quxiao === 'b' + i ? '' : 'none',
+                                            color: 'white',
+                                            fontSize: '18px',
+                                            margin: '0',
+                                            padding: '0',
+                                            border: '1px solid #24292d',
+                                            outline: 'none',
+                                            backgroundColor: '#24292d',
+                                            cursor: 'pointer'
+                                        }}>
+                                            X</button>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div >
     }
 }
 
