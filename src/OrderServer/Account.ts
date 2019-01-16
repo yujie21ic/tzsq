@@ -159,26 +159,26 @@ export class Account {
         else if (仓位数量 !== 0 && arr.length === 1) {
             const { price, side, id } = arr[0]
             const 浮盈点数 = this.get浮盈点数('XBTUSD')
-            let 止损 = NaN
+            let 新的Price = NaN
 
             if (浮盈点数 > 7) {
-                止损 = toXBTUSDGridPoint(开仓均价, side)
+                新的Price = toXBTUSDGridPoint(开仓均价, side)
             }
             else if (浮盈点数 > 15) {
-                止损 = toXBTUSDGridPoint(开仓均价 + (side === 'Buy' ? - 3 : 3), side)
+                新的Price = toXBTUSDGridPoint(开仓均价 + (side === 'Buy' ? - 3 : 3), side)
             }
 
 
-            if (isNaN(止损)) {
+            if (isNaN(新的Price)) {
                 return false
             }
             else if (
-                (side === 'Buy' && 止损 < price) ||
-                (side === 'Sell' && 止损 > price)
+                (side === 'Buy' && 新的Price < price) ||
+                (side === 'Sell' && 新的Price > price)
             ) {
                 await BitMEXOrderAPI.updateStop(this.cookie, {
                     orderID: id,
-                    stopPx: 止损,
+                    stopPx: 新的Price,
                 })
                 return true
             }
