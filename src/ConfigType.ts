@@ -1,5 +1,3 @@
-import { BaseType } from './lib/BaseType'
-
 export type ConfigType = {
     ss: boolean
     tick历史加载多少秒?: number
@@ -9,10 +7,11 @@ export type ConfigType = {
     account?: {
         [name: string]: {
             cookie: string
-            一键买卖: {
-                symbol: BaseType.BitmexSymbol
-                size: number
-            }[]
+            交易: {
+                XBTUSD: {
+                    数量: number
+                }
+            }
             计分板倍数?: number
         }
     }
