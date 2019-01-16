@@ -6,24 +6,24 @@ import { config } from './config'
 import { getAccountName } from './ConfigType'
 import { Switch } from '@material-ui/core'
 import { JSONRequestError } from './lib/C/JSONRequest'
-import { dialog } from './lib/UI/dialog';
+import { dialog } from './lib/UI/dialog'
 
 const cookie = config.account![getAccountName()].cookie
 const orderClient = new OrderClient(cookie)
 const d = () => orderClient.jsonSync.rawData.symbol.XBTUSD
 const rpc = OrderClient.rpc.func
 
+;(window as any)['d']=d
 
 
 const boxButton = style({
-    margin: '15px auto',
+    margin: 'auto auto',
     width: '150px',
     height: '36px',
     lineHeight: '36px',
     borderRadius: '2px 2px 2px 2px',
     fontSize: '18px',
     textAlign: 'center',
-    boxShadow: '0px 8px 8px 0px rgba(0, 0, 0, 0.24)',
     cursor: 'pointer',
     $nest: {
         '&:active': {
@@ -37,6 +37,7 @@ const boxButton = style({
 class Button extends React.Component<{
     bgColor: string
     text: string
+    width?: string
     func: () => Promise<{
         error?: JSONRequestError
         data?: boolean
@@ -67,7 +68,11 @@ class Button extends React.Component<{
     }
 
     render() {
-        return <div />
+        return <div className={boxButton} style={{
+            backgroundColor: this.props.bgColor,
+            width:this.props.width
+        }}>
+            {this.props.text}</div>
     }
 }
 
@@ -109,11 +114,9 @@ class APP extends React.Component<{}, { quxiao: string }> {
                 <span style={{ color: d().仓位数量 < 0 ? 'rgba(229, 101, 70, 1)' : 'rgba(72, 170, 101, 1)', fontSize: '24px' }}>{d().仓位数量}</span>
                 <span style={{ paddingLeft: '50px', fontSize: '24px' }}>@{d().开仓均价}</span>
             </div>
-            <div className={boxButton} style={{
-
-                backgroundColor: 'rgba(229, 101, 70, 1)'
-            }}>
-                市价平仓</div>
+            <Button bgColor='rgba(229, 101, 70, 1)'
+                text='市价平仓'
+                func={() => rpc.市价平仓({ cookie, symbol: 'XBTUSD' })} />
             <div
                 style={{
                     fontSize: '20px',
@@ -132,16 +135,16 @@ class APP extends React.Component<{}, { quxiao: string }> {
 
                         width: '50%'
                     }}>
-                    <div className={boxButton} style={{
-                        backgroundColor: 'rgba(72, 170, 101, 1)'
-                    }}>
-                        500</div>
+                    <Button bgColor='rgba(72, 170, 101, 1)'
+                        text='500'
+                        func={() => { }} />
+                  
                     <table style={{
                         width: '150px',
                         margin: '15px auto',
                     }}>
                         <tbody>
-                            {d().活动委托.filter(v => v.side === 'Sell').map((v, i) =>
+                            {d().活动委托.filter(v => v.side === 'Buy').map((v, i) =>
                                 <tr key={v.id}
                                     style={{
                                         fontSize: '20px',
@@ -153,19 +156,10 @@ class APP extends React.Component<{}, { quxiao: string }> {
                                     <td style={{ width: '50%' }}>{v.price}</td>
                                     <td style={{ width: '35%' }}>{v.size}</td>
                                     <td style={{ width: '15%' }}>
-                                        <button style={{
-                                            display: this.state.quxiao === 'a' + i ? '' : 'none',
-                                            color: 'white',
-                                            fontSize: '18px',
-                                            margin: '0',
-                                            padding: '0',
-                                            border: '1px solid #24292d',
-                                            outline: 'none',
-                                            backgroundColor: '#24292d',
-                                            cursor: 'pointer'
-                                        }}
-                                            onClick={() => rpc.取消委托({ cookie, orderID: [v.id] })}>
-                                            X</button>
+                                    <Button bgColor='#24292d'
+                                            text='X'
+                                            width='100%'
+                                            func={() => rpc.取消委托({ cookie, orderID: [v.id] })} />
                                     </td>
                                 </tr>
                             )}
@@ -176,18 +170,15 @@ class APP extends React.Component<{}, { quxiao: string }> {
                     style={{
                         width: '50%'
                     }}>
-                    <div className={boxButton} style={{
-
-                        backgroundColor: 'rgba(229, 101, 70, 1)',
-
-                    }}>
-                        -500</div>
+                    <Button bgColor='rgba(229, 101, 70, 1)'
+                        text='-500'
+                        func={() => { }} />
                     <table style={{
                         width: '150px',
                         margin: '15px auto',
                     }}>
                         <tbody>
-                            {d().活动委托.filter(v => v.side === 'Buy').map((v, i) =>
+                            {d().活动委托.filter(v => v.side === 'Sell').map((v, i) =>
                                 <tr key={v.id}
                                     style={{
                                         fontSize: '20px',
@@ -198,26 +189,16 @@ class APP extends React.Component<{}, { quxiao: string }> {
                                     <td style={{ width: '50%' }}>{v.price}</td>
                                     <td style={{ width: '35%' }}>{v.size}</td>
                                     <td style={{ width: '15%' }}>
-                                        <button style={{
-                                            display: this.state.quxiao === 'b' + i ? '' : 'none',
-                                            color: 'white',
-                                            fontSize: '18px',
-                                            margin: '0',
-                                            padding: '0',
-                                            border: '0px solid #24292d',
-                                            outline: 'none',
-                                            backgroundColor: '#24292d',
-                                            cursor: 'pointer'
-                                        }}
-                                            onClick={() => rpc.取消委托({ cookie, orderID: [v.id] })}>
-                                            X</button>
+                                        <Button bgColor='#24292d'
+                                            text='X'
+                                            width='100%'
+                                            func={() => rpc.取消委托({ cookie, orderID: [v.id] })} />
                                     </td>
                                 </tr>
                             )}
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div >
     }
