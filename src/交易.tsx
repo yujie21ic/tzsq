@@ -7,10 +7,9 @@ import { getAccountName } from './ConfigType'
 import { Switch } from '@material-ui/core'
 
 const orderClient = new OrderClient(config.account![getAccountName()].cookie)
+const d = () => orderClient.jsonSync.rawData.symbol.XBTUSD
 
-//数据全在  orderClient.jsonSync.rawData.symbol 
-
-const boxButton = style({  
+const boxButton = style({
     width: '120px',
     height: '36px',
     lineHeight: '36px',
@@ -47,11 +46,17 @@ type State = {
     quxiao: string
 }
 
+
 class APP extends React.Component<Props, State> {
     componentWillMount() {
         this.setState({
             quxiao: '0'
         })
+        const f = () => {
+            requestAnimationFrame(f)
+            this.forceUpdate()
+        }
+        f()
     }
     render() {
         return <div style={{
@@ -74,8 +79,8 @@ class APP extends React.Component<Props, State> {
                 justifyContent: 'center',
                 margin: '20px 0'
             }}>
-                <span style={{ color: '#E56546', fontSize: '24px' }}>{this.props.xbtusd1}</span>
-                <span style={{ paddingLeft: '50px', fontSize: '24px' }}>@{this.props.xbtusd2}</span>
+                <span style={{ color: d().仓位数量 < 0?'#E56546':'#24292d', fontSize: '24px' }}>{d().仓位数量}</span>
+                <span style={{ paddingLeft: '50px', fontSize: '24px' }}>@{d().开仓均价}</span>
             </div>
             <div className={boxButton} style={{
                 margin: '15px auto',
@@ -85,10 +90,10 @@ class APP extends React.Component<Props, State> {
             <div
                 style={{
                     fontSize: '20px',
-                    
+
                 }}>
-                <span>止损任务<Switch color='primary' /></span><br />
-                <span>止盈任务<Switch color='secondary' /></span>
+                <span>止损任务<Switch value={d().任务.止损} color='primary' /></span><br />
+                <span>止盈任务<Switch value={d().任务.止盈} color='secondary' /></span>
             </div>
             <div style={{
                 display: 'flex',
@@ -107,7 +112,7 @@ class APP extends React.Component<Props, State> {
                         {this.props.task1}</div>
                     <table style={{
                         width: '100%',
-                        marginTop:'20px'
+                        marginTop: '20px'
                     }}>
                         <tbody>
                             {this.props.data1.map((v, i) =>
@@ -149,7 +154,7 @@ class APP extends React.Component<Props, State> {
                         {this.props.task2}</div>
                     <table style={{
                         width: '100%',
-                        marginTop:'20px'
+                        marginTop: '20px'
                     }}>
                         <tbody>
                             {this.props.data2.map((v, i) =>
