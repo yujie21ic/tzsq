@@ -65,14 +65,14 @@ class Table extends React.Component<{
                         }}>
                         <td style={{ width: '50%' }}>{v.price}</td>
                         <td style={{ width: '35%' }}>{v.size}</td>
-                        <td style={{ width: '15%', display: 'none' }} >
+                        <td style={{ width: '15%' }} >
                             <Button
                                 bgColor='#24292d'
                                 text='X'
                                 width='100%'
                                 left={() => rpc.取消委托({ cookie, orderID: [v.id] })}
                                 right={() => rpc.取消委托({ cookie, orderID: [v.id] })}
-                                />
+                            />
                         </td>
                     </tr>
                 )}
@@ -234,7 +234,7 @@ class APP extends React.Component<{}, { quxiao: string }> {
                         })}
                     />
 
-                    <Table side='Buy'/>
+                    <Table side='Buy' />
                 </div>
                 <div
                     style={{
@@ -258,7 +258,7 @@ class APP extends React.Component<{}, { quxiao: string }> {
                             size: account.交易.XBTUSD.数量,
                         })}
                     />
-                    <Table side='Sell'/>
+                    <Table side='Sell' />
                 </div>
             </div>
         </div >
