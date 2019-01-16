@@ -5,13 +5,15 @@ import { OrderClient } from './OrderServer/OrderClient'
 import { config } from './config'
 import { getAccountName } from './ConfigType'
 import { Switch } from '@material-ui/core'
+import { JSONRequestError } from './lib/C/JSONRequest'
+import { dialog } from './lib/UI/dialog';
 
 const cookie = config.account![getAccountName()].cookie
 const orderClient = new OrderClient(cookie)
 const d = () => orderClient.jsonSync.rawData.symbol.XBTUSD
 const rpc = OrderClient.rpc.func
 
-// rpc.取消委托({cookie,orderID:'aaa'})
+
 
 const boxButton = style({
     margin: '15px auto',
@@ -29,15 +31,50 @@ const boxButton = style({
         }
     }
 })
-type Props = {
 
+
+
+class Button extends React.Component<{
+    bgColor: string
+    text: string
+    func: () => Promise<{
+        error?: JSONRequestError
+        data?: boolean
+        msg?: string
+    }>
+}, { loading: boolean }> {
+
+    componentWillMount() {
+        this.setState({ loading: false })
+    }
+
+    callFunc() {
+        this.setState({ loading: true })
+        this.props.func().then(({ error, msg, data }) => {
+            if (error !== undefined) {
+                dialog.showMessageBox({
+                    title: error,
+                    contentText: msg !== undefined ? msg : '',
+                })
+            }
+            else if (data === false) {
+                dialog.showMessageBox({
+                    title: '失败',
+                    contentText: '',
+                })
+            }
+        })
+    }
+
+    render() {
+        return <div />
+    }
 }
-type State = {
-    quxiao: string
-}
 
 
-class APP extends React.Component<Props, State> {
+
+
+class APP extends React.Component<{}, { quxiao: string }> {
     componentWillMount() {
         this.setState({
             quxiao: '0'
@@ -73,14 +110,14 @@ class APP extends React.Component<Props, State> {
                 <span style={{ paddingLeft: '50px', fontSize: '24px' }}>@{d().开仓均价}</span>
             </div>
             <div className={boxButton} style={{
-                
+
                 backgroundColor: 'rgba(229, 101, 70, 1)'
             }}>
                 市价平仓</div>
             <div
                 style={{
                     fontSize: '20px',
-                    marginLeft:'10px'
+                    marginLeft: '10px'
                 }}>
                 <span>止损任务<Switch value={d().任务.止损} color='primary' /></span><br />
                 <span>止盈任务<Switch value={d().任务.止盈} color='secondary' /></span>
@@ -92,7 +129,7 @@ class APP extends React.Component<Props, State> {
             }}>
                 <div
                     style={{
-                        
+
                         width: '50%'
                     }}>
                     <div className={boxButton} style={{
