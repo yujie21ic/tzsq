@@ -7,7 +7,7 @@ import { getAccountName } from './ConfigType'
 import { Switch } from '@material-ui/core'
 import { JSONRequestError } from './lib/C/JSONRequest'
 import { dialog } from './lib/UI/dialog'
-import none from 'ramda/es/none'
+
 
 const account = config.account![getAccountName()]
 const { cookie } = account
