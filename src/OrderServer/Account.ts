@@ -8,7 +8,19 @@ import { realData } from './realData'
 import { lastNumber } from '../lib/F/lastNumber'
 
 
-const toXBTUSDGridPoint = (n: number) => Math.floor(n / 0.5) * 0.5
+const toXBTUSDGridPoint = (n: number, side: BaseType.Side) => {
+    const v = Math.floor(n / 0.5) * 0.5
+    if (side === 'Buy') {
+        return v
+    } else {
+        if (v === n) {
+            return n
+        } else {
+            return v + 0.5
+        }
+    }
+}
+
 
 export class Account {
     jsonSync = createJSONSync()
@@ -117,10 +129,16 @@ export class Account {
         const arr = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => v.type === '止损')
 
         //清空止损列表
-        if (arr.length > 1 || (仓位数量 === 0 && arr.length !== 0)) {
+        if (arr.length > 1 ||   //不能有多个止损
+            (仓位数量 === 0 && arr.length === 1) || //没有仓位 不能有止损
+            (仓位数量 > 0 && arr.length === 1 && arr[0].side !== 'Sell') || //止损方向错了
+            (仓位数量 < 0 && arr.length === 1 && arr[0].side !== 'Buy')  //止损方向错了
+        ) {
             await BitMEXOrderAPI.cancel(this.cookie, arr.map(v => v.id))
             return true
         }
+
+
         //初始化止损
         else if (仓位数量 !== 0 && arr.length === 0) {
             let 止损点 = lastNumber(realData.dataExt.XBTUSD.期货.波动率) / 4
@@ -129,18 +147,42 @@ export class Account {
             }
             止损点 = Math.max(3, 止损点)
             止损点 = Math.min(18, 止损点)
+            const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
             await BitMEXOrderAPI.stop(this.cookie, {
                 symbol: 'XBTUSD',
-                side: 仓位数量 > 0 ? 'Sell' : 'Buy',
-                stopPx: toXBTUSDGridPoint(仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点),
+                side,
+                stopPx: toXBTUSDGridPoint(仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点, side),
             })
             return true
         }
         //修改止损  只能改小  不能改大
         else if (仓位数量 !== 0 && arr.length === 1) {
-            // 盈利超过7点    止损 = 成本价，
-            // 盈利超过15点   止损 =  成本价 + 3
-            return true
+            const { price, side, id } = arr[0]
+            const 浮盈点数 = this.get浮盈点数('XBTUSD')
+            let 止损 = NaN
+
+            if (浮盈点数 > 7) {
+                止损 = toXBTUSDGridPoint(开仓均价, side)
+            }
+            else if (浮盈点数 > 15) {
+                止损 = toXBTUSDGridPoint(开仓均价 + (side === 'Buy' ? - 3 : 3), side)
+            }
+
+
+            if (isNaN(止损)) {
+                return false
+            }
+            else if (
+                (side === 'Buy' && 止损 < price) ||
+                (side === 'Sell' && 止损 > price)
+            ) {
+                await BitMEXOrderAPI.updateStop(this.cookie, {
+                    orderID: id,
+                    stopPx: 止损,
+                })
+                return true
+            }
+
         }
 
 
@@ -159,5 +201,18 @@ export class Account {
         }
     }
 
+    get浮盈点数(symbol: BaseType.BitmexSymbol) {
+        const 最新价 = realData.期货价格dic.get(symbol)
+        if (最新价 === undefined) return NaN
+        const { 仓位数量, 开仓均价 } = this.jsonSync.rawData.symbol[symbol]
+        if (仓位数量 === 0) return NaN
+        if (仓位数量 > 0) {
+            return 最新价 - 开仓均价
+        } else if (仓位数量 < 0) {
+            return 开仓均价 - 最新价
+        } else {
+            return 0
+        }
+    }
 
 }
