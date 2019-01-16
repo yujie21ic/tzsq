@@ -99,11 +99,16 @@ server.func.下单 = async req => {
     }
 
     return req.type === 'taker' ?
-        await BitMEXOrderAPI.taker(req.cookie, req) :
+        await BitMEXOrderAPI.taker(req.cookie, {
+            symbol: req.symbol,
+            side: req.side,
+            size: req.size,
+        }) :
         await BitMEXOrderAPI.maker(req.cookie, {
             symbol: req.symbol,
             side: req.side,
             size: req.size,
             price: getPrice,
+            只减仓: false,
         })
 }
