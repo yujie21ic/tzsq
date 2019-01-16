@@ -188,8 +188,11 @@ export class RealDataBase {
 
             指标.lazyMapCache(() => data.length, i => data[i].close)
 
-        const 价格均线 = 指标.均线(价格, 300, RealDataBase.单位时间) //300s
-        const 波动率 = 指标.波动率(价格, 30, RealDataBase.单位时间)  //20s
+
+        //和别的时间参数不一样
+        const 价格均线 = 指标.均线(价格, 300, RealDataBase.单位时间)
+        const 波动率 = 指标.波动率(价格, 30, RealDataBase.单位时间)
+
 
         const 成交量买 = 指标.lazyMapCache(() => data.length, i => data[i].buySize)
         const 成交量卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellSize)
