@@ -49,7 +49,7 @@ export namespace BitMEXOrderAPI {
         side: BaseType.Side
         size: number
         price: () => number
-        只减仓: boolean
+        reduceOnly: boolean
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
             symbol: p.symbol,
@@ -57,7 +57,7 @@ export namespace BitMEXOrderAPI {
             side: p.side,
             orderQty: p.size,
             price: p.price(),
-            execInst: p.只减仓 ? ['ParticipateDoNotInitiate', 'ReduceOnly'] : 'ParticipateDoNotInitiate',
+            execInst: p.reduceOnly ? ['ParticipateDoNotInitiate', 'ReduceOnly'] : 'ParticipateDoNotInitiate',
         })
     )
 

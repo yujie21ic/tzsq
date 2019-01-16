@@ -109,6 +109,6 @@ server.func.下单 = async req => {
             side: req.side,
             size: req.size,
             price: getPrice,
-            只减仓: false,
+            reduceOnly: false,
         })
 }
