@@ -9,7 +9,7 @@ export type ConfigType = {
             cookie: string
             交易: {
                 XBTUSD: {
-                    数量: 1
+                    数量: number
                 }
             }
             计分板倍数?: number
