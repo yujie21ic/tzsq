@@ -109,7 +109,7 @@ export namespace BitMEXOrderAPI {
         })
     )
 
-    export const cancel = xx<string>(
-        (cookie, orderID) => BitMEXRESTAPI.Order.cancel(cookie, { orderID })
+    export const cancel = xx<string[]>(
+        (cookie, orderID) => BitMEXRESTAPI.Order.cancel(cookie, { orderID: JSON.stringify(orderID) })
     )
 } 

@@ -35,7 +35,7 @@ export const funcList = {
     取消委托: {
         req: {
             cookie: '',
-            orderID: '',
+            orderID: [''],
         },
         res: false,
     },
