@@ -2,19 +2,36 @@ import { BaseType } from '../lib/BaseType'
 import { JSONSync } from '../lib/C/JSONSync'
 
 export const funcList = {
-    //TODO
-    任务开关: {
+
+    //参数设置  分开设置了
+    set_任务_止盈: {
         req: {
             cookie: '',
             symbol: '' as BaseType.BitmexSymbol,
-            key: '' as '止盈' | '止损',
-            isOpen: false,
+            value: false,
+        },
+        res: false,
+    },
+
+    set_任务_止盈第一次平到多少仓位: {
+        req: {
+            cookie: '',
+            symbol: '' as BaseType.BitmexSymbol,
+            value: 0,
+        },
+        res: false,
+    },
+
+    set_任务_止损: {
+        req: {
+            cookie: '',
+            symbol: '' as BaseType.BitmexSymbol,
+            value: false,
         },
         res: false,
     },
 
 
-    //TODO  止损 和 止盈(减仓)  不取消
     取消委托: {
         req: {
             cookie: '',
@@ -23,7 +40,6 @@ export const funcList = {
         res: false,
     },
 
-    //
     市价平仓: {
         req: {
             cookie: '',
@@ -32,7 +48,6 @@ export const funcList = {
         res: false,
     },
 
-    //挂单 吃单
     下单: {
         req: {
             cookie: '',
