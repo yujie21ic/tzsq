@@ -80,7 +80,7 @@ class APP extends React.Component<Props, State> {
             <div
                 style={{
                     fontSize: '20px',
-
+                    marginLeft:'10px'
                 }}>
                 <span>止损任务<Switch value={d().任务.止损} color='primary' /></span><br />
                 <span>止盈任务<Switch value={d().任务.止盈} color='secondary' /></span>
