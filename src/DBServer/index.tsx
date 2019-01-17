@@ -8,17 +8,23 @@ import { syncBitmex500msOrderBook } from './syncBitmex500msOrderBook'
 import { syncBinance1M } from './syncBinance1M'
 import { timeID } from '../lib/F/timeID'
 import { syncBitmex500msKLine } from './syncBitmex500msKLine'
+import { syncBitmex1M } from './syncBitmex1M'
 
 //采集
 syncBitmex500msOrderBook()
 syncBitmex500msKLine('XBTUSD')
 syncBitmex500msKLine('ETHUSD')
 
+syncBitmex1M('XBTUSD')
+syncBitmex1M('ETHUSD')
+
 syncBinanceTrades('btcusdt', 64975394)
 syncBinanceTrades('ethusdt', 38096146)
 
 syncBinance1M('btcusdt')
 syncBinance1M('ethusdt')
+
+
 
 //
 const server = new JSONRPCServer({

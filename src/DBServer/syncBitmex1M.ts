@@ -6,34 +6,18 @@ import { timeID } from '../lib/F/timeID'
 import { sleep } from '../lib/C/sleep'
 
 
-export const syncBinance1M = (symbol: BaseType.BinanceSymbol) =>
+export const syncBitmex1M = (symbol: BaseType.BitmexSymbol) =>
     new SyncKLine({
         getTable: () => DB.getKLine('1m', symbol).table,
         get采集start: async (lastItemID: number) => {
             if (isNaN(lastItemID)) {
                 return 0
             } else {
-                const timestamp = timeID.oneMinuteIDToTimestamp(lastItemID + 1)
-
-                const obj = await DB.getTrades(symbol).table.findOne({
-                    raw: true,
-                    where: {
-                        timestamp: {
-                            [Sequelize.Op.gte]: timestamp,
-                        }
-                    },
-                    order: ['id'],
-                })
-
-                if (obj) {
-                    return obj.id
-                } else {
-                    return 0 //<---------
-                }
+                return timeID.timestampTo500msID(timeID.oneMinuteIDToTimestamp(lastItemID + 1))
             }
         },
         getData: async (start: number) => {
-            const tickArr = (await DB.getTrades(symbol).table.findAll({
+            const tickArr = (await DB.getKLine('500ms', symbol).table.findAll({
                 raw: true,
                 where: {
                     id: {
@@ -51,17 +35,17 @@ export const syncBinance1M = (symbol: BaseType.BinanceSymbol) =>
             }
             return {
                 tickArr: tickArr.map(v => ({
-                    id: timeID.timestampToOneMinuteID(v.timestamp),
-                    open: v.price,
-                    high: v.price,
-                    low: v.price,
-                    close: v.price,
-                    buySize: v.size > 0 ? Math.abs(v.size) : 0,
-                    sellSize: v.size < 0 ? Math.abs(v.size) : 0,
-                    buyCount: 1,
-                    sellCount: 1,
+                    id: timeID.timestampToOneMinuteID(timeID._500msIDToTimestamp(v.id)),
+                    open: v.open,
+                    high: v.high,
+                    low: v.low,
+                    close: v.close,
+                    buySize: v.buySize,
+                    sellSize: v.sellSize,
+                    buyCount: v.buyCount,
+                    sellCount: v.sellCount,
                 })),
-                newStart
+                newStart,
             }
         }
     })
