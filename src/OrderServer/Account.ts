@@ -82,7 +82,7 @@ export class Account {
         keys(this.jsonSync.rawData.symbol).forEach(symbol => {
 
             const arr = [] as {
-                type: '限价' | '限价只减仓' | '止损'
+                type: '限价' | '限价只减仓' | '止损' | '市价触发'
                 id: string
                 side: BaseType.Side
                 size: number
@@ -111,6 +111,15 @@ export class Account {
                 else if (v.ordType === 'Stop' && v.execInst === 'Close,LastPrice') {
                     arr.push({
                         type: '止损',
+                        id: v.orderID,
+                        side: v.side as BaseType.Side,
+                        size: v.orderQty,
+                        price: v.stopPx,
+                    })
+                }
+                else if (v.ordType === 'MarketIfTouched' && v.execInst === 'LastPrice') {
+                    arr.push({
+                        type: '市价触发',
                         id: v.orderID,
                         side: v.side as BaseType.Side,
                         size: v.orderQty,

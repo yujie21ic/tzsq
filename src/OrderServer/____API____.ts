@@ -68,7 +68,7 @@ const symbol = () => ({
         止盈第一次平到多少仓位: 0,
     },
     活动委托: [] as {
-        type: '限价' | '限价只减仓' | '止损'
+        type: '限价' | '限价只减仓' | '止损' | '市价触发'
         id: string
         side: BaseType.Side
         size: number
