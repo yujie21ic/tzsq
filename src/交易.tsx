@@ -57,11 +57,12 @@ class Table extends React.Component<{
                         style={{
                             fontSize: '20px',
                             width: '100%',
-                            color: v.type === '限价只减仓' ?
-                                'rgba(255, 239, 85, 1)'
-                                : v.type === '止损' ?
-                                    this.props.side === 'Buy' ? 'rgba(229, 101, 70, 1)' : 'rgba(72, 170, 101, 1)'
-                                    : this.props.side === 'Buy' ? 'rgba(72, 170, 101, 1)' : 'rgba(72, 170, 101, 1)'
+                            color:
+                                v.type === '市价触发' ? 'white' :
+                                    v.type === '限价只减仓' ? 'yellow'
+                                        : v.type === '止损' ?
+                                            this.props.side === 'Buy' ? 'rgba(229, 101, 70, 1)' : 'rgba(72, 170, 101, 1)'
+                                            : this.props.side === 'Buy' ? 'rgba(72, 170, 101, 1)' : 'rgba(72, 170, 101, 1)'
                         }}>
                         <td style={{ width: '50%' }}>{v.price}</td>
                         <td style={{ width: '35%' }}>{v.size}</td>
@@ -234,6 +235,27 @@ class APP extends React.Component<{}, { quxiao: string }> {
                         })}
                     />
 
+                    <br />
+
+                    <Button
+                        bgColor='rgba(72, 170, 101, 1)'
+                        text={'5秒内最低价'}
+                        left={() => rpc.下单_最低_最高({
+                            cookie,
+                            symbol: 'XBTUSD',
+                            type: 'maker',
+                            side: 'Buy',
+                            size: account.交易.XBTUSD.数量,
+                        })}
+                        right={() => rpc.下单_最低_最高({
+                            cookie,
+                            symbol: 'XBTUSD',
+                            type: 'taker',
+                            side: 'Buy',
+                            size: account.交易.XBTUSD.数量,
+                        })}
+                    />
+
                     <Table side='Buy' />
                 </div>
                 <div
@@ -258,6 +280,28 @@ class APP extends React.Component<{}, { quxiao: string }> {
                             size: account.交易.XBTUSD.数量,
                         })}
                     />
+
+                    <br />
+
+                    <Button
+                        bgColor='rgba(229, 101, 70, 1)'
+                        text={'5秒内最高价'}
+                        left={() => rpc.下单_最低_最高({
+                            cookie,
+                            symbol: 'XBTUSD',
+                            type: 'maker',
+                            side: 'Sell',
+                            size: account.交易.XBTUSD.数量,
+                        })}
+                        right={() => rpc.下单({
+                            cookie,
+                            symbol: 'XBTUSD',
+                            type: 'taker',
+                            side: 'Sell',
+                            size: account.交易.XBTUSD.数量,
+                        })}
+                    />
+
                     <Table side='Sell' />
                 </div>
             </div>
