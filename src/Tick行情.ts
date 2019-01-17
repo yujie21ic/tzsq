@@ -71,7 +71,7 @@ window.addEventListener('mousedown', e => {
                 }
             })),
             undefined,
-            ...[250, 500, 1000, 2000].map(v => ({
+            ...[150,250, 500, 1000, 2000].map(v => ({
                 label: v + '秒',
                 checked: v === showCount / (1000 / RealDataBase.单位时间),
                 onClick: () => showCount = v * (1000 / RealDataBase.单位时间)

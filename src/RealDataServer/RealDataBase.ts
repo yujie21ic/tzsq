@@ -200,7 +200,7 @@ export class RealDataBase {
         const 成交次数买 = 指标.lazyMapCache(() => data.length, i => data[i].buyCount)
         const 成交次数卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellCount)
         const 成交量均线1 = 指标.累加(
-            指标.lazyMapCache(() => Math.min(成交量买.length, 成交量卖.length), i => 成交量买[i] + 成交量卖[i]),
+            指标.lazyMapCache(() => Math.min(成交量买.length, 成交量卖.length), i => Math.abs(成交量买[i] - 成交量卖[i])),
             多少秒均线,
             RealDataBase.单位时间
         )

@@ -71,41 +71,41 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             layerList: 双价格(d)
         },
 
-        // {
-        //     heightPercentage: 0.4,
-        //     yCoordinate: '对数',
-        //     和下一张重叠: true,
-        //     layerList: [
-        //         layer(LineLayer, { data: d.期货.阻力4涨, color: 买颜色 }),
-        //         // layer(LineLayer, { data: d.期货.阻力4跌, color: 卖颜色 }),
-        //     ]
-        // },
-        // {
-        //     heightPercentage: 0.4,
-        //     yCoordinate: '对数',
-        //     layerList: [
-        //         // layer(LineLayer, { data: d.期货.阻力4涨, color: 买颜色 }),
-        //         layer(LineLayer, { data: d.期货.阻力4跌, color: 卖颜色 }),
-        //     ]
-        // },
         {
             heightPercentage: 0.5,
             yCoordinate: '对数',
             和下一张重叠: true,
             layerList: [
-                layer(LineLayer, { data: d.期货.阻力3涨, color: 买颜色 }),
-                layer(TextLayer, {
-                    text: `涨跌动力`,
-                    color: 现货颜色
-                })
+                layer(LineLayer, { data: d.期货.阻力4涨, color: 买颜色 }),
+                // layer(LineLayer, { data: d.期货.阻力4跌, color: 卖颜色 }),
             ]
         },
         {
-            heightPercentage: 0.5,
+            heightPercentage: 0.,
+            yCoordinate: '对数',
             layerList: [
-                layer(LineLayer, { data: d.期货.阻力3跌, color: 卖颜色 }),
+                // layer(LineLayer, { data: d.期货.阻力4涨, color: 买颜色 }),
+                layer(LineLayer, { data: d.期货.阻力4跌, color: 卖颜色 }),
             ]
         },
+        // {
+        //     heightPercentage: 0.5,
+        //     yCoordinate: '对数',
+        //     和下一张重叠: true,
+        //     layerList: [
+        //         layer(LineLayer, { data: d.期货.阻力3涨, color: 买颜色 }),
+        //         layer(TextLayer, {
+        //             text: `涨跌动力`,
+        //             color: 现货颜色
+        //         })
+        //     ]
+        // },
+        // {
+        //     heightPercentage: 0.5,
+        //     layerList: [
+        //         layer(LineLayer, { data: d.期货.阻力3跌, color: 卖颜色 }),
+        //     ]
+        // },
         {
             heightPercentage: 0.5,
             yCoordinate: '对数',
