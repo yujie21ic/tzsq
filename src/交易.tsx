@@ -8,6 +8,7 @@ import { Switch } from '@material-ui/core'
 import { JSONRequestError } from './lib/C/JSONRequest'
 import { dialog } from './lib/UI/dialog'
 
+
 const account = config.account![getAccountName()]
 const { cookie } = account
 const orderClient = new OrderClient(account.cookie)
@@ -34,8 +35,55 @@ const boxButton = style({
 })
 
 
+class Table extends React.Component<{
+
+    side: string
+
+}, {}> {
+
+    componentWillMount() {
+
+    }
+    render() {
+        return <table style={{
+            width: '150px',
+            margin: '15px auto',
+        }}
+        >
+            <tbody>
+                {d().活动委托.filter(v => v.side === this.props.side).map((v, i) =>
+                    <tr key={v.id}
+
+                        style={{
+                            fontSize: '20px',
+                            width: '100%',
+                            color: v.type === '限价只减仓' ?
+                                'rgba(255, 239, 85, 1)'
+                                : v.type === '止损' ?
+                                    this.props.side === 'Buy' ? 'rgba(229, 101, 70, 1)' : 'rgba(72, 170, 101, 1)'
+                                    : this.props.side === 'Buy' ? 'rgba(72, 170, 101, 1)' : 'rgba(72, 170, 101, 1)'
+                        }}>
+                        <td style={{ width: '50%' }}>{v.price}</td>
+                        <td style={{ width: '35%' }}>{v.size}</td>
+                        <td style={{ width: '15%' }} >
+                            <Button
+                                bgColor='#24292d'
+                                text='X'
+                                width='100%'
+                                left={() => rpc.取消委托({ cookie, orderID: [v.id] })}
+                                right={() => rpc.取消委托({ cookie, orderID: [v.id] })}
+                            />
+                        </td>
+                    </tr>
+                )}
+            </tbody>
+        </table>
+    }
+}
+
 
 class Button extends React.Component<{
+
     bgColor: string
     text: string
     width?: string
@@ -77,7 +125,6 @@ class Button extends React.Component<{
             this.setState({ loading: false })
         })
     }
-
     render() {
         return this.state.loading ? '--' : <div
             className={boxButton}
@@ -187,35 +234,7 @@ class APP extends React.Component<{}, { quxiao: string }> {
                         })}
                     />
 
-                    <table style={{
-                        width: '150px',
-                        margin: '15px auto',
-                    }}>
-                        <tbody>
-                            {d().活动委托.filter(v => v.side === 'Buy').map((v, i) =>
-                                <tr key={v.id}
-                                    style={{
-                                        fontSize: '20px',
-                                        width: '100%',
-                                        color: v.type === '限价只减仓' ? 'rgba(255, 239, 85, 1)' : v.type === '止损' ? 'rgba(229, 101, 70, 1)' : 'rgba(72, 170, 101, 1)'
-                                    }}
-                                    onMouseOver={() => this.setState({ quxiao: 'a' + i })}
-                                    onMouseOut={() => this.setState({ quxiao: '0' })}>
-                                    <td style={{ width: '50%' }}>{v.price}</td>
-                                    <td style={{ width: '35%' }}>{v.size}</td>
-                                    <td style={{ width: '15%' }}>
-                                        <Button
-                                            bgColor='#24292d'
-                                            text='X'
-                                            width='100%'
-                                            left={() => rpc.取消委托({ cookie, orderID: [v.id] })}
-                                            right={() => rpc.取消委托({ cookie, orderID: [v.id] })}
-                                        />
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                    <Table side='Buy' />
                 </div>
                 <div
                     style={{
@@ -239,33 +258,7 @@ class APP extends React.Component<{}, { quxiao: string }> {
                             size: account.交易.XBTUSD.数量,
                         })}
                     />
-                    <table style={{
-                        width: '150px',
-                        margin: '15px auto',
-                    }}>
-                        <tbody>
-                            {d().活动委托.filter(v => v.side === 'Sell').map((v, i) =>
-                                <tr key={v.id}
-                                    style={{
-                                        fontSize: '20px',
-                                        color: v.type === '限价只减仓' ? 'rgba(255, 239, 85, 1)' : v.type === '止损' ? 'rgba(229, 101, 70, 1)' : 'rgba(229, 101, 70, 1)'
-                                    }}
-                                    onMouseOver={() => this.setState({ quxiao: 'b' + i })}
-                                    onMouseOut={() => this.setState({ quxiao: '0' })}>
-                                    <td style={{ width: '50%' }}>{v.price}</td>
-                                    <td style={{ width: '35%' }}>{v.size}</td>
-                                    <td style={{ width: '15%' }}>
-                                        <Button bgColor='#24292d'
-                                            text='X'
-                                            width='100%'
-                                            left={() => rpc.取消委托({ cookie, orderID: [v.id] })}
-                                            right={() => rpc.取消委托({ cookie, orderID: [v.id] })}
-                                        />
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                    <Table side='Sell' />
                 </div>
             </div>
         </div >
