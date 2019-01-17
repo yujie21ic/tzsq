@@ -7,6 +7,7 @@ import { dialog } from './lib/UI/dialog'
 import { registerCommand } from './lib/UI/registerCommand'
 import { Tick行情____config } from './Tick行情____config'
 import { 指标 } from './lib/指标'
+import { keys } from 'ramda'
 
 
 const realTickClient = new DataClient.RealData__Client()
@@ -62,16 +63,16 @@ window.addEventListener('mousedown', e => {
                 }
             })),
             undefined,
-            ...Object.keys(real.dataExt).map(v => ({
+            ...keys(real.dataExt).map(v => ({
                 label: v,
                 checked: v === nowTickSymbol,
                 onClick: () => {
-                    nowTickSymbol = v as TickSymbol
+                    nowTickSymbol = v
                     real.set现货减去(0)
                 }
             })),
             undefined,
-            ...[150,250, 500, 1000, 2000].map(v => ({
+            ...[150, 250, 500, 1000, 2000].map(v => ({
                 label: v + '秒',
                 checked: v === showCount / (1000 / RealDataBase.单位时间),
                 onClick: () => showCount = v * (1000 / RealDataBase.单位时间)
@@ -100,11 +101,11 @@ window.addEventListener('mousedown', e => {
                 })
             },
             undefined,
-            ...Object.keys(Tick行情____config).map(v => ({
+            ...keys(Tick行情____config).map(v => ({
                 label: v,
                 checked: v === nowChart,
                 onClick: () => {
-                    nowChart = v as TickSymbol
+                    nowChart = v
                 }
             })),
         ])
@@ -115,7 +116,7 @@ type TickSymbol = keyof typeof real.dataExt
 
 let showCount = 600
 let nowTickSymbol: TickSymbol = 'XBTUSD'
-let nowChart = Object.keys(Tick行情____config)[0]
+let nowChart = keys(Tick行情____config)[0]
 
 chartInit(({ layer }) => {
     const d = real.dataExt[nowTickSymbol]

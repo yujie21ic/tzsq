@@ -1,5 +1,3 @@
-
-
 export namespace timeID {
 
     export const timestampToOneMinuteID = (time: number) =>
