@@ -21,7 +21,7 @@ const 现货颜色 = 0xaaaa00
 const 期货颜色 = 0xcc66ff
 const 买颜色 = 0x48aa65
 const 卖颜色 = 0xe56546
-
+const 波动率颜色=0xC70039  
 
 
 const 双价格 = (d: D) => [
@@ -70,24 +70,30 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             和下一张重叠: true,
             layerList: 双价格(d)
         },
-
         {
             heightPercentage: 0.5,
-            yCoordinate: '对数',
-            和下一张重叠: true,
             layerList: [
-                layer(LineLayer, { data: d.期货.阻力4涨, color: 买颜色 }),
-                // layer(LineLayer, { data: d.期货.阻力4跌, color: 卖颜色 }),
+                layer(LineLayer, { data: d.期货.波动率, color: 波动率颜色 }),
             ]
         },
-        {
-            heightPercentage: 0.,
-            yCoordinate: '对数',
-            layerList: [
-                // layer(LineLayer, { data: d.期货.阻力4涨, color: 买颜色 }),
-                layer(LineLayer, { data: d.期货.阻力4跌, color: 卖颜色 }),
-            ]
-        },
+
+        // {
+        //     heightPercentage: 0.5,
+        //     yCoordinate: '对数',
+        //     和下一张重叠: true,
+        //     layerList: [
+        //         layer(LineLayer, { data: d.期货.阻力4涨, color: 买颜色 }),
+        //         // layer(LineLayer, { data: d.期货.阻力4跌, color: 卖颜色 }),
+        //     ]
+        // },
+        // {
+        //     heightPercentage: 0.5,
+        //     yCoordinate: '对数',
+        //     layerList: [
+        //         // layer(LineLayer, { data: d.期货.阻力4涨, color: 买颜色 }),
+        //         layer(LineLayer, { data: d.期货.阻力4跌, color: 卖颜色 }),
+        //     ]
+        // },
         // {
         //     heightPercentage: 0.5,
         //     yCoordinate: '对数',
@@ -109,15 +115,10 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         {
             heightPercentage: 0.5,
             yCoordinate: '对数',
-            和下一张重叠: true,
+           // 和下一张重叠: true,
             layerList: 成交量买卖曲线(d)
         },
-        {
-            heightPercentage: 0.5,
-            layerList: [
-                layer(LineLayer, { data: d.期货.波动率, color: 期货颜色 }),
-            ]
-        },
+       
 
     ],
     双价格图和成交量: d => [
