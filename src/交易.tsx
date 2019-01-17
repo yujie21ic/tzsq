@@ -60,8 +60,7 @@ class Table extends React.Component<{
                             color:
                                 v.type === '市价触发' ? 'white' :
                                     v.type === '限价只减仓' ? 'yellow'
-                                        : v.type === '止损' ?
-                                            this.props.side === 'Buy' ? 'rgba(229, 101, 70, 1)' : 'rgba(72, 170, 101, 1)'
+                                        : v.type === '止损' ? '#cc66ff'
                                             : this.props.side === 'Buy' ? 'rgba(72, 170, 101, 1)' : 'rgba(72, 170, 101, 1)'
                         }}>
                         <td style={{ width: '50%' }}>{v.price}</td>
