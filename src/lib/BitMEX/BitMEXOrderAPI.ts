@@ -63,8 +63,13 @@ export namespace BitMEXOrderAPI {
 
     export const updateStop = xx_ordStatus<{
         orderID: string
-        stopPx: number
-    }>(BitMEXRESTAPI.Order.amend)
+        price: number
+    }>(
+        (cookie, p) => BitMEXRESTAPI.Order.amend(cookie, {
+            orderID: p.orderID,
+            stopPx: p.price,
+        })
+    )
 
     export const updateMaker = xx_ordStatus<{
         orderID: string
@@ -97,15 +102,31 @@ export namespace BitMEXOrderAPI {
     export const stop = xx<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
-        stopPx: number
+        price: number
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
             symbol: p.symbol,
             ordType: 'Stop',
-            stopPx: p.stopPx,
+            stopPx: p.price,
             orderQty: 100000,
             side: p.side,
             execInst: ['Close', 'LastPrice'],
+        })
+    )
+
+    export const 市价触发 = xx<{
+        symbol: BaseType.BitmexSymbol
+        side: BaseType.Side
+        price: number
+        size: number
+    }>(
+        (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
+            symbol: p.symbol,
+            ordType: 'MarketIfTouched',
+            stopPx: p.price,
+            orderQty: p.size,
+            side: p.side,
+            execInst: 'LastPrice',
         })
     )
 

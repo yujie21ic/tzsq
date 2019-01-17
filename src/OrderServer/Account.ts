@@ -117,7 +117,7 @@ export class Account {
                         price: v.stopPx,
                     })
                 }
-            }) 
+            })
 
             this.jsonSync.data.symbol[symbol].活动委托.____set(arr)
         })
@@ -151,7 +151,7 @@ export class Account {
             await BitMEXOrderAPI.stop(this.cookie, {
                 symbol: 'XBTUSD',
                 side,
-                stopPx: toXBTUSDGridPoint(仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点, side),
+                price: toXBTUSDGridPoint(仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点, side),
             })
             return true
         }
@@ -178,7 +178,7 @@ export class Account {
             ) {
                 await BitMEXOrderAPI.updateStop(this.cookie, {
                     orderID: id,
-                    stopPx: 新的Price,
+                    price: 新的Price,
                 })
                 return true
             }
