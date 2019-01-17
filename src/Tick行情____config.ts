@@ -68,14 +68,16 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         {
             heightPercentage: 0.5,
             和下一张重叠: true,
-            layerList: 双价格(d)
-        },
-        {
-            heightPercentage: 0.5,
             layerList: [
                 layer(LineLayer, { data: d.期货.波动率, color: 波动率颜色 }),
             ]
         },
+        {
+            heightPercentage: 0.5,
+            
+            layerList: 双价格(d)
+        },
+      
 
         // {
         //     heightPercentage: 0.5,

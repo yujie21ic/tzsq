@@ -254,7 +254,7 @@ export class RealDataBase {
 
 
         const 净盘口 = 指标.累加(
-            指标.lazyMapCache(() => Math.min(盘口买.length, 盘口卖.length), i => 盘口买[i] - 盘口卖[i]),
+            指标.lazyMapCache(() => Math.min(盘口买.length, 盘口卖.length), i => 盘口买[i] + 盘口卖[i]),
             多少秒均线,
             RealDataBase.单位时间
         )

@@ -170,10 +170,10 @@ export class Account {
             const 浮盈点数 = this.get浮盈点数('XBTUSD')
             let 新的Price = NaN
 
-            if (浮盈点数 > 7) {
+            if (浮盈点数 > 5) {
                 新的Price = toXBTUSDGridPoint(开仓均价, side)
             }
-            else if (浮盈点数 > 15) {
+            else if (浮盈点数 > 10) {
                 新的Price = toXBTUSDGridPoint(开仓均价 + (side === 'Buy' ? - 3 : 3), side)
             }
 
