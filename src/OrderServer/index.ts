@@ -13,7 +13,7 @@ import { kvs } from '../lib/F/kvs'
 //运行的账户
 //cookie --> Account
 const accountDic = new Map<string, Account>()
-if (config.orderServer !== undefined) { 
+if (config.orderServer !== undefined) {
     kvs(config.orderServer).forEach(({ k, v }) => accountDic.set(v, new Account({ accountName: k, cookie: v })))
 } else {
     console.log('运行的账户 没有设置')
@@ -115,22 +115,33 @@ server.func.下单 = async req => {
 
 
 server.func.下单_最低_最高 = async req => {
-    const getPrice = () => realData.getOrderPrice(req.symbol, req.side, req.type)
+
+    const getPrice = () => {
+        const price = realData.getOrderPrice(req.symbol, req.side, req.type)
+        const { high, low } = realData.get期货多少秒内最高最低(req.symbol, 5)
+        if (req.side === 'Buy') {
+            return Math.min(price, low)
+        } else {
+            return Math.max(price, high)
+        }
+    }
 
     if (isNaN(getPrice())) {
-        throw '服务器还没有 买1 卖1 价格'
+        throw '服务器还没有 买1 卖1 价格  或者5秒内最高最低价'
     }
 
     return req.type === 'taker' ?
-        await BitMEXOrderAPI.taker(req.cookie, {
-            symbol: req.symbol,
-            side: req.side,
-            size: req.size,
-        }) :
         await BitMEXOrderAPI.市价触发(req.cookie, {
             symbol: req.symbol,
             side: req.side,
             size: req.size,
             price: getPrice(),
+        }) :
+        await BitMEXOrderAPI.maker(req.cookie, {
+            symbol: req.symbol,
+            side: req.side,
+            size: req.size,
+            price: getPrice,
+            reduceOnly: false,
         })
 }

@@ -147,7 +147,36 @@ export class RealDataBase {
     }
 
 
-    get现货多少秒内成交量(symbol: 'btcusdt' | 'ethusdt', second: number) {
+    get期货多少秒内最高最低(symbol: BaseType.BitmexSymbol, second: number) {
+        second = second * (1000 / RealDataBase.单位时间)
+
+        const data = this.data.bitmex[symbol].data
+
+        let high = NaN
+        let low = NaN
+
+        if (data.length >= second) {
+            for (let i = data.length - 1; i >= data.length - second; i--) {
+                if (isNaN(high)) {
+                    high = data[i].high
+                } else {
+                    high = Math.max(high, data[i].high)
+                }
+
+                if (isNaN(low)) {
+                    low = data[i].low
+                } else {
+                    low = Math.max(low, data[i].low)
+                }
+            }
+        }
+        return { high, low }
+    }
+
+
+    //!!!
+    get现货多少秒内成交量(symbol: BaseType.BinanceSymbol, second: number) {
+        second = second * (1000 / RealDataBase.单位时间)
         let volume = 0
         const data = this.data.binance[symbol].data
         if (data.length >= second) {
@@ -159,7 +188,10 @@ export class RealDataBase {
             return NaN
         }
     }
-    get期货多少秒内成交量(symbol: 'XBTUSD' | 'ETHUSD', second: number) {
+
+    //!!!
+    get期货多少秒内成交量(symbol: BaseType.BitmexSymbol, second: number) {
+        second = second * (1000 / RealDataBase.单位时间)
         let volume = 0
         const data = this.data.bitmex.XBTUSD.data
         if (data.length >= second) {
@@ -306,7 +338,7 @@ export class RealDataBase {
     }
 
 
-    private item = (symbol: 'XBTUSD' | 'ETHUSD', binanceSymbol: 'btcusdt' | 'ethusdt') => {
+    private item = (symbol: BaseType.BitmexSymbol, binanceSymbol: BaseType.BinanceSymbol) => {
 
         const 现货 = this.item2(this.data.binance[binanceSymbol], false)
         const 期货 = this.item2(this.data.bitmex[symbol], true)
@@ -325,7 +357,7 @@ export class RealDataBase {
 
             //期货
             期货,
-            期货30秒内成交量: () => this.get期货多少秒内成交量('XBTUSD', 30),
+            期货30秒内成交量: () => this.get期货多少秒内成交量(symbol, 30),
             //差价
             差价,
             差价均线,
