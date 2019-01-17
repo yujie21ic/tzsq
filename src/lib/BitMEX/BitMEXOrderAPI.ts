@@ -43,7 +43,7 @@ export namespace BitMEXOrderAPI {
         return success
     }
 
-    //需要判断 workingIndicator
+    //需要判断 ordStatus
     export const maker = xx_ordStatus<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
@@ -58,6 +58,37 @@ export namespace BitMEXOrderAPI {
             orderQty: p.size,
             price: p.price(),
             execInst: p.reduceOnly ? ['ParticipateDoNotInitiate', 'ReduceOnly'] : 'ParticipateDoNotInitiate',
+        })
+    )
+
+    export const stop = xx_ordStatus<{
+        symbol: BaseType.BitmexSymbol
+        side: BaseType.Side
+        price: number
+    }>(
+        (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
+            symbol: p.symbol,
+            ordType: 'Stop',
+            stopPx: p.price,
+            orderQty: 100000,
+            side: p.side,
+            execInst: ['Close', 'LastPrice'],
+        })
+    )
+
+    export const 市价触发 = xx_ordStatus<{
+        symbol: BaseType.BitmexSymbol
+        side: BaseType.Side
+        price: number
+        size: number
+    }>(
+        (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
+            symbol: p.symbol,
+            ordType: 'MarketIfTouched',
+            stopPx: p.price,
+            orderQty: p.size,
+            side: p.side,
+            execInst: 'LastPrice',
         })
     )
 
@@ -96,37 +127,6 @@ export namespace BitMEXOrderAPI {
             symbol,
             ordType: 'Market',
             execInst: 'Close',
-        })
-    )
-
-    export const stop = xx<{
-        symbol: BaseType.BitmexSymbol
-        side: BaseType.Side
-        price: number
-    }>(
-        (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
-            symbol: p.symbol,
-            ordType: 'Stop',
-            stopPx: p.price,
-            orderQty: 100000,
-            side: p.side,
-            execInst: ['Close', 'LastPrice'],
-        })
-    )
-
-    export const 市价触发 = xx<{
-        symbol: BaseType.BitmexSymbol
-        side: BaseType.Side
-        price: number
-        size: number
-    }>(
-        (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
-            symbol: p.symbol,
-            ordType: 'MarketIfTouched',
-            stopPx: p.price,
-            orderQty: p.size,
-            side: p.side,
-            execInst: 'LastPrice',
         })
     )
 

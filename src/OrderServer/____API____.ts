@@ -58,6 +58,17 @@ export const funcList = {
         },
         res: false,
     },
+
+    下单_最低_最高: {
+        req: {
+            cookie: '',
+            symbol: '' as BaseType.BitmexSymbol,
+            type: '' as 'taker' | 'maker',
+            side: '' as BaseType.Side,
+            size: 0,
+        },
+        res: false,
+    },
 }
 
 
