@@ -7,7 +7,6 @@ import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
 import { realData } from './realData'
 import { lastNumber } from '../lib/F/lastNumber'
 
-
 const to范围 = ({ min, max, value }: { min: number, max: number, value: number }) => {
     if (value < min) {
         return min
@@ -20,15 +19,18 @@ const to范围 = ({ min, max, value }: { min: number, max: number, value: number
     }
 }
 
-const toXBTUSDGridPoint = (n: number, side: BaseType.Side) => {
-    const v = Math.floor(n / 0.5) * 0.5
-    if (side === 'Buy') {
-        return v
-    } else {
-        if (v === n) {
-            return n
+const toGridPoint = (symbol: BaseType.BitmexSymbol, value: number, side: BaseType.Side) => {
+    const grid = symbol === 'XBTUSD' ? 0.5 : 0.05
+
+    const ret = Math.floor(value / grid) * grid
+    if (side === 'Buy') {   //ret <= value
+        return ret
+    }
+    else {                   //ret>= value
+        if (ret === value) {
+            return value
         } else {
-            return v + 0.5
+            return ret + grid
         }
     }
 }
@@ -60,7 +62,10 @@ export class Account {
                 this.updateOrder()
             }
         }
-        this.XBTUSD止损任务()
+
+        keys(this.jsonSync.rawData.symbol).forEach(symbol => {
+            this.止损任务(symbol)
+        })
     }
 
     private updateMargin() {
@@ -145,9 +150,9 @@ export class Account {
     }
 
 
-    async XBTUSD止损step() {
-        const { 仓位数量, 开仓均价 } = this.jsonSync.rawData.symbol.XBTUSD
-        const arr = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => v.type === '止损')
+    async 止损step(symbol: BaseType.BitmexSymbol) {
+        const { 仓位数量, 开仓均价 } = this.jsonSync.rawData.symbol[symbol]
+        const arr = this.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type === '止损')
 
         //清空止损列表
         if (arr.length > 1 ||   //不能有多个止损
@@ -162,32 +167,35 @@ export class Account {
 
         //初始化止损
         else if (仓位数量 !== 0 && arr.length === 0) {
-            const 止损点 = to范围({ min: 3, max: 18, value: lastNumber(realData.dataExt.XBTUSD.期货.波动率) / 4 })
-            //ETH 波动率/100+0.1  最小就是0.1  最大就是0.9
+            const 止损点 =
+                symbol === 'XBTUSD' ?
+                    to范围({ min: 3, max: 18, value: lastNumber(realData.dataExt.XBTUSD.期货.波动率) / 4 }) :
+                    to范围({ min: 0.1, max: 0.9, value: lastNumber(realData.dataExt.ETHUSD.期货.波动率) / 100 + 0.1 })
+
+
             if (isNaN(止损点)) {
                 return false //波动率还没出来 不止损
             }
             const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
             await BitMEXOrderAPI.stop(this.cookie, {
-                symbol: 'XBTUSD',
+                symbol,
                 side,
-                price: toXBTUSDGridPoint(仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点, side),
+                price: toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点, side),
             })
             return true
         }
         //修改止损  只能改小  不能改大
         else if (仓位数量 !== 0 && arr.length === 1) {
             const { price, side, id } = arr[0]
-            const 浮盈点数 = this.get浮盈点数('XBTUSD')
+            const 浮盈点数 = this.get浮盈点数(symbol)
             let 新的Price = NaN
 
             if (浮盈点数 > 7) {
-                新的Price = toXBTUSDGridPoint(开仓均价, side)
+                新的Price = toGridPoint(symbol, 开仓均价, side)
             }
             else if (浮盈点数 > 15) {
-                新的Price = toXBTUSDGridPoint(开仓均价 + (side === 'Buy' ? - 3 : 3), side)
+                新的Price = toGridPoint(symbol, 开仓均价 + (side === 'Buy' ? - 3 : 3), side)
             }
-
 
             if (isNaN(新的Price)) {
                 return false
@@ -202,18 +210,16 @@ export class Account {
                 })
                 return true
             }
-
         }
-
 
         return false
     }
 
 
-    async XBTUSD止损任务() {
+    async  止损任务(symbol: BaseType.BitmexSymbol) {
         while (true) {
-            if (this.jsonSync.rawData.symbol.XBTUSD.任务.止损) {
-                if (await this.XBTUSD止损step()) {
+            if (this.jsonSync.rawData.symbol[symbol].任务.止损) {
+                if (await this.止损step(symbol)) {
                     await sleep(2000) //2s
                 }
             }
