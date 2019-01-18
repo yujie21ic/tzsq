@@ -9,13 +9,12 @@ import { BarLayer } from './lib/Chart/Layer/BarLayer'
 import { BaseType } from './lib/BaseType'
 import { MACD } from './lib/指标/MACD'
 import { TextLayer } from './lib/Chart/Layer/TextLayer'
-import { lastNumber } from './lib/F/lastNumber'
 import { formatDate } from './lib/F/formatDate'
 import { DBClient } from './DBServer/DBClient'
 import { dialog } from './lib/UI/dialog'
 import { timeID } from './lib/F/timeID'
 
-let nowSymbol: BaseType.BinanceSymbol = 'ethusdt'
+let nowSymbol: BaseType.BitmexSymbol = 'ETHUSD'
 
 const load = async () => {
     S = {
@@ -27,7 +26,7 @@ const load = async () => {
 
     const arr = (await DBClient.func.getKLine({
         type: '1m',
-        symbol: 'XBTUSD',
+        symbol: nowSymbol,
         startTime: 0,//Date.now() - 24 * 60 * 60 * 1000 * 4,
         endTime: Date.now(),
     })).data
@@ -41,7 +40,7 @@ const load = async () => {
 
     S = {
         ...S,
-        left: Math.max(0, arr.length - 20),
+        left: Math.max(0, arr.length - 100),
         right: arr.length,
         data: arr
     }
@@ -51,12 +50,12 @@ const load = async () => {
 window.addEventListener('mousedown', e => {
     if (e.button === 2) {
         dialog.popupMenu(
-            ['btcusdt', 'ethusdt'].map(v =>
+            ['XBTUSD', 'ETHUSD'].map(v =>
                 ({
                     label: v,
                     checked: nowSymbol === v,
                     onClick: () => {
-                        nowSymbol = v as BaseType.BinanceSymbol
+                        nowSymbol = v as BaseType.BitmexSymbol
                         load()
                     }
                 })
@@ -67,17 +66,7 @@ window.addEventListener('mousedown', e => {
 
 
 let S = {
-    data: [] as {
-        id: number //<---------------------------
-        open: number
-        high: number
-        low: number
-        close: number
-        buySize: number
-        sellSize: number
-        buyCount: number
-        sellCount: number
-    }[],
+    data: [] as BaseType.KLine[],
     left: 200,
     right: 300,
 }
@@ -85,23 +74,18 @@ let S = {
 chartInit(({ layer }) => {
     const arr = S.data
     const klineData = arr
-    const xxx = MACD(arr.map(v => v.close))
-    const OBV = [] as number[]
-    for (let i = 0; i < arr.length; i++) {
-        OBV[i] = (i === 0 ? 0 : OBV[i - 1]) + arr[i].buySize - arr[i].sellSize
-    }
 
-    //5____没显示
-    const 成交速度_买 = arr.map(v => -v.buyCount)
-    const 成交速度_卖 = arr.map(v => v.sellCount)
+    const { OSC, DIF, DEM } = MACD(arr.map(v => v.close))
+    const 成交买 = arr.map(v => -v.buySize)
+    const 成交卖 = arr.map(v => v.sellSize)
 
     return {
         title: nowSymbol,
         startTime: arr[0] ? timeID.oneMinuteIDToTimestamp(arr[0].id) : 0,//<---------------
         显示y: v => {
             const time = (arr[0] ? timeID.oneMinuteIDToTimestamp(arr[0].id) : 0) + v * 1000 * 60
-            if (time % 3600000 === 0) {
-                return formatDate(new Date(time), v => `${v.hh}:${v.mm}`)
+            if (time % (3600000 * 24) === 0) {
+                return formatDate(new Date(time), v => `${v.d}号`)
             } else {
                 return undefined
             }
@@ -111,7 +95,7 @@ chartInit(({ layer }) => {
         right: S.right,
         items: [
             {
-                heightPercentage: 0.4,
+                heightPercentage: 0.6,
                 layerList: [
                     layer(KLineLayer, { data: klineData }),
                     layer(笔Layer, { data: get笔Index(klineData), color: 0xffff00 }),
@@ -123,27 +107,16 @@ chartInit(({ layer }) => {
             {
                 heightPercentage: 0.2,
                 layerList: [
-                    layer(LineLayer, { data: OBV, color: 0xffff00 }),
-                    layer(TextLayer, { text: '', color: 0xffffff }),
+                    layer(BarLayer, { data: 成交买, color: 0x48aa65 }),
+                    layer(BarLayer, { data: 成交卖, color: 0xe56546 }),
                 ]
             },
             {
                 heightPercentage: 0.2,
                 layerList: [
-                    layer(BarLayer, { data: 成交速度_买, color: 0x48aa65 }),
-                    layer(BarLayer, { data: 成交速度_卖, color: 0xe56546 }),
-                    layer(TextLayer, {
-                        text: `现货 买笔数:${lastNumber(成交速度_买)}  卖笔数:${lastNumber(成交速度_卖)}`,
-                        color: 0xffffff
-                    })
-                ]
-            },
-            {
-                heightPercentage: 0.2,
-                layerList: [
-                    layer(BarLayer, { data: xxx.OSC, color: 0xaaaaaa }),
-                    layer(LineLayer, { data: xxx.DIF, color: 0xaa0000 }),
-                    layer(LineLayer, { data: xxx.DEM, color: 0xffff00 }),
+                    layer(BarLayer, { data: OSC, color: 0xaaaaaa }),
+                    layer(LineLayer, { data: DIF, color: 0xaa0000 }),
+                    layer(LineLayer, { data: DEM, color: 0xffff00 }),
                     layer(TextLayer, {
                         text: '',
                         color: 0xffffff
@@ -159,6 +132,8 @@ window.onmousewheel = (e: any) => {
         ...S,
         left: Math.floor(S.left + e['wheelDelta'] / 120 * (S.right - S.left) * 0.05)
     }
+    S.left = Math.min(S.data.length - 20.5, S.left) //<------------- 
+
     startX = e['clientX']
     startLeft = S.left
     startRight = S.right
@@ -173,18 +148,30 @@ let startX = 0
 let startWidth = 0
 
 window.onmousedown = e => {
-    isDown = true
-    startX = e.clientX
-    startLeft = S.left
-    startRight = S.right
-    startWidth = startRight - startLeft
+    if (e.button === 0) {
+        isDown = true
+        startX = e.clientX
+        startLeft = S.left
+        startRight = S.right
+        startWidth = startRight - startLeft
+    }
+}
+
+window.onmouseup = e => {
+    if (e.button === 0) {
+        isDown = false
+    }
 }
 
 window.onmousemove = e => {
 
     if (isDown) {
-        const left = startLeft - startWidth * (e.clientX - startX) / document.body.clientWidth
-        const right = startRight - startWidth * (e.clientX - startX) / document.body.clientWidth
+        let left = startLeft - startWidth * (e.clientX - startX) / document.body.clientWidth
+        let right = startRight - startWidth * (e.clientX - startX) / document.body.clientWidth
+
+        left = Math.min(S.data.length - 20.5, left) //<-------------
+        right = Math.max(20.5, right)
+
         S = {
             ...S,
             left,
@@ -197,6 +184,6 @@ window.onmousemove = e => {
     }
 }
 
-window.onmouseup = e => isDown = false
+
 
 load()
