@@ -41,7 +41,7 @@ export class JSONRPCServer<T extends FuncList> {
                             res.end()
                         } catch (e) {
                             res.writeHead(404)
-                            res.write(e)
+                            res.write('出错了')
                             res.end()
                         }
                         return
