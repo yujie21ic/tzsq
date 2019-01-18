@@ -11,6 +11,9 @@ export type ConfigType = {
                 XBTUSD: {
                     数量: number
                 }
+                ETHUSD: {
+                    数量: number
+                }
             }
             计分板倍数?: number
         }

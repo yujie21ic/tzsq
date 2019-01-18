@@ -7,12 +7,15 @@ import { getAccountName } from './ConfigType'
 import { Switch } from '@material-ui/core'
 import { JSONRequestError } from './lib/C/JSONRequest'
 import { dialog } from './lib/UI/dialog'
+import { BaseType } from './lib/BaseType'
 
 
 const account = config.account![getAccountName()]
 const { cookie } = account
 const orderClient = new OrderClient(account.cookie)
-const d = () => orderClient.jsonSync.rawData.symbol.XBTUSD
+let nowSymbol: BaseType.BitmexSymbol = 'XBTUSD'
+const d = () => orderClient.jsonSync.rawData.symbol[nowSymbol]
+
 const rpc = OrderClient.rpc.func
 
     ; (window as any)['d'] = d
@@ -172,7 +175,13 @@ class APP extends React.Component<{}, { quxiao: string }> {
                 userSelect: 'none',
                 cursor: 'default'
             }}>
-                <span>XBTUSD</span>
+                <button onClick={() => {
+                    if (nowSymbol === 'XBTUSD') {
+                        nowSymbol = 'ETHUSD'
+                    } else {
+                        nowSymbol = 'XBTUSD'
+                    }
+                }}><h1>{nowSymbol}</h1></button>
                 <div style={{
                     display: 'flex',
                     flexDirection: 'row',
@@ -185,8 +194,8 @@ class APP extends React.Component<{}, { quxiao: string }> {
                 <Button
                     bgColor='rgba(229, 101, 70, 1)'
                     text='市价平仓'
-                    left={() => rpc.市价平仓({ cookie, symbol: 'XBTUSD' })}
-                    right={() => rpc.市价平仓({ cookie, symbol: 'XBTUSD' })}
+                    left={() => rpc.市价平仓({ cookie, symbol: nowSymbol })}
+                    right={() => rpc.市价平仓({ cookie, symbol: nowSymbol })}
                 />
                 <div
                     style={{
@@ -195,14 +204,14 @@ class APP extends React.Component<{}, { quxiao: string }> {
                     }}>
                     <span>止损任务<Switch
                         checked={d().任务.止损}
-                        onChange={(_, checked) => rpc.set_任务_止损({ cookie, symbol: 'XBTUSD', value: checked })}
+                        onChange={(_, checked) => rpc.set_任务_止损({ cookie, symbol: nowSymbol, value: checked })}
                         color='secondary'
                     /></span><br />
 
 
                     <span>止盈任务<Switch
                         checked={d().任务.止盈}
-                        onChange={(_, checked) => rpc.set_任务_止盈({ cookie, symbol: 'XBTUSD', value: checked })}
+                        onChange={(_, checked) => rpc.set_任务_止盈({ cookie, symbol: nowSymbol, value: checked })}
                         color='primary'
                     /></span>
                 </div>
@@ -218,20 +227,20 @@ class APP extends React.Component<{}, { quxiao: string }> {
                         }}>
                         <Button
                             bgColor='rgba(72, 170, 101, 1)'
-                            text={account.交易.XBTUSD.数量 + ''}
+                            text={account.交易[nowSymbol].数量 + ''}
                             left={() => rpc.下单({
                                 cookie,
-                                symbol: 'XBTUSD',
+                                symbol: nowSymbol,
                                 type: 'maker',
                                 side: 'Buy',
-                                size: account.交易.XBTUSD.数量,
+                                size: account.交易[nowSymbol].数量,
                             })}
                             right={() => rpc.下单({
                                 cookie,
-                                symbol: 'XBTUSD',
+                                symbol: nowSymbol,
                                 type: 'taker',
                                 side: 'Buy',
-                                size: account.交易.XBTUSD.数量,
+                                size: account.交易[nowSymbol].数量,
                             })}
                         />
 
@@ -242,17 +251,17 @@ class APP extends React.Component<{}, { quxiao: string }> {
                             text={'5秒内最低价'}
                             left={() => rpc.下单_最低_最高({
                                 cookie,
-                                symbol: 'XBTUSD',
+                                symbol: nowSymbol,
                                 type: 'maker',
                                 side: 'Buy',
-                                size: account.交易.XBTUSD.数量,
+                                size: account.交易[nowSymbol].数量,
                             })}
                             right={() => rpc.下单_最低_最高({
                                 cookie,
-                                symbol: 'XBTUSD',
+                                symbol: nowSymbol,
                                 type: 'taker',
                                 side: 'Buy',
-                                size: account.交易.XBTUSD.数量,
+                                size: account.交易[nowSymbol].数量,
                             })}
                         />
 
@@ -264,20 +273,20 @@ class APP extends React.Component<{}, { quxiao: string }> {
                         }}>
                         <Button
                             bgColor='rgba(229, 101, 70, 1)'
-                            text={-account.交易.XBTUSD.数量 + ''}
+                            text={-account.交易[nowSymbol].数量 + ''}
                             left={() => rpc.下单({
                                 cookie,
-                                symbol: 'XBTUSD',
+                                symbol: nowSymbol,
                                 type: 'maker',
                                 side: 'Sell',
-                                size: account.交易.XBTUSD.数量,
+                                size: account.交易[nowSymbol].数量,
                             })}
                             right={() => rpc.下单({
                                 cookie,
-                                symbol: 'XBTUSD',
+                                symbol: nowSymbol,
                                 type: 'taker',
                                 side: 'Sell',
-                                size: account.交易.XBTUSD.数量,
+                                size: account.交易[nowSymbol].数量,
                             })}
                         />
 
@@ -288,17 +297,17 @@ class APP extends React.Component<{}, { quxiao: string }> {
                             text={'5秒内最高价'}
                             left={() => rpc.下单_最低_最高({
                                 cookie,
-                                symbol: 'XBTUSD',
+                                symbol: nowSymbol,
                                 type: 'maker',
                                 side: 'Sell',
-                                size: account.交易.XBTUSD.数量,
+                                size: account.交易[nowSymbol].数量,
                             })}
                             right={() => rpc.下单({
                                 cookie,
-                                symbol: 'XBTUSD',
+                                symbol: nowSymbol,
                                 type: 'taker',
                                 side: 'Sell',
-                                size: account.交易.XBTUSD.数量,
+                                size: account.交易[nowSymbol].数量,
                             })}
                         />
 
