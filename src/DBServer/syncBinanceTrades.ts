@@ -10,7 +10,7 @@ export const syncBinanceTrades = async (
     fromID: number
 ) => {
 
-    const { table } = DB.getTrades(symbol)
+    const table = DB.getTrades(symbol)
 
     //创建表
     await table.sync()
