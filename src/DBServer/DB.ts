@@ -46,7 +46,7 @@ export class DB {
 
     //_________________________________________________________________________________//
     private static _getKLine_dic: {
-        [symbol: string]: {
+        [type_symbol: string]: {
             sequelize: Sequelize.Sequelize
             table: Sequelize.Model<BaseType.KLine, BaseType.KLine>
         }

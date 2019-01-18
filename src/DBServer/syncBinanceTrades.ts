@@ -10,7 +10,7 @@ export const syncBinanceTrades = async (
     fromID: number
 ) => {
 
-    const { /*sequelize,*/ table } = DB.getTrades(symbol)
+    const { table } = DB.getTrades(symbol)
 
     //创建表
     await table.sync()
@@ -37,26 +37,21 @@ export const syncBinanceTrades = async (
                 //没有数据了 等一分钟再试
                 await sleep(1000 * 60)
             } else {
-                // await sequelize.transaction(t =>
-                //     table.bulkCreate(data.map(v =>
-                //         ({
-                //             id: v.a,
-                //             timestamp: v.T,
-                //             price: Number(v.p),
-                //             size: Number(v.q) * (v.m ? -1 : 1) //主动买是正
-                //         })
-                //     ), { transaction: t })
-                // )
 
-                await table.bulkCreate(data.map(v =>
-                    ({
-                        id: v.a,
-                        timestamp: v.T,
-                        price: Number(v.p),
-                        size: Number(v.q) * (v.m ? -1 : 1) //主动买是正
-                    })
-                ))
-                fromID = data[data.length - 1].a + 1
+                try {
+                    await table.bulkCreate(data.map(v =>
+                        ({
+                            id: v.a,
+                            timestamp: v.T,
+                            price: Number(v.p),
+                            size: Number(v.q) * (v.m ? -1 : 1) //主动买是正
+                        })
+                    ))
+                    fromID = data[data.length - 1].a + 1
+                } catch (error) {
+                    console.log(`syncBinanceTrades 出错  fromID:${fromID} error:${error}`)
+                }
+
             }
         }
         await sleep(1000 * 0.1) //休息0.1s
