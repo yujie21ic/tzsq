@@ -15,6 +15,8 @@ export namespace DB {
                 storage: `db/trades_${symbol}.db`
             })
 
+            sequelize.query('PRAGMA journal_mode=WAL;')
+
             const table = sequelize.define<BaseType.Trade, BaseType.Trade>(symbol,
                 {
                     id: { type: Sequelize.BIGINT, primaryKey: true },
@@ -51,6 +53,8 @@ export namespace DB {
                 storage: `db/${type}_${symbol}.db`
             })
 
+            sequelize.query('PRAGMA journal_mode=WAL;')
+
             const table = sequelize.define<BaseType.KLine, BaseType.KLine>(symbol,
                 {
                     id: { type: Sequelize.BIGINT, primaryKey: true },
@@ -86,6 +90,8 @@ export namespace DB {
                 dialect: 'sqlite',
                 storage: `db/500msOrderBook_${symbol}.db`
             })
+
+            sequelize.query('PRAGMA journal_mode=WAL;')
 
             const table = sequelize.define<BaseType.OrderBookDB, BaseType.OrderBookDB>(symbol,
                 {
