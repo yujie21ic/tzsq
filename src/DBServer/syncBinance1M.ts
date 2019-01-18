@@ -8,6 +8,7 @@ import { sleep } from '../lib/C/sleep'
 
 export const syncBinance1M = (symbol: BaseType.BinanceSymbol) =>
     new SyncKLine({
+        getName: () => `syncBinance1M ${symbol}`,
         getTable: () => DB.getKLine('1m', symbol).table,
         get采集start: async (lastItemID: number) => {
             if (isNaN(lastItemID)) {

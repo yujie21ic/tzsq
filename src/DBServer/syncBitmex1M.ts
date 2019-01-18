@@ -8,6 +8,7 @@ import { sleep } from '../lib/C/sleep'
 
 export const syncBitmex1M = (symbol: BaseType.BitmexSymbol) =>
     new SyncKLine({
+        getName: () => `syncBitmex1M ${symbol}`,
         getTable: () => DB.getKLine('1m', symbol).table,
         get采集start: async (lastItemID: number) => {
             if (isNaN(lastItemID)) {
