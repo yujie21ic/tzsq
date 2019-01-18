@@ -2,10 +2,10 @@
   "name": "tzsq",
   "version": "1.0.0",
   "main": "build/main.js",
-  "scripts": {
-    "greate": "ts-node  --max-old-space-size=4096 ./src/lib/BitMEX/BitMEXGreate",
-    "order_server": "ts-node  --max-old-space-size=4096 ./src/OrderServer",
-    "db_server": "ts-node  --max-old-space-size=4096 ./src/DBServer",
+  "scripts": {    
+    "greate": "node --max_old_space_size=8192 -r ts-node/register ./src/lib/BitMEX/BitMEXGreate",
+    "order_server": "node --max_old_space_size=8192 -r ts-node/register ./src/OrderServer",
+    "db_server": "node --max_old_space_size=8192 -r ts-node/register ./src/DBServer",
     "i": "install-app-deps",
     "test": "mocha -r ts-node/register src/lib/*/*-test.ts",
     "start": "concurrently \"tsc -w\" \"ts-node ./src/RealDataServer\" \"electron ./build/main.js\""
