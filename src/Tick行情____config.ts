@@ -69,17 +69,33 @@ const 成交量买卖曲线 = (d: D) => [
 export const Tick行情____config: { [key in string]: ItemFunc } = {
 
     图表1: d => [
+       
+        // {
+        //     heightPercentage: 0.5,
+
+        //     layerList: 双价格(d)
+        // },
         {
             heightPercentage: 0.5,
             和下一张重叠: true,
             layerList: [
-                layer(LineLayer, { data: d.期货.波动率, color: 波动率颜色 }),
+                layer(LineLayer, { data: realTickClient.dataExt.XBTUSD.期货.价格, color: 期货颜色 }),
+                layer(TextLayer, {
+                    text:
+                        `现货:${lastNumber(d.现货.价格).toFixed(2)} - ${d.现货减去.toFixed(2)} = ${lastNumber(d.现货减去价格).toFixed(2)}   ` +
+                        `期货:${lastNumber(d.期货.价格).toFixed(2)}      ` +
+                        `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
+                        `期货波动率:${lastNumber(d.期货.波动率).toFixed(2)}`,
+                    color: 现货颜色
+                })
+                
             ]
         },
         {
             heightPercentage: 0.5,
-
-            layerList: 双价格(d)
+            layerList: [
+                layer(LineLayer, { data: realTickClient.dataExt.ETHUSD.期货.价格, color: 现货颜色 })
+            ]
         },
 
 
@@ -121,8 +137,15 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         {
             heightPercentage: 0.5,
             yCoordinate: '对数',
-            // 和下一张重叠: true,
+             和下一张重叠: true,
             layerList: 成交量买卖曲线(d)
+        },
+        {
+            heightPercentage: 0.5,
+            //和下一张重叠: true,
+            layerList: [
+                layer(LineLayer, { data: d.期货.波动率, color: 波动率颜色 }),
+            ]
         },
 
 
