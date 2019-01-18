@@ -23,10 +23,10 @@ const toGridPoint = (symbol: BaseType.BitmexSymbol, value: number, side: BaseTyp
     const grid = symbol === 'XBTUSD' ? 0.5 : 0.05
 
     const ret = Math.floor(value / grid) * grid
-    if (side === 'Buy') {   //ret <= value
+    if (side === 'Buy') {       //ret <= value
         return ret
     }
-    else {                   //ret>= value
+    else {                      //ret>= value
         if (ret === value) {
             return value
         } else {
@@ -167,16 +167,18 @@ export class Account {
 
         //初始化止损
         else if (仓位数量 !== 0 && arr.length === 0) {
+
             const 止损点 =
                 symbol === 'XBTUSD' ?
                     to范围({ min: 3, max: 18, value: lastNumber(realData.dataExt.XBTUSD.期货.波动率) / 4 }) :
                     to范围({ min: 0.1, max: 0.9, value: lastNumber(realData.dataExt.ETHUSD.期货.波动率) / 100 + 0.1 })
 
-
             if (isNaN(止损点)) {
                 return false //波动率还没出来 不止损
             }
+
             const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
+
             await BitMEXOrderAPI.stop(this.cookie, {
                 symbol,
                 side,
@@ -216,7 +218,7 @@ export class Account {
     }
 
 
-    async  止损任务(symbol: BaseType.BitmexSymbol) {
+    async 止损任务(symbol: BaseType.BitmexSymbol) {
         while (true) {
             if (this.jsonSync.rawData.symbol[symbol].任务.止损) {
                 if (await this.止损step(symbol)) {
