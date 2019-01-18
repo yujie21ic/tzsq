@@ -5,14 +5,14 @@ import { formatDate } from './lib/F/formatDate'
 import { DataClient } from './RealDataServer/DataClient'
 import { dialog } from './lib/UI/dialog'
 import { registerCommand } from './lib/UI/registerCommand'
-import { Tick行情____config, realTickClient } from './Tick行情____config'
+import { Tick行情____config } from './Tick行情____config'
 import { 指标 } from './lib/指标'
 import { keys } from 'ramda'
 
 
 
 
-
+const realTickClient = new DataClient.RealData__Client()
 let real: RealDataBase = realTickClient
 let realTickHistory: DataClient.RealData__History
 
@@ -149,6 +149,6 @@ chartInit(({ layer }) => {
         每一根是: RealDataBase.单位时间,
         left,
         right,
-        items: Tick行情____config[nowChart](d)
+        items: Tick行情____config[nowChart](d, real.dataExt)
     }
 })
