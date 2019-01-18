@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "build/main.js",
   "scripts": {
-    "greate": "ts-node ./src/lib/BitMEX/BitMEXGreate",
-    "order_server": "ts-node ./src/OrderServer",
-    "db_server": "ts-node ./src/DBServer",
+    "greate": "ts-node  --max-old-space-size=4096 ./src/lib/BitMEX/BitMEXGreate",
+    "order_server": "ts-node  --max-old-space-size=4096 ./src/OrderServer",
+    "db_server": "ts-node  --max-old-space-size=4096 ./src/DBServer",
     "i": "install-app-deps",
     "test": "mocha -r ts-node/register src/lib/*/*-test.ts",
     "start": "concurrently \"tsc -w\" \"ts-node ./src/RealDataServer\" \"electron ./build/main.js\""
