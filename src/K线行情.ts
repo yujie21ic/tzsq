@@ -137,13 +137,15 @@ chartInit(({ layer }) => {
 window.onmousewheel = (e: any) => {
 
     const count = S.right - S.left
-    const d = e['wheelDelta'] / 120 * count
+    const d = e['wheelDelta'] / 120 * (count * 0.1)
     const n = startX / (document.body.clientWidth - theme.RIGHT_WIDTH)
 
 
     S.left += d * n
     S.right -= d * (1 - n)
 
+    S.left = Math.min(S.data.length - 20.5, S.left) //<-------------
+    S.right = Math.max(20.5, S.right)
 
     startX = e['clientX']
     startLeft = S.left
