@@ -135,12 +135,22 @@ chartInit(({ layer }) => {
 })
 
 window.onmousewheel = (e: any) => {
-    S.left = Math.floor(S.left + e['wheelDelta'] / 120 * (S.right - S.left) * 0.05)
-    S.left = Math.min(S.data.length - 20.5, S.left) //<------------- 
+
+    const count = S.right - S.left
+    const d = e['wheelDelta'] / 120 * count
+    const n = startX / (document.body.clientWidth - theme.RIGHT_WIDTH)
+
+
+    S.left += d * n
+    S.right -= d * (1 - n)
+
+
     startX = e['clientX']
     startLeft = S.left
     startRight = S.right
 }
+
+
 
 window.onmousedown = e => {
     if (e.button === 0) {
@@ -156,6 +166,7 @@ window.onmouseup = e => {
         isDown = false
     }
 }
+
 
 window.onmousemove = e => {
     if (isDown) {
