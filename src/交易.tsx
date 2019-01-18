@@ -158,153 +158,154 @@ class APP extends React.Component<{}, { quxiao: string }> {
         f()
     }
     render() {
-        return <div style={{
-            backgroundColor: '#24292d',
-            margin: 'auto auto',
-            width: '350px',
-            height: '100%',
-            padding: '10px 5px',
-            overflow: 'hidden',
-            fontFamily: 'SourceHanSansSC-regular',
-            color: 'white',
-            fontSize: '24px',
-            userSelect: 'none',
-            cursor: 'default'
-        }}>
-            <span>XBTUSD</span>
+        return orderClient.isConnected === false ? <a href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a> :
             <div style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                margin: '20px 0'
+                backgroundColor: '#24292d',
+                margin: 'auto auto',
+                width: '350px',
+                height: '100%',
+                padding: '10px 5px',
+                overflow: 'hidden',
+                fontFamily: 'SourceHanSansSC-regular',
+                color: 'white',
+                fontSize: '24px',
+                userSelect: 'none',
+                cursor: 'default'
             }}>
-                <span style={{ color: d().仓位数量 < 0 ? 'rgba(229, 101, 70, 1)' : 'rgba(72, 170, 101, 1)', fontSize: '24px' }}>{d().仓位数量}</span>
-                <span style={{ paddingLeft: '50px', fontSize: '24px' }}>@{d().开仓均价}</span>
-            </div>
-            <Button
-                bgColor='rgba(229, 101, 70, 1)'
-                text='市价平仓'
-                left={() => rpc.市价平仓({ cookie, symbol: 'XBTUSD' })}
-                right={() => rpc.市价平仓({ cookie, symbol: 'XBTUSD' })}
-            />
-            <div
-                style={{
-                    fontSize: '20px',
-                    marginLeft: '10px'
+                <span>XBTUSD</span>
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    margin: '20px 0'
                 }}>
-                <span>止损任务<Switch
-                    checked={d().任务.止损}
-                    onChange={(_, checked) => rpc.set_任务_止损({ cookie, symbol: 'XBTUSD', value: checked })}
-                    color='secondary'
-                /></span><br />
-
-
-                <span>止盈任务<Switch
-                    checked={d().任务.止盈}
-                    onChange={(_, checked) => rpc.set_任务_止盈({ cookie, symbol: 'XBTUSD', value: checked })}
-                    color='primary'
-                /></span>
-            </div>
-            <div style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center'
-            }}>
+                    <span style={{ color: d().仓位数量 < 0 ? 'rgba(229, 101, 70, 1)' : 'rgba(72, 170, 101, 1)', fontSize: '24px' }}>{d().仓位数量}</span>
+                    <span style={{ paddingLeft: '50px', fontSize: '24px' }}>@{d().开仓均价}</span>
+                </div>
+                <Button
+                    bgColor='rgba(229, 101, 70, 1)'
+                    text='市价平仓'
+                    left={() => rpc.市价平仓({ cookie, symbol: 'XBTUSD' })}
+                    right={() => rpc.市价平仓({ cookie, symbol: 'XBTUSD' })}
+                />
                 <div
                     style={{
-
-                        width: '50%'
+                        fontSize: '20px',
+                        marginLeft: '10px'
                     }}>
-                    <Button
-                        bgColor='rgba(72, 170, 101, 1)'
-                        text={account.交易.XBTUSD.数量 + ''}
-                        left={() => rpc.下单({
-                            cookie,
-                            symbol: 'XBTUSD',
-                            type: 'maker',
-                            side: 'Buy',
-                            size: account.交易.XBTUSD.数量,
-                        })}
-                        right={() => rpc.下单({
-                            cookie,
-                            symbol: 'XBTUSD',
-                            type: 'taker',
-                            side: 'Buy',
-                            size: account.交易.XBTUSD.数量,
-                        })}
-                    />
+                    <span>止损任务<Switch
+                        checked={d().任务.止损}
+                        onChange={(_, checked) => rpc.set_任务_止损({ cookie, symbol: 'XBTUSD', value: checked })}
+                        color='secondary'
+                    /></span><br />
 
-                    <br />
 
-                    <Button
-                        bgColor='rgba(72, 170, 101, 1)'
-                        text={'5秒内最低价'}
-                        left={() => rpc.下单_最低_最高({
-                            cookie,
-                            symbol: 'XBTUSD',
-                            type: 'maker',
-                            side: 'Buy',
-                            size: account.交易.XBTUSD.数量,
-                        })}
-                        right={() => rpc.下单_最低_最高({
-                            cookie,
-                            symbol: 'XBTUSD',
-                            type: 'taker',
-                            side: 'Buy',
-                            size: account.交易.XBTUSD.数量,
-                        })}
-                    />
-
-                    <Table side='Buy' />
+                    <span>止盈任务<Switch
+                        checked={d().任务.止盈}
+                        onChange={(_, checked) => rpc.set_任务_止盈({ cookie, symbol: 'XBTUSD', value: checked })}
+                        color='primary'
+                    /></span>
                 </div>
-                <div
-                    style={{
-                        width: '50%'
-                    }}>
-                    <Button
-                        bgColor='rgba(229, 101, 70, 1)'
-                        text={-account.交易.XBTUSD.数量 + ''}
-                        left={() => rpc.下单({
-                            cookie,
-                            symbol: 'XBTUSD',
-                            type: 'maker',
-                            side: 'Sell',
-                            size: account.交易.XBTUSD.数量,
-                        })}
-                        right={() => rpc.下单({
-                            cookie,
-                            symbol: 'XBTUSD',
-                            type: 'taker',
-                            side: 'Sell',
-                            size: account.交易.XBTUSD.数量,
-                        })}
-                    />
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center'
+                }}>
+                    <div
+                        style={{
 
-                    <br />
+                            width: '50%'
+                        }}>
+                        <Button
+                            bgColor='rgba(72, 170, 101, 1)'
+                            text={account.交易.XBTUSD.数量 + ''}
+                            left={() => rpc.下单({
+                                cookie,
+                                symbol: 'XBTUSD',
+                                type: 'maker',
+                                side: 'Buy',
+                                size: account.交易.XBTUSD.数量,
+                            })}
+                            right={() => rpc.下单({
+                                cookie,
+                                symbol: 'XBTUSD',
+                                type: 'taker',
+                                side: 'Buy',
+                                size: account.交易.XBTUSD.数量,
+                            })}
+                        />
 
-                    <Button
-                        bgColor='rgba(229, 101, 70, 1)'
-                        text={'5秒内最高价'}
-                        left={() => rpc.下单_最低_最高({
-                            cookie,
-                            symbol: 'XBTUSD',
-                            type: 'maker',
-                            side: 'Sell',
-                            size: account.交易.XBTUSD.数量,
-                        })}
-                        right={() => rpc.下单({
-                            cookie,
-                            symbol: 'XBTUSD',
-                            type: 'taker',
-                            side: 'Sell',
-                            size: account.交易.XBTUSD.数量,
-                        })}
-                    />
+                        <br />
 
-                    <Table side='Sell' />
+                        <Button
+                            bgColor='rgba(72, 170, 101, 1)'
+                            text={'5秒内最低价'}
+                            left={() => rpc.下单_最低_最高({
+                                cookie,
+                                symbol: 'XBTUSD',
+                                type: 'maker',
+                                side: 'Buy',
+                                size: account.交易.XBTUSD.数量,
+                            })}
+                            right={() => rpc.下单_最低_最高({
+                                cookie,
+                                symbol: 'XBTUSD',
+                                type: 'taker',
+                                side: 'Buy',
+                                size: account.交易.XBTUSD.数量,
+                            })}
+                        />
+
+                        <Table side='Buy' />
+                    </div>
+                    <div
+                        style={{
+                            width: '50%'
+                        }}>
+                        <Button
+                            bgColor='rgba(229, 101, 70, 1)'
+                            text={-account.交易.XBTUSD.数量 + ''}
+                            left={() => rpc.下单({
+                                cookie,
+                                symbol: 'XBTUSD',
+                                type: 'maker',
+                                side: 'Sell',
+                                size: account.交易.XBTUSD.数量,
+                            })}
+                            right={() => rpc.下单({
+                                cookie,
+                                symbol: 'XBTUSD',
+                                type: 'taker',
+                                side: 'Sell',
+                                size: account.交易.XBTUSD.数量,
+                            })}
+                        />
+
+                        <br />
+
+                        <Button
+                            bgColor='rgba(229, 101, 70, 1)'
+                            text={'5秒内最高价'}
+                            left={() => rpc.下单_最低_最高({
+                                cookie,
+                                symbol: 'XBTUSD',
+                                type: 'maker',
+                                side: 'Sell',
+                                size: account.交易.XBTUSD.数量,
+                            })}
+                            right={() => rpc.下单({
+                                cookie,
+                                symbol: 'XBTUSD',
+                                type: 'taker',
+                                side: 'Sell',
+                                size: account.交易.XBTUSD.数量,
+                            })}
+                        />
+
+                        <Table side='Sell' />
+                    </div>
                 </div>
-            </div>
-        </div >
+            </div >
     }
 }
 

@@ -45,28 +45,29 @@ class APP extends React.Component {
             })
         }
 
-        return <Table
-            dataSource={data}
-            columns={[
-                {
-                    title: '时间',
-                    width: '50%',
-                    render: v =>
-                        <p style={{ color: v.earn < 0 ? '#e56546' : '#49a965' }}>
-                            {v.time === 0 ? '--' : new Date(v.time).toLocaleString()}
+        return orderClient.isConnected === false ? <a href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a> :
+            <Table
+                dataSource={data}
+                columns={[
+                    {
+                        title: '时间',
+                        width: '50%',
+                        render: v =>
+                            <p style={{ color: v.earn < 0 ? '#e56546' : '#49a965' }}>
+                                {v.time === 0 ? '--' : new Date(v.time).toLocaleString()}
+                            </p>
+                    },
+                    {
+                        title: '收益',
+                        width: '50%',
+                        render: v =>
+                            <p style={{ color: v.earn < 0 ? '#e56546' : '#49a965' }}>
+                                {v.earn / 100000}mXBT
                         </p>
-                },
-                {
-                    title: '收益',
-                    width: '50%',
-                    render: v =>
-                        <p style={{ color: v.earn < 0 ? '#e56546' : '#49a965' }}>
-                            {v.earn / 100000}mXBT
-                        </p>
-                }
-            ]}
-            rowKey={v => v.id}
-        />
+                    }
+                ]}
+                rowKey={v => v.id}
+            />
     }
 }
 
