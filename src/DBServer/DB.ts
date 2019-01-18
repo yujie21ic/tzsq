@@ -54,7 +54,7 @@ export class DB {
 
     static getKLine(type: '1m' | '500ms', symbol: BaseType.BinanceSymbol | BaseType.BitmexSymbol) {
 
-        if (this._getKLine_dic[symbol] === undefined) {
+        if (this._getKLine_dic[`${type}_${symbol}`] === undefined) {
 
             const sequelize = new Sequelize({
                 logging: false,
