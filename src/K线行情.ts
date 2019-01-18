@@ -27,10 +27,13 @@ const load = async () => {
 
     const arr = (await DBClient.func.getKLine({
         type: '1m',
-        symbol: nowSymbol,
-        startTime: Date.now() - 24 * 60 * 60 * 1000 * 4,
+        symbol: 'XBTUSD',
+        startTime: 0,//Date.now() - 24 * 60 * 60 * 1000 * 4,
         endTime: Date.now(),
     })).data
+
+    console.log('arr', arr)
+
     if (arr === undefined) {
         console.log('load error')
         return
