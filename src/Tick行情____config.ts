@@ -4,9 +4,11 @@ import { LineLayer } from './lib/Chart/Layer/LineLayer'
 import { TextLayer } from './lib/Chart/Layer/TextLayer'
 import { lastNumber } from './lib/F/lastNumber'
 import { BarLayer } from './lib/Chart/Layer/BarLayer'
+import { DataClient } from './RealDataServer/DataClient'
 // import { 竖线Layer } from './lib/Chart/Layer/竖线Layer'
 // import { 画线Layer } from './lib/Chart/Layer/画线Layer'
 
+export const realTickClient = new DataClient.RealData__Client()
 
 type D = RealDataBase['dataExt']['XBTUSD']
 type ItemFunc = (d: D) => {
@@ -21,7 +23,9 @@ const 现货颜色 = 0xaaaa00
 const 期货颜色 = 0xcc66ff
 const 买颜色 = 0x48aa65
 const 卖颜色 = 0xe56546
-const 波动率颜色=0xC70039  
+const 波动率颜色 = 0xC70039
+
+
 
 
 const 双价格 = (d: D) => [
@@ -74,10 +78,10 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         },
         {
             heightPercentage: 0.5,
-            
+
             layerList: 双价格(d)
         },
-      
+
 
         // {
         //     heightPercentage: 0.5,
@@ -117,10 +121,10 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         {
             heightPercentage: 0.5,
             yCoordinate: '对数',
-           // 和下一张重叠: true,
+            // 和下一张重叠: true,
             layerList: 成交量买卖曲线(d)
         },
-       
+
 
     ],
     双价格图和成交量: d => [
@@ -150,5 +154,20 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 })
             ]
         },
+    ],
+    BTC_ETH: d => [
+        {
+            heightPercentage: 1,
+            和下一张重叠: true,
+            layerList: [
+                layer(LineLayer, { data: realTickClient.dataExt.XBTUSD.期货.价格, color: 0xcc66ff })
+            ]
+        },
+        {
+            heightPercentage: 1,
+            layerList: [
+                layer(LineLayer, { data: realTickClient.dataExt.ETHUSD.期货.价格, color: 0xffff00 })
+            ]
+        }
     ]
 }
