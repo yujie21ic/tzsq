@@ -13,6 +13,7 @@ import { formatDate } from './lib/F/formatDate'
 import { DBClient } from './DBServer/DBClient'
 import { dialog } from './lib/UI/dialog'
 import { timeID } from './lib/F/timeID'
+import { theme } from './lib/Chart/theme'
 
 let nowSymbol: BaseType.BitmexSymbol = 'ETHUSD'
 
@@ -166,8 +167,8 @@ window.onmouseup = e => {
 window.onmousemove = e => {
 
     if (isDown) {
-        let left = startLeft - startWidth * (e.clientX - startX) / document.body.clientWidth
-        let right = startRight - startWidth * (e.clientX - startX) / document.body.clientWidth
+        let left = startLeft - startWidth * (e.clientX - startX) / (document.body.clientWidth - theme.RIGHT_WIDTH)
+        let right = startRight - startWidth * (e.clientX - startX) / (document.body.clientWidth - theme.RIGHT_WIDTH)
 
         left = Math.min(S.data.length - 20.5, left) //<-------------
         right = Math.max(20.5, right)
