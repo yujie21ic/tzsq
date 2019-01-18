@@ -126,9 +126,11 @@ export namespace DataClient {
             this.get_bitmex_orderBook('ETHUSD', startTime)
 
             this.data.bitmex.XBTUSD.data = await this.getBitmex500msKLine('XBTUSD', startTime)
+            console.log('XBTUSD 500msKLine', this.data.bitmex.XBTUSD.data)
             this.重新初始化()
 
             this.data.bitmex.ETHUSD.data = await this.getBitmex500msKLine('ETHUSD', startTime)
+            console.log('ETHUSD 500msKLine', this.data.bitmex.ETHUSD.data)
             this.重新初始化()
 
             this.get_binance_tick('btcusdt', startTime)
