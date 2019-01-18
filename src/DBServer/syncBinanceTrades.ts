@@ -37,7 +37,6 @@ export const syncBinanceTrades = async (
                 //没有数据了 等一分钟再试
                 await sleep(1000 * 60)
             } else {
-
                 try {
                     await table.bulkCreate(data.map(v =>
                         ({
@@ -51,7 +50,6 @@ export const syncBinanceTrades = async (
                 } catch (error) {
                     console.log(`syncBinanceTrades 出错  fromID:${fromID} error:${error}`)
                 }
-
             }
         }
         await sleep(1000 * 0.1) //休息0.1s
