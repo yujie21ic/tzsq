@@ -2,7 +2,7 @@ import { RealDataBase } from './RealDataBase'
 import { WebSocketClient } from '../lib/C/WebSocketClient'
 import { deepMapNullToNaN } from '../lib/F/deepMapNullToNaN'
 import { config } from '../config'
-import { BaseType } from '../lib/BaseType' 
+import { BaseType } from '../lib/BaseType'
 import { DBClient } from '../DBServer/DBClient'
 import { timeID } from '../lib/F/timeID'
 
@@ -126,7 +126,10 @@ export namespace DataClient {
             this.get_bitmex_orderBook('ETHUSD', startTime)
 
             this.data.bitmex.XBTUSD.data = await this.getBitmex500msKLine('XBTUSD', startTime)
+            this.重新初始化()
+
             this.data.bitmex.ETHUSD.data = await this.getBitmex500msKLine('ETHUSD', startTime)
+            this.重新初始化()
 
             this.get_binance_tick('btcusdt', startTime)
             this.get_binance_tick('ethusdt', startTime)
