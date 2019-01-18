@@ -31,7 +31,7 @@ export const syncBitmex500msOrderBook = async () => {
                     sell: '最新',
                 })
 
-                const { table } = DB.getBitmex500msOrderBook(symbol as BaseType.BitmexSymbol)
+                const table = DB.getBitmex500msOrderBook(symbol as BaseType.BitmexSymbol)
 
                 //创建表
                 table.sync()

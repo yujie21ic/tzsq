@@ -9,7 +9,7 @@ import { sleep } from '../lib/C/sleep'
 export const syncBitmex1M = (symbol: BaseType.BitmexSymbol) =>
     new SyncKLine({
         getName: () => `syncBitmex1M ${symbol}`,
-        getTable: () => DB.getKLine('1m', symbol).table,
+        getTable: () => DB.getKLine('1m', symbol),
         get采集start: async (lastItemID: number) => {
             if (isNaN(lastItemID)) {
                 return 0
@@ -18,7 +18,7 @@ export const syncBitmex1M = (symbol: BaseType.BitmexSymbol) =>
             }
         },
         getData: async (start: number) => {
-            const tickArr = (await DB.getKLine('500ms', symbol).table.findAll({
+            const tickArr = (await DB.getKLine('500ms', symbol).findAll({
                 raw: true,
                 where: {
                     id: {

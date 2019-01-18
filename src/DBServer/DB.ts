@@ -1,19 +1,13 @@
 import * as Sequelize from 'sequelize'
 import { BaseType } from '../lib/BaseType'
 
-export class DB {
-
+export namespace DB {
     //_________________________________________________________________________________//
-    private static _getTrades_dic: {
-        [symbol: string]: {
-            sequelize: Sequelize.Sequelize
-            table: Sequelize.Model<BaseType.Trade, BaseType.Trade>
-        }
-    } = Object.create(null)
+    const _getTrades_dic: { [symbol: string]: Sequelize.Model<BaseType.Trade, BaseType.Trade> } = Object.create(null)
 
-    static getTrades(symbol: BaseType.BinanceSymbol) {
+    export const getTrades = (symbol: BaseType.BinanceSymbol) => {
 
-        if (this._getTrades_dic[symbol] === undefined) {
+        if (_getTrades_dic[symbol] === undefined) {
 
             const sequelize = new Sequelize({
                 logging: false,
@@ -37,24 +31,19 @@ export class DB {
                     ]
                 }
             )
-            this._getTrades_dic[symbol] = { sequelize, table }
+            _getTrades_dic[symbol] = table
         }
 
-        return this._getTrades_dic[symbol]
+        return _getTrades_dic[symbol]
     }
 
 
     //_________________________________________________________________________________//
-    private static _getKLine_dic: {
-        [type_symbol: string]: {
-            sequelize: Sequelize.Sequelize
-            table: Sequelize.Model<BaseType.KLine, BaseType.KLine>
-        }
-    } = Object.create(null)
+    const _getKLine_dic: { [type_symbol: string]: Sequelize.Model<BaseType.KLine, BaseType.KLine> } = Object.create(null)
 
-    static getKLine(type: '1m' | '500ms', symbol: BaseType.BinanceSymbol | BaseType.BitmexSymbol) {
+    export const getKLine = (type: '1m' | '500ms', symbol: BaseType.BinanceSymbol | BaseType.BitmexSymbol) => {
 
-        if (this._getKLine_dic[`${type}_${symbol}`] === undefined) {
+        if (_getKLine_dic[`${type}_${symbol}`] === undefined) {
 
             const sequelize = new Sequelize({
                 logging: false,
@@ -79,23 +68,18 @@ export class DB {
                     timestamps: false
                 }
             )
-            this._getKLine_dic[symbol] = { sequelize, table }
+            _getKLine_dic[symbol] = table
         }
 
-        return this._getKLine_dic[symbol]
+        return _getKLine_dic[symbol]
     }
 
     //_________________________________________________________________________________//
-    private static _getBitmex500msOrderBook_dic: {
-        [symbol: string]: {
-            sequelize: Sequelize.Sequelize
-            table: Sequelize.Model<BaseType.OrderBookDB, BaseType.OrderBookDB>
-        }
-    } = Object.create(null)
+    const _getBitmex500msOrderBook_dic: { [symbol: string]: Sequelize.Model<BaseType.OrderBookDB, BaseType.OrderBookDB> } = Object.create(null)
 
-    static getBitmex500msOrderBook(symbol: BaseType.BitmexSymbol) {
+    export const getBitmex500msOrderBook = (symbol: BaseType.BitmexSymbol) => {
 
-        if (this._getBitmex500msOrderBook_dic[symbol] === undefined) {
+        if (_getBitmex500msOrderBook_dic[symbol] === undefined) {
 
             const sequelize = new Sequelize({
                 logging: false,
@@ -132,9 +116,9 @@ export class DB {
                     timestamps: false
                 }
             )
-            this._getBitmex500msOrderBook_dic[symbol] = { sequelize, table }
+            _getBitmex500msOrderBook_dic[symbol] = table
         }
 
-        return this._getBitmex500msOrderBook_dic[symbol]
+        return _getBitmex500msOrderBook_dic[symbol]
     }
 }

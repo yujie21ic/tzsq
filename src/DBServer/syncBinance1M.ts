@@ -9,14 +9,14 @@ import { sleep } from '../lib/C/sleep'
 export const syncBinance1M = (symbol: BaseType.BinanceSymbol) =>
     new SyncKLine({
         getName: () => `syncBinance1M ${symbol}`,
-        getTable: () => DB.getKLine('1m', symbol).table,
+        getTable: () => DB.getKLine('1m', symbol),
         get采集start: async (lastItemID: number) => {
             if (isNaN(lastItemID)) {
                 return 0
             } else {
                 const timestamp = timeID.oneMinuteIDToTimestamp(lastItemID + 1)
 
-                const obj = await DB.getTrades(symbol).table.findOne({
+                const obj = await DB.getTrades(symbol).findOne({
                     raw: true,
                     where: {
                         timestamp: {
@@ -34,7 +34,7 @@ export const syncBinance1M = (symbol: BaseType.BinanceSymbol) =>
             }
         },
         getData: async (start: number) => {
-            const tickArr = (await DB.getTrades(symbol).table.findAll({
+            const tickArr = (await DB.getTrades(symbol).findAll({
                 raw: true,
                 where: {
                     id: {

@@ -34,7 +34,7 @@ const server = new JSONRPCServer({
 
 server.func.getKLine = async req => {
     const timeFunc = req.type === '1m' ? timeID.timestampToOneMinuteID : timeID.timestampTo500msID
-    const retData = await DB.getKLine(req.type, req.symbol).table.findAll({
+    const retData = await DB.getKLine(req.type, req.symbol).findAll({
         raw: true,
         where: {
             id: {
@@ -48,7 +48,7 @@ server.func.getKLine = async req => {
 }
 
 server.func.getBinanceTick = async req => {
-    const retData = await DB.getTrades(req.symbol).table.findAll({
+    const retData = await DB.getTrades(req.symbol).findAll({
         raw: true,
         where: {
             timestamp: {
@@ -62,7 +62,7 @@ server.func.getBinanceTick = async req => {
 }
 
 server.func.getBitmex500msOrderBook = async req => {
-    const arr = await DB.getBitmex500msOrderBook(req.symbol).table.findAll({
+    const arr = await DB.getBitmex500msOrderBook(req.symbol).findAll({
         raw: true,
         where: {
             id: {

@@ -50,7 +50,7 @@ const get1000sData = async (startTime: number, symbol: BaseType.BitmexSymbol) =>
 export const syncBitmex500msKLine = (symbol: BaseType.BitmexSymbol) =>
     new SyncKLine({
         getName: () => `syncBitmex500msKLine ${symbol}`,
-        getTable: () => DB.getKLine('500ms', symbol).table,
+        getTable: () => DB.getKLine('500ms', symbol),
         get采集start: async (lastItemID: number) => {
             if (isNaN(lastItemID)) {
                 return new Date('2019-01-01T00:00:00').getTime()
