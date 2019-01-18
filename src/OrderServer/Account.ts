@@ -8,6 +8,18 @@ import { realData } from './realData'
 import { lastNumber } from '../lib/F/lastNumber'
 
 
+const to范围 = ({ min, max, value }: { min: number, max: number, value: number }) => {
+    if (value < min) {
+        return min
+    }
+    if (value > max) {
+        return max
+    }
+    else {
+        return value
+    }
+}
+
 const toXBTUSDGridPoint = (n: number, side: BaseType.Side) => {
     const v = Math.floor(n / 0.5) * 0.5
     if (side === 'Buy') {
@@ -150,12 +162,11 @@ export class Account {
 
         //初始化止损
         else if (仓位数量 !== 0 && arr.length === 0) {
-            let 止损点 = lastNumber(realData.dataExt.XBTUSD.期货.波动率) / 4
+            const 止损点 = to范围({ min: 3, max: 18, value: lastNumber(realData.dataExt.XBTUSD.期货.波动率) / 4 })
+            //ETH 波动率/100+0.1  最小就是0.1  最大就是0.9
             if (isNaN(止损点)) {
                 return false //波动率还没出来 不止损
             }
-            止损点 = Math.max(3, 止损点)
-            止损点 = Math.min(18, 止损点)
             const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
             await BitMEXOrderAPI.stop(this.cookie, {
                 symbol: 'XBTUSD',
