@@ -27,7 +27,7 @@ const base64URL = (jsPath: string, accountName: string) => `data:text/html;base6
 </head>    
 <body><div id="root"></div></body>
 <script> 
-window['accountName'] = '${accountName}'
+window['accountName'] = ${html转义(JSON.stringify(accountName))}
 document.body.ondragenter = document.body.ondragover = document.body.ondrop = e => {
   e.stopPropagation()
   e.preventDefault()
@@ -46,26 +46,22 @@ const show = (name: string, accountName: string) => {
   win.loadURL(base64URL(path.join(__dirname, `../build/${name}.js`), accountName))
 }
 
-
-const ____ = (name: string, accountName = '') => ({
+const item = (name: string, accountName = '') => ({
   label: name,
   click: () => show(name, accountName)
 })
 
-
 const menu = Menu.buildFromTemplate([
-  ____('Test'),
-  { type: 'separator' },
-  ____('盘口'),
-  ____('K线行情'),
-  ____('Tick行情'),
-  ____('提醒'),
+  item('盘口'),
+  item('K线行情'),
+  item('Tick行情'),
+  item('提醒'),
   { type: 'separator' },
   ...kvs(config.account || {}).map(v => ({
     label: v.k,
     submenu: [
-      ____('计分板', v.k),
-      ____('交易', v.k),
+      item('计分板', v.k),
+      item('交易', v.k),
     ],
   })),
   { type: 'separator' },
