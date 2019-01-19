@@ -142,9 +142,9 @@ const xx = () => {
 
     S.left = to范围({ min: -多出, max: S.data.length - 多出, value: S.left })
 
-    // if (S.right <= S.left + 多出) {
-    //     S.right = S.left + 多出
-    // }
+    if (S.right <= S.left + 多出) {
+        S.right = S.left + 多出
+    }
 
     S.right = to范围({ min: 多出, max: S.data.length + 多出, value: S.right })
 
@@ -155,8 +155,6 @@ window.onmousewheel = (e: any) => {
 
     const count = S.right - S.left
     const d = e['wheelDelta'] / 120 * (count * 0.05)
-
-    if (count < 20 && d > 0) return //
 
     const n = startX / (document.body.clientWidth - theme.RIGHT_WIDTH)
 
