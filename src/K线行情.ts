@@ -1,4 +1,4 @@
-import { chartInit, layer } from './lib/Chart'
+import { chartInit, layer, getIndex } from './lib/Chart'
 import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
 import { BarLayer } from './lib/Chart/Layer/BarLayer'
 import { BaseType } from './lib/BaseType'
@@ -9,6 +9,7 @@ import { timeID } from './lib/F/timeID'
 import { theme } from './lib/Chart/theme'
 import { remote } from 'electron'
 import { to范围 } from './lib/F/to范围'
+import { showWindow, showWindowRemote } from './windowExt'
 
 // import { MACD } from './lib/指标/MACD' 
 
@@ -66,16 +67,28 @@ const load = async () => {
 window.addEventListener('mousedown', e => {
     if (e.button === 2) {
         dialog.popupMenu(
-            ['XBTUSD', 'ETHUSD'].map(v =>
-                ({
-                    label: v,
-                    checked: nowSymbol === v,
-                    onClick: () => {
-                        nowSymbol = v as BaseType.BitmexSymbol
-                        load()
-                    }
-                })
-            )
+            [
+                {
+                    label: '打开tick图',
+                    onClick: () =>
+                        showWindowRemote('Tick复盘', {
+                            accountName: '',
+                            symbol: nowSymbol,
+                            startTime: timeID.oneMinuteIDToTimestamp(S.data[getIndex()].id),
+                        }),
+                },
+                undefined,
+                ...['XBTUSD', 'ETHUSD'].map(v =>
+                    ({
+                        label: v,
+                        checked: nowSymbol === v,
+                        onClick: () => {
+                            nowSymbol = v as BaseType.BitmexSymbol
+                            load()
+                        }
+                    })),
+
+            ]
         )
     }
 })
@@ -147,8 +160,6 @@ const xx = () => {
     }
 
     S.right = to范围({ min: 多出, max: S.data.length + 多出, value: S.right })
-
-    remote.getCurrentWindow().setTitle(Math.floor(S.left) + '  ' + Math.floor(S.right))
 }
 
 window.onmousewheel = (e: any) => {
