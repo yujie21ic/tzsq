@@ -7,22 +7,12 @@ import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
 import { realData } from './realData'
 import { lastNumber } from '../lib/F/lastNumber'
 import { to范围 } from '../lib/F/to范围'
+import { to价格对齐 } from '../lib/F/to价格对齐'
 
 
 const toGridPoint = (symbol: BaseType.BitmexSymbol, value: number, side: BaseType.Side) => {
     const grid = symbol === 'XBTUSD' ? 0.5 : 0.05
-
-    const ret = Math.floor(value / grid) * grid
-    if (side === 'Buy') {       //ret <= value
-        return ret
-    }
-    else {                      //ret>= value
-        if (ret === value) {
-            return value
-        } else {
-            return ret + grid
-        }
-    }
+    return to价格对齐({ grid, side, value })
 }
 
 
