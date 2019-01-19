@@ -9,15 +9,10 @@ class Tick复盘 extends TickBase {
     constructor() {
         super()
 
-        const 历史模式 = (v: string) => {
-            this.real = new DataClient.RealData__History()
-            this.real.load(new Date(v).getTime())
-            this.real.重新初始化()
-        }
-
         registerCommand('load', '时间', v => {
-            const str = String(v)
-            历史模式(str)
+            this.real = new DataClient.RealData__History()
+            this.real.load(new Date(String(v)).getTime())
+            this.real.重新初始化()
         })
     }
 }
