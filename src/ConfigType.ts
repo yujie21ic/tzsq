@@ -20,4 +20,5 @@ export type ConfigType = {
     }
 }
 
-export const getAccountName = () => (window as any)['accountName'] 
+export const getAccountName = () =>
+    (window as any)['accountName'] as string
