@@ -1,7 +1,7 @@
 import { DataClient } from './RealDataServer/DataClient'
 import { TickBase } from './TickBase'
 import { registerCommand } from './lib/UI/registerCommand'
-import { windowExt } from './windowExt';
+import { windowExt } from './windowExt'
 
 class Tick复盘 extends TickBase {
 
