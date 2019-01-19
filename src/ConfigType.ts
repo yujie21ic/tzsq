@@ -18,7 +18,4 @@ export type ConfigType = {
             计分板倍数?: number
         }
     }
-}
-
-export const getAccountName = () =>
-    (window as any)['accountName'] as string
+} 

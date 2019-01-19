@@ -1,13 +1,13 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { config } from './config'
-import { getAccountName } from './ConfigType'
 import { OrderClient } from './OrderServer/OrderClient'
 import { Table } from './lib/UI/Table'
+import { windowExt } from './windowExt'
 
-const 计分板倍数 = config.account![getAccountName()].计分板倍数 || 1
+const 计分板倍数 = config.account![windowExt.accountName].计分板倍数 || 1
 
-const orderClient = new OrderClient(config.account![getAccountName()].cookie)
+const orderClient = new OrderClient(config.account![windowExt.accountName].cookie)
 
 class APP extends React.Component {
 

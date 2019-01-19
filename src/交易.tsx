@@ -3,14 +3,14 @@ import * as ReactDOM from 'react-dom'
 import { style } from 'typestyle'
 import { OrderClient } from './OrderServer/OrderClient'
 import { config } from './config'
-import { getAccountName } from './ConfigType'
 import { Switch } from '@material-ui/core'
 import { JSONRequestError } from './lib/C/JSONRequest'
 import { dialog } from './lib/UI/dialog'
 import { BaseType } from './lib/BaseType'
+import { windowExt } from './windowExt'
 
 
-const account = config.account![getAccountName()]
+const account = config.account![windowExt.accountName]
 const { cookie } = account
 const orderClient = new OrderClient(account.cookie)
 let nowSymbol: BaseType.BitmexSymbol = 'XBTUSD'

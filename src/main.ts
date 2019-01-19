@@ -27,7 +27,7 @@ const base64URL = (jsPath: string, accountName: string) => `data:text/html;base6
 </head>    
 <body><div id="root"></div></body>
 <script> 
-window['accountName'] = ${html转义(JSON.stringify(accountName))}
+window['windowExt'] = ${html转义(JSON.stringify({ accountName }))}
 document.body.ondragenter = document.body.ondragover = document.body.ondrop = e => {
   e.stopPropagation()
   e.preventDefault()
