@@ -388,7 +388,7 @@ export class RealDataBase {
     }
 
 
-    默认期货波动率 = 30
+    private 默认期货波动率 = 30
 
     //
     priceObservable = new Subject<{

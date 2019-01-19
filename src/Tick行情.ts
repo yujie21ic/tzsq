@@ -4,48 +4,11 @@ import { RealDataBase } from './RealDataServer/RealDataBase'
 import { formatDate } from './lib/F/formatDate'
 import { DataClient } from './RealDataServer/DataClient'
 import { dialog } from './lib/UI/dialog'
-import { registerCommand } from './lib/UI/registerCommand'
 import { Tick行情____config } from './Tick行情____config'
 import { 指标 } from './lib/指标'
 import { keys } from 'ramda'
 
-
-
-
-const realTickClient = new DataClient.RealData__Client()
-let real: RealDataBase = realTickClient
-let realTickHistory: DataClient.RealData__History
-
-const 实时模式 = () => real = realTickClient
-
-const 历史模式 = (v: string) => {
-    realTickHistory = new DataClient.RealData__History()
-    realTickHistory.load(new Date(v).getTime())
-    realTickHistory.默认期货波动率 = realTickClient.默认期货波动率
-    realTickHistory.重新初始化()
-    real = realTickHistory
-}
-
-const 设置波动率 = (v: string) => {
-    const n = Number(v)
-    realTickClient.默认期货波动率 = n
-    realTickClient.重新初始化()
-    if (realTickHistory !== undefined) {
-        realTickHistory.默认期货波动率 = realTickClient.默认期货波动率
-        realTickHistory.重新初始化()
-    }
-}
-
-registerCommand('load', '时间', v => {
-    const str = String(v)
-    if (str === '') {
-        实时模式()
-    } else {
-        历史模式(str)
-    }
-})
-
-registerCommand('bdl', '波动率', 设置波动率)
+const real = new DataClient.RealData__Client()
 
 window.addEventListener('mousedown', e => {
     if (e.button === 0) {
@@ -77,29 +40,6 @@ window.addEventListener('mousedown', e => {
                 checked: v === showCount / (1000 / RealDataBase.单位时间),
                 onClick: () => showCount = v * (1000 / RealDataBase.单位时间)
             })),
-            undefined,
-            {
-                label: '历史模式',
-                onClick: () => dialog.showInput({
-                    type: 'date',
-                    title: '设置时间',
-                    value: new Date().toISOString(),
-                    onOK: 历史模式,
-                })
-            },
-            {
-                label: '实时模式',
-                onClick: 实时模式,
-            },
-            {
-                label: '设置波动率',
-                onClick: () => dialog.showInput({
-                    type: 'text',
-                    title: '设置波动率',
-                    value: realTickClient.默认期货波动率 + '',
-                    onOK: 设置波动率,
-                })
-            },
             undefined,
             ...keys(Tick行情____config).map(v => ({
                 label: v,
