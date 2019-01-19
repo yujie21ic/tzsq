@@ -48,7 +48,7 @@ export const showWindowRemote = (name: string, props: Partial<typeof windowExt>,
   const win = new remote.BrowserWindow({
     width: 550,
     height: 400,
-    title: name + props.accountName ? ' ' + props.accountName : '',
+    title: name + (props.accountName !== undefined ? ' ' + props.accountName : ''),
   })
   win.loadURL(base64URL(path.join(__dirname, `../build/${name}.js`), props))
   if (maximize) win.maximize()
@@ -59,7 +59,7 @@ export const showWindow = (name: string, props: Partial<typeof windowExt>, maxim
   const win = new BrowserWindow({
     width: 550,
     height: 400,
-    title: name + props.accountName ? ' ' + props.accountName : '',
+    title: name + (props.accountName !== undefined ? ' ' + props.accountName : ''),
   })
   win.loadURL(base64URL(path.join(__dirname, `../build/${name}.js`), props))
   if (maximize) win.maximize()
