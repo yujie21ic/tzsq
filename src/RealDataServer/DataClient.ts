@@ -27,7 +27,7 @@ export namespace DataClient {
         }
     }
 
-    const 加载多少秒数据 = config.tick历史加载多少秒 || 300
+    const 加载多少秒数据 = (config.tick历史加载多少秒 || 300) + (1000 * 120) //多2分钟
 
     export class RealData__History extends RealDataBase {
 
@@ -113,6 +113,8 @@ export namespace DataClient {
         }
 
         async load(startTime: number) {
+            startTime -= (1000 * 120) //2分钟前
+
             this.data.startTick = Math.floor(startTime / RealDataBase.单位时间)
             this.data.nowTick = Math.floor(startTime / RealDataBase.单位时间)
 

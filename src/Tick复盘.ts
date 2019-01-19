@@ -22,8 +22,21 @@ class Tick复盘 extends TickBase {
             this.real = new DataClient.RealData__History()
             this.real.load(new Date(String(v)).getTime())
         })
+
+        window.onkeydown = e => {
+            if (e.keyCode === 32) {
+                this.加速 = true
+            }
+        }
+
+        window.onkeyup = e => {
+            if (e.keyCode === 32) {
+                this.加速 = false
+            }
+        }
     }
 
+    加速 = false
 
     c = 0
     getLeftRight() {
@@ -32,9 +45,10 @@ class Tick复盘 extends TickBase {
         if (right2 === 0) {
             this.c = 0
         } else {
-            this.c += 1 / 60 * (1000 / RealDataBase.单位时间)
+            this.c += (this.加速 ? 20 : 1) / 60 * (1000 / RealDataBase.单位时间)
         }
-        const right = Math.min(600 * (1000 / RealDataBase.单位时间) + Math.floor(this.c), right2)
+        //2分钟前的直接显示
+        const right = Math.min(120 * (1000 / RealDataBase.单位时间) + Math.floor(this.c), right2)
         const left = Math.max(0, right - this.showCount)
         return { left, right }
     }
