@@ -8,7 +8,7 @@ export const windowExt = typeObjectParse({
   accountName: '',
   symbol: 'XBTUSD' as BaseType.BitmexSymbol,
   startTime: 0,
-})((window as any)['windowExt'])
+})(typeof window === 'undefined' ? {} : (window as any)['windowExt'])
 
 const html转义 = (s: string) => s //居然没有这个现成的函数  这里没实现
 
