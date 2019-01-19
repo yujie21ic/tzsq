@@ -60,6 +60,7 @@ export class TickBase {
         })
 
 
+
         chartInit(() => {
             const d = this.real.dataExt[this.nowTickSymbol]
 
@@ -71,7 +72,7 @@ export class TickBase {
             const { left, right } = this.getLeftRight()
 
             return {
-                title: this.nowTickSymbol + '  ' + ((right - left) / (1000 / RealDataBase.单位时间)) + '秒',
+                title: this.title + ' ' + this.nowTickSymbol + '  ' + ((right - left) / (1000 / RealDataBase.单位时间)) + '秒',
                 startTime: this.real.data.startTick * RealDataBase.单位时间,
                 显示y: v => {
                     const time = (this.real.data.startTick + v) * RealDataBase.单位时间
@@ -94,7 +95,7 @@ export class TickBase {
             }
         })
     }
-
+    title = ''
     getLeftRight() {
         const d = this.real.dataExt[this.nowTickSymbol]
         const right = Math.max(d.现货.价格.length, d.期货.价格.length, d.期货.盘口买.length, d.期货.盘口卖.length) - 1

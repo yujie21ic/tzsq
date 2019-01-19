@@ -6,6 +6,7 @@ import { RealDataBase } from './RealDataServer/RealDataBase'
 
 class Tick复盘 extends TickBase {
 
+    title = new Date(windowExt.startTime).toLocaleString()
     real = new DataClient.RealData__History()
 
     constructor() {
