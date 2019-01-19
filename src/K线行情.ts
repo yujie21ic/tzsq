@@ -7,9 +7,8 @@ import { DBClient } from './DBServer/DBClient'
 import { dialog } from './lib/UI/dialog'
 import { timeID } from './lib/F/timeID'
 import { theme } from './lib/Chart/theme'
-import { remote } from 'electron'
 import { to范围 } from './lib/F/to范围'
-import { showWindow, showWindowRemote } from './windowExt'
+import { showWindowRemote } from './windowExt'
 
 // import { MACD } from './lib/指标/MACD' 
 
