@@ -6,18 +6,8 @@ import { sleep } from '../lib/C/sleep'
 import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
 import { realData } from './realData'
 import { lastNumber } from '../lib/F/lastNumber'
+import { to范围 } from '../lib/F/to范围'
 
-const to范围 = ({ min, max, value }: { min: number, max: number, value: number }) => {
-    if (value < min) {
-        return min
-    }
-    if (value > max) {
-        return max
-    }
-    else {
-        return value
-    }
-}
 
 const toGridPoint = (symbol: BaseType.BitmexSymbol, value: number, side: BaseType.Side) => {
     const grid = symbol === 'XBTUSD' ? 0.5 : 0.05

@@ -7,6 +7,8 @@ import { DBClient } from './DBServer/DBClient'
 import { dialog } from './lib/UI/dialog'
 import { timeID } from './lib/F/timeID'
 import { theme } from './lib/Chart/theme'
+import { remote } from 'electron'
+import { to范围 } from './lib/F/to范围'
 
 // import { MACD } from './lib/指标/MACD' 
 
@@ -134,18 +136,35 @@ chartInit(({ layer }) => {
     }
 })
 
+
+const xx = () => {
+    const 多出 = 12
+
+    S.left = to范围({ min: -多出, max: S.data.length - 多出, value: S.left })
+
+    // if (S.right <= S.left + 多出) {
+    //     S.right = S.left + 多出
+    // }
+
+    S.right = to范围({ min: 多出, max: S.data.length + 多出, value: S.right })
+
+    remote.getCurrentWindow().setTitle(Math.floor(S.left) + '  ' + Math.floor(S.right))
+}
+
 window.onmousewheel = (e: any) => {
 
     const count = S.right - S.left
-    const d = e['wheelDelta'] / 120 * (count * 0.1)
+    const d = e['wheelDelta'] / 120 * (count * 0.05)
+
+    if (count < 20 && d > 0) return //
+
     const n = startX / (document.body.clientWidth - theme.RIGHT_WIDTH)
 
 
     S.left += d * n
     S.right -= d * (1 - n)
 
-    S.left = Math.min(S.data.length - 20.5, S.left) //<-------------
-    S.right = Math.max(20.5, S.right)
+    xx()
 
     startX = e['clientX']
     startLeft = S.left
@@ -172,10 +191,9 @@ window.onmouseup = e => {
 
 window.onmousemove = e => {
     if (isDown) {
-        const left = startLeft - (startRight - startLeft) * (e.clientX - startX) / (document.body.clientWidth - theme.RIGHT_WIDTH)
-        const right = startRight - (startRight - startLeft) * (e.clientX - startX) / (document.body.clientWidth - theme.RIGHT_WIDTH)
-        S.left = Math.min(S.data.length - 20.5, left) //<-------------
-        S.right = Math.max(20.5, right)
+        S.left = startLeft - (startRight - startLeft) * (e.clientX - startX) / (document.body.clientWidth - theme.RIGHT_WIDTH)
+        S.right = startRight - (startRight - startLeft) * (e.clientX - startX) / (document.body.clientWidth - theme.RIGHT_WIDTH)
+        xx()
     }
 }
 

@@ -78,7 +78,7 @@ export class JSONRPCClient<T extends FuncList> {
                     const { error, data, msg } = await JSONRequest({
                         url: `http://${p.host}:${p.port}`,
                         method: 'POST',
-                        body: [key, req]
+                        body: [key, req],
                     })
                     return {
                         error: error,
