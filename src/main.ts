@@ -55,6 +55,7 @@ const menu = Menu.buildFromTemplate([
   item('盘口'),
   item('K线行情'),
   item('Tick行情'),
+  item('Tick复盘'),
   item('提醒'),
   { type: 'separator' },
   ...kvs(config.account || {}).map(v => ({
