@@ -9,26 +9,17 @@ import { Tick行情____config } from './Tick行情____config'
 import { 指标 } from './lib/指标'
 import { keys } from 'ramda'
 
-const realTickClient = new DataClient.RealData__Client()
-let real: RealDataBase = realTickClient
-let realTickHistory: DataClient.RealData__History
-
-const 实时模式 = () => real = realTickClient
+let real = new DataClient.RealData__History()
 
 const 历史模式 = (v: string) => {
-    realTickHistory = new DataClient.RealData__History()
-    realTickHistory.load(new Date(v).getTime()) 
-    realTickHistory.重新初始化()
-    real = realTickHistory
+    real = new DataClient.RealData__History()
+    real.load(new Date(v).getTime())
+    real.重新初始化()
 }
 
 registerCommand('load', '时间', v => {
     const str = String(v)
-    if (str === '') {
-        实时模式()
-    } else {
-        历史模式(str)
-    }
+    历史模式(str)
 })
 
 window.addEventListener('mousedown', e => {
@@ -61,20 +52,6 @@ window.addEventListener('mousedown', e => {
                 checked: v === showCount / (1000 / RealDataBase.单位时间),
                 onClick: () => showCount = v * (1000 / RealDataBase.单位时间)
             })),
-            undefined,
-            {
-                label: '历史模式',
-                onClick: () => dialog.showInput({
-                    type: 'date',
-                    title: '设置时间',
-                    value: new Date().toISOString(),
-                    onOK: 历史模式,
-                })
-            },
-            {
-                label: '实时模式',
-                onClick: 实时模式,
-            },
             undefined,
             ...keys(Tick行情____config).map(v => ({
                 label: v,
