@@ -43,21 +43,24 @@ require(${html转义(JSON.stringify(jsPath))})
 </html>`)}`
 
 
-export const showWindowRemote = (name: string, props: Partial<typeof windowExt>) => {
+//重复
+export const showWindowRemote = (name: string, props: Partial<typeof windowExt>, maximize = false) => {
   const win = new remote.BrowserWindow({
     width: 550,
     height: 400,
     title: name + props.accountName ? ' ' + props.accountName : '',
   })
   win.loadURL(base64URL(path.join(__dirname, `../build/${name}.js`), props))
+  if (maximize) win.maximize()
 }
 
 
-export const showWindow = (name: string, props: Partial<typeof windowExt>) => {
+export const showWindow = (name: string, props: Partial<typeof windowExt>, maximize = false) => {
   const win = new BrowserWindow({
     width: 550,
     height: 400,
     title: name + props.accountName ? ' ' + props.accountName : '',
   })
   win.loadURL(base64URL(path.join(__dirname, `../build/${name}.js`), props))
+  if (maximize) win.maximize()
 }

@@ -75,7 +75,7 @@ window.addEventListener('mousedown', e => {
                             accountName: '',
                             symbol: nowSymbol,
                             startTime: timeID.oneMinuteIDToTimestamp(S.data[getIndex()].id),
-                        }),
+                        }, true),
                 },
                 undefined,
                 ...['XBTUSD', 'ETHUSD'].map(v =>
