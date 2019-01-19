@@ -26,7 +26,7 @@ export const getIndex = () => indexX
 
 export const layer = <P>(a: LayerClass<P>, b: P): LayerItem => [a, b] as any
 
-let dataSourceFunc: (p: { layer: typeof layer }) => {
+let dataSourceFunc: () => {
     title: string
     startTime: number
     显示y: (v: number) => string | undefined
@@ -74,7 +74,7 @@ let lastTitle = ''
 const chartRender = () => {
     if (dataSourceFunc === undefined) return
 
-    let { title, startTime, 每一根是, 显示y, left, right, items } = dataSourceFunc({ layer })
+    let { title, startTime, 每一根是, 显示y, left, right, items } = dataSourceFunc()
 
     if (lastTitle !== title) {
         lastTitle = title

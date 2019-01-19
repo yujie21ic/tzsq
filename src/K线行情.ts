@@ -1,4 +1,4 @@
-import { chartInit } from './lib/Chart'
+import { chartInit, layer } from './lib/Chart'
 import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
 import { BarLayer } from './lib/Chart/Layer/BarLayer'
 import { BaseType } from './lib/BaseType'
@@ -81,7 +81,7 @@ window.addEventListener('mousedown', e => {
 })
 
 
-chartInit(({ layer }) => {
+chartInit(() => {
     const arr = S.data
     const klineData = arr
 
