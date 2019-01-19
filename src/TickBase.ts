@@ -60,7 +60,6 @@ export class TickBase {
         })
 
 
-
         chartInit(() => {
             const d = this.real.dataExt[this.nowTickSymbol]
 
@@ -69,8 +68,7 @@ export class TickBase {
                 this.real.set现货减去(xxx)
             }
 
-            const right = Math.max(d.现货.价格.length, d.期货.价格.length, d.期货.盘口买.length, d.期货.盘口卖.length) - 1
-            const left = Math.max(0, right - this.showCount)
+            const { left, right } = this.getLeftRight()
 
             return {
                 title: this.nowTickSymbol + '  ' + ((right - left) / (1000 / RealDataBase.单位时间)) + '秒',
@@ -95,5 +93,12 @@ export class TickBase {
                 items: Tick行情____config[this.nowChart](d, this.real.dataExt)
             }
         })
+    }
+
+    getLeftRight() {
+        const d = this.real.dataExt[this.nowTickSymbol]
+        const right = Math.max(d.现货.价格.length, d.期货.价格.length, d.期货.盘口买.length, d.期货.盘口卖.length) - 1
+        const left = Math.max(0, right - this.showCount)
+        return { left, right }
     }
 } 
