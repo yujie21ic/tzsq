@@ -29,16 +29,21 @@ wss.on('connection', ws => {
         ws.onmessage = () => { }
         const account = accountDic.get(typeObjectParse({ cookie: '' })(safeJSONParse(e.data + '')).cookie)
         if (account !== undefined) {
-            ws.send(
-                JSON.stringify({
-                    path: [],
-                    value: account.jsonSync.rawData
-                })
-            )
-            online.set(ws,
-                account.jsonSync.subject.subscribe(op =>
-                    ws.send(JSON.stringify(op))
+            try {
+                ws.send(
+                    JSON.stringify({
+                        path: [],
+                        value: account.jsonSync.rawData
+                    })
                 )
+            } catch (err) { }
+
+            online.set(ws,
+                account.jsonSync.subject.subscribe(op => {
+                    try {
+                        ws.send(JSON.stringify(op))
+                    } catch (err) { }
+                })
             )
         }
     }
