@@ -7,11 +7,11 @@ import { typeObjectParse } from '../lib/F/typeObjectParse'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
 import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
 import { kvs } from '../lib/F/kvs'
-import { 止损step } from './止损step'
+import { 止损step } from './task/止损step'
 import { to范围 } from '../lib/F/to范围'
 import { lastNumber } from '../lib/F/lastNumber'
 import { realData } from './realData'
-import { 委托检测step } from './委托检测step'
+import { 委托检测step } from './task/委托检测step'
 
 
 //运行的账户

@@ -1,6 +1,6 @@
-import { BaseType } from '../lib/BaseType'
-import { Account } from './Account'
-import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
+import { BaseType } from '../../lib/BaseType'
+import { Account } from '../Account'
+import { BitMEXOrderAPI } from '../../lib/BitMEX/BitMEXOrderAPI'
 
 export const 委托检测step = (symbol: BaseType.BitmexSymbol) => async (self: Account) => {
     const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
