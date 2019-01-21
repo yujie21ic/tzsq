@@ -181,35 +181,34 @@ export class Account {
                 return true
             }
             else {
+                //只写了BTC的
+                //修改止损  只能改小  不能改大
+                // const { price, side, id } = arr[0]
+                // const 浮盈点数 = this.get浮盈点数(symbol)
+                // let 新的Price = NaN
+
+                // if (浮盈点数 > 7) {
+                //     新的Price = toGridPoint(symbol, 开仓均价, side)
+                // }
+                // else if (浮盈点数 > 15) {
+                //     新的Price = toGridPoint(symbol, 开仓均价 + (side === 'Buy' ? - 3 : 3), side)
+                // }
+
+                // if (isNaN(新的Price)) {
+                //     return false
+                // }
+                // else if (
+                //     (side === 'Buy' && 新的Price < price) ||
+                //     (side === 'Sell' && 新的Price > price)
+                // ) {
+                //     await BitMEXOrderAPI.updateStop(this.cookie, {
+                //         orderID: id,
+                //         price: 新的Price,
+                //     })
+                //     return true
+                // }
                 return false
             }
-
-            //只写了BTC的
-            //修改止损  只能改小  不能改大
-            // const { price, side, id } = arr[0]
-            // const 浮盈点数 = this.get浮盈点数(symbol)
-            // let 新的Price = NaN
-
-            // if (浮盈点数 > 7) {
-            //     新的Price = toGridPoint(symbol, 开仓均价, side)
-            // }
-            // else if (浮盈点数 > 15) {
-            //     新的Price = toGridPoint(symbol, 开仓均价 + (side === 'Buy' ? - 3 : 3), side)
-            // }
-
-            // if (isNaN(新的Price)) {
-            //     return false
-            // }
-            // else if (
-            //     (side === 'Buy' && 新的Price < price) ||
-            //     (side === 'Sell' && 新的Price > price)
-            // ) {
-            //     await BitMEXOrderAPI.updateStop(this.cookie, {
-            //         orderID: id,
-            //         price: 新的Price,
-            //     })
-            //     return true
-            // }
         }
         else {
             //多个止损 全部清空
@@ -217,7 +216,6 @@ export class Account {
             return true
         }
     }
-
 
     async 止损任务(symbol: BaseType.BitmexSymbol, 初始止损点: () => number) {
         while (true) {
@@ -230,10 +228,12 @@ export class Account {
 
     async 委托检测step(symbol: BaseType.BitmexSymbol) {
         const { 仓位数量 } = this.jsonSync.rawData.symbol[symbol]
-        const 限价 = this.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type === '限价')
+
+        const arr = this.jsonSync.rawData.symbol[symbol].活动委托.filter(v =>
+            v.type === '限价' || v.type === '限价只减仓' || v.type === '市价触发'
+        )
+
         const 限价只减仓 = this.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type === '限价只减仓')
-        const 市价触发 = this.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type === '市价触发')
-        const arr = [...限价, ...限价只减仓, ...市价触发]
 
         //没有委托
         if (arr.length === 0) {
@@ -286,7 +286,6 @@ export class Account {
             throw 'symbol不存在'
         }
 
-
         const getPrice最高最低 = () => {
             const price = realData.getOrderPrice(req.symbol, req.side, req.type)
             const { high, low } = realData.get期货多少秒内最高最低(req.symbol, 5)
@@ -327,13 +326,12 @@ export class Account {
             throw '已经有委托了'
         }
 
+
         if ((仓位数量 > 0 && req.side !== 'Sell') ||
             (仓位数量 < 0 && req.side !== 'Buy')
         ) {
             throw '不能加仓'
         }
-
-
 
 
         return req.type === 'taker' ?
