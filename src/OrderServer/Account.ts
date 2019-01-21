@@ -287,23 +287,6 @@ export class Account {
         }
 
 
-        const symbol = req.symbol
-        const { 仓位数量 } = this.jsonSync.rawData.symbol[symbol]
-        const arr = this.jsonSync.rawData.symbol[symbol].活动委托.filter(v =>
-            v.type === '限价' || v.type === '限价只减仓' || v.type === '市价触发'
-        )
-
-        if (arr.length > 0) {
-            throw '已经有委托了'
-        }
-
-        if ((仓位数量 > 0 && req.side !== 'Sell') ||
-            (仓位数量 < 0 && req.side !== 'Buy')
-        ) {
-            throw '不能加仓'
-        }
-
-
         const getPrice最高最低 = () => {
             const price = realData.getOrderPrice(req.symbol, req.side, req.type)
             const { high, low } = realData.get期货多少秒内最高最低(req.symbol, 5)
@@ -321,6 +304,37 @@ export class Account {
         if (isNaN(getPrice())) {
             throw '服务器还没有 买1 卖1 价格'
         }
+
+
+        const symbol = req.symbol
+        const { 仓位数量 } = this.jsonSync.rawData.symbol[symbol]
+        const arr = this.jsonSync.rawData.symbol[symbol].活动委托.filter(v =>
+            v.type === '限价' || v.type === '限价只减仓' || v.type === '市价触发'
+        )
+
+        if (arr.length === 1) {
+            //更新 限价委托
+            if (arr[0].type === '限价' && arr[0].side === req.side && req.type === 'maker') {
+                return await BitMEXOrderAPI.updateMaker(req.cookie, {
+                    orderID: arr[0].id,
+                    price: getPrice,
+                })
+            } else {
+                throw '已经有委托了'
+            }
+        }
+        else if (arr.length > 0) {
+            throw '已经有委托了'
+        }
+
+        if ((仓位数量 > 0 && req.side !== 'Sell') ||
+            (仓位数量 < 0 && req.side !== 'Buy')
+        ) {
+            throw '不能加仓'
+        }
+
+
+
 
         return req.type === 'taker' ?
             (req.最低_最高 ?

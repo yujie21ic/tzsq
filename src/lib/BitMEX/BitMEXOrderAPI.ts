@@ -104,11 +104,14 @@ export namespace BitMEXOrderAPI {
 
     export const updateMaker = xx_ordStatus<{
         orderID: string
-        price: number
-    }>(BitMEXRESTAPI.Order.amend)
+        price: () => number
+    }>(
+        (cookie, p) => BitMEXRESTAPI.Order.amend(cookie, {
+            orderID: p.orderID,
+            price: p.price(),
+        })
+    )
 
-
-    // 
     export const taker = xx<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
