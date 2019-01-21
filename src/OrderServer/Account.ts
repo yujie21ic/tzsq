@@ -166,17 +166,20 @@ export class Account {
             throw '服务器还没有 买1 卖1 价格'
         }
 
+        const { 仓位数量 } = this.jsonSync.rawData.symbol[req.symbol]
 
-        const arr = this.jsonSync.rawData.symbol[req.symbol].活动委托.filter(v => v.type === '限价' || v.type === '限价只减仓' || v.type === '市价触发')
+        const 活动委托 = this.jsonSync.rawData.symbol[req.symbol].活动委托.filter(v =>
+            v.type === '限价' || v.type === '限价只减仓' || v.type === '市价触发'
+        )
 
-        if (arr.length > 1) {
+        if (活动委托.length > 1) {
             throw '已经有委托了'
         }
-        else if (arr.length === 1) {
+        else if (活动委托.length === 1) {
             //更新 限价委托
-            if (arr[0].type === '限价' && arr[0].side === req.side && req.type === 'maker') {
+            if (活动委托[0].type === '限价' && 活动委托[0].side === req.side && req.type === 'maker') {
                 return await BitMEXOrderAPI.updateMaker(req.cookie, {
-                    orderID: arr[0].id,
+                    orderID: 活动委托[0].id,
                     price: getPrice,
                 })
             } else {
@@ -184,7 +187,7 @@ export class Account {
             }
         }
 
-        const { 仓位数量 } = this.jsonSync.rawData.symbol[req.symbol]
+
         if ((仓位数量 > 0 && req.side !== 'Sell') ||
             (仓位数量 < 0 && req.side !== 'Buy')
         ) {
