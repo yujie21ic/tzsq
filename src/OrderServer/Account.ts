@@ -150,32 +150,29 @@ export class Account {
             throw 'symbol不存在'
         }
 
-        const getPrice最高最低 = () => {
-            const price = realData.getOrderPrice(req.symbol, req.side, req.type)
-            const { high, low } = realData.get期货多少秒内最高最低(req.symbol, 5)
-            if (req.side === 'Buy') {
-                return Math.min(price, low)
-            } else {
-                return Math.max(price, high)
-            }
-        }
+        const getPrice = req.最低_最高 ?
+            () => {
+                const price = realData.getOrderPrice(req.symbol, req.side, req.type)
+                const { high, low } = realData.get期货多少秒内最高最低(req.symbol, 5)
+                if (req.side === 'Buy') {
+                    return Math.min(price, low)
+                } else {
+                    return Math.max(price, high)
+                }
+            } :
+            () => realData.getOrderPrice(req.symbol, req.side, req.type)
 
-        const getPrice买1卖1 = () => realData.getOrderPrice(req.symbol, req.side, req.type)
-
-        const getPrice = req.最低_最高 ? getPrice最高最低 : getPrice买1卖1
-
-        if (isNaN(getPrice())) {
+        if (req.type === 'maker' && isNaN(getPrice())) {
             throw '服务器还没有 买1 卖1 价格'
         }
 
 
-        const symbol = req.symbol
-        const { 仓位数量 } = this.jsonSync.rawData.symbol[symbol]
-        const arr = this.jsonSync.rawData.symbol[symbol].活动委托.filter(v =>
-            v.type === '限价' || v.type === '限价只减仓' || v.type === '市价触发'
-        )
+        const arr = this.jsonSync.rawData.symbol[req.symbol].活动委托.filter(v => v.type === '限价' || v.type === '限价只减仓' || v.type === '市价触发')
 
-        if (arr.length === 1) {
+        if (arr.length > 1) {
+            throw '已经有委托了'
+        }
+        else if (arr.length === 1) {
             //更新 限价委托
             if (arr[0].type === '限价' && arr[0].side === req.side && req.type === 'maker') {
                 return await BitMEXOrderAPI.updateMaker(req.cookie, {
@@ -186,17 +183,13 @@ export class Account {
                 throw '已经有委托了'
             }
         }
-        else if (arr.length > 0) {
-            throw '已经有委托了'
-        }
 
-
+        const { 仓位数量 } = this.jsonSync.rawData.symbol[req.symbol]
         if ((仓位数量 > 0 && req.side !== 'Sell') ||
             (仓位数量 < 0 && req.side !== 'Buy')
         ) {
             throw '不能加仓'
         }
-
 
         return req.type === 'taker' ?
             (req.最低_最高 ?
