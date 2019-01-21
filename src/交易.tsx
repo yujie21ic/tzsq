@@ -175,6 +175,8 @@ class APP extends React.Component<{}, { quxiao: string }> {
                 userSelect: 'none',
                 cursor: 'default'
             }}>
+                <h3>只做摸顶抄底</h3>
+                <br />
                 <button onClick={() => {
                     if (nowSymbol === 'XBTUSD') {
                         nowSymbol = 'ETHUSD'
