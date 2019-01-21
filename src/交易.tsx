@@ -3,7 +3,6 @@ import * as ReactDOM from 'react-dom'
 import { style } from 'typestyle'
 import { OrderClient } from './OrderServer/OrderClient'
 import { config } from './config'
-import { Switch } from '@material-ui/core'
 import { JSONRequestError } from './lib/C/JSONRequest'
 import { dialog } from './lib/UI/dialog'
 import { BaseType } from './lib/BaseType'
@@ -67,7 +66,7 @@ class Table extends React.Component<{
                                             : this.props.side === 'Buy' ? 'rgba(72, 170, 101, 1)' : 'rgba(72, 170, 101, 1)'
                         }}>
                         <td style={{ width: '50%' }}>{v.price}</td>
-                        <td style={{ width: '35%' }}>{v.size}</td>
+                        <td style={{ width: '35%' }}>{v.cumQty}/{v.orderQty}</td>
                         <td style={{ width: '15%' }} >
                             <Button
                                 bgColor='#24292d'
@@ -204,18 +203,6 @@ class APP extends React.Component<{}, { quxiao: string }> {
                         fontSize: '20px',
                         marginLeft: '10px'
                     }}>
-                    <span>止损任务<Switch
-                        checked={d().任务.止损}
-                        onChange={(_, checked) => rpc.set_任务_止损({ cookie, symbol: nowSymbol, value: checked })}
-                        color='secondary'
-                    /></span><br />
-
-
-                    <span>止盈任务<Switch
-                        checked={d().任务.止盈}
-                        onChange={(_, checked) => rpc.set_任务_止盈({ cookie, symbol: nowSymbol, value: checked })}
-                        color='primary'
-                    /></span>
                 </div>
                 <div style={{
                     display: 'flex',
@@ -236,6 +223,7 @@ class APP extends React.Component<{}, { quxiao: string }> {
                                 type: 'maker',
                                 side: 'Buy',
                                 size: account.交易[nowSymbol].数量,
+                                最低_最高: false,
                             })}
                             right={() => rpc.下单({
                                 cookie,
@@ -243,6 +231,7 @@ class APP extends React.Component<{}, { quxiao: string }> {
                                 type: 'taker',
                                 side: 'Buy',
                                 size: account.交易[nowSymbol].数量,
+                                最低_最高: false,
                             })}
                         />
 
@@ -251,19 +240,21 @@ class APP extends React.Component<{}, { quxiao: string }> {
                         <Button
                             bgColor='rgba(72, 170, 101, 1)'
                             text={'5秒内最低价'}
-                            left={() => rpc.下单_最低_最高({
+                            left={() => rpc.下单({
                                 cookie,
                                 symbol: nowSymbol,
                                 type: 'maker',
                                 side: 'Buy',
                                 size: account.交易[nowSymbol].数量,
+                                最低_最高: true,
                             })}
-                            right={() => rpc.下单_最低_最高({
+                            right={() => rpc.下单({
                                 cookie,
                                 symbol: nowSymbol,
                                 type: 'taker',
                                 side: 'Buy',
                                 size: account.交易[nowSymbol].数量,
+                                最低_最高: true,
                             })}
                         />
 
@@ -282,6 +273,7 @@ class APP extends React.Component<{}, { quxiao: string }> {
                                 type: 'maker',
                                 side: 'Sell',
                                 size: account.交易[nowSymbol].数量,
+                                最低_最高: false,
                             })}
                             right={() => rpc.下单({
                                 cookie,
@@ -289,6 +281,7 @@ class APP extends React.Component<{}, { quxiao: string }> {
                                 type: 'taker',
                                 side: 'Sell',
                                 size: account.交易[nowSymbol].数量,
+                                最低_最高: false,
                             })}
                         />
 
@@ -297,12 +290,13 @@ class APP extends React.Component<{}, { quxiao: string }> {
                         <Button
                             bgColor='rgba(229, 101, 70, 1)'
                             text={'5秒内最高价'}
-                            left={() => rpc.下单_最低_最高({
+                            left={() => rpc.下单({
                                 cookie,
                                 symbol: nowSymbol,
                                 type: 'maker',
                                 side: 'Sell',
                                 size: account.交易[nowSymbol].数量,
+                                最低_最高: true,
                             })}
                             right={() => rpc.下单({
                                 cookie,
@@ -310,6 +304,7 @@ class APP extends React.Component<{}, { quxiao: string }> {
                                 type: 'taker',
                                 side: 'Sell',
                                 size: account.交易[nowSymbol].数量,
+                                最低_最高: true,
                             })}
                         />
 
