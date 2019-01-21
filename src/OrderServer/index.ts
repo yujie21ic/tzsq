@@ -7,13 +7,38 @@ import { typeObjectParse } from '../lib/F/typeObjectParse'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
 import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
 import { kvs } from '../lib/F/kvs'
+import { 止损step } from './止损step'
+import { to范围 } from '../lib/F/to范围'
+import { lastNumber } from '../lib/F/lastNumber'
+import { realData } from './realData'
+import { 委托检测step } from './委托检测step'
 
 
 //运行的账户
 //cookie --> Account
 const accountDic = new Map<string, Account>()
 if (config.orderServer !== undefined) {
-    kvs(config.orderServer).forEach(({ k, v }) => accountDic.set(v, new Account({ accountName: k, cookie: v })))
+    kvs(config.orderServer).forEach(({ k, v }) => {
+
+        const account = new Account({ accountName: k, cookie: v })
+
+        account.runTask(止损step('XBTUSD', () => to范围({
+            min: 3,
+            max: 18,
+            value: lastNumber(realData.dataExt.XBTUSD.期货.波动率) / 4,
+        })))
+
+        account.runTask(止损step('ETHUSD', () => to范围({
+            min: 0.1,
+            max: 0.9,
+            value: lastNumber(realData.dataExt.XBTUSD.期货.波动率) / 100 + 0.1,
+        })))
+
+        account.runTask(委托检测step('XBTUSD'))
+        account.runTask(委托检测step('ETHUSD'))
+
+        accountDic.set(v, account)
+    })
 } else {
     console.log('运行的账户 没有设置')
 }
