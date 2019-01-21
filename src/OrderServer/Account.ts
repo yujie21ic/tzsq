@@ -151,7 +151,7 @@ export class Account {
             const 止损点 =
                 symbol === 'XBTUSD' ?
                     to范围({ min: 3, max: 18, value: lastNumber(realData.dataExt.XBTUSD.期货.波动率) / 4 }) :
-                    to范围({ min: 0.1, max: 0.9, value: lastNumber(realData.dataExt.ETHUSD.期货.波动率) / 100 + 0.1 })
+                    to范围({ min: 0.1, max: 0.9, value: lastNumber(realData.dataExt.XBTUSD.期货.波动率) / 100 + 0.1 }) //也用XBTUSD的
 
             if (isNaN(止损点)) {
                 return false //波动率还没出来 不止损
