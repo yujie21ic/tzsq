@@ -222,7 +222,7 @@ export class Account {
     async 止损任务(symbol: BaseType.BitmexSymbol, 初始止损点: () => number) {
         while (true) {
             if (await this.止损step(symbol, 初始止损点)) {
-                await sleep(2000) //2s
+                await sleep(2000) //发了请求 休息2秒
             }
             await sleep(500)
         }
@@ -259,7 +259,7 @@ export class Account {
     async 委托检测任务(symbol: BaseType.BitmexSymbol) {
         while (true) {
             if (await this.委托检测step(symbol)) {
-                await sleep(2000) //2s
+                await sleep(2000) //发了请求 休息2秒 
             }
             await sleep(500)
         }
@@ -281,6 +281,28 @@ export class Account {
 
 
     下单 = async (req: typeof funcList.下单.req) => {
+
+        if (req.symbol !== 'XBTUSD' && req.symbol !== 'ETHUSD') {
+            throw 'symbol不存在'
+        }
+
+
+        const symbol = req.symbol
+        const { 仓位数量 } = this.jsonSync.rawData.symbol[symbol]
+        const arr = this.jsonSync.rawData.symbol[symbol].活动委托.filter(v =>
+            v.type === '限价' || v.type === '限价只减仓' || v.type === '市价触发'
+        )
+
+        if (arr.length > 0) {
+            throw '已经有委托了'
+        }
+
+        if ((仓位数量 > 0 && req.side !== 'Sell') ||
+            (仓位数量 < 0 && req.side !== 'Buy')
+        ) {
+            throw '不能加仓'
+        }
+
 
         const getPrice最高最低 = () => {
             const price = realData.getOrderPrice(req.symbol, req.side, req.type)
@@ -319,7 +341,7 @@ export class Account {
                 side: req.side,
                 size: req.size,
                 price: getPrice,
-                reduceOnly: false,
+                reduceOnly: 仓位数量 > 0,
             })
     }
 
