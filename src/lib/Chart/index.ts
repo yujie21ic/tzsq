@@ -6,7 +6,7 @@ import { theme } from './theme'
 import { Crosshairs } from './Crosshairs'
 import { Viewport, To } from './type'
 import { formatDate } from '../F/formatDate'
-import { remote } from 'electron'
+import { setWindowTitle } from '../C/setWindowTitle'
 
 const 坐标刻度 = new Coordinate()
 const layerContainer = new Container()
@@ -78,7 +78,7 @@ const chartRender = () => {
 
     if (lastTitle !== title) {
         lastTitle = title
-        remote.getCurrentWindow().setTitle(title)
+        setWindowTitle(title)
     }
 
     const width = document.body.clientWidth - theme.RIGHT_WIDTH

@@ -1,10 +1,10 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { style } from 'typestyle'
-import { remote } from 'electron'
 import { reverse } from 'ramda'
 import { DataClient } from './RealDataServer/DataClient'
 import { dialog } from './lib/UI/dialog'
+import { setWindowTitle } from './lib/C/setWindowTitle'
 
 const orderTbodyTdSell = style({
 
@@ -183,7 +183,7 @@ class APP extends React.Component {
                             checked: v === this.nowType,
                             onClick: () => {
                                 this.nowType = v as any
-                                remote.getCurrentWindow().setTitle(this.nowType + ' 盘口')
+                                setWindowTitle(this.nowType + ' 盘口')
                             }
                         })
                     )
@@ -191,7 +191,7 @@ class APP extends React.Component {
             }
         })
 
-        remote.getCurrentWindow().setTitle(this.nowType + ' 盘口')
+        setWindowTitle(this.nowType + ' 盘口')
     }
 
     render() {
