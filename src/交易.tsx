@@ -146,7 +146,8 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                     text='市价平仓'
                     left={() => rpc.市价平仓({ cookie, symbol: this.props.symbol })}
                 />
-                <p>仓位:{this.get仓位()}@{this.get均价()}__stop__{this.get止损()}</p>
+                <p>仓位:{this.get仓位()}@{this.get均价()}</p>
+                <p>止损:{this.get止损()}</p>
                 <p>委托:{this.get委托()}</p>
             </div>
             <div style={{
