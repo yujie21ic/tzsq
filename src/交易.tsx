@@ -8,17 +8,13 @@ import { dialog } from './lib/UI/dialog'
 import { BaseType } from './lib/BaseType'
 import { windowExt } from './windowExt'
 
-
 const account = config.account![windowExt.accountName]
 const { cookie } = account
 const orderClient = new OrderClient(account.cookie)
-let nowSymbol: BaseType.BitmexSymbol = 'XBTUSD'
-const d = () => orderClient.jsonSync.rawData.symbol[nowSymbol]
-
 const rpc = OrderClient.rpc.func
 
-    ; (window as any)['d'] = d
-
+const RED = 'rgba(229, 101, 70, 1)'
+const GREEN = 'rgba(72, 170, 101, 1)'
 
 const boxButton = style({
     margin: 'auto auto',
@@ -36,56 +32,7 @@ const boxButton = style({
     }
 })
 
-
-class Table extends React.Component<{
-
-    side: string
-
-}, {}> {
-
-    componentWillMount() {
-
-    }
-    render() {
-        return <table style={{
-            width: '150px',
-            margin: '15px auto',
-        }}
-        >
-            <tbody>
-                {d().活动委托.filter(v => v.side === this.props.side).map((v, i) =>
-                    <tr key={v.id}
-
-                        style={{
-                            fontSize: '20px',
-                            width: '100%',
-                            color:
-                                v.type === '市价触发' ? 'white' :
-                                    v.type === '限价只减仓' ? 'yellow'
-                                        : v.type === '止损' ? '#cc66ff'
-                                            : this.props.side === 'Buy' ? 'rgba(72, 170, 101, 1)' : 'rgba(72, 170, 101, 1)'
-                        }}>
-                        <td style={{ width: '50%' }}>{v.price}</td>
-                        <td style={{ width: '35%' }}>{v.cumQty}/{v.orderQty}</td>
-                        <td style={{ width: '15%' }} >
-                            <Button
-                                bgColor='#24292d'
-                                text='X'
-                                width='100%'
-                                left={() => rpc.取消委托({ cookie, orderID: [v.id] })}
-                                right={() => rpc.取消委托({ cookie, orderID: [v.id] })}
-                            />
-                        </td>
-                    </tr>
-                )}
-            </tbody>
-        </table>
-    }
-}
-
-
 class Button extends React.Component<{
-
     bgColor: string
     text: string
     width?: string
@@ -146,28 +93,178 @@ class Button extends React.Component<{
 }
 
 
+class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
+
+    get止损() {
+        const arr = orderClient.jsonSync.rawData.symbol[this.props.symbol].活动委托.filter(v => v.type === '止损')
+        if (arr.length === 1) {
+            return arr[0].price
+        } else {
+            return undefined
+        }
+    }
+
+    get委托() {
+        const arr = orderClient.jsonSync.rawData.symbol[this.props.symbol].活动委托.filter(v => v.type !== '止损')
+        if (arr.length === 1) {
+            return arr[0]
+        } else {
+            return undefined
+        }
+    }
+
+    get仓位() {
+        const { 仓位数量 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
+        return <span style={{ color: 仓位数量 < 0 ? RED : GREEN }}>{仓位数量}</span>
+    }
+
+    get均价() {
+        const { 开仓均价 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
+        return <span>{开仓均价}</span>
+    }
+
+    render() {
+
+        return <div>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'left',
+                margin: '20px 0'
+            }}>
+                <p>{this.props.symbol}</p>
+                <Button
+                    bgColor={RED}
+                    text='市价平仓'
+                    left={() => rpc.市价平仓({ cookie, symbol: this.props.symbol })}
+                    right={() => rpc.市价平仓({ cookie, symbol: this.props.symbol })}
+                />
+                <p>仓位:{this.get仓位()}@{this.get均价()}__stop__{this.get止损()}</p>
+                <p>委托:{this.get委托()}</p>
+            </div>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center'
+            }}>
+                <div
+                    style={{ width: '50%' }}>
+                    <Button
+                        bgColor={GREEN}
+                        text={account.交易[this.props.symbol].数量 + ''}
+                        left={() => rpc.下单({
+                            cookie,
+                            symbol: this.props.symbol,
+                            type: 'maker',
+                            side: 'Buy',
+                            size: account.交易[this.props.symbol].数量,
+                            最低_最高: false,
+                        })}
+                        right={() => rpc.下单({
+                            cookie,
+                            symbol: this.props.symbol,
+                            type: 'taker',
+                            side: 'Buy',
+                            size: account.交易[this.props.symbol].数量,
+                            最低_最高: false,
+                        })}
+                    />
+
+                    <br />
+
+                    <Button
+                        bgColor={GREEN}
+                        text={'5秒内最低价'}
+                        left={() => rpc.下单({
+                            cookie,
+                            symbol: this.props.symbol,
+                            type: 'maker',
+                            side: 'Buy',
+                            size: account.交易[this.props.symbol].数量,
+                            最低_最高: true,
+                        })}
+                        right={() => rpc.下单({
+                            cookie,
+                            symbol: this.props.symbol,
+                            type: 'taker',
+                            side: 'Buy',
+                            size: account.交易[this.props.symbol].数量,
+                            最低_最高: true,
+                        })}
+                    />
+                    <br />
+                </div>
+                <div
+                    style={{
+                        width: '50%'
+                    }}>
+                    <Button
+                        bgColor={RED}
+                        text={-account.交易[this.props.symbol].数量 + ''}
+                        left={() => rpc.下单({
+                            cookie,
+                            symbol: this.props.symbol,
+                            type: 'maker',
+                            side: 'Sell',
+                            size: account.交易[this.props.symbol].数量,
+                            最低_最高: false,
+                        })}
+                        right={() => rpc.下单({
+                            cookie,
+                            symbol: this.props.symbol,
+                            type: 'taker',
+                            side: 'Sell',
+                            size: account.交易[this.props.symbol].数量,
+                            最低_最高: false,
+                        })}
+                    />
+                    <br />
+                    <Button
+                        bgColor={RED}
+                        text={'5秒内最高价'}
+                        left={() => rpc.下单({
+                            cookie,
+                            symbol: this.props.symbol,
+                            type: 'maker',
+                            side: 'Sell',
+                            size: account.交易[this.props.symbol].数量,
+                            最低_最高: true,
+                        })}
+                        right={() => rpc.下单({
+                            cookie,
+                            symbol: this.props.symbol,
+                            type: 'taker',
+                            side: 'Sell',
+                            size: account.交易[this.props.symbol].数量,
+                            最低_最高: true,
+                        })}
+                    />
+                    <br />
+                </div>
+            </div>
+        </div >
+    }
+}
 
 
-class APP extends React.Component<{}, { quxiao: string }> {
+
+class APP extends React.Component {
     componentWillMount() {
-        this.setState({
-            quxiao: '0'
-        })
         const f = () => {
             requestAnimationFrame(f)
             this.forceUpdate()
         }
         f()
     }
+
     render() {
-        return orderClient.isConnected === false ? <a href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a> :
+        return orderClient.isConnected === false ?
+            <a href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a> :
             <div style={{
                 backgroundColor: '#24292d',
                 margin: 'auto auto',
                 width: '350px',
-                height: '100%',
                 padding: '10px 5px',
-                overflow: 'hidden',
                 fontFamily: 'SourceHanSansSC-regular',
                 color: 'white',
                 fontSize: '24px',
@@ -175,145 +272,14 @@ class APP extends React.Component<{}, { quxiao: string }> {
                 cursor: 'default'
             }}>
                 <h3>只做摸顶抄底</h3>
-                <br />
-                <button onClick={() => {
-                    if (nowSymbol === 'XBTUSD') {
-                        nowSymbol = 'ETHUSD'
-                    } else {
-                        nowSymbol = 'XBTUSD'
-                    }
-                }}><h1>{nowSymbol}</h1></button>
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    margin: '20px 0'
-                }}>
-                    <span style={{ color: d().仓位数量 < 0 ? 'rgba(229, 101, 70, 1)' : 'rgba(72, 170, 101, 1)', fontSize: '24px' }}>{d().仓位数量}</span>
-                    <span style={{ paddingLeft: '50px', fontSize: '24px' }}>@{d().开仓均价}</span>
-                </div>
-                <Button
-                    bgColor='rgba(229, 101, 70, 1)'
-                    text='市价平仓'
-                    left={() => rpc.市价平仓({ cookie, symbol: nowSymbol })}
-                    right={() => rpc.市价平仓({ cookie, symbol: nowSymbol })}
-                />
-                <br />
-                <div
-                    style={{
-                        fontSize: '20px',
-                        marginLeft: '10px'
-                    }}>
-                </div>
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'center'
-                }}>
-                    <div
-                        style={{
-
-                            width: '50%'
-                        }}>
-                        <Button
-                            bgColor='rgba(72, 170, 101, 1)'
-                            text={account.交易[nowSymbol].数量 + ''}
-                            left={() => rpc.下单({
-                                cookie,
-                                symbol: nowSymbol,
-                                type: 'maker',
-                                side: 'Buy',
-                                size: account.交易[nowSymbol].数量,
-                                最低_最高: false,
-                            })}
-                            right={() => rpc.下单({
-                                cookie,
-                                symbol: nowSymbol,
-                                type: 'taker',
-                                side: 'Buy',
-                                size: account.交易[nowSymbol].数量,
-                                最低_最高: false,
-                            })}
-                        />
-
-                        <br />
-
-                        <Button
-                            bgColor='rgba(72, 170, 101, 1)'
-                            text={'5秒内最低价'}
-                            left={() => rpc.下单({
-                                cookie,
-                                symbol: nowSymbol,
-                                type: 'maker',
-                                side: 'Buy',
-                                size: account.交易[nowSymbol].数量,
-                                最低_最高: true,
-                            })}
-                            right={() => rpc.下单({
-                                cookie,
-                                symbol: nowSymbol,
-                                type: 'taker',
-                                side: 'Buy',
-                                size: account.交易[nowSymbol].数量,
-                                最低_最高: true,
-                            })}
-                        />
-
-                        <Table side='Buy' />
-                    </div>
-                    <div
-                        style={{
-                            width: '50%'
-                        }}>
-                        <Button
-                            bgColor='rgba(229, 101, 70, 1)'
-                            text={-account.交易[nowSymbol].数量 + ''}
-                            left={() => rpc.下单({
-                                cookie,
-                                symbol: nowSymbol,
-                                type: 'maker',
-                                side: 'Sell',
-                                size: account.交易[nowSymbol].数量,
-                                最低_最高: false,
-                            })}
-                            right={() => rpc.下单({
-                                cookie,
-                                symbol: nowSymbol,
-                                type: 'taker',
-                                side: 'Sell',
-                                size: account.交易[nowSymbol].数量,
-                                最低_最高: false,
-                            })}
-                        />
-
-                        <br />
-
-                        <Button
-                            bgColor='rgba(229, 101, 70, 1)'
-                            text={'5秒内最高价'}
-                            left={() => rpc.下单({
-                                cookie,
-                                symbol: nowSymbol,
-                                type: 'maker',
-                                side: 'Sell',
-                                size: account.交易[nowSymbol].数量,
-                                最低_最高: true,
-                            })}
-                            right={() => rpc.下单({
-                                cookie,
-                                symbol: nowSymbol,
-                                type: 'taker',
-                                side: 'Sell',
-                                size: account.交易[nowSymbol].数量,
-                                最低_最高: true,
-                            })}
-                        />
-
-                        <Table side='Sell' />
-                    </div>
-                </div>
-            </div >
+                <hr />
+                <Item symbol='XBTUSD' />
+                <hr />
+                <Item symbol='ETHUSD' />
+            </div>
     }
+
 }
+
 
 ReactDOM.render(<APP />, document.querySelector('#root'))
