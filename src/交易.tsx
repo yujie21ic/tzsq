@@ -4,7 +4,6 @@ import { style } from 'typestyle'
 import { OrderClient } from './OrderServer/OrderClient'
 import { config } from './config'
 import { JSONRequestError } from './lib/C/JSONRequest'
-import { dialog } from './lib/UI/dialog'
 import { BaseType } from './lib/BaseType'
 import { windowExt } from './windowExt'
 
