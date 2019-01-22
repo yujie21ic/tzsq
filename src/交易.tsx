@@ -140,12 +140,11 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                 justifyContent: 'left',
                 margin: '20px 0'
             }}>
-                <p>{this.props.symbol}</p>
-                <Button
-                    bgColor={RED}
-                    text='市价平仓'
-                    left={() => rpc.市价平仓({ cookie, symbol: this.props.symbol })}
-                />
+                <p>{this.props.symbol} <a
+                    href='#'
+                    style={{ color: RED }}
+                    onClick={() => rpc.市价平仓({ cookie, symbol: this.props.symbol })}
+                >市价平仓</a> </p>
                 <p>仓位:{this.get仓位()}@{this.get均价()}</p>
                 <p>止损:{this.get止损()}</p>
                 <p>委托:{this.get委托()}</p>
