@@ -140,7 +140,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                 justifyContent: 'left',
                 margin: '20px 0'
             }}>
-                <p>{this.props.symbol} <a
+                <p style={{ color: this.props.symbol === 'XBTUSD' ? '#cc66ff' : '#aaaa00' }}>{this.props.symbol} <a
                     href='#'
                     style={{ color: RED }}
                     onClick={() => rpc.市价平仓({ cookie, symbol: this.props.symbol })}
