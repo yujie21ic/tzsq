@@ -1,11 +1,10 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { style } from 'typestyle'
 import { OrderClient } from './OrderServer/OrderClient'
 import { config } from './config'
-import { JSONRequestError } from './lib/C/JSONRequest'
 import { BaseType } from './lib/BaseType'
 import { windowExt } from './windowExt'
+import { Button } from './lib/UI/Button'
 
 const account = config.account![windowExt.accountName]
 const { cookie } = account
@@ -14,83 +13,6 @@ const rpc = OrderClient.rpc.func
 
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
-
-const boxButton = style({
-    margin: 'auto auto',
-    width: '150px',
-    height: '36px',
-    lineHeight: '36px',
-    borderRadius: '2px 2px 2px 2px',
-    fontSize: '18px',
-    textAlign: 'center',
-    cursor: 'pointer',
-    $nest: {
-        '&:active': {
-            boxShadow: '2px 2px 2px #999 inset'
-        }
-    }
-})
-
-class Button extends React.Component<{
-    bgColor: string
-    text: string
-    width?: string
-    left: () => Promise<{
-        error?: JSONRequestError
-        data?: boolean
-        msg?: string
-    }>
-    right?: () => Promise<{
-        error?: JSONRequestError
-        data?: boolean
-        msg?: string
-    }>
-}, { loading: boolean }> {
-
-    componentWillMount() {
-        this.setState({ loading: false })
-    }
-
-    callFunc(f: () => Promise<{
-        error?: JSONRequestError
-        data?: boolean
-        msg?: string
-    }>) {
-        this.setState({ loading: true })
-        f().then(({ error, msg, data }) => {
-            // if (error !== undefined) {
-            //     dialog.showMessageBox({
-            //         title: error,
-            //         contentText: msg !== undefined ? msg : '',
-            //     })
-            // }
-            // else if (data === false) {
-            //     dialog.showMessageBox({
-            //         title: '失败',
-            //         contentText: '',
-            //     })
-            // }
-            this.setState({ loading: false })
-        })
-    }
-    render() {
-        return this.state.loading ? '--' : <div
-            className={boxButton}
-            style={{
-                backgroundColor: this.props.bgColor,
-                width: this.props.width,
-            }}
-            onMouseUp={e => {
-                if (e.button === 0) {
-                    this.callFunc(this.props.left)
-                } else if (e.button === 2) {
-                    this.callFunc(this.props.right ? this.props.right : this.props.left)
-                }
-            }}
-        >{this.props.text}</div>
-    }
-}
-
 
 class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
 
