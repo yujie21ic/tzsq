@@ -122,13 +122,8 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
     }
 
     get仓位() {
-        const { 仓位数量 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
-        return <span style={{ color: 仓位数量 < 0 ? RED : GREEN }}>{仓位数量}</span>
-    }
-
-    get均价() {
-        const { 开仓均价 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
-        return <span>{开仓均价}</span>
+        const { 仓位数量, 开仓均价 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
+        return <span><span style={{ color: 仓位数量 === 0 ? 'white' : (仓位数量 < 0 ? RED : GREEN) }}>{仓位数量}</span>@<span>{开仓均价}</span></span>
     }
 
     render() {
@@ -145,7 +140,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                     style={{ color: RED }}
                     onClick={() => rpc.市价平仓({ cookie, symbol: this.props.symbol })}
                 >市价平仓</a> : undefined} </p>
-                <p>仓位:{this.get仓位()}@{this.get均价()}</p>
+                <p>仓位:{this.get仓位()}</p>
                 <p>止损:{this.get止损()}</p>
                 <p>委托:{this.get委托()}</p>
             </div>
