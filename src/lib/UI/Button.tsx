@@ -3,6 +3,7 @@ import { style } from 'typestyle'
 import { JSONRequestError } from '../C/JSONRequest'
 
 const buttonStyle = style({
+    // display:'inline',
     margin: 'auto auto',
     width: '150px',
     height: '36px',
