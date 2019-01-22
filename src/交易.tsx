@@ -41,7 +41,7 @@ class Button extends React.Component<{
         data?: boolean
         msg?: string
     }>
-    right: () => Promise<{
+    right?: () => Promise<{
         error?: JSONRequestError
         data?: boolean
         msg?: string
@@ -85,7 +85,7 @@ class Button extends React.Component<{
                 if (e.button === 0) {
                     this.callFunc(this.props.left)
                 } else if (e.button === 2) {
-                    this.callFunc(this.props.right)
+                    this.callFunc(this.props.right ? this.props.right : this.props.left)
                 }
             }}
         >{this.props.text}</div>
@@ -107,7 +107,15 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
     get委托() {
         const arr = orderClient.jsonSync.rawData.symbol[this.props.symbol].活动委托.filter(v => v.type !== '止损')
         if (arr.length === 1) {
-            return arr[0]
+            const { id, side, cumQty, orderQty, price, type } = arr[0]
+            return <a
+                href='#'
+                style={{ color: 'yellow' }}
+                onClick={() => rpc.取消委托({ cookie, orderID: [id] })}
+            >
+                <span style={{ color: side === 'Sell' ? RED : GREEN }}>{side === 'Sell' ? '-' : '+'}{cumQty}/{orderQty}</span>
+                <span>@{price}__{type}</span>
+            </a>
         } else {
             return undefined
         }
@@ -137,7 +145,6 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                     bgColor={RED}
                     text='市价平仓'
                     left={() => rpc.市价平仓({ cookie, symbol: this.props.symbol })}
-                    right={() => rpc.市价平仓({ cookie, symbol: this.props.symbol })}
                 />
                 <p>仓位:{this.get仓位()}@{this.get均价()}__stop__{this.get止损()}</p>
                 <p>委托:{this.get委托()}</p>
