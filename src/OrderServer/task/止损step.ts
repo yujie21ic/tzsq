@@ -22,6 +22,7 @@ export const 止损step = (symbol: BaseType.BitmexSymbol, 初始止损点: () =>
 
             const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
 
+            //ws返回有时间  直接给委托列表加一条记录??
             await BitMEXOrderAPI.stop(self.cookie, {
                 symbol,
                 side,
@@ -37,6 +38,7 @@ export const 止损step = (symbol: BaseType.BitmexSymbol, 初始止损点: () =>
     else if (止损委托.length === 1) {
         //止损方向错了
         if ((仓位数量 > 0 && 止损委托[0].side !== 'Sell') || (仓位数量 < 0 && 止损委托[0].side !== 'Buy')) {
+            //ws返回有时间  直接给委托列表加一条记录??
             await BitMEXOrderAPI.cancel(self.cookie, 止损委托.map(v => v.id))
             return true
         }
@@ -72,6 +74,7 @@ export const 止损step = (symbol: BaseType.BitmexSymbol, 初始止损点: () =>
     }
     else {
         //多个止损 全部清空
+        //ws返回有时间  直接给委托列表加一条记录??
         await BitMEXOrderAPI.cancel(self.cookie, 止损委托.map(v => v.id))
         return true
     }
