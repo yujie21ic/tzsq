@@ -59,18 +59,18 @@ class Button extends React.Component<{
     }>) {
         this.setState({ loading: true })
         f().then(({ error, msg, data }) => {
-            if (error !== undefined) {
-                dialog.showMessageBox({
-                    title: error,
-                    contentText: msg !== undefined ? msg : '',
-                })
-            }
-            else if (data === false) {
-                dialog.showMessageBox({
-                    title: '失败',
-                    contentText: '',
-                })
-            }
+            // if (error !== undefined) {
+            //     dialog.showMessageBox({
+            //         title: error,
+            //         contentText: msg !== undefined ? msg : '',
+            //     })
+            // }
+            // else if (data === false) {
+            //     dialog.showMessageBox({
+            //         title: '失败',
+            //         contentText: '',
+            //     })
+            // }
             this.setState({ loading: false })
         })
     }
