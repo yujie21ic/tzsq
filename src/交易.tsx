@@ -113,8 +113,8 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                 style={{ color: 'white' }}
                 onClick={() => rpc.取消委托({ cookie, orderID: [id] })}
             >
-                <span style={{ color: side === 'Sell' ? RED : GREEN }}>{side === 'Sell' ? '-' : '+'}{cumQty}/{orderQty}</span>
-                <span>@{price}__{type}</span>
+                <span style={{ color: side === 'Sell' ? RED : GREEN }}>{cumQty}/{orderQty}</span>
+                <span>@{price}{type === '市价触发' ? '市价' : ''}</span>
             </a>
         } else {
             return undefined
