@@ -178,6 +178,7 @@ export class Account {
         else if (活动委托.length === 1) {
             //更新 限价委托
             if (活动委托[0].type === '限价' && 活动委托[0].side === req.side && req.type === 'maker') {
+                //ws返回有时间  直接给委托列表加一条记录??
                 return await BitMEXOrderAPI.updateMaker(req.cookie, {
                     orderID: 活动委托[0].id,
                     price: getPrice,
