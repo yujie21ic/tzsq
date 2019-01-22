@@ -36,8 +36,8 @@ export const 止损step = (symbol: BaseType.BitmexSymbol, 初始止损点: () =>
     }
     //有止损
     else if (止损委托.length === 1) {
-        //止损方向错了
-        if ((仓位数量 > 0 && 止损委托[0].side !== 'Sell') || (仓位数量 < 0 && 止损委托[0].side !== 'Buy')) {
+        //没有仓位 或者 止损方向错了
+        if (仓位数量 === 0 || (仓位数量 > 0 && 止损委托[0].side !== 'Sell') || (仓位数量 < 0 && 止损委托[0].side !== 'Buy')) {
             //ws返回有时间  直接给委托列表加一条记录??
             await BitMEXOrderAPI.cancel(self.cookie, 止损委托.map(v => v.id))
             return true
