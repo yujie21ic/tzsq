@@ -198,6 +198,7 @@ class APP extends React.Component<{}, { quxiao: string }> {
                     left={() => rpc.市价平仓({ cookie, symbol: nowSymbol })}
                     right={() => rpc.市价平仓({ cookie, symbol: nowSymbol })}
                 />
+                <br />
                 <div
                     style={{
                         fontSize: '20px',
