@@ -132,7 +132,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
     }
 
     render() {
-
+        const { 仓位数量 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
         return <div>
             <div style={{
                 display: 'flex',
@@ -140,11 +140,11 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                 justifyContent: 'left',
                 margin: '20px 0'
             }}>
-                <p style={{ color: this.props.symbol === 'XBTUSD' ? '#cc66ff' : '#aaaa00' }}>{this.props.symbol} <a
+                <p style={{ color: this.props.symbol === 'XBTUSD' ? '#cc66ff' : '#aaaa00' }}>{this.props.symbol} {仓位数量 !== 0 ? <a
                     href='#'
                     style={{ color: RED }}
                     onClick={() => rpc.市价平仓({ cookie, symbol: this.props.symbol })}
-                >市价平仓</a> </p>
+                >市价平仓</a> : undefined} </p>
                 <p>仓位:{this.get仓位()}@{this.get均价()}</p>
                 <p>止损:{this.get止损()}</p>
                 <p>委托:{this.get委托()}</p>
