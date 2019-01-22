@@ -110,7 +110,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
             const { id, side, cumQty, orderQty, price, type } = arr[0]
             return <a
                 href='#'
-                style={{ color: 'yellow' }}
+                style={{ color: 'white' }}
                 onClick={() => rpc.取消委托({ cookie, orderID: [id] })}
             >
                 <span style={{ color: side === 'Sell' ? RED : GREEN }}>{side === 'Sell' ? '-' : '+'}{cumQty}/{orderQty}</span>
