@@ -215,7 +215,7 @@ export class Account {
                 side: req.side,
                 size: req.size,
                 price: getPrice,
-                reduceOnly: 仓位数量 > 0,
+                reduceOnly: 仓位数量 !== 0,
             })
     }
 
