@@ -115,8 +115,7 @@ export namespace DataClient {
         async load(startTime: number) {
             startTime -= (1000 * 120) //2分钟前
 
-            this.data.startTick = Math.floor(startTime / RealDataBase.单位时间)
-            this.data.nowTick = Math.floor(startTime / RealDataBase.单位时间)
+            this.data.startTick = Math.floor(startTime / RealDataBase.单位时间)            
 
             this.data.bitmex.XBTUSD.data = []
             this.data.bitmex.ETHUSD.data = []

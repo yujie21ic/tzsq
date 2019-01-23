@@ -12,8 +12,7 @@ export class RealDataBase {
 
     protected jsonSync = new JSONSync(
         {
-            startTick: 0,
-            nowTick: 0,
+            startTick: 0, 
             bitmex: {
                 XBTUSD: {
                     data: [] as BaseType.KLine[],
@@ -54,11 +53,7 @@ export class RealDataBase {
 
         if (this.data.startTick === 0) {
             this.jsonSync.data.startTick.____set(tick)
-        }
-
-        if (this.data.nowTick < tick) {
-            this.jsonSync.data.nowTick.____set(tick)
-        }
+        } 
 
         if (this.on盘口Dic[p.symbol] === undefined) {
             this.on盘口Dic[p.symbol] = new Sampling<BaseType.OrderBook>({
@@ -98,10 +93,7 @@ export class RealDataBase {
 
         if (this.data.startTick === 0) {
             this.jsonSync.data.startTick.____set(tick)
-        }
-        if (this.data.nowTick < tick) {
-            this.jsonSync.data.nowTick.____set(tick)
-        }
+        } 
 
         if (this.on着笔Dic[p.symbol] === undefined) {
             this.on着笔Dic[p.symbol] = new Sampling<BaseType.KLine>({
