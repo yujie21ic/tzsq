@@ -208,7 +208,6 @@ export class RealDataBase {
         data: BaseType.KLine[]
         orderBook: BaseType.OrderBook[]
     }, 盘口算价格: boolean) {
-        盘口算价格=false
 
         // const 多少秒均线 = Math.floor(this.默认期货波动率 / 3.3 + 1) 
         const 多少秒均线 = this.默认期货波动率
