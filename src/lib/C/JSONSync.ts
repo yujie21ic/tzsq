@@ -37,11 +37,9 @@ export class JSONSync<T>{
             return {
                 ____set: (value: any) => this.set({ path, value }),
                 ____push: (value: any) => {
-                    //this.set({ path: [...path, this.get(path).length], value })
                     this.set({ path: [...path, '__push__'], value })
                 },
                 ____updateLast: (value: any) => {
-                    //this.set({ path: [...path, this.get(path).length - 1], value })
                     this.set({ path: [...path, '__last__'], value })
                 }
             }
@@ -85,12 +83,9 @@ export class JSONSync<T>{
         if (path.length === 0) {
             return this.rawData
         }
-        else if (path.length === 1) {
-            return (this.rawData as any)[path[0]]
-        }
         else {
             const key = path[path.length - 1]
-            const obj = path.reduce((last: any, current, i) => i === path.length - 1 ? last : last[current], this.rawData)
+            const obj = path.reduce((prev: any, current, i) => i === path.length - 1 ? prev : prev[current], this.rawData)
             return obj[key]
         }
     }
