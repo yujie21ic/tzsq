@@ -27,7 +27,7 @@ export namespace DataClient {
         }
     }
 
-    const 加载多少秒数据 = (config.tick历史加载多少秒 || 300) + 2 //多2分钟
+    const 加载多少秒数据 = (config.tick历史加载多少秒 || 300) + 120 //多2分钟
 
     export class RealData__History extends RealDataBase {
 
