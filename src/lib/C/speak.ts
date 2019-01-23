@@ -5,7 +5,7 @@ export const speak = (msg: string, id: string) => {
 
     const n = dic.get(id)
     if (n !== undefined && Date.now() - n < 60 * 1000) {
-        console.log(new Date().toLocaleString(), '没有提醒', '同一个id一分钟内 只提醒一次', JSON.stringify({ body: msg }))
+        // console.log(new Date().toLocaleString(), '没有提醒', '同一个id一分钟内 只提醒一次', JSON.stringify({ body: msg }))
         return
     } else {
         console.log(new Date().toLocaleString(), '提醒', JSON.stringify({ body: msg }))
