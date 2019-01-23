@@ -13,5 +13,5 @@ export const speak = (msg: string, id: string) => {
 
     dic.set(id, Date.now())
     speechSynthesis.speak(new SpeechSynthesisUtterance(msg))
-    new Notification('提醒', { body: msg })
+    // new Notification('提醒', { body: msg })
 }
