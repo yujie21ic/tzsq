@@ -39,9 +39,9 @@ export class JSONRPCServer<T extends FuncList> {
                             const ret = await f(typeObjectParse(define.req)(param))
                             res.write(JSON.stringify(ret))
                             res.end()
-                        } catch (e) {
+                        } catch (error) {
                             res.writeHead(404)
-                            res.write('出错了')
+                            res.write(String(error))
                             res.end()
                         }
                         return
