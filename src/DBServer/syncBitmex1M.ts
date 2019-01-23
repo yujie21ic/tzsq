@@ -26,7 +26,7 @@ export const syncBitmex1M = (symbol: BaseType.BitmexSymbol) =>
                     }
                 },
                 order: ['id'],
-                limit: 1000
+                limit: 1000,
             }))
             const newStart = tickArr.length > 0 ? tickArr[tickArr.length - 1].id + 1 : start
             if (tickArr.length < 100) {

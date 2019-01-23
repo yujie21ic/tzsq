@@ -33,8 +33,8 @@ const get1000sData = async (startTime: number, symbol: BaseType.BitmexSymbol) =>
                     high: v.price,
                     low: v.price,
                     close: v.price,
-                    buySize: v.side === 'Buy' ? Math.abs(v.size) : 0,
-                    sellSize: v.side === 'Sell' ? Math.abs(v.size) : 0,
+                    buySize: v.side === 'Buy' ? v.size : 0,
+                    sellSize: v.side === 'Sell' ? v.size : 0,
                     buyCount: 1,
                     sellCount: 1,
                 })
