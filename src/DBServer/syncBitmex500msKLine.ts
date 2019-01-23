@@ -6,7 +6,7 @@ import { timeID } from '../lib/F/timeID'
 import { sleep } from '../lib/C/sleep'
 
 
-const get1000sData = async (startTime: number, symbol: BaseType.BitmexSymbol) => {
+const get500sData = async (startTime: number, symbol: BaseType.BitmexSymbol) => {
 
     const retArr: BaseType.KLine[] = []
 
@@ -19,7 +19,7 @@ const get1000sData = async (startTime: number, symbol: BaseType.BitmexSymbol) =>
             symbol,
             count: 500,
             startTime: new Date(startTime).toISOString(),
-            endTime: new Date(startTime + 1000 * 1000).toISOString()
+            endTime: new Date(startTime + 1000 * 500).toISOString()
         }))
         if (data === undefined) {
             return undefined
@@ -59,18 +59,18 @@ export const syncBitmex500msKLine = (symbol: BaseType.BitmexSymbol) =>
             }
         },
         getData: async (start: number) => {
-            //只采集10分钟前的数据
-            if (new Date(start).getTime() + 1000 * 600 > Date.now()) {
-                await sleep(1000 * 600)
+            //只采集 1000秒 前的数据
+            if (start + 1000 * 1000 > Date.now()) {
+                await sleep(1000 * 60) //休息 60s 
                 return { tickArr: [], newStart: start }
             }
-            const data = await get1000sData(start, symbol)
+            const data = await get500sData(start, symbol)
             if (data === undefined) {
                 await sleep(1000 * 60) //网络错误 休息 60s
                 return { tickArr: [], newStart: start }
             } else {
                 await sleep(1000 * 1) //休息1s
-                return { tickArr: data, newStart: start + 1000 * 1000 }//采集了1000秒
+                return { tickArr: data, newStart: start + 1000 * 500 }//采集了500秒
             }
         }
     })
