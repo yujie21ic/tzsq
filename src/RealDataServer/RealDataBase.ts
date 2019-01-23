@@ -8,7 +8,7 @@ import { kvs } from '../lib/F/kvs'
 
 
 export class RealDataBase {
-    static 单位时间 = 500 
+    static 单位时间 = 500
 
     private 删除历史() {
         const length = Math.min(
@@ -25,8 +25,8 @@ export class RealDataBase {
             this.jsonSync.rawData.binance.ethusdt.orderBook.length,
         )
 
-        //>4000 删除2000
-        if (length > 4000) {
+        //>5000 删除2000
+        if (length > 5000) {
             this.jsonSync.rawData.startTick += 2000
             this.jsonSync.rawData.bitmex.XBTUSD.data.splice(0, 2000)
             this.jsonSync.rawData.bitmex.XBTUSD.orderBook.splice(0, 2000)
@@ -123,7 +123,7 @@ export class RealDataBase {
         size: number
     }) {
         this.删除历史()
-        
+
         const tick = Math.floor(p.timestamp / RealDataBase.单位时间)
 
         if (this.data.startTick === 0) {
