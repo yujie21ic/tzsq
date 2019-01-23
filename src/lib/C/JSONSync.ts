@@ -37,10 +37,12 @@ export class JSONSync<T>{
             return {
                 ____set: (value: any) => this.set({ path, value }),
                 ____push: (value: any) => {
-                    this.set({ path: [...path, this.get(path).length], value })
+                    //this.set({ path: [...path, this.get(path).length], value })
+                    this.set({ path: [...path, '__push__'], value })
                 },
                 ____updateLast: (value: any) => {
-                    this.set({ path: [...path, this.get(path).length - 1], value })
+                    //this.set({ path: [...path, this.get(path).length - 1], value })
+                    this.set({ path: [...path, '__last__'], value })
                 }
             }
         } else if (v instanceof Object) {
@@ -55,17 +57,26 @@ export class JSONSync<T>{
         this.data = this.mapJSON([])
     }
 
+    private setObjKV(obj: any, k: string | number, v: any) {
+        if (k === '__push__') {
+            obj.push(v)
+        }
+        else if (k === '__last__') {
+            obj[obj.length - 1] = v
+        }
+        else {
+            obj[k] = v
+        }
+    }
+
     set({ path, value }: OP) {
         if (path.length === 0) {
             this.rawData = value
         }
-        else if (path.length === 1) {
-            (this.rawData as any)[path[0]] = value
-        }
         else {
             const key = path[path.length - 1]
-            const obj = path.reduce((last: any, current, i) => i === path.length - 1 ? last : last[current], this.rawData)
-            obj[key] = value
+            const obj = path.reduce((prev: any, current, i) => i === path.length - 1 ? prev : prev[current], this.rawData)
+            this.setObjKV(obj, key, value)
         }
         this.subject.next({ path, value })
     }
