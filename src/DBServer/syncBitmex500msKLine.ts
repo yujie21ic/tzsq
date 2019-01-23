@@ -21,6 +21,7 @@ const get1000sData = async (startTime: number, symbol: BaseType.BitmexSymbol) =>
             startTime: new Date(startTime).toISOString(),
             endTime: new Date(startTime + 1000 * 1000).toISOString()
         }))
+        console.log('data', data)
         if (data === undefined) {
             return undefined
         }
@@ -60,8 +61,8 @@ export const syncBitmex500msKLine = (symbol: BaseType.BitmexSymbol) =>
         },
         getData: async (start: number) => {
             //只采集10分钟前的数据
-            if (new Date(start).getTime() + 10 * 60 * 1000 > Date.now()) {
-                await sleep(1000 * 60)
+            if (new Date(start).getTime() + 1000 * 600 > Date.now()) {
+                await sleep(1000 * 600)
                 return { tickArr: [], newStart: start }
             }
             const data = await get1000sData(start, symbol)
