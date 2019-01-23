@@ -31,9 +31,13 @@ export class WebSocketClient {
         this.connect()
     }
 
-    send(obj: any) {
+    sendJSON(obj: any) {
         if (this.ws !== undefined && this.isConnected) {
-            this.ws.send(JSON.stringify(obj))
+            try {
+                this.ws.send(JSON.stringify(obj))
+            } catch (error) {
+
+            }
         }
     }
 

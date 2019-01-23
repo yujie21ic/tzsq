@@ -56,10 +56,14 @@ export class RealData extends RealDataBase {
         //runServer
         if (this.wss !== undefined) {
             this.wss.on('connection', ws => {
-                ws.send(JSON.stringify({
-                    path: [],
-                    value: this.data
-                }))
+                try {
+                    ws.send(JSON.stringify({
+                        path: [],
+                        value: this.data
+                    }))
+                } catch (error) {
+
+                }
                 this.wsDic.set(ws, true)
                 ws.onerror = ws.onclose = () => this.wsDic.delete(ws)
             })
@@ -68,7 +72,9 @@ export class RealData extends RealDataBase {
         this.jsonSync.subject.subscribe(
             op => {
                 const str = JSON.stringify(op)
-                this.wsDic.forEach((_, ws) => ws.send(str))
+                this.wsDic.forEach((_, ws) => {
+                    try { ws.send(str) } catch (error) { }
+                })
             }
         )
 

@@ -177,7 +177,7 @@ export class BitMEXWSAPI {
             if (ws.isConnected) {
 
                 //有情况发数组 服务器返回不对  只能一次一次的发
-                subscribe.map(v => ws.send({
+                subscribe.map(v => ws.sendJSON({
                     op: 'subscribe',
                     args: v.filter !== undefined ? v.theme + ':' + v.filter : v.theme
                 }))

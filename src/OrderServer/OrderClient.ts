@@ -23,7 +23,7 @@ export class OrderClient {
         this.ws.onStatusChange = () => {
             this.收到了消息 = false
             if (this.ws.isConnected) {
-                this.ws.send({ cookie })
+                this.ws.sendJSON({ cookie })
             }
         }
         this.ws.onData = obj => {
