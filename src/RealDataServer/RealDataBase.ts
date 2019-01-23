@@ -8,11 +8,43 @@ import { kvs } from '../lib/F/kvs'
 
 
 export class RealDataBase {
-    static 单位时间 = 500
+    static 单位时间 = 500 
+
+    private 删除历史() {
+        const length = Math.min(
+            this.jsonSync.rawData.bitmex.XBTUSD.data.length,
+            this.jsonSync.rawData.bitmex.XBTUSD.orderBook.length,
+
+            this.jsonSync.rawData.bitmex.ETHUSD.data.length,
+            this.jsonSync.rawData.bitmex.ETHUSD.orderBook.length,
+
+            this.jsonSync.rawData.binance.btcusdt.data.length,
+            this.jsonSync.rawData.binance.btcusdt.orderBook.length,
+
+            this.jsonSync.rawData.binance.ethusdt.data.length,
+            this.jsonSync.rawData.binance.ethusdt.orderBook.length,
+        )
+
+        //>4000 删除2000
+        if (length > 4000) {
+            this.jsonSync.rawData.startTick += 2000
+            this.jsonSync.rawData.bitmex.XBTUSD.data.splice(0, 2000)
+            this.jsonSync.rawData.bitmex.XBTUSD.orderBook.splice(0, 2000)
+
+            this.jsonSync.rawData.bitmex.ETHUSD.data.splice(0, 2000)
+            this.jsonSync.rawData.bitmex.ETHUSD.orderBook.splice(0, 2000)
+
+            this.jsonSync.rawData.binance.btcusdt.data.splice(0, 2000)
+            this.jsonSync.rawData.binance.btcusdt.orderBook.splice(0, 2000)
+
+            this.jsonSync.rawData.binance.ethusdt.data.splice(0, 2000)
+            this.jsonSync.rawData.binance.ethusdt.orderBook.splice(0, 2000)
+        }
+    }
 
     protected jsonSync = new JSONSync(
         {
-            startTick: 0, 
+            startTick: 0,
             bitmex: {
                 XBTUSD: {
                     data: [] as BaseType.KLine[],
@@ -49,11 +81,12 @@ export class RealDataBase {
         timestamp: number
         orderBook: BaseType.OrderBook
     }) {
+        this.删除历史()
         const tick = Math.floor(p.timestamp / RealDataBase.单位时间)
 
         if (this.data.startTick === 0) {
             this.jsonSync.data.startTick.____set(tick)
-        } 
+        }
 
         if (this.on盘口Dic[p.symbol] === undefined) {
             this.on盘口Dic[p.symbol] = new Sampling<BaseType.OrderBook>({
@@ -89,11 +122,13 @@ export class RealDataBase {
         price: number
         size: number
     }) {
+        this.删除历史()
+        
         const tick = Math.floor(p.timestamp / RealDataBase.单位时间)
 
         if (this.data.startTick === 0) {
             this.jsonSync.data.startTick.____set(tick)
-        } 
+        }
 
         if (this.on着笔Dic[p.symbol] === undefined) {
             this.on着笔Dic[p.symbol] = new Sampling<BaseType.KLine>({
