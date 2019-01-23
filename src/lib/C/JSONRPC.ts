@@ -13,9 +13,9 @@ type FuncList = {
 
 export class JSONRPCServer<T extends FuncList> {
 
-    func: {
+    readonly func: {
         [K in keyof T]?: (req: T[K]['req']) => Promise<T[K]['res']>
-    } = {}
+    } = Object.create(null)
 
     constructor(p: {
         funcList: T
@@ -58,7 +58,7 @@ export class JSONRPCServer<T extends FuncList> {
 
 export class JSONRPCClient<T extends FuncList> {
 
-    func: {
+    readonly func: {
         [K in keyof T]: (req: T[K]['req']) => Promise<{
             error?: JSONRequestError
             data?: T[K]['res']
