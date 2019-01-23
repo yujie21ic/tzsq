@@ -21,7 +21,6 @@ const get1000sData = async (startTime: number, symbol: BaseType.BitmexSymbol) =>
             startTime: new Date(startTime).toISOString(),
             endTime: new Date(startTime + 1000 * 1000).toISOString()
         }))
-        console.log('data', data)
         if (data === undefined) {
             return undefined
         }
