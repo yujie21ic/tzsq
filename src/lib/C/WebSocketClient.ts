@@ -62,7 +62,21 @@ export class WebSocketClient {
     }
 
     private reconnect = () => {
-        this.destory()
+        //destory
+        if (this.ws !== undefined) {
+            this.ws.onopen = this.ws.onerror = this.ws.onclose = this.ws.onmessage = () => { }
+            this.ws.removeAllListeners('pong')
+            this.ws.close()
+            this.ws.terminate()
+            this.ws = undefined
+        }
+
+        if (this._isConnected) {
+            this._isConnected = false
+            this.onStatusChange()
+        }
+
+        //connect
         setTimeout(this.connect, 100)
     }
 
@@ -87,20 +101,5 @@ export class WebSocketClient {
             }
         }
         f()
-    }
-
-    destory() {
-        if (this.ws !== undefined) {
-            this.ws.onopen = this.ws.onerror = this.ws.onclose = this.ws.onmessage = () => { }
-            this.ws.removeAllListeners('pong')
-            this.ws.close()
-            this.ws.terminate()
-            this.ws = undefined
-        }
-
-        if (this._isConnected) {
-            this._isConnected = false
-            this.onStatusChange()
-        }
     }
 } 
