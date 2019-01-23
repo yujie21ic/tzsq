@@ -8,6 +8,9 @@
     "db_server": "node --max_old_space_size=8192 -r ts-node/register ./src/DBServer",
     "i": "install-app-deps",
     "test": "mocha -r ts-node/register src/lib/*/*-test.ts",
+    "w": "tsc -w",
+    "real_data_server": "ts-node ./src/RealDataServer",
+    "ui": "electron ./build/main.js",
     "start": "concurrently \"tsc -w\" \"ts-node ./src/RealDataServer\" \"electron ./build/main.js\""
   },
   "devDependencies": {
