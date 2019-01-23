@@ -5,8 +5,8 @@ import { JSONRequestError } from '../C/JSONRequest'
 
 export namespace BitMEXOrderAPI {
 
-    const 重试几次 = 20
-    const 重试休息多少毫秒 = 15
+    const 重试几次 = 50
+    const 重试休息多少毫秒 = 20
 
     const xx = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError }>) => async (cookie: string, p: P) => {
         let success = false
