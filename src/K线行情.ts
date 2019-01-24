@@ -41,6 +41,8 @@ const load = async () => {
         data: []
     }
 
+    console.log('load')
+
     const arr = (await DBClient.func.getKLine({
         type: '1m',
         symbol: nowSymbol,
