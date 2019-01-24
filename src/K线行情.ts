@@ -43,24 +43,24 @@ const load = async () => {
 
     console.log('load')
 
-    const arr = (await DBClient.func.getKLine({
+    const { data, error, msg } = await DBClient.func.getKLine({
         type: '1m',
         symbol: nowSymbol,
         startTime: Date.now() - 24 * 60 * 60 * 1000 * 4,
         endTime: Date.now(),
-    })).data
+    })
 
-    console.log('arr', arr)
+    console.log('arr', data)
 
-    if (arr === undefined) {
-        console.log('load error')
+    if (data === undefined) {
+        console.log('load error', error, msg)
         return
     }
 
     S = {
-        left: Math.max(0, arr.length - 100),
-        right: arr.length,
-        data: arr
+        left: Math.max(0, data.length - 100),
+        right: data.length,
+        data: data
     }
 
 }
