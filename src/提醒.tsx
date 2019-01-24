@@ -35,7 +35,7 @@ class APP extends React.Component {
         //BTC
         const XBTUSD现货 = realTickClient.dataExt.XBTUSD.现货
         const volum = realTickClient.get期货多少秒内成交量('XBTUSD',30)
-        if (volum>150){
+        if (volum>200){
             this.setAndSpeak(
                 '比 特 币 成交量',
                 volum,
