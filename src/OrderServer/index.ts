@@ -29,7 +29,7 @@ if (config.orderServer !== undefined) {
         })))
 
         account.runTask(止损step('ETHUSD', () => to范围({
-            min: 0.1,
+            min: 0.3,
             max: 0.9,
             value: lastNumber(realData.dataExt.XBTUSD.期货.波动率) / 100 + 0.1,
         })))
