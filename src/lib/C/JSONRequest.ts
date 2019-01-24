@@ -23,6 +23,7 @@ export const JSONRequest = <T>({
 }>(resolve => {
 
     const requestOptions: request.OptionsWithUrl = {
+        timeout: 1000 * 60,//超时1分钟
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
