@@ -10,7 +10,6 @@ export namespace DB {
         attributes: Sequelize.DefineModelAttributes<T>
         indexes?: Sequelize.DefineIndexesOptions[]
     }) => {
-
         const sequelize = new Sequelize({
             logging: false,
             dialect: 'sqlite',
@@ -41,7 +40,7 @@ export namespace DB {
                 indexes: [
                     { fields: ['timestamp'] },  //时间加索引
                     { fields: ['size'] },       //给单笔成交量加索引
-                ]
+                ],
             })
     )
 
@@ -92,7 +91,7 @@ export namespace DB {
                     buy5_size: { type: Sequelize.BIGINT },
                     sell5_price: { type: Sequelize.BIGINT },
                     sell5_size: { type: Sequelize.BIGINT },
-                }
+                },
             })
     )
 
