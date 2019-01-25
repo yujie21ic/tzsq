@@ -2,7 +2,7 @@ import { BaseType } from '../lib/BaseType'
 
 export const funcList = {
 
-    //现货没有500ms
+    //K线
     getKLine: {
         req: {
             type: '' as '1m' | '500ms',
@@ -23,7 +23,7 @@ export const funcList = {
         }]
     },
 
-    //现货 直接采集着笔
+    //现货着笔
     getBinanceTick: {
         req: {
             symbol: '' as BaseType.BinanceSymbol,
