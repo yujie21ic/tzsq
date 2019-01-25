@@ -18,7 +18,7 @@ import { showWindowRemote } from './windowExt'
 // import { LineLayer } from './lib/Chart/Layer/LineLayer'
 // import { 笔Layer } from './lib/Chart/Layer/笔Layer'
 
-let nowSymbol: BaseType.BitmexSymbol = 'ETHUSD'
+let nowSymbol: BaseType.BitmexSymbol = 'XBTUSD'
 
 let S = {
     left: 200,
@@ -46,7 +46,7 @@ const load = async () => {
     const { data, error, msg } = await DBClient.func.getKLine({
         type: '1m',
         symbol: nowSymbol,
-        startTime: Date.now() - 24 * 60 * 60 * 1000 * 4,
+        startTime: Date.now() - 24 * 60 * 60 * 1000 * 20,
         endTime: Date.now(),
     })
 

@@ -55,10 +55,21 @@ const 成交量买卖 = (d: D, d2: D2) => [
     })
 ]
 const 成交量买卖曲线 = (d: D, d2: D2) => [
-    layer(LineLayer, { data: d.期货.成交量均线1, color: 现货颜色 }),
-    layer(LineLayer, { data: d.期货.成交量买, color: 买颜色 }),
-    layer(LineLayer, { data: d.期货.成交量卖, color: 卖颜色 }),
+    layer(LineLayer, { data: d.期货.成交量均线1, color: 期货颜色 }),
+    layer(LineLayer, { data: d2.ETHUSD.期货.成交量均线1, color: 现货颜色 }),
+    layer(LineLayer, { data: d.期货.成交量买均线1, color: 买颜色 }),
+    layer(LineLayer, { data: d.期货.成交量卖均线1, color: 卖颜色 }),
     //layer(LineLayer, { data: d.期货.净成交量均线, color: 现货颜色 }),
+    layer(TextLayer, {
+        text:
+            `30秒成交量曲线`,
+        color: 现货颜色
+    })
+]
+const 成交量买卖速度曲线 = (d: D, d2: D2) => [
+    layer(LineLayer, { data: d.期货.成交次数卖, color: 卖颜色 }),
+    layer(LineLayer, { data: d.期货.成交次数买, color: 买颜色 }),
+   
     layer(TextLayer, {
         text:
             `30秒成交量曲线`,
@@ -96,58 +107,37 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             layerList: [
                 layer(LineLayer, { data: d2.ETHUSD.期货.价格, color: 现货颜色 })
             ]
-        },
-
-
-        // {
-        //     heightPercentage: 0.5,
-        //     yCoordinate: '对数',
-        //     和下一张重叠: true,
-        //     layerList: [
-        //         layer(LineLayer, { data: d.期货.阻力4涨, color: 买颜色 }),
-        //         // layer(LineLayer, { data: d.期货.阻力4跌, color: 卖颜色 }),
-        //     ]
-        // },
-        // {
-        //     heightPercentage: 0.5,
-        //     yCoordinate: '对数',
-        //     layerList: [
-        //         // layer(LineLayer, { data: d.期货.阻力4涨, color: 买颜色 }),
-        //         layer(LineLayer, { data: d.期货.阻力4跌, color: 卖颜色 }),
-        //     ]
-        // },
-        // {
-        //     heightPercentage: 0.5,
-        //     yCoordinate: '对数',
-        //     和下一张重叠: true,
-        //     layerList: [
-        //         layer(LineLayer, { data: d.期货.阻力3涨, color: 买颜色 }),
-        //         layer(TextLayer, {
-        //             text: `涨跌动力`,
-        //             color: 现货颜色
-        //         })
-        //     ]
-        // },
-        // {
-        //     heightPercentage: 0.5,
-        //     layerList: [
-        //         layer(LineLayer, { data: d.期货.阻力3跌, color: 卖颜色 }),
-        //     ]
-        // },
+        },  
         {
-            heightPercentage: 0.5,
+            heightPercentage: 0.3,
             yCoordinate: '对数',
             和下一张重叠: true,
             layerList: 成交量买卖曲线(d, d2)
         },
         {
-            heightPercentage: 0.5,
+            heightPercentage: 0.3,
             //和下一张重叠: true,
             layerList: [
                 layer(LineLayer, { data: d.期货.波动率, color: 波动率颜色 }),
             ]
         },
-
+        {
+            heightPercentage: 0.2,
+            和下一张重叠: true,
+            layerList: [
+                layer(LineLayer, { data: d.期货.成交次数卖, color: 卖颜色 }),
+            ]
+          
+        },  
+        // {
+        //     heightPercentage: 0.2,
+        //     //和下一张重叠: true,
+        //     layerList: [
+        //         layer(LineLayer, { data: d.期货.成交次数买, color: 买颜色 }),
+        //     ]
+          
+        // },  
+        
 
     ],
     双价格图和成交量: (d, d2) => [

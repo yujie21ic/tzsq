@@ -5,6 +5,7 @@ import { Subject } from 'rxjs'
 import { 指标 } from '../lib/指标'
 import { Sampling } from '../lib/C/Sampling'
 import { kvs } from '../lib/F/kvs'
+import { lastNumber } from '../lib/F/lastNumber';
 
 
 export class RealDataBase {
@@ -258,8 +259,26 @@ export class RealDataBase {
 
         const 成交次数买 = 指标.lazyMapCache(() => data.length, i => data[i].buyCount)
         const 成交次数卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellCount)
-        const 成交量均线1 = 指标.累加(
-            指标.lazyMapCache(() => Math.min(成交量买.length, 成交量卖.length), i => Math.abs(成交量买[i] - 成交量卖[i])),
+        console.log("成交次数买"+lastNumber(成交次数买))
+        console.log("成交次数卖"+lastNumber(成交次数卖))
+        const 成交量买均线1 = 指标.累加(
+            指标.lazyMapCache(() => 成交量买.length, i =>成交量买[i]),
+            多少秒均线,
+            RealDataBase.单位时间
+        )
+        const 成交量卖均线1 = 指标.累加(
+            指标.lazyMapCache(() => 成交量卖.length, i => 成交量卖[i]),
+            多少秒均线,
+            RealDataBase.单位时间
+        )
+        // const 成交量均线1 = 指标.累加(
+        //     指标.lazyMapCache(() => Math.min(成交量买.length, 成交量卖.length), i => Math.max(成交量买均线1[i],成交量卖均线1[i])-Math.min(成交量买均线1[i],成交量卖均线1[i]) ),
+        //     多少秒均线,
+        //     RealDataBase.单位时间
+        // )
+        const 成交量均线1 = 指标.lazyMapCache(() => data.length, i => Math.max(成交量买均线1[i],成交量卖均线1[i])-Math.min(成交量买均线1[i],成交量卖均线1[i]) )
+        const 成交量次数均线1 = 指标.累加(
+            指标.lazyMapCache(() => Math.min(成交次数买.length, 成交次数卖.length), i =>  data[i].buyCount + data[i].sellCount),
             多少秒均线,
             RealDataBase.单位时间
         )
@@ -360,6 +379,9 @@ export class RealDataBase {
             真空信号跌,
             //成交量波动率比值,
             成交量均线1,
+            成交量买均线1,
+            成交量卖均线1,
+            成交量次数均线1,
             阻力笔,
         }
     }
