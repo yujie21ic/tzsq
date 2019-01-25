@@ -9,6 +9,8 @@ export class Sampling<T extends { id: number }>{
     private 收key = ''
 
     //await 和 in 保持一样
+    //不然状态是乱的
+
     onNew = async (item: T) => { }
     onUpdate = async (item: T) => { }
     onComplete = async (item: T) => { }
