@@ -16,7 +16,7 @@ export const syncBinance1M = (symbol: BaseType.BinanceSymbol) =>
             } else {
                 const timestamp = timeID.oneMinuteIDToTimestamp(lastItemID + 1)
 
-                const obj = await DB.getTrades(symbol).findOne({
+                const obj = await DB.getTrades(symbol).findOne<{}>({
                     raw: true,
                     where: {
                         timestamp: {
@@ -34,7 +34,7 @@ export const syncBinance1M = (symbol: BaseType.BinanceSymbol) =>
             }
         },
         getData: async (start: number) => {
-            const tickArr = (await DB.getTrades(symbol).findAll({
+            const tickArr = (await DB.getTrades(symbol).findAll<{}>({
                 raw: true,
                 where: {
                     id: {
