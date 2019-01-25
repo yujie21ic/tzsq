@@ -2,22 +2,28 @@ import * as Sequelize from 'sequelize'
 import { BaseType } from '../lib/BaseType'
 
 export namespace DB {
+
+    const createSequelize = (storage: string) => {
+
+        const sequelize = new Sequelize({
+            logging: false,
+            dialect: 'sqlite',
+            storage,
+        })
+
+        sequelize.query('PRAGMA journal_mode=WAL;')
+
+        return sequelize
+    }
+
+
     //_________________________________________________________________________________//
     const _getTrades_dic: { [symbol: string]: Sequelize.Model<BaseType.Trade, BaseType.Trade> } = Object.create(null)
 
     export const getTrades = (symbol: BaseType.BinanceSymbol) => {
 
         if (_getTrades_dic[symbol] === undefined) {
-
-            const sequelize = new Sequelize({
-                logging: false,
-                dialect: 'sqlite',
-                storage: `db/trades_${symbol}.db`
-            })
-
-            sequelize.query('PRAGMA journal_mode=WAL;')
-
-            const table = sequelize.define<BaseType.Trade, BaseType.Trade>(symbol,
+            _getTrades_dic[symbol] = createSequelize(`db/trades_${symbol}.db`).define<BaseType.Trade, BaseType.Trade>(symbol,
                 {
                     id: { type: Sequelize.BIGINT, primaryKey: true },
                     timestamp: { type: Sequelize.BIGINT },
@@ -33,7 +39,6 @@ export namespace DB {
                     ]
                 }
             )
-            _getTrades_dic[symbol] = table
         }
 
         return _getTrades_dic[symbol]
@@ -47,15 +52,7 @@ export namespace DB {
 
         if (_getKLine_dic[`${type}_${symbol}`] === undefined) {
 
-            const sequelize = new Sequelize({
-                logging: false,
-                dialect: 'sqlite',
-                storage: `db/${type}_${symbol}.db`
-            })
-
-            sequelize.query('PRAGMA journal_mode=WAL;')
-
-            const table = sequelize.define<BaseType.KLine, BaseType.KLine>(symbol,
+            _getKLine_dic[symbol] = createSequelize(`db/${type}_${symbol}.db`).define<BaseType.KLine, BaseType.KLine>(symbol,
                 {
                     id: { type: Sequelize.BIGINT, primaryKey: true },
                     open: { type: Sequelize.DOUBLE },
@@ -72,7 +69,6 @@ export namespace DB {
                     timestamps: false
                 }
             )
-            _getKLine_dic[symbol] = table
         }
 
         return _getKLine_dic[symbol]
@@ -85,15 +81,7 @@ export namespace DB {
 
         if (_getBitmex500msOrderBook_dic[symbol] === undefined) {
 
-            const sequelize = new Sequelize({
-                logging: false,
-                dialect: 'sqlite',
-                storage: `db/500msOrderBook_${symbol}.db`
-            })
-
-            sequelize.query('PRAGMA journal_mode=WAL;')
-
-            const table = sequelize.define<BaseType.OrderBookDB, BaseType.OrderBookDB>(symbol,
+            _getBitmex500msOrderBook_dic[symbol] = createSequelize(`db/500msOrderBook_${symbol}.db`).define<BaseType.OrderBookDB, BaseType.OrderBookDB>(symbol,
                 {
                     id: { type: Sequelize.BIGINT, primaryKey: true },
                     buy1_price: { type: Sequelize.BIGINT },
@@ -122,7 +110,6 @@ export namespace DB {
                     timestamps: false
                 }
             )
-            _getBitmex500msOrderBook_dic[symbol] = table
         }
 
         return _getBitmex500msOrderBook_dic[symbol]
