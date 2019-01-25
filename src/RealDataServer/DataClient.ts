@@ -32,11 +32,11 @@ export namespace DataClient {
 
         private get_bitmex_orderBook = async (symbol: BaseType.BitmexSymbol, startTime: number) => {
 
-            const { data, error, msg } = (await DBClient.func.getBitmex500msOrderBook({
+            const { data, error, msg } = await DBClient.func.getBitmex500msOrderBook({
                 symbol,
                 startTime,
                 endTime: startTime + 加载多少秒数据 * 1000
-            }))
+            })
 
             if (data === undefined || data.length === 0) {
                 console.info(`get_bitmex_orderBook ${symbol} 错误`, { msg, error, data })

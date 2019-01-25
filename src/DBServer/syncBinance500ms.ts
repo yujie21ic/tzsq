@@ -34,7 +34,7 @@ export const syncBinance500ms = (symbol: BaseType.BinanceSymbol) =>
             }
         },
         getData: async (start: number) => {
-            const tickArr = (await DB.getTrades(symbol).findAll<{}>({
+            const tickArr = await DB.getTrades(symbol).findAll<{}>({
                 raw: true,
                 where: {
                     id: {
@@ -43,7 +43,7 @@ export const syncBinance500ms = (symbol: BaseType.BinanceSymbol) =>
                 },
                 order: ['id'],
                 limit: 1000
-            }))
+            })
             const newStart = tickArr.length > 0 ? tickArr[tickArr.length - 1].id + 1 : start
             if (tickArr.length < 100) {
                 await sleep(1000 * 60) //休息60s
