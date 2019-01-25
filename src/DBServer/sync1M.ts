@@ -6,9 +6,9 @@ import { timeID } from '../lib/F/timeID'
 import { sleep } from '../lib/C/sleep'
 
 
-export const syncBitmex1M = (symbol: BaseType.BitmexSymbol) =>
+export const sync1M = (symbol: BaseType.BitmexSymbol | BaseType.BinanceSymbol) =>
     new SyncKLine({
-        getName: () => `syncBitmex1M ${symbol}`,
+        getName: () => `sync1M ${symbol}`,
         getTable: () => DB.getKLine('1m', symbol),
         get采集start: async (lastItemID: number) => {
             if (isNaN(lastItemID)) {

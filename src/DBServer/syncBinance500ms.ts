@@ -6,15 +6,15 @@ import { timeID } from '../lib/F/timeID'
 import { sleep } from '../lib/C/sleep'
 
 
-export const syncBinance1M = (symbol: BaseType.BinanceSymbol) =>
+export const syncBinance500ms = (symbol: BaseType.BinanceSymbol) =>
     new SyncKLine({
-        getName: () => `syncBinance1M ${symbol}`,
-        getTable: () => DB.getKLine('1m', symbol),
+        getName: () => `syncBinance500ms ${symbol}`,
+        getTable: () => DB.getKLine('500ms', symbol),
         get采集start: async (lastItemID: number) => {
             if (isNaN(lastItemID)) {
                 return 0
             } else {
-                const timestamp = timeID.oneMinuteIDToTimestamp(lastItemID + 1)
+                const timestamp = timeID._500msIDToTimestamp(lastItemID + 1)
 
                 const obj = await DB.getTrades(symbol).findOne<{}>({
                     raw: true,
@@ -52,7 +52,7 @@ export const syncBinance1M = (symbol: BaseType.BinanceSymbol) =>
             }
             return {
                 tickArr: tickArr.map(v => ({
-                    id: timeID.timestampToOneMinuteID(v.timestamp),
+                    id: timeID.timestampTo500msID(v.timestamp),
                     open: v.price,
                     high: v.price,
                     low: v.price,

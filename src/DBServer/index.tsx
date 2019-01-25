@@ -5,25 +5,26 @@ import { funcList } from './funcList'
 import { DB } from './DB'
 import { syncBinanceTrades } from './syncBinanceTrades'
 import { syncBitmex500msOrderBook } from './syncBitmex500msOrderBook'
-import { syncBinance1M } from './syncBinance1M'
+import { syncBinance500ms } from './syncBinance500ms'
 import { timeID } from '../lib/F/timeID'
 import { syncBitmex500msKLine } from './syncBitmex500msKLine'
-import { syncBitmex1M } from './syncBitmex1M'
+import { sync1M } from './sync1M'
 
 //采集
+//期货
 syncBitmex500msOrderBook()
 syncBitmex500msKLine('XBTUSD')
 syncBitmex500msKLine('ETHUSD')
+sync1M('XBTUSD')
+sync1M('ETHUSD')
 
-syncBitmex1M('XBTUSD')
-syncBitmex1M('ETHUSD')
-
+//现货
 syncBinanceTrades('btcusdt', 64975394)
 syncBinanceTrades('ethusdt', 38096146)
-
-syncBinance1M('btcusdt')
-syncBinance1M('ethusdt')
-
+syncBinance500ms('btcusdt')
+syncBinance500ms('ethusdt')
+sync1M('btcusdt')
+sync1M('ethusdt')
 
 
 //
