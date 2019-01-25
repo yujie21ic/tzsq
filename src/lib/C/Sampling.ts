@@ -8,9 +8,9 @@ export class Sampling<T extends { id: number }>{
     private _rule: BaseType.Omit<{ [K in keyof T]: '累加' | '最新' | '开' | '高' | '低' | '收' }, 'id'>
     private 收key = ''
 
-    onNew = (item: T) => { }
-    onUpdate = (item: T) => { }
-    onComplete = (item: T) => { }
+    onNew = async (item: T) => { }
+    onUpdate = async (item: T) => { }
+    onComplete = async (item: T) => { }
 
     constructor(rule: BaseType.Omit<{ [K in keyof T]: '累加' | '最新' | '开' | '高' | '低' | '收' }, 'id'>) {
         this._rule = rule
@@ -23,11 +23,11 @@ export class Sampling<T extends { id: number }>{
         }
     }
 
-    in(item: T) {
+    async in(item: T) {
         //初始化
         if (this._lastItem === undefined) {
             this._lastItem = item
-            this.onNew(this._lastItem)
+            await this.onNew(this._lastItem)
         }
         //更新最后一个
         else if (this._lastItem.id === item.id) {
@@ -56,12 +56,12 @@ export class Sampling<T extends { id: number }>{
                     throw new Error('Sampling 不支持的 type' + type)
                 }
             }, this._lastItem)
-            this.onUpdate(this._lastItem)
+            await this.onUpdate(this._lastItem)
         }
         //
         else if (this._lastItem.id < item.id) {
             //结束上一个
-            this.onComplete(this._lastItem)
+            await this.onComplete(this._lastItem)
 
             //更新空的
             for (let i = this._lastItem.id + 1; i < item.id; i++) {
@@ -83,13 +83,13 @@ export class Sampling<T extends { id: number }>{
                         throw new Error('Sampling 不支持的 type ' + type)
                     }
                 }, this._lastItem)
-                this.onNew(this._lastItem)
-                this.onComplete(this._lastItem)
+                await this.onNew(this._lastItem)
+                await this.onComplete(this._lastItem)
             }
 
             //追加 
             this._lastItem = item
-            this.onNew(this._lastItem)
+            await this.onNew(this._lastItem)
         }
     }
 

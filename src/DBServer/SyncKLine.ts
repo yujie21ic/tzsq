@@ -71,7 +71,9 @@ export class SyncKLine {
                 let start = await this.syncKLineFunc.get采集start(await this.init(this.syncKLineFunc.getTable()))
                 while (true) {
                     const { tickArr, newStart } = await this.syncKLineFunc.getData(start)
-                    tickArr.forEach(v => this.sampling!.in(v))
+                    for (let i = 0; i < tickArr.length; i++) {
+                        await this.sampling!.in(tickArr[i])
+                    }
                     start = newStart
                 }
             } catch (error) {

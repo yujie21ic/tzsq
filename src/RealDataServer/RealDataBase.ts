@@ -94,8 +94,8 @@ export class RealDataBase {
                 buy: '最新',
                 sell: '最新',
             })
-            this.on盘口Dic[p.symbol].onNew = item => p.xxxxxxxx.____push(item)
-            this.on盘口Dic[p.symbol].onUpdate = item => p.xxxxxxxx.____updateLast(item)
+            this.on盘口Dic[p.symbol].onNew = async item => p.xxxxxxxx.____push(item)
+            this.on盘口Dic[p.symbol].onUpdate = async item => p.xxxxxxxx.____updateLast(item)
             this.on盘口Dic[p.symbol].in({
                 id: this.data.startTick,
                 buy: [],
@@ -142,8 +142,8 @@ export class RealDataBase {
                 sellSize: '累加',
                 sellCount: '累加',
             })
-            this.on着笔Dic[p.symbol].onNew = item => p.xxxxxxxx.____push(item)
-            this.on着笔Dic[p.symbol].onUpdate = item => p.xxxxxxxx.____updateLast(item)
+            this.on着笔Dic[p.symbol].onNew = async item => p.xxxxxxxx.____push(item)
+            this.on着笔Dic[p.symbol].onUpdate = async item => p.xxxxxxxx.____updateLast(item)
             this.on着笔Dic[p.symbol].in({
                 id: this.data.startTick,
                 open: NaN,
@@ -259,10 +259,10 @@ export class RealDataBase {
 
         const 成交次数买 = 指标.lazyMapCache(() => data.length, i => data[i].buyCount)
         const 成交次数卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellCount)
-        console.log("成交次数买"+lastNumber(成交次数买))
-        console.log("成交次数卖"+lastNumber(成交次数卖))
+        console.log("成交次数买" + lastNumber(成交次数买))
+        console.log("成交次数卖" + lastNumber(成交次数卖))
         const 成交量买均线1 = 指标.累加(
-            指标.lazyMapCache(() => 成交量买.length, i =>成交量买[i]),
+            指标.lazyMapCache(() => 成交量买.length, i => 成交量买[i]),
             多少秒均线,
             RealDataBase.单位时间
         )
@@ -276,9 +276,9 @@ export class RealDataBase {
         //     多少秒均线,
         //     RealDataBase.单位时间
         // )
-        const 成交量均线1 = 指标.lazyMapCache(() => data.length, i => Math.max(成交量买均线1[i],成交量卖均线1[i])-Math.min(成交量买均线1[i],成交量卖均线1[i]) )
+        const 成交量均线1 = 指标.lazyMapCache(() => data.length, i => Math.max(成交量买均线1[i], 成交量卖均线1[i]) - Math.min(成交量买均线1[i], 成交量卖均线1[i]))
         const 成交量次数均线1 = 指标.累加(
-            指标.lazyMapCache(() => Math.min(成交次数买.length, 成交次数卖.length), i =>  data[i].buyCount + data[i].sellCount),
+            指标.lazyMapCache(() => Math.min(成交次数买.length, 成交次数卖.length), i => data[i].buyCount + data[i].sellCount),
             多少秒均线,
             RealDataBase.单位时间
         )
