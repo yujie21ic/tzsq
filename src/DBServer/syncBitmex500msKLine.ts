@@ -34,9 +34,9 @@ const get500sData = async (startTime: number, symbol: BaseType.BitmexSymbol) => 
                     low: v.price,
                     close: v.price,
                     buySize: v.side === 'Buy' ? v.size : 0,
+                    buyCount: v.side === 'Buy' ? 1 : 0,
                     sellSize: v.side === 'Sell' ? v.size : 0,
-                    buyCount: 1,
-                    sellCount: 1,
+                    sellCount: v.side === 'Sell' ? 1 : 0,
                 })
             })
         }
