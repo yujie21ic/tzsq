@@ -1,5 +1,6 @@
 import * as Sequelize from 'sequelize'
 import { BaseType } from '../lib/BaseType'
+import { toCacheFunc } from '../lib/C/toCacheFunc'
 
 export namespace DB {
 
@@ -17,13 +18,9 @@ export namespace DB {
     }
 
 
-    //_________________________________________________________________________________//
-    const _getTrades_dic: { [symbol: string]: Sequelize.Model<BaseType.Trade, BaseType.Trade> } = Object.create(null)
-
-    export const getTrades = (symbol: BaseType.BinanceSymbol) => {
-
-        if (_getTrades_dic[symbol] === undefined) {
-            _getTrades_dic[symbol] = createSequelize(`db/trades_${symbol}.db`).define<BaseType.Trade, BaseType.Trade>(symbol,
+    export const getTrades = toCacheFunc(
+        (symbol: BaseType.BinanceSymbol) =>
+            createSequelize(`db/trades_${symbol}.db`).define<BaseType.Trade, BaseType.Trade>(symbol,
                 {
                     id: { type: Sequelize.BIGINT, primaryKey: true },
                     timestamp: { type: Sequelize.BIGINT },
@@ -35,24 +32,15 @@ export namespace DB {
                     timestamps: false,
                     indexes: [
                         { fields: ['timestamp'] },  //时间加索引
-                        { fields: ['size'] }        //给单笔成交量加索引
+                        { fields: ['size'] },       //给单笔成交量加索引
                     ]
                 }
             )
-        }
+    )
 
-        return _getTrades_dic[symbol]
-    }
-
-
-    //_________________________________________________________________________________//
-    const _getKLine_dic: { [type_symbol: string]: Sequelize.Model<BaseType.KLine, BaseType.KLine> } = Object.create(null)
-
-    export const getKLine = (type: '1m' | '500ms', symbol: BaseType.BinanceSymbol | BaseType.BitmexSymbol) => {
-
-        if (_getKLine_dic[`${type}_${symbol}`] === undefined) {
-
-            _getKLine_dic[symbol] = createSequelize(`db/${type}_${symbol}.db`).define<BaseType.KLine, BaseType.KLine>(symbol,
+    export const getKLine = toCacheFunc(
+        (type: '1m' | '500ms', symbol: BaseType.BinanceSymbol | BaseType.BitmexSymbol) =>
+            createSequelize(`db/${type}_${symbol}.db`).define<BaseType.KLine, BaseType.KLine>(symbol,
                 {
                     id: { type: Sequelize.BIGINT, primaryKey: true },
                     open: { type: Sequelize.DOUBLE },
@@ -66,22 +54,15 @@ export namespace DB {
                 },
                 {
                     tableName: symbol,
-                    timestamps: false
+                    timestamps: false,
                 }
             )
-        }
+    )
 
-        return _getKLine_dic[symbol]
-    }
 
-    //_________________________________________________________________________________//
-    const _getBitmex500msOrderBook_dic: { [symbol: string]: Sequelize.Model<BaseType.OrderBookDB, BaseType.OrderBookDB> } = Object.create(null)
-
-    export const getBitmex500msOrderBook = (symbol: BaseType.BitmexSymbol) => {
-
-        if (_getBitmex500msOrderBook_dic[symbol] === undefined) {
-
-            _getBitmex500msOrderBook_dic[symbol] = createSequelize(`db/500msOrderBook_${symbol}.db`).define<BaseType.OrderBookDB, BaseType.OrderBookDB>(symbol,
+    export const getBitmex500msOrderBook = toCacheFunc(
+        (symbol: BaseType.BitmexSymbol) =>
+            createSequelize(`db/500msOrderBook_${symbol}.db`).define<BaseType.OrderBookDB, BaseType.OrderBookDB>(symbol,
                 {
                     id: { type: Sequelize.BIGINT, primaryKey: true },
                     buy1_price: { type: Sequelize.BIGINT },
@@ -107,11 +88,9 @@ export namespace DB {
                 },
                 {
                     tableName: symbol,
-                    timestamps: false
+                    timestamps: false,
                 }
             )
-        }
+    )
 
-        return _getBitmex500msOrderBook_dic[symbol]
-    }
 }
