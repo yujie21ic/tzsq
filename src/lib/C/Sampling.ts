@@ -8,6 +8,7 @@ export class Sampling<T extends { id: number }>{
     private _rule: BaseType.Omit<{ [K in keyof T]: '累加' | '最新' | '开' | '高' | '低' | '收' }, 'id'>
     private 收key = ''
 
+    //await 和 in 保持一样
     onNew = async (item: T) => { }
     onUpdate = async (item: T) => { }
     onComplete = async (item: T) => { }
