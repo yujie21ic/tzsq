@@ -51,7 +51,7 @@ export class SyncKLine {
         await table.sync()
 
         //
-        const lastItem = await table.findOne({
+        const lastItem = await table.findOne<{}>({
             raw: true,
             order: [['id', 'desc']],
         })

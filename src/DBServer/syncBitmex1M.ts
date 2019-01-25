@@ -18,7 +18,7 @@ export const syncBitmex1M = (symbol: BaseType.BitmexSymbol) =>
             }
         },
         getData: async (start: number) => {
-            const tickArr = (await DB.getKLine('500ms', symbol).findAll({
+            const tickArr = (await DB.getKLine('500ms', symbol).findAll<{}>({
                 raw: true,
                 where: {
                     id: {
