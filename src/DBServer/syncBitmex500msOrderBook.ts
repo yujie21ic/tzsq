@@ -39,7 +39,7 @@ export const syncBitmex500msOrderBook = async () => {
                 samplingDic[symbol].onComplete = async item => {
 
                     try {
-                        table.create({
+                        await table.create({
                             id: item.id,
                             buy1_price: item.buy[0].price,
                             buy1_size: item.buy[0].size,
