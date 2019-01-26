@@ -39,7 +39,7 @@ export const syncBitmex500msOrderBook = async () => {
                 //创建表
                 table.sync()
 
-                samplingDic[symbol].onComplete = async item => {
+                samplingDic[symbol].onComplete2 = async item => {
 
                     try {
                         table.create({
@@ -75,7 +75,7 @@ export const syncBitmex500msOrderBook = async () => {
                 }
             }
 
-            samplingDic[symbol].in({
+            samplingDic[symbol].in2({
                 id: timeID.timestampTo500msID(new Date(timestamp).getTime()),
                 buy: bids.map(盘口map),
                 sell: asks.map(盘口map),

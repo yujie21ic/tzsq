@@ -28,18 +28,20 @@ export class RealDataBase {
 
         //>5000 删除2000
         if (length > 5000) {
-            this.jsonSync.rawData.startTick += 2000
-            this.jsonSync.rawData.bitmex.XBTUSD.data.splice(0, 2000)
-            this.jsonSync.rawData.bitmex.XBTUSD.orderBook.splice(0, 2000)
 
-            this.jsonSync.rawData.bitmex.ETHUSD.data.splice(0, 2000)
-            this.jsonSync.rawData.bitmex.ETHUSD.orderBook.splice(0, 2000)
+            const deleteCount = 2000
+            this.jsonSync.rawData.startTick += deleteCount
+            this.jsonSync.rawData.bitmex.XBTUSD.data.splice(0, deleteCount)
+            this.jsonSync.rawData.bitmex.XBTUSD.orderBook.splice(0, deleteCount)
 
-            this.jsonSync.rawData.binance.btcusdt.data.splice(0, 2000)
-            this.jsonSync.rawData.binance.btcusdt.orderBook.splice(0, 2000)
+            this.jsonSync.rawData.bitmex.ETHUSD.data.splice(0, deleteCount)
+            this.jsonSync.rawData.bitmex.ETHUSD.orderBook.splice(0, deleteCount)
 
-            this.jsonSync.rawData.binance.ethusdt.data.splice(0, 2000)
-            this.jsonSync.rawData.binance.ethusdt.orderBook.splice(0, 2000)
+            this.jsonSync.rawData.binance.btcusdt.data.splice(0, deleteCount)
+            this.jsonSync.rawData.binance.btcusdt.orderBook.splice(0, deleteCount)
+
+            this.jsonSync.rawData.binance.ethusdt.data.splice(0, deleteCount)
+            this.jsonSync.rawData.binance.ethusdt.orderBook.splice(0, deleteCount)
         }
     }
 
@@ -94,16 +96,16 @@ export class RealDataBase {
                 buy: '最新',
                 sell: '最新',
             })
-            this.on盘口Dic[p.symbol].onNew = async item => p.xxxxxxxx.____push(item)
-            this.on盘口Dic[p.symbol].onUpdate = async item => p.xxxxxxxx.____updateLast(item)
-            this.on盘口Dic[p.symbol].in({
+            this.on盘口Dic[p.symbol].onNew2 = async item => p.xxxxxxxx.____push(item)
+            this.on盘口Dic[p.symbol].onUpdate2 = async item => p.xxxxxxxx.____updateLast(item)
+            this.on盘口Dic[p.symbol].in2({
                 id: this.data.startTick,
                 buy: [],
                 sell: [],
             })
         }
 
-        this.on盘口Dic[p.symbol].in(p.orderBook)
+        this.on盘口Dic[p.symbol].in2(p.orderBook)
     }
 
 
@@ -142,9 +144,9 @@ export class RealDataBase {
                 sellSize: '累加',
                 sellCount: '累加',
             })
-            this.on着笔Dic[p.symbol].onNew = async item => p.xxxxxxxx.____push(item)
-            this.on着笔Dic[p.symbol].onUpdate = async item => p.xxxxxxxx.____updateLast(item)
-            this.on着笔Dic[p.symbol].in({
+            this.on着笔Dic[p.symbol].onNew2 = async item => p.xxxxxxxx.____push(item)
+            this.on着笔Dic[p.symbol].onUpdate2 = async item => p.xxxxxxxx.____updateLast(item)
+            this.on着笔Dic[p.symbol].in2({
                 id: this.data.startTick,
                 open: NaN,
                 high: NaN,
@@ -157,7 +159,7 @@ export class RealDataBase {
             })
         }
 
-        this.on着笔Dic[p.symbol].in({
+        this.on着笔Dic[p.symbol].in2({
             id: tick,
             open: p.price,
             high: p.price,
