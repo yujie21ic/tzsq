@@ -19,7 +19,10 @@ export const syncBitmex500msOrderBook = async () => {
         { theme: 'orderBook10', filter: 'ETHUSD' },
     ])
 
-    ws.onStatusChange = () => samplingDic = Object.create(null)
+    ws.onStatusChange = () => {
+        samplingDic = Object.create(null)
+        console.log(new Date().toLocaleString(), 'ws isConnected ', ws.isConnected)
+    }
 
     ws.onmessage = frame => {
         if (frame.table === 'orderBook10' && (frame.action === 'update' || frame.action === 'partial')) {
