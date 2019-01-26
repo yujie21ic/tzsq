@@ -6,6 +6,7 @@
     "greate": "node --max_old_space_size=8192 -r ts-node/register ./src/lib/BitMEX/BitMEXGreate",
     "order_server": "node --max_old_space_size=8192 -r ts-node/register ./src/OrderServer",
     "db_server": "node --max_old_space_size=8192 -r ts-node/register ./src/DBServer",
+    "pk_server": "node --max_old_space_size=8192 -r ts-node/register ./src/PKServer",
     "i": "install-app-deps",
     "test": "mocha -r ts-node/register src/lib/*/*-test.ts",
     "w": "tsc -w",

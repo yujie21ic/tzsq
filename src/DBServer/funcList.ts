@@ -1,7 +1,6 @@
 import { BaseType } from '../lib/BaseType'
 
 export const funcList = {
-
     //K线
     getKLine: {
         req: {
@@ -21,40 +20,5 @@ export const funcList = {
             buyCount: 0,
             sellCount: 0
         }]
-    },
-
-    //现货着笔
-    getBinanceTick: {
-        req: {
-            symbol: '' as BaseType.BinanceSymbol,
-            startTime: 0,
-            endTime: 0
-        },
-        res: [{
-            id: 0,
-            timestamp: 0,
-            price: 0,
-            size: 0, //主动买是正  主动卖是负
-        }]
-    },
-
-    //期货才有盘口
-    getBitmex500msOrderBook: {
-        req: {
-            symbol: '' as BaseType.BitmexSymbol,
-            startTime: 0,
-            endTime: 0
-        },
-        res: [{
-            id: 0,
-            buy: [{
-                price: 0,
-                size: 0,
-            }],
-            sell: [{
-                price: 0,
-                size: 0,
-            }],
-        }]
-    }
+    },  
 }

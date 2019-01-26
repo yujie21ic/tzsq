@@ -5,6 +5,7 @@ import { config } from '../config'
 import { BaseType } from '../lib/BaseType'
 import { DBClient } from '../DBServer/DBClient'
 import { timeID } from '../lib/F/timeID'
+import { PKClient } from '../PKServer/PKClient'
 
 export namespace DataClient {
 
@@ -32,7 +33,7 @@ export namespace DataClient {
 
         private get_bitmex_orderBook = async (symbol: BaseType.BitmexSymbol, startTime: number) => {
 
-            const { data, error, msg } = await DBClient.func.getBitmex500msOrderBook({
+            const { data, error, msg } = await PKClient.func.getBitmex500msOrderBook({
                 symbol,
                 startTime,
                 endTime: startTime + 加载多少秒数据 * 1000
