@@ -1,7 +1,10 @@
 .vscode
 .idea
-node_modules
-build 
-src/config.ts
 
+node_modules
+package-lock.json
+
+build 
+
+src/config.ts
 db/*
