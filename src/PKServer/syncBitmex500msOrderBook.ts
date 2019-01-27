@@ -39,7 +39,7 @@ export const syncBitmex500msOrderBook = async () => {
                 //创建表
                 table.sync()
 
-                samplingDic[symbol].onComplete2 = async item => {
+                samplingDic[symbol].onComplete2 = item => {
 
                     try {
                         table.create({
