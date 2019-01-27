@@ -107,8 +107,8 @@ export class RealData extends RealDataBase {
                     timestamp: new Date(timestamp).getTime(),
                     orderBook: {
                         id: Math.floor(new Date(timestamp).getTime() / RealDataBase.单位时间),
-                        buy: bids.map(盘口map).slice(0, 10),
-                        sell: asks.map(盘口map).slice(0, 10),
+                        buy: bids.map(盘口map).slice(0, 5),
+                        sell: asks.map(盘口map).slice(0, 5),
                     }
                 })
 

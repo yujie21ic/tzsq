@@ -4,8 +4,7 @@ import { sum } from 'ramda'
 import { Subject } from 'rxjs'
 import { 指标 } from '../lib/指标'
 import { Sampling } from '../lib/C/Sampling'
-import { kvs } from '../lib/F/kvs'
-import { lastNumber } from '../lib/F/lastNumber';
+import { kvs } from '../lib/F/kvs' 
 
 
 export class RealDataBase {
@@ -261,8 +260,8 @@ export class RealDataBase {
 
         const 成交次数买 = 指标.lazyMapCache(() => data.length, i => data[i].buyCount)
         const 成交次数卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellCount)
-        console.log("成交次数买" + lastNumber(成交次数买))
-        console.log("成交次数卖" + lastNumber(成交次数卖))
+   
+        
         const 成交量买均线1 = 指标.累加(
             指标.lazyMapCache(() => 成交量买.length, i => 成交量买[i]),
             多少秒均线,
