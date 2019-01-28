@@ -260,8 +260,17 @@ export class RealDataBase {
 
         const 成交次数买 = 指标.lazyMapCache(() => data.length, i => data[i].buyCount)
         const 成交次数卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellCount)
-   
+        const 成交次数买均线 = 指标.累加(
+            指标.lazyMapCache(() => 成交次数买.length, i => 成交次数买[i]),
+            5,
+            RealDataBase.单位时间
+        )
         
+        const 成交次数卖均线 = 指标.累加(
+            指标.lazyMapCache(() => 成交次数卖.length, i => 成交次数卖[i]),
+            5,
+            RealDataBase.单位时间
+        )
         const 成交量买均线1 = 指标.累加(
             指标.lazyMapCache(() => 成交量买.length, i => 成交量买[i]),
             多少秒均线,
@@ -288,17 +297,7 @@ export class RealDataBase {
 
         const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
         const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
-        //const 净成交量 = 指标.lazyMapCache(() => data.length, i => Math.min(Math.abs(成交量买[i]), Math.abs(成交量卖[i]))+(Math.abs( Math.max(Math.abs(成交量买[i]), Math.abs(成交量卖[i]))-Math.min(Math.abs(成交量买[i]), Math.abs(成交量卖[i])))/2))
-        // const 净成交量 = 指标.累加(
-        //     指标.lazyMapCache(() => Math.min(成交量买.length, 成交量卖.length), i => 成交量买[i] - 成交量卖[i]),
-        //     多少秒均线,
-        //     RealDataBase.单位时间
-        // )
-        //const 净成交量均线1 = 指标.均线(净成交量1, 多少秒均线, RealDataBase.单位时间)
-        //const 净成交量均线 = 指标.lazyMapCache(() => Math.min(成交量买均线.length, 波动率.length), i =>Math.min(Math.abs(成交量买均线[i]), Math.abs(成交量卖均线[i]))+(Math.abs( Math.max(Math.abs(成交量买均线[i]), Math.abs(成交量卖均线[i]))-Math.min(Math.abs(成交量买均线[i]), Math.abs(成交量卖均线[i])))/2))
-
-        //const 成交量波动率比值 = 指标.lazyMapCache(() => Math.min(净成交量.length, 波动率.length), i => 净成交量[i] / 波动率[i])
-
+     
 
         const 净盘口 = 指标.累加(
             指标.lazyMapCache(() => Math.min(盘口买.length, 盘口卖.length), i => 盘口买[i] + 盘口卖[i]),
@@ -383,6 +382,8 @@ export class RealDataBase {
             成交量买均线1,
             成交量卖均线1,
             成交量次数均线1,
+            成交次数买均线,
+            成交次数卖均线,
             阻力笔,
         }
     }
