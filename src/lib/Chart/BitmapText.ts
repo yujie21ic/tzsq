@@ -15,17 +15,17 @@ export class BitmapText extends Container {
     }) {
         super()
 
+        this._anchor = p.anchor
+
         this._text = new Text('', new TextStyle({
             fontSize: p.fontSize,
             fill: p.fill,
         }))
-        this._anchor = p.anchor
-
         this.addChild(this._text)
     }
 
     set fill(n: number) {
-        if (n !== this._text.style.fontSize) {
+        if (n !== this._text.style.fill) {
             this._text.cacheAsBitmap = false
             this._text.style = new TextStyle({
                 fontSize: this._text.style.fontSize,
