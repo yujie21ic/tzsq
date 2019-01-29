@@ -86,8 +86,9 @@ export class Crosshairs extends Container {
         this.g.clear()
         this.g.lineStyle(1, 0xaaaaaa)
 
-        //横线
-        if (this.visible && y < height) {
+
+        if (this.visible && y < height && x < width) {
+            //横线 y < height
             this.g.moveTo(0, y)
             this.g.lineTo(width, y)
             this.价格高亮render({
@@ -95,12 +96,8 @@ export class Crosshairs extends Container {
                 x: width,
                 y: y
             })
-        } else {
-            this.价格高亮render()
-        }
 
-        //竖线
-        if (this.visible && x < width) {
+            //竖线 x < width
             this.g.moveTo(x, 0)
             this.g.lineTo(x, height)
 
@@ -110,6 +107,7 @@ export class Crosshairs extends Container {
                 y: height
             })
         } else {
+            this.价格高亮render()
             this.时间高亮render()
         }
     }
