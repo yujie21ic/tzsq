@@ -15,7 +15,7 @@ export class TickBase {
     nowTickSymbol: BaseType.BitmexSymbol = 'XBTUSD'
     nowChart = keys(Tick行情____config)[0]
 
-    constructor() {
+    constructor(element: HTMLElement) {
 
         window.addEventListener('mousedown', e => {
             if (e.button === 0) {
@@ -61,7 +61,7 @@ export class TickBase {
 
 
 
-        chartInit(document.querySelector('#root') as HTMLElement, () => {
+        chartInit(element, () => {
             const d = this.real.dataExt[this.nowTickSymbol]
 
             const xxx = lastNumber(d.现货.价格均线) - lastNumber(d.期货.价格均线) //<------------

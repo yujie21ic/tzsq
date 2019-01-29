@@ -9,8 +9,8 @@ class Tick复盘 extends TickBase {
     title = new Date(windowExt.startTime).toLocaleString()
     real = new DataClient.RealData__History()
 
-    constructor() {
-        super()
+    constructor(element: HTMLElement) {
+        super(element)
 
         this.nowTickSymbol = windowExt.symbol
 
@@ -56,4 +56,4 @@ class Tick复盘 extends TickBase {
 
 }
 
-new Tick复盘()
+new Tick复盘(document.querySelector('#root') as HTMLElement)
