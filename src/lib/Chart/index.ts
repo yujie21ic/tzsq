@@ -211,28 +211,3 @@ const chartRender = () => {
     })
 
 }
-
-
-
-import * as React from 'react'
-
-export const CreateChart = (func: typeof dataSourceFunc) =>
-
-    class Chart extends React.PureComponent {
-
-        componentWillMount() {
-        }
-
-        init = (element: HTMLElement | null) => {
-            if (element !== null) {
-                chartInit(func, element)
-            }
-        }
-
-        render() {
-            return <div style={{ width: '100%', height: '100%' }} ref={this.init}>
-
-            </div>
-        }
-
-    }
