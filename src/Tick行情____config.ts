@@ -119,7 +119,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         },
         {
             heightPercentage: 0.3,
-            //和下一张重叠: true,
+            numberColor: 波动率颜色,
+            numberX: 100,
             layerList: [
                 layer(LineLayer, { data: d.期货.波动率, color: 波动率颜色 }),
             ]
@@ -127,23 +128,11 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
         {
             heightPercentage: 0.2,
-            和下一张重叠: true,
-            numberColor: 买颜色,
-            numberX: 100,
             layerList: [
                 layer(LineLayer, { data: d.期货.成交次数买均线, color: 买颜色 }),
-            ]
-
-        },
-        {
-            heightPercentage: 0.2,
-            和下一张重叠: true,
-            numberColor: 卖颜色,
-            layerList: [
                 layer(LineLayer, { data: d.期货.成交次数卖均线, color: 卖颜色 }),
             ]
         },
-
 
     ],
     双价格图和成交量: (d, d2) => [

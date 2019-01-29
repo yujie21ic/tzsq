@@ -120,8 +120,11 @@ export class Coordinate extends Container {
             g.lineTo(x偏移 + width + 8, y)
             let text = this.textArr[this.III]
             this.III += 1
+
+            //
+
             text.fill = numberColor === undefined ? 0xaaaaaa : numberColor
-            text.text = value.toFixed(2)
+            text.text = (value > 10000 * 10) ? (value / 10000) + '万' : value.toFixed(2)
             text.x = x偏移 + width + 15
             text.y = y
             text.visible = true
