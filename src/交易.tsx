@@ -13,7 +13,7 @@ const rpc = OrderClient.rpc.func
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
 
-class Item extends React.PureComponent<{ symbol: BaseType.BitmexSymbol }> {
+class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
 
     get止损() {
         const arr = orderClient.jsonSync.rawData.symbol[this.props.symbol].活动委托.filter(v => v.type === '止损')
