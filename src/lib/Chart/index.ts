@@ -42,6 +42,11 @@ let dataSourceFunc: () => {
     }[]
 }
 
+import PixiFps from 'pixi-fps'
+
+
+
+
 export const chartInit = (element: HTMLElement, func: typeof dataSourceFunc) => {
 
     const pixiApplication = new Application({
@@ -56,6 +61,7 @@ export const chartInit = (element: HTMLElement, func: typeof dataSourceFunc) => 
     pixiApplication.stage.addChild(坐标刻度)
     pixiApplication.stage.addChild(layerContainer)
     pixiApplication.stage.addChild(十字光标)
+    pixiApplication.stage.addChild(new PixiFps())
 
     //
     window.addEventListener('mousemove', e => {
