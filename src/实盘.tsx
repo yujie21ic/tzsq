@@ -1,8 +1,19 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { Tick行情 } from './Tick行情'
 import { 交易 } from './交易'
 import { 提醒 } from './提醒'
+
+import { DataClient } from './RealDataServer/DataClient'
+import { TickBase } from './TickBase'
+
+class Tick行情 extends TickBase {
+    title = '实时'
+    real = new DataClient.RealData__Client()
+
+    constructor(element: HTMLElement) {
+        super(element)
+    }
+}
 
 class 实盘 extends React.PureComponent {
 
