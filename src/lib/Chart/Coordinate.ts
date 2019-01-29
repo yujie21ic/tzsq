@@ -71,7 +71,7 @@ export class Coordinate extends Container {
 
 
 
-    render({ numberColor, width, startY, height, top, bottom, toY }: { numberColor?: number, startY: number, width: number, height: number, top: number, bottom: number, toY: (value: number) => number }) {
+    render({ numberColor, numberX, width, startY, height, top, bottom, toY }: { numberColor?: number, numberX?: number, startY: number, width: number, height: number, top: number, bottom: number, toY: (value: number) => number }) {
 
 
         //Temp
@@ -104,6 +104,8 @@ export class Coordinate extends Container {
 
         const { g } = this
 
+        const x偏移 = (numberX === undefined ? 0 : numberX)
+
         //图表刻度 
         g.lineStyle(1, 0x222222)
         arr.forEach(({ value, y }) => {
@@ -114,13 +116,13 @@ export class Coordinate extends Container {
         //图表刻度数字
         g.lineStyle(1, 0xffffff)
         arr.forEach(({ value, y }) => {
-            g.moveTo(width, y)
-            g.lineTo(width + 8, y)
+            g.moveTo(x偏移 + width, y)
+            g.lineTo(x偏移 + width + 8, y)
             let text = this.textArr[this.III]
             this.III += 1
             text.fill = numberColor === undefined ? 0xaaaaaa : numberColor
             text.text = value.toFixed(2)
-            text.x = width + 15
+            text.x = x偏移 + width + 15
             text.y = y
             text.visible = true
         })

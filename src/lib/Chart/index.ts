@@ -35,6 +35,7 @@ let dataSourceFunc: () => {
     right: number
     items: {
         numberColor?: number
+        numberX?: number
         yCoordinate?: '普通' | '对数'
         heightPercentage: number
         和下一张重叠?: boolean
@@ -160,6 +161,7 @@ const chartRender = () => {
 
         坐标刻度.render({
             numberColor: v.numberColor,
+            numberX: v.numberX,
             startY,
             width,
             height: layerHeight,

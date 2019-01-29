@@ -106,6 +106,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         {
             heightPercentage: 0.5,
             numberColor: ETH颜色,
+            numberX: 100,
             layerList: [
                 layer(LineLayer, { data: d2.ETHUSD.期货.价格, color: ETH颜色 })
             ]
