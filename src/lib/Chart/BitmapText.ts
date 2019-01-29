@@ -49,4 +49,8 @@ export class BitmapText extends Container {
             this._text.y = -this._text.height * this._anchor.y
         }
     }
+
+    destroy() {
+        this._text.destroy({ texture: true, baseTexture: true })
+    }
 } 

@@ -116,7 +116,7 @@ const chartRender = () => {
 
 
     while (layerContainer.children.length > 0) {
-        layerContainer.removeChildAt(0)
+        (layerContainer.removeChildAt(0) as Layer<any>).destroy()
     }
 
     let price = NaN
