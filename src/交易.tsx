@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as ReactDOM from 'react-dom'
 import { OrderClient } from './OrderServer/OrderClient'
 import { config } from './config'
 import { BaseType } from './lib/BaseType'
