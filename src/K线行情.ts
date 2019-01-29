@@ -95,7 +95,7 @@ window.addEventListener('mousedown', e => {
 })
 
 
-chartInit(() => {
+chartInit(document.querySelector('#root') as HTMLElement, () => {
     const arr = S.data
     const klineData = arr
 

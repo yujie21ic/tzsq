@@ -61,7 +61,7 @@ export class TickBase {
 
 
 
-        chartInit(() => {
+        chartInit(document.querySelector('#root') as HTMLElement, () => {
             const d = this.real.dataExt[this.nowTickSymbol]
 
             const xxx = lastNumber(d.现货.价格均线) - lastNumber(d.期货.价格均线) //<------------

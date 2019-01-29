@@ -42,7 +42,7 @@ let dataSourceFunc: () => {
     }[]
 }
 
-export const chartInit = (func: typeof dataSourceFunc, element?: HTMLElement) => {
+export const chartInit = (element: HTMLElement, func: typeof dataSourceFunc) => {
 
     const pixiApplication = new Application({
         width: 800,
@@ -63,11 +63,7 @@ export const chartInit = (func: typeof dataSourceFunc, element?: HTMLElement) =>
         mouseY = e.clientY
     })
 
-    if (element === undefined) {
-        document.querySelector('#root')!.appendChild(pixiApplication.view)//!!!!
-    } else {
-        element.appendChild(pixiApplication.view)//!!!!
-    }
+    element.appendChild(pixiApplication.view)
 
     const onResize = () => pixiApplication.renderer.resize(document.body.clientWidth, document.body.clientHeight)
 
