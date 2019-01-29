@@ -71,7 +71,7 @@ export class Coordinate extends Container {
 
 
 
-    render({ width, startY, height, top, bottom, toY }: { startY: number, width: number, height: number, top: number, bottom: number, toY: (value: number) => number }) {
+    render({ numberColor, width, startY, height, top, bottom, toY }: { numberColor: number, startY: number, width: number, height: number, top: number, bottom: number, toY: (value: number) => number }) {
 
 
         //Temp
@@ -118,6 +118,7 @@ export class Coordinate extends Container {
             g.lineTo(width + 8, y)
             let text = this.textArr[this.III]
             this.III += 1
+            text.fill = numberColor === undefined ? 0xaaaaaa : numberColor
             text.text = value.toFixed(2)
             text.x = width + 15
             text.y = y

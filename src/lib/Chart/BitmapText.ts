@@ -1,15 +1,10 @@
-import { Container, Text, Texture, TextStyle, Sprite } from 'pixi.js'
-import { pixiApplication } from './pixiApplication'
-export class BitmapText extends Container {
-    private static __dic__: { [key: string]: { [char: string]: Texture } } = Object.create(null)
-    private textureDic: { [char: string]: Texture }
-    private textContainer = new Container()
-    private style: TextStyle
+import { Container, Text, TextStyle } from 'pixi.js'
 
-    private anchor: {
-        x: number
-        y: number
-    }
+export class BitmapText extends Container {
+
+    private _text: Text
+    private _anchor: { x: number, y: number }
+
     constructor(p: {
         fontSize: number
         fill: number
@@ -20,54 +15,38 @@ export class BitmapText extends Container {
     }) {
         super()
 
-        this.addChild(this.textContainer)
-
-        this.style = new TextStyle({
+        this._text = new Text('', new TextStyle({
             fontSize: p.fontSize,
-            fill: p.fill
-        })
-        this.anchor = p.anchor
+            fill: p.fill,
+        }))
+        this._anchor = p.anchor
 
-        const key = JSON.stringify([p.fontSize, p.fill])
-
-        if (BitmapText.__dic__[key] === undefined) {
-            BitmapText.__dic__[key] = Object.create(null)
-        }
-
-        this.textureDic = BitmapText.__dic__[key]
+        this.addChild(this._text)
     }
 
-    private getTexture(char: string) {
-        if (this.textureDic[char] === undefined) {
-            this.textureDic[char] = pixiApplication.renderer.generateTexture(new Text(char, this.style))
+    set fill(n: number) {
+        if (n !== this._text.style.fontSize) {
+            this._text.cacheAsBitmap = false
+            this._text.style = new TextStyle({
+                fontSize: this._text.style.fontSize,
+                fill: n,
+            })
+            this._text.cacheAsBitmap = true
         }
-        return this.textureDic[char]
     }
 
-    private _text = ''
 
     get text() {
-        return this._text
+        return this._text.text
     }
+
     set text(str: string) {
-        if (this._text !== str) {
-            this._text = str
-
-            while (this.textContainer.children.length > 0) {
-                this.textContainer.removeChildAt(0)
-            }
-
-            let startX = 0
-            str.split('').forEach(v => {
-                let sp = new Sprite(this.getTexture(v))
-                this.textContainer.addChild(sp)
-
-                sp.x = startX
-                startX += sp.width
-            })
-
-            this.textContainer.x = -this.textContainer.width * this.anchor.x
-            this.textContainer.y = -this.textContainer.height * this.anchor.y
+        if (this._text.text !== str) {
+            this._text.cacheAsBitmap = false
+            this._text.text = str
+            this._text.cacheAsBitmap = true
+            this._text.x = -this._text.width * this._anchor.x
+            this._text.y = -this._text.height * this._anchor.y
         }
     }
-}
+} 
