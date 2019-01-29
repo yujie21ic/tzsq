@@ -9,7 +9,7 @@ const 计分板倍数 = config.account![windowExt.accountName].计分板倍数 |
 
 const orderClient = new OrderClient(config.account![windowExt.accountName].cookie)
 
-class APP extends React.Component {
+class APP extends React.PureComponent {
 
     componentWillMount() {
         const f = () => {

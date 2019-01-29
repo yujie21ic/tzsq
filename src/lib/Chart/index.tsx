@@ -1,6 +1,5 @@
-import { Container } from 'pixi.js'
+import { Application, Container } from 'pixi.js'
 import { Layer } from './Layer/Layer'
-import { pixiApplication } from './pixiApplication'
 import { Coordinate } from './Coordinate'
 import { theme } from './theme'
 import { Crosshairs } from './Crosshairs'
@@ -24,7 +23,7 @@ export type LayerItem = [LayerClass<any>, any, '__用layer函数创建__']
 
 export const getIndex = () => indexX
 
-export const layer = <P>(a: LayerClass<P>, b: P): LayerItem => [a, b] as any
+export const layer = <P extends any>(a: LayerClass<P>, b: P): LayerItem => [a, b] as any
 
 let dataSourceFunc: () => {
     title: string
@@ -44,6 +43,16 @@ let dataSourceFunc: () => {
 }
 
 export const chartInit = (func: typeof dataSourceFunc) => {
+
+    const pixiApplication = new Application({
+        width: 800,
+        height: 600,
+        resolution: window.devicePixelRatio,
+        autoResize: true,
+        antialias: false,
+        backgroundColor: 0x000000
+    })
+
     pixiApplication.stage.addChild(坐标刻度)
     pixiApplication.stage.addChild(layerContainer)
     pixiApplication.stage.addChild(十字光标)
@@ -196,5 +205,20 @@ const chartRender = () => {
         xStr: formatDate(new Date(startTime + indexX * 每一根是), v => `${v.hh}:${v.mm}:${v.ss}:${v.msmsms}`),
         yStr: price.toFixed(2)
     })
+
+}
+
+
+
+import * as React from 'react'
+
+export class Chart extends React.PureComponent {
+
+    componentWillMount() {
+    }
+
+    render() {
+        return 123
+    }
 
 }

@@ -24,7 +24,7 @@ export namespace dialog {
     const clear = () => show(<div />)
 
 
-    class XXX extends React.Component<{ 
+    class XXX extends React.PureComponent<{ 
         title: string
         value: string
         onOK: (str: string) => void
