@@ -59,13 +59,9 @@ const 成交量买卖曲线 = (d: D, d2: D2) => [
     layer(LineLayer, { data: d2.ETHUSD.期货.成交量均线1, color: ETH颜色 }),
     layer(LineLayer, { data: d.期货.成交量买均线1, color: 买颜色 }),
     layer(LineLayer, { data: d.期货.成交量卖均线1, color: 卖颜色 }),
-    //layer(LineLayer, { data: d.期货.净成交量均线, color: ETH颜色 }),
-    layer(TextLayer, {
-        text:
-            `30秒成交量曲线`,
-        color: ETH颜色
-    })
+    //layer(LineLayer, { data: d.期货.净成交量均线, color: ETH颜色 }), 
 ]
+
 const 成交量买卖速度曲线 = (d: D, d2: D2) => [
     layer(LineLayer, { data: d.期货.成交次数卖, color: 卖颜色 }),
     layer(LineLayer, { data: d.期货.成交次数买, color: 买颜色 }),
