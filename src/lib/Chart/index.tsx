@@ -42,7 +42,7 @@ let dataSourceFunc: () => {
     }[]
 }
 
-export const chartInit = (func: typeof dataSourceFunc) => {
+export const chartInit = (func: typeof dataSourceFunc, element?: HTMLElement) => {
 
     const pixiApplication = new Application({
         width: 800,
@@ -63,7 +63,11 @@ export const chartInit = (func: typeof dataSourceFunc) => {
         mouseY = e.clientY
     })
 
-    document.querySelector('#root')!.appendChild(pixiApplication.view)//!!!!
+    if (element === undefined) {
+        document.querySelector('#root')!.appendChild(pixiApplication.view)//!!!!
+    } else {
+        element.appendChild(pixiApplication.view)//!!!!
+    }
 
     const onResize = () => pixiApplication.renderer.resize(document.body.clientWidth, document.body.clientHeight)
 
@@ -212,13 +216,23 @@ const chartRender = () => {
 
 import * as React from 'react'
 
-export class Chart extends React.PureComponent {
+export const CreateChart = (func: typeof dataSourceFunc) =>
 
-    componentWillMount() {
+    class Chart extends React.PureComponent {
+
+        componentWillMount() {
+        }
+
+        init = (element: HTMLElement | null) => {
+            if (element !== null) {
+                chartInit(func, element)
+            }
+        }
+
+        render() {
+            return <div style={{ width: '100%', height: '100%' }} ref={this.init}>
+
+            </div>
+        }
+
     }
-
-    render() {
-        return 123
-    }
-
-}
