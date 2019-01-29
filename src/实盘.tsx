@@ -15,7 +15,7 @@ class Tick行情 extends TickBase {
     }
 }
 
-class 实盘 extends React.PureComponent {
+class 实盘 extends React.Component {
 
     initChart = (element: HTMLElement | null) => {
         if (element !== null) {

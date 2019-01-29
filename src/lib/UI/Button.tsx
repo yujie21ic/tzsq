@@ -18,7 +18,7 @@ const buttonStyle = style({
     }
 })
 
-export class Button extends React.PureComponent<{
+export class Button extends React.Component<{
     bgColor: string
     text: string
     left: () => Promise<{

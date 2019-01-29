@@ -7,7 +7,7 @@ import { DataClient } from './RealDataServer/DataClient'
 const realTickClient = new DataClient.RealData__Client()
 
 
-export class 提醒 extends React.PureComponent {
+export class 提醒 extends React.Component {
 
     dic: { [key: string]: number } = Object.create(null)
 

@@ -161,7 +161,7 @@ const Table = (props: {
 
 
 const realTickClient = new DataClient.RealData__Client()
-class APP extends React.PureComponent {
+class APP extends React.Component {
 
     nowType = '现货 btcusdt'
 

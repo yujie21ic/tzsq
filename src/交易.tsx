@@ -174,7 +174,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
 
 
 
-export class 交易 extends React.PureComponent {
+export class 交易 extends React.Component {
     componentWillMount() {
         const f = () => {
             requestAnimationFrame(f)
