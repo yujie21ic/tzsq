@@ -71,7 +71,7 @@ export class Coordinate extends Container {
 
 
 
-    render({ numberColor, width, startY, height, top, bottom, toY }: { numberColor: number, startY: number, width: number, height: number, top: number, bottom: number, toY: (value: number) => number }) {
+    render({ numberColor, width, startY, height, top, bottom, toY }: { numberColor?: number, startY: number, width: number, height: number, top: number, bottom: number, toY: (value: number) => number }) {
 
 
         //Temp
