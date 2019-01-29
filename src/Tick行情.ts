@@ -1,7 +1,7 @@
 import { DataClient } from './RealDataServer/DataClient'
 import { TickBase } from './TickBase'
 
-class Tick行情 extends TickBase {
+export class Tick行情 extends TickBase {
 
     title = '实时'
     real = new DataClient.RealData__Client()
@@ -11,4 +11,4 @@ class Tick行情 extends TickBase {
     }
 }
 
-new Tick行情(document.querySelector('#root') as HTMLElement)
+// new Tick行情(document.querySelector('#root') as HTMLElement)

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as ReactDOM from 'react-dom'
 import { speak } from './lib/C/speak'
 import { lastNumber } from './lib/F/lastNumber'
 import { mapObjIndexed } from './lib/F/mapObjIndexed'
@@ -8,7 +7,7 @@ import { DataClient } from './RealDataServer/DataClient'
 const realTickClient = new DataClient.RealData__Client()
 
 
-class APP extends React.PureComponent {
+export class 提醒 extends React.PureComponent {
 
     dic: { [key: string]: number } = Object.create(null)
 
@@ -34,8 +33,8 @@ class APP extends React.PureComponent {
 
         //BTC
         const XBTUSD现货 = realTickClient.dataExt.XBTUSD.现货
-        const volum = realTickClient.get期货多少秒内成交量('XBTUSD',30)
-        if (volum>200){
+        const volum = realTickClient.get期货多少秒内成交量('XBTUSD', 30)
+        if (volum > 200) {
             this.setAndSpeak(
                 '比 特 币 成交量',
                 volum,
@@ -99,8 +98,4 @@ class APP extends React.PureComponent {
             </pre>
         </div>
     }
-}
-
-
-
-ReactDOM.render(<APP />, document.querySelector('#root'))
+} 

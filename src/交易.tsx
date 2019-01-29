@@ -175,7 +175,7 @@ class Item extends React.PureComponent<{ symbol: BaseType.BitmexSymbol }> {
 
 
 
-class APP extends React.PureComponent {
+export class 交易 extends React.PureComponent {
     componentWillMount() {
         const f = () => {
             requestAnimationFrame(f)
@@ -206,7 +206,4 @@ class APP extends React.PureComponent {
             </div>
     }
 
-}
-
-
-ReactDOM.render(<APP />, document.querySelector('#root'))
+} 
