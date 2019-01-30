@@ -78,7 +78,15 @@ export const chartInit = (element: HTMLElement, func: typeof dataSourceFunc) => 
     setTimeout(onResize, 0) //pixi.js 一闪一闪的 bug   
 
     dataSourceFunc = func
-    pixiApplication.ticker.add(chartRender)
+
+
+    // 60fps
+    // pixiApplication.ticker.add(chartRender)
+
+
+    // 10fps
+    setInterval(chartRender, 1000 / 10)
+
 
     window.addEventListener('mouseover', () => 十字光标.visible = true)
     window.addEventListener('mouseout', () => 十字光标.visible = false)
