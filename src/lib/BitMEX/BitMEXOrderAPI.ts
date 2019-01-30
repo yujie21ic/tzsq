@@ -8,40 +8,42 @@ export namespace BitMEXOrderAPI {
     const 重试几次 = 100
     const 重试休息多少毫秒 = 30
 
-    const DDOS调用 = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError }>) => async (cookie: string, p: P) => {
-        let success = false
-        for (let i = 0; i < 重试几次; i++) {
-            const ret = await f(cookie, p)
+    const DDOS调用 = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError }>) =>
+        async (cookie: string, p: P) => {
+            let success = false
+            for (let i = 0; i < 重试几次; i++) {
+                const ret = await f(cookie, p)
 
-            if (ret.error === '网络错误') {
-                success = false
-                break
+                if (ret.error === '网络错误') {
+                    success = false
+                    break
+                }
+                else if (ret.error === undefined) {
+                    success = true
+                    break
+                }
+                await sleep(重试休息多少毫秒)
             }
-            else if (ret.error === undefined) {
-                success = true
-                break
-            }
-            await sleep(重试休息多少毫秒)
+            return success
         }
-        return success
-    }
 
-    const DDOS调用_ordStatus = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: { ordStatus: string } }>) => async (cookie: string, p: P) => {
-        let success = false
-        for (let i = 0; i < 重试几次; i++) {
-            const ret = await f(cookie, p)
-            if (ret.error === '网络错误') {
-                success = false
-                break
+    const DDOS调用_ordStatus = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: { ordStatus: string } }>) =>
+        async (cookie: string, p: P) => {
+            let success = false
+            for (let i = 0; i < 重试几次; i++) {
+                const ret = await f(cookie, p)
+                if (ret.error === '网络错误') {
+                    success = false
+                    break
+                }
+                else if (ret.error === undefined && ret.data !== undefined && ret.data.ordStatus === 'New') {
+                    success = true
+                    break
+                }
+                await sleep(重试休息多少毫秒)
             }
-            else if (ret.error === undefined && ret.data !== undefined && ret.data.ordStatus === 'New') {
-                success = true
-                break
-            }
-            await sleep(重试休息多少毫秒)
+            return success
         }
-        return success
-    }
 
     //需要判断 ordStatus
     export const maker = DDOS调用_ordStatus<{
