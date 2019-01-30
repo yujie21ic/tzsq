@@ -2,19 +2,20 @@ import { WebSocketClient } from '../lib/C/WebSocketClient'
 import { deepMapNullToNaN } from '../lib/F/deepMapNullToNaN'
 import { JSONRPCClient } from '../lib/C/JSONRPC'
 import { funcList, createJSONSync } from './____API____'
+import { config } from '../config'
 
 export class OrderClient {
 
     static rpc = new JSONRPCClient({
         funcList,
-        host: '34.245.14.85',
+        host: config.orderServerIP + '',
         port: 3456
     })
 
     jsonSync = createJSONSync()
 
     private ws = new WebSocketClient({
-        url: 'ws://34.245.14.85:4567'
+        url: `ws://${config.orderServerIP}:4567`
     })
 
     private 收到了消息 = false

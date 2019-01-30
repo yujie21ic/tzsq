@@ -1,5 +1,6 @@
 export type ConfigType = {
     ss: boolean
+    orderServerIP?: string
     tick历史加载多少秒?: number
     orderServer?: {
         [name: string]: string //cookie
