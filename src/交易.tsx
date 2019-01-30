@@ -4,6 +4,7 @@ import { config } from './config'
 import { BaseType } from './lib/BaseType'
 import { windowExt } from './windowExt'
 import { Button } from './lib/UI/Button'
+import { theme } from './lib/Chart/theme'
 
 const account = config.account![windowExt.accountName]
 const { cookie } = account
@@ -189,7 +190,7 @@ export class 交易 extends React.Component {
             <div style={{
                 backgroundColor: '#24292d',
                 margin: 'auto auto',
-                width: '350px',
+                width: `${theme.右边空白}px`,
                 padding: '10px 5px',
                 fontFamily: 'SourceHanSansSC-regular',
                 color: 'white',

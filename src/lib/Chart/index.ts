@@ -71,7 +71,7 @@ export const chartInit = (element: HTMLElement, func: typeof dataSourceFunc) => 
 
     element.appendChild(pixiApplication.view)
 
-    const onResize = () => pixiApplication.renderer.resize(document.body.clientWidth - 350, document.body.clientHeight)
+    const onResize = () => pixiApplication.renderer.resize(document.body.clientWidth - theme.右边空白, document.body.clientHeight)
 
     window.addEventListener('resize', onResize)
 
@@ -106,7 +106,7 @@ const chartRender = () => {
         setWindowTitle(title)
     }
 
-    const width = document.body.clientWidth - 350 - theme.RIGHT_WIDTH
+    const width = document.body.clientWidth - theme.右边空白 - theme.RIGHT_WIDTH
     const height = document.body.clientHeight - theme.BOTTOM_HEIGHT
 
     indexX = Math.round(left + (right - left) * (mouseX / width))

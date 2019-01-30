@@ -5,6 +5,7 @@ import { 提醒 } from './提醒'
 
 import { DataClient } from './RealDataServer/DataClient'
 import { TickBase } from './TickBase'
+import { theme } from './lib/Chart/theme'
 
 class Tick行情 extends TickBase {
     title = '实时'
@@ -26,7 +27,7 @@ class 实盘 extends React.Component {
     render() {
         return <div style={{ display: 'flex', height: '100%' }}>
             <div style={{ flex: '1 1 auto' }} ref={this.initChart} />
-            <div style={{ width: '350px' }}><交易 /><提醒 /></div>
+            <div style={{ width: `${theme.右边空白}px` }}><交易 /><提醒 /></div>
         </div>
     }
 }
