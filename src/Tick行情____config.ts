@@ -80,12 +80,6 @@ const 成交量买卖速度曲线 = (d: D, d2: D2) => [
 export const Tick行情____config: { [key in string]: ItemFunc } = {
 
     图表1: (d, d2) => [
-
-        // {
-        //     heightPercentage: 0.5,
-
-        //     layerList: 双价格(d)
-        // },
         {
             heightPercentage: 0.4,
             和下一张重叠: true,
@@ -93,17 +87,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             yCoordinate: '对数',
             layerList: [
                 layer(LineLayer, { data: d.期货.成交次数买均线2, color: 买颜色 }),
-              
-            ]
-        },
-        {
-            heightPercentage: 0.4,
-            和下一张重叠: true,
-            numberX: 100,
-            yCoordinate: '对数',
-            layerList: [
-             
-                layer(LineLayer, { data: d.期货.成交次数卖均线2, color: 卖颜色 }),
+                layer(LineLayer, { data: d.期货.成交次数卖均线2, color: 卖颜色, 临时参数: '倒过来显示' }),
 
             ]
         },
@@ -142,8 +126,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             //和下一张重叠: true,
             layerList: [
                 layer(LineLayer, { data: d.期货.盘口买, color: 买颜色 }),
-                layer(LineLayer, { data: d.期货.盘口卖, color: 卖颜色 }),
-                layer(LineLayer, { data: d.期货.净盘口, color:BTC颜色 }),
+                layer(LineLayer, { data: d.期货.盘口卖, color: 卖颜色, 临时参数: '变成负数' }),
+                layer(LineLayer, { data: d.期货.净盘口, color: BTC颜色 }),
             ]
         },
         // {

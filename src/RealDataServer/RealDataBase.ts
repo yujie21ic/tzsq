@@ -4,7 +4,7 @@ import { sum } from 'ramda'
 import { Subject } from 'rxjs'
 import { 指标 } from '../lib/指标'
 import { Sampling } from '../lib/C/Sampling'
-import { kvs } from '../lib/F/kvs' 
+import { kvs } from '../lib/F/kvs'
 
 
 export class RealDataBase {
@@ -256,8 +256,8 @@ export class RealDataBase {
 
 
         const 成交量买 = 指标.lazyMapCache(() => data.length, i => data[i].buySize)
-        const 成交量卖 = 指标.lazyMapCache(() => data.length, i => -data[i].sellSize)
-        
+        const 成交量卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellSize)
+
         const 成交次数买 = 指标.lazyMapCache(() => data.length, i => data[i].buyCount)
         const 成交次数卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellCount)
         const 成交次数买均线2 = 指标.累加(
@@ -306,7 +306,7 @@ export class RealDataBase {
         const 成交量卖均线 = 指标.均线(成交量卖, 多少秒均线, RealDataBase.单位时间)
 
         const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
-        const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => -sum(orderBook[i].sell.map(v => v.size)))
+        const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
         // const 盘口买均线 = 指标.均线(
         //     指标.lazyMapCache(() => 盘口买.length, i => 盘口买[i]),
         //     150,
@@ -319,7 +319,7 @@ export class RealDataBase {
         // )   
         const 净盘口 = 指标.lazyMapCache(() => Math.min(盘口买.length, 盘口卖.length), i => 盘口买[i] - Math.abs(盘口卖[i]))
         const 净盘口均线 = 指标.均线(
-            指标.lazyMapCache(() => Math.min(盘口买.length, 盘口卖.length), i => (盘口买[i] + 盘口卖[i])/2),
+            指标.lazyMapCache(() => Math.min(盘口买.length, 盘口卖.length), i => (盘口买[i] + 盘口卖[i]) / 2),
             多少秒均线,
             RealDataBase.单位时间
         )
@@ -387,7 +387,7 @@ export class RealDataBase {
         const 阻力笔 = 指标.阻力笔(价格)
 
         return {
-            价格, 价格均线, 波动率, 成交量买, 成交量买均线, 成交量卖, 成交量卖均线, 盘口买, 盘口卖,净盘口, 净盘口均线,
+            价格, 价格均线, 波动率, 成交量买, 成交量买均线, 成交量卖, 成交量卖均线, 盘口买, 盘口卖, 净盘口, 净盘口均线,
             成交次数买, 成交次数卖,
             阻力1涨, 阻力1跌,
             阻力2涨, 阻力2跌,
