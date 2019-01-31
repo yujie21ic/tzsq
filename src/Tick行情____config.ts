@@ -25,8 +25,8 @@ const BTC颜色 = 0xcc66ff
 //const 买颜色1 = 0x52BE80
 //const 卖颜色 = 0xB03A2E
 //const 卖颜色1 = 0xEC7063
- const 买颜色 = 0x48aa65
- const 卖颜色 = 0xe56546
+const 买颜色 = 0x48aa65
+const 卖颜色 = 0xe56546
 const 波动率颜色 = 0xC70039
 
 
@@ -105,10 +105,11 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         },
         {
             heightPercentage: 0.4,
+            numberX: 100,
             layerList: [
                 layer(LineLayer, { data: d.期货.成交次数买均线2, color: 买颜色 }),
                 layer(LineLayer, { data: d.期货.成交次数卖均线2, color: 卖颜色 }),
-              
+
             ]
         },
         // {
@@ -134,7 +135,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         //         layer(LineLayer, { data: d.期货.成交次数卖均线10, color: 卖颜色 }),
         //     ]
         // },
-      
+
         {
             heightPercentage: 0.3,
             yCoordinate: '对数',
