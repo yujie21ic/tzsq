@@ -262,12 +262,12 @@ export class RealDataBase {
         const 成交次数卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellCount)
         const 成交次数买均线2 = 指标.累加(
             指标.lazyMapCache(() => 成交量买.length, i => 成交量买[i]),
-            1,
+            3,
             RealDataBase.单位时间
         )
         const 成交次数卖均线2 = 指标.累加(
             指标.lazyMapCache(() => 成交量卖.length, i => 成交量卖[i]),
-            1,
+            3,
             RealDataBase.单位时间
         )
         const 成交次数买均线10 = 指标.累加(

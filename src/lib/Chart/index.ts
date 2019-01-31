@@ -85,7 +85,7 @@ export const chartInit = (element: HTMLElement, func: typeof dataSourceFunc) => 
 
 
     // 10fps
-    setInterval(chartRender, 1000 / 10)
+    setInterval(chartRender, 250)
 
 
     window.addEventListener('mouseover', () => 十字光标.visible = true)
