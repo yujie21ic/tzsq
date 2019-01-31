@@ -1,7 +1,7 @@
 import { Graphics } from 'pixi.js'
 import { Viewport, TopBottom, To } from '../type'
 import { Layer } from './Layer'
-import { combineTopAndBottom, combineTopAndBottom正负 } from '../combineTopAndBottom'
+import { combineTopAndBottom } from '../combineTopAndBottom'
 import { getTopAndBottom } from '../getTopAndBottom'
 
 export class LineLayer extends Layer<{ data: ArrayLike<number>, color: number, 临时参数?: '倒过来显示' | '变成负数' }> {
@@ -51,12 +51,9 @@ export class LineLayer extends Layer<{ data: ArrayLike<number>, color: number, �
     updateTopAndBottom = (viewport: Viewport, tb: TopBottom) => {
         const xx = getTopAndBottom(this.props.data)(viewport)
         if (this.props.临时参数 === '变成负数') {
-            //     return combineTopAndBottom正负(tb, xx)
-            xx.bottom = -xx.top
-        } //else {
+            xx.bottom = -xx.top //!!!!!!!!!!! 本来没有负数
+        }
         return combineTopAndBottom(tb, xx)
-        // }
-
     }
 
 } 
