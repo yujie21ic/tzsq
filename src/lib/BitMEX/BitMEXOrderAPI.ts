@@ -8,43 +8,45 @@ export namespace BitMEXOrderAPI {
     const 重试几次 = 100
     const 重试休息多少毫秒 = 30
 
-    const xx = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError }>) => async (cookie: string, p: P) => {
-        let success = false
-        for (let i = 0; i < 重试几次; i++) {
-            const ret = await f(cookie, p)
+    const DDOS调用 = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError }>) =>
+        async (cookie: string, p: P) => {
+            let success = false
+            for (let i = 0; i < 重试几次; i++) {
+                const ret = await f(cookie, p)
 
-            if (ret.error === '网络错误') {
-                success = false
-                break
+                if (ret.error === '网络错误') {
+                    success = false
+                    break
+                }
+                else if (ret.error === undefined) {
+                    success = true
+                    break
+                }
+                await sleep(重试休息多少毫秒)
             }
-            else if (ret.error === undefined) {
-                success = true
-                break
-            }
-            await sleep(重试休息多少毫秒)
+            return success
         }
-        return success
-    }
 
-    const xx_ordStatus = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: { ordStatus: string } }>) => async (cookie: string, p: P) => {
-        let success = false
-        for (let i = 0; i < 重试几次; i++) {
-            const ret = await f(cookie, p)
-            if (ret.error === '网络错误') {
-                success = false
-                break
+    const DDOS调用_ordStatus = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: { ordStatus: string } }>) =>
+        async (cookie: string, p: P) => {
+            let success = false
+            for (let i = 0; i < 重试几次; i++) {
+                const ret = await f(cookie, p)
+                if (ret.error === '网络错误') {
+                    success = false
+                    break
+                }
+                else if (ret.error === undefined && ret.data !== undefined && ret.data.ordStatus === 'New') {
+                    success = true
+                    break
+                }
+                await sleep(重试休息多少毫秒)
             }
-            else if (ret.error === undefined && ret.data !== undefined && ret.data.ordStatus === 'New') {
-                success = true
-                break
-            }
-            await sleep(重试休息多少毫秒)
+            return success
         }
-        return success
-    }
 
     //需要判断 ordStatus
-    export const maker = xx_ordStatus<{
+    export const maker = DDOS调用_ordStatus<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         size: number
@@ -61,7 +63,7 @@ export namespace BitMEXOrderAPI {
         })
     )
 
-    export const stop = xx_ordStatus<{
+    export const stop = DDOS调用_ordStatus<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         price: number
@@ -76,7 +78,7 @@ export namespace BitMEXOrderAPI {
         })
     )
 
-    export const 市价触发 = xx_ordStatus<{
+    export const 市价触发 = DDOS调用_ordStatus<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         price: number
@@ -92,7 +94,7 @@ export namespace BitMEXOrderAPI {
         })
     )
 
-    export const updateStop = xx_ordStatus<{
+    export const updateStop = DDOS调用_ordStatus<{
         orderID: string
         price: number
     }>(
@@ -102,7 +104,7 @@ export namespace BitMEXOrderAPI {
         })
     )
 
-    export const updateMaker = xx_ordStatus<{
+    export const updateMaker = DDOS调用_ordStatus<{
         orderID: string
         price: () => number
     }>(
@@ -112,7 +114,7 @@ export namespace BitMEXOrderAPI {
         })
     )
 
-    export const taker = xx<{
+    export const taker = DDOS调用<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         size: number
@@ -125,7 +127,7 @@ export namespace BitMEXOrderAPI {
         })
     )
 
-    export const close = xx<BaseType.BitmexSymbol>(
+    export const close = DDOS调用<BaseType.BitmexSymbol>(
         (cookie, symbol) => BitMEXRESTAPI.Order.new(cookie, {
             symbol,
             ordType: 'Market',
@@ -133,7 +135,7 @@ export namespace BitMEXOrderAPI {
         })
     )
 
-    export const cancel = xx<string[]>(
+    export const cancel = DDOS调用<string[]>(
         (cookie, orderID) => BitMEXRESTAPI.Order.cancel(cookie, { orderID: JSON.stringify(orderID) })
     )
 } 
