@@ -219,7 +219,7 @@ export class RealDataBase {
     }
 
     //!!!
-    get期货多少秒内成交量(symbol: BaseType.BitmexSymbol, second: number) {
+    get期货多少秒内成交量__万为单位(symbol: BaseType.BitmexSymbol, second: number) {
         second = second * (1000 / RealDataBase.单位时间)
         let volume = 0
         const data = this.data.bitmex.XBTUSD.data
@@ -260,12 +260,12 @@ export class RealDataBase {
 
         const 成交次数买 = 指标.lazyMapCache(() => data.length, i => data[i].buyCount)
         const 成交次数卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellCount)
-        const 成交次数买均线2 = 指标.累加(
+        const 成交量均线买3 = 指标.累加(
             指标.lazyMapCache(() => 成交量买.length, i => 成交量买[i]),
             3,
             RealDataBase.单位时间
         )
-        const 成交次数卖均线2 = 指标.累加(
+        const 成交量均线卖3 = 指标.累加(
             指标.lazyMapCache(() => 成交量卖.length, i => 成交量卖[i]),
             3,
             RealDataBase.单位时间
@@ -401,8 +401,8 @@ export class RealDataBase {
             成交量买均线1,
             成交量卖均线1,
             成交量次数均线1,
-            成交次数买均线2,
-            成交次数卖均线2,
+            成交量均线买3,
+            成交量均线卖3,
             成交次数买均线10,
             成交次数卖均线10,
             // 盘口买均线,
@@ -431,7 +431,7 @@ export class RealDataBase {
 
             //期货
             期货,
-            期货30秒内成交量: () => this.get期货多少秒内成交量(symbol, 30),
+            期货30秒内成交量: () => this.get期货多少秒内成交量__万为单位(symbol, 30),
             //差价
             差价,
             差价均线,
