@@ -89,6 +89,18 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         {
             heightPercentage: 0.4,
             和下一张重叠: true,
+            numberX: 100,
+            yCoordinate: '对数',
+            layerList: [
+                layer(LineLayer, { data: d.期货.成交次数买均线2, color: 买颜色 }),
+                layer(LineLayer, { data: d.期货.成交次数卖均线2, color: 卖颜色 }),
+
+            ]
+        },
+
+        {
+            heightPercentage: 0.4,
+
             numberColor: BTC颜色,
             layerList: [
                 layer(LineLayer, { data: d2.XBTUSD.期货.价格, color: BTC颜色 }),
@@ -103,16 +115,9 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
             ]
         },
-        {
-            heightPercentage: 0.4,
-            numberX: 100,
-            yCoordinate: '对数',
-            layerList: [
-                layer(LineLayer, { data: d.期货.成交次数买均线2, color: 买颜色 }),
-                layer(LineLayer, { data: d.期货.成交次数卖均线2, color: 卖颜色 }),
 
-            ]
-        },
+
+
         // {
         //     heightPercentage: 0.4,
         //     numberColor: ETH颜色,
