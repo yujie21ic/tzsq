@@ -80,12 +80,14 @@ export const chartInit = (element: HTMLElement, func: typeof dataSourceFunc) => 
     dataSourceFunc = func
 
 
-    // 60fps
-    // pixiApplication.ticker.add(chartRender)
+    const FPS = 4
 
+    if (FPS >= 60) {
+        pixiApplication.ticker.add(chartRender)
+    } else {
+        setInterval(chartRender, 1000 / FPS)
+    }
 
-    // 10fps
-    setInterval(chartRender, 250)
 
 
     window.addEventListener('mouseover', () => 十字光标.visible = true)
