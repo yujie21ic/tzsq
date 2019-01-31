@@ -22,17 +22,49 @@ if (config.orderServer !== undefined) {
 
         const account = new Account({ accountName: k, cookie: v })
 
-        account.runTask(止损step('XBTUSD', () => to范围({
-            min: 3,
-            max: 18,
-            value: lastNumber(realData.dataExt.XBTUSD.期货.波动率) / 4,
-        })))
+        account.runTask(
+            止损step({
+                symbol: 'XBTUSD',
+                初始止损点: () => to范围({
+                    min: 3,
+                    max: 18,
+                    value: lastNumber(realData.dataExt.XBTUSD.期货.波动率) / 4,
+                }),
+                推止损: 盈利点 => {
+                    const 波动率 = lastNumber(realData.dataExt.XBTUSD.期货.波动率)
+                    if (盈利点 >= to范围({ min: 5, max: 30, value: 波动率 / 5 + 5 })) {
+                        return 3
+                    }
+                    else if (盈利点 >= to范围({ min: 5, max: 15, value: 波动率 / 10 + 5 })) {
+                        return 0
+                    } else {
+                        return NaN
+                    }
+                }
+            })
+        )
 
-        account.runTask(止损step('ETHUSD', () => to范围({
-            min: 0.3,
-            max: 0.9,
-            value: lastNumber(realData.dataExt.ETHUSD.期货.波动率) / 10 + 0.2,
-        })))
+        account.runTask(
+            止损step({
+                symbol: 'ETHUSD',
+                初始止损点: () => to范围({
+                    min: 0.3,
+                    max: 0.9,
+                    value: lastNumber(realData.dataExt.ETHUSD.期货.波动率) / 10 + 0.2,
+                }),
+                推止损: 盈利点 => {
+                    const 波动率 = lastNumber(realData.dataExt.ETHUSD.期货.波动率)
+                    if (盈利点 >= to范围({ min: 0.3, max: 3, value: 波动率 / 5 + 0.3 })) {
+                        return 0.2
+                    }
+                    else if (盈利点 >= to范围({ min: 0.3, max: 1.5, value: 波动率 / 10 + 0.3 })) {
+                        return 0
+                    } else {
+                        return NaN
+                    }
+                }
+            })
+        )
 
         account.runTask(委托检测step('XBTUSD'))
         account.runTask(委托检测step('ETHUSD'))

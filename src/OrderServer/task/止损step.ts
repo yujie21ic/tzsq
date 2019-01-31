@@ -8,7 +8,15 @@ const toGridPoint = (symbol: BaseType.BitmexSymbol, value: number, side: BaseTyp
     return to价格对齐({ grid, side, value })
 }
 
-export const 止损step = (symbol: BaseType.BitmexSymbol, 初始止损点: () => number) => async (self: Account) => {
+export const 止损step = ({
+    symbol,
+    初始止损点,
+    推止损,
+}: {
+    symbol: BaseType.BitmexSymbol
+    初始止损点: () => number
+    推止损: (盈利点: number) => number //0 成本价  3 盈利3点的价
+}) => async (self: Account) => {
     const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
     const 止损委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type === '止损')
 
@@ -43,32 +51,27 @@ export const 止损step = (symbol: BaseType.BitmexSymbol, 初始止损点: () =>
             return true
         }
         else {
-            //只写了BTC的
             //修改止损  只能改小  不能改大
-            // const { price, side, id } = arr[0]
-            // const 浮盈点数 = self.get浮盈点数(symbol)
-            // let 新的Price = NaN
+            const { price, side, id } = 止损委托[0]
+            const 浮盈点数 = self.get浮盈点数(symbol)
 
-            // if (浮盈点数 > 7) {
-            //     新的Price = toGridPoint(symbol, 开仓均价, side)
-            // }
-            // else if (浮盈点数 > 15) {
-            //     新的Price = toGridPoint(symbol, 开仓均价 + (side === 'Buy' ? - 3 : 3), side)
-            // }
+            const 推 = 推止损(浮盈点数)
+            if (isNaN(推)) {
+                return false
+            }
 
-            // if (isNaN(新的Price)) {
-            //     return false
-            // }
-            // else if (
-            //     (side === 'Buy' && 新的Price < price) ||
-            //     (side === 'Sell' && 新的Price > price)
-            // ) {
-            //     await BitMEXOrderAPI.updateStop(self.cookie, {
-            //         orderID: id,
-            //         price: 新的Price,
-            //     })
-            //     return true
-            // }
+            const 新的Price = toGridPoint(symbol, 开仓均价 + (side === 'Buy' ? - 推 : 推), side)
+
+            if (
+                (side === 'Buy' && 新的Price < price) ||
+                (side === 'Sell' && 新的Price > price)
+            ) {
+                await BitMEXOrderAPI.updateStop(self.cookie, {
+                    orderID: id,
+                    price: 新的Price,
+                })
+                return true
+            }
             return false
         }
     }
