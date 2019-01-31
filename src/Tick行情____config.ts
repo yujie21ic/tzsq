@@ -106,6 +106,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         {
             heightPercentage: 0.4,
             numberX: 100,
+            yCoordinate: '对数',
             layerList: [
                 layer(LineLayer, { data: d.期货.成交次数买均线2, color: 买颜色 }),
                 layer(LineLayer, { data: d.期货.成交次数卖均线2, color: 卖颜色 }),
