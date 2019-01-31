@@ -87,7 +87,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             yCoordinate: '对数',
             layerList: [
                 layer(LineLayer, { data: d.期货.成交量均线买3, color: 买颜色 }),
-                layer(LineLayer, { data: d.期货.成交量均线买3, color: 卖颜色, 临时参数: '倒过来显示' }),
+                layer(LineLayer, { data: d.期货.成交量均线卖3, color: 卖颜色, 临时参数: '倒过来显示' }),
             ]
         },
 
