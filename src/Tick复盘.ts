@@ -46,7 +46,7 @@ class Tick复盘 extends TickBase {
         if (right2 === 0) {
             this.c = 0
         } else {
-            this.c += (this.加速 ? 20 : 1) / 60 * (1000 / RealDataBase.单位时间)
+            this.c += (this.加速 ? 80 : 1) / 60 * (1000 / RealDataBase.单位时间)
         }
         //2分钟前的直接显示
         const right = Math.min(120 * (1000 / RealDataBase.单位时间) + Math.floor(this.c), right2)

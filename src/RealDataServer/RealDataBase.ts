@@ -260,17 +260,27 @@ export class RealDataBase {
 
         const 成交次数买 = 指标.lazyMapCache(() => data.length, i => data[i].buyCount)
         const 成交次数卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellCount)
-        const 成交次数买均线 = 指标.累加(
+        const 成交次数买均线2 = 指标.累加(
+            指标.lazyMapCache(() => 成交量买.length, i => 成交量买[i]),
+            1,
+            RealDataBase.单位时间
+        )
+        const 成交次数卖均线2 = 指标.累加(
+            指标.lazyMapCache(() => 成交量卖.length, i => 成交量卖[i]),
+            1,
+            RealDataBase.单位时间
+        )
+        const 成交次数买均线10 = 指标.累加(
             指标.lazyMapCache(() => 成交次数买.length, i => 成交次数买[i]),
             5,
             RealDataBase.单位时间
         )
-        
-        const 成交次数卖均线 = 指标.累加(
+        const 成交次数卖均线10 = 指标.累加(
             指标.lazyMapCache(() => 成交次数卖.length, i => 成交次数卖[i]),
             5,
             RealDataBase.单位时间
         )
+
         const 成交量买均线1 = 指标.累加(
             指标.lazyMapCache(() => 成交量买.length, i => 成交量买[i]),
             多少秒均线,
@@ -382,8 +392,10 @@ export class RealDataBase {
             成交量买均线1,
             成交量卖均线1,
             成交量次数均线1,
-            成交次数买均线,
-            成交次数卖均线,
+            成交次数买均线2,
+            成交次数卖均线2,
+            成交次数买均线10,
+            成交次数卖均线10,
             阻力笔,
         }
     }
