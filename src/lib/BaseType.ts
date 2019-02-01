@@ -1,20 +1,30 @@
 export namespace BaseType {
-    export type BinanceSymbol = 'btcusdt' | 'ethusdt'
+
+
     export type BitmexSymbol = 'ETHUSD' | 'XBTUSD'
+    export type BinanceSymbol = 'btcusdt' | 'ethusdt' //ws小写  http大写  卧槽
+    export type HopexSymbol = 'BTCUSDT' | 'ETHUSDT'
 
 
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
     export type MarketAndSymbol = {
         market: 'bitmex'
-        symbol: 'ETHUSD' | 'XBTUSD'
-    } |
+        symbol: BitmexSymbol
+    }
+        |
     {
         market: 'binance'
-        symbol: 'btcusdt' | 'ethusdt'
+        symbol: BinanceSymbol
+    }
+        |
+    {
+        market: 'hopex'
+        symbol: HopexSymbol
     }
 
 
     export type Side = 'Buy' | 'Sell'
+
+
     export type OrderBook = { //订单薄
         id: number
         buy: {
@@ -26,6 +36,7 @@ export namespace BaseType {
             size: number
         }[]
     }
+
     export type OrderBookDB = { //订单薄
         id: number
         buy1_price: number
@@ -49,12 +60,14 @@ export namespace BaseType {
         sell5_price: number
         sell5_size: number
     }
+
     export type Trade = { //着笔
         id: number
         timestamp: number
         price: number
         size: number
     }
+
     export type KLine = { //K线
         id: number
         open: number
@@ -66,5 +79,6 @@ export namespace BaseType {
         buyCount: number
         sellCount: number
     }
+
     export type Omit<T, K extends string> = Pick<T, Exclude<keyof T, K>>
 } 
