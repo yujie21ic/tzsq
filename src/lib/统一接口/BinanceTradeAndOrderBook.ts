@@ -1,7 +1,7 @@
 import { TradeAndOrderBook } from './TradeAndOrderBook'
 import { BaseType } from '../BaseType'
-import { config } from '../../config';
-import { WebSocketClient } from '../C/WebSocketClient';
+import { config } from '../../config'
+import { WebSocketClient } from '../C/WebSocketClient'
 
 const 盘口map = (v: any) => ({
     price: Number(v[0]),
