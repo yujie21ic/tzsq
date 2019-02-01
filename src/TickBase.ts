@@ -8,10 +8,13 @@ import { 指标 } from './lib/指标'
 import { keys } from 'ramda'
 import { BaseType } from './lib/BaseType'
 
+
+const 显示秒 = [150, 250, 500, 1000, 2000]
+
 export class TickBase {
 
     real = new RealDataBase()
-    showCount = 600
+    showCount = 显示秒[0] * (1000 / RealDataBase.单位时间)
     nowTickSymbol: BaseType.BitmexSymbol = 'XBTUSD'
     nowChart = keys(Tick行情____config)[0]
 
@@ -42,7 +45,7 @@ export class TickBase {
                         }
                     })),
                     undefined,
-                    ...[150, 250, 500, 1000, 2000].map(v => ({
+                    ...显示秒.map(v => ({
                         label: v + '秒',
                         checked: v === this.showCount / (1000 / RealDataBase.单位时间),
                         onClick: () => this.showCount = v * (1000 / RealDataBase.单位时间)
