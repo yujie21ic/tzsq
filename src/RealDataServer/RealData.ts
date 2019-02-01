@@ -1,31 +1,21 @@
 import * as WebSocket from 'ws'
 import { RealDataBase } from './RealDataBase'
-import { WebSocketClient } from '../lib/C/WebSocketClient'
 import { BaseType } from '../lib/BaseType'
-import { config } from '../config'
 import { BitmexTradeAndOrderBook } from '../lib/统一接口/BitmexTradeAndOrderBook'
 import { BinanceTradeAndOrderBook } from '../lib/统一接口/BinanceTradeAndOrderBook'
-
-const 盘口map = (v: any) => ({
-    price: Number(v[0]),
-    size: Number(v[1]),
-})
 
 export class RealData extends RealDataBase {
 
     private wss?: WebSocket.Server
     private wsDic = new Map<WebSocket, boolean>()
 
-    private 期货 = new BitmexTradeAndOrderBook()
-    private 现货 = new BinanceTradeAndOrderBook()
-
-
+    private bitmex = new BitmexTradeAndOrderBook()
+    private binance = new BinanceTradeAndOrderBook()
 
     onTitle = (p: {
         binance: boolean
         bitmex: boolean
     }) => { }
-
 
     constructor(server = true) {
         super()
@@ -33,12 +23,11 @@ export class RealData extends RealDataBase {
             this.wss = new WebSocket.Server({ port: 6666 })
         }
 
-        this.现货.onStatusChange = this.期货.onStatusChange = () =>
+        this.binance.onStatusChange = this.bitmex.onStatusChange = () =>
             this.onTitle({
-                binance: this.现货.isConnected,
-                bitmex: this.期货.isConnected
+                binance: this.binance.isConnected,
+                bitmex: this.bitmex.isConnected
             })
-
 
         //runServer
         if (this.wss !== undefined) {
@@ -66,7 +55,7 @@ export class RealData extends RealDataBase {
         )
 
         //run期货
-        this.期货.onTrade = ({ symbol, timestamp, side, size, price }) => {
+        this.bitmex.onTrade = ({ symbol, timestamp, side, size, price }) => {
             this.on着笔({
                 symbol,
                 xxxxxxxx: this.jsonSync.data.bitmex[symbol as 'XBTUSD'].data,
@@ -79,7 +68,7 @@ export class RealData extends RealDataBase {
             this.priceObservable.next({ symbol, price })
         }
 
-        this.期货.onOrderBook = ({ symbol, timestamp, buy, sell }) => {
+        this.bitmex.onOrderBook = ({ symbol, timestamp, buy, sell }) => {
             this.on盘口({
                 symbol,
                 xxxxxxxx: this.jsonSync.data.bitmex[symbol as 'XBTUSD'].orderBook,
@@ -97,8 +86,7 @@ export class RealData extends RealDataBase {
             })
         }
 
-
-        this.现货.onTrade = ({ symbol, timestamp, price, side, size }) => {
+        this.binance.onTrade = ({ symbol, timestamp, price, side, size }) => {
             this.on着笔({
                 symbol,
                 xxxxxxxx: this.jsonSync.data.binance[symbol as 'btcusdt'].data,
@@ -107,12 +95,9 @@ export class RealData extends RealDataBase {
                 side,
                 size,
             })
-
             this.现货价格dic.set(symbol as 'btcusdt', price)
             this.priceObservable.next({ symbol, price })
         }
-
-
 
     }
 }
