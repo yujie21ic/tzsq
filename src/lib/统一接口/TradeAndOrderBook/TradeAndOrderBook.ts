@@ -1,4 +1,4 @@
-import { BaseType } from '../BaseType'
+import { BaseType } from '../../BaseType'
 
 export class TradeAndOrderBook<T extends string> {
 
