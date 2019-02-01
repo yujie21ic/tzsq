@@ -1,20 +1,22 @@
 import { BaseType } from '../BaseType'
 
-export interface TradeAndOrderBook {
+export class TradeAndOrderBook {
 
-    readonly isConnected: boolean
+    get isConnected() {
+        return false
+    }
 
-    onStatusChange(): void
+    onStatusChange = () => { }
 
-    onTrade(p: {
+    onTrade = (p: {
         symbol: string
         timestamp: number
         side: BaseType.Side
         size: number
         price: number
-    }): void
+    }) => { }
 
-    onOrderBook(p: {
+    onOrderBook = (p: {
         symbol: string
         timestamp: number
         buy: {
@@ -25,8 +27,6 @@ export interface TradeAndOrderBook {
             price: number
             size: number
         }[]
-    }): void
-
-
+    }) => { } 
 
 }
