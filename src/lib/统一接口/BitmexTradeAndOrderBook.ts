@@ -33,7 +33,7 @@ export class BitmexTradeAndOrderBook extends TradeAndOrderBook<BaseType.BitmexSy
 
                 frame.data.forEach(({ symbol, side, size, price, timestamp }) => {
                     this.onTrade({
-                        symbol,
+                        symbol: symbol as BaseType.BitmexSymbol,
                         timestamp: new Date(timestamp).getTime(),
                         side: side as BaseType.Side,
                         size,
@@ -46,7 +46,7 @@ export class BitmexTradeAndOrderBook extends TradeAndOrderBook<BaseType.BitmexSy
             if (frame.table === 'orderBook10' && (frame.action === 'update' || frame.action === 'partial')) {
                 const { symbol, bids, asks, timestamp } = frame.data[0]
                 this.onOrderBook({
-                    symbol,
+                    symbol: symbol as BaseType.BitmexSymbol,
                     timestamp: new Date(timestamp).getTime(),
                     buy: bids.map(盘口map).slice(0, 5),
                     sell: asks.map(盘口map).slice(0, 5),
