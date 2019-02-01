@@ -47,6 +47,13 @@ export class RealDataBase {
     protected jsonSync = new JSONSync(
         {
             startTick: 0,
+            //TODO
+            hopex: {
+                BTCUSDT: {
+                    data: [] as BaseType.KLine[],
+                    orderBook: [] as BaseType.OrderBook[],
+                },
+            },
             bitmex: {
                 XBTUSD: {
                     data: [] as BaseType.KLine[],
