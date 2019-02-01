@@ -8,7 +8,7 @@ const 盘口map = (v: any) => ({
     size: Number(v[1]),
 })
 
-export class BinanceTradeAndOrderBook extends TradeAndOrderBook {
+export class BinanceTradeAndOrderBook extends TradeAndOrderBook<BaseType.BinanceSymbol> {
 
     private ws = new WebSocketClient({
         ss: config.ss,

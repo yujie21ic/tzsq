@@ -1,6 +1,6 @@
 import { BaseType } from '../BaseType'
 
-export class TradeAndOrderBook {
+export class TradeAndOrderBook<T extends string> {
 
     get isConnected() {
         return false
@@ -9,7 +9,7 @@ export class TradeAndOrderBook {
     onStatusChange = () => { }
 
     onTrade = (p: {
-        symbol: string
+        symbol: T
         timestamp: number
         side: BaseType.Side
         size: number
@@ -17,7 +17,7 @@ export class TradeAndOrderBook {
     }) => { }
 
     onOrderBook = (p: {
-        symbol: string
+        symbol: T
         timestamp: number
         buy: {
             price: number

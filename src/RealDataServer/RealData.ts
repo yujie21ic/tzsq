@@ -58,7 +58,7 @@ export class RealData extends RealDataBase {
         this.bitmex.onTrade = ({ symbol, timestamp, side, size, price }) => {
             this.on着笔({
                 symbol,
-                xxxxxxxx: this.jsonSync.data.bitmex[symbol as 'XBTUSD'].data,
+                xxxxxxxx: this.jsonSync.data.bitmex[symbol].data,
                 timestamp,
                 side: side as BaseType.Side,
                 size,
@@ -71,7 +71,7 @@ export class RealData extends RealDataBase {
         this.bitmex.onOrderBook = ({ symbol, timestamp, buy, sell }) => {
             this.on盘口({
                 symbol,
-                xxxxxxxx: this.jsonSync.data.bitmex[symbol as 'XBTUSD'].orderBook,
+                xxxxxxxx: this.jsonSync.data.bitmex[symbol].orderBook,
                 timestamp,
                 orderBook: {
                     id: Math.floor(timestamp / RealDataBase.单位时间),
@@ -89,13 +89,13 @@ export class RealData extends RealDataBase {
         this.binance.onTrade = ({ symbol, timestamp, price, side, size }) => {
             this.on着笔({
                 symbol,
-                xxxxxxxx: this.jsonSync.data.binance[symbol as 'btcusdt'].data,
+                xxxxxxxx: this.jsonSync.data.binance[symbol].data,
                 timestamp,
                 price,
                 side,
                 size,
             })
-            this.现货价格dic.set(symbol as 'btcusdt', price)
+            this.现货价格dic.set(symbol, price)
             this.priceObservable.next({ symbol, price })
         }
 

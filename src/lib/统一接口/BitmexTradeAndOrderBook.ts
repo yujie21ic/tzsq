@@ -7,7 +7,7 @@ const 盘口map = (v: any) => ({
     size: Number(v[1]),
 })
 
-export class BitmexTradeAndOrderBook extends TradeAndOrderBook {
+export class BitmexTradeAndOrderBook extends TradeAndOrderBook<BaseType.BitmexSymbol> {
 
     private ws = new BitMEXWSAPI('', [
         { theme: 'trade', filter: 'XBTUSD' },
@@ -26,7 +26,7 @@ export class BitmexTradeAndOrderBook extends TradeAndOrderBook {
         this.ws.onStatusChange = () => {
             this.onStatusChange()
         }
-        
+
         this.ws.onmessage = frame => {
 
             if (frame.table === 'trade' && (frame.action === 'partial' || frame.action === 'insert')) {
