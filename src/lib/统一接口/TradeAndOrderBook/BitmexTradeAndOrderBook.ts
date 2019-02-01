@@ -29,8 +29,8 @@ export class BitmexTradeAndOrderBook extends TradeAndOrderBook<BaseType.BitmexSy
 
         this.ws.onmessage = frame => {
 
+            //trade 只会插入新数据  不会更新
             if (frame.table === 'trade' && (frame.action === 'partial' || frame.action === 'insert')) {
-
                 frame.data.forEach(({ symbol, side, size, price, timestamp }) => {
                     this.onTrade({
                         symbol: symbol as BaseType.BitmexSymbol,
@@ -42,8 +42,10 @@ export class BitmexTradeAndOrderBook extends TradeAndOrderBook<BaseType.BitmexSy
                 })
             }
 
-            //服务器bug  partial 了2次 orderBook10  keys 都是 symbol   然后 update
-            if (frame.table === 'orderBook10' && (frame.action === 'update' || frame.action === 'partial')) {
+            //服务器bug  
+            //partial 了2次 orderBook10  keys 都是 symbol   
+            //然后 update
+            if (frame.table === 'orderBook10' && (frame.action === 'partial' || frame.action === 'update')) {
                 const { symbol, bids, asks, timestamp } = frame.data[0]
                 this.onOrderBook({
                     symbol: symbol as BaseType.BitmexSymbol,
