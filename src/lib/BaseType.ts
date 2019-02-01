@@ -1,6 +1,19 @@
 export namespace BaseType {
     export type BinanceSymbol = 'btcusdt' | 'ethusdt'
     export type BitmexSymbol = 'ETHUSD' | 'XBTUSD'
+
+
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+    export type MarketAndSymbol = {
+        market: 'bitmex'
+        symbol: 'ETHUSD' | 'XBTUSD'
+    } |
+    {
+        market: 'binance'
+        symbol: 'btcusdt' | 'ethusdt'
+    }
+
+
     export type Side = 'Buy' | 'Sell'
     export type OrderBook = { //订单薄
         id: number
