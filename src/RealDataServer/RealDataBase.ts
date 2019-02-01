@@ -423,12 +423,12 @@ export class RealDataBase {
     }
 
 
-    private item = (symbol: BaseType.BitmexSymbol, binanceSymbol: BaseType.BinanceSymbol) => {
+    private item = (symbol: BaseType.BitmexSymbol, binanceSymbol: BaseType.BinanceSymbol, hopexSymbol: BaseType.HopexSymbol) => {
 
         const 现货 = this.item2(this.data.binance[binanceSymbol], false)
 
         const 期货 = this.item2(this.data.bitmex[symbol], true)
-        const hopex = this.item2(this.data.hopex[binanceSymbol.toUpperCase() as 'BTCUSDT'], true)
+        const hopex = this.item2(this.data.hopex[hopexSymbol], true)
 
         //差价
         const 差价 = 指标.lazyMapCache(() => Math.min(现货.价格.length, 期货.价格.length), i => 现货.价格[i] - 期货.价格[i])
@@ -455,14 +455,14 @@ export class RealDataBase {
     }
 
     dataExt = {
-        XBTUSD: this.item('XBTUSD', 'btcusdt'),
-        ETHUSD: this.item('ETHUSD', 'ethusdt')
+        XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT'),
+        ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT'),
     }
 
     重新初始化 = () => {
         this.dataExt = {
-            XBTUSD: this.item('XBTUSD', 'btcusdt'),
-            ETHUSD: this.item('ETHUSD', 'ethusdt')
+            XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT'),
+            ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT'),
         }
     }
 
