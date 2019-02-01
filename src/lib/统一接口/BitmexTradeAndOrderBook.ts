@@ -9,7 +9,7 @@ const 盘口map = (v: any) => ({
 
 export class BitmexTradeAndOrderBook extends TradeAndOrderBook {
 
-    private 期货ws = new BitMEXWSAPI('', [
+    private ws = new BitMEXWSAPI('', [
         { theme: 'trade', filter: 'XBTUSD' },
         { theme: 'trade', filter: 'ETHUSD' },
         { theme: 'orderBook10', filter: 'XBTUSD' },
@@ -17,18 +17,17 @@ export class BitmexTradeAndOrderBook extends TradeAndOrderBook {
     ])
 
     get isConnected() {
-        return this.期货ws.isConnected
+        return this.ws.isConnected
     }
 
     constructor() {
         super()
 
-        this.期货ws.onStatusChange = () => {
+        this.ws.onStatusChange = () => {
             this.onStatusChange()
         }
-
-        //run期货
-        this.期货ws.onmessage = frame => {
+        
+        this.ws.onmessage = frame => {
 
             if (frame.table === 'trade' && (frame.action === 'partial' || frame.action === 'insert')) {
 

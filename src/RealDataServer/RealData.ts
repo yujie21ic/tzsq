@@ -4,6 +4,7 @@ import { WebSocketClient } from '../lib/C/WebSocketClient'
 import { BaseType } from '../lib/BaseType'
 import { config } from '../config'
 import { BitmexTradeAndOrderBook } from '../lib/统一接口/BitmexTradeAndOrderBook'
+import { BinanceTradeAndOrderBook } from '../lib/统一接口/BinanceTradeAndOrderBook'
 
 const 盘口map = (v: any) => ({
     price: Number(v[0]),
@@ -16,18 +17,9 @@ export class RealData extends RealDataBase {
     private wsDic = new Map<WebSocket, boolean>()
 
     private 期货 = new BitmexTradeAndOrderBook()
+    private 现货 = new BinanceTradeAndOrderBook()
 
-    private 现货ws = new WebSocketClient({
-        ss: config.ss,
-        url: 'wss://stream.binance.com:9443/stream?streams=' + [
-            //近期交易
-            'btcusdt@trade',
-            'ethusdt@trade',
-            //盘口 
-            'btcusdt@depth5',
-            'ethusdt@depth5'
-        ].join('/')
-    })
+
 
     onTitle = (p: {
         binance: boolean
@@ -41,9 +33,9 @@ export class RealData extends RealDataBase {
             this.wss = new WebSocket.Server({ port: 6666 })
         }
 
-        this.现货ws.onStatusChange = this.期货.onStatusChange = () =>
+        this.现货.onStatusChange = this.期货.onStatusChange = () =>
             this.onTitle({
-                binance: this.现货ws.isConnected,
+                binance: this.现货.isConnected,
                 bitmex: this.期货.isConnected
             })
 
@@ -106,41 +98,21 @@ export class RealData extends RealDataBase {
         }
 
 
-        //run现货
-        this.现货ws.onData = ({ stream, data }: { stream: string, data: any }) => {
-            const arr = stream.split('@')
-            const symbol = arr[0] as BaseType.BinanceSymbol
-            const type = arr[1]
+        this.现货.onTrade = ({ symbol, timestamp, price, side, size }) => {
+            this.on着笔({
+                symbol,
+                xxxxxxxx: this.jsonSync.data.binance[symbol as 'btcusdt'].data,
+                timestamp,
+                price,
+                side,
+                size,
+            })
 
-            //现货盘口
-            if (type === 'depth5') {
-
-                this.on盘口({
-                    symbol,
-                    xxxxxxxx: this.jsonSync.data.binance[symbol as 'btcusdt'].orderBook,
-                    timestamp: Date.now(),//直接读取本地时间
-                    orderBook: {
-                        id: Math.floor(Date.now() / RealDataBase.单位时间),
-                        buy: data.bids.map(盘口map),
-                        sell: data.asks.map(盘口map)
-                    }
-                })
-            }
-
-            //近期交易
-            if (type === 'trade') {
-                this.on着笔({
-                    symbol,
-                    xxxxxxxx: this.jsonSync.data.binance[symbol as 'btcusdt'].data,
-                    timestamp: data.E,
-                    price: Number(data.p),
-                    side: data.m ? 'Sell' : 'Buy',
-                    size: Number(data.q),
-                })
-
-                this.现货价格dic.set(symbol, Number(data.p))
-                this.priceObservable.next({ symbol, price: Number(data.p) })
-            }
+            this.现货价格dic.set(symbol as 'btcusdt', price)
+            this.priceObservable.next({ symbol, price })
         }
+
+
+
     }
 }
