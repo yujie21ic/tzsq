@@ -53,6 +53,10 @@ export class RealDataBase {
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 },
+                ETHUSDT: {
+                    data: [] as BaseType.KLine[],
+                    orderBook: [] as BaseType.OrderBook[],
+                },
             },
             bitmex: {
                 XBTUSD: {
@@ -422,7 +426,9 @@ export class RealDataBase {
     private item = (symbol: BaseType.BitmexSymbol, binanceSymbol: BaseType.BinanceSymbol) => {
 
         const 现货 = this.item2(this.data.binance[binanceSymbol], false)
+
         const 期货 = this.item2(this.data.bitmex[symbol], true)
+        const hopex = this.item2(this.data.hopex[binanceSymbol.toUpperCase() as 'BTCUSDT'], true)
 
         //差价
         const 差价 = 指标.lazyMapCache(() => Math.min(现货.价格.length, 期货.价格.length), i => 现货.价格[i] - 期货.价格[i])
@@ -442,6 +448,9 @@ export class RealDataBase {
             //差价
             差价,
             差价均线,
+
+            //hopex,
+            hopex,
         }
     }
 
