@@ -9,35 +9,13 @@ export class TradeAndOrderBook<T extends string> {
 
     onStatusChange = () => { }
 
-    onTrade = (p: {
-        symbol: T
-        timestamp: number
-        side: BaseType.Side
-        size: number
-        price: number
-    }) => { }
-
     tradeObservable = new Subject<{
         symbol: T
         timestamp: number
         side: BaseType.Side
         size: number
         price: number
-    }>() 
-
-    onOrderBook = (p: {
-        symbol: T
-        timestamp: number
-        buy: {
-            price: number
-            size: number
-        }[]
-        sell: {
-            price: number
-            size: number
-        }[]
-    }) => { }
-
+    }>()
 
     orderBookObservable = new Subject<{
         symbol: T

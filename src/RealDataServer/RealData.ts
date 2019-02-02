@@ -55,7 +55,7 @@ export class RealData extends RealDataBase {
         )
 
         //run期货
-        this.bitmex.onTrade = ({ symbol, timestamp, side, size, price }) => {
+        this.bitmex.tradeObservable.subscribe(({ symbol, timestamp, side, size, price }) => {
             this.on着笔({
                 symbol,
                 xxxxxxxx: this.jsonSync.data.bitmex[symbol].data,
@@ -66,9 +66,9 @@ export class RealData extends RealDataBase {
             })
             this.期货价格dic.set(symbol as BaseType.BitmexSymbol, price)
             this.priceObservable.next({ symbol, price })
-        }
+        })
 
-        this.bitmex.onOrderBook = ({ symbol, timestamp, buy, sell }) => {
+        this.bitmex.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
             this.on盘口({
                 symbol,
                 xxxxxxxx: this.jsonSync.data.bitmex[symbol].orderBook,
@@ -84,9 +84,9 @@ export class RealData extends RealDataBase {
                 buy,
                 sell,
             })
-        }
+        })
 
-        this.binance.onTrade = ({ symbol, timestamp, price, side, size }) => {
+        this.binance.tradeObservable.subscribe(({ symbol, timestamp, price, side, size }) => {
             this.on着笔({
                 symbol,
                 xxxxxxxx: this.jsonSync.data.binance[symbol].data,
@@ -97,7 +97,21 @@ export class RealData extends RealDataBase {
             })
             this.现货价格dic.set(symbol, price)
             this.priceObservable.next({ symbol, price })
-        }
+        })
 
+
+        this.binance.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
+            this.on盘口({
+                symbol,
+                xxxxxxxx: this.jsonSync.data.binance[symbol].orderBook,
+                timestamp,
+                orderBook: {
+                    id: Math.floor(timestamp / RealDataBase.单位时间),
+                    buy,
+                    sell,
+                }
+            })
+
+        })
     }
 }
