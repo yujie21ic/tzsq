@@ -46,10 +46,23 @@ export class BinanceTradeAndOrderBook extends TradeAndOrderBook<BaseType.Binance
                     side: data.m ? 'Sell' : 'Buy',
                     size: Number(data.q),
                 })
+                this.tradeObservable.next({
+                    symbol,
+                    timestamp: data.E,
+                    price: Number(data.p),
+                    side: data.m ? 'Sell' : 'Buy',
+                    size: Number(data.q),
+                })
             }
 
             if (type === 'depth5') {
                 this.onOrderBook({
+                    symbol,
+                    timestamp: Date.now(),//直接读取本地时间
+                    buy: data.bids.map(盘口map),
+                    sell: data.asks.map(盘口map),
+                })
+                this.orderBookObservable.next({
                     symbol,
                     timestamp: Date.now(),//直接读取本地时间
                     buy: data.bids.map(盘口map),

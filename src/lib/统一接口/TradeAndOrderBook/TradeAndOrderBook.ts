@@ -1,4 +1,5 @@
 import { BaseType } from '../../BaseType'
+import { Subject } from 'rxjs'
 
 export class TradeAndOrderBook<T extends string> {
 
@@ -16,6 +17,14 @@ export class TradeAndOrderBook<T extends string> {
         price: number
     }) => { }
 
+    tradeObservable = new Subject<{
+        symbol: T
+        timestamp: number
+        side: BaseType.Side
+        size: number
+        price: number
+    }>() 
+
     onOrderBook = (p: {
         symbol: T
         timestamp: number
@@ -27,6 +36,20 @@ export class TradeAndOrderBook<T extends string> {
             price: number
             size: number
         }[]
-    }) => { } 
+    }) => { }
+
+
+    orderBookObservable = new Subject<{
+        symbol: T
+        timestamp: number
+        buy: {
+            price: number
+            size: number
+        }[]
+        sell: {
+            price: number
+            size: number
+        }[]
+    }>()
 
 }
