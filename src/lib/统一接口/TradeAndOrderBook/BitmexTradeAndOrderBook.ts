@@ -16,15 +16,11 @@ export class BitmexTradeAndOrderBook extends TradeAndOrderBook<BaseType.BitmexSy
         { theme: 'orderBook10', filter: 'ETHUSD' },
     ])
 
-    get isConnected() {
-        return this.ws.isConnected
-    }
-
     constructor() {
         super()
 
         this.ws.onStatusChange = () => {
-            this.onStatusChange()
+            this.statusObservable.next({ isConnected: this.ws.isConnected })
         }
 
         this.ws.onmessage = frame => {

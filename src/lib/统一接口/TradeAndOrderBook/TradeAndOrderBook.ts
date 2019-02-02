@@ -3,11 +3,9 @@ import { Subject } from 'rxjs'
 
 export class TradeAndOrderBook<T extends string> {
 
-    get isConnected() {
-        return false
-    }
-
-    onStatusChange = () => { }
+    statusObservable = new Subject<{
+        isConnected: boolean
+    }>()
 
     tradeObservable = new Subject<{
         symbol: T

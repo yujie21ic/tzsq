@@ -20,17 +20,13 @@ export class BinanceTradeAndOrderBook extends TradeAndOrderBook<BaseType.Binance
             'btcusdt@depth5',
             'ethusdt@depth5'
         ].join('/')
-    })
-
-    get isConnected() {
-        return this.ws.isConnected
-    }
+    }) 
 
     constructor() {
         super()
 
         this.ws.onStatusChange = () => {
-            this.onStatusChange()
+            this.statusObservable.next({ isConnected: this.ws.isConnected })
         }
 
         this.ws.onData = ({ stream, data }: { stream: string, data: any }) => {

@@ -12,6 +12,8 @@ export class RealData extends RealDataBase {
     private bitmex = new BitmexTradeAndOrderBook()
     private binance = new BinanceTradeAndOrderBook()
 
+    _binance = false
+    _bitmex = false
     onTitle = (p: {
         binance: boolean
         bitmex: boolean
@@ -23,11 +25,22 @@ export class RealData extends RealDataBase {
             this.wss = new WebSocket.Server({ port: 6666 })
         }
 
-        this.binance.onStatusChange = this.bitmex.onStatusChange = () =>
+        this.bitmex.statusObservable.subscribe(v => {
+            this._bitmex = v.isConnected
             this.onTitle({
-                binance: this.binance.isConnected,
-                bitmex: this.bitmex.isConnected
+                binance: this._binance,
+                bitmex: this._bitmex,
             })
+        })
+
+        this.binance.statusObservable.subscribe(v => {
+            this._binance = v.isConnected
+            this.onTitle({
+                binance: this._binance,
+                bitmex: this._bitmex,
+            })
+        })
+
 
         //runServer
         if (this.wss !== undefined) {
