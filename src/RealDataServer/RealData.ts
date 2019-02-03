@@ -3,6 +3,7 @@ import { RealDataBase } from './RealDataBase'
 import { BaseType } from '../lib/BaseType'
 import { BitmexTradeAndOrderBook } from '../lib/统一接口/TradeAndOrderBook/BitmexTradeAndOrderBook'
 import { BinanceTradeAndOrderBook } from '../lib/统一接口/TradeAndOrderBook/BinanceTradeAndOrderBook'
+import { HopexTradeAndOrderBook } from '../lib/统一接口/TradeAndOrderBook/HopexTradeAndOrderBook'
 
 export class RealData extends RealDataBase {
 
@@ -11,6 +12,7 @@ export class RealData extends RealDataBase {
 
     private bitmex = new BitmexTradeAndOrderBook()
     private binance = new BinanceTradeAndOrderBook()
+    private hopex = new HopexTradeAndOrderBook()
 
     _binance = false
     _bitmex = false
@@ -126,5 +128,34 @@ export class RealData extends RealDataBase {
             })
 
         })
+
+
+
+        this.hopex.tradeObservable.subscribe(({ symbol, timestamp, price, side, size }) => {
+            this.on着笔({
+                symbol,
+                xxxxxxxx: this.jsonSync.data.hopex[symbol].data,
+                timestamp,
+                price,
+                side,
+                size,
+            })
+        })
+
+
+        this.hopex.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
+            this.on盘口({
+                symbol,
+                xxxxxxxx: this.jsonSync.data.hopex[symbol].orderBook,
+                timestamp,
+                orderBook: {
+                    id: Math.floor(timestamp / RealDataBase.单位时间),
+                    buy,
+                    sell,
+                }
+            })
+        })
+
+
     }
 }
