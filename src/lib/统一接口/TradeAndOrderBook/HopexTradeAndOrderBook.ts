@@ -106,8 +106,8 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
                         symbol: v.contractCode,
                         timestamp: Number(d.timestamp),
                         side: v.side === '1' ? 'Sell' : 'Buy',
-                        size: Number(v.fillQuantity),
-                        price: Number(v.fillPrice),
+                        size: Number(v.fillQuantity.split(',').join('')),   //居然返回字符串样式
+                        price: Number(v.fillPrice.split(',').join('')),     //居然返回字符串样式
                     })
                 })
             }

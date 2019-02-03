@@ -16,9 +16,11 @@ export class RealData extends RealDataBase {
 
     _binance = false
     _bitmex = false
+    _hopex = false
     onTitle = (p: {
         binance: boolean
         bitmex: boolean
+        hopex: boolean
     }) => { }
 
     constructor(server = true) {
@@ -32,6 +34,7 @@ export class RealData extends RealDataBase {
             this.onTitle({
                 binance: this._binance,
                 bitmex: this._bitmex,
+                hopex: this._hopex,
             })
         })
 
@@ -40,6 +43,16 @@ export class RealData extends RealDataBase {
             this.onTitle({
                 binance: this._binance,
                 bitmex: this._bitmex,
+                hopex: this._hopex,
+            })
+        })
+
+        this.hopex.statusObservable.subscribe(v => {
+            this._hopex = v.isConnected
+            this.onTitle({
+                binance: this._binance,
+                bitmex: this._bitmex,
+                hopex: this._hopex,
             })
         })
 
