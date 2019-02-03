@@ -52,17 +52,17 @@ const head_data = (name: string) => ({
     'serialNumber': '5'
 })
 
-const orderbook_subscribe_data = (symbol: BaseType.HopexSymbol) => (
-    {
-        'head': head_data('orderbook'),
-        'param': {
-            'market': symbol,
-            'marketCode': symbol,
-            'contractCode': symbol,
-            'lang': 'cn'
-        }
-    }
-)
+// const orderbook_subscribe_data = (symbol: BaseType.HopexSymbol) => (
+//     {
+//         'head': head_data('orderbook'),
+//         'param': {
+//             'market': symbol,
+//             'marketCode': symbol,
+//             'contractCode': symbol,
+//             'lang': 'cn'
+//         }
+//     }
+// )
 
 const deals_subscribe_data = (symbol: BaseType.HopexSymbol) => ({
     'head': head_data('deals'),
