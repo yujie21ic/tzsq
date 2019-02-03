@@ -88,8 +88,9 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
 
         this.ws.onStatusChange = () => {
             if (this.ws.isConnected) {
-                this.ws.sendJSON(orderbook_subscribe_data('BTCUSDT'))
-                this.ws.sendJSON(orderbook_subscribe_data('ETHUSDT'))
+                // 盘口懒得写了
+                // this.ws.sendJSON(orderbook_subscribe_data('BTCUSDT'))
+                // this.ws.sendJSON(orderbook_subscribe_data('ETHUSDT'))
                 this.ws.sendJSON(deals_subscribe_data('BTCUSDT'))
                 this.ws.sendJSON(deals_subscribe_data('ETHUSDT'))
             }
