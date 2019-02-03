@@ -428,7 +428,8 @@ export class RealDataBase {
         const 现货 = this.item2(this.data.binance[binanceSymbol], false)
 
         const 期货 = this.item2(this.data.bitmex[symbol], true)
-        const hopex = this.item2(this.data.hopex[hopexSymbol], true)
+
+        const hopex = this.item2(this.data.hopex[hopexSymbol], false)
 
         //差价
         const 差价 = 指标.lazyMapCache(() => Math.min(现货.价格.length, 期货.价格.length), i => 现货.价格[i] - 期货.价格[i])
