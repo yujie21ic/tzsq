@@ -28,6 +28,7 @@ const 卖颜色1 = 0x78281F
 const 买颜色 = 0x48aa65
 const 卖颜色 = 0xe56546
 const 波动率颜色 = 0xC70039
+const 净盘口颜色 = 0xEB95D8
 
 
 
@@ -88,16 +89,17 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             layerList: [
                 layer(LineLayer, { data: d.期货.成交量均线买3, color: 买颜色1 }),
                 layer(LineLayer, { data: d.期货.成交量均线卖3, color: 卖颜色1, 临时参数: '倒过来显示' }),
+                //layer(LineLayer, { data: d.期货.成交量均线卖3, color: 卖颜色1}),
+                //layer(LineLayer, { data: d.期货.净盘口, color: 净盘口颜色 }),
             ]
         },
-
-
         {
             heightPercentage: 0.4,
-
             numberColor: BTC颜色,
+            和下一张重叠: true,
             layerList: [
                 layer(LineLayer, { data: d2.XBTUSD.期货.价格, color: BTC颜色 }),
+              
                 layer(TextLayer, {
                     text:
                         `现货:${lastNumber(d.现货.价格).toFixed(2)} - ${d.现货减去.toFixed(2)} = ${lastNumber(d.现货减去价格).toFixed(2)}   ` +
@@ -109,6 +111,20 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
             ]
         },
+        {
+            heightPercentage: 0.4,
+           //和下一张重叠: true,
+            layerList: [
+                layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+            ]
+        },
+        // {
+        //     heightPercentage: 0.4,
+        //    //和下一张重叠: true,
+        //     layerList: [
+        //         layer(LineLayer, { data: d.期货.净盘口, color: 净盘口颜色 }),
+        //     ]
+        // },
 
 
 
@@ -127,6 +143,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layer(LineLayer, { data: d.期货.盘口买, color: 买颜色 }),
                 layer(LineLayer, { data: d.期货.盘口卖, color: 卖颜色, 临时参数: '变成负数' }),
                 layer(LineLayer, { data: d.期货.净盘口, color: BTC颜色 }),
+                layer(LineLayer, { data: d.期货.净盘口均线, color: ETH颜色 }),
             ]
         },
         // {
