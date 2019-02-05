@@ -2,9 +2,9 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { style } from 'typestyle'
 import { reverse } from 'ramda'
-import { DataClient } from './RealDataServer/DataClient'
-import { dialog } from './lib/UI/dialog'
-import { setWindowTitle } from './lib/C/setWindowTitle'
+import { DataClient } from '../RealDataServer/DataClient'
+import { dialog } from '../lib/UI/dialog'
+import { setWindowTitle } from '../lib/C/setWindowTitle'
 
 const orderTbodyTdSell = style({
 

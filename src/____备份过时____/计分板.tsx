@@ -1,9 +1,9 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { config } from './config'
-import { OrderClient } from './OrderServer/OrderClient'
-import { Table } from './lib/UI/Table'
-import { windowExt } from './windowExt'
+import { config } from '../config'
+import { OrderClient } from '../OrderServer/OrderClient'
+import { Table } from '../lib/UI/Table'
+import { windowExt } from '../windowExt'
 
 const 计分板倍数 = config.account![windowExt.accountName].计分板倍数 || 1
 
