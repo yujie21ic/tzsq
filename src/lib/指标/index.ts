@@ -23,6 +23,17 @@ export namespace 指标 {
                 })
 
 
+    export const EMA = 指标(({ start, end, count, arr }) => {
+        const α = 2 / (count + 1)
+
+        let ret = α * arr[start]
+        for (let i = start + 1; i <= end; i++) {
+            ret = α * arr[i] + (1 - α) * ret
+        }
+        return ret
+    })
+
+
     export const 均线 = 指标(({ start, end, count, arr }) => {
         let sum = 0
         for (let i = start; i <= end; i++) {
@@ -655,7 +666,7 @@ export namespace 指标 {
                 开始点价格,
                 成交量累计,
                 价钱增量,
-                阻力: Math.min(NaNToInfinity((成交量累计*成交量累计) / 价钱增量), 2000000),
+                阻力: Math.min(NaNToInfinity((成交量累计 * 成交量累计) / 价钱增量), 2000000),
             }
             // console.log('初始化涨', i, cache[i])
         }

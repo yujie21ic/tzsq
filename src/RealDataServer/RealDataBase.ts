@@ -397,6 +397,15 @@ export class RealDataBase {
 
         const 阻力笔 = 指标.阻力笔(价格)
 
+
+
+        //MACD 
+        const EMA12 = 指标.EMA(价格, 12, RealDataBase.单位时间)
+        const EMA26 = 指标.EMA(价格, 16, RealDataBase.单位时间)
+        const DIF = 指标.lazyMapCache(() => Math.max(EMA12.length, EMA26.length), i => EMA12[i] - EMA26[i])
+        const DEM = 指标.EMA(DIF, 9, RealDataBase.单位时间)
+        const OSC = 指标.lazyMapCache(() => Math.max(DIF.length, DEM.length), i => DIF[i] - DEM[i])
+
         return {
             价格, 价格均线, 波动率, 成交量买, 成交量买均线, 成交量卖, 成交量卖均线, 盘口买, 盘口卖, 净盘口, 净盘口均线,
             成交次数买, 成交次数卖,
@@ -419,6 +428,13 @@ export class RealDataBase {
             // 盘口买均线,
             // 盘口卖均线,
             阻力笔,
+
+            MACD: {
+                DIF,
+                DEM,
+                OSC,
+            }
+
         }
     }
 
