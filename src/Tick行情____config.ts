@@ -21,12 +21,12 @@ type ItemFunc = (d: D, d2: D2) => {
 
 const ETH颜色 = 0xaaaa00
 const BTC颜色 = 0xcc66ff
-//const 买颜色 = 0x1E8449
-const 买颜色1 = 0x145A32
-//const 卖颜色 = 0xB03A2E
-const 卖颜色1 = 0x78281F
-const 买颜色 = 0x48aa65
-const 卖颜色 = 0xe56546
+const 买颜色 = 0x0E6655
+const 买颜色1 = 0x16A085
+const 卖颜色 = 0x943126
+const 卖颜色1 = 0xE74C3C
+// const 买颜色 = 0x48aa65
+// const 卖颜色 = 0xe56546
 const 波动率颜色 = 0xC70039
 const 净盘口颜色 = 0xEB95D8
 
@@ -120,14 +120,22 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         },
         {
             heightPercentage: 0.4,
-            //和下一张重叠: true,
+            numberColor: 波动率颜色,
+            numberX: 100,
             layerList: [
-                layer(LineLayer, { data: d.期货.卖MACD.DEM1, color: 买颜色 }),
-                layer(LineLayer, { data: d.期货.卖MACD.DIF1, color: 卖颜色 }),
-                //layer(BarLayer,{ data: d.期货.MACD.OSC, color: BTC颜色 })
-              
+                layer(LineLayer, { data: d.期货.波动率, color: 波动率颜色 }),
             ]
         },
+        // {
+        //     heightPercentage: 0.4,
+        //     //和下一张重叠: true,
+        //     layerList: [
+        //         layer(LineLayer, { data: d.期货.卖MACD.DEM1, color: 买颜色 }),
+        //         layer(LineLayer, { data: d.期货.卖MACD.DIF1, color: 卖颜色 }),
+        //         //layer(BarLayer,{ data: d.期货.MACD.OSC, color: BTC颜色 })
+              
+        //     ]
+        // },
         // {
         //     heightPercentage: 0.4,
         //     //和下一张重叠: true,
@@ -167,12 +175,23 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         },
         {
             heightPercentage: 0.3,
-            和下一张重叠: true,
+            //和下一张重叠: true,
             layerList: [
                 layer(LineLayer, { data: d.期货.买MACD.DEM, color: 买颜色 }),
-                layer(LineLayer, { data: d.期货.买MACD.DIF, color: 卖颜色 }),
+                layer(LineLayer, { data: d.期货.买MACD.DIF, color: 买颜色1 }),
+                layer(LineLayer, { data: d.期货.卖MACD.DEM1, color: 卖颜色 }),
+                layer(LineLayer, { data: d.期货.卖MACD.DIF1, color: 卖颜色1 }),
             ]
         },
+        // {
+        //     heightPercentage: 0.3,
+        //     //和下一张重叠: true,
+        //     layerList: [
+               
+        //         //layer(BarLayer,{ data: d.期货.MACD.OSC, color: BTC颜色 })
+              
+        //     ]
+        // },
         // {
         //     heightPercentage: 0.3,
         //     和下一张重叠: true,
@@ -195,14 +214,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         //     和下一张重叠: true,
         //     layerList: 成交量买卖曲线(d, d2)
         // },
-        {
-            heightPercentage: 0.3,
-            numberColor: 波动率颜色,
-            numberX: 100,
-            layerList: [
-                layer(LineLayer, { data: d.期货.波动率, color: 波动率颜色 }),
-            ]
-        },
+       
 
     ],
     双价格图和成交量: (d, d2) => [

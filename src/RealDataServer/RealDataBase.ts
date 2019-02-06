@@ -266,8 +266,8 @@ export class RealDataBase {
         const 波动率 = 指标.波动率(价格, 30, RealDataBase.单位时间)
 
 
-        const 成交量买 = 指标.lazyMapCache(() => data.length, i => data[i].buySize)
-        const 成交量卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellSize)
+        const 成交量买 = 指标.lazyMapCache(() => data.length, i => Math.abs(data[i].buySize))
+        const 成交量卖 = 指标.lazyMapCache(() => data.length, i => Math.abs(data[i].sellSize))
         const 净成交量 = 指标.lazyMapCache(() => data.length, i => Math.abs(成交量买[i]-成交量卖[i]))
         const 成交次数买 = 指标.lazyMapCache(() => data.length, i => data[i].buyCount)
         const 成交次数卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellCount)
