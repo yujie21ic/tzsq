@@ -268,17 +268,18 @@ export class RealDataBase {
 
         const 成交量买 = 指标.lazyMapCache(() => data.length, i => data[i].buySize)
         const 成交量卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellSize)
-
+        const 净成交量 = 指标.lazyMapCache(() => data.length, i => Math.abs(成交量买[i]-成交量卖[i]))
         const 成交次数买 = 指标.lazyMapCache(() => data.length, i => data[i].buyCount)
         const 成交次数卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellCount)
+    
         const 成交量均线买3 = 指标.累加(
             指标.lazyMapCache(() => 成交量买.length, i => 成交量买[i]),
-            3,
+            5,
             RealDataBase.单位时间
         )
         const 成交量均线卖3 = 指标.累加(
             指标.lazyMapCache(() => 成交量卖.length, i => 成交量卖[i]),
-            3,
+            5,
             RealDataBase.单位时间
         )
         const 成交次数买均线10 = 指标.累加(
@@ -331,7 +332,7 @@ export class RealDataBase {
         const 净盘口 = 指标.lazyMapCache(() => Math.min(盘口买.length, 盘口卖.length), i => 盘口买[i] - Math.abs(盘口卖[i]))
         const 净盘口均线 = 指标.均线(
             指标.lazyMapCache(() => Math.min(盘口买.length, 盘口卖.length), i => 净盘口[i]),
-            5,
+            10,
             RealDataBase.单位时间
         )
         //const 净盘口均线 = 指标.均线(净盘口, 多少秒均线, RealDataBase.单位时间)
@@ -399,12 +400,18 @@ export class RealDataBase {
 
 
 
-        //MACD 
-        const EMA12 = 指标.EMA(价格, 12, RealDataBase.单位时间)
-        const EMA26 = 指标.EMA(价格, 16, RealDataBase.单位时间)
+        //MACD  19 40
+        const EMA12 = 指标.EMA(成交量买, 12, RealDataBase.单位时间)
+        const EMA26 = 指标.EMA(成交量买, 26, RealDataBase.单位时间)
         const DIF = 指标.lazyMapCache(() => Math.max(EMA12.length, EMA26.length), i => EMA12[i] - EMA26[i])
         const DEM = 指标.EMA(DIF, 9, RealDataBase.单位时间)
         const OSC = 指标.lazyMapCache(() => Math.max(DIF.length, DEM.length), i => DIF[i] - DEM[i])
+
+        const a = 指标.EMA(成交量卖, 12, RealDataBase.单位时间)
+        const b = 指标.EMA(成交量卖, 26, RealDataBase.单位时间)
+        const DIF1 = 指标.lazyMapCache(() => Math.max(a.length, b.length), i => a[i] - b[i])
+        const DEM1 = 指标.EMA(DIF1, 9, RealDataBase.单位时间)
+        const OSC1 = 指标.lazyMapCache(() => Math.max(DIF1.length, DEM1.length), i => DIF1[i] - DEM[i])
 
         return {
             价格, 价格均线, 波动率, 成交量买, 成交量买均线, 成交量卖, 成交量卖均线, 盘口买, 盘口卖, 净盘口, 净盘口均线,
@@ -429,11 +436,17 @@ export class RealDataBase {
             // 盘口卖均线,
             阻力笔,
 
-            MACD: {
+            买MACD: {
                 DIF,
                 DEM,
                 OSC,
-            }
+            },
+            
+            卖MACD: {
+                DIF1,
+                DEM1,
+                OSC1,
+            },
 
         }
     }
