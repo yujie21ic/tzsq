@@ -268,10 +268,10 @@ export class RealDataBase {
 
         const 成交量买 = 指标.lazyMapCache(() => data.length, i => Math.abs(data[i].buySize))
         const 成交量卖 = 指标.lazyMapCache(() => data.length, i => Math.abs(data[i].sellSize))
-        const 净成交量 = 指标.lazyMapCache(() => data.length, i => Math.abs(成交量买[i]-成交量卖[i]))
+        const 净成交量 = 指标.lazyMapCache(() => data.length, i => Math.abs(成交量买[i] - 成交量卖[i]))
         const 成交次数买 = 指标.lazyMapCache(() => data.length, i => data[i].buyCount)
         const 成交次数卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellCount)
-    
+
         const 成交量均线买3 = 指标.累加(
             指标.lazyMapCache(() => 成交量买.length, i => 成交量买[i]),
             5,
@@ -413,6 +413,41 @@ export class RealDataBase {
         const DEM1 = 指标.EMA(DIF1, 9, RealDataBase.单位时间)
         const OSC1 = 指标.lazyMapCache(() => Math.max(DIF1.length, DEM1.length), i => DIF1[i] - DEM[i])
 
+
+
+        //信号_上涨
+        const 盘口买3秒均线 = 指标.均线(
+            指标.lazyMapCache(() => 盘口买.length, i => 盘口买[i]),
+            3,
+            RealDataBase.单位时间
+        )
+
+        const 信号_上涨 = 指标.lazyMapCache(
+            () => Math.max(DIF1.length, DEM1.length),
+            i => [
+                {
+                    name: '净盘口均线 < 0',
+                    value: 净盘口均线[i] < 0
+                },
+                {
+                    name: '净盘口 < 净盘口均线',
+                    value: 净盘口[i] < 净盘口均线[i]
+                },
+                {
+                    name: '买盘口必须低量（3秒均线小于50万）',
+                    value: 盘口买3秒均线[i] < 50 * 10000
+                },
+                {
+                    name: '成交量买快均线 < 慢均线',
+                    value: DIF[i] < DEM[i]
+                },
+                {
+                    name: '波动率 > 5',
+                    value: 波动率[i] > 5
+                },
+            ]
+        )
+
         return {
             价格, 价格均线, 波动率, 成交量买, 成交量买均线, 成交量卖, 成交量卖均线, 盘口买, 盘口卖, 净盘口, 净盘口均线,
             成交次数买, 成交次数卖,
@@ -441,13 +476,14 @@ export class RealDataBase {
                 DEM,
                 OSC,
             },
-            
+
             卖MACD: {
                 DIF1,
                 DEM1,
                 OSC1,
             },
 
+            信号_上涨,
         }
     }
 

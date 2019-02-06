@@ -5,6 +5,7 @@ import { TextLayer } from './lib/Chart/Layer/TextLayer'
 import { lastNumber } from './lib/F/lastNumber'
 import { BarLayer } from './lib/Chart/Layer/BarLayer'
 import { ZeroLayer } from './lib/Chart/Layer/ZeroLayer'
+import { 信号Layer } from './lib/Chart/Layer/信号Layer';
 // import { 竖线Layer } from './lib/Chart/Layer/竖线Layer'
 // import { 画线Layer } from './lib/Chart/Layer/画线Layer'
 
@@ -175,7 +176,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ]
         },
         {
-            heightPercentage: 0.3,
+            heightPercentage: 0.15,
             //和下一张重叠: true,
             layerList: [
                 layer(ZeroLayer, { color: 0xaaaaaa }),
@@ -183,6 +184,13 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layer(LineLayer, { data: d.期货.买MACD.DIF, color: 买颜色1 }),
                 layer(LineLayer, { data: d.期货.卖MACD.DEM1, color: 卖颜色 }),
                 layer(LineLayer, { data: d.期货.卖MACD.DIF1, color: 卖颜色1 }),
+            ]
+        },
+
+        {
+            heightPercentage: 0.15,
+            layerList: [
+                layer(信号Layer, { data: d.期货.信号_上涨 }),
             ]
         },
         // {
