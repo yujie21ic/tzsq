@@ -186,7 +186,6 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layer(LineLayer, { data: d.期货.卖MACD.DIF1, color: 卖颜色1 }),
             ]
         },
-
         {
             heightPercentage: 0.15,
             layerList: [
