@@ -4,6 +4,7 @@ import { LineLayer } from './lib/Chart/Layer/LineLayer'
 import { TextLayer } from './lib/Chart/Layer/TextLayer'
 import { lastNumber } from './lib/F/lastNumber'
 import { BarLayer } from './lib/Chart/Layer/BarLayer'
+import { ZeroLayer } from './lib/Chart/Layer/ZeroLayer'
 // import { 竖线Layer } from './lib/Chart/Layer/竖线Layer'
 // import { 画线Layer } from './lib/Chart/Layer/画线Layer'
 
@@ -99,7 +100,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             和下一张重叠: true,
             layerList: [
                 layer(LineLayer, { data: d2.XBTUSD.期货.价格, color: BTC颜色 }),
-              
+
                 layer(TextLayer, {
                     text:
                         `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -113,7 +114,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         },
         {
             heightPercentage: 0.4,
-           和下一张重叠: true,
+            和下一张重叠: true,
             layerList: [
                 layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
             ]
@@ -133,14 +134,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         //         layer(LineLayer, { data: d.期货.卖MACD.DEM1, color: 买颜色 }),
         //         layer(LineLayer, { data: d.期货.卖MACD.DIF1, color: 卖颜色 }),
         //         //layer(BarLayer,{ data: d.期货.MACD.OSC, color: BTC颜色 })
-              
+
         //     ]
         // },
         // {
         //     heightPercentage: 0.4,
         //     //和下一张重叠: true,
         //     layerList: [
-              
+
         //         layer(LineLayer,{ data: d.期货.成交量均线卖3, color: ETH颜色 })
         //     ]
         // },
@@ -166,7 +167,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             heightPercentage: 0.3,
             //和下一张重叠: true,
             layerList: [
-                
+                layer(ZeroLayer, { color: 0xaaaaaa }),
                 layer(LineLayer, { data: d.期货.盘口买, color: 买颜色 }),
                 layer(LineLayer, { data: d.期货.盘口卖, color: 卖颜色, 临时参数: '变成负数' }),
                 layer(LineLayer, { data: d.期货.净盘口, color: BTC颜色 }),
@@ -177,6 +178,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             heightPercentage: 0.3,
             //和下一张重叠: true,
             layerList: [
+                layer(ZeroLayer, { color: 0xaaaaaa }),
                 layer(LineLayer, { data: d.期货.买MACD.DEM, color: 买颜色 }),
                 layer(LineLayer, { data: d.期货.买MACD.DIF, color: 买颜色1 }),
                 layer(LineLayer, { data: d.期货.卖MACD.DEM1, color: 卖颜色 }),
@@ -187,9 +189,9 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         //     heightPercentage: 0.3,
         //     //和下一张重叠: true,
         //     layerList: [
-               
+
         //         //layer(BarLayer,{ data: d.期货.MACD.OSC, color: BTC颜色 })
-              
+
         //     ]
         // },
         // {
@@ -214,7 +216,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         //     和下一张重叠: true,
         //     layerList: 成交量买卖曲线(d, d2)
         // },
-       
+
 
     ],
     双价格图和成交量: (d, d2) => [
