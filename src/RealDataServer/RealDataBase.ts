@@ -440,6 +440,30 @@ export class RealDataBase {
             ]
         )
 
+        //下跌 重复
+        const 盘口卖3秒均线 = 指标.均线(
+            指标.lazyMapCache(() => 盘口卖.length, i => 盘口卖[i]),
+            3,
+            RealDataBase.单位时间
+        )
+        const 信号_下跌 = 指标.lazyMapCache(
+            () => Math.min(
+                净盘口.length,
+                净盘口均线.length,
+                盘口卖3秒均线.length,
+                DIF1.length,
+                DEM1.length,
+                波动率.length
+            ),
+            i => [
+                { name: '净盘口均线 > 0', value: 净盘口均线[i] > 0 },
+                { name: '净盘口 > 净盘口均线', value: 净盘口[i] > 净盘口均线[i] },
+                { name: '卖盘口必须低量（3秒均线小于50万）', value: 盘口卖3秒均线[i] < 50 * 10000 },
+                { name: '成交量卖快均线 < 慢均线', value: DIF1[i] < DEM1[i] },
+                { name: '波动率 > 5', value: 波动率[i] > 5 },
+            ]
+        )
+
         return {
             价格, 价格均线, 波动率, 成交量买, 成交量买均线, 成交量卖, 成交量卖均线, 盘口买, 盘口卖, 净盘口, 净盘口均线,
             成交次数买, 成交次数卖,
@@ -477,6 +501,7 @@ export class RealDataBase {
             },
 
             信号_上涨,
+            信号_下跌,
         }
     }
 

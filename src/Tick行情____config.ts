@@ -189,7 +189,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         {
             heightPercentage: 0.15,
             layerList: [
-                layer(信号Layer, { data: d.期货.信号_上涨 }),
+                layer(信号Layer, { data: d.期货.信号_上涨, color: 买颜色 }),
             ]
         },
         // {
@@ -226,47 +226,51 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
 
     ],
-    双价格图和成交量: (d, d2) => [
+    图表2: (d, d2) => [ 
         {
             heightPercentage: 0.5,
-            layerList: 双价格(d, d2)
-        },
-        {
-            heightPercentage: 0.5,
-            yCoordinate: '对数',
-            layerList: 成交量买卖(d, d2)
-        },
-    ],
-    真空涨跌: (d, d2) => [
-        {
-            heightPercentage: 0.5,
-            layerList: 双价格(d, d2)
-        },
-        {
-            heightPercentage: 0.5,
-            layerList: [
-                layer(BarLayer, { data: d.期货.真空涨, color: 买颜色 }),
-                layer(BarLayer, { data: d.期货.真空跌, color: 卖颜色 }),
-                layer(TextLayer, {
-                    text: `期货真空涨  ${lastNumber(d.期货.真空涨)} 期货真空跌  ${lastNumber(d.期货.真空跌)} `,
-                    color: BTC颜色
-                })
-            ]
-        },
-    ],
-    BTC_ETH: (d, d2) => [
-        {
-            heightPercentage: 1,
+            numberColor: BTC颜色,
             和下一张重叠: true,
             layerList: [
-                layer(LineLayer, { data: d2.XBTUSD.期货.价格, color: 0xcc66ff })
+                layer(LineLayer, { data: d2.XBTUSD.期货.价格, color: BTC颜色 }),
+
+                layer(TextLayer, {
+                    text:
+                        `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
+                        `bitmex:${lastNumber(d.期货.价格).toFixed(2)}      ` +
+                        `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
+                        `期货波动率:${lastNumber(d.期货.波动率).toFixed(2)}`,
+                    color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+                })
+
             ]
         },
         {
-            heightPercentage: 1,
+            heightPercentage: 0.5,
+            和下一张重叠: true,
             layerList: [
-                layer(LineLayer, { data: d2.ETHUSD.期货.价格, color: 0xffff00 })
+                layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
             ]
-        }
+        },
+        {
+            heightPercentage: 0.5,
+            numberColor: 波动率颜色,
+            numberX: 100,
+            layerList: [
+                layer(LineLayer, { data: d.期货.波动率, color: 波动率颜色 }),
+            ]
+        },
+        {
+            heightPercentage: 0.25,
+            layerList: [
+                layer(信号Layer, { data: d.期货.信号_下跌, color: 卖颜色 }),
+            ]
+        },
+        {
+            heightPercentage: 0.25,
+            layerList: [
+                layer(信号Layer, { data: d.期货.信号_上涨, color: 买颜色 }),
+            ]
+        },
     ]
 }

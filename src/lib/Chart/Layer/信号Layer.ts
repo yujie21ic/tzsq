@@ -4,7 +4,7 @@ import { Layer } from './Layer'
 import { BitmapText } from '../BitmapText'
 import { range } from 'ramda'
 
-export class 信号Layer extends Layer<{ data: ArrayLike<{ name: string, value: boolean }[]> }> {
+export class 信号Layer extends Layer<{ data: ArrayLike<{ name: string, value: boolean }[]>, color: number }> {
 
     private g = new Graphics()
     private textArr: BitmapText[] = []
@@ -28,7 +28,7 @@ export class 信号Layer extends Layer<{ data: ArrayLike<{ name: string, value: 
         const { g } = this
         const { left, right, width, height } = viewport
 
-        const { data } = this.props
+        const { data, color } = this.props
 
         if (data.length === 0) return
 
@@ -44,11 +44,8 @@ export class 信号Layer extends Layer<{ data: ArrayLike<{ name: string, value: 
 
         //
         strArr.forEach((v, i) => {
-            g.moveTo(x偏移 + width, oneH * i)
-            g.lineTo(x偏移 + width + 8, oneH * (i + 1))
             let text = this.textArr[III]
             III += 1
-
             text.fill = 0xaaaaaa
             text.text = v
             text.x = x偏移 + width + 15
@@ -58,7 +55,7 @@ export class 信号Layer extends Layer<{ data: ArrayLike<{ name: string, value: 
 
 
         g.clear()
-        g.lineStyle(1, 0xffffff)
+        g.lineStyle(1, color)
 
         for (let i = Math.max(0, Math.floor(left)); i <= Math.min(Math.round(right), data.length - 1); i++) {
             const x = to.x(i)
