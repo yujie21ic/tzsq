@@ -423,7 +423,7 @@ export class RealDataBase {
         )
 
         const 信号_上涨 = 指标.lazyMapCache(
-            () => Math.max(
+            () => Math.min(
                 净盘口.length,
                 净盘口均线.length,
                 盘口买3秒均线.length,
