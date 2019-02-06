@@ -423,28 +423,20 @@ export class RealDataBase {
         )
 
         const 信号_上涨 = 指标.lazyMapCache(
-            () => Math.max(DIF1.length, DEM1.length),
+            () => Math.max(
+                净盘口.length,
+                净盘口均线.length,
+                盘口买3秒均线.length,
+                DIF.length,
+                DEM.length,
+                波动率.length
+            ),
             i => [
-                {
-                    name: '净盘口均线 < 0',
-                    value: 净盘口均线[i] < 0
-                },
-                {
-                    name: '净盘口 < 净盘口均线',
-                    value: 净盘口[i] < 净盘口均线[i]
-                },
-                {
-                    name: '买盘口必须低量（3秒均线小于50万）',
-                    value: 盘口买3秒均线[i] < 50 * 10000
-                },
-                {
-                    name: '成交量买快均线 < 慢均线',
-                    value: DIF[i] < DEM[i]
-                },
-                {
-                    name: '波动率 > 5',
-                    value: 波动率[i] > 5
-                },
+                { name: '净盘口均线 < 0', value: 净盘口均线[i] < 0 },
+                { name: '净盘口 < 净盘口均线', value: 净盘口[i] < 净盘口均线[i] },
+                { name: '买盘口必须低量（3秒均线小于50万）', value: 盘口买3秒均线[i] < 50 * 10000 },
+                { name: '成交量买快均线 < 慢均线', value: DIF[i] < DEM[i] },
+                { name: '波动率 > 5', value: 波动率[i] > 5 },
             ]
         )
 
