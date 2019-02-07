@@ -5,6 +5,7 @@ import { Subject } from 'rxjs'
 import { 指标 } from './指标'
 import { Sampling } from '../lib/C/Sampling'
 import { kvs } from '../lib/F/kvs'
+import { to范围 } from '../lib/F/to范围'
 
 
 export class RealDataBase {
@@ -379,8 +380,8 @@ export class RealDataBase {
         const 真空跌 = 指标.lazyMapCache(() => 真空.length, i => Math.min(0, 真空[i]))
 
         //真空信号  阻力小于10万，价差大于5
-        const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 100000 && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > 5) ? 1 : 0)
-        const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 > -100000 && 阻力3[i].价钱增量 > 5) ? 1 : 0)
+        const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 100000 && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 >  to范围({value :波动率[i]/10,min:3,max:30 })) ? 1 : 0)
+        const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 > -100000 && 阻力3[i].价钱增量 > to范围({value :波动率[i]/10,min:3,max:30 })) ? 1 : 0)
 
         const 阻力笔 = 指标.阻力笔(价格)
 
