@@ -380,8 +380,8 @@ export class RealDataBase {
         const 真空跌 = 指标.lazyMapCache(() => 真空.length, i => Math.min(0, 真空[i]))
 
         //真空信号  阻力小于10万，价差大于5
-        const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 <to范围({value:波动率[i]/10*10000,min:50000,max:400000}) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 30 })))
-        const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 >to范围({value:-波动率[i]/10*10000,max:-50000,min:-400000}) && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 30 })))
+        const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < to范围({ value: 波动率[i] / 10 * 10000, min: 50000, max: 400000 }) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 30 })))
+        const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 > to范围({ value: -波动率[i] / 10 * 10000, max: -50000, min: -400000 }) && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 30 })))
 
         const 阻力笔 = 指标.阻力笔(价格)
 
@@ -461,26 +461,26 @@ export class RealDataBase {
         const 最高价10 = 指标.最高(价格, 10, RealDataBase.单位时间)
         const 最低价10 = 指标.最低(价格, 10, RealDataBase.单位时间)
 
-        //最低价10 价格均线60 交叉
-        const 上涨速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr: number[], ext) => {
-            for (let i = Math.max(0, arr.length - 1); i < Math.max(价格均线60.length, 最低价10.length); i++) {
-                const 时间ms = (i - ext.last交叉Index) / (1000 / RealDataBase.单位时间)
-                arr[i] = 时间ms === 0 ? NaN : (价格均线60[i] - 最低价10[i]) / 时间ms
 
-                if (Math.abs(最低价10[i] - 价格均线60[i]) < 0.01) {
+        const 上涨速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr: number[], ext) => {
+            for (let i = Math.max(0, arr.length - 1); i < Math.max(价格均线60.length, 最高价10.length); i++) {
+                const 时间ms = (i - ext.last交叉Index) / (1000 / RealDataBase.单位时间)
+                arr[i] = 时间ms === 0 ? NaN : (最高价10[i] - 价格均线60[i]) / 时间ms
+
+                if (Math.abs(最高价10[i] - 价格均线60[i]) < 0.01) {
                     ext.last交叉Index = i
                 }
             }
         })
 
 
-        //最高价10 价格均线60 交叉
-        const 下跌速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr: number[], ext) => {
-            for (let i = Math.max(0, arr.length - 1); i < Math.max(价格均线60.length, 最高价10.length); i++) {
-                const 时间ms = (i - ext.last交叉Index) / (1000 / RealDataBase.单位时间)
-                arr[i] = 时间ms === 0 ? NaN : (最高价10[i] - 价格均线60[i]) / 时间ms
 
-                if (Math.abs(最高价10[i] - 价格均线60[i]) < 0.01) {
+        const 下跌速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr: number[], ext) => {
+            for (let i = Math.max(0, arr.length - 1); i < Math.max(价格均线60.length, 最低价10.length); i++) {
+                const 时间ms = (i - ext.last交叉Index) / (1000 / RealDataBase.单位时间)
+                arr[i] = 时间ms === 0 ? NaN : (价格均线60[i] - 最低价10[i]) / 时间ms
+
+                if (Math.abs(最低价10[i] - 价格均线60[i]) < 0.01) {
                     ext.last交叉Index = i
                 }
             }
