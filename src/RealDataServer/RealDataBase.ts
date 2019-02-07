@@ -418,7 +418,7 @@ export class RealDataBase {
         //信号_上涨
         const 盘口买3秒均线 = 指标.均线(
             指标.lazyMapCache(() => 盘口买.length, i => 盘口买[i]),
-            3,
+            2,
             RealDataBase.单位时间
         )
 
@@ -434,7 +434,7 @@ export class RealDataBase {
             i => [
                 { name: '净盘口均线 < 0', value: 净盘口均线[i] < 0 },
                 { name: '净盘口 < 净盘口均线', value: 净盘口[i] < 净盘口均线[i] },
-                { name: '买盘口必须低量（3秒均线小于50万）', value: 盘口买3秒均线[i] < 50 * 10000 },
+                { name: '买盘口必须低量（3秒均线小于50万）', value: 波动率[i] <15? 盘口买3秒均线[i] < 100 * 10000: 盘口买3秒均线[i] < 50 * 10000  },
                 { name: '成交量买快均线 < 慢均线', value: DIF[i] < DEM[i] },
                 { name: '波动率 > 5', value: 波动率[i] > 5 },
             ]
@@ -443,7 +443,7 @@ export class RealDataBase {
         //下跌 重复
         const 盘口卖3秒均线 = 指标.均线(
             指标.lazyMapCache(() => 盘口卖.length, i => 盘口卖[i]),
-            3,
+            2,
             RealDataBase.单位时间
         )
         const 信号_下跌 = 指标.lazyMapCache(
@@ -458,7 +458,7 @@ export class RealDataBase {
             i => [
                 { name: '净盘口均线 > 0', value: 净盘口均线[i] > 0 },
                 { name: '净盘口 > 净盘口均线', value: 净盘口[i] > 净盘口均线[i] },
-                { name: '卖盘口必须低量（3秒均线小于50万）', value: 盘口卖3秒均线[i] < 50 * 10000 },
+                { name: '卖盘口必须低量',  value: 波动率[i] <15? 盘口卖3秒均线[i] < 100 * 10000: 盘口卖3秒均线[i] < 50 * 10000  },
                 { name: '成交量卖快均线 < 慢均线', value: DIF1[i] < DEM1[i] },
                 { name: '波动率 > 5', value: 波动率[i] > 5 },
             ]
