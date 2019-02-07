@@ -58,7 +58,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             heightPercentage: 0.4,
             和下一张重叠: true,
             layerList: [
-                layer(BarLayer, { data: d.期货.价格OSC, color: 买颜色 }),
+                layer(BarLayer, { data: d.期货.价格OSC, color: 卖颜色 }),
             ]
         },
         // {
@@ -153,33 +153,33 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             heightPercentage: 0.4,
             和下一张重叠: true,
             layerList: [
-                layer(LineLayer, { data: d.期货.价格OSC, color: 卖颜色 }),
+                layer(BarLayer, { data: d.期货.价格OSC, color: 卖颜色 }),
             ]
         },
-        {
-            heightPercentage: 0.4,
-            和下一张重叠: true,
-            layerList: [
-                layer(LineLayer, { data: d2.ETHUSD.期货.价格, color: ETH颜色 }),
+        // {
+        //     heightPercentage: 0.4,
+        //     和下一张重叠: true,
+        //     layerList: [
+        //         layer(LineLayer, { data: d2.ETHUSD.期货.价格, color: ETH颜色 }),
             
-            ]
-        },
-        {
-            heightPercentage: 0.4,
-            和下一张重叠: true,
-            layerList: [
-                layer(LineLayer, { data: d.期货.阻力3涨, color: ETH颜色 }),
+        //     ]
+        // },
+        // {
+        //     heightPercentage: 0.4,
+        //     和下一张重叠: true,
+        //     layerList: [
+        //         layer(LineLayer, { data: d.期货.阻力3涨, color: ETH颜色 }),
             
-            ]
-        },
-        {
-            heightPercentage: 0.4,
-            和下一张重叠: true,
-            layerList: [
+        //     ]
+        // },
+        // {
+        //     heightPercentage: 0.4,
+        //     和下一张重叠: true,
+        //     layerList: [
                
-                layer(LineLayer, { data: d.期货.成交量均线买1, color: 买颜色 }),
-            ]
-        },
+        //         layer(BarLayer, { data: d.期货.成交量均线买1, color: 买颜色 }),
+        //     ]
+        // },
         // {
         //     heightPercentage: 0.4,
         //     和下一张重叠: true,

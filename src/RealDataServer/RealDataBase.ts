@@ -387,7 +387,7 @@ export class RealDataBase {
         const 价格EMA12 = 指标.EMA(成交量买, 12, RealDataBase.单位时间)
         const 价格EMA26 = 指标.EMA(成交量买, 26, RealDataBase.单位时间)
         const 价格DIF = 指标.lazyMapCache(() => Math.max(价格EMA12.length, 价格EMA26.length), i => 价格EMA12[i] - 价格EMA26[i])
-        const 价格DEM = 指标.EMA(价格DIF, 9, RealDataBase.单位时间)
+        const 价格DEM = 指标.EMA(价格DIF, 12, RealDataBase.单位时间)
         const 价格OSC = 指标.lazyMapCache(() => Math.max(价格DIF.length, 价格DEM.length), i => 价格DIF[i] - 价格DEM[i])
 
         //MACD  19 40
@@ -422,6 +422,7 @@ export class RealDataBase {
                 波动率.length
             ),
             i => [
+                { name: 'macd < 0', value: 净盘口均线[i] < 0 },
                 { name: '净盘口均线 < 0', value: 净盘口均线[i] < 0 },
                 { name: '净盘口 < 净盘口均线', value: 净盘口[i] < 净盘口均线[i] },
                 { name: '买盘口必须低量（3秒均线小于50万）', value: 波动率[i] <15? 盘口买2秒均线[i] < 100 * 10000: 盘口买2秒均线[i] < 50 * 10000  },
