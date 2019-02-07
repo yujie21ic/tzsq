@@ -455,6 +455,42 @@ export class RealDataBase {
             ]
         )
 
+        //上涨速度
+        //下跌速度
+        const 价格均线60 = 指标.均线(价格, 60, RealDataBase.单位时间)
+        const 最高价10 = 指标.最高(价格, 10, RealDataBase.单位时间)
+        const 最低价10 = 指标.最低(价格, 10, RealDataBase.单位时间)
+
+        //最低价10 价格均线60 交叉
+        const 上涨速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr, ext) => {
+            for (let i = Math.max(0, arr.length - 1); i < Math.max(价格均线60.length, 最低价10.length); i++) {
+                const 时间ms = (i - ext.last交叉Index) / (1000 / RealDataBase.单位时间)
+                arr[i] = 时间ms === 0 ? NaN : (价格均线60[i] - 最低价10[i]) / 时间ms
+
+                if (Math.abs(最低价10[i] - 价格均线60[i]) < 0.01) {
+                    ext.last交叉Index = i
+                }
+            }
+        })
+
+
+        //最高价10 价格均线60 交叉
+        const 下跌速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr, ext) => {
+            for (let i = Math.max(0, arr.length - 1); i < Math.max(价格均线60.length, 最高价10.length); i++) {
+                const 时间ms = (i - ext.last交叉Index) / (1000 / RealDataBase.单位时间)
+                arr[i] = 时间ms === 0 ? NaN : (最高价10[i] - 价格均线60[i]) / 时间ms
+
+                if (Math.abs(最高价10[i] - 价格均线60[i]) < 0.01) {
+                    ext.last交叉Index = i
+                }
+            }
+        })
+
+
+
+
+
+
         return {
             价格, 价格均线, 波动率, 成交量买, 成交量买均线: 成交量买均线30, 成交量卖, 盘口买, 盘口卖, 净盘口, 净盘口均线,
             成交次数买, 成交次数卖,
@@ -495,6 +531,9 @@ export class RealDataBase {
             // 价格DIF,
             // 价格DEM,
             // 价格OSC,
+
+            上涨速度,
+            下跌速度,
         }
     }
 

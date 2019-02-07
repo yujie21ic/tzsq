@@ -40,14 +40,15 @@ export namespace 指标 {
 
 
     //批量计算
-    export const lazyMapCache2 = <T>(
-        f: (t: T[]) => void
+    export const lazyMapCache2 = <T, EXT>(
+        ext: EXT,
+        f: (arr: T[], ext: EXT) => void
     ): ArrayLike<T> => {
 
         const cache = [] as T[]
 
         const get = (_: any, key: any): any => {
-            f(cache)
+            f(cache, ext)
             if (key === 'length') {
                 return cache.length
             } else {
