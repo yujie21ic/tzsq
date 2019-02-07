@@ -45,8 +45,7 @@ export class 信号Layer extends Layer<{ data: ArrayLike<{ name: string, value: 
         //
         strArr.forEach((v, i) => {
             let text = this.textArr[III]
-            III += 1
-            text.fill = 0xaaaaaa
+            III += 1 
             text.text = v
             text.x = x偏移 + width + 15
             text.y = oneH * (i + 0.5)
