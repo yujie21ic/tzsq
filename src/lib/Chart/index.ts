@@ -58,6 +58,8 @@ export const chartInit = (element: HTMLElement, func: typeof dataSourceFunc) => 
         backgroundColor: 0x000000
     })
 
+        ; ((window as any)['pixiApplication']) = pixiApplication
+
     pixiApplication.stage.addChild(坐标刻度)
     pixiApplication.stage.addChild(layerContainer)
     pixiApplication.stage.addChild(十字光标)
