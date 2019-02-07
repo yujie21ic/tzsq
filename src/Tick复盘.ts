@@ -3,6 +3,9 @@ import { TickBase } from './TickBase'
 import { registerCommand } from './lib/UI/registerCommand'
 import { windowExt } from './windowExt'
 import { RealDataBase } from './RealDataServer/RealDataBase'
+import { theme } from './lib/Chart/theme'
+
+theme.右边空白 = 0
 
 class Tick复盘 extends TickBase {
 
