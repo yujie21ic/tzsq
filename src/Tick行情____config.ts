@@ -35,20 +35,24 @@ const 净盘口颜色 = 0xEB95D8
 
 
 
-const 双价格 = (d: D, d2: D2) => [
-    //layer(LineLayer, { data: d.现货减去价格, color: ETH颜色 }),
-    layer(LineLayer, { data: d.期货.价格, color: BTC颜色 }),
-    // layer(竖线Layer, { data: d.期货.真空信号涨, color: 买颜色 }),
-    // layer(竖线Layer, { data: d.期货.真空信号跌, color: 卖颜色 }),
-    // layer(画线Layer, { data: d.期货.阻力笔 }),
-    layer(TextLayer, {
-        text:
-            `现货:${lastNumber(d.现货.价格).toFixed(2)} - ${d.现货减去.toFixed(2)} = ${lastNumber(d.现货减去价格).toFixed(2)}   ` +
-            `期货:${lastNumber(d.期货.价格).toFixed(2)}      ` +
-            `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
-            `期货波动率:${lastNumber(d.期货.波动率).toFixed(2)}`,
-        color: ETH颜色
-    })
+const 价格主图 = (d: D, d2: D2) => [
+    {
+        heightPercentage: 0.4,
+        numberColor: BTC颜色,
+        和下一张重叠: true,
+        layerList: [
+            layer(LineLayer, { data: d2.XBTUSD.期货.价格, color: BTC颜色 }),
+            layer(TextLayer, {
+                text:
+                    `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
+                    `bitmex:${lastNumber(d.期货.价格).toFixed(2)}      ` +
+                    `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
+                    `期货波动率:${lastNumber(d.期货.波动率).toFixed(2)}`,
+                color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+            })
+
+        ]
+    },
 ]
 
 const 成交量买卖 = (d: D, d2: D2) => [
@@ -78,6 +82,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             numberColor: BTC颜色,
             和下一张重叠: true,
             layerList: [
+
                 layer(LineLayer, { data: d2.XBTUSD.期货.价格, color: BTC颜色 }),
 
                 layer(TextLayer, {

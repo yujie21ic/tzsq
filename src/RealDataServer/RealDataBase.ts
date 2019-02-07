@@ -332,7 +332,7 @@ export class RealDataBase {
         const 净盘口 = 指标.lazyMapCache(() => Math.min(盘口买.length, 盘口卖.length), i => 盘口买[i] - Math.abs(盘口卖[i]))
         const 净盘口均线 = 指标.均线(
             指标.lazyMapCache(() => Math.min(盘口买.length, 盘口卖.length), i => 净盘口[i]),
-            10,
+            5,
             RealDataBase.单位时间
         )
         //const 净盘口均线 = 指标.均线(净盘口, 多少秒均线, RealDataBase.单位时间)
