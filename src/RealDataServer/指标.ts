@@ -7,24 +7,55 @@ export namespace 指标 {
         getLength: () => number,
         getValue: (i: number) => T,
     ): ArrayLike<T> => {
-        const cache = [] as (T | undefined)[]
+
+        const cache = [] as (T | undefined)[] //任意索引缓存 不需要连续
+
         const get = (_: any, key: any): any => {
             if (key === 'length') {
                 return getLength()
-            }
-            else {
-                key = parseInt(String(key))
-                if (cache[key] !== undefined) return cache[key]
+            } else {
+                //索引
+                const index = parseInt(String(key))
 
-                const ret = getValue(key)
-
-                if (key !== getLength() - 1) {
-                    cache[key] = ret
+                //返回缓存
+                if (cache[index] !== undefined) {
+                    return cache[index]
                 }
 
+                //计算
+                const ret = getValue(index)
+
+                //不是最后一个就缓存
+                if (index !== getLength() - 1) {
+                    cache[index] = ret
+                }
+
+                //返回
                 return ret
             }
         }
+
+        return new Proxy({}, { get })
+    }
+
+
+    //批量计算
+    export const lazyMapCache2 = <T>(
+        f: (t: T[]) => void
+    ): ArrayLike<T> => {
+
+        const cache = [] as T[]
+
+        const get = (_: any, key: any): any => {
+            f(cache)
+            if (key === 'length') {
+                return cache.length
+            } else {
+                key = parseInt(String(key))
+                return cache[key]
+            }
+        }
+
         return new Proxy({}, { get })
     }
 

@@ -272,7 +272,7 @@ export class RealDataBase {
         const 净成交量 = 指标.lazyMapCache(() => data.length, i => Math.abs(成交量买[i] - 成交量卖[i]))
         const 成交次数买 = 指标.lazyMapCache(() => data.length, i => data[i].buyCount)
         const 成交次数卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellCount)
-        
+
         const 成交量均线买1 = 指标.累加(
             指标.lazyMapCache(() => 成交量买.length, i => 成交量买[i]),
             1,
@@ -312,7 +312,7 @@ export class RealDataBase {
         //     RealDataBase.单位时间
         // )
         const 净成交量均线30 = 指标.lazyMapCache(() => data.length, i => Math.max(成交量买均线30[i], 成交量卖均线30[i]) - Math.min(成交量买均线30[i], 成交量卖均线30[i]))
-      
+
 
         const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
         const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
@@ -423,9 +423,9 @@ export class RealDataBase {
                 波动率.length
             ),
             i => [
-                { name: '净盘口均线 < 0', value: 净盘口均线[i]< 100000 },
+                { name: '净盘口均线 < 0', value: 净盘口均线[i] < 100000 },
                 { name: '净盘口 < 净盘口均线', value: 净盘口[i] < 净盘口均线[i] },
-                { name: '买盘口必须低量',value:真空信号涨[i]==1?(true):( 波动率[i] <15? 盘口买2秒均线[i] < 100 * 10000: 盘口买2秒均线[i] < 50 * 10000)},
+                { name: '买盘口必须低量', value: (真空信号涨[i] === 1) || (波动率[i] < 15 ? 盘口买2秒均线[i] < 100 * 10000 : 盘口买2秒均线[i] < 50 * 10000) },
                 { name: '成交量买快均线 < 慢均线', value: DIF[i] < DEM[i] },
                 { name: '波动率 > 5', value: 波动率[i] > 5 },
             ]
@@ -447,9 +447,9 @@ export class RealDataBase {
                 波动率.length
             ),
             i => [
-                { name: '净盘口均线 > 0', value:Math.abs(净盘口均线[i]) > -100000 },
+                { name: '净盘口均线 > 0', value: Math.abs(净盘口均线[i]) > -100000 },
                 { name: '净盘口 > 净盘口均线', value: 净盘口[i] > 净盘口均线[i] },
-                { name: '卖盘口必须低量', value:真空信号跌[i]==1?(true):( 波动率[i] <15? 盘口卖2秒均线[i] < 100 * 10000: 盘口卖2秒均线[i] < 50 * 10000) },
+                { name: '卖盘口必须低量', value: (真空信号跌[i] === 1) || (波动率[i] < 15 ? 盘口卖2秒均线[i] < 100 * 10000 : 盘口卖2秒均线[i] < 50 * 10000) },
                 //{ name: '卖盘口必须低量',  value: 波动率[i] <15? 盘口卖2秒均线[i] < 100 * 10000: 盘口卖2秒均线[i] < 50 * 10000  },
                 { name: '成交量卖快均线 < 慢均线', value: DIF1[i] < DEM1[i] },
                 { name: '波动率 > 5', value: 波动率[i] > 5 },
@@ -470,7 +470,7 @@ export class RealDataBase {
             净成交量,
             净成交量均线30,
             成交量均线买1,
-            成交量均线卖1, 
+            成交量均线卖1,
             成交量均线买5,
             成交量均线卖5,
             成交量买均线30,
