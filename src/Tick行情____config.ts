@@ -176,7 +176,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ]
         },
         {
-            heightPercentage: 0.15,
+            heightPercentage: 0.3,
             //和下一张重叠: true,
             layerList: [
                 layer(ZeroLayer, { color: 0xaaaaaa }),
@@ -184,12 +184,6 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layer(LineLayer, { data: d.期货.买MACD.DIF, color: 买颜色1 }),
                 layer(LineLayer, { data: d.期货.卖MACD.DEM1, color: 卖颜色 }),
                 layer(LineLayer, { data: d.期货.卖MACD.DIF1, color: 卖颜色1 }),
-            ]
-        },
-        {
-            heightPercentage: 0.15,
-            layerList: [
-                layer(信号Layer, { data: d.期货.信号_上涨, color: 买颜色 }),
             ]
         },
         // {
@@ -226,7 +220,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
 
     ],
-    图表2: (d, d2) => [ 
+    图表2: (d, d2) => [
         {
             heightPercentage: 0.5,
             numberColor: BTC颜色,
@@ -263,13 +257,13 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         {
             heightPercentage: 0.25,
             layerList: [
-                layer(信号Layer, { data: d.期货.信号_下跌, color: 卖颜色 }),
+                layer(信号Layer, { data: d.期货.信号_上涨, color: 卖颜色 }),
             ]
         },
         {
             heightPercentage: 0.25,
             layerList: [
-                layer(信号Layer, { data: d.期货.信号_上涨, color: 买颜色 }),
+                layer(信号Layer, { data: d.期货.信号_下跌, color: 买颜色 }),
             ]
         },
     ]
