@@ -35,9 +35,6 @@ export class 信号Layer extends Layer<{ data: ArrayLike<{ name: string, value: 
         const strArr = data[0].map(v => v.name)
         const oneH = height / strArr.length
 
-
-        const x偏移 = 20
-
         //clear
         let III = 0
         this.textArr.forEach(v => v.visible = false)
@@ -45,9 +42,9 @@ export class 信号Layer extends Layer<{ data: ArrayLike<{ name: string, value: 
         //
         strArr.forEach((v, i) => {
             let text = this.textArr[III]
-            III += 1 
+            III += 1
             text.text = v
-            text.x = x偏移 + width + 15
+            text.x = width + 5
             text.y = oneH * (i + 0.5)
             text.visible = true
         })
