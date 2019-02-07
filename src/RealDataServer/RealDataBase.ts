@@ -462,7 +462,7 @@ export class RealDataBase {
         const 最低价10 = 指标.最低(价格, 10, RealDataBase.单位时间)
 
         //最低价10 价格均线60 交叉
-        const 上涨速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr, ext) => {
+        const 上涨速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr: number[], ext) => {
             for (let i = Math.max(0, arr.length - 1); i < Math.max(价格均线60.length, 最低价10.length); i++) {
                 const 时间ms = (i - ext.last交叉Index) / (1000 / RealDataBase.单位时间)
                 arr[i] = 时间ms === 0 ? NaN : (价格均线60[i] - 最低价10[i]) / 时间ms
@@ -475,7 +475,7 @@ export class RealDataBase {
 
 
         //最高价10 价格均线60 交叉
-        const 下跌速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr, ext) => {
+        const 下跌速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr: number[], ext) => {
             for (let i = Math.max(0, arr.length - 1); i < Math.max(价格均线60.length, 最高价10.length); i++) {
                 const 时间ms = (i - ext.last交叉Index) / (1000 / RealDataBase.单位时间)
                 arr[i] = 时间ms === 0 ? NaN : (最高价10[i] - 价格均线60[i]) / 时间ms
