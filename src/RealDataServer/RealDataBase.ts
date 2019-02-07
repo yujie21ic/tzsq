@@ -380,8 +380,8 @@ export class RealDataBase {
         const 真空跌 = 指标.lazyMapCache(() => 真空.length, i => Math.min(0, 真空[i]))
 
         //真空信号  阻力小于10万，价差大于5
-        const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 100000 && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 >  to范围({value :波动率[i]/10,min:3,max:30 })) ? 1 : 0)
-        const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 > -100000 && 阻力3[i].价钱增量 > to范围({value :波动率[i]/10,min:3,max:30 })) ? 1 : 0)
+        const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 100000 && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 30 })))
+        const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 > -100000 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 30 })))
 
         const 阻力笔 = 指标.阻力笔(价格)
 
@@ -425,7 +425,7 @@ export class RealDataBase {
             i => [
                 { name: '净盘口均线 < 0', value: 净盘口均线[i] < 100000 },
                 { name: '净盘口 < 净盘口均线', value: 净盘口[i] < 净盘口均线[i] },
-                { name: '买盘口必须低量', value: 真空信号涨[i] === 1 || 盘口买2秒均线[i] < (波动率[i] < 15 ? 100 : 50) * 10000 },
+                { name: '买盘口必须低量', value: 真空信号涨[i] || 盘口买2秒均线[i] < (波动率[i] < 15 ? 100 : 50) * 10000 },
                 { name: '成交量买快均线 < 慢均线', value: DIF[i] < DEM[i] },
                 { name: '波动率 > 5', value: 波动率[i] > 5 },
             ]
@@ -449,7 +449,7 @@ export class RealDataBase {
             i => [
                 { name: '净盘口均线 > 0', value: Math.abs(净盘口均线[i]) > -100000 },
                 { name: '净盘口 > 净盘口均线', value: 净盘口[i] > 净盘口均线[i] },
-                { name: '卖盘口必须低量', value: 真空信号跌[i] === 1 || 盘口卖2秒均线[i] < (波动率[i] < 15 ? 100 : 50) * 10000 },
+                { name: '卖盘口必须低量', value: 真空信号跌[i] || 盘口卖2秒均线[i] < (波动率[i] < 15 ? 100 : 50) * 10000 },
                 { name: '成交量卖快均线 < 慢均线', value: DIF1[i] < DEM1[i] },
                 { name: '波动率 > 5', value: 波动率[i] > 5 },
             ]

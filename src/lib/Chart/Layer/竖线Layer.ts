@@ -2,7 +2,7 @@ import { Graphics } from 'pixi.js'
 import { Viewport, To, TopBottom } from '../type'
 import { Layer } from './Layer'
 
-export class 竖线Layer extends Layer<{ data: ArrayLike<number>, color: number }> {
+export class 竖线Layer extends Layer<{ data: ArrayLike<boolean>, color: number }> {
 
     private g = new Graphics()
 
@@ -23,7 +23,7 @@ export class 竖线Layer extends Layer<{ data: ArrayLike<number>, color: number 
 
 
         for (let i = Math.max(0, Math.floor(left)); i <= Math.min(Math.round(right), data.length - 1); i++) {
-            if (data[i] === 1) {
+            if (data[i]) {
                 const x = to.x(i)
                 g.moveTo(x, to.y(tb.top))
                 g.lineTo(x, to.y(tb.bottom))
