@@ -80,7 +80,7 @@ export const chartInit = (element: HTMLElement, func: typeof dataSourceFunc) => 
     dataSourceFunc = func
 
 
-    const FPS = 4
+    const FPS = 60
 
     if (FPS >= 60) {
         pixiApplication.ticker.add(chartRender)
@@ -97,6 +97,41 @@ export const chartInit = (element: HTMLElement, func: typeof dataSourceFunc) => 
 
 
 let lastTitle = ''
+
+
+//
+const layerCache = new Map<LayerClass<any>, Layer<any>[]>()
+
+const popLayer = (c: LayerClass<any>, p: any) => {
+
+    if (layerCache.has(c) === false) {
+        layerCache.set(c, [])
+    }
+
+    const arr = layerCache.get(c)!
+    if (arr.length > 0) {
+        const layer = arr.pop() as Layer<any>
+        layer.props = p
+        return layer
+    } else {
+        const layer = new c(p)
+            ; (layer as any)['__xxx__'] = c //!!!
+        layer.init()
+        return layer
+    }
+}
+
+const pushLayer = (layer: Layer<any>) => {
+    const c = (layer as any)['__xxx__'] //!!!
+
+    if (layerCache.has(c) === false) {
+        layerCache.set(c, [])
+    }
+
+    const arr = layerCache.get(c)!
+    arr.push(layer)
+}
+//
 
 const chartRender = () => {
     if (dataSourceFunc === undefined) return
@@ -128,7 +163,8 @@ const chartRender = () => {
 
 
     while (layerContainer.children.length > 0) {
-        (layerContainer.removeChildAt(0) as Layer<any>).destroy()
+        // (layerContainer.removeChildAt(0) as Layer<any>).destroy()        
+        pushLayer(layerContainer.removeChildAt(0) as Layer<any>)
     }
 
     let price = NaN
@@ -137,10 +173,7 @@ const chartRender = () => {
     items.forEach(v => {
 
         //layerList new
-        const layerList = v.layerList.map(([C, P]) => new C(P))
-
-        //init
-        layerList.forEach(layer => layer.init())
+        const layerList = v.layerList.map(([C, P]) => popLayer(C, P))
 
 
         //updateTopAndBottom
