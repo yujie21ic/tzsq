@@ -55,14 +55,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
             ]
         },
-        {
-            heightPercentage: 0.4,
-            和下一张重叠: true,
-            layerList: [
-                layer(LineLayer, { data: d.期货.真空信号涨, color: 买颜色 }),
+        // {
+        //     heightPercentage: 0.4,
+        //     和下一张重叠: true,
+        //     layerList: [
+        //         layer(LineLayer, { data: d.期货.真空信号涨, color: 买颜色 }),
             
-            ]
-        },
+        //     ]
+        // },
         {
             heightPercentage: 0.4,
             和下一张重叠: true,
@@ -72,12 +72,20 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layer(LineLayer, { data: d.期货.波动率, color: 波动率颜色 }),
             ]
         },
+        // {
+        //     heightPercentage: 0.4,
+        //    和下一张重叠: true,
+        //     layerList: [
+        //         layer(LineLayer, { data: d.期货.阻力3涨, color: ETH颜色 }),
+            
+        //     ]
+        // },
         {
             heightPercentage: 0.4,
            // 和下一张重叠: true,
             layerList: [
-                layer(LineLayer, { data: d.期货.阻力3涨, color: ETH颜色 }),
-            
+               
+                layer(LineLayer, { data: d.期货.上涨速度, color: 买颜色 }),
             ]
         },
         // {
@@ -136,14 +144,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 })
             ]
         },
-        {
-            heightPercentage: 0.4,
-            和下一张重叠: true,
-            layerList: [
-                layer(LineLayer, { data: d.期货.真空信号跌, color: 卖颜色 }),
+        // {
+        //     heightPercentage: 0.4,
+        //     和下一张重叠: true,
+        //     layerList: [
+        //         layer(LineLayer, { data: d.期货.真空信号跌, color: 卖颜色 }),
             
-            ]
-        },
+        //     ]
+        // },
         {
             heightPercentage: 0.4,
             和下一张重叠: true,
@@ -154,12 +162,20 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ]
         },
       
+        // {
+        //     heightPercentage: 0.4,
+        //     和下一张重叠: true,
+        //     layerList: [
+               
+        //         layer(LineLayer, { data: d.期货.阻力3跌, color: ETH颜色 }),
+        //     ]
+        // },
         {
             heightPercentage: 0.4,
            // 和下一张重叠: true,
             layerList: [
                
-                layer(LineLayer, { data: d.期货.阻力3跌, color: ETH颜色 }),
+                layer(LineLayer, { data: d.期货.下跌速度, color: 卖颜色 }),
             ]
         },
         // {
