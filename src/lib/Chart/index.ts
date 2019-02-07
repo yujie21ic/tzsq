@@ -80,7 +80,7 @@ export const chartInit = (element: HTMLElement, func: typeof dataSourceFunc) => 
     dataSourceFunc = func
 
 
-    const FPS = 60
+    const FPS = 5 //60
 
     if (FPS >= 60) {
         pixiApplication.ticker.add(chartRender)
