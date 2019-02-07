@@ -18,11 +18,7 @@ export class Layer<P> extends Container {
 
     render(viewport: Viewport, to: To, tb: TopBottom) {
 
-    }
-
-    destroy() {
-
-    }
+    } 
 
     updateTopAndBottom = (viewport: Viewport, tb: TopBottom) => tb
 }

@@ -28,10 +28,4 @@ export class TextLayer extends Layer<{ text: string, color: number }> {
             this.bitmapText.y = 10
         }
     }
-
-    destroy() {
-        if (this.bitmapText !== undefined) {
-            this.bitmapText.destroy()
-        }
-    }
 }

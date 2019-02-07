@@ -62,7 +62,7 @@ export class WebSocketClient {
     }
 
     private reconnect = () => {
-        //destory
+        //destroy
         if (this.ws !== undefined) {
             this.ws.onopen = this.ws.onerror = this.ws.onclose = this.ws.onmessage = () => { }
             this.ws.removeAllListeners('pong')
