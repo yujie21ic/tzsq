@@ -4,7 +4,6 @@ import { RealDataBase } from './RealDataServer/RealDataBase'
 import { formatDate } from './lib/F/formatDate'
 import { dialog } from './lib/UI/dialog'
 import { Tick行情____config } from './Tick行情____config'
-import { 指标 } from './lib/指标'
 import { keys } from 'ramda'
 import { BaseType } from './lib/BaseType'
 
@@ -27,15 +26,6 @@ export class TickBase {
             }
             else if (e.button === 2) {
                 dialog.popupMenu([
-                    ...['涨', '跌', '结束'].map(v => ({
-                        label: v,
-                        checked: 指标.配置.type === v,
-                        onClick: () => {
-                            指标.配置.type = v as any
-                            指标.配置.startIndex = getIndex()
-                        }
-                    })),
-                    undefined,
                     ...keys(this.real.dataExt).map(v => ({
                         label: v,
                         checked: v === this.nowTickSymbol,
