@@ -51,8 +51,7 @@ export namespace 指标 {
             if (key === 'length') {
                 return cache.length
             } else {
-                key = parseInt(String(key))
-                return cache[key]
+                return cache[parseInt(String(key))]
             }
         }
 
