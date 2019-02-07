@@ -5,7 +5,6 @@ import { Subject } from 'rxjs'
 import { 指标 } from './指标'
 import { Sampling } from '../lib/C/Sampling'
 import { kvs } from '../lib/F/kvs'
-import { lastNumber } from '../lib/F/lastNumber';
 
 
 export class RealDataBase {
