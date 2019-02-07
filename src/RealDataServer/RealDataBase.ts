@@ -2,7 +2,7 @@ import { JSONSync } from '../lib/C/JSONSync'
 import { BaseType } from '../lib/BaseType'
 import { sum } from 'ramda'
 import { Subject } from 'rxjs'
-import { 指标 } from '../lib/指标'
+import { 指标 } from './指标'
 import { Sampling } from '../lib/C/Sampling'
 import { kvs } from '../lib/F/kvs'
 import { lastNumber } from '../lib/F/lastNumber';

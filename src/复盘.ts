@@ -11,7 +11,7 @@ import { to范围 } from './lib/F/to范围'
 import { showWindowRemote } from './windowExt'
 
 theme.右边空白 = 0
-// import { MACD } from './lib/指标/MACD' 
+ 
 
 // import { get笔Index, 合并后的K线, get线段 } from './lib/缠中说禅'
 // import { 线段Layer } from './lib/Chart/Layer/线段Layer'

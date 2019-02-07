@@ -1,6 +1,34 @@
-import { 画线LayerItem } from '../Chart/Layer/画线Layer'
+import { 画线LayerItem } from '../lib/Chart/Layer/画线Layer'
 
 export namespace 指标 {
+
+
+    export const lazyMapCache = <T>(
+        getLength: () => number,
+        getValue: (i: number) => T,
+    ): ArrayLike<T> => {
+        const cache = [] as (T | undefined)[]
+        const get = (_: any, key: any): any => {
+            if (key === 'length') {
+                return getLength()
+            }
+            else {
+                key = parseInt(String(key))
+                if (cache[key] !== undefined) return cache[key]
+
+                const ret = getValue(key)
+
+                if (key !== getLength() - 1) {
+                    cache[key] = ret
+                }
+
+                return ret
+            }
+        }
+        return new Proxy({}, { get })
+    }
+
+
 
     const 指标 = (f: (p: {
         start: number
@@ -152,41 +180,6 @@ export namespace 指标 {
         }
         return new Proxy({}, { get })
     }
-
-    export const lazyMapCache = <T>(
-        getLength: () => number,
-        getValue: (i: number) => T,
-    ): ArrayLike<T> => {
-        const cache = [] as (T | undefined)[]
-        const get = (_: any, key: any): any => {
-            if (key === 'length') {
-                return getLength()
-            }
-            else {
-                key = parseInt(String(key))
-                if (cache[key] !== undefined) return cache[key]
-
-                const ret = getValue(key)
-
-                if (key !== getLength() - 1) {
-                    cache[key] = ret
-                }
-
-                return ret
-            }
-        }
-        return new Proxy({}, { get })
-    }
-
-
-
-
-
-
-
-
-
-
 
 
     export const 阻力2 = (p: {
