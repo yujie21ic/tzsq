@@ -1,30 +1,16 @@
-import { Container, Text, Texture, TextStyle, Sprite } from 'pixi.js'
+import { Container, Text, TextStyle, Sprite } from 'pixi.js'
+import { toCacheFunc } from '../C/toCacheFunc'
 
-const __dic__: { [key: string]: { [char: string]: Texture } } = Object.create(null)
-
-const getTexture = (fontSize: number, fill: number, char: string) => {
-    const key = JSON.stringify([fontSize, fill])
-
-    if (__dic__[key] === undefined) {
-        __dic__[key] = Object.create(null)
-    }
-
-    const textureDic = __dic__[key]
-
-    if (textureDic[char] === undefined) {
-        textureDic[char] = ((window as any)['pixiApplication']).renderer.generateTexture(
-            new Text(char,
-                new TextStyle({
-                    fontSize: fontSize,
-                    fill: fill,
-                })
-            )
+const getTexture = toCacheFunc((fontSize: number, fill: number, char: string) =>
+    ((window as any)['pixiApplication']).renderer.generateTexture(
+        new Text(char,
+            new TextStyle({
+                fontSize: fontSize,
+                fill: fill,
+            })
         )
-    }
-    return textureDic[char]
-}
-
-
+    )
+)
 
 export class BitmapText extends Container {
 
