@@ -1,4 +1,4 @@
-import { 画线LayerItem } from '../Chart/Layer/画线Layer'
+import { 画线LayerItem } from '../lib/Chart/Layer/画线Layer'
 
 export namespace 指标 {
 
