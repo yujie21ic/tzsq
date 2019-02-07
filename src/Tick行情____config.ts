@@ -59,49 +59,35 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             heightPercentage: 0.4,
             和下一张重叠: true,
             layerList: [
-                layer(BarLayer, { data: d.期货.价格OSC, color: 卖颜色 }),
+                layer(LineLayer, { data: d.期货.真空信号涨, color: 买颜色 }),
+            
             ]
         },
-        // {
-        //     heightPercentage: 0.4,
-        //     和下一张重叠: true,
-        //     layerList: [
-        //         layer(LineLayer, { data: d2.ETHUSD.期货.价格, color: ETH颜色 }),
-            
-        //     ]
-        // },
-        // {
-        //     heightPercentage: 0.4,
-        //     和下一张重叠: true,
-        //     layerList: [
-        //         layer(LineLayer, { data: d.期货.阻力3涨, color: ETH颜色 }),
-            
-        //     ]
-        // },
-        // {
-        //     heightPercentage: 0.4,
-        //     和下一张重叠: true,
-        //     layerList: [
-               
-        //         layer(BarLayer, { data: d.期货.成交量均线买1, color: 买颜色 }),
-        //     ]
-        // },
-        // {
-        //     heightPercentage: 0.4,
-        //     和下一张重叠: true,
-        //     layerList: [
-               
-        //         layer(LineLayer, { data: d.期货.阻力3跌, color: 卖颜色 }),
-        //     ]
-        // },
         {
             heightPercentage: 0.4,
+            和下一张重叠: true,
             numberColor: 波动率颜色,
             numberX: 100,
             layerList: [
                 layer(LineLayer, { data: d.期货.波动率, color: 波动率颜色 }),
             ]
         },
+        {
+            heightPercentage: 0.4,
+           // 和下一张重叠: true,
+            layerList: [
+                layer(LineLayer, { data: d.期货.阻力3涨, color: ETH颜色 }),
+            
+            ]
+        },
+        // {
+        //     heightPercentage: 0.4,
+        //     layerList: [
+               
+        //         layer(LineLayer, { data: d.期货.成交量均线买1, color: 买颜色 }),
+        //     ]
+        // },
+       
         {
             heightPercentage: 0.25,
             //和下一张重叠: true,
@@ -124,12 +110,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layer(LineLayer, { data: d.期货.卖MACD.DIF1, color: 卖颜色1 }),
             ]
         },
-        // {
-        //     heightPercentage: 0.15,
-        //     layerList: [
-        //         layer(信号Layer, { data: d.期货.信号_上涨, color: 买颜色 }),
-        //     ]
-        // },
+      
         {
             heightPercentage: 0.1,
             layerList: [
@@ -155,47 +136,42 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 })
             ]
         },
-      
         {
             heightPercentage: 0.4,
             和下一张重叠: true,
             layerList: [
-                layer(BarLayer, { data: d.期货.价格OSC, color: 卖颜色 }),
+                layer(LineLayer, { data: d.期货.真空信号跌, color: 卖颜色 }),
+            
             ]
         },
-        // {
-        //     heightPercentage: 0.4,
-        //     和下一张重叠: true,
-        //     layerList: [
-        //         layer(LineLayer, { data: d2.ETHUSD.期货.价格, color: ETH颜色 }),
-            
-        //     ]
-        // },
-        // {
-        //     heightPercentage: 0.4,
-        //     和下一张重叠: true,
-        //     layerList: [
-               
-        //         layer(LineLayer, { data: d.期货.阻力3跌, color: ETH颜色 }),
-        //     ]
-        // },
-        // {
-        //     heightPercentage: 0.4,
-        //     和下一张重叠: true,
-        //     layerList: [
-               
-        //         layer(LineLayer, { data: d.期货.成交量均线卖1, color: 卖颜色 }),
-        //     ]
-        // },
-
         {
             heightPercentage: 0.4,
+            和下一张重叠: true,
             numberColor: 波动率颜色,
             numberX: 100,
             layerList: [
                 layer(LineLayer, { data: d.期货.波动率, color: 波动率颜色 }),
             ]
         },
+      
+        {
+            heightPercentage: 0.4,
+           // 和下一张重叠: true,
+            layerList: [
+               
+                layer(LineLayer, { data: d.期货.阻力3跌, color: ETH颜色 }),
+            ]
+        },
+        // {
+        //     heightPercentage: 0.4,
+           
+        //     layerList: [
+               
+        //         layer(LineLayer, { data: d.期货.成交量均线卖1, color: 卖颜色 }),
+        //     ]
+        // },
+
+       
         {
             heightPercentage: 0.25,
             //和下一张重叠: true,
@@ -218,12 +194,6 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layer(LineLayer, { data: d.期货.卖MACD.DIF1, color: 卖颜色1 }),
             ]
         },
-        // {
-        //     heightPercentage: 0.15,
-        //     layerList: [
-        //         layer(信号Layer, { data: d.期货.信号_上涨, color: 买颜色 }),
-        //     ]
-        // },
         {
             heightPercentage: 0.1,
             layerList: [
@@ -234,7 +204,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
    
     实盘: (d, d2) => [ 
         {
-            heightPercentage: 0.5,
+            heightPercentage: 0.4,
             numberColor: BTC颜色,
             和下一张重叠: true,
             layerList: [
@@ -252,14 +222,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ]
         },
         {
-            heightPercentage: 0.5,
+            heightPercentage: 0.4,
             和下一张重叠: true,
             layerList: [
                 layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
             ]
         },
         {
-            heightPercentage: 0.5,
+            heightPercentage: 0.4,
             numberColor: 波动率颜色,
             numberX: 100,
             layerList: [
@@ -267,13 +237,13 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ]
         },
         {
-            heightPercentage: 0.25,
+            heightPercentage: 0.3,
             layerList: [
                 layer(信号Layer, { data: d.期货.信号_上涨, color: 卖颜色 }),
             ]
         },
         {
-            heightPercentage: 0.25,
+            heightPercentage: 0.3,
             layerList: [
                 layer(信号Layer, { data: d.期货.信号_下跌, color: 买颜色 }),
             ]
