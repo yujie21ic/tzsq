@@ -5,7 +5,7 @@ import { BaseType } from '../lib/BaseType'
 import { sleep } from '../lib/C/sleep'
 import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
 import { realData } from './realData'
-import { to范围 } from '../lib/F/to范围';
+import { to范围 } from '../lib/F/to范围'
 
 export class Account {
     jsonSync = createJSONSync()
