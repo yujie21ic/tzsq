@@ -5,6 +5,8 @@ import { BaseType } from './lib/BaseType'
 import { windowExt } from './windowExt'
 import { Button } from './lib/UI/Button'
 import { theme } from './lib/Chart/theme'
+import { JSONRequest } from './lib/C/JSONRequest'
+import { dialog } from './lib/UI/dialog';
 
 const account = config.account![windowExt.accountName]
 const { cookie } = account
@@ -192,6 +194,8 @@ export class 交易 extends React.Component {
         f()
     }
 
+    hopexCookie = ''
+
     render() {
         return orderClient.isConnected === false ?
             <a href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a> :
@@ -210,8 +214,71 @@ export class 交易 extends React.Component {
                 <hr />
                 <Item symbol='XBTUSD' />
                 <hr />
-                <Item symbol='ETHUSD' />
+
+                <br />
+                <br />
+                <a href='#' onClick={() => {
+                    dialog.showInput({ title: '设置 hopex cookie', value: this.hopexCookie, onOK: v => this.hopexCookie = v })
+                }}>hopex 设置cookie</a>
+                <br />
+                <br />
+
+                <div>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'center'
+                    }}>
+                        <div
+                            style={{ width: '50%' }}>
+                            <Button
+                                bgColor={GREEN}
+                                text={account.交易['XBTUSD'].数量 + ''}
+                                left={() => hopex市价开仓BTC(this.hopexCookie, { size: account.交易['XBTUSD'].数量, side: 'Buy' })}
+                            />
+                        </div>
+                        <div
+                            style={{
+                                width: '50%'
+                            }}>
+                            <Button
+                                bgColor={RED}
+                                text={-account.交易['XBTUSD'].数量 + ''}
+                                left={() => hopex市价开仓BTC(this.hopexCookie, { size: account.交易['XBTUSD'].数量, side: 'Sell' })}
+                            />
+                        </div>
+                    </div>
+                </div >
+
+                {/* <Item symbol='ETHUSD' /> */}
             </div>
     }
 
-} 
+}
+
+
+const hopex市价开仓BTC = (cookie: string, p: { size: number, side: BaseType.Side }) =>
+    JSONRequest<boolean>({
+        url: 'https://www.hopex.com/api/v1/gateway/User/Order',
+        method: 'POST',
+        body: {
+            'param': {
+                'side': p.side === 'Sell' ? '1' : '2',
+                'orderQuantity': p.size,
+                'source': '浏览器，我是市价测试单,用户id：undefined,邮箱：undefined',
+                'market': 'BTCUSDT',
+                'marketCode': 'BTCUSDT',
+                'contractCode': 'BTCUSDT',
+                'lang': 'cn'
+            }
+        },
+        ss: config.ss,
+        headers: {
+            Origin: 'https://www.hopex.com',
+            Referer: 'https://www.hopex.com/trade?marketCode=BTCUSDT',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
+            conversionCurrency: 'USD',
+            Authorization: cookie.split('=')[1],
+            Cookie: cookie,
+        }
+    })  

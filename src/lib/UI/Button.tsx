@@ -52,7 +52,7 @@ export class Button extends React.Component<{
         f().then(({ error, msg, data }) => {
             if (error !== undefined) {
                 //提示失败 error msg
-                this.setState({ 上一次失败信息: error === '服务器返回错误' ? String(msg) : error })
+                this.setState({ 上一次失败信息: '错误:' + (error === '服务器返回错误' ? String(msg) : error) })
             }
             else if (data === false) {
                 //提示失败 overload
