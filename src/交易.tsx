@@ -6,7 +6,7 @@ import { windowExt } from './windowExt'
 import { Button } from './lib/UI/Button'
 import { theme } from './lib/Chart/theme'
 import { JSONRequest } from './lib/C/JSONRequest'
-import { dialog } from './lib/UI/dialog';
+import { dialog } from './lib/UI/dialog'
 
 const account = config.account![windowExt.accountName]
 const { cookie } = account
@@ -236,8 +236,12 @@ export class 交易 extends React.Component {
                             style={{ width: '50%' }}>
                             <Button
                                 bgColor={GREEN}
-                                text={account.交易['XBTUSD'].数量 + ''}
-                                left={() => hopex市价开仓BTC(this.hopexCookie, { size: account.交易['XBTUSD'].数量, side: 'Buy' })}
+                                text={(config.hopex数量 || 0) + ''}
+                                left={() =>
+                                    hopex市价开仓BTC(this.hopexCookie, {
+                                        size: config.hopex数量 || 0,
+                                        side: 'Buy',
+                                    })}
                             />
                         </div>
                         <div
@@ -246,8 +250,11 @@ export class 交易 extends React.Component {
                             }}>
                             <Button
                                 bgColor={RED}
-                                text={-account.交易['XBTUSD'].数量 + ''}
-                                left={() => hopex市价开仓BTC(this.hopexCookie, { size: account.交易['XBTUSD'].数量, side: 'Sell' })}
+                                text={-(config.hopex数量 || 0) + ''}
+                                left={() => hopex市价开仓BTC(this.hopexCookie, {
+                                    size: config.hopex数量 || 0,
+                                    side: 'Sell',
+                                })}
                             />
                         </div>
                     </div>
