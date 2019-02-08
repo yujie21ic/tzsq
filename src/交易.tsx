@@ -85,6 +85,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                             type: 'maker',
                             side: 'Buy',
                             size: account.交易[this.props.symbol].数量,
+                            位置: 3,
                             最低_最高: false,
                         })}
                         right={() => rpc.下单({
@@ -93,6 +94,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                             type: 'taker',
                             side: 'Buy',
                             size: account.交易[this.props.symbol].数量,
+                            位置: 3,
                             最低_最高: false,
                         })}
                     />
@@ -108,6 +110,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                             type: 'maker',
                             side: 'Buy',
                             size: account.交易[this.props.symbol].数量,
+                            位置: 3,
                             最低_最高: true,
                         })}
                         right={() => rpc.下单({
@@ -116,6 +119,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                             type: 'taker',
                             side: 'Buy',
                             size: account.交易[this.props.symbol].数量,
+                            位置: 3,
                             最低_最高: true,
                         })}
                     />
@@ -134,6 +138,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                             type: 'maker',
                             side: 'Sell',
                             size: account.交易[this.props.symbol].数量,
+                            位置: 3,
                             最低_最高: false,
                         })}
                         right={() => rpc.下单({
@@ -142,6 +147,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                             type: 'taker',
                             side: 'Sell',
                             size: account.交易[this.props.symbol].数量,
+                            位置: 3,
                             最低_最高: false,
                         })}
                     />
@@ -155,6 +161,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                             type: 'maker',
                             side: 'Sell',
                             size: account.交易[this.props.symbol].数量,
+                            位置: 3,
                             最低_最高: true,
                         })}
                         right={() => rpc.下单({
@@ -163,6 +170,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                             type: 'taker',
                             side: 'Sell',
                             size: account.交易[this.props.symbol].数量,
+                            位置: 3,
                             最低_最高: true,
                         })}
                     />

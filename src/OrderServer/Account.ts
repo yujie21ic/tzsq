@@ -5,6 +5,7 @@ import { BaseType } from '../lib/BaseType'
 import { sleep } from '../lib/C/sleep'
 import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
 import { realData } from './realData'
+import { to范围 } from '../lib/F/to范围';
 
 export class Account {
     jsonSync = createJSONSync()
@@ -150,9 +151,17 @@ export class Account {
             throw 'symbol不存在'
         }
 
+        const getOrderPrice = () =>
+            realData.getOrderPrice({
+                symbol: req.symbol,
+                side: req.side,
+                type: req.type,
+                位置: Math.floor(to范围({ min: 0, max: 4, value: req.位置 }))
+            })
+
         const getPrice = req.最低_最高 ?
             () => {
-                const price = realData.getOrderPrice(req.symbol, req.side, req.type)
+                const price = getOrderPrice()
                 const { high, low } = realData.get期货多少秒内最高最低(req.symbol, 5)
                 if (req.side === 'Buy') {
                     return Math.min(price, low)
@@ -160,7 +169,7 @@ export class Account {
                     return Math.max(price, high)
                 }
             } :
-            () => realData.getOrderPrice(req.symbol, req.side, req.type)
+            getOrderPrice
 
         if (req.type === 'maker' && isNaN(getPrice())) {
             throw '服务器还没有 买1 卖1 价格'

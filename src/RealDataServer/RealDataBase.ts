@@ -495,7 +495,7 @@ export class RealDataBase {
 
         //上涨速度
         //下跌速度
-        
+
 
 
         const 上涨速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr: number[], ext) => {
@@ -693,21 +693,21 @@ export class RealDataBase {
     现货价格dic = new Map<BaseType.BinanceSymbol, number>()
     期货价格dic = new Map<BaseType.BitmexSymbol, number>()
 
-    getOrderPrice = (symbol: BaseType.BitmexSymbol, side: BaseType.Side, type: 'taker' | 'maker') => {
+    getOrderPrice = ({ symbol, side, type, 位置 }: { symbol: BaseType.BitmexSymbol, side: BaseType.Side, type: 'taker' | 'maker', 位置: number }) => {
         const p = this.期货盘口dic.get(symbol)
         if (p === undefined) return NaN
 
         if (side === 'Buy') {
             if (type === 'taker') {
-                return p.sell[0] ? p.sell[0].price : NaN
+                return p.sell[位置] ? p.sell[位置].price : NaN
             } else {
-                return p.buy[0] ? p.buy[0].price : NaN
+                return p.buy[位置] ? p.buy[位置].price : NaN
             }
         } else if (side === 'Sell') {
             if (type === 'taker') {
-                return p.buy[0] ? p.buy[0].price : NaN
+                return p.buy[位置] ? p.buy[位置].price : NaN
             } else {
-                return p.sell[0] ? p.sell[0].price : NaN
+                return p.sell[位置] ? p.sell[位置].price : NaN
             }
         } else {
             return NaN

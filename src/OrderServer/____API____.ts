@@ -26,6 +26,7 @@ export const funcList = {
             type: '' as 'taker' | 'maker',
             side: '' as BaseType.Side,
             size: 0,
+            位置: 0,
             最低_最高: false,
         },
         res: false,
