@@ -465,7 +465,19 @@ export class RealDataBase {
         const 上涨速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr: number[], ext) => {
             for (let i = Math.max(0, arr.length - 1); i < Math.max(价格均线60.length, 最高价10.length); i++) {
                 const 时间ms = (i - ext.last交叉Index) / (1000 / RealDataBase.单位时间)
-                arr[i] = 时间ms === 0 ? NaN : (最高价10[i] - 价格均线60[i]) / 时间ms
+                if(时间ms === 0){
+                    arr[i] = NaN
+                }else{
+                    let a = (最高价10[i] - 价格均线60[i]) / 时间ms
+                   // let a = 波动率[i]/ 时间ms
+                    //arr[i] = a
+                    if(a>0.5){
+                        arr[i]=0.5
+                    }else{
+                        arr[i]=a
+                    }
+                }
+                //arr[i] = 时间ms === 0 ? NaN : (最高价10[i] - 价格均线60[i]) / 时间ms
 
                 if (Math.abs(最高价10[i] - 价格均线60[i]) < 0.01) {
                     ext.last交叉Index = i
@@ -473,18 +485,48 @@ export class RealDataBase {
             }
         })
 
+        const 上涨速度12 = 指标.EMA(上涨速度, 12, RealDataBase.单位时间)
+        const 上涨速度26 = 指标.EMA(上涨速度, 26, RealDataBase.单位时间)
+        const 上涨速度DIF = 指标.lazyMapCache(() => Math.max(上涨速度12.length, 上涨速度26.length), i => 上涨速度12[i] - 上涨速度26[i])
+        const 上涨速度DEM = 指标.EMA(上涨速度DIF, 9, RealDataBase.单位时间)
+        const 上涨速度OSC = 指标.lazyMapCache(() => Math.max(上涨速度DIF.length, 上涨速度DEM.length), i => 上涨速度DIF[i] - 上涨速度DEM[i])
+
 
 
         const 下跌速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr: number[], ext) => {
             for (let i = Math.max(0, arr.length - 1); i < Math.max(价格均线60.length, 最低价10.length); i++) {
                 const 时间ms = (i - ext.last交叉Index) / (1000 / RealDataBase.单位时间)
-                arr[i] = 时间ms === 0 ? NaN : (价格均线60[i] - 最低价10[i]) / 时间ms
+
+                if(时间ms === 0){
+                    arr[i] = NaN
+                }else{
+                    let a = (价格均线60[i] - 最低价10[i]) / 时间ms
+                   // let a = 波动率[i]/ 时间ms
+                    //arr[i] = a
+                    if(a>0.5){
+                        arr[i]=0.5
+                    }else{
+                        arr[i]=a
+                    }
+                }
+               
+
+                //arr[i] = 时间ms === 0 ? NaN : (价格均线60[i] - 最低价10[i]) / 时间ms
 
                 if (Math.abs(最低价10[i] - 价格均线60[i]) < 0.01) {
                     ext.last交叉Index = i
                 }
             }
         })
+
+        const 下跌速度12 = 指标.EMA(下跌速度, 12, RealDataBase.单位时间)
+        const 下跌速度26 = 指标.EMA(下跌速度, 26, RealDataBase.单位时间)
+        const 下跌速度DIF = 指标.lazyMapCache(() => Math.max(下跌速度12.length, 下跌速度26.length), i => 下跌速度12[i] - 下跌速度26[i])
+        const 下跌速度DEM = 指标.EMA(上涨速度DIF, 9, RealDataBase.单位时间)
+        const 下跌速度OSC = 指标.lazyMapCache(() => Math.max(下跌速度DIF.length, 下跌速度DEM.length), i => 下跌速度DIF[i] - 下跌速度DEM[i])
+
+       
+
 
 
 
@@ -534,6 +576,13 @@ export class RealDataBase {
 
             上涨速度,
             下跌速度,
+            价格均线60,
+            最高价10 ,
+            最低价10 ,
+           上涨速度DIF,
+           上涨速度DEM,
+           下跌速度DIF,
+           下跌速度DEM
         }
     }
 

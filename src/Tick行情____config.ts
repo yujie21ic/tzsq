@@ -31,6 +31,7 @@ const 卖颜色1 = 0xE74C3C
 // const 卖颜色 = 0xe56546
 const 波动率颜色 = 0xC70039
 const 净盘口颜色 = 0xEB95D8
+const 石青 = 0x1685a9
 
 
 export const Tick行情____config: { [key in string]: ItemFunc } = {
@@ -63,15 +64,15 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             
         //     ]
         // },
-        // {
-        //     heightPercentage: 0.4,
-        //     和下一张重叠: true,
-        //     numberColor: 波动率颜色,
-        //     numberX: 100,
-        //     layerList: [
-        //         layer(LineLayer, { data: d.期货.波动率, color: 波动率颜色 }),
-        //     ]
-        // },
+        {
+            heightPercentage: 0.4,
+            和下一张重叠: true,
+            numberColor: 波动率颜色,
+            numberX: 100,
+            layerList: [
+                layer(LineLayer, { data: d.期货.波动率, color: 石青 }),
+            ]
+        },
         // {
         //     heightPercentage: 0.4,
         //    和下一张重叠: true,
@@ -91,7 +92,16 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         },
         {
             heightPercentage: 0.4,
+            和下一张重叠: true,
+            layerList: [
+               
+                layer(LineLayer, { data: d2.ETHUSD.期货.价格, color: ETH颜色 }),
+            ]
+        },
+        {
+            heightPercentage: 0.4,
            // 和下一张重叠: true,
+         
             layerList: [
                
                 layer(LineLayer, { data: d.期货.上涨速度, color: 买颜色 }),
@@ -116,18 +126,28 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layer(LineLayer, { data: d.期货.净盘口均线, color: ETH颜色 }),
             ]
         },
+        // {
+        //     heightPercentage: 0.25,
+        //     //和下一张重叠: true,
+        //     layerList: [
+        //         layer(ZeroLayer, { color: 0xaaaaaa }),
+        //         layer(LineLayer, { data: d.期货.买MACD.DEM, color: 买颜色 }),
+        //         layer(LineLayer, { data: d.期货.买MACD.DIF, color: 买颜色1 }),
+        //         layer(LineLayer, { data: d.期货.卖MACD.DEM1, color: 卖颜色 }),
+        //         layer(LineLayer, { data: d.期货.卖MACD.DIF1, color: 卖颜色1 }),
+        //     ]
+        // },
         {
             heightPercentage: 0.25,
             //和下一张重叠: true,
             layerList: [
                 layer(ZeroLayer, { color: 0xaaaaaa }),
-                layer(LineLayer, { data: d.期货.买MACD.DEM, color: 买颜色 }),
-                layer(LineLayer, { data: d.期货.买MACD.DIF, color: 买颜色1 }),
-                layer(LineLayer, { data: d.期货.卖MACD.DEM1, color: 卖颜色 }),
-                layer(LineLayer, { data: d.期货.卖MACD.DIF1, color: 卖颜色1 }),
+                layer(LineLayer, { data: d.期货.上涨速度DEM, color: 买颜色 }),
+                layer(LineLayer, { data: d.期货.上涨速度DIF, color: 卖颜色 }),
+                // layer(LineLayer, { data: d.期货.下跌速度DEM, color: 卖颜色 }),
+                // layer(LineLayer, { data: d.期货.下跌速度DIF, color: 卖颜色1 }),
             ]
         },
-      
         {
             heightPercentage: 0.1,
             layerList: [
@@ -161,15 +181,15 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             
         //     ]
         // },
-        // {
-        //     heightPercentage: 0.4,
-        //     和下一张重叠: true,
-        //     numberColor: 波动率颜色,
-        //     numberX: 100,
-        //     layerList: [
-        //         layer(LineLayer, { data: d.期货.波动率, color: 波动率颜色 }),
-        //     ]
-        // },
+        {
+            heightPercentage: 0.4,
+            和下一张重叠: true,
+            numberColor: 波动率颜色,
+            numberX: 100,
+            layerList: [
+                layer(LineLayer, { data: d.期货.波动率, color: 石青 }),
+            ]
+        },
       
         // {
         //     heightPercentage: 0.4,
@@ -179,18 +199,27 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         //         layer(LineLayer, { data: d.期货.阻力3跌, color: ETH颜色 }),
         //     ]
         // },
+        // {
+        //     heightPercentage: 0.4,
+        //     和下一张重叠: true,
+        //     layerList: [
+               
+        //         layer(LineLayer, { data: d.期货.价格均线60, color: ETH颜色 }),
+        //         layer(LineLayer, { data: d.期货.最低价10, color: 波动率颜色 }),
+        //     ]
+        // },
         {
             heightPercentage: 0.4,
             和下一张重叠: true,
             layerList: [
                
-                layer(LineLayer, { data: d.期货.价格均线60, color: ETH颜色 }),
-                layer(LineLayer, { data: d.期货.最低价10, color: 波动率颜色 }),
+                layer(LineLayer, { data: d2.ETHUSD.期货.价格, color: ETH颜色 }),
             ]
         },
         {
             heightPercentage: 0.4,
            // 和下一张重叠: true,
+         
             layerList: [
                
                 layer(LineLayer, { data: d.期货.下跌速度, color: 卖颜色 }),
@@ -217,15 +246,26 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layer(LineLayer, { data: d.期货.净盘口均线, color: ETH颜色 }),
             ]
         },
+        // {
+        //     heightPercentage: 0.25,
+        //     //和下一张重叠: true,
+        //     layerList: [
+        //         layer(ZeroLayer, { color: 0xaaaaaa }),
+        //         layer(LineLayer, { data: d.期货.买MACD.DEM, color: 买颜色 }),
+        //         layer(LineLayer, { data: d.期货.买MACD.DIF, color: 买颜色1 }),
+        //         layer(LineLayer, { data: d.期货.卖MACD.DEM1, color: 卖颜色 }),
+        //         layer(LineLayer, { data: d.期货.卖MACD.DIF1, color: 卖颜色1 }),
+        //     ]
+        // },
         {
             heightPercentage: 0.25,
             //和下一张重叠: true,
             layerList: [
                 layer(ZeroLayer, { color: 0xaaaaaa }),
-                layer(LineLayer, { data: d.期货.买MACD.DEM, color: 买颜色 }),
-                layer(LineLayer, { data: d.期货.买MACD.DIF, color: 买颜色1 }),
-                layer(LineLayer, { data: d.期货.卖MACD.DEM1, color: 卖颜色 }),
-                layer(LineLayer, { data: d.期货.卖MACD.DIF1, color: 卖颜色1 }),
+                // layer(LineLayer, { data: d.期货.上涨速度DEM, color: 买颜色 }),
+                // layer(LineLayer, { data: d.期货.上涨速度DIF, color: 买颜色1 }),
+                layer(LineLayer, { data: d.期货.下跌速度DEM, color: 卖颜色 }),
+                layer(LineLayer, { data: d.期货.下跌速度DIF, color: 买颜色 }),
             ]
         },
         {
