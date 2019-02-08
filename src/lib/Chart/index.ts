@@ -39,7 +39,10 @@ let dataSourceFunc: () => {
     每一根是: number
     left: number
     right: number
-    items: (Item | Item[])[]
+    items: {
+        heightList: number[]
+        items: (Item | Item[])[]
+    }
 }
 
 import PixiFps from 'pixi-fps'
@@ -171,10 +174,7 @@ const chartRender = () => {
     let price = NaN
     let startY = 0
 
-
-    const heightPercentage = 1 / items.length
-
-    const aaa = (v: Item) => {
+    const aaa = (v: Item, heightPercentage: number) => {
         //layerList new
         const layerList = v.layerList.map(([C, P]) => popLayer(C, P))
 
@@ -244,15 +244,15 @@ const chartRender = () => {
         })
     }
 
-    items.forEach(v => {
+    items.items.forEach((v, i) => {
 
         if (v instanceof Array) {
-            v.forEach(aaa)
+            v.forEach(v => aaa(v, items.heightList[i]))
         } else {
-            aaa(v)
+            aaa(v, items.heightList[i])
         }
 
-        startY += height * heightPercentage
+        startY += height * items.heightList[i]
 
     })
 

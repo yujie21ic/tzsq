@@ -11,7 +11,7 @@ import { to范围 } from './lib/F/to范围'
 import { showWindowRemote } from './windowExt'
 
 theme.右边空白 = 0
- 
+
 
 // import { get笔Index, 合并后的K线, get线段 } from './lib/缠中说禅'
 // import { 线段Layer } from './lib/Chart/Layer/线段Layer'
@@ -118,33 +118,36 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
         每一根是: 1000 * 60,
         left: S.left,
         right: S.right,
-        items: [
-            {
-                layerList: [
-                    layer(KLineLayer, { data: klineData }),
-                    // layer(笔Layer, { data: get笔Index(klineData), color: 0xffff00 }),
-                    // layer(线段Layer, { data: get线段(get笔Index(klineData)), color: 0xaa0000 }),
-                    // layer(合并后的Layer, { data: 合并后的K线(klineData), color: 0xffff00 }),                    
-                ]
-            },
-            {
-                layerList: [
-                    layer(BarLayer, { data: 成交买, color: 0x48aa65 }),
-                    layer(BarLayer, { data: 成交卖, color: 0xe56546 }),
-                ]
-            },
-            // {
-            //     layerList: [
-            //         layer(BarLayer, { data: OSC, color: 0xaaaaaa }),
-            //         layer(LineLayer, { data: DIF, color: 0xaa0000 }),
-            //         layer(LineLayer, { data: DEM, color: 0xffff00 }),
-            //         layer(TextLayer, {
-            //             text: '',
-            //             color: 0xffffff
-            //         })
-            //     ]
-            // },
-        ]
+        items: {
+            heightList: [0.6, 0.4],
+            items: [
+                {
+                    layerList: [
+                        layer(KLineLayer, { data: klineData }),
+                        // layer(笔Layer, { data: get笔Index(klineData), color: 0xffff00 }),
+                        // layer(线段Layer, { data: get线段(get笔Index(klineData)), color: 0xaa0000 }),
+                        // layer(合并后的Layer, { data: 合并后的K线(klineData), color: 0xffff00 }),                    
+                    ]
+                },
+                {
+                    layerList: [
+                        layer(BarLayer, { data: 成交买, color: 0x48aa65 }),
+                        layer(BarLayer, { data: 成交卖, color: 0xe56546 }),
+                    ]
+                },
+                // {
+                //     layerList: [
+                //         layer(BarLayer, { data: OSC, color: 0xaaaaaa }),
+                //         layer(LineLayer, { data: DIF, color: 0xaa0000 }),
+                //         layer(LineLayer, { data: DEM, color: 0xffff00 }),
+                //         layer(TextLayer, {
+                //             text: '',
+                //             color: 0xffffff
+                //         })
+                //     ]
+                // },
+            ]
+        }
     }
 })
 
