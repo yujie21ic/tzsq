@@ -403,8 +403,8 @@ export class RealDataBase {
         //const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < to范围({ value: 波动率[i] / 10 * 10000, min: 50000, max: 400000 }) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 30 })))
         //const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 > to范围({ value: -波动率[i] / 10 * 10000, max: -50000, min: -400000 }) && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 30 })))
 
-        const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 <100000 && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 30 })))
-        const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 > -100000 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 30 })))
+        const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 <1000000 && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 4 })))
+        const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 > -1000000 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 4 })))
 
         const 阻力笔 = 指标.阻力笔(价格)
 
