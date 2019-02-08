@@ -217,9 +217,12 @@ export class 交易 extends React.Component {
 
                 <br />
                 <br />
-                <a href='#' onClick={() => {
-                    dialog.showInput({ title: '设置 hopex cookie', value: this.hopexCookie, onOK: v => this.hopexCookie = v })
-                }}>hopex 设置cookie</a>
+                <a
+                    style={{ color: 'yellow' }}
+                    href='#'
+                    onClick={() => {
+                        dialog.showInput({ title: '设置 hopex cookie', value: this.hopexCookie, onOK: v => this.hopexCookie = v })
+                    }}>{this.hopexCookie !== '' ? '已设置' : 'hopex 设置 cookie'}</a>
                 <br />
                 <br />
 
