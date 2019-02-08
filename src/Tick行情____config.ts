@@ -64,13 +64,13 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
             //     ]
             // },
-            {
-                layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.期货.上涨价格DEM, color: 买颜色 }),
-                    layer(LineLayer, { data: d.期货.上涨价格DIF, color: 买颜色1 }),
-                ]
-            },
+            // {
+            //     layerList: [
+            //         layer(ZeroLayer, { color: 0xaaaaaa }),
+            //         layer(LineLayer, { data: d.期货.上涨价格DEM, color: 买颜色 }),
+            //         layer(LineLayer, { data: d.期货.上涨价格DIF, color: 买颜色1 }),
+            //     ]
+            // },
             {
                 numberColor: 波动率颜色,
                 numberX: 100,
@@ -169,13 +169,13 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
             //     ]
             // },
-            {
-                layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.期货.下跌价格DEM, color: 卖颜色 }),
-                    layer(LineLayer, { data: d.期货.下跌价格DIF, color: 卖颜色1 }),
-                ]
-            },
+            // {
+            //     layerList: [
+            //         layer(ZeroLayer, { color: 0xaaaaaa }),
+            //         layer(LineLayer, { data: d.期货.下跌价格DEM, color: 卖颜色 }),
+            //         layer(LineLayer, { data: d.期货.下跌价格DIF, color: 卖颜色1 }),
+            //     ]
+            // },
             {
                 numberColor: 波动率颜色,
                 numberX: 100,

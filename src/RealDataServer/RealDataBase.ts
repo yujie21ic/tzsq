@@ -463,7 +463,7 @@ export class RealDataBase {
                 { name: '净盘口 < 净盘口均线', value: 净盘口[i] < 净盘口均线[i] },
                 { name: '买盘口必须低量', value: 真空信号涨[i] || 盘口买2秒均线[i] < (波动率[i] < 15 ? 100 : 50) * 10000 },
                 { name: '成交量买快均线 < 慢均线', value: DIF[i] < DEM[i] },
-                { name: '价格快均线 < 慢均线', value: 波动率[i]>20?true:上涨价格DIF[i] < 上涨价格DEM[i] },
+                //{ name: '价格快均线 < 慢均线', value: 波动率[i]>20?true:上涨价格DIF[i] < 上涨价格DEM[i] },
                 { name: '波动率 > 7', value: 波动率[i] > 7 },
             ]
         )
@@ -488,7 +488,7 @@ export class RealDataBase {
                 { name: '净盘口 > 净盘口均线', value: 净盘口[i] > 净盘口均线[i] },
                 { name: '卖盘口必须低量', value: 真空信号跌[i] || 盘口卖2秒均线[i] < (波动率[i] < 15 ? 100 : 50) * 10000 },
                 { name: '成交量卖快均线 < 慢均线', value: DIF1[i] < DEM1[i] },
-                { name: '价格快均线 > 慢均线', value: 波动率[i]>20?true:下跌价格DIF[i] > 下跌价格DEM[i] },
+                //{ name: '价格快均线 > 慢均线', value: 波动率[i]>20?true:下跌价格DIF[i] > 下跌价格DEM[i] },
                 { name: '波动率 > 7', value: 波动率[i] > 7 },
             ]
         )
@@ -610,7 +610,7 @@ export class RealDataBase {
             上涨价格DEM,
             下跌价格DIF,
             下跌价格DEM,
-            // 价格OSC,
+            //价格OSC,
 
             上涨速度,
             下跌速度,
