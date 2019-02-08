@@ -212,6 +212,8 @@ export class 交易 extends React.Component {
             }}>
                 <h3>只做摸顶抄底</h3>
                 <hr />
+                <h3>大波动 变 小波动 视觉误差</h3>
+                <hr />                
                 <Item symbol='XBTUSD' />
                 <hr />
 
