@@ -246,7 +246,6 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             numberColor: BTC颜色,
             layerList: [
                 layer(LineLayer, { data: d2.XBTUSD.期货.价格, color: BTC颜色 }),
-
                 layer(TextLayer, {
                     text:
                         `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -255,7 +254,6 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         `期货波动率:${lastNumber(d.期货.波动率).toFixed(2)}`,
                     color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
                 })
-
             ]
         },
         {
@@ -264,7 +262,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ]
         },
         {
-            numberColor: 波动率颜色,
+            numberColor: 石青,
             numberX: 100,
             layerList: [
                 layer(LineLayer, { data: d.期货.波动率, color: 石青 }),

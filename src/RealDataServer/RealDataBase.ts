@@ -400,11 +400,11 @@ export class RealDataBase {
         const 真空跌 = 指标.lazyMapCache(() => 真空.length, i => Math.min(0, 真空[i]))
 
         //真空信号  阻力小于10万，价差大于5
-        //const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < to范围({ value: 波动率[i] / 10 * 10000, min: 50000, max: 400000 }) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 30 })))
-        //const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 > to范围({ value: -波动率[i] / 10 * 10000, max: -50000, min: -400000 }) && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 30 })))
+        const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < to范围({ value: 波动率[i] / 10 * 10000, min: 50000, max: 400000 }) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 30 })))
+        const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 > to范围({ value: -波动率[i] / 10 * 10000, max: -50000, min: -400000 }) && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 30 })))
 
-        const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 <1000000 && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 4 })))
-        const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 > -1000000 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 4 })))
+        //const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 <1000000 && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 4 })))
+        //const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 > -1000000 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 10, min: 3, max: 4 })))
 
         const 阻力笔 = 指标.阻力笔(价格)
 
@@ -426,6 +426,12 @@ export class RealDataBase {
         const DIF1 = 指标.lazyMapCache(() => Math.max(a.length, b.length), i => a[i] - b[i])
         const DEM1 = 指标.EMA(DIF1, 9, RealDataBase.单位时间)
         const OSC1 = 指标.lazyMapCache(() => Math.max(DIF1.length, DEM1.length), i => DIF1[i] - DEM[i])
+
+        const 价格12 = 指标.EMA(价格, 12, RealDataBase.单位时间)
+        const 价格26 = 指标.EMA(价格, 26, RealDataBase.单位时间)
+        const 价格DIF = 指标.lazyMapCache(() => Math.max(价格12.length, 价格26.length), i => 价格12[i] - 价格26[i])
+        const 价格DEM = 指标.EMA(价格DIF, 9, RealDataBase.单位时间)
+        //const 价格OSC = 指标.lazyMapCache(() => Math.max(DIF.length, DEM.length), i => DIF[i] - DEM[i])
 
 
 
@@ -450,7 +456,8 @@ export class RealDataBase {
                 { name: '净盘口 < 净盘口均线', value: 净盘口[i] < 净盘口均线[i] },
                 { name: '买盘口必须低量', value: 真空信号涨[i] || 盘口买2秒均线[i] < (波动率[i] < 15 ? 100 : 50) * 10000 },
                 { name: '成交量买快均线 < 慢均线', value: DIF[i] < DEM[i] },
-                { name: '波动率 > 5', value: 波动率[i] > 5 },
+                { name: '价格快均线 < 慢均线', value: 价格DIF[i] < 价格DEM[i] },
+                { name: '波动率 > 7', value: 波动率[i] > 7 },
             ]
         )
 
@@ -474,7 +481,8 @@ export class RealDataBase {
                 { name: '净盘口 > 净盘口均线', value: 净盘口[i] > 净盘口均线[i] },
                 { name: '卖盘口必须低量', value: 真空信号跌[i] || 盘口卖2秒均线[i] < (波动率[i] < 15 ? 100 : 50) * 10000 },
                 { name: '成交量卖快均线 < 慢均线', value: DIF1[i] < DEM1[i] },
-                { name: '波动率 > 5', value: 波动率[i] > 5 },
+                { name: '价格快均线 < 慢均线', value: 价格DIF[i] < 价格DEM[i] },
+                { name: '波动率 > 7', value: 波动率[i] > 7 },
             ]
         )
 
@@ -593,8 +601,8 @@ export class RealDataBase {
 
             信号_上涨,
             信号_下跌,
-            // 价格DIF,
-            // 价格DEM,
+            价格DIF,
+            价格DEM,
             // 价格OSC,
 
             上涨速度,
