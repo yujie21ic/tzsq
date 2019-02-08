@@ -25,6 +25,13 @@ export const getIndex = () => indexX
 
 export const layer = <P extends any>(a: LayerClass<P>, b: P): LayerItem => [a, b] as any
 
+type Item = {
+    numberColor?: number
+    numberX?: number
+    yCoordinate?: '普通' | '对数'
+    layerList: LayerItem[]
+}
+
 let dataSourceFunc: () => {
     title: string
     startTime: number
@@ -32,14 +39,7 @@ let dataSourceFunc: () => {
     每一根是: number
     left: number
     right: number
-    items: {
-        numberColor?: number
-        numberX?: number
-        yCoordinate?: '普通' | '对数'
-        heightPercentage: number
-        和下一张重叠?: boolean
-        layerList: LayerItem[]
-    }[]
+    items: (Item | Item[])[]
 }
 
 import PixiFps from 'pixi-fps'
@@ -164,15 +164,17 @@ const chartRender = () => {
     }
 
 
-    while (layerContainer.children.length > 0) {     
+    while (layerContainer.children.length > 0) {
         pushLayer(layerContainer.removeChildAt(0) as Layer<any>)
     }
 
     let price = NaN
     let startY = 0
 
-    items.forEach(v => {
 
+    const heightPercentage = 1 / items.length
+
+    const aaa = (v: Item) => {
         //layerList new
         const layerList = v.layerList.map(([C, P]) => popLayer(C, P))
 
@@ -180,7 +182,7 @@ const chartRender = () => {
         //updateTopAndBottom
         const viewport: Viewport = {
             width: width,
-            height: height * v.heightPercentage,
+            height: height * heightPercentage,
             left: left,
             right: right
         }
@@ -195,7 +197,7 @@ const chartRender = () => {
 
         const 上面加空隙 = 40
         const 下面加空隙 = 5
-        const layerHeight = height * v.heightPercentage
+        const layerHeight = height * heightPercentage
 
         const toY = (value: number) => {
             let n = (value - tb.bottom) / (tb.top - tb.bottom) //0--1
@@ -240,10 +242,18 @@ const chartRender = () => {
             layer.render(viewport, to, tb)
             layerContainer.addChild(layer)
         })
+    }
 
-        if (v.和下一张重叠 !== true) {
-            startY += height * v.heightPercentage
+    items.forEach(v => {
+
+        if (v instanceof Array) {
+            v.forEach(aaa)
+        } else {
+            aaa(v)
         }
+
+        startY += height * heightPercentage
+
     })
 
 

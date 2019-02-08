@@ -120,7 +120,6 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
         right: S.right,
         items: [
             {
-                heightPercentage: 0.6,
                 layerList: [
                     layer(KLineLayer, { data: klineData }),
                     // layer(笔Layer, { data: get笔Index(klineData), color: 0xffff00 }),
@@ -129,14 +128,12 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
                 ]
             },
             {
-                heightPercentage: 0.4,
                 layerList: [
                     layer(BarLayer, { data: 成交买, color: 0x48aa65 }),
                     layer(BarLayer, { data: 成交卖, color: 0xe56546 }),
                 ]
             },
             // {
-            //     heightPercentage: 0.2,
             //     layerList: [
             //         layer(BarLayer, { data: OSC, color: 0xaaaaaa }),
             //         layer(LineLayer, { data: DIF, color: 0xaa0000 }),
