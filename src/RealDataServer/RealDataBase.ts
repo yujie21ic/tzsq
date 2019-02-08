@@ -489,7 +489,7 @@ export class RealDataBase {
         const 上涨速度26 = 指标.EMA(上涨速度, 26, RealDataBase.单位时间)
         const 上涨速度DIF = 指标.lazyMapCache(() => Math.max(上涨速度12.length, 上涨速度26.length), i => 上涨速度12[i] - 上涨速度26[i])
         const 上涨速度DEM = 指标.EMA(上涨速度DIF, 9, RealDataBase.单位时间)
-        const 上涨速度OSC = 指标.lazyMapCache(() => Math.max(上涨速度DIF.length, 上涨速度DEM.length), i => 上涨速度DIF[i] - 上涨速度DEM[i])
+        //const 上涨速度OSC = 指标.lazyMapCache(() => Math.max(上涨速度DIF.length, 上涨速度DEM.length), i => 上涨速度DIF[i] - 上涨速度DEM[i])
 
 
 
@@ -523,7 +523,7 @@ export class RealDataBase {
         const 下跌速度26 = 指标.EMA(下跌速度, 26, RealDataBase.单位时间)
         const 下跌速度DIF = 指标.lazyMapCache(() => Math.max(下跌速度12.length, 下跌速度26.length), i => 下跌速度12[i] - 下跌速度26[i])
         const 下跌速度DEM = 指标.EMA(上涨速度DIF, 9, RealDataBase.单位时间)
-        const 下跌速度OSC = 指标.lazyMapCache(() => Math.max(下跌速度DIF.length, 下跌速度DEM.length), i => 下跌速度DIF[i] - 下跌速度DEM[i])
+        //const 下跌速度OSC = 指标.lazyMapCache(() => Math.max(下跌速度DIF.length, 下跌速度DEM.length), i => 下跌速度DIF[i] - 下跌速度DEM[i])
 
        
 

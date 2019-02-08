@@ -3,7 +3,7 @@ import { layer, LayerItem } from './lib/Chart'
 import { LineLayer } from './lib/Chart/Layer/LineLayer'
 import { TextLayer } from './lib/Chart/Layer/TextLayer'
 import { lastNumber } from './lib/F/lastNumber'
-import { BarLayer } from './lib/Chart/Layer/BarLayer'
+//import { BarLayer } from './lib/Chart/Layer/BarLayer'
 import { ZeroLayer } from './lib/Chart/Layer/ZeroLayer'
 import { 信号Layer } from './lib/Chart/Layer/信号Layer';
 // import { 竖线Layer } from './lib/Chart/Layer/竖线Layer'
@@ -24,13 +24,13 @@ type ItemFunc = (d: D, d2: D2) => {
 const ETH颜色 = 0xaaaa00
 const BTC颜色 = 0xcc66ff
 const 买颜色 = 0x0E6655
-const 买颜色1 = 0x16A085
+//const 买颜色1 = 0x16A085
 const 卖颜色 = 0x943126
-const 卖颜色1 = 0xE74C3C
+//const 卖颜色1 = 0xE74C3C
 // const 买颜色 = 0x48aa65
 // const 卖颜色 = 0xe56546
 const 波动率颜色 = 0xC70039
-const 净盘口颜色 = 0xEB95D8
+//const 净盘口颜色 = 0xEB95D8
 const 石青 = 0x1685a9
 
 
