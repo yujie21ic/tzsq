@@ -13,12 +13,22 @@ export class RealDataBase {
 
     private 删除历史() {
         const length = Math.min(
+
+            //hopex
+            this.jsonSync.rawData.hopex.BTCUSDT.data.length,
+            this.jsonSync.rawData.hopex.BTCUSDT.orderBook.length,
+
+            this.jsonSync.rawData.hopex.ETHUSDT.data.length,
+            this.jsonSync.rawData.hopex.ETHUSDT.orderBook.length,
+
+            //bitmex
             this.jsonSync.rawData.bitmex.XBTUSD.data.length,
             this.jsonSync.rawData.bitmex.XBTUSD.orderBook.length,
 
             this.jsonSync.rawData.bitmex.ETHUSD.data.length,
             this.jsonSync.rawData.bitmex.ETHUSD.orderBook.length,
 
+            //binance
             this.jsonSync.rawData.binance.btcusdt.data.length,
             this.jsonSync.rawData.binance.btcusdt.orderBook.length,
 
@@ -31,12 +41,22 @@ export class RealDataBase {
 
             const deleteCount = 2000
             this.jsonSync.rawData.startTick += deleteCount
+
+            //hopex
+            this.jsonSync.rawData.hopex.BTCUSDT.data.splice(0, deleteCount)
+            this.jsonSync.rawData.hopex.BTCUSDT.orderBook.splice(0, deleteCount)
+
+            this.jsonSync.rawData.hopex.ETHUSDT.data.splice(0, deleteCount)
+            this.jsonSync.rawData.hopex.ETHUSDT.orderBook.splice(0, deleteCount)
+
+            //bitmex
             this.jsonSync.rawData.bitmex.XBTUSD.data.splice(0, deleteCount)
             this.jsonSync.rawData.bitmex.XBTUSD.orderBook.splice(0, deleteCount)
 
             this.jsonSync.rawData.bitmex.ETHUSD.data.splice(0, deleteCount)
             this.jsonSync.rawData.bitmex.ETHUSD.orderBook.splice(0, deleteCount)
 
+            //binance
             this.jsonSync.rawData.binance.btcusdt.data.splice(0, deleteCount)
             this.jsonSync.rawData.binance.btcusdt.orderBook.splice(0, deleteCount)
 
@@ -465,16 +485,16 @@ export class RealDataBase {
         const 上涨速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr: number[], ext) => {
             for (let i = Math.max(0, arr.length - 1); i < Math.max(价格均线60.length, 最高价10.length); i++) {
                 const 时间ms = (i - ext.last交叉Index) / (1000 / RealDataBase.单位时间)
-                if(时间ms === 0){
+                if (时间ms === 0) {
                     arr[i] = NaN
-                }else{
+                } else {
                     let a = (最高价10[i] - 价格均线60[i]) / 时间ms
-                   // let a = 波动率[i]/ 时间ms
+                    // let a = 波动率[i]/ 时间ms
                     //arr[i] = a
-                    if(a>0.5){
-                        arr[i]=0.5
-                    }else{
-                        arr[i]=a
+                    if (a > 0.5) {
+                        arr[i] = 0.5
+                    } else {
+                        arr[i] = a
                     }
                 }
                 //arr[i] = 时间ms === 0 ? NaN : (最高价10[i] - 价格均线60[i]) / 时间ms
@@ -497,19 +517,19 @@ export class RealDataBase {
             for (let i = Math.max(0, arr.length - 1); i < Math.max(价格均线60.length, 最低价10.length); i++) {
                 const 时间ms = (i - ext.last交叉Index) / (1000 / RealDataBase.单位时间)
 
-                if(时间ms === 0){
+                if (时间ms === 0) {
                     arr[i] = NaN
-                }else{
+                } else {
                     let a = (价格均线60[i] - 最低价10[i]) / 时间ms
-                   // let a = 波动率[i]/ 时间ms
+                    // let a = 波动率[i]/ 时间ms
                     //arr[i] = a
-                    if(a>0.5){
-                        arr[i]=0.5
-                    }else{
-                        arr[i]=a
+                    if (a > 0.5) {
+                        arr[i] = 0.5
+                    } else {
+                        arr[i] = a
                     }
                 }
-               
+
 
                 //arr[i] = 时间ms === 0 ? NaN : (价格均线60[i] - 最低价10[i]) / 时间ms
 
@@ -525,7 +545,7 @@ export class RealDataBase {
         const 下跌速度DEM = 指标.EMA(上涨速度DIF, 9, RealDataBase.单位时间)
         //const 下跌速度OSC = 指标.lazyMapCache(() => Math.max(下跌速度DIF.length, 下跌速度DEM.length), i => 下跌速度DIF[i] - 下跌速度DEM[i])
 
-       
+
 
 
 
@@ -577,12 +597,12 @@ export class RealDataBase {
             上涨速度,
             下跌速度,
             价格均线60,
-            最高价10 ,
-            最低价10 ,
-           上涨速度DIF,
-           上涨速度DEM,
-           下跌速度DIF,
-           下跌速度DEM
+            最高价10,
+            最低价10,
+            上涨速度DIF,
+            上涨速度DEM,
+            下跌速度DIF,
+            下跌速度DEM
         }
     }
 
