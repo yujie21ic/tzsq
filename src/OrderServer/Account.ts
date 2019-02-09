@@ -189,8 +189,7 @@ export class Account {
             if (
                 (
                     活动委托[0].type === '限价' ||
-                    活动委托[0].type === '限价只减仓' ||
-                    活动委托[0].type === '市价触发'
+                    活动委托[0].type === '限价只减仓'
                 )
                 && 活动委托[0].side === req.side && req.type === 'maker') {
                 //ws返回有时间  直接给委托列表加一条记录??
