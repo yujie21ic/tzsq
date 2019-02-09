@@ -29,7 +29,7 @@ if (config.orderServer !== undefined) {
                 初始止损点: () => to范围({
                     min: 3,
                     max: 18,
-                    value: lastNumber(realData.dataExt.XBTUSD.期货.波动率) / 4,
+                    value: get波动率('XBTUSD') / 4,
                 }),
                 推止损: 盈利点 => {
                     const 波动率 = get波动率('XBTUSD')
@@ -51,7 +51,7 @@ if (config.orderServer !== undefined) {
                 初始止损点: () => to范围({
                     min: 0.3,
                     max: 0.9,
-                    value: lastNumber(realData.dataExt.ETHUSD.期货.波动率) / 10 + 0.2,
+                    value: get波动率('ETHUSD') / 10 + 0.2,
                 }),
                 推止损: 盈利点 => {
                     const 波动率 = get波动率('ETHUSD')

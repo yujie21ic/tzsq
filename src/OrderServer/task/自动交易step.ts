@@ -1,6 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { Account } from '../Account'
-import { 信号灯is全亮, get波动率, toGridPoint, realData } from '../realData'
+import { 信号灯全亮type, get波动率, toGridPoint, realData } from '../realData'
 import { BitMEXOrderAPI } from '../../lib/BitMEX/BitMEXOrderAPI'
 
 const 交易数量 = 1
@@ -16,22 +16,35 @@ export const 自动交易step = (symbol: BaseType.BitmexSymbol) => async (self: 
         v.type === '限价' || v.type === '限价只减仓' || v.type === '市价触发'
     )
 
-    //自动交易 开仓任务
-    //当前没有仓位 信号灯亮 挂单
+    //自动交易 开仓任务 
     //没开成功  开了一部分  ??????????????????????????????????????????????????????
     if (仓位数量 === 0) {
-        if (信号灯is全亮(symbol, '上涨')) {
-            //挂卖单
-        }
-        else if (信号灯is全亮(symbol, '下跌')) {
-            //挂买单
+
+        //信号灯亮 挂单
+        const type = 信号灯全亮type(symbol)
+        if (type !== 'none') {
+            const side = type === '上涨' ? 'Sell' : 'Buy'
+            await BitMEXOrderAPI.maker(self.cookie, {
+                symbol,
+                side,
+                size: 交易数量,
+                price: () => realData.getOrderPrice({
+                    symbol,
+                    side,
+                    type: 'maker',
+                    位置: 0,
+                }),
+                reduceOnly: false,
+            })
+            return true
         }
     }
 
 
-    //自动交易 止盈任务 
-    //触发了反向开仓信号 提前 修改 止盈
+    //自动交易 止盈任务    
     if (仓位数量 !== 0) {
+
+        //先把止盈挂上
         if (活动委托.length === 0) {
             //挂止盈             
             //ws返回有时间  直接给委托列表加一条记录??
@@ -57,6 +70,12 @@ export const 自动交易step = (symbol: BaseType.BitmexSymbol) => async (self: 
                 reduceOnly: true,
             })
             return true
+        }
+        else if (活动委托.length === 1) {
+            //触发了反向开仓信号 提前 修改 止盈
+            if (活动委托[0].side === (仓位数量 > 0 ? 'Sell' : 'Buy') && 活动委托[0].type === '限价只减仓') {
+
+            }
         }
     }
 

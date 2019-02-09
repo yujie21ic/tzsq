@@ -259,12 +259,18 @@ export const 期货走平X = 走平<BaseType.BitmexSymbol>(symbol => {
 
 
 
-export const 信号灯is全亮 = (symbol: BaseType.BitmexSymbol, type: '上涨' | '下跌') => {
-    const obj = type === '上涨' ? realData.dataExt[symbol].期货.信号_上涨 : realData.dataExt[symbol].期货.信号_下跌
-    if (obj.length > 0) {
-        return obj[obj.length - 1].every(v => v.value)
-    } else {
-        return false
+export const 信号灯全亮type = (symbol: BaseType.BitmexSymbol) => {
+    const up = realData.dataExt[symbol].期货.信号_上涨
+    const down = realData.dataExt[symbol].期货.信号_下跌
+
+    if (up.length > 0 && up[up.length - 1].every(v => v.value)) {
+        return '上涨'
+    }
+    else if (down.length > 0 && down[down.length - 1].every(v => v.value)) {
+        return '下跌'
+    }
+    else {
+        return 'none'
     }
 }
 
