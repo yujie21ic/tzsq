@@ -5,7 +5,7 @@ import { BitMEXOrderAPI } from '../../lib/BitMEX/BitMEXOrderAPI'
 
 const 交易数量 = 1
 
-export const 自动交易step = (symbol: BaseType.BitmexSymbol) => async (self: Account) => {
+const 自动交易step = (symbol: BaseType.BitmexSymbol) => async (self: Account) => {
 
     if (self.jsonSync.rawData.symbol[symbol].自动交易 === false) {
         return true
@@ -80,4 +80,6 @@ export const 自动交易step = (symbol: BaseType.BitmexSymbol) => async (self: 
     }
 
     return true
-} 
+}
+
+export const XBTUSD自动交易step = 自动交易step('XBTUSD')

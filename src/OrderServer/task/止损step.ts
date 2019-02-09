@@ -1,9 +1,10 @@
 import { BaseType } from '../../lib/BaseType'
 import { Account } from '../Account'
 import { BitMEXOrderAPI } from '../../lib/BitMEX/BitMEXOrderAPI'
-import { toGridPoint } from '../realData'
+import { toGridPoint, get波动率 } from '../realData'
+import { to范围 } from '../../lib/F/to范围'
 
-export const 止损step = ({
+const 止损step = ({
     symbol,
     初始止损点,
     推止损,
@@ -77,3 +78,43 @@ export const 止损step = ({
         return true
     }
 }
+
+export const XBTUSD止损step = 止损step({
+    symbol: 'XBTUSD',
+    初始止损点: () => to范围({
+        min: 3,
+        max: 18,
+        value: get波动率('XBTUSD') / 4,
+    }),
+    推止损: 盈利点 => {
+        const 波动率 = get波动率('XBTUSD')
+        if (盈利点 >= to范围({ min: 5, max: 30, value: 波动率 / 5 + 5 })) {
+            return 3
+        }
+        else if (盈利点 >= to范围({ min: 5, max: 15, value: 波动率 / 10 + 5 })) {
+            return 0
+        } else {
+            return NaN
+        }
+    }
+})
+
+export const ETHUSD止损step = 止损step({
+    symbol: 'ETHUSD',
+    初始止损点: () => to范围({
+        min: 0.3,
+        max: 0.9,
+        value: get波动率('ETHUSD') / 10 + 0.2,
+    }),
+    推止损: 盈利点 => {
+        const 波动率 = get波动率('ETHUSD')
+        if (盈利点 >= to范围({ min: 0.3, max: 3, value: 波动率 / 5 + 0.3 })) {
+            return 0.2
+        }
+        else if (盈利点 >= to范围({ min: 0.3, max: 1.5, value: 波动率 / 10 + 0.3 })) {
+            return 0
+        } else {
+            return NaN
+        }
+    }
+})
