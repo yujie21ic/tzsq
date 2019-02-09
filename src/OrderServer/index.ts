@@ -69,8 +69,9 @@ if (config.orderServer !== undefined) {
         account.runTask(委托检测step('XBTUSD'))
         account.runTask(委托检测step('ETHUSD'))
 
+
         account.runTask(自动交易step('XBTUSD'))
-        account.runTask(自动交易step('ETHUSD'))
+        // account.runTask(自动交易step('ETHUSD')) //参数不一样
 
         accountDic.set(v, account)
     })
