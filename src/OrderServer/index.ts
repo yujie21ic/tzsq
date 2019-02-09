@@ -12,6 +12,7 @@ import { to范围 } from '../lib/F/to范围'
 import { lastNumber } from '../lib/F/lastNumber'
 import { realData } from './realData'
 import { 委托检测step } from './task/委托检测step'
+import { 自动交易step } from './task/自动交易'
 
 
 //运行的账户
@@ -68,6 +69,9 @@ if (config.orderServer !== undefined) {
 
         account.runTask(委托检测step('XBTUSD'))
         account.runTask(委托检测step('ETHUSD'))
+
+        account.runTask(自动交易step('XBTUSD'))
+        account.runTask(自动交易step('ETHUSD'))
 
         accountDic.set(v, account)
     })
@@ -126,4 +130,15 @@ server.func.下单 = async req => {
     const account = accountDic.get(req.cookie)
     if (account === undefined) throw 'cookie不存在'
     return account.下单(req)
+}
+
+server.func.自动交易_开关 = async req => {
+    const account = accountDic.get(req.cookie)
+    if (account === undefined) throw 'cookie不存在'
+    if (req.symbol === 'XBTUSD' || req.symbol === 'ETHUSD') {
+        account.jsonSync.data.symbol[req.symbol].自动交易.____set(req.value)
+        return true
+    } else {
+        return false
+    }
 } 

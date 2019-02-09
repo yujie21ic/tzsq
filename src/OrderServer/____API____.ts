@@ -31,10 +31,20 @@ export const funcList = {
         },
         res: false,
     },
+
+    自动交易_开关: {
+        req: {
+            cookie: '',
+            symbol: '' as BaseType.BitmexSymbol,
+            value: false,
+        },
+        res: false,
+    },
 }
 
 
 const symbol = () => ({
+    自动交易: false,
     活动委托: [] as {
         type: '限价' | '限价只减仓' | '止损' | '市价触发'
         id: string

@@ -4,7 +4,9 @@ import { Account } from '../Account'
 
 export const 自动交易step = (symbol: BaseType.BitmexSymbol) => async (self: Account) => {
 
-    const ret = true
+    if (self.jsonSync.rawData.symbol[symbol].自动交易 === false) {
+        return true
+    }
 
-    return ret
+    return true
 } 
