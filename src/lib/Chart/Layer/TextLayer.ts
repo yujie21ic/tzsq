@@ -24,6 +24,7 @@ export class TextLayer extends Layer<{ text: string, color: number }> {
         const { width } = viewport
         if (this.bitmapText !== undefined) {
             this.bitmapText.text = this.props.text
+            this.bitmapText.fill = this.props.color
             this.bitmapText.x = width - 10
             this.bitmapText.y = 10
         }
