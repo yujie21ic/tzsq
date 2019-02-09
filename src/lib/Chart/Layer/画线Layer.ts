@@ -24,11 +24,13 @@ export class 画线Layer extends Layer<{
     }
 
     render(viewport: Viewport, to: To) {
-        const { g, } = this
+        const { g } = this
+        g.clear()
+
         const { left, right } = viewport
         const { data } = this.props
 
-        g.clear()
+
 
         if (data.length === 0) return
 
