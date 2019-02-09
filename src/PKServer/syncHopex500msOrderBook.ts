@@ -7,7 +7,7 @@ import { HopexTradeAndOrderBook } from '../lib/统一接口/TradeAndOrderBook/Ho
 //重复
 
 let samplingDic: { [symbol: string]: Sampling<BaseType.OrderBook> }
-let ws = new HopexTradeAndOrderBook()
+let ws = new HopexTradeAndOrderBook('order_book')
 
 export const syncHopex500msOrderBook = async () => {
 

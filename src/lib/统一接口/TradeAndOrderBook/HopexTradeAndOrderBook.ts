@@ -83,15 +83,19 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
         url: 'wss://api.hopex.com/ws'
     })
 
-    constructor() {
+    constructor(type: 'all' | 'trade' | 'order_book' = 'all') {
         super()
 
         this.ws.onStatusChange = () => {
             if (this.ws.isConnected) {
-                this.ws.sendJSON(orderbook_subscribe_data('BTCUSDT'))
-                this.ws.sendJSON(orderbook_subscribe_data('ETHUSDT'))
-                this.ws.sendJSON(deals_subscribe_data('BTCUSDT'))
-                this.ws.sendJSON(deals_subscribe_data('ETHUSDT'))
+                if (type === 'order_book' || type === 'all') {
+                    this.ws.sendJSON(orderbook_subscribe_data('BTCUSDT'))
+                    this.ws.sendJSON(orderbook_subscribe_data('ETHUSDT'))
+                }
+                if (type === 'trade' || type === 'all') {
+                    this.ws.sendJSON(deals_subscribe_data('BTCUSDT'))
+                    this.ws.sendJSON(deals_subscribe_data('ETHUSDT'))
+                }
             }
             this.statusObservable.next({ isConnected: this.ws.isConnected })
         }
