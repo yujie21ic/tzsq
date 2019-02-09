@@ -253,39 +253,42 @@ export class 交易 extends React.Component {
                 <br />
                 <br />
 
-                <div>
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'center'
-                    }}>
-                        <div
-                            style={{ width: '50%' }}>
-                            <Button
-                                bgColor={GREEN}
-                                text={(config.hopex数量 || 0) * this.倍数 + ''}
-                                left={() =>
-                                    hopex市价开仓BTC(this.hopexCookie, {
+                {this.hopexCookie !== '' ?
+                    <div>
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'center'
+                        }}>
+                            <div
+                                style={{ width: '50%' }}>
+                                <Button
+                                    bgColor={GREEN}
+                                    text={(config.hopex数量 || 0) * this.倍数 + ''}
+                                    left={() =>
+                                        hopex市价开仓BTC(this.hopexCookie, {
+                                            size: (config.hopex数量 || 0) * this.倍数,
+                                            side: 'Buy',
+                                        })}
+                                />
+                            </div>
+                            <div
+                                style={{
+                                    width: '50%'
+                                }}>
+                                <Button
+                                    bgColor={RED}
+                                    text={-(config.hopex数量 || 0) * this.倍数 + ''}
+                                    left={() => hopex市价开仓BTC(this.hopexCookie, {
                                         size: (config.hopex数量 || 0) * this.倍数,
-                                        side: 'Buy',
+                                        side: 'Sell',
                                     })}
-                            />
+                                />
+                            </div>
                         </div>
-                        <div
-                            style={{
-                                width: '50%'
-                            }}>
-                            <Button
-                                bgColor={RED}
-                                text={-(config.hopex数量 || 0) * this.倍数 + ''}
-                                left={() => hopex市价开仓BTC(this.hopexCookie, {
-                                    size: (config.hopex数量 || 0) * this.倍数,
-                                    side: 'Sell',
-                                })}
-                            />
-                        </div>
-                    </div>
-                </div >
+                    </div > : '需要设置cookie'}
+
+
             </div>
     }
 
