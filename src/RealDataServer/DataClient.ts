@@ -63,13 +63,41 @@ export namespace DataClient {
         }
 
         async get500msKLine(symbol: BaseType.BitmexSymbol | BaseType.BinanceSymbol | BaseType.HopexSymbol, startTime: number, endTime: number) {
-            const { data } = await DBClient.func.getKLine({
+            const { data, msg, error, } = await DBClient.func.getKLine({
                 type: '500ms',
                 symbol,
                 startTime,
                 endTime,
             })
-            return data || []
+
+            if (data === undefined || data.length === 0) {
+                console.info(`get500msKLine ${symbol} 错误`, { msg, error, data })
+                return []
+            }
+
+
+            //data 处理
+            let index = 0
+            let ret = [] as typeof data
+            for (let i = timeID.timestampTo500msID(new Date(startTime).getTime()); i <= timeID.timestampTo500msID(new Date(startTime + 加载多少秒数据 * 1000).getTime()); i++) {
+                if (data[index] === undefined || i < data[index].id) {
+                    ret.push({
+                        id: i,
+                        open: NaN,
+                        high: NaN,
+                        low: NaN,
+                        close: NaN,
+                        buySize: NaN,
+                        sellSize: NaN,
+                        buyCount: NaN,
+                        sellCount: NaN,
+                    })
+                } else {
+                    ret.push(data[index])
+                    index++
+                }
+            }
+            return ret
         }
 
 
