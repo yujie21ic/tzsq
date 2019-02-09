@@ -186,15 +186,28 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
 
 
 export class 交易 extends React.Component {
+
+
+    //state
+    位置 = 0
+    hopexCookie = ''
+
+
     componentWillMount() {
         const f = () => {
             requestAnimationFrame(f)
             this.forceUpdate()
         }
         f()
+
+        window.addEventListener('keydown', e => {
+            if (e.keyCode >= 40 && e.keyCode <= 53) {
+                this.位置 = e.keyCode - 49
+            }
+        })
     }
 
-    hopexCookie = ''
+
 
     render() {
         return orderClient.isConnected === false ?
@@ -213,7 +226,9 @@ export class 交易 extends React.Component {
                 <h3>只做摸顶抄底</h3>
                 <hr />
                 <h3>大波动 变 小波动 视觉误差</h3>
-                <hr />                
+                <hr />
+                <h1>买{(this.位置 + 1)}__卖{(this.位置 + 1)}</h1>
+                <hr />
                 <Item symbol='XBTUSD' />
                 <hr />
 
