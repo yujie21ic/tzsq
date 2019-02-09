@@ -52,17 +52,17 @@ const head_data = (name: string) => ({
     'serialNumber': '5'
 })
 
-// const orderbook_subscribe_data = (symbol: BaseType.HopexSymbol) => (
-//     {
-//         'head': head_data('orderbook'),
-//         'param': {
-//             'market': symbol,
-//             'marketCode': symbol,
-//             'contractCode': symbol,
-//             'lang': 'cn'
-//         }
-//     }
-// )
+const orderbook_subscribe_data = (symbol: BaseType.HopexSymbol) => (
+    {
+        'head': head_data('orderbook'),
+        'param': {
+            'market': symbol,
+            'marketCode': symbol,
+            'contractCode': symbol,
+            'lang': 'cn'
+        }
+    }
+)
 
 const deals_subscribe_data = (symbol: BaseType.HopexSymbol) => ({
     'head': head_data('deals'),
@@ -88,9 +88,8 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
 
         this.ws.onStatusChange = () => {
             if (this.ws.isConnected) {
-                // 盘口懒得写了
-                // this.ws.sendJSON(orderbook_subscribe_data('BTCUSDT'))
-                // this.ws.sendJSON(orderbook_subscribe_data('ETHUSDT'))
+                this.ws.sendJSON(orderbook_subscribe_data('BTCUSDT'))
+                this.ws.sendJSON(orderbook_subscribe_data('ETHUSDT'))
                 this.ws.sendJSON(deals_subscribe_data('BTCUSDT'))
                 this.ws.sendJSON(deals_subscribe_data('ETHUSDT'))
             }
@@ -113,45 +112,65 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
             }
 
             // //盘口
-            // if (d.method === 'orderbook.update') {
-            //     const obj = this.orderBook[d.data.contractCode]
+            if (d.method === 'orderbook.update') {
+                const obj = this.orderBook[d.data.contractCode]
 
-            //     d.data.asks.forEach(v => {
-            //         const price = Number(v.orderPrice)
-            //         const size = v.orderQuantity
-            //         obj.sell[price] = size
-            //     })
+                d.data.asks.forEach(v => {
+                    const price = Number(v.orderPrice)
+                    const size = v.orderQuantity
 
-            //     d.data.bids.forEach(v => {
-            //         const price = Number(v.orderPrice)
-            //         const size = v.orderQuantity
-            //         obj.buy[price] = size
-            //     })
+                    if (size === 0) {
+                        delete obj.sell[price]
+                    } else {
+                        obj.sell[price] = size
+                    }
+                })
 
-            //     this.orderBookObservable.next({
-            //         symbol: d.data.contractCode,
-            //         timestamp: Number(d.timestamp),
-            //         buy: [],
-            //         sell: [],
-            //     })
-            // }
+                d.data.bids.forEach(v => {
+                    const price = Number(v.orderPrice)
+                    const size = v.orderQuantity
+
+                    if (size === 0) {
+                        delete obj.buy[price]
+                    } else {
+                        obj.buy[price] = size
+                    }
+                })
+
+                const buy = Object.keys(obj.buy).sort((a, b) => Number(b) - Number(a))
+                const sell = Object.keys(obj.sell).sort()
+
+                if (buy.length >= 5 && sell.length >= 5) {
+
+                    //删除50以上的
+                    buy.slice(50).forEach(v => delete obj.buy[Number(v)])
+                    sell.slice(50).forEach(v => delete obj.sell[Number(v)])
+
+                    this.orderBookObservable.next({
+                        symbol: d.data.contractCode,
+                        timestamp: Number(d.timestamp),
+                        buy: buy.slice(0, 5).map(v => ({
+                            price: Number(v),
+                            size: obj.buy[Number(v)],
+                        })),
+                        sell: sell.slice(0, 5).map(v => ({
+                            price: Number(v),
+                            size: obj.sell[Number(v)],
+                        })),
+                    })
+                }
+            }
         }
     }
 
-    // orderBook = {
-    //     BTCUSDT: {
-    //         最小间隔: 0.5,
-    //         sellMin: NaN,
-    //         sell: Object.create(null) as { [orderPrice: number]: number },
-    //         buyMax: NaN,
-    //         buy: Object.create(null) as { [orderPrice: number]: number },
-    //     },
-    //     ETHUSDT: {
-    //         最小间隔: 0.05,
-    //         sellMin: NaN,
-    //         sell: Object.create(null) as { [orderPrice: number]: number },
-    //         buyMax: NaN,
-    //         buy: Object.create(null) as { [orderPrice: number]: number },
-    //     }
-    // }
+    orderBook = {
+        BTCUSDT: {
+            sell: Object.create(null) as { [orderPrice: number]: number },
+            buy: Object.create(null) as { [orderPrice: number]: number },
+        },
+        ETHUSDT: {
+            sell: Object.create(null) as { [orderPrice: number]: number },
+            buy: Object.create(null) as { [orderPrice: number]: number },
+        }
+    }
 }
