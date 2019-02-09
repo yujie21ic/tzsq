@@ -5,22 +5,13 @@ export namespace BaseType {
     export type BinanceSymbol = 'btcusdt' | 'ethusdt' //ws小写  http大写  卧槽
     export type HopexSymbol = 'BTCUSDT' | 'ETHUSDT'
 
+    export type Market = 'bitmex' | 'binance' | 'hopex'
 
-    export type MarketAndSymbol = {
-        market: 'bitmex'
-        symbol: BitmexSymbol
+    export interface MarketSymbol {
+        bitmex: BitmexSymbol
+        binance: BinanceSymbol
+        hopex: HopexSymbol
     }
-        |
-    {
-        market: 'binance'
-        symbol: BinanceSymbol
-    }
-        |
-    {
-        market: 'hopex'
-        symbol: HopexSymbol
-    }
-
 
     export type Side = 'Buy' | 'Sell'
 
