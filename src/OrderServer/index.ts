@@ -10,7 +10,7 @@ import { kvs } from '../lib/F/kvs'
 import { 止损step } from './task/止损step'
 import { to范围 } from '../lib/F/to范围'
 import { lastNumber } from '../lib/F/lastNumber'
-import { realData } from './realData'
+import { realData, get波动率 } from './realData'
 import { 委托检测step } from './task/委托检测step'
 import { 自动交易step } from './task/自动交易step'
 
@@ -32,7 +32,7 @@ if (config.orderServer !== undefined) {
                     value: lastNumber(realData.dataExt.XBTUSD.期货.波动率) / 4,
                 }),
                 推止损: 盈利点 => {
-                    const 波动率 = lastNumber(realData.dataExt.XBTUSD.期货.波动率)
+                    const 波动率 = get波动率('XBTUSD')
                     if (盈利点 >= to范围({ min: 5, max: 30, value: 波动率 / 5 + 5 })) {
                         return 3
                     }
@@ -54,7 +54,7 @@ if (config.orderServer !== undefined) {
                     value: lastNumber(realData.dataExt.ETHUSD.期货.波动率) / 10 + 0.2,
                 }),
                 推止损: 盈利点 => {
-                    const 波动率 = lastNumber(realData.dataExt.ETHUSD.期货.波动率)
+                    const 波动率 = get波动率('ETHUSD')
                     if (盈利点 >= to范围({ min: 0.3, max: 3, value: 波动率 / 5 + 0.3 })) {
                         return 0.2
                     }

@@ -1,12 +1,7 @@
 import { BaseType } from '../../lib/BaseType'
 import { Account } from '../Account'
 import { BitMEXOrderAPI } from '../../lib/BitMEX/BitMEXOrderAPI'
-import { to价格对齐 } from '../../lib/F/to价格对齐'
-
-const toGridPoint = (symbol: BaseType.BitmexSymbol, value: number, side: BaseType.Side) => {
-    const grid = symbol === 'XBTUSD' ? 0.5 : 0.05
-    return to价格对齐({ grid, side, value })
-}
+import { toGridPoint } from '../realData'
 
 export const 止损step = ({
     symbol,
