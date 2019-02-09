@@ -12,7 +12,7 @@ import { to范围 } from '../lib/F/to范围'
 import { lastNumber } from '../lib/F/lastNumber'
 import { realData } from './realData'
 import { 委托检测step } from './task/委托检测step'
-import { 自动交易step } from './task/自动交易'
+import { 自动交易step } from './task/自动交易step'
 
 
 //运行的账户
