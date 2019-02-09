@@ -21,7 +21,7 @@ export const syncBitmex500msOrderBook = async () => {
 
     ws.onStatusChange = () => {
         samplingDic = Object.create(null)
-        console.log(new Date().toLocaleString(), 'ws isConnected ', ws.isConnected)
+        console.log(new Date().toLocaleString(), 'syncBitmex500msOrderBook isConnected ', ws.isConnected)
     }
 
     ws.onmessage = frame => {
@@ -70,7 +70,7 @@ export const syncBitmex500msOrderBook = async () => {
                             sell5_size: item.sell[4].size,
                         })
                     } catch (error) {
-                        console.log(`getBitmex500msOrderBook id:${item.id} 写入失败 error:${error}`)
+                        console.log(`syncBitmex500msOrderBook id:${item.id} 写入失败 error:${error}`)
                     }
                 }
             }

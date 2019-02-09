@@ -65,7 +65,7 @@ export namespace DB {
 
 
     export const getBitmex500msOrderBook = toCacheFunc(
-        (symbol: BaseType.BitmexSymbol) =>
+        (symbol: BaseType.BitmexSymbol | BaseType.HopexSymbol) =>
             define<BaseType.OrderBookDB>({
                 storage: `db/500msOrderBook_${symbol}.db`,
                 tableName: symbol,

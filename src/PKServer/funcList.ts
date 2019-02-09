@@ -4,7 +4,7 @@ export const funcList = {
 
     getBitmex500msOrderBook: {
         req: {
-            symbol: '' as BaseType.BitmexSymbol,
+            symbol: '' as BaseType.BitmexSymbol | BaseType.HopexSymbol,
             startTime: 0,
             endTime: 0
         },

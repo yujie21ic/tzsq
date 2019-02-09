@@ -163,7 +163,7 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
         }
     }
 
-    orderBook = {
+    private orderBook = {
         BTCUSDT: {
             sell: Object.create(null) as { [orderPrice: number]: number },
             buy: Object.create(null) as { [orderPrice: number]: number },

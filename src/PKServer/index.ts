@@ -4,8 +4,10 @@ import { funcList } from './funcList'
 import { DB } from '../DBServer/DB'
 import { syncBitmex500msOrderBook } from './syncBitmex500msOrderBook'
 import { timeID } from '../lib/F/timeID'
+import { syncHopex500msOrderBook } from './syncHopex500msOrderBook'
 
 syncBitmex500msOrderBook()
+syncHopex500msOrderBook()
 
 const server = new JSONRPCServer({
     funcList,
