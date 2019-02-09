@@ -1,7 +1,6 @@
 import { JSONSync } from '../lib/C/JSONSync'
 import { BaseType } from '../lib/BaseType'
-import { sum } from 'ramda'
-import { Subject } from 'rxjs'
+import { sum } from 'ramda' 
 import { 指标 } from './指标'
 import { Sampling } from '../lib/C/Sampling'
 import { kvs } from '../lib/F/kvs'
