@@ -18,7 +18,7 @@ export namespace DB {
 
         sequelize.query('PRAGMA journal_mode=WAL;')
 
-        return sequelize.define<T, T>(p.tableName, p.attributes, {
+        return sequelize.define<T, T>('modelName', p.attributes, {
             tableName: p.tableName,
             timestamps: false,
             indexes: p.indexes,
