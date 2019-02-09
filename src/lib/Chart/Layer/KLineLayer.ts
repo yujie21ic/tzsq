@@ -16,13 +16,14 @@ export class KLineLayer extends Layer<{ data: { open: number, close: number, hig
     }
 
     render(viewport: Viewport, to: To) {
+        this.g.clear()
 
         const { left, right } = viewport
         const { data } = this.props
 
         if (data.length === 0) return
 
-        this.g.clear()
+
 
         //start
         for (let i = Math.max(0, Math.floor(left)); i <= Math.min(Math.round(right), data.length - 1); i++) {

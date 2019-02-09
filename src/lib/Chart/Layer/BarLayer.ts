@@ -14,13 +14,15 @@ export class BarLayer extends Layer<{ data: ArrayLike<number>, color: number }> 
 
     render(viewport: Viewport, to: To) {
         const { g } = this
+        g.clear()
+        
         const { left, right } = viewport
 
         const { data, color } = this.props
 
         if (data.length === 0) return
 
-        g.clear()
+       
         g.lineStyle(0)
         g.beginFill(color)
 

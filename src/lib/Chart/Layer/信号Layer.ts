@@ -26,6 +26,12 @@ export class 信号Layer extends Layer<{ data: ArrayLike<{ name: string, value: 
 
     render(viewport: Viewport, to: To) {
         const { g } = this
+
+         //clear
+         let III = 0
+         this.textArr.forEach(v => v.visible = false)
+         g.clear()
+         
         const { left, right, width, height } = viewport
 
         const { data, color } = this.props
@@ -35,10 +41,7 @@ export class 信号Layer extends Layer<{ data: ArrayLike<{ name: string, value: 
         const strArr = data[0].map(v => v.name)
         const oneH = height / strArr.length
 
-        //clear
-        let III = 0
-        this.textArr.forEach(v => v.visible = false)
-
+       
         //
         strArr.forEach((v, i) => {
             let text = this.textArr[III]
@@ -50,7 +53,7 @@ export class 信号Layer extends Layer<{ data: ArrayLike<{ name: string, value: 
         })
 
 
-        g.clear()
+       
         g.lineStyle(1, color)
 
         for (let i = Math.max(0, Math.floor(left)); i <= Math.min(Math.round(right), data.length - 1); i++) {

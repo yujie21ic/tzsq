@@ -11,14 +11,16 @@ export class 竖线Layer extends Layer<{ data: ArrayLike<boolean>, color: number
     }
 
     render(viewport: Viewport, to: To, tb: TopBottom) {
-        const { g, } = this
+        const { g } = this
+        g.clear()
+
         const { left, right } = viewport
 
         const { data, color } = this.props
 
         if (data.length === 0) return
 
-        g.clear()
+
         g.lineStyle(1, color)
 
 

@@ -14,13 +14,15 @@ export class LineLayer extends Layer<{ data: ArrayLike<number>, color: number, �
 
     render(viewport: Viewport, to: To, tb: TopBottom) {
         const { g } = this
+        g.clear()
+        
         const { left, right } = viewport
 
         const { data, color, 临时参数 } = this.props
 
         if (data.length === 0) return
 
-        g.clear()
+       
         g.lineStyle(1, color)
 
         let hasMove = false
