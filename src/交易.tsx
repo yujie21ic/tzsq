@@ -16,7 +16,7 @@ const rpc = OrderClient.rpc.func
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
 
-class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
+class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: number }> {
 
     get止损() {
         const arr = orderClient.jsonSync.rawData.symbol[this.props.symbol].活动委托.filter(v => v.type === '止损')
@@ -80,14 +80,14 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                     style={{ width: '50%' }}>
                     <Button
                         bgColor={GREEN}
-                        text={account.交易[this.props.symbol].数量 + ''}
+                        text={account.交易[this.props.symbol].数量 + ' 买' + (this.props.位置 + 1)}
                         left={() => rpc.下单({
                             cookie,
                             symbol: this.props.symbol,
                             type: 'maker',
                             side: 'Buy',
                             size: account.交易[this.props.symbol].数量,
-                            位置: 0,
+                            位置: this.props.位置,
                             最低_最高: false,
                         })}
                         right={() => rpc.下单({
@@ -96,7 +96,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                             type: 'taker',
                             side: 'Buy',
                             size: account.交易[this.props.symbol].数量,
-                            位置: 0,
+                            位置: this.props.位置,
                             最低_最高: false,
                         })}
                     />
@@ -105,14 +105,14 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
 
                     <Button
                         bgColor={GREEN}
-                        text={'5秒内最低价'}
+                        text={'5秒最低 买' + (this.props.位置 + 1)}
                         left={() => rpc.下单({
                             cookie,
                             symbol: this.props.symbol,
                             type: 'maker',
                             side: 'Buy',
                             size: account.交易[this.props.symbol].数量,
-                            位置: 0,
+                            位置: this.props.位置,
                             最低_最高: true,
                         })}
                         right={() => rpc.下单({
@@ -121,7 +121,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                             type: 'taker',
                             side: 'Buy',
                             size: account.交易[this.props.symbol].数量,
-                            位置: 0,
+                            位置: this.props.位置,
                             最低_最高: true,
                         })}
                     />
@@ -133,14 +133,14 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                     }}>
                     <Button
                         bgColor={RED}
-                        text={-account.交易[this.props.symbol].数量 + ''}
+                        text={-account.交易[this.props.symbol].数量 + ' 卖' + (this.props.位置 + 1)}
                         left={() => rpc.下单({
                             cookie,
                             symbol: this.props.symbol,
                             type: 'maker',
                             side: 'Sell',
                             size: account.交易[this.props.symbol].数量,
-                            位置: 0,
+                            位置: this.props.位置,
                             最低_最高: false,
                         })}
                         right={() => rpc.下单({
@@ -149,21 +149,21 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                             type: 'taker',
                             side: 'Sell',
                             size: account.交易[this.props.symbol].数量,
-                            位置: 0,
+                            位置: this.props.位置,
                             最低_最高: false,
                         })}
                     />
                     <br />
                     <Button
                         bgColor={RED}
-                        text={'5秒内最高价'}
+                        text={'5秒最高 卖' + (this.props.位置 + 1)}
                         left={() => rpc.下单({
                             cookie,
                             symbol: this.props.symbol,
                             type: 'maker',
                             side: 'Sell',
                             size: account.交易[this.props.symbol].数量,
-                            位置: 0,
+                            位置: this.props.位置,
                             最低_最高: true,
                         })}
                         right={() => rpc.下单({
@@ -172,7 +172,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol }> {
                             type: 'taker',
                             side: 'Sell',
                             size: account.交易[this.props.symbol].数量,
-                            位置: 0,
+                            位置: this.props.位置,
                             最低_最高: true,
                         })}
                     />
@@ -227,9 +227,7 @@ export class 交易 extends React.Component {
                 <hr />
                 <h3>大波动 变 小波动 视觉误差</h3>
                 <hr />
-                <h1>买{(this.位置 + 1)}__卖{(this.位置 + 1)}</h1>
-                <hr />
-                <Item symbol='XBTUSD' />
+                <Item symbol='XBTUSD' 位置={this.位置} />
                 <hr />
 
                 <br />
@@ -277,7 +275,7 @@ export class 交易 extends React.Component {
                     </div>
                 </div >
 
-                {/* <Item symbol='ETHUSD' /> */}
+                {/* <Item symbol='ETHUSD' 位置={this.位置} /> */}
             </div>
     }
 
