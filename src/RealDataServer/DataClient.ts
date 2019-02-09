@@ -104,34 +104,8 @@ export namespace DataClient {
 
         async load(startTime: number) {
             startTime -= (1000 * 120) //2分钟前
-
-            this.data.startTick = Math.floor(startTime / RealDataBase.单位时间)
-
-            this.data.bitmex.XBTUSD.data = []
-            this.data.bitmex.ETHUSD.data = []
-
-            this.data.binance.btcusdt.data = []
-            this.data.binance.ethusdt.data = []
-
-            this.get_bitmex_orderBook('XBTUSD', startTime, startTime + 加载多少秒数据 * 1000)
-            this.get_bitmex_orderBook('ETHUSD', startTime, startTime + 加载多少秒数据 * 1000)
-
-            this.data.bitmex.XBTUSD.data = await this.get500msKLine('XBTUSD', startTime, startTime + 加载多少秒数据 * 1000)
-            console.log('XBTUSD 500msKLine', this.data.bitmex.XBTUSD.data)
-            this.重新初始化()
-
-            this.data.bitmex.ETHUSD.data = await this.get500msKLine('ETHUSD', startTime, startTime + 加载多少秒数据 * 1000)
-            console.log('ETHUSD 500msKLine', this.data.bitmex.ETHUSD.data)
-            this.重新初始化()
-
-            this.data.binance.btcusdt.data = await this.get500msKLine('btcusdt', startTime, startTime + 加载多少秒数据 * 1000)
-            console.log('btcusdt 500msKLine', this.data.binance.btcusdt.data)
-            this.重新初始化()
-
-            this.data.binance.ethusdt.data = await this.get500msKLine('ethusdt', startTime, startTime + 加载多少秒数据 * 1000)
-            console.log('ethusdt 500msKLine', this.data.binance.ethusdt.data)
-            this.重新初始化()
-
+            const endTime = startTime + 加载多少秒数据 * 1000
+            this.load2(startTime, endTime)
         }
 
 
@@ -142,9 +116,18 @@ export namespace DataClient {
 
             this.data.bitmex.XBTUSD.data = []
             this.data.bitmex.ETHUSD.data = []
+            this.data.bitmex.XBTUSD.orderBook = []
+            this.data.bitmex.ETHUSD.orderBook = []
 
             this.data.binance.btcusdt.data = []
             this.data.binance.ethusdt.data = []
+            this.data.binance.btcusdt.orderBook = []
+            this.data.binance.ethusdt.orderBook = []
+
+            this.data.hopex.BTCUSDT.data = []
+            this.data.hopex.ETHUSDT.data = []
+            this.data.hopex.BTCUSDT.orderBook = []
+            this.data.hopex.ETHUSDT.orderBook = []
 
 
             //bitmex
