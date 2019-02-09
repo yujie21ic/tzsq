@@ -201,7 +201,7 @@ export class 交易 extends React.Component {
         f()
 
         window.addEventListener('keydown', e => {
-            if (e.keyCode >= 40 && e.keyCode <= 53) {
+            if (e.keyCode >= 49 && e.keyCode <= 53) {
                 this.位置 = e.keyCode - 49
             }
         })
