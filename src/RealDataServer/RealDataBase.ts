@@ -681,13 +681,7 @@ export class RealDataBase {
     }
 
 
-    private 默认期货波动率 = 30
-
-    //
-    priceObservable = new Subject<{
-        symbol: string
-        price: number
-    }>()
+    private 默认期货波动率 = 30 
 
     期货盘口dic = new Map<BaseType.BitmexSymbol, BaseType.OrderBook>()
     现货价格dic = new Map<BaseType.BinanceSymbol, number>()
