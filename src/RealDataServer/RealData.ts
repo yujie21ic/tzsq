@@ -121,8 +121,7 @@ export class RealData extends RealDataBase {
                 price,
                 side,
                 size,
-            })
-            this.现货价格dic.set(symbol, price)
+            }) 
         })
 
 

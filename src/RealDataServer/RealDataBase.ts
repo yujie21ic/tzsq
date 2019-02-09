@@ -681,10 +681,9 @@ export class RealDataBase {
     }
 
 
-    private 默认期货波动率 = 30 
+    private 默认期货波动率 = 30
 
     期货盘口dic = new Map<BaseType.BitmexSymbol, BaseType.OrderBook>()
-    现货价格dic = new Map<BaseType.BinanceSymbol, number>()
     期货价格dic = new Map<BaseType.BitmexSymbol, number>()
 
     getOrderPrice = ({ symbol, side, type, 位置 }: { symbol: BaseType.BitmexSymbol, side: BaseType.Side, type: 'taker' | 'maker', 位置: number }) => {
