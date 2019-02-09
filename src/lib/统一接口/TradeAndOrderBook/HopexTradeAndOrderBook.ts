@@ -90,11 +90,11 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
             if (this.ws.isConnected) {
                 if (type === 'order_book' || type === 'all') {
                     this.ws.sendJSON(orderbook_subscribe_data('BTCUSDT'))
-                    this.ws.sendJSON(orderbook_subscribe_data('ETHUSDT'))
+                    // this.ws.sendJSON(orderbook_subscribe_data('ETHUSDT'))  
                 }
                 if (type === 'trade' || type === 'all') {
                     this.ws.sendJSON(deals_subscribe_data('BTCUSDT'))
-                    this.ws.sendJSON(deals_subscribe_data('ETHUSDT'))
+                    // this.ws.sendJSON(deals_subscribe_data('ETHUSDT'))
                 }
             }
             this.statusObservable.next({ isConnected: this.ws.isConnected })
