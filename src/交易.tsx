@@ -16,7 +16,7 @@ const rpc = OrderClient.rpc.func
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
 
-class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: number }> {
+class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: number, 倍数: number }> {
 
     get止损() {
         const arr = orderClient.jsonSync.rawData.symbol[this.props.symbol].活动委托.filter(v => v.type === '止损')
@@ -55,6 +55,8 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
 
     render() {
         const { 仓位数量 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
+        const 下单数量 = account.交易[this.props.symbol].数量 * this.props.倍数
+
         return <div>
             <div style={{
                 display: 'flex',
@@ -80,13 +82,13 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
                     style={{ width: '50%' }}>
                     <Button
                         bgColor={GREEN}
-                        text={account.交易[this.props.symbol].数量 + ' 买' + (this.props.位置 + 1)}
+                        text={下单数量 + ' 买' + (this.props.位置 + 1)}
                         left={() => rpc.下单({
                             cookie,
                             symbol: this.props.symbol,
                             type: 'maker',
                             side: 'Buy',
-                            size: account.交易[this.props.symbol].数量,
+                            size: 下单数量,
                             位置: this.props.位置,
                             最低_最高: false,
                         })}
@@ -95,7 +97,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
                             symbol: this.props.symbol,
                             type: 'taker',
                             side: 'Buy',
-                            size: account.交易[this.props.symbol].数量,
+                            size: 下单数量,
                             位置: this.props.位置,
                             最低_最高: false,
                         })}
@@ -111,7 +113,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
                             symbol: this.props.symbol,
                             type: 'maker',
                             side: 'Buy',
-                            size: account.交易[this.props.symbol].数量,
+                            size: 下单数量,
                             位置: this.props.位置,
                             最低_最高: true,
                         })}
@@ -120,7 +122,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
                             symbol: this.props.symbol,
                             type: 'taker',
                             side: 'Buy',
-                            size: account.交易[this.props.symbol].数量,
+                            size: 下单数量,
                             位置: this.props.位置,
                             最低_最高: true,
                         })}
@@ -133,13 +135,13 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
                     }}>
                     <Button
                         bgColor={RED}
-                        text={-account.交易[this.props.symbol].数量 + ' 卖' + (this.props.位置 + 1)}
+                        text={-下单数量 + ' 卖' + (this.props.位置 + 1)}
                         left={() => rpc.下单({
                             cookie,
                             symbol: this.props.symbol,
                             type: 'maker',
                             side: 'Sell',
-                            size: account.交易[this.props.symbol].数量,
+                            size: 下单数量,
                             位置: this.props.位置,
                             最低_最高: false,
                         })}
@@ -148,7 +150,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
                             symbol: this.props.symbol,
                             type: 'taker',
                             side: 'Sell',
-                            size: account.交易[this.props.symbol].数量,
+                            size: 下单数量,
                             位置: this.props.位置,
                             最低_最高: false,
                         })}
@@ -162,7 +164,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
                             symbol: this.props.symbol,
                             type: 'maker',
                             side: 'Sell',
-                            size: account.交易[this.props.symbol].数量,
+                            size: 下单数量,
                             位置: this.props.位置,
                             最低_最高: true,
                         })}
@@ -171,7 +173,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
                             symbol: this.props.symbol,
                             type: 'taker',
                             side: 'Sell',
-                            size: account.交易[this.props.symbol].数量,
+                            size: 下单数量,
                             位置: this.props.位置,
                             最低_最高: true,
                         })}
@@ -190,6 +192,7 @@ export class 交易 extends React.Component {
 
     //state
     位置 = 0
+    倍数 = 1
     hopexCookie = ''
 
 
@@ -201,9 +204,18 @@ export class 交易 extends React.Component {
         f()
 
         window.addEventListener('keydown', e => {
-            if (e.keyCode >= 49 && e.keyCode <= 53) {
-                this.位置 = e.keyCode - 49
+            if (e.keyCode >= 49 && e.keyCode <= 52) {
+                this.倍数 = e.keyCode - 48
             }
+
+            if (e.keyCode === 37) {//left
+                if (this.位置 > 0) this.位置--
+            }
+
+            if (e.keyCode === 39) {//right
+                if (this.位置 < 4) this.位置++
+            }
+
         })
     }
 
@@ -227,7 +239,7 @@ export class 交易 extends React.Component {
                 <hr />
                 <h3>大波动 变 小波动 视觉误差</h3>
                 <hr />
-                <Item symbol='XBTUSD' 位置={this.位置} />
+                <Item symbol='XBTUSD' 位置={this.位置} 倍数={this.倍数} />
                 <hr />
 
                 <br />
@@ -251,10 +263,10 @@ export class 交易 extends React.Component {
                             style={{ width: '50%' }}>
                             <Button
                                 bgColor={GREEN}
-                                text={(config.hopex数量 || 0) + ''}
+                                text={(config.hopex数量 || 0) * this.倍数 + ''}
                                 left={() =>
                                     hopex市价开仓BTC(this.hopexCookie, {
-                                        size: config.hopex数量 || 0,
+                                        size: (config.hopex数量 || 0) * this.倍数,
                                         side: 'Buy',
                                     })}
                             />
@@ -265,17 +277,15 @@ export class 交易 extends React.Component {
                             }}>
                             <Button
                                 bgColor={RED}
-                                text={-(config.hopex数量 || 0) + ''}
+                                text={-(config.hopex数量 || 0) * this.倍数 + ''}
                                 left={() => hopex市价开仓BTC(this.hopexCookie, {
-                                    size: config.hopex数量 || 0,
+                                    size: (config.hopex数量 || 0) * this.倍数,
                                     side: 'Sell',
                                 })}
                             />
                         </div>
                     </div>
                 </div >
-
-                {/* <Item symbol='ETHUSD' 位置={this.位置} /> */}
             </div>
     }
 
