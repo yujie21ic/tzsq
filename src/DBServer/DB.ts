@@ -45,7 +45,7 @@ export namespace DB {
     )
 
     export const getKLine = toCacheFunc(
-        (type: '1m' | '500ms', symbol: BaseType.BinanceSymbol | BaseType.BitmexSymbol) =>
+        (type: '1m' | '500ms', symbol: BaseType.BinanceSymbol | BaseType.BitmexSymbol | BaseType.HopexSymbol) =>
             define<BaseType.KLine>({
                 storage: `db/${type}_${symbol}.db`,
                 tableName: symbol,

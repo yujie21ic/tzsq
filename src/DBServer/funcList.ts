@@ -5,7 +5,7 @@ export const funcList = {
     getKLine: {
         req: {
             type: '' as '1m' | '500ms',
-            symbol: '' as BaseType.BitmexSymbol | BaseType.BinanceSymbol, //market and symbol
+            symbol: '' as BaseType.BitmexSymbol | BaseType.BinanceSymbol | BaseType.HopexSymbol, //market and symbol
             startTime: 1,
             endTime: 1,
         },

@@ -9,6 +9,7 @@ import { syncBinance500ms } from './syncBinance500ms'
 import { timeID } from '../lib/F/timeID'
 import { syncBitmex500msKLine } from './syncBitmex500msKLine'
 import { sync1M } from './sync1M'
+import { syncHopex500msKLine } from './syncHopex500msKLine'
 
 //采集
 //期货
@@ -25,6 +26,9 @@ syncBinance500ms('btcusdt')
 syncBinance500ms('ethusdt')
 sync1M('btcusdt')
 sync1M('ethusdt')
+
+//hopex
+syncHopex500msKLine()
 
 
 //
