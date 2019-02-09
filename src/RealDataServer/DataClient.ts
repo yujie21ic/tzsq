@@ -31,7 +31,7 @@ export namespace DataClient {
 
     export class RealData__History extends RealDataBase {
 
-        private get_bitmex_orderBook = async (symbol: BaseType.BitmexSymbol, startTime: number, endTime: number) => {
+        private get_bitmex_orderBook = async (symbol: BaseType.BitmexSymbol | BaseType.HopexSymbol, startTime: number, endTime: number) => {
 
             const { data, error, msg } = await PKClient.func.getBitmex500msOrderBook({
                 symbol,
@@ -41,8 +41,7 @@ export namespace DataClient {
 
             if (data === undefined || data.length === 0) {
                 console.info(`get_bitmex_orderBook ${symbol} 错误`, { msg, error, data })
-                this.重新初始化()
-                return
+                return []
             }
 
             //data 处理
@@ -60,13 +59,10 @@ export namespace DataClient {
                     index++
                 }
             }
-
-            this.data.bitmex[symbol as 'XBTUSD'].orderBook = ret
-            this.重新初始化()
-            return
+            return ret
         }
 
-        async get500msKLine(symbol: BaseType.BitmexSymbol | BaseType.BinanceSymbol, startTime: number, endTime: number) {
+        async get500msKLine(symbol: BaseType.BitmexSymbol | BaseType.BinanceSymbol | BaseType.HopexSymbol, startTime: number, endTime: number) {
             const { data } = await DBClient.func.getKLine({
                 type: '500ms',
                 symbol,
@@ -122,23 +118,40 @@ export namespace DataClient {
             this.data.binance.btcusdt.data = []
             this.data.binance.ethusdt.data = []
 
-            this.get_bitmex_orderBook('XBTUSD', startTime, endTime)
-            this.get_bitmex_orderBook('ETHUSD', startTime, endTime)
+
+            //bitmex
+            this.data.bitmex.XBTUSD.orderBook = await this.get_bitmex_orderBook('XBTUSD', startTime, endTime)
+            this.重新初始化()
+
+            this.data.bitmex.ETHUSD.orderBook = await this.get_bitmex_orderBook('ETHUSD', startTime, endTime)
+            this.重新初始化()
 
             this.data.bitmex.XBTUSD.data = await this.get500msKLine('XBTUSD', startTime, endTime)
-            console.log('XBTUSD 500msKLine', this.data.bitmex.XBTUSD.data)
             this.重新初始化()
 
             this.data.bitmex.ETHUSD.data = await this.get500msKLine('ETHUSD', startTime, endTime)
-            console.log('ETHUSD 500msKLine', this.data.bitmex.ETHUSD.data)
             this.重新初始化()
 
+
+            //binance 没有盘口
             this.data.binance.btcusdt.data = await this.get500msKLine('btcusdt', startTime, endTime)
-            console.log('btcusdt 500msKLine', this.data.binance.btcusdt.data)
             this.重新初始化()
 
             this.data.binance.ethusdt.data = await this.get500msKLine('ethusdt', startTime, endTime)
-            console.log('ethusdt 500msKLine', this.data.binance.ethusdt.data)
+            this.重新初始化()
+
+
+            //hopex
+            this.data.hopex.BTCUSDT.orderBook = await this.get_bitmex_orderBook('BTCUSDT', startTime, endTime)
+            this.重新初始化()
+
+            this.data.hopex.ETHUSDT.orderBook = await this.get_bitmex_orderBook('ETHUSDT', startTime, endTime)
+            this.重新初始化()
+
+            this.data.hopex.BTCUSDT.data = await this.get500msKLine('BTCUSDT', startTime, endTime)
+            this.重新初始化()
+
+            this.data.hopex.ETHUSDT.data = await this.get500msKLine('ETHUSDT', startTime, endTime)
             this.重新初始化()
 
         }
