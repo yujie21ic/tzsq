@@ -61,6 +61,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                         })
                     })
                     text.____set(new Date().toLocaleString() + ' 修改平仓' + 信号side + '  ' + ret ? '成功' : '失败')
+                    return true
                 }
             }
         }
