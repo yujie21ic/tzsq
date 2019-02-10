@@ -363,7 +363,7 @@ const hopex市价开仓和止损BTC = async (cookie: string, p: { size: number, 
         method: 'POST',
         body: {
             'param': {
-                'expectedQuantity': '1',
+                'expectedQuantity': String(p.size),
                 'marketCode': 'BTCUSDT',
                 'trigPrice': String(p.side === 'Sell' ? String(p.stopPrice - 100) : String(p.stopPrice + 100)),//
                 'lang': 'cn',
