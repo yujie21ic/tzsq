@@ -6,15 +6,15 @@ import { to价格对齐 } from '../lib/F/to价格对齐'
 
 //_________________________________________________________________________//
 
-export const 信号灯全亮type = (symbol: BaseType.BitmexSymbol) => {
+export const 信号灯side = (symbol: BaseType.BitmexSymbol) => {
     const up = realData.dataExt[symbol].期货.信号_上涨
     const down = realData.dataExt[symbol].期货.信号_下跌
 
     if (up.length > 0 && up[up.length - 1].every(v => v.value)) {
-        return '上涨'
+        return 'Sell'
     }
     else if (down.length > 0 && down[down.length - 1].every(v => v.value)) {
-        return '下跌'
+        return 'Buy'
     }
     else {
         return 'none'

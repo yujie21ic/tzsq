@@ -1,6 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { Account } from '../Account'
-import { 信号灯全亮type, get波动率, toGridPoint, realData } from '../realData'
+import { 信号灯side, get波动率, toGridPoint, realData } from '../realData'
 import { BitMEXOrderAPI } from '../../lib/BitMEX/BitMEXOrderAPI'
 
 const 交易数量 = 1
@@ -16,35 +16,41 @@ const 自动交易step = (symbol: BaseType.BitmexSymbol) => async (self: Account
         v.type === '限价' || v.type === '限价只减仓' || v.type === '市价触发'
     )
 
-    //自动交易 开仓任务 
+    //_____________________________________自动交易 开仓任务_____________________________________
     if (仓位数量 === 0) {
-        //信号灯亮 挂单
-        const type = 信号灯全亮type(symbol)
-        if (type === 'none') {
-            return false
-        } else {
-            const side = type === '上涨' ? 'Sell' : 'Buy'
-            await BitMEXOrderAPI.maker(self.cookie, {
-                symbol,
-                side,
-                size: 交易数量,
-                price: () => realData.getOrderPrice({
+        //没有委托 信号灯全亮 挂单
+        if (活动委托.length === 0) {
+            const side = 信号灯side(symbol)
+            if (side !== 'none') {
+                await BitMEXOrderAPI.maker(self.cookie, {
                     symbol,
                     side,
-                    type: 'maker',
-                    位置: 0,
-                }),
-                reduceOnly: false,
-            })
-            return true
+                    size: 交易数量,
+                    price: () => realData.getOrderPrice({
+                        symbol,
+                        side,
+                        type: 'maker',
+                        位置: 0,
+                    }),
+                    reduceOnly: false,
+                })
+                return true
+            }
+        }
+        //有挂单 15秒 取消
+        else if (活动委托.length === 1) {
+            const { type, timestamp, id } = 活动委托[0]
+            if (type === '限价' && Date.now() > (timestamp + 15 * 1000)) {
+                await BitMEXOrderAPI.cancel(self.cookie, [id])
+                return true
+            }
         }
 
-
-        //没开成功  开了一部分 取消
+        return false
     }
 
 
-    //自动交易 止盈任务    
+    //_____________________________________自动交易 止盈任务_____________________________________    
     if (仓位数量 !== 0) {
 
         //先把止盈挂上
