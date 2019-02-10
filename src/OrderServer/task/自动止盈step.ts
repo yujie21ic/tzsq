@@ -5,9 +5,9 @@ import { BitMEXOrderAPI } from '../../lib/BitMEX/BitMEXOrderAPI'
 
 const 交易数量 = 1
 
-const 自动交易step = (symbol: BaseType.BitmexSymbol) => async (self: Account) => {
+const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account) => {
 
-    if (self.jsonSync.rawData.symbol[symbol].自动交易 === false) {
+    if (self.jsonSync.rawData.symbol[symbol].任务开关.自动止盈.value === false) {
         return true
     }
 
@@ -15,40 +15,6 @@ const 自动交易step = (symbol: BaseType.BitmexSymbol) => async (self: Account
     const 活动委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v =>
         v.type === '限价' || v.type === '限价只减仓' || v.type === '市价触发'
     )
-
-    //_____________________________________自动交易 开仓任务_____________________________________
-    if (仓位数量 === 0) {
-        //没有委托 信号灯全亮 挂单
-        if (活动委托.length === 0) {
-            const side = 信号灯side(symbol)
-            if (side !== 'none') {
-                await BitMEXOrderAPI.maker(self.cookie, {
-                    symbol,
-                    side,
-                    size: 交易数量,
-                    price: () => realData.getOrderPrice({
-                        symbol,
-                        side,
-                        type: 'maker',
-                        位置: 0,
-                    }),
-                    reduceOnly: false,
-                })
-                return true
-            }
-        }
-        //有挂单 15秒 取消
-        else if (活动委托.length === 1) {
-            const { type, timestamp, id } = 活动委托[0]
-            if (type === '限价' && Date.now() > (timestamp + 15 * 1000)) {
-                await BitMEXOrderAPI.cancel(self.cookie, [id])
-                return true
-            }
-        }
-
-        return false
-    }
-
 
     //_____________________________________自动交易 止盈任务_____________________________________    
     if (仓位数量 !== 0) {
@@ -91,4 +57,4 @@ const 自动交易step = (symbol: BaseType.BitmexSymbol) => async (self: Account
     return true
 }
 
-export const XBTUSD自动交易step = 自动交易step('XBTUSD')
+export const XBTUSD自动止盈step = 自动止盈step('XBTUSD')

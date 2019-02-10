@@ -32,10 +32,11 @@ export const funcList = {
         res: false,
     },
 
-    自动交易_开关: {
+    任务_开关: {
         req: {
             cookie: '',
             symbol: '' as BaseType.BitmexSymbol,
+            任务名字: '' as '自动开仓' | '自动止盈',
             value: false,
         },
         res: false,
@@ -44,7 +45,16 @@ export const funcList = {
 
 
 const symbol = () => ({
-    自动交易: false,
+    任务开关: {
+        自动开仓: {
+            value: false,
+            text: '',
+        },
+        自动止盈: {
+            value: false,
+            text: '',
+        }
+    },
     活动委托: [] as {
         type: '限价' | '限价只减仓' | '止损' | '市价触发'
         timestamp: number
