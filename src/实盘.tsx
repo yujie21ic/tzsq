@@ -14,8 +14,8 @@ import { Button } from './lib/UI/Button'
 import { JSONRequest } from './lib/C/JSONRequest'
 import { dialog } from './lib/UI/dialog'
 import { Switch } from '@material-ui/core'
-import { toGridPoint } from './OrderServer/realData';
-import { to范围 } from './lib/F/to范围';
+import { toGridPoint } from './OrderServer/realData'
+import { to范围 } from './lib/F/to范围'
 
 const realTickClient = new DataClient.RealData__Client()
 
