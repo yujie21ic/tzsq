@@ -17,12 +17,12 @@ const 自动交易step = (symbol: BaseType.BitmexSymbol) => async (self: Account
     )
 
     //自动交易 开仓任务 
-    //没开成功  开了一部分  ??????????????????????????????????????????????????????
     if (仓位数量 === 0) {
-
         //信号灯亮 挂单
         const type = 信号灯全亮type(symbol)
-        if (type !== 'none') {
+        if (type === 'none') {
+            return false
+        } else {
             const side = type === '上涨' ? 'Sell' : 'Buy'
             await BitMEXOrderAPI.maker(self.cookie, {
                 symbol,
@@ -38,6 +38,9 @@ const 自动交易step = (symbol: BaseType.BitmexSymbol) => async (self: Account
             })
             return true
         }
+
+
+        //没开成功  开了一部分 取消
     }
 
 

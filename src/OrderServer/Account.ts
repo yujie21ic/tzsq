@@ -68,6 +68,7 @@ export class Account {
 
             const arr = [] as {
                 type: '限价' | '限价只减仓' | '止损' | '市价触发'
+                timestamp: number
                 id: string
                 side: BaseType.Side
                 cumQty: number
@@ -79,6 +80,7 @@ export class Account {
                 if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate' && v.workingIndicator) {
                     arr.push({
                         type: '限价',
+                        timestamp: new Date(v.timestamp).getTime(),
                         id: v.orderID,
                         side: v.side as BaseType.Side,
                         cumQty: v.cumQty,
@@ -89,6 +91,7 @@ export class Account {
                 else if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && v.workingIndicator) {
                     arr.push({
                         type: '限价只减仓',
+                        timestamp: new Date(v.timestamp).getTime(),
                         id: v.orderID,
                         side: v.side as BaseType.Side,
                         cumQty: v.cumQty,
@@ -99,6 +102,7 @@ export class Account {
                 else if (v.ordType === 'Stop' && v.execInst === 'Close,LastPrice') {
                     arr.push({
                         type: '止损',
+                        timestamp: new Date(v.timestamp).getTime(),
                         id: v.orderID,
                         side: v.side as BaseType.Side,
                         cumQty: v.cumQty,
@@ -109,6 +113,7 @@ export class Account {
                 else if (v.ordType === 'MarketIfTouched' && v.execInst === 'LastPrice') {
                     arr.push({
                         type: '市价触发',
+                        timestamp: new Date(v.timestamp).getTime(),
                         id: v.orderID,
                         side: v.side as BaseType.Side,
                         cumQty: v.cumQty,

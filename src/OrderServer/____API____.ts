@@ -47,6 +47,7 @@ const symbol = () => ({
     自动交易: false,
     活动委托: [] as {
         type: '限价' | '限价只减仓' | '止损' | '市价触发'
+        timestamp: number
         id: string
         side: BaseType.Side
         cumQty: number      //成交数量
