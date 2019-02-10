@@ -358,6 +358,8 @@ const hopex市价开仓和止损BTC = async (cookie: string, p: { size: number, 
         }
     })
 
+    const 止损side = p.side === 'Sell' ? 'Buy' : 'Sell'
+
     JSONRequest({
         url: 'https://www.hopex.com/api/v1/gateway/User/ConditionOrder',
         method: 'POST',
@@ -365,11 +367,11 @@ const hopex市价开仓和止损BTC = async (cookie: string, p: { size: number, 
             'param': {
                 'expectedQuantity': String(p.size),
                 'marketCode': 'BTCUSDT',
-                'trigPrice': String(p.side === 'Sell' ? String(p.stopPrice - 100) : String(p.stopPrice + 100)),//
+                'trigPrice': String(止损side === 'Sell' ? String(p.stopPrice - 100) : String(p.stopPrice + 100)),
                 'lang': 'cn',
                 'expectedPrice': String(p.stopPrice),
                 'trigType': 'market_price',
-                'side': p.side === 'Sell' ? 1 : 2,
+                'side': 止损side === 'Sell' ? 1 : 2,
                 'type': 'LimitLoss',
                 'market': 'BTCUSDT',
                 'contractCode': 'BTCUSDT'
