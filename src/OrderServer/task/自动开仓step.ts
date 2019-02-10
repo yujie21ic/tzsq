@@ -13,6 +13,8 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
         return true
     }
 
+    const { text } = self.jsonSync.data.symbol[symbol].任务开关.自动开仓
+
     const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
 
     const 活动委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v =>
@@ -23,7 +25,8 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
 
     //没有仓位 没有委托 信号灯全亮 挂单
     if (仓位数量 === 0 && 活动委托.length === 0 && 信号side !== 'none') {
-        await BitMEXOrderAPI.maker(self.cookie, {
+        text.____set(new Date().toLocaleString() + ' 挂单开仓' + 信号side)
+        const ret = await BitMEXOrderAPI.maker(self.cookie, {
             symbol,
             side: 信号side,
             size: 交易数量,
@@ -35,6 +38,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
             }),
             reduceOnly: false,
         })
+        text.____set(new Date().toLocaleString() + ' 挂单开仓' + 信号side + '  ' + ret ? '成功' : '失败')
         return true
     }
 
@@ -45,7 +49,9 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
             (Date.now() > (timestamp + 15 * 1000)) ||          //15秒取消
             (信号side !== 'none' && 信号side !== side)          //出现反向信号时候取消
         )) {
-            await BitMEXOrderAPI.cancel(self.cookie, [id])
+            text.____set(new Date().toLocaleString() + ' 取消开仓')
+            const ret = await BitMEXOrderAPI.cancel(self.cookie, [id])
+            text.____set(new Date().toLocaleString() + ' 取消开仓  ' + ret ? '成功' : '失败')
             return true
         }
     }

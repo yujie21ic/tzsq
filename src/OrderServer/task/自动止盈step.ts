@@ -9,6 +9,8 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
         return true
     }
 
+    const { text } = self.jsonSync.data.symbol[symbol].任务开关.自动止盈
+
     const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
     const 活动委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v =>
         v.type === '限价' || v.type === '限价只减仓' || v.type === '市价触发'
@@ -19,7 +21,8 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
         //先把止盈挂上
         if (活动委托.length === 0) {
             const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
-            await BitMEXOrderAPI.maker(self.cookie, {
+            text.____set(new Date().toLocaleString() + ' 挂单平仓' + side)
+            const ret = await BitMEXOrderAPI.maker(self.cookie, {
                 symbol,
                 side,
                 size: 仓位数量,
@@ -39,6 +42,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                 },
                 reduceOnly: true,
             })
+            text.____set(new Date().toLocaleString() + ' 挂单平仓' + side + '  ' + ret ? '成功' : '失败')
             return true
         }
         else if (活动委托.length === 1) {
@@ -46,7 +50,8 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
             const 信号side = 信号灯side(symbol)
             if (活动委托[0].side === (仓位数量 > 0 ? 'Sell' : 'Buy') && 活动委托[0].type === '限价只减仓') {
                 if (信号side === 活动委托[0].side) {
-                    await BitMEXOrderAPI.updateMaker(self.cookie, {
+                    text.____set(new Date().toLocaleString() + ' 修改平仓' + 信号side)
+                    const ret = await BitMEXOrderAPI.updateMaker(self.cookie, {
                         orderID: 活动委托[0].id,
                         price: () => realData.getOrderPrice({
                             symbol,
@@ -55,6 +60,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                             位置: 0,
                         })
                     })
+                    text.____set(new Date().toLocaleString() + ' 修改平仓' + 信号side + '  ' + ret ? '成功' : '失败')
                 }
             }
         }
