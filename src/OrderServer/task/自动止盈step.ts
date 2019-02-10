@@ -47,8 +47,8 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
         }
         else if (活动委托.length === 1) {
             //触发了反向开仓信号 提前 修改 止盈
-            const 信号side = 信号灯side(symbol)
             if (活动委托[0].side === (仓位数量 > 0 ? 'Sell' : 'Buy') && 活动委托[0].type === '限价只减仓') {
+                const 信号side = 信号灯side(symbol)
                 if (信号side === 活动委托[0].side) {
                     text.____set(new Date().toLocaleString() + ' 修改平仓' + 信号side)
                     const ret = await BitMEXOrderAPI.updateMaker(self.cookie, {
