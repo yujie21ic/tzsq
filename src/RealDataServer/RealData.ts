@@ -93,7 +93,6 @@ export class RealData extends RealDataBase {
                 price,
             })
             this.期货价格dic.set(symbol as BaseType.BitmexSymbol, price)
-            this.priceObservable.next({ symbol, price })
         })
 
         this.bitmex.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
@@ -122,9 +121,7 @@ export class RealData extends RealDataBase {
                 price,
                 side,
                 size,
-            })
-            this.现货价格dic.set(symbol, price)
-            this.priceObservable.next({ symbol, price })
+            }) 
         })
 
 

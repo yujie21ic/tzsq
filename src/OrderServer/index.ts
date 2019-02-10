@@ -7,11 +7,10 @@ import { typeObjectParse } from '../lib/F/typeObjectParse'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
 import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
 import { kvs } from '../lib/F/kvs'
-import { 止损step } from './task/止损step'
-import { to范围 } from '../lib/F/to范围'
-import { lastNumber } from '../lib/F/lastNumber'
-import { realData } from './realData'
+import { XBTUSD止损step, ETHUSD止损step } from './task/止损step'
 import { 委托检测step } from './task/委托检测step'
+import { XBTUSD自动开仓step } from './task/自动开仓step'
+import { XBTUSD自动止盈step } from './task/自动止盈step'
 
 
 //运行的账户
@@ -22,52 +21,14 @@ if (config.orderServer !== undefined) {
 
         const account = new Account({ accountName: k, cookie: v })
 
-        account.runTask(
-            止损step({
-                symbol: 'XBTUSD',
-                初始止损点: () => to范围({
-                    min: 3,
-                    max: 18,
-                    value: lastNumber(realData.dataExt.XBTUSD.期货.波动率) / 4,
-                }),
-                推止损: 盈利点 => {
-                    const 波动率 = lastNumber(realData.dataExt.XBTUSD.期货.波动率)
-                    if (盈利点 >= to范围({ min: 5, max: 30, value: 波动率 / 5 + 5 })) {
-                        return 3
-                    }
-                    else if (盈利点 >= to范围({ min: 5, max: 15, value: 波动率 / 10 + 5 })) {
-                        return 0
-                    } else {
-                        return NaN
-                    }
-                }
-            })
-        )
-
-        account.runTask(
-            止损step({
-                symbol: 'ETHUSD',
-                初始止损点: () => to范围({
-                    min: 0.3,
-                    max: 0.9,
-                    value: lastNumber(realData.dataExt.ETHUSD.期货.波动率) / 10 + 0.2,
-                }),
-                推止损: 盈利点 => {
-                    const 波动率 = lastNumber(realData.dataExt.ETHUSD.期货.波动率)
-                    if (盈利点 >= to范围({ min: 0.3, max: 3, value: 波动率 / 5 + 0.3 })) {
-                        return 0.2
-                    }
-                    else if (盈利点 >= to范围({ min: 0.3, max: 1.5, value: 波动率 / 10 + 0.3 })) {
-                        return 0
-                    } else {
-                        return NaN
-                    }
-                }
-            })
-        )
+        account.runTask(XBTUSD止损step)
+        account.runTask(ETHUSD止损step)
 
         account.runTask(委托检测step('XBTUSD'))
         account.runTask(委托检测step('ETHUSD'))
+
+        account.runTask(XBTUSD自动开仓step)
+        account.runTask(XBTUSD自动止盈step)
 
         accountDic.set(v, account)
     })
@@ -126,4 +87,17 @@ server.func.下单 = async req => {
     const account = accountDic.get(req.cookie)
     if (account === undefined) throw 'cookie不存在'
     return account.下单(req)
-} 
+}
+
+server.func.任务_开关 = async req => {
+    const account = accountDic.get(req.cookie)
+    if (account === undefined) throw 'cookie不存在'
+    if (req.symbol !== 'XBTUSD' && req.symbol !== 'ETHUSD') throw 'symbol不存在'
+
+    const { 任务开关 } = account.jsonSync.data.symbol[req.symbol]
+    if (Object.keys(任务开关).some(v => v === req.任务名字) === false) throw '任务不存在'
+
+    任务开关[req.任务名字].value.____set(req.value)
+
+    return true
+}  

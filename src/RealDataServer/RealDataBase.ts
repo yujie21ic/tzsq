@@ -1,7 +1,6 @@
 import { JSONSync } from '../lib/C/JSONSync'
 import { BaseType } from '../lib/BaseType'
-import { sum } from 'ramda'
-import { Subject } from 'rxjs'
+import { sum } from 'ramda' 
 import { 指标 } from './指标'
 import { Sampling } from '../lib/C/Sampling'
 import { kvs } from '../lib/F/kvs'
@@ -683,14 +682,7 @@ export class RealDataBase {
 
     private 默认期货波动率 = 30
 
-    //
-    priceObservable = new Subject<{
-        symbol: string
-        price: number
-    }>()
-
     期货盘口dic = new Map<BaseType.BitmexSymbol, BaseType.OrderBook>()
-    现货价格dic = new Map<BaseType.BinanceSymbol, number>()
     期货价格dic = new Map<BaseType.BitmexSymbol, number>()
 
     getOrderPrice = ({ symbol, side, type, 位置 }: { symbol: BaseType.BitmexSymbol, side: BaseType.Side, type: 'taker' | 'maker', 位置: number }) => {
