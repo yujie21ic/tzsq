@@ -7,6 +7,7 @@ import { Button } from './lib/UI/Button'
 import { theme } from './lib/Chart/theme'
 import { JSONRequest } from './lib/C/JSONRequest'
 import { dialog } from './lib/UI/dialog'
+import { Switch } from '@material-ui/core'
 
 const account = config.account![windowExt.accountName]
 const { cookie } = account
@@ -54,7 +55,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
     }
 
     render() {
-        const { 仓位数量 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
+        const { 仓位数量, 任务开关 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
         const 下单数量 = account.交易[this.props.symbol].数量 * this.props.倍数
 
         return <div>
@@ -72,6 +73,14 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
                 <p>仓位:{this.get仓位()}</p>
                 <p>止损:{this.get止损()}</p>
                 <p>委托:{this.get委托()}</p>
+                <p>自动开仓:<Switch checked={任务开关.自动开仓.value}
+                    onChange={(e, v) => {
+                        rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓', value: v })
+                    }}
+                />{任务开关.自动开仓.text}</p>
+                <p>自动止盈:<Switch checked={任务开关.自动止盈.value} onChange={(e, v) => {
+                    rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动止盈', value: v })
+                }} />{任务开关.自动止盈.text}</p>
             </div>
             <div style={{
                 display: 'flex',
