@@ -424,7 +424,8 @@ export class RealDataBase {
 
         const 涨价差 = 指标.lazyMapCache(() => Math.max(最高价10.length, 价格均线60.length), i => Math.abs(最高价10[i] - 价格均线60[i]))
         const 跌价差 = 指标.lazyMapCache(() => Math.max(最低价10.length, 价格均线60.length), i => Math.abs(最低价10[i] - 价格均线60[i]))
-
+        //  补完涨价差/这一段内的成交量
+        //  补完跌价差/这一段内的成交量
 
         // const 价格EMA12 = 指标.EMA(成交量买, 12, RealDataBase.单位时间)
         // const 价格EMA26 = 指标.EMA(成交量买, 26, RealDataBase.单位时间)
