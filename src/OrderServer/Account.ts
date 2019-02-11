@@ -10,11 +10,12 @@ import { to范围 } from '../lib/F/to范围'
 export class Account {
     jsonSync = createJSONSync()
     private ws: BitMEXWSAPI
-    //private accountName: string
+    
+    accountName: string
     cookie: string
 
     constructor(p: { accountName: string, cookie: string }) {
-        //this.accountName = p.accountName
+        this.accountName = p.accountName
         this.cookie = p.cookie
 
         this.ws = new BitMEXWSAPI(p.cookie, [

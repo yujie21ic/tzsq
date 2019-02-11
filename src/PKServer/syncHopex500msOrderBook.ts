@@ -31,7 +31,7 @@ export const syncHopex500msOrderBook = async () => {
             table.sync()
 
             samplingDic[symbol].onComplete2 = item => {
-
+                const { buy, sell } = item
                 try {
                     table.create({
                         id: item.id,
