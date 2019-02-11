@@ -11,7 +11,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
     }
 
     const log = (text: string) => {
-        logToFile(self.accountName + '__' + symbol + '__自动止盈step.text', text)
+        logToFile(self.accountName + '__' + symbol + '__自动止盈step.txt', text)
         self.jsonSync.data.symbol[symbol].任务开关.自动止盈.text.____set(new Date().toLocaleString() + text)
     }
 

@@ -13,7 +13,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
     }
 
     const log = (text: string) => {
-        logToFile(self.accountName + '__' + symbol + '__自动开仓step.text', text)
+        logToFile(self.accountName + '__' + symbol + '__自动开仓step.txt', text)
         self.jsonSync.data.symbol[symbol].任务开关.自动开仓.text.____set(new Date().toLocaleString() + text)
     }
 
