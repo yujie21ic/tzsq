@@ -537,7 +537,7 @@ export class RealDataBase {
                 let b = false
                 if(波动率[i] <波动率小中分界  ){
                     if(盘口买[i]< 10 * 100000){
-                            if(净盘口[i] >= (净盘口均线[i] + 5 * 100000)){
+                            if(净盘口[i] <= (净盘口均线[i]+ 5 * 100000)){
                                 if(净盘口[i] < 0){
                                     b = true
                                 }
@@ -545,7 +545,7 @@ export class RealDataBase {
                     }
                 }else{
                     if(盘口买[i]< 5 * 100000){
-                        if(净盘口[i] >= (净盘口均线[i] + 5 * 100000)){
+                        if(净盘口[i] <= (净盘口均线[i] + 5 * 100000)){
                             if(净盘口[i] < 0){
                                 b = true
                             }
