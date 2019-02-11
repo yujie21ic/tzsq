@@ -36,7 +36,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
             }),
             reduceOnly: false,
         })
-        text.____set(new Date().toLocaleString() + ' 挂单开仓' + 信号side + '  ' + ret ? '成功' : '失败')
+        text.____set(new Date().toLocaleString() + ' 挂单开仓' + 信号side + '  ' + (ret ? '成功' : '失败'))
         return true
     }
 
@@ -49,7 +49,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
         )) {
             text.____set(new Date().toLocaleString() + ' 取消开仓')
             const ret = await BitMEXOrderAPI.cancel(self.cookie, [id])
-            text.____set(new Date().toLocaleString() + ' 取消开仓  ' + ret ? '成功' : '失败')
+            text.____set(new Date().toLocaleString() + ' 取消开仓  ' + (ret ? '成功' : '失败'))
             return true
         }
     }

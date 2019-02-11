@@ -42,7 +42,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                 },
                 reduceOnly: true,
             })
-            text.____set(new Date().toLocaleString() + ' 挂单平仓' + side + '  ' + ret ? '成功' : '失败')
+            text.____set(new Date().toLocaleString() + ' 挂单平仓' + side + '  ' + (ret ? '成功' : '失败'))
             return true
         }
         else if (活动委托.length === 1) {
@@ -60,7 +60,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                             位置: 0,
                         })
                     })
-                    text.____set(new Date().toLocaleString() + ' 修改平仓' + 信号side + '  ' + ret ? '成功' : '失败')
+                    text.____set(new Date().toLocaleString() + ' 修改平仓' + 信号side + '  ' + (ret ? '成功' : '失败'))
                     return true
                 }
             }
