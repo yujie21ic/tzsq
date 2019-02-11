@@ -430,7 +430,7 @@ export class RealDataBase {
                 } else {
                     ext.累计成交量 += 成交量买[i] + 成交量卖[i]
                 }
-                arr[i] = ext.累计成交量 = 0 ? NaN : 涨价差[i] / ext.累计成交量
+                arr[i] = ext.累计成交量 === 0 ? NaN : 涨价差[i] / ext.累计成交量
             }
         })
 
@@ -443,7 +443,7 @@ export class RealDataBase {
                 } else {
                     ext.累计成交量 += 成交量买[i] + 成交量卖[i]
                 }
-                arr[i] = ext.累计成交量 = 0 ? NaN : 跌价差[i] / ext.累计成交量
+                arr[i] = ext.累计成交量 === 0 ? NaN : 跌价差[i] / ext.累计成交量
             }
         })
 
