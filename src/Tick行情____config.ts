@@ -5,8 +5,6 @@ import { TextLayer } from './lib/Chart/Layer/TextLayer'
 import { lastNumber } from './lib/F/lastNumber'
 import { ZeroLayer } from './lib/Chart/Layer/ZeroLayer'
 import { 信号Layer } from './lib/Chart/Layer/信号Layer'
-import { 竖线Layer } from './lib/Chart/Layer/竖线Layer';
-//import { 竖线Layer } from './lib/Chart/Layer/竖线Layer';
 
 
 
@@ -41,7 +39,7 @@ const 石青 = 0x1685a9
 export const Tick行情____config: { [key in string]: ItemFunc } = {
 
     复盘上涨: (d, d2) => ({
-        heightList: [0.5, 0.2, 0.2, 0.1], 
+        heightList: [0.4, 0.2, 0.2, 0.2], 
         items: [
             [{
                 numberColor: BTC颜色,
@@ -69,8 +67,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layer(ZeroLayer, { color: 0xaaaaaa }),
                     // layer(LineLayer, { data: d.期货.买MACD.DEM, color: 买颜色 }),
                     // layer(LineLayer, { data: d.期货.买MACD.DIF, color: 买颜色1 }),
-                    layer(LineLayer, { data: d.期货.阻力3涨DEM, color: 买颜色 }),
-                    layer(LineLayer, { data: d.期货.阻力3涨DIF, color: 买颜色1 }),
+                    layer(LineLayer, { data: d.期货.涨价差__除以__这一段内的成交量DEM, color: 买颜色 }),
+                    layer(LineLayer, { data: d.期货.涨价差__除以__这一段内的成交量DIF, color: 买颜色1 }),
                 ]
             },
             // {
@@ -96,7 +94,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             
             {
                 layerList: [
-                    layer(LineLayer, { data: d.期货.阻力3涨, color: ETH颜色 }),
+                    layer(LineLayer, { data: d.期货.涨价差__除以__这一段内的成交量, color: ETH颜色 }),
                    
                 ]
             },
@@ -146,8 +144,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.期货.买MACD.DEM, color: 买颜色 }),
-                    layer(LineLayer, { data: d.期货.买MACD.DIF, color: 买颜色1 }),
+                    layer(LineLayer, { data: d.期货.买MACD. 买成交量DEM, color: 买颜色 }),
+                    layer(LineLayer, { data: d.期货.买MACD. 买成交量DIF, color: 买颜色1 }),
                     // layer(LineLayer, { data: d.期货.卖MACD.DEM1, color: 卖颜色 }),
                     // layer(LineLayer, { data: d.期货.卖MACD.DIF1, color: 卖颜色1 }),
                 ]
@@ -169,7 +167,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
     复盘下跌: (d, d2) =>({
-        heightList: [0.5, 0.2, 0.2, 0.1], 
+        heightList: [0.4, 0.2, 0.2, 0.2], 
         items: [
             [{
                 numberColor: BTC颜色,
@@ -195,8 +193,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layer(ZeroLayer, { color: 0xaaaaaa }),
                     // layer(LineLayer, { data: d.期货.买MACD.DEM, color: 买颜色 }),
                     // layer(LineLayer, { data: d.期货.买MACD.DIF, color: 买颜色1 }),
-                    layer(LineLayer, { data: d.期货.阻力3跌DEM, color: 卖颜色 }),
-                    layer(LineLayer, { data: d.期货.阻力3跌DIF, color: 卖颜色1 }),
+                    layer(LineLayer, { data: d.期货.跌价差__除以__这一段内的成交量DEM, color: 卖颜色 }),
+                    layer(LineLayer, { data: d.期货.跌价差__除以__这一段内的成交量DIF, color: 卖颜色1 }),
                 ]
             },
             // {
@@ -222,7 +220,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(LineLayer, { data: d.期货.阻力3跌, color: ETH颜色 }),
+                    layer(LineLayer, { data: d.期货.跌价差__除以__这一段内的成交量, color: ETH颜色 }),
                 ]
             }
         ],
@@ -250,8 +248,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layer(ZeroLayer, { color: 0xaaaaaa }),
                 // layer(LineLayer, { data: d.期货.买MACD.DEM, color: 买颜色 }),
                 // layer(LineLayer, { data: d.期货.买MACD.DIF, color: 买颜色1 }),
-                layer(LineLayer, { data: d.期货.卖MACD.DEM1, color: 卖颜色 }),
-                layer(LineLayer, { data: d.期货.卖MACD.DIF1, color: 卖颜色1 }),
+                layer(LineLayer, { data: d.期货.卖MACD. 卖成交量DEM, color: 卖颜色 }),
+                layer(LineLayer, { data: d.期货.卖MACD. 卖成交量DIF, color: 卖颜色1 }),
             ]
         },
         // {
@@ -367,10 +365,10 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         {
             layerList: [
                 layer(ZeroLayer, { color: 0xaaaaaa }),
-                layer(LineLayer, { data:d2.XBTUSD.hopex.买MACD.DEM, color: 买颜色 }),
-                layer(LineLayer, { data:d2.XBTUSD.hopex.买MACD.DIF, color: 买颜色1 }),
-                layer(LineLayer, { data: d2.XBTUSD.hopex.卖MACD.DEM1, color: 卖颜色 }),
-                layer(LineLayer, { data: d2.XBTUSD.hopex.卖MACD.DIF1, color: 卖颜色1 }),
+                layer(LineLayer, { data:d2.XBTUSD.hopex.买MACD. 买成交量DEM, color: 买颜色 }),
+                layer(LineLayer, { data:d2.XBTUSD.hopex.买MACD. 买成交量DIF, color: 买颜色1 }),
+                layer(LineLayer, { data: d2.XBTUSD.hopex.卖MACD.  卖成交量DEM, color: 卖颜色 }),
+                layer(LineLayer, { data: d2.XBTUSD.hopex.卖MACD. 卖成交量DIF, color: 卖颜色1 }),
                 layer(TextLayer, {
                     text:
                         `hopex成交量` ,
@@ -395,10 +393,10 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         {
             layerList: [
                 layer(ZeroLayer, { color: 0xaaaaaa }),
-                layer(LineLayer, { data: d.期货.买MACD.DEM, color: 买颜色 }),
-                layer(LineLayer, { data: d.期货.买MACD.DIF, color: 买颜色1 }),
-                layer(LineLayer, { data: d.期货.卖MACD.DEM1, color: 卖颜色 }),
-                layer(LineLayer, { data: d.期货.卖MACD.DIF1, color: 卖颜色1 }),
+                layer(LineLayer, { data: d.期货.买MACD.买成交量DEM, color: 买颜色 }),
+                layer(LineLayer, { data: d.期货.买MACD.买成交量DIF, color: 买颜色1 }),
+                layer(LineLayer, { data: d.期货.卖MACD.卖成交量DEM, color: 卖颜色 }),
+                layer(LineLayer, { data: d.期货.卖MACD.卖成交量DIF, color: 卖颜色1 }),
                 layer(TextLayer, {
                     text:
                         `bitmex成交量` ,
