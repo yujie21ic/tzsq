@@ -31,7 +31,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                 side,
                 size: 仓位数量,
                 price: () => {
-                    const 止盈点 = get波动率(symbol) / 10 + 5
+                    const 止盈点 = get波动率(symbol) / 10 + 3
                     const 止盈点价格 = toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 + 止盈点 : 开仓均价 - 止盈点, side)
 
                     const 位置1价格 = realData.getOrderPrice({
