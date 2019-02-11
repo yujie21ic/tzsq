@@ -1,6 +1,6 @@
 import { JSONSync } from '../lib/C/JSONSync'
 import { BaseType } from '../lib/BaseType'
-import { sum } from 'ramda' 
+import { sum } from 'ramda'
 import { 指标 } from './指标'
 import { Sampling } from '../lib/C/Sampling'
 import { kvs } from '../lib/F/kvs'
@@ -411,19 +411,42 @@ export class RealDataBase {
 
         //真空信号  阻力小于10万，价差大于5
         const 真空信号涨 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 < 200000) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > 4)
-        const 真空信号跌 = 指标.lazyMapCache(() => 价格.length, i =>  (阻力3[i].阻力 > -200000) && 阻力3[i].阻力 < 0 && 阻力3[i].价钱增量 > 4)
+        const 真空信号跌 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 > -200000) && 阻力3[i].阻力 < 0 && 阻力3[i].价钱增量 > 4)
         //const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < to范围({ value: 波动率[i] / 10 * 10000, min: 100000, max: 400000 }) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 15, min: 3, max: 30 })))
         //const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 > to范围({ value: -波动率[i] / 10 * 10000, max: -100000, min: -400000 }) && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 15, min: 3, max: 30 })))
 
-       
+
         const 阻力笔 = 指标.阻力笔(价格)
 
         const 价格均线60 = 指标.均线(价格, 60, RealDataBase.单位时间)
         const 最高价10 = 指标.最高(价格, 10, RealDataBase.单位时间)
         const 最低价10 = 指标.最低(价格, 10, RealDataBase.单位时间)
 
-        const 涨价差 = 指标.lazyMapCache(() => Math.max(最高价10.length, 价格均线60.length), i => Math.abs(最高价10[i] - 价格均线60[i]))
-        const 跌价差 = 指标.lazyMapCache(() => Math.max(最低价10.length, 价格均线60.length), i => Math.abs(最低价10[i] - 价格均线60[i]))
+        const 涨价差 = 指标.lazyMapCache(() => Math.min(最高价10.length, 价格均线60.length), i => Math.abs(最高价10[i] - 价格均线60[i]))
+        const 涨价差__除以__这一段内的成交量 = 指标.lazyMapCache2({ 累计成交量: 0 }, (arr: number[], ext) => {
+            for (let i = Math.max(0, arr.length - 1); i < Math.min(涨价差.length, 成交量买.length, 成交量卖.length); i++) {
+                if (涨价差[i] < 0.01) {
+                    ext.累计成交量 = 0
+                } else {
+                    ext.累计成交量 += 成交量买[i] + 成交量卖[i]
+                }
+                arr[i] = ext.累计成交量 = 0 ? NaN : 涨价差[i] / ext.累计成交量
+            }
+        })
+
+        //重复
+        const 跌价差 = 指标.lazyMapCache(() => Math.min(最低价10.length, 价格均线60.length), i => Math.abs(最低价10[i] - 价格均线60[i]))
+        const 跌价差__除以__这一段内的成交量 = 指标.lazyMapCache2({ 累计成交量: 0 }, (arr: number[], ext) => {
+            for (let i = Math.max(0, arr.length - 1); i < Math.min(跌价差.length, 成交量买.length, 成交量卖.length); i++) {
+                if (跌价差[i] < 0.01) {
+                    ext.累计成交量 = 0
+                } else {
+                    ext.累计成交量 += 成交量买[i] + 成交量卖[i]
+                }
+                arr[i] = ext.累计成交量 = 0 ? NaN : 跌价差[i] / ext.累计成交量
+            }
+        })
+
         //  补完涨价差/这一段内的成交量
         //  补完跌价差/这一段内的成交量
 
@@ -516,7 +539,7 @@ export class RealDataBase {
 
 
         const 上涨速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr: number[], ext) => {
-            for (let i = Math.max(0, arr.length - 1); i < Math.max(价格均线60.length, 最高价10.length); i++) {
+            for (let i = Math.max(0, arr.length - 1); i < Math.min(价格均线60.length, 最高价10.length); i++) {
                 const 时间ms = (i - ext.last交叉Index) / (1000 / RealDataBase.单位时间)
                 if (时间ms === 0) {
                     arr[i] = NaN
@@ -547,7 +570,7 @@ export class RealDataBase {
 
 
         const 下跌速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr: number[], ext) => {
-            for (let i = Math.max(0, arr.length - 1); i < Math.max(价格均线60.length, 最低价10.length); i++) {
+            for (let i = Math.max(0, arr.length - 1); i < Math.min(价格均线60.length, 最低价10.length); i++) {
                 const 时间ms = (i - ext.last交叉Index) / (1000 / RealDataBase.单位时间)
 
                 if (时间ms === 0) {
