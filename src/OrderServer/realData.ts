@@ -6,23 +6,28 @@ import { to价格对齐 } from '../lib/F/to价格对齐'
 
 //_________________________________________________________________________//
 
+const get信号msg = (up: ArrayLike<{ name: string, value: boolean }[]>, down: ArrayLike<{ name: string, value: boolean }[]>) =>
+    JSON.stringify({
+        信号_上涨: up.length > 0 ? up[up.length - 1] : '',
+        信号_下跌: down.length > 0 ? down[down.length - 1] : '',
+    }, undefined, 4)
+
+    
 export const 信号灯side = (symbol: BaseType.BitmexSymbol) => {
 
     //TODO
     // 10s最大值在价格的位置i大，10s最小值在价格位置中的i小，如果i大-i小>0,也就是最大值出现的比最小值晚，那么就是上涨，如果i大-i小<0,那么就是下跌
-
-
     const up = realData.dataExt[symbol].期货.信号_上涨
     const down = realData.dataExt[symbol].期货.信号_下跌
 
     if (up.length > 0 && up[up.length - 1].every(v => v.value)) {
-        return 'Sell'
+        return { 信号side: 'Sell' as 'Sell', 信号msg: get信号msg(up, down) }
     }
     else if (down.length > 0 && down[down.length - 1].every(v => v.value)) {
-        return 'Buy'
+        return { 信号side: 'Buy' as 'Buy', 信号msg: get信号msg(up, down) }
     }
     else {
-        return 'none'
+        return { 信号side: 'none' as 'none', 信号msg: '' }
     }
 }
 
