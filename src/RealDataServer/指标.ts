@@ -110,6 +110,32 @@ export namespace 指标 {
     })
 
 
+    export const 最高index = 指标(({ start, end, count, arr }) => {
+        let ret = arr[start]
+        let retIndex = start
+        for (let i = start + 1; i <= end; i++) {
+            if (arr[i] > ret) {
+                ret = arr[i]
+                retIndex = i
+            }
+        }
+        return retIndex
+    })
+
+
+    export const 最低index = 指标(({ start, end, count, arr }) => {
+        let ret = arr[start]
+        let retIndex = start
+        for (let i = start + 1; i <= end; i++) {
+            if (arr[i] < ret) {
+                ret = arr[i]
+                retIndex = i
+            }
+        }
+        return retIndex
+    })
+
+
     export const 均线 = 指标(({ start, end, count, arr }) => {
         let sum = 0
         for (let i = start; i <= end; i++) {

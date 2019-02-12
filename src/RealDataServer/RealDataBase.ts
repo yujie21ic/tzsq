@@ -426,6 +426,15 @@ export class RealDataBase {
         const 最高价10 = 指标.最高(价格, 10, RealDataBase.单位时间)
         const 最低价10 = 指标.最低(价格, 10, RealDataBase.单位时间)
 
+        const 最高价10index = 指标.最高index(价格, 10, RealDataBase.单位时间)
+        const 最低价10index = 指标.最低index(价格, 10, RealDataBase.单位时间)
+
+        const 上涨还是下跌 = 指标.lazyMapCache(
+            () => Math.min(最高价10index.length, 最低价10index.length),
+            i => 最高价10index[i] > 最低价10index[i] ? '上涨' : '下跌'
+        )
+
+
         const 涨价差 = 指标.lazyMapCache(() => Math.min(最高价10.length, 价格均线60.length), i => Math.abs(最高价10[i] - 价格均线60[i]))
         const 涨价差__除以__这一段内的成交量 = 指标.lazyMapCache2({ 累计成交量: 0 }, (arr: number[], ext) => {
             for (let i = Math.max(0, arr.length - 1); i < Math.min(涨价差.length, 成交量买.length, 成交量卖.length); i++) {
@@ -535,18 +544,18 @@ export class RealDataBase {
             ),
             i => {
                 let b = false
-                if(波动率[i] <波动率小中分界  ){
-                    if(盘口买[i]< 10 * 100000){
-                            if(净盘口[i] <= (净盘口均线[i]+ 5 * 100000)){
-                                if(净盘口[i] < 5 * 100000){
-                                    b = true
-                                }
+                if (波动率[i] < 波动率小中分界) {
+                    if (盘口买[i] < 10 * 100000) {
+                        if (净盘口[i] <= (净盘口均线[i] + 5 * 100000)) {
+                            if (净盘口[i] < 5 * 100000) {
+                                b = true
                             }
+                        }
                     }
-                }else{
-                    if(盘口买[i]< 5 * 100000){
-                        if(净盘口[i] <= (净盘口均线[i] + 5 * 100000)){
-                            if(净盘口[i] < 5 * 100000){
+                } else {
+                    if (盘口买[i] < 5 * 100000) {
+                        if (净盘口[i] <= (净盘口均线[i] + 5 * 100000)) {
+                            if (净盘口[i] < 5 * 100000) {
                                 b = true
                             }
                         }
@@ -603,18 +612,18 @@ export class RealDataBase {
             ),
             i => {
                 let b = false
-                if(波动率[i] <波动率小中分界  ){
-                    if(盘口卖[i]< 10 * 100000){
-                            if(净盘口[i] >= (净盘口均线[i] - 5 * 100000)){
-                                if(净盘口[i] > (- 5 * 100000)){
-                                    b = true
-                                }
+                if (波动率[i] < 波动率小中分界) {
+                    if (盘口卖[i] < 10 * 100000) {
+                        if (净盘口[i] >= (净盘口均线[i] - 5 * 100000)) {
+                            if (净盘口[i] > (- 5 * 100000)) {
+                                b = true
                             }
+                        }
                     }
-                }else{
-                    if(盘口卖[i]< 5 * 100000){
-                        if(净盘口[i] >= (净盘口均线[i] - 5 * 100000)){
-                            if(净盘口[i] > (- 5 * 100000)) {
+                } else {
+                    if (盘口卖[i] < 5 * 100000) {
+                        if (净盘口[i] >= (净盘口均线[i] - 5 * 100000)) {
+                            if (净盘口[i] > (- 5 * 100000)) {
                                 b = true
                             }
                         }
@@ -713,6 +722,7 @@ export class RealDataBase {
 
 
         return {
+            上涨还是下跌,
             价格, 价格均线, 波动率, 成交量买, 成交量买均线: 成交量买均线30, 成交量卖, 盘口买, 盘口卖, 净盘口, 净盘口均线,
             成交次数买, 成交次数卖,
             阻力1涨, 阻力1跌,
