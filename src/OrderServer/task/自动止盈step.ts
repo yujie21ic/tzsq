@@ -47,12 +47,11 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                 return false
             }
 
-
             log('挂单平仓' + side + '  price:' + getPrice())
             const ret = await BitMEXOrderAPI.maker(self.cookie, {
                 symbol,
                 side,
-                size: 仓位数量,
+                size: Math.abs(仓位数量),
                 price: getPrice,
                 reduceOnly: true,
             })
