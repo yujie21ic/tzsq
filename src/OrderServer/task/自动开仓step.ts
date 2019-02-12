@@ -23,11 +23,11 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
         v.type === '限价' || v.type === '限价只减仓' || v.type === '市价触发'
     )
 
-    const 信号side = 信号灯side(symbol)
+    const { 信号side, 信号msg } = 信号灯side(symbol)
 
     //没有仓位 没有委托 信号灯全亮 挂单
     if (仓位数量 === 0 && 活动委托.length === 0 && 信号side !== 'none') {
-        log('挂单开仓' + 信号side)
+        log('挂单开仓' + 信号side + ' 信号msg:' + 信号msg)
         const ret = await BitMEXOrderAPI.maker(self.cookie, {
             symbol,
             side: 信号side,
@@ -40,7 +40,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
             }),
             reduceOnly: false,
         })
-        log('挂单开仓' + 信号side + '  ' + (ret ? '成功' : '失败'))
+        log('挂单开仓' + (ret ? '成功' : '失败'))
         return true
     }
 
@@ -50,12 +50,10 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
         if (type === '限价') {
             const _15秒取消 = (Date.now() > (timestamp + 15 * 1000))
             const 出现反向信号时候取消 = (信号side !== 'none' && 信号side !== side)
-
             if (_15秒取消 || 出现反向信号时候取消) {
-                const s = '取消开仓' + JSON.stringify({ _15秒取消, 出现反向信号时候取消 })
-                log(s)
+                log('取消开仓' + JSON.stringify({ _15秒取消, 出现反向信号时候取消 }) + ' 信号msg:' + 信号msg)
                 const ret = await BitMEXOrderAPI.cancel(self.cookie, [id])
-                log(s + (ret ? '成功' : '失败'))
+                log('取消开仓' + (ret ? '成功' : '失败'))
                 return true
             }
         }
