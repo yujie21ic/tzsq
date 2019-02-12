@@ -25,25 +25,35 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
         //先把止盈挂上
         if (活动委托.length === 0) {
             const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
+
+
+            const getPrice = () => {
+                const 止盈点 = get波动率(symbol) / 10 + 3
+                const 止盈点价格 = toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 + 止盈点 : 开仓均价 - 止盈点, side)
+
+                const 位置1价格 = realData.getOrderPrice({
+                    symbol,
+                    side,
+                    type: 'maker',
+                    位置: 0,
+                })
+                return side === 'Buy' ?
+                    Math.min(止盈点价格, 位置1价格) :
+                    Math.max(止盈点价格, 位置1价格)
+            }
+
+            if (isNaN(getPrice())) {
+                log('波动率未出来 先不挂单平仓')
+                return false
+            }
+
+
             log('挂单平仓' + side)
             const ret = await BitMEXOrderAPI.maker(self.cookie, {
                 symbol,
                 side,
                 size: 仓位数量,
-                price: () => {
-                    const 止盈点 = get波动率(symbol) / 10 + 3
-                    const 止盈点价格 = toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 + 止盈点 : 开仓均价 - 止盈点, side)
-
-                    const 位置1价格 = realData.getOrderPrice({
-                        symbol,
-                        side,
-                        type: 'maker',
-                        位置: 0,
-                    })
-                    return side === 'Buy' ?
-                        Math.min(止盈点价格, 位置1价格) :
-                        Math.max(止盈点价格, 位置1价格)
-                },
+                price: getPrice,
                 reduceOnly: true,
             })
             log('挂单平仓' + side + '  ' + (ret ? '成功' : '失败'))
