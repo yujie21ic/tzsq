@@ -4,7 +4,7 @@ import { sum } from 'ramda'
 import { 指标 } from './指标'
 import { Sampling } from '../lib/C/Sampling'
 import { kvs } from '../lib/F/kvs'
-import { to范围 } from '../lib/F/to范围';
+import { to范围 } from '../lib/F/to范围'
 
 
 
