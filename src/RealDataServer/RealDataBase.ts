@@ -569,7 +569,7 @@ export class RealDataBase {
                     { name: '成交量DIF<DEM', value: 买成交量DIF[i] < 买成交量DEM[i] },
                     //&&(波动率[i] <波动率小中分界||买成交量DIF[i]<0) 
                     { name: ' 净盘口<净盘口均线<0', value: b },
-                    { name: '波动率 > 8', value: 波动率[i] > 8 },
+                    { name: '波动率 > 8', value: 波动率[i] > 3 },
                 ]
             }
         )
@@ -640,7 +640,7 @@ export class RealDataBase {
                     //(盘口买[i]<5*100000?净盘口[i] <=净盘口均线[i]-5*100000:净盘口[i] < 净盘口均线[i])
                     { name: ' 净盘口 > 净盘口均线>0', value: b },
                     //{ name: ' 净盘口 > 净盘口均线>0', value:   净盘口[i] > 净盘口均线[i] &&(净盘口[i]>0)},
-                    { name: '波动率 > 8', value: 波动率[i] > 8 },
+                    { name: '波动率 > 8', value: 波动率[i] > 3 },
                 ]
             }
         )
