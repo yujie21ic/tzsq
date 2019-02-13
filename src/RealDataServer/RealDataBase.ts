@@ -4,6 +4,7 @@ import { sum } from 'ramda'
 import { 指标 } from './指标'
 import { Sampling } from '../lib/C/Sampling'
 import { kvs } from '../lib/F/kvs'
+import { to范围 } from '../lib/F/to范围';
 
 
 
@@ -434,6 +435,14 @@ export class RealDataBase {
             i => 最高价10index[i] > 最低价10index[i] ? '上涨' : '下跌'
         )
 
+        const 自动下单条件 = 指标.lazyMapCache(
+            () => Math.min(最高价10.length, 最低价10.length, 波动率.length, 上涨还是下跌.length),
+            i =>
+                Math.abs(价格[i] - (上涨还是下跌[i] === '上涨' ? 最高价10[i] : 最低价10[i]))
+                <=
+                to范围({ value: 波动率[i] / 10 + 2, min: 3, max: 15 })
+        )
+
 
         const 涨价差 = 指标.lazyMapCache(() => Math.min(最高价10.length, 价格均线60.length), i => Math.abs(最高价10[i] - 价格均线60[i]))
         const 涨价差__除以__这一段内的成交量 = 指标.lazyMapCache2({ 累计成交量: 0 }, (arr: number[], ext) => {
@@ -540,7 +549,9 @@ export class RealDataBase {
                 盘口买2秒均线.length,
                 买成交量DIF.length,
                 买成交量DEM.length,
-                波动率.length
+                波动率.length,
+                上涨还是下跌.length,
+                自动下单条件.length,
             ),
             i => {
                 let b = false
@@ -570,6 +581,10 @@ export class RealDataBase {
                     //&&(波动率[i] <波动率小中分界||买成交量DIF[i]<0) 
                     { name: ' 净盘口<净盘口均线<0', value: b },
                     { name: '波动率 > 8', value: 波动率[i] > 3 },
+
+                    //量化用
+                    { name: '量化 is上涨', value: 上涨还是下跌[i] === '上涨' },
+                    { name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
                 ]
             }
         )
@@ -608,7 +623,9 @@ export class RealDataBase {
                 盘口卖2秒均线.length,
                 卖成交量DIF.length,
                 卖成交量DEM.length,
-                波动率.length
+                波动率.length,
+                上涨还是下跌.length,
+                自动下单条件.length,
             ),
             i => {
                 let b = false
@@ -641,6 +658,10 @@ export class RealDataBase {
                     { name: ' 净盘口 > 净盘口均线>0', value: b },
                     //{ name: ' 净盘口 > 净盘口均线>0', value:   净盘口[i] > 净盘口均线[i] &&(净盘口[i]>0)},
                     { name: '波动率 > 8', value: 波动率[i] > 3 },
+
+                    //量化用
+                    { name: '量化 is下跌', value: 上涨还是下跌[i] === '下跌' },
+                    { name: '量化 自动下单条件', value: 上涨还是下跌[i] === '下跌' && 自动下单条件[i] },
                 ]
             }
         )
@@ -723,6 +744,7 @@ export class RealDataBase {
 
         return {
             上涨还是下跌,
+            自动下单条件,
             价格, 价格均线, 波动率, 成交量买, 成交量买均线: 成交量买均线30, 成交量卖, 盘口买, 盘口卖, 净盘口, 净盘口均线,
             成交次数买, 成交次数卖,
             阻力1涨, 阻力1跌,
