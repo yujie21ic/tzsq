@@ -11,8 +11,7 @@ import { config } from './config'
 import { BaseType } from './lib/BaseType'
 import { windowExt } from './windowExt'
 import { Button } from './lib/UI/Button'
-import { JSONRequest } from './lib/C/JSONRequest'
-import { dialog } from './lib/UI/dialog'
+import { JSONRequest } from './lib/C/JSONRequest' 
 import { Switch } from '@material-ui/core'
 import { toGridPoint } from './OrderServer/realData'
 import { to范围 } from './lib/F/to范围'
@@ -214,7 +213,7 @@ export class 交易 extends React.Component {
     //state
     位置 = 0
     倍数 = 1
-    hopexCookie = ''
+    hopexCookie = (config.hopexCookie || '')
 
 
     componentWillMount() {
@@ -264,15 +263,7 @@ export class 交易 extends React.Component {
                 <hr />
 
                 <br />
-                <br />
-                <a
-                    style={{ color: 'yellow' }}
-                    href='#'
-                    onClick={() => {
-                        dialog.showInput({ title: '设置 hopex cookie', value: this.hopexCookie, onOK: v => this.hopexCookie = v })
-                    }}>{this.hopexCookie !== '' ? '已设置' : 'hopex 设置 cookie'}</a>
-                <br />
-                <br />
+                <br /> 
 
                 {this.hopexCookie !== '' ?
                     <div>

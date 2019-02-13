@@ -6,6 +6,7 @@ export type ConfigType = {
         [name: string]: string //cookie
     }
     hopex数量?: number
+    hopexCookie?: string
     account?: {
         [name: string]: {
             cookie: string
