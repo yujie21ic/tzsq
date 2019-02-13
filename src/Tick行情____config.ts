@@ -183,11 +183,11 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     })
                 ]
             },
-            {
-                layerList: [
-                    layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
-                ]
-            },
+            // {
+            //     layerList: [
+            //         layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+            //     ]
+            // },
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
@@ -210,14 +210,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             //         layer(LineLayer, { data: d.期货.下跌价格DIF, color: 卖颜色1 }),
             //     ]
             // },
-            {
-                numberColor: 波动率颜色,
-                numberX: 100,
-                layerList: [
-                    layer(LineLayer, { data: d.期货.波动率, color: 石青 }),
+            // {
+            //     numberColor: 波动率颜色,
+            //     numberX: 100,
+            //     layerList: [
+            //         layer(LineLayer, { data: d.期货.波动率, color: 石青 }),
                     
-                ]
-            },
+            //     ]
+            // },
             {
                 layerList: [
                     layer(LineLayer, { data: d.期货.跌价差__除以__这一段内的成交量, color: ETH颜色 }),
