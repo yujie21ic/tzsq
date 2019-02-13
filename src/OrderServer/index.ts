@@ -5,7 +5,6 @@ import * as WebSocket from 'ws'
 import { config } from '../config'
 import { typeObjectParse } from '../lib/F/typeObjectParse'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
-import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
 import { kvs } from '../lib/F/kvs'
 import { XBTUSD止损step, ETHUSD止损step } from './task/止损step'
 import { 委托检测step } from './task/委托检测step'
@@ -77,11 +76,17 @@ wss.on('connection', ws => {
 //http
 const server = new JSONRPCServer({ funcList, port: 3456 })
 
-server.func.取消委托 = async req =>
-    await BitMEXOrderAPI.cancel(req.cookie, req.orderID)
+server.func.取消委托 = async req => {
+    const account = accountDic.get(req.cookie)
+    if (account === undefined) throw 'cookie不存在'
+    return account.取消委托(req)
+}
 
-server.func.市价平仓 = async req =>
-    await BitMEXOrderAPI.close(req.cookie, req.symbol)
+server.func.市价平仓 = async req => {
+    const account = accountDic.get(req.cookie)
+    if (account === undefined) throw 'cookie不存在'
+    return account.市价平仓(req)
+}
 
 server.func.下单 = async req => {
     const account = accountDic.get(req.cookie)

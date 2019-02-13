@@ -10,13 +10,28 @@ import { to范围 } from '../lib/F/to范围'
 export class Account {
     jsonSync = createJSONSync()
     private ws: BitMEXWSAPI
-    
+
     accountName: string
     cookie: string
+
+    order手动: BitMEXOrderAPI
+    order自动: BitMEXOrderAPI
 
     constructor(p: { accountName: string, cookie: string }) {
         this.accountName = p.accountName
         this.cookie = p.cookie
+
+        this.order手动 = new BitMEXOrderAPI({
+            cookie: p.cookie,
+            重试几次: 100,
+            重试休息多少毫秒: 30,
+        })
+
+        this.order自动 = new BitMEXOrderAPI({
+            cookie: p.cookie,
+            重试几次: 10,
+            重试休息多少毫秒: 10,
+        })
 
         this.ws = new BitMEXWSAPI(p.cookie, [
             { theme: 'margin' },
@@ -151,6 +166,12 @@ export class Account {
         }
     }
 
+    市价平仓 = async (req: typeof funcList.市价平仓.req) =>
+        await this.order手动.close(req.symbol)
+
+    取消委托 = async (req: typeof funcList.取消委托.req) =>
+        await this.order手动.cancel(req.orderID)
+
     下单 = async (req: typeof funcList.下单.req) => {
 
         if (req.symbol !== 'XBTUSD' && req.symbol !== 'ETHUSD') {
@@ -199,7 +220,7 @@ export class Account {
                 )
                 && 活动委托[0].side === req.side && req.type === 'maker') {
                 //ws返回有时间  直接给委托列表加一条记录??
-                return await BitMEXOrderAPI.updateMaker(req.cookie, {
+                return await this.order手动.updateMaker({
                     orderID: 活动委托[0].id,
                     price: getPrice,
                 })
@@ -217,20 +238,20 @@ export class Account {
 
         return req.type === 'taker' ?
             (req.最低_最高 ?
-                await BitMEXOrderAPI.市价触发(req.cookie, {
+                await this.order手动.市价触发({
                     symbol: req.symbol,
                     side: req.side,
                     size: req.size,
                     price: getPrice(),
                 }) :
-                await BitMEXOrderAPI.taker(req.cookie, {
+                await this.order手动.taker({
                     symbol: req.symbol,
                     side: req.side,
                     size: req.size,
                 })
             ) :
             //ws返回有时间  直接给委托列表加一条记录??
-            await BitMEXOrderAPI.maker(req.cookie, {
+            await this.order手动.maker({
                 symbol: req.symbol,
                 side: req.side,
                 size: req.size,

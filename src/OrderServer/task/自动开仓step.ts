@@ -1,7 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { Account } from '../Account'
 import { 信号灯side, realData } from '../realData'
-import { BitMEXOrderAPI } from '../../lib/BitMEX/BitMEXOrderAPI'
 import { logToFile } from '../../lib/C/logToFile'
 
 const 交易数量 = 1
@@ -28,7 +27,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
     //没有仓位 没有委托 信号灯全亮 挂单
     if (仓位数量 === 0 && 活动委托.length === 0 && 信号side !== 'none') {
         log('挂单开仓' + 信号side + ' 信号msg:' + 信号msg)
-        const ret = await BitMEXOrderAPI.maker(self.cookie, {
+        const ret = await self.order自动.maker({
             symbol,
             side: 信号side,
             size: 交易数量,
@@ -52,7 +51,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
             const 出现反向信号时候取消 = (信号side !== 'none' && 信号side !== side)
             if (_15秒取消 || 出现反向信号时候取消) {
                 log('取消开仓' + JSON.stringify({ _15秒取消, 出现反向信号时候取消 }) + ' 信号msg:' + 信号msg)
-                const ret = await BitMEXOrderAPI.cancel(self.cookie, [id])
+                const ret = await self.order自动.cancel([id])
                 log('取消开仓' + (ret ? '成功' : '失败'))
                 return true
             }

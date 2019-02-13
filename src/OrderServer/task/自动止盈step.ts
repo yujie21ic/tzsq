@@ -1,7 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { Account } from '../Account'
 import { get波动率, toGridPoint, realData, 信号灯side } from '../realData'
-import { BitMEXOrderAPI } from '../../lib/BitMEX/BitMEXOrderAPI'
 import { logToFile } from '../../lib/C/logToFile'
 
 const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account) => {
@@ -48,7 +47,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
             }
 
             log('挂单平仓' + side + '  price:' + getPrice())
-            const ret = await BitMEXOrderAPI.maker(self.cookie, {
+            const ret = await self.order自动.maker({
                 symbol,
                 side,
                 size: Math.abs(仓位数量),
@@ -64,7 +63,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                 const { 信号side, 信号msg } = 信号灯side(symbol)
                 if (信号side === 活动委托[0].side) {
                     log('修改平仓' + 信号side + ' 信号msg:' + 信号msg)
-                    const ret = await BitMEXOrderAPI.updateMaker(self.cookie, {
+                    const ret = await self.order自动.updateMaker({
                         orderID: 活动委托[0].id,
                         price: () => realData.getOrderPrice({
                             symbol,

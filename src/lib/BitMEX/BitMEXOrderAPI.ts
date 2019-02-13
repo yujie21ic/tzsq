@@ -3,16 +3,23 @@ import { BitMEXRESTAPI } from '../BitMEX/BitMEXRESTAPI'
 import { sleep } from '../C/sleep'
 import { JSONRequestError } from '../C/JSONRequest'
 
-export namespace BitMEXOrderAPI {
+export class BitMEXOrderAPI {
 
-    const 重试几次 = 100
-    const 重试休息多少毫秒 = 30
+    private cookie: string
+    private 重试几次 = 100
+    private 重试休息多少毫秒 = 30
 
-    const DDOS调用 = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError }>) =>
-        async (cookie: string, p: P) => {
+    constructor(p: { cookie: string, 重试几次: number, 重试休息多少毫秒: number }) {
+        this.cookie = p.cookie
+        this.重试几次 = p.重试几次
+        this.重试休息多少毫秒 = p.重试休息多少毫秒
+    }
+
+    DDOS调用 = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError }>) =>
+        async (p: P) => {
             let success = false
-            for (let i = 0; i < 重试几次; i++) {
-                const ret = await f(cookie, p)
+            for (let i = 0; i < this.重试几次; i++) {
+                const ret = await f(this.cookie, p)
 
                 if (ret.error === '网络错误') {
                     success = false
@@ -22,16 +29,16 @@ export namespace BitMEXOrderAPI {
                     success = true
                     break
                 }
-                await sleep(重试休息多少毫秒)
+                await sleep(this.重试休息多少毫秒)
             }
             return success
         }
 
-    const DDOS调用_ordStatus = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: { ordStatus: string } }>) =>
-        async (cookie: string, p: P) => {
+    DDOS调用_ordStatus = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: { ordStatus: string } }>) =>
+        async (p: P) => {
             let success = false
-            for (let i = 0; i < 重试几次; i++) {
-                const ret = await f(cookie, p)
+            for (let i = 0; i < this.重试几次; i++) {
+                const ret = await f(this.cookie, p)
                 if (ret.error === '网络错误') {
                     success = false
                     break
@@ -40,13 +47,14 @@ export namespace BitMEXOrderAPI {
                     success = true
                     break
                 }
-                await sleep(重试休息多少毫秒)
+                await sleep(this.重试休息多少毫秒)
             }
             return success
         }
 
+
     //需要判断 ordStatus
-    export const maker = DDOS调用_ordStatus<{
+    maker = this.DDOS调用_ordStatus<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         size: number
@@ -63,7 +71,7 @@ export namespace BitMEXOrderAPI {
         })
     )
 
-    export const stop = DDOS调用_ordStatus<{
+    stop = this.DDOS调用_ordStatus<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         price: number
@@ -78,7 +86,7 @@ export namespace BitMEXOrderAPI {
         })
     )
 
-    export const 市价触发 = DDOS调用_ordStatus<{
+    市价触发 = this.DDOS调用_ordStatus<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         price: number
@@ -94,7 +102,7 @@ export namespace BitMEXOrderAPI {
         })
     )
 
-    export const updateStop = DDOS调用_ordStatus<{
+    updateStop = this.DDOS调用_ordStatus<{
         orderID: string
         price: number
     }>(
@@ -104,7 +112,7 @@ export namespace BitMEXOrderAPI {
         })
     )
 
-    export const updateMaker = DDOS调用_ordStatus<{
+    updateMaker = this.DDOS调用_ordStatus<{
         orderID: string
         price: () => number
     }>(
@@ -114,7 +122,7 @@ export namespace BitMEXOrderAPI {
         })
     )
 
-    export const taker = DDOS调用<{
+    taker = this.DDOS调用<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         size: number
@@ -127,7 +135,7 @@ export namespace BitMEXOrderAPI {
         })
     )
 
-    export const close = DDOS调用<BaseType.BitmexSymbol>(
+    close = this.DDOS调用<BaseType.BitmexSymbol>(
         (cookie, symbol) => BitMEXRESTAPI.Order.new(cookie, {
             symbol,
             ordType: 'Market',
@@ -135,7 +143,7 @@ export namespace BitMEXOrderAPI {
         })
     )
 
-    export const cancel = DDOS调用<string[]>(
+    cancel = this.DDOS调用<string[]>(
         (cookie, orderID) => BitMEXRESTAPI.Order.cancel(cookie, { orderID: JSON.stringify(orderID) })
     )
 } 

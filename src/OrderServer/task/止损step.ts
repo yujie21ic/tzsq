@@ -1,6 +1,5 @@
 import { BaseType } from '../../lib/BaseType'
 import { Account } from '../Account'
-import { BitMEXOrderAPI } from '../../lib/BitMEX/BitMEXOrderAPI'
 import { toGridPoint, get波动率 } from '../realData'
 import { to范围 } from '../../lib/F/to范围'
 
@@ -27,7 +26,7 @@ const 止损step = ({
             const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
 
             //ws返回有时间  直接给委托列表加一条记录??
-            await BitMEXOrderAPI.stop(self.cookie, {
+            await self.order自动.stop({
                 symbol,
                 side,
                 price: toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点, side),
@@ -43,7 +42,7 @@ const 止损step = ({
         //没有仓位 或者 止损方向错了
         if (仓位数量 === 0 || (仓位数量 > 0 && 止损委托[0].side !== 'Sell') || (仓位数量 < 0 && 止损委托[0].side !== 'Buy')) {
             //ws返回有时间  直接给委托列表加一条记录??
-            await BitMEXOrderAPI.cancel(self.cookie, 止损委托.map(v => v.id))
+            await self.order自动.cancel(止损委托.map(v => v.id))
             return true
         }
         else {
@@ -62,7 +61,7 @@ const 止损step = ({
                 (side === 'Buy' && 新的Price < price) ||
                 (side === 'Sell' && 新的Price > price)
             ) {
-                await BitMEXOrderAPI.updateStop(self.cookie, {
+                await self.order自动.updateStop({
                     orderID: id,
                     price: 新的Price,
                 })
@@ -74,7 +73,7 @@ const 止损step = ({
     else {
         //多个止损 全部清空
         //ws返回有时间  直接给委托列表加一条记录??
-        await BitMEXOrderAPI.cancel(self.cookie, 止损委托.map(v => v.id))
+        await self.order自动.cancel(止损委托.map(v => v.id))
         return true
     }
 }
