@@ -435,6 +435,21 @@ export class RealDataBase {
             i => 最高价10index[i] > 最低价10index[i] ? '上涨' : '下跌'
         )
 
+        // const 上涨还是下跌 = 指标.lazyMapCache(
+        //     () => Math.min(价格均线60.length, 最高价10.length, 最低价10.length),
+        //     i => {
+        //         if (最低价10[i] < 价格均线60[i]) {
+        //             return '下跌'
+        //         }
+        //         else if (最高价10[i] > 价格均线60[i]) {
+        //             return '上涨'
+        //         }
+        //         else {
+        //             return '____横盘____'
+        //         }
+        //     }
+        // )
+
         const 自动下单条件 = 指标.lazyMapCache(
             () => Math.min(最高价10.length, 最低价10.length, 波动率.length, 上涨还是下跌.length),
             i =>
