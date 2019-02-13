@@ -6,8 +6,8 @@ import { JSONRequestError } from '../C/JSONRequest'
 export class BitMEXOrderAPI {
 
     private cookie: string
-    private 重试几次 = 100
-    private 重试休息多少毫秒 = 30
+    private 重试几次: number
+    private 重试休息多少毫秒: number
 
     constructor(p: { cookie: string, 重试几次: number, 重试休息多少毫秒: number }) {
         this.cookie = p.cookie
