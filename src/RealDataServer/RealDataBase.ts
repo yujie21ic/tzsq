@@ -595,8 +595,7 @@ export class RealDataBase {
                     { name: '成交量DIF<DEM', value: 买成交量DIF[i] < 买成交量DEM[i] },
                     //&&(波动率[i] <波动率小中分界||买成交量DIF[i]<0) 
                     { name: ' 净盘口<净盘口均线<0', value: b },
-                    { name: '波动率 > 8', value: 波动率[i] > 3 },
-
+                    { name: '波动率 > 7', value: 波动率[i] > 7 },
                     //量化用
                     { name: '量化 is上涨', value: 上涨还是下跌[i] === '上涨' },
                     { name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
@@ -672,7 +671,7 @@ export class RealDataBase {
                     //(盘口买[i]<5*100000?净盘口[i] <=净盘口均线[i]-5*100000:净盘口[i] < 净盘口均线[i])
                     { name: ' 净盘口 > 净盘口均线>0', value: b },
                     //{ name: ' 净盘口 > 净盘口均线>0', value:   净盘口[i] > 净盘口均线[i] &&(净盘口[i]>0)},
-                    { name: '波动率 > 8', value: 波动率[i] > 3 },
+                    { name: '波动率 > 7', value: 波动率[i] > 7 },
 
                     //量化用
                     { name: '量化 is下跌', value: 上涨还是下跌[i] === '下跌' },
