@@ -302,6 +302,7 @@ export class 交易 extends React.Component {
                                     left={() => hopex市价开仓和止损BTC(this.hopexCookie, {
                                         size: (config.hopex数量 || 0) * this.倍数,
                                         stopPrice:
+
                                             toGridPoint('XBTUSD',
                                                 lastNumber(realTickClient.dataExt.XBTUSD.hopex.价格) + to范围({
                                                     min: 3,
@@ -348,7 +349,7 @@ const hopex市价开仓和止损BTC = async (cookie: string, p: { size: number, 
             Cookie: cookie,
         }
     })
-
+    console.log(p.stopPrice)
     const 止损side = p.side === 'Sell' ? 'Buy' : 'Sell'
 
     JSONRequest({
@@ -358,9 +359,9 @@ const hopex市价开仓和止损BTC = async (cookie: string, p: { size: number, 
             'param': {
                 'expectedQuantity': String(p.size),
                 'marketCode': 'BTCUSDT',
-                'trigPrice': String(止损side === 'Sell' ? String(p.stopPrice - 100) : String(p.stopPrice + 100)),
+                'trigPrice': String(止损side === 'Sell' ? String(p.stopPrice ) : String(p.stopPrice )),
                 'lang': 'cn',
-                'expectedPrice': String(p.stopPrice),
+                'expectedPrice':String(止损side === 'Sell' ? String(p.stopPrice-100 ) : String(p.stopPrice+100 )),
                 'trigType': 'market_price',
                 'side': 止损side === 'Sell' ? 1 : 2,
                 'type': 'LimitLoss',
