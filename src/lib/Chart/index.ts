@@ -192,6 +192,12 @@ const chartRender = () => {
         }
         layerList.forEach(layer => tb = layer.updateTopAndBottom(viewport, tb))
 
+        //1 1
+        if (tb.top === tb.bottom) {
+            tb.top += 1
+            tb.bottom -= 1
+        }
+
 
 
 
