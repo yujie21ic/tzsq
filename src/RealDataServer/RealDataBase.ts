@@ -487,7 +487,7 @@ export class RealDataBase {
 
         const 涨价差__除以__这一段内的成交量 = 指标.lazyMapCache(
             () => Math.min(涨价差__累计成交量.length, 涨价差.length),
-            i => 涨价差__累计成交量[i] === 0 ? NaN : to范围({ value: 涨价差__累计成交量[i] / 跌价差[i], min: 10000, max: 500 * 10000 })
+            i => 涨价差__累计成交量[i] === 0 ? NaN : to范围({ value: 涨价差__累计成交量[i] / 涨价差2[i], min: 10000, max: 500 * 10000 })
         )
 
 
