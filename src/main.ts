@@ -6,7 +6,7 @@ import { showWindow } from './windowExt'
 
 
 const menu = Menu.buildFromTemplate([
-  { label: '量化回测', click: () => showWindow('量化回测', {}) },
+  { label: '测试', click: () => showWindow('测试', {}) },
   { label: '复盘', click: () => showWindow('复盘', {}) },
   { type: 'separator' },
   ...kvs(config.account || {}).map(v => ({
