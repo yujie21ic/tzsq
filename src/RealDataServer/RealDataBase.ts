@@ -424,11 +424,11 @@ export class RealDataBase {
         const 阻力笔 = 指标.阻力笔(价格)
 
         const 价格均线60 = 指标.均线(价格, 120, RealDataBase.单位时间)
-        
+
         const 最高价10 = 指标.最高(价格, 15, RealDataBase.单位时间)
         const 最低价10 = 指标.最低(价格, 15, RealDataBase.单位时间)
 
-        const 最高价10index = 指标.最高index(价格,15, RealDataBase.单位时间)
+        const 最高价10index = 指标.最高index(价格, 15, RealDataBase.单位时间)
         const 最低价10index = 指标.最低index(价格, 15, RealDataBase.单位时间)
 
         const 上涨还是下跌 = 指标.lazyMapCache(
@@ -467,35 +467,60 @@ export class RealDataBase {
                 if (涨价差[i] < 0.01) {
                     ext.累计成交量 = 0
                 } else {
-                    ext.累计成交量 += (成交量买[i] -成交量卖[i])
+                    ext.累计成交量 += (成交量买[i] - 成交量卖[i])
                 }
                 arr[i] = ext.累计成交量
             }
         })
 
+
+        //涨价差2
+        const 涨价差__交叉点价格 = 指标.lazyMapCache2({ 价格: 0 }, (arr: number[], ext) => {
+            for (let i = Math.max(0, arr.length - 1); i < Math.min(涨价差.length, 价格.length); i++) {
+                if (涨价差[i] < 0.01) {
+                    ext.价格 = 价格[i]
+                }
+                arr[i] = ext.价格
+            }
+        })
+        const 涨价差2 = 指标.lazyMapCache(() => Math.min(最高价10.length, 涨价差__交叉点价格.length), i => Math.abs(最高价10[i] - 涨价差__交叉点价格[i]))
+
         const 涨价差__除以__这一段内的成交量 = 指标.lazyMapCache(
             () => Math.min(涨价差__累计成交量.length, 涨价差.length),
-            i => 涨价差__累计成交量[i] === 0 ? NaN :to范围({value:涨价差__累计成交量[i]/跌价差[i],min:10000,max:500*10000})
+            i => 涨价差__累计成交量[i] === 0 ? NaN : to范围({ value: 涨价差__累计成交量[i] / 跌价差[i], min: 10000, max: 500 * 10000 })
         )
 
 
         //重复
-        const 跌价差 = 指标.lazyMapCache(() => Math.min(最低价10.length, 价格均线60.length), i =>Math.abs(价格均线60[i]-最低价10[i]))
+        const 跌价差 = 指标.lazyMapCache(() => Math.min(最低价10.length, 价格均线60.length), i => Math.abs(价格均线60[i] - 最低价10[i]))
 
         const 跌价差__累计成交量 = 指标.lazyMapCache2({ 累计成交量: 0 }, (arr: number[], ext) => {
             for (let i = Math.max(0, arr.length - 1); i < Math.min(跌价差.length, 成交量买.length, 成交量卖.length); i++) {
                 if (跌价差[i] < 0.01) {
                     ext.累计成交量 = 0
                 } else {
-                    ext.累计成交量 +=  (成交量卖[i]-成交量买[i])
+                    ext.累计成交量 += (成交量卖[i] - 成交量买[i])
                 }
                 arr[i] = ext.累计成交量
             }
         })
 
+        //跌价差2
+        const 跌价差__交叉点价格 = 指标.lazyMapCache2({ 价格: 0 }, (arr: number[], ext) => {
+            for (let i = Math.max(0, arr.length - 1); i < Math.min(跌价差.length, 价格.length); i++) {
+                if (跌价差[i] < 0.01) {
+                    ext.价格 = 价格[i]
+                }
+                arr[i] = ext.价格
+            }
+        })
+        const 跌价差2 = 指标.lazyMapCache(() => Math.min(最高价10.length, 跌价差__交叉点价格.length), i => Math.abs(涨价差__交叉点价格[i] - 最低价10[i]))
+
+
+
         const 跌价差__除以__这一段内的成交量 = 指标.lazyMapCache(
             () => Math.min(跌价差__累计成交量.length, 跌价差.length),
-            i => 跌价差__累计成交量[i] === 0 ? NaN :to范围({value:跌价差__累计成交量[i]/跌价差[i],min:10000,max:500*10000})
+            i => 跌价差__累计成交量[i] === 0 ? NaN : to范围({ value: 跌价差__累计成交量[i] / 跌价差[i], min: 10000, max: 500 * 10000 })
         )
 
         const 涨价差__除以__这一段内的成交量12 = 指标.EMA(涨价差__除以__这一段内的成交量, 12, RealDataBase.单位时间)
@@ -517,8 +542,8 @@ export class RealDataBase {
         // const 价格DIF = 指标.lazyMapCache(() => Math.min(价格EMA12.length, 价格EMA26.length), i => 价格EMA12[i] - 价格EMA26[i])
         // const 价格DEM = 指标.EMA(价格DIF, 12, RealDataBase.单位时间)
         // const 价格OSC = 指标.lazyMapCache(() => Math.min(价格DIF.length, 价格DEM.length), i => 价格DIF[i] - 价格DEM[i])
-        const 净下跌成交量 = 指标.lazyMapCache(() => data.length, i =>  成交量卖[i]-成交量买[i])
-        const 净上涨成交量 = 指标.lazyMapCache(() => data.length, i =>  成交量买[i]-成交量卖[i])
+        const 净下跌成交量 = 指标.lazyMapCache(() => data.length, i => 成交量卖[i] - 成交量买[i])
+        const 净上涨成交量 = 指标.lazyMapCache(() => data.length, i => 成交量买[i] - 成交量卖[i])
 
         const 净下跌成交量12 = 指标.EMA(净下跌成交量, 12, RealDataBase.单位时间)
         const 净下跌成交量26 = 指标.EMA(净下跌成交量, 26, RealDataBase.单位时间)
@@ -570,16 +595,16 @@ export class RealDataBase {
         //         波动率.length
         //     ),
         //     i => [
-            // { name: '真空涨|成交量|阻力', value: 波动率[i] <波动率中大分界||真空信号涨[i]||涨价差__除以__这一段内的成交量DIF[i]<0 },
-            // //{ name: '涨价差/成交量DIF<0', value: 波动率[i] <波动率中大分界||涨价差__除以__这一段内的成交量DIF[i]<0 },
-            // { name: '涨价差/成交量DIF<DEM', value: 波动率[i] <波动率中大分界||(涨价差__除以__这一段内的成交量DIF[i] < 涨价差__除以__这一段内的成交量DEM[i]) },
-            // { name: '成交量DIF<DEM', value: 买成交量DIF[i] < 买成交量DEM[i] &&( 波动率[i] <波动率中大分界?true: 买成交量DIF[i]<0)},
-            // //&&(波动率[i] <波动率小中分界||买成交量DIF[i]<0) 
-            // { name: ' 净盘口<净盘口均线<0', value: b },
-            // { name: '波动率 > 7', value: 波动率[i] > 7 },
-            // //量化用
-            // { name: '量化 is上涨', value: 上涨还是下跌[i] === '上涨' },
-            // { name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
+        // { name: '真空涨|成交量|阻力', value: 波动率[i] <波动率中大分界||真空信号涨[i]||涨价差__除以__这一段内的成交量DIF[i]<0 },
+        // //{ name: '涨价差/成交量DIF<0', value: 波动率[i] <波动率中大分界||涨价差__除以__这一段内的成交量DIF[i]<0 },
+        // { name: '涨价差/成交量DIF<DEM', value: 波动率[i] <波动率中大分界||(涨价差__除以__这一段内的成交量DIF[i] < 涨价差__除以__这一段内的成交量DEM[i]) },
+        // { name: '成交量DIF<DEM', value: 买成交量DIF[i] < 买成交量DEM[i] &&( 波动率[i] <波动率中大分界?true: 买成交量DIF[i]<0)},
+        // //&&(波动率[i] <波动率小中分界||买成交量DIF[i]<0) 
+        // { name: ' 净盘口<净盘口均线<0', value: b },
+        // { name: '波动率 > 7', value: 波动率[i] > 7 },
+        // //量化用
+        // { name: '量化 is上涨', value: 上涨还是下跌[i] === '上涨' },
+        // { name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
         //     ]
         // )
         //const 波动率大巨大大分界 = 50
@@ -605,8 +630,8 @@ export class RealDataBase {
                                 b = true
                             }
                         }
-                    }else{
-                        if (净盘口[i] <= (净盘口均线[i] )) {
+                    } else {
+                        if (净盘口[i] <= (净盘口均线[i])) {
                             if (净盘口[i] < 0) {
                                 b = true
                             }
@@ -619,8 +644,8 @@ export class RealDataBase {
                                 b = true
                             }
                         }
-                    }else{
-                        if (净盘口[i] <= (净盘口均线[i] )) {
+                    } else {
+                        if (净盘口[i] <= (净盘口均线[i])) {
                             if (净盘口[i] < 0) {
                                 b = true
                             }
@@ -641,12 +666,12 @@ export class RealDataBase {
                 //         c = true
                 //     }
                 // }
-              
+
                 return [
                     { name: '真空', value: 真空信号涨[i] },
                     //{ name: '涨价差/成交量DIF<0', value: 波动率[i] <波动率中大分界||涨价差__除以__这一段内的成交量DIF[i]<0 },
                     //{ name: '涨价差/成交量DIF<DEM', value: 波动率[i] <波动率中大分界||(涨价差__除以__这一段内的成交量DIF[i] < 涨价差__除以__这一段内的成交量DEM[i]) },
-                    { name: '成交量DIF<DEM', value: 净上涨成交量DIF[i] < 净上涨成交量DEM[i] &&( 波动率[i] <波动率中大分界?true: 净上涨成交量DIF[i]<0)},
+                    { name: '成交量DIF<DEM', value: 净上涨成交量DIF[i] < 净上涨成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净上涨成交量DIF[i] < 0) },
                     //&&(波动率[i] <波动率小中分界||买成交量DIF[i]<0) 
                     { name: ' 净盘口<净盘口均线<0', value: b },
                     { name: '波动率 > 7', value: 波动率[i] > 7 },
@@ -708,7 +733,7 @@ export class RealDataBase {
                                 b = true
                             }
                         }
-                    }else{
+                    } else {
                         if (净盘口[i] >= 净盘口均线[i]) {
                             if (净盘口[i] > 0) {
                                 b = true
@@ -722,7 +747,7 @@ export class RealDataBase {
                                 b = true
                             }
                         }
-                    }else{
+                    } else {
                         if (净盘口[i] >= 净盘口均线[i]) {
                             if (净盘口[i] > 0) {
                                 b = true
@@ -733,12 +758,12 @@ export class RealDataBase {
                 //let a = (Math.abs(盘口卖[i]) < (波动率[i] < 10 ? 10 * 100000 : 5 * 100000) ? 净盘口[i] >= 净盘口均线[i] - 5 * 100000 : 净盘口[i] < 净盘口均线[i]) && (净盘口[i] > 0)
                 // (波动率[i] < 波动率小中分界)
 
-                
+
 
                 return [
 
                     { name: '真空', value: 真空信号跌[i] },
-                    { name: '卖成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i]&&( 波动率[i] <波动率中大分界?true: 净下跌成交量DIF[i]<0) },
+                    { name: '卖成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净下跌成交量DIF[i] < 0) },
                     //&&(波动率[i] <波动率小中分界||卖成交量DIF[i]<0) 
                     //(盘口买[i]<5*100000?净盘口[i] <=净盘口均线[i]-5*100000:净盘口[i] < 净盘口均线[i])
                     { name: ' 净盘口 > 净盘口均线>0', value: b },
@@ -827,7 +852,9 @@ export class RealDataBase {
 
 
 
-        return { 
+        return {
+            涨价差2,
+            跌价差2,
             涨价差,
             跌价差,
             跌价差__累计成交量,
@@ -897,7 +924,7 @@ export class RealDataBase {
             跌价差__除以__这一段内的成交量DEM,
             涨价差__除以__这一段内的成交量,
             跌价差__除以__这一段内的成交量,
-            净下跌成交量DIF,净下跌成交量DEM,净上涨成交量DIF,净上涨成交量DEM
+            净下跌成交量DIF, 净下跌成交量DEM, 净上涨成交量DIF, 净上涨成交量DEM
         }
     }
 
