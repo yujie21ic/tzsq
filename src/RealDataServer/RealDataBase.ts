@@ -514,13 +514,13 @@ export class RealDataBase {
                 arr[i] = ext.价格
             }
         })
-        const 跌价差2 = 指标.lazyMapCache(() => Math.min(最高价10.length, 跌价差__交叉点价格.length), i => Math.abs(涨价差__交叉点价格[i] - 最低价10[i]))
+        const 跌价差2 = 指标.lazyMapCache(() => Math.min(最高价10.length, 跌价差__交叉点价格.length), i => Math.abs(跌价差__交叉点价格[i] - 最低价10[i]))
 
 
 
         const 跌价差__除以__这一段内的成交量 = 指标.lazyMapCache(
             () => Math.min(跌价差__累计成交量.length, 跌价差.length),
-            i => 跌价差__累计成交量[i] === 0 ? NaN : to范围({ value: 跌价差__累计成交量[i] / 跌价差[i], min: 10000, max: 500 * 10000 })
+            i => 跌价差__累计成交量[i] === 0 ? NaN : to范围({ value: 跌价差__累计成交量[i] / 跌价差2[i], min: 10000, max: 500 * 10000 })
         )
 
         const 涨价差__除以__这一段内的成交量12 = 指标.EMA(涨价差__除以__这一段内的成交量, 12, RealDataBase.单位时间)
