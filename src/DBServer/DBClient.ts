@@ -3,6 +3,6 @@ import { funcList } from './funcList'
 
 export const DBClient = new JSONRPCClient({
     funcList,
-    host: '35.220.182.184',
+    host: '150.109.48.108',
     port: 5555
 })
