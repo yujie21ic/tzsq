@@ -289,7 +289,7 @@ export class RealDataBase {
 
         const 成交量买 = 指标.lazyMapCache(() => data.length, i => Math.abs(data[i].buySize))
         const 成交量卖 = 指标.lazyMapCache(() => data.length, i => Math.abs(data[i].sellSize))
-        const 净成交量 = 指标.lazyMapCache(() => data.length, i => Math.abs(成交量买[i] - 成交量卖[i]))
+        const 净成交量 = 指标.lazyMapCache(() => data.length, i => 成交量买[i] - 成交量卖[i])
         const 成交次数买 = 指标.lazyMapCache(() => data.length, i => data[i].buyCount)
         const 成交次数卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellCount)
 
@@ -423,7 +423,7 @@ export class RealDataBase {
 
         const 阻力笔 = 指标.阻力笔(价格)
 
-        const 价格均线60 = 指标.均线(价格, 60, RealDataBase.单位时间)
+        const 价格均线60 = 指标.均线(价格, 120, RealDataBase.单位时间)
         
         const 最高价10 = 指标.最高(价格, 15, RealDataBase.单位时间)
         const 最低价10 = 指标.最低(价格, 15, RealDataBase.单位时间)
@@ -460,14 +460,14 @@ export class RealDataBase {
         )
 
 
-        const 涨价差 = 指标.lazyMapCache(() => Math.min(最高价10.length, 价格均线60.length), i => 最高价10[i] - 价格均线60[i]>=3?最高价10[i] - 价格均线60[i]:3)
+        const 涨价差 = 指标.lazyMapCache(() => Math.min(最高价10.length, 价格均线60.length), i => Math.abs(最高价10[i] - 价格均线60[i]))
 
         const 涨价差__累计成交量 = 指标.lazyMapCache2({ 累计成交量: 0 }, (arr: number[], ext) => {
             for (let i = Math.max(0, arr.length - 1); i < Math.min(涨价差.length, 成交量买.length, 成交量卖.length); i++) {
                 if (涨价差[i] < 0.01) {
                     ext.累计成交量 = 0
                 } else {
-                    ext.累计成交量 += 成交量买[i] - 成交量卖[i]
+                    ext.累计成交量 += (成交量买[i] -成交量卖[i])
                 }
                 arr[i] = ext.累计成交量
             }
@@ -475,19 +475,19 @@ export class RealDataBase {
 
         const 涨价差__除以__这一段内的成交量 = 指标.lazyMapCache(
             () => Math.min(涨价差__累计成交量.length, 涨价差.length),
-            i => 涨价差__累计成交量[i] === 0 ? NaN : 涨价差__累计成交量[i]/涨价差[i]  
+            i => 涨价差__累计成交量[i] === 0 ? NaN :to范围({value:涨价差__累计成交量[i]/跌价差[i],min:10000,max:500*10000})
         )
 
 
         //重复
-        const 跌价差 = 指标.lazyMapCache(() => Math.min(最低价10.length, 价格均线60.length), i =>价格均线60[i]-最低价10[i]<=3?3:价格均线60[i]-最低价10[i])
+        const 跌价差 = 指标.lazyMapCache(() => Math.min(最低价10.length, 价格均线60.length), i =>Math.abs(价格均线60[i]-最低价10[i]))
 
         const 跌价差__累计成交量 = 指标.lazyMapCache2({ 累计成交量: 0 }, (arr: number[], ext) => {
             for (let i = Math.max(0, arr.length - 1); i < Math.min(跌价差.length, 成交量买.length, 成交量卖.length); i++) {
                 if (跌价差[i] < 0.01) {
                     ext.累计成交量 = 0
                 } else {
-                    ext.累计成交量 +=  成交量卖[i]-成交量买[i]
+                    ext.累计成交量 +=  (成交量卖[i]-成交量买[i])
                 }
                 arr[i] = ext.累计成交量
             }
@@ -495,7 +495,7 @@ export class RealDataBase {
 
         const 跌价差__除以__这一段内的成交量 = 指标.lazyMapCache(
             () => Math.min(跌价差__累计成交量.length, 跌价差.length),
-            i => 跌价差__累计成交量[i] === 0 ? NaN : 跌价差__累计成交量[i]/跌价差[i] 
+            i => 跌价差__累计成交量[i] === 0 ? NaN :to范围({value:跌价差__累计成交量[i]/跌价差[i],min:10000,max:500*10000})
         )
 
         const 涨价差__除以__这一段内的成交量12 = 指标.EMA(涨价差__除以__这一段内的成交量, 12, RealDataBase.单位时间)
