@@ -484,7 +484,7 @@ export class RealDataBase {
         const 涨价差__交叉点价格 = 指标.lazyMapCache2({ 价格: NaN }, (arr: number[], ext) => {
             for (let i = Math.max(0, arr.length - 1); i < Math.min(涨价差__交叉.length, 价格.length); i++) {
                 if (涨价差__交叉[i]) {
-                    ext.价格 = 价格[i]
+                    ext.价格 = 最高价10[i]
                 }
                 arr[i] = ext.价格
             }
@@ -521,7 +521,7 @@ export class RealDataBase {
         const 跌价差__交叉点价格 = 指标.lazyMapCache2({ 价格: NaN }, (arr: number[], ext) => {
             for (let i = Math.max(0, arr.length - 1); i < Math.min(跌价差__交叉.length, 价格.length); i++) {
                 if (跌价差__交叉[i]) {
-                    ext.价格 = 价格[i]
+                    ext.价格 = 最低价10[i]
                 }
                 arr[i] = ext.价格
             }
