@@ -481,7 +481,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             [{
                 numberColor: BTC颜色,
                 layerList: [
-                    layer(LineLayer, { data: d2.XBTUSD.期货.涨价差__累计成交量, color: 卖颜色 }),
+                    layer(LineLayer, { data: d2.XBTUSD.期货.涨价差__累计成交量, color: ETH颜色 }),
                 ]
             },
             {
