@@ -490,11 +490,11 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
                 ]
             },
-            {
-                layerList: [
-                    layer(LineLayer, { data: d.期货.涨价差__交叉点价格, color: 买颜色 }),
-                ]
-            },
+            // {
+            //     layerList: [
+            //         layer(LineLayer, { data: d.期货.涨价差__交叉点价格, color: 买颜色 }),
+            //     ]
+            // },
           
             {
                 layerList: [
