@@ -464,7 +464,7 @@ export class RealDataBase {
 
         const 涨价差__累计成交量 = 指标.lazyMapCache2({ 累计成交量: 0 }, (arr: number[], ext) => {
             for (let i = Math.max(0, arr.length - 1); i < Math.min(涨价差.length, 成交量买.length, 成交量卖.length); i++) {
-                if (涨价差[i] < 0.01) {
+                if (涨价差[i] < 0.1) {
                     ext.累计成交量 = 0
                 } else {
                     ext.累计成交量 += (成交量买[i] - 成交量卖[i])
@@ -475,9 +475,9 @@ export class RealDataBase {
 
 
         //涨价差2
-        const 涨价差__交叉点价格 = 指标.lazyMapCache2({ 价格: 0 }, (arr: number[], ext) => {
+        const 涨价差__交叉点价格 = 指标.lazyMapCache2({ 价格: NaN }, (arr: number[], ext) => {
             for (let i = Math.max(0, arr.length - 1); i < Math.min(涨价差.length, 价格.length); i++) {
-                if (涨价差[i] < 0.01) {
+                if (涨价差[i] < 0.1) {
                     ext.价格 = 价格[i]
                 }
                 arr[i] = ext.价格
@@ -496,7 +496,7 @@ export class RealDataBase {
 
         const 跌价差__累计成交量 = 指标.lazyMapCache2({ 累计成交量: 0 }, (arr: number[], ext) => {
             for (let i = Math.max(0, arr.length - 1); i < Math.min(跌价差.length, 成交量买.length, 成交量卖.length); i++) {
-                if (跌价差[i] < 0.01) {
+                if (跌价差[i] < 0.1) {
                     ext.累计成交量 = 0
                 } else {
                     ext.累计成交量 += (成交量卖[i] - 成交量买[i])
@@ -506,9 +506,9 @@ export class RealDataBase {
         })
 
         //跌价差2
-        const 跌价差__交叉点价格 = 指标.lazyMapCache2({ 价格: 0 }, (arr: number[], ext) => {
+        const 跌价差__交叉点价格 = 指标.lazyMapCache2({ 价格: NaN }, (arr: number[], ext) => {
             for (let i = Math.max(0, arr.length - 1); i < Math.min(跌价差.length, 价格.length); i++) {
-                if (跌价差[i] < 0.01) {
+                if (跌价差[i] < 0.1) {
                     ext.价格 = 价格[i]
                 }
                 arr[i] = ext.价格
@@ -798,7 +798,7 @@ export class RealDataBase {
         //         }
         //         //arr[i] = 时间ms === 0 ? NaN : (最高价10[i] - 价格均线60[i]) / 时间ms
 
-        //         if (Math.abs(最高价10[i] - 价格均线60[i]) < 0.01) {
+        //         if (Math.abs(最高价10[i] - 价格均线60[i]) < 0.1) {
         //             ext.last交叉Index = i
         //         }
         //     }
@@ -832,7 +832,7 @@ export class RealDataBase {
 
         //         //arr[i] = 时间ms === 0 ? NaN : (价格均线60[i] - 最低价10[i]) / 时间ms
 
-        //         if (Math.abs(最低价10[i] - 价格均线60[i]) < 0.01) {
+        //         if (Math.abs(最低价10[i] - 价格均线60[i]) < 0.1) {
         //             ext.last交叉Index = i
         //         }
         //     }
