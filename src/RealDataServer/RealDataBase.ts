@@ -5,6 +5,7 @@ import { 指标 } from './指标'
 import { Sampling } from '../lib/C/Sampling'
 import { kvs } from '../lib/F/kvs'
 import { to范围 } from '../lib/F/to范围'
+import { is交叉 } from '../lib/C/is交叉'
 
 
 
@@ -462,9 +463,14 @@ export class RealDataBase {
 
         const 涨价差 = 指标.lazyMapCache(() => Math.min(最高价10.length, 价格均线60.length), i => Math.abs(最高价10[i] - 价格均线60[i]))
 
+        const 涨价差__交叉 = 指标.lazyMapCache(
+            () => Math.min(最高价10.length, 价格均线60.length),
+            i => i > 0 && is交叉({ a1: 最高价10[i - 1], b1: 价格均线60[i - 1], a2: 最高价10[i], b2: 价格均线60[i] })
+        )
+
         const 涨价差__累计成交量 = 指标.lazyMapCache2({ 累计成交量: 0 }, (arr: number[], ext) => {
-            for (let i = Math.max(0, arr.length - 1); i < Math.min(涨价差.length, 成交量买.length, 成交量卖.length); i++) {
-                if (涨价差[i] < 0.1) {
+            for (let i = Math.max(0, arr.length - 1); i < Math.min(涨价差__交叉.length, 成交量买.length, 成交量卖.length); i++) {
+                if (涨价差__交叉[i]) {
                     ext.累计成交量 = 0
                 } else {
                     ext.累计成交量 += (成交量买[i] - 成交量卖[i])
@@ -476,8 +482,8 @@ export class RealDataBase {
 
         //涨价差2
         const 涨价差__交叉点价格 = 指标.lazyMapCache2({ 价格: NaN }, (arr: number[], ext) => {
-            for (let i = Math.max(0, arr.length - 1); i < Math.min(涨价差.length, 价格.length); i++) {
-                if (涨价差[i] < 0.1) {
+            for (let i = Math.max(0, arr.length - 1); i < Math.min(涨价差__交叉.length, 价格.length); i++) {
+                if (涨价差__交叉[i]) {
                     ext.价格 = 价格[i]
                 }
                 arr[i] = ext.价格
@@ -494,9 +500,15 @@ export class RealDataBase {
         //重复
         const 跌价差 = 指标.lazyMapCache(() => Math.min(最低价10.length, 价格均线60.length), i => Math.abs(价格均线60[i] - 最低价10[i]))
 
+        const 跌价差__交叉 = 指标.lazyMapCache(
+            () => Math.min(最低价10.length, 价格均线60.length),
+            i => i > 0 && is交叉({ a1: 最低价10[i - 1], b1: 价格均线60[i - 1], a2: 最低价10[i], b2: 价格均线60[i] })
+        )
+
+
         const 跌价差__累计成交量 = 指标.lazyMapCache2({ 累计成交量: 0 }, (arr: number[], ext) => {
-            for (let i = Math.max(0, arr.length - 1); i < Math.min(跌价差.length, 成交量买.length, 成交量卖.length); i++) {
-                if (跌价差[i] < 0.1) {
+            for (let i = Math.max(0, arr.length - 1); i < Math.min(跌价差__交叉.length, 成交量买.length, 成交量卖.length); i++) {
+                if (跌价差__交叉[i]) {
                     ext.累计成交量 = 0
                 } else {
                     ext.累计成交量 += (成交量卖[i] - 成交量买[i])
@@ -507,8 +519,8 @@ export class RealDataBase {
 
         //跌价差2
         const 跌价差__交叉点价格 = 指标.lazyMapCache2({ 价格: NaN }, (arr: number[], ext) => {
-            for (let i = Math.max(0, arr.length - 1); i < Math.min(跌价差.length, 价格.length); i++) {
-                if (跌价差[i] < 0.1) {
+            for (let i = Math.max(0, arr.length - 1); i < Math.min(跌价差__交叉.length, 价格.length); i++) {
+                if (跌价差__交叉[i]) {
                     ext.价格 = 价格[i]
                 }
                 arr[i] = ext.价格
@@ -925,7 +937,7 @@ export class RealDataBase {
             涨价差__除以__这一段内的成交量,
             跌价差__除以__这一段内的成交量,
             净下跌成交量DIF, 净下跌成交量DEM, 净上涨成交量DIF, 净上涨成交量DEM,
-            涨价差__交叉点价格,跌价差__交叉点价格
+            涨价差__交叉点价格, 跌价差__交叉点价格
         }
     }
 
