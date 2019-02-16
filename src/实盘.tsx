@@ -15,6 +15,8 @@ import { JSONRequest } from './lib/C/JSONRequest'
 import { Switch } from '@material-ui/core'
 import { toGridPoint } from './OrderServer/realData'
 import { to范围 } from './lib/F/to范围'
+import { 指标 } from './RealDataServer/指标'
+import { sleep } from './lib/C/sleep';
 
 const realTickClient = new DataClient.RealData__Client()
 
@@ -413,56 +415,59 @@ export class 提醒 extends React.Component {
 
 
         //BTC
-        const XBTUSD现货 = realTickClient.dataExt.XBTUSD.现货
+        //const XBTUSD现货 = realTickClient.dataExt.XBTUSD.现货
 
         const volum = realTickClient.get期货多少秒内成交量__万为单位('XBTUSD', 15)
-        if (volum > 200) {
+        const 波动率 = 指标.波动率(realTickClient.dataExt.XBTUSD.期货.价格, 30, 500)
+        console.log("波动率 = "+lastNumber(波动率))
+        if (volum > 200&&lastNumber(波动率)>=5) {
             this.setAndSpeak(
                 '比 特 币 成交量',
                 volum,
                 v => true
             )
         }
-        if (XBTUSD现货.价格.length >= 30) {
-            const 价钱增量 = XBTUSD现货.价格[XBTUSD现货.价格.length - 1] - XBTUSD现货.价格[XBTUSD现货.价格.length - 30]
-            const 差价均线距离 =
-                lastNumber(realTickClient.dataExt.XBTUSD.差价) -
-                lastNumber(realTickClient.dataExt.XBTUSD.差价均线)
+        // if (XBTUSD现货.价格.length >= 30) {
+        //     const 价钱增量 = XBTUSD现货.价格[XBTUSD现货.价格.length - 1] - XBTUSD现货.价格[XBTUSD现货.价格.length - 30]
+        //     const 差价均线距离 =
+        //         lastNumber(realTickClient.dataExt.XBTUSD.差价) -
+        //         lastNumber(realTickClient.dataExt.XBTUSD.差价均线)
 
-            if (
-                (价钱增量 >= 4 && 差价均线距离 <= -3) || //上涨
-                (价钱增量 <= -4 && 差价均线距离 >= 3)    //下跌
-            ) {
-                this.setAndSpeak(
-                    '比 特 币 差价',
-                    差价均线距离,
-                    v => true
-                )
-            }
-        }
+        //     if (
+        //         (价钱增量 >= 4 && 差价均线距离 <= -3) || //上涨
+        //         (价钱增量 <= -4 && 差价均线距离 >= 3)    //下跌
+        //     ) {
+        //         this.setAndSpeak(
+        //             '比 特 币 差价',
+        //             差价均线距离,
+        //             v => true
+        //         )
+        //     }
+        // }
 
-        //ETH
-        const ETHUSD现货 = realTickClient.dataExt.ETHUSD.现货
-        if (ETHUSD现货.价格.length >= 30) {
-            const 价钱增量 = ETHUSD现货.价格[ETHUSD现货.价格.length - 1] - ETHUSD现货.价格[ETHUSD现货.价格.length - 30]
-            const 差价均线距离 =
-                lastNumber(realTickClient.dataExt.ETHUSD.差价) -
-                lastNumber(realTickClient.dataExt.ETHUSD.差价均线)
+        // //ETH
+        // const ETHUSD现货 = realTickClient.dataExt.ETHUSD.现货
+        // if (ETHUSD现货.价格.length >= 30) {
+        //     const 价钱增量 = ETHUSD现货.价格[ETHUSD现货.价格.length - 1] - ETHUSD现货.价格[ETHUSD现货.价格.length - 30]
+        //     const 差价均线距离 =
+        //         lastNumber(realTickClient.dataExt.ETHUSD.差价) -
+        //         lastNumber(realTickClient.dataExt.ETHUSD.差价均线)
 
-            if (
-                (价钱增量 >= 8 && 差价均线距离 <= -0.3) || //上涨
-                (价钱增量 <= -8 && 差价均线距离 >= 0.3)    //下跌
-            ) {
-                this.setAndSpeak(
-                    '以 太 坊 差价',
-                    差价均线距离,
-                    v => true
-                )
-            }
-        }
+        //     if (
+        //         (价钱增量 >= 8 && 差价均线距离 <= -0.3) || //上涨
+        //         (价钱增量 <= -8 && 差价均线距离 >= 0.3)    //下跌
+        //     ) {
+        //         this.setAndSpeak(
+        //             '以 太 坊 差价',
+        //             差价均线距离,
+        //             v => true
+        //         )
+        //     }
+        // }
 
 
         this.forceUpdate()
+        sleep(1000)
     }
 
     componentWillMount() {

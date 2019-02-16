@@ -332,7 +332,12 @@ export class RealDataBase {
         //     多少秒均线,
         //     RealDataBase.单位时间
         // )
-        const 净成交量均线30 = 指标.lazyMapCache(() => data.length, i => Math.max(成交量买均线30[i], 成交量卖均线30[i]) - Math.min(成交量买均线30[i], 成交量卖均线30[i]))
+        const 净成交量均线30 = 指标.累加(
+            指标.lazyMapCache(() => 成交量卖.length, i => 净成交量[i]),
+            多少秒均线,
+            RealDataBase.单位时间
+        )
+        //const 净成交量均线30 = 指标.lazyMapCache(() => data.length, i =>净成交量[i])
 
 
         const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
@@ -424,7 +429,7 @@ export class RealDataBase {
 
         const 阻力笔 = 指标.阻力笔(价格)
 
-        const 价格均线60 = 指标.均线(价格, 120, RealDataBase.单位时间)
+        const 价格均线60 = 指标.均线(价格, 60, RealDataBase.单位时间)
 
         const 最高价10 = 指标.最高(价格, 15, RealDataBase.单位时间)
         const 最低价10 = 指标.最低(价格, 15, RealDataBase.单位时间)
@@ -493,7 +498,11 @@ export class RealDataBase {
 
         const 涨价差__除以__这一段内的成交量 = 指标.lazyMapCache(
             () => Math.min(涨价差__累计成交量.length, 涨价差.length),
-            i => 涨价差__累计成交量[i] === 0 ? NaN : to范围({ value: 涨价差__累计成交量[i] / 涨价差2[i], min: 10000, max: 500 * 10000 })
+            i => 涨价差__累计成交量[i] === 0 ? NaN : to范围({ value: 涨价差__累计成交量[i] / 涨价差2[i], min: 10000, max: 200 * 10000 })
+        )
+        const 涨价差__除以__这一段内的成交量1 = 指标.lazyMapCache(
+            () => Math.min(涨价差__累计成交量.length, 涨价差.length),
+            i => 涨价差__累计成交量[i] === 0 ? NaN : to范围({ value: 涨价差__累计成交量[i] / 涨价差[i], min: 10000, max: 200 * 10000 })
         )
 
 
@@ -532,7 +541,11 @@ export class RealDataBase {
 
         const 跌价差__除以__这一段内的成交量 = 指标.lazyMapCache(
             () => Math.min(跌价差__累计成交量.length, 跌价差.length),
-            i => 跌价差__累计成交量[i] === 0 ? NaN : to范围({ value: 跌价差__累计成交量[i] / 跌价差2[i], min: 10000, max: 500 * 10000 })
+            i => 跌价差__累计成交量[i] === 0 ? NaN : to范围({ value: 跌价差__累计成交量[i] / 跌价差2[i], min: 10000, max: 200 * 10000 })
+        )
+        const 跌价差__除以__这一段内的成交量1 = 指标.lazyMapCache(
+            () => Math.min(跌价差__累计成交量.length, 跌价差.length),
+            i => 跌价差__累计成交量[i] === 0 ? NaN : to范围({ value: 跌价差__累计成交量[i] / 跌价差[i], min: 10000, max: 200 * 10000 })
         )
 
         const 涨价差__除以__这一段内的成交量12 = 指标.EMA(涨价差__除以__这一段内的成交量, 12, RealDataBase.单位时间)
@@ -620,7 +633,7 @@ export class RealDataBase {
         //     ]
         // )
         //const 波动率大巨大大分界 = 50
-        const 波动率中大分界 = 30
+        const 波动率中大分界 = 25
         //const 波动率中大分界 = 20
         const 信号_上涨 = 指标.lazyMapCache(
             () => Math.min(
@@ -678,18 +691,21 @@ export class RealDataBase {
                 //         c = true
                 //     }
                 // }
-
+                
                 return [
-                    { name: '真空', value: 真空信号涨[i] },
+                    { name: '真空', value: 波动率[i] < 波动率中大分界||真空信号涨[i] },
                     //{ name: '涨价差/成交量DIF<0', value: 波动率[i] <波动率中大分界||涨价差__除以__这一段内的成交量DIF[i]<0 },
                     //{ name: '涨价差/成交量DIF<DEM', value: 波动率[i] <波动率中大分界||(涨价差__除以__这一段内的成交量DIF[i] < 涨价差__除以__这一段内的成交量DEM[i]) },
                     { name: '成交量DIF<DEM', value: 净上涨成交量DIF[i] < 净上涨成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净上涨成交量DIF[i] < 0) },
+                    { name: '净上涨成交量DIF<DEM', value: 净上涨成交量DIF[i]<净上涨成交量DEM[i] },
                     //&&(波动率[i] <波动率小中分界||买成交量DIF[i]<0) 
                     { name: ' 净盘口<净盘口均线<0', value: b },
-                    { name: '波动率 > 7', value: 波动率[i] > 7 },
-                    //量化用
-                    { name: '量化 is上涨', value: 上涨还是下跌[i] === '上涨' },
-                    { name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
+                    { name: '动力<75万', value: 真空信号涨[i]||涨价差__除以__这一段内的成交量[i] <75*10000 },
+                    { name: '波动率 >=5', value: 波动率[i] >=5 },
+                    { name: '追涨', value: 涨价差__除以__这一段内的成交量[i] >110*10000&&波动率[i] >=5 },
+                    //量化用 净上涨成交量DIF
+                    { name: '量化 is上涨', value: 净成交量均线30[i]>0 },
+                    //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
                 ]
             }
         )
@@ -774,16 +790,19 @@ export class RealDataBase {
 
                 return [
 
-                    { name: '真空', value: 真空信号跌[i] },
+                    { name: '真空', value: 波动率[i] < 波动率中大分界 ||真空信号跌[i] },
                     { name: '卖成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净下跌成交量DIF[i] < 0) },
+                    { name: '净下跌成交量DIF<DEM', value: 净下跌成交量DIF[i]<净下跌成交量DEM[i] },
                     //&&(波动率[i] <波动率小中分界||卖成交量DIF[i]<0) 
                     //(盘口买[i]<5*100000?净盘口[i] <=净盘口均线[i]-5*100000:净盘口[i] < 净盘口均线[i])
                     { name: ' 净盘口 > 净盘口均线>0', value: b },
                     //{ name: ' 净盘口 > 净盘口均线>0', value:   净盘口[i] > 净盘口均线[i] &&(净盘口[i]>0)},
-                    { name: '波动率 > 7', value: 波动率[i] > 7 },
+                    { name: '动力<75万', value: 真空信号涨[i]||跌价差__除以__这一段内的成交量[i] <75*10000 },
+                    { name: '波动率 >=5', value: 波动率[i] >=5 },
+                    { name: '追跌', value: 跌价差__除以__这一段内的成交量[i] >110*10000&&波动率[i] >=5},
                     //量化用
-                    { name: '量化 is下跌', value: 上涨还是下跌[i] === '下跌' },
-                    { name: '量化 自动下单条件', value: 上涨还是下跌[i] === '下跌' && 自动下单条件[i] },
+                    { name: '量化 is下跌', value: 净成交量均线30[i]<0 },
+                    //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '下跌' && 自动下单条件[i] },
                 ]
             }
         )
@@ -936,8 +955,11 @@ export class RealDataBase {
             跌价差__除以__这一段内的成交量DEM,
             涨价差__除以__这一段内的成交量,
             跌价差__除以__这一段内的成交量,
+            涨价差__除以__这一段内的成交量1,
+            跌价差__除以__这一段内的成交量1,
             净下跌成交量DIF, 净下跌成交量DEM, 净上涨成交量DIF, 净上涨成交量DEM,
-            涨价差__交叉点价格, 跌价差__交叉点价格
+            涨价差__交叉点价格, 跌价差__交叉点价格,
+          
         }
     }
 
