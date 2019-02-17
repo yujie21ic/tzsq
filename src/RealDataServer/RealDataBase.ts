@@ -5,7 +5,6 @@ import { 指标 } from './指标'
 import { Sampling } from '../lib/C/Sampling'
 import { kvs } from '../lib/F/kvs'
 import { to范围 } from '../lib/F/to范围'
-import { is交叉 } from '../lib/C/is交叉'
 
 
 
@@ -277,7 +276,6 @@ export class RealDataBase {
     }, 盘口算价格: boolean) {
 
 
-        // const 多少秒均线 = Math.floor(this.默认期货波动率 / 3.3 + 1) 
         const 多少秒均线 = this.默认期货波动率
 
         const 价格 = 盘口算价格 ?
@@ -297,8 +295,7 @@ export class RealDataBase {
         const 成交量买 = 指标.lazyMapCache(() => data.length, i => Math.abs(data[i].buySize))
         const 成交量卖 = 指标.lazyMapCache(() => data.length, i => Math.abs(data[i].sellSize))
         const 净成交量 = 指标.lazyMapCache(() => data.length, i => 成交量买[i] - 成交量卖[i])
-        const 成交次数买 = 指标.lazyMapCache(() => data.length, i => data[i].buyCount)
-        const 成交次数卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellCount)
+      
 
         const 成交量均线买1 = 指标.累加(
             指标.lazyMapCache(() => 成交量买.length, i => 成交量买[i]),
@@ -333,17 +330,12 @@ export class RealDataBase {
             多少秒均线,
             RealDataBase.单位时间
         )
-        // const 成交量均线1 = 指标.累加(
-        //     指标.lazyMapCache(() => Math.min(成交量买.length, 成交量卖.length), i => Math.max(成交量买均线1[i],成交量卖均线1[i])-Math.min(成交量买均线1[i],成交量卖均线1[i]) ),
-        //     多少秒均线,
-        //     RealDataBase.单位时间
-        // )
+        
         const 净成交量均线30 = 指标.累加(
             指标.lazyMapCache(() => 成交量卖.length, i => 净成交量[i]),
             多少秒均线,
             RealDataBase.单位时间
         )
-        //const 净成交量均线30 = 指标.lazyMapCache(() => data.length, i =>净成交量[i])
 
 
         const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
@@ -354,33 +346,6 @@ export class RealDataBase {
             5,
             RealDataBase.单位时间
         )
-        //const 净盘口均线 = 指标.均线(净盘口, 多少秒均线, RealDataBase.单位时间)
-
-
-
-        const 价格30秒均线 = 指标.均线(价格, 30, RealDataBase.单位时间)
-        const 阻力2涨 = 指标.阻力2({
-            价格,
-            价格均线: 价格30秒均线,
-            成交量: 成交量买,
-            type: '涨',
-        })
-
-        const 阻力2跌 = 指标.阻力2({
-            价格,
-            价格均线: 价格30秒均线,
-            成交量: 成交量卖,
-            type: '跌',
-        })
-
-        const 阻力1 = 指标.阻力({
-            price: 价格,
-            volumeBuy: 成交量买,
-            volumeSell: 成交量卖,
-        })
-        const 阻力1涨 = 指标.lazyMapCache(() => 阻力1.length, i => Math.max(0, 阻力1[i]))
-        const 阻力1跌 = 指标.lazyMapCache(() => 阻力1.length, i => Math.min(0, 阻力1[i]))
-
 
         const 阻力3 = 指标.阻力3({
             price: 价格,
@@ -389,54 +354,10 @@ export class RealDataBase {
         })
         const 阻力3涨 = 指标.lazyMapCache(() => 阻力3.length, i => Math.max(0, 阻力3[i].阻力))
         let 阻力3跌 = 指标.lazyMapCache(() => 阻力3.length, i => Math.min(0, 阻力3[i].阻力))
-        //if(阻力3跌<-2000000)阻力3跌=-2000000
 
-
-        const 阻力3涨12 = 指标.EMA(阻力3涨, 12, RealDataBase.单位时间)
-        const 阻力3涨26 = 指标.EMA(阻力3涨, 26, RealDataBase.单位时间)
-        const 阻力3涨DIF = 指标.lazyMapCache(() => Math.min(阻力3涨12.length, 阻力3涨26.length), i => 阻力3涨12[i] - 阻力3涨26[i])
-        const 阻力3涨DEM = 指标.EMA(阻力3涨DIF, 9, RealDataBase.单位时间)
-
-        const 阻力3跌12 = 指标.EMA(阻力3跌, 12, RealDataBase.单位时间)
-        const 阻力3跌26 = 指标.EMA(阻力3跌, 26, RealDataBase.单位时间)
-        const 阻力3跌DIF = 指标.lazyMapCache(() => Math.min(阻力3跌12.length, 阻力3跌26.length), i => 阻力3跌12[i] - 阻力3跌26[i])
-        const 阻力3跌DEM = 指标.EMA(阻力3跌DIF, 9, RealDataBase.单位时间)
-
-
-
-        const 阻力4 = 指标.阻力4({
-            price: 价格,
-            volumeBuy: 成交量买,
-            volumeSell: 成交量卖,
-        })
-        const 阻力4涨 = 指标.lazyMapCache(() => 阻力4.length, i => Math.max(0, 阻力4[i].阻力))
-        let 阻力4跌 = 指标.lazyMapCache(() => 阻力4.length, i => Math.min(0, 阻力4[i].阻力))
-
-
-
-        const 真空 = 指标.真空({
-            price: 价格,
-            volumeBuy: 成交量买,
-            volumeSell: 成交量卖,
-        })
-        const 真空涨 = 指标.lazyMapCache(() => 真空.length, i => Math.max(0, 真空[i]))
-        const 真空跌 = 指标.lazyMapCache(() => 真空.length, i => Math.min(0, 真空[i]))
-
-        //真空信号  阻力小于10万，价差大于5
         const 真空信号涨 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 < 200000) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 >= 3)
-        //const 真空信号涨_阻力 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 < 200000&& 阻力3[i].阻力 > 0 ))
-        //const 真空信号涨_价差 = 指标.lazyMapCache(() => 价格.length, i => 阻力3[i].价钱增量 >=3)
         const 真空信号跌 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 > -200000) && 阻力3[i].阻力 < 0 && 阻力3[i].价钱增量 >= 4)
-        //const 真空信号跌_阻力 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 > -200000&& 阻力3[i].阻力 < 0 ))
-        //const 真空信号跌_价差 = 指标.lazyMapCache(() => 价格.length, i => 阻力3[i].价钱增量 >=3)
-        //const 真空信号涨 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < to范围({ value: 波动率[i] / 10 * 10000, min: 100000, max: 400000 }) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 15, min: 3, max: 30 })))
-        //const 真空信号跌 = 指标.lazyMapCache(() => 阻力3.length, i => (阻力3[i].阻力 < 0 && 阻力3[i].阻力 > to范围({ value: -波动率[i] / 10 * 10000, max: -100000, min: -400000 }) && 阻力3[i].价钱增量 > to范围({ value: 波动率[i] / 15, min: 3, max: 30 })))
-
-
-
-
-        const 阻力笔 = 指标.阻力笔(价格)
-
+    
         const 价格均线60 = 指标.均线(价格, 60, RealDataBase.单位时间)
 
         const 最高价10 = 指标.最高(价格, 15, RealDataBase.单位时间)
@@ -450,20 +371,6 @@ export class RealDataBase {
             i => 最高价10index[i] > 最低价10index[i] ? '上涨' : '下跌'
         )
 
-        // const 上涨还是下跌 = 指标.lazyMapCache(
-        //     () => Math.min(价格均线60.length, 最高价10.length, 最低价10.length),
-        //     i => {
-        //         if (最低价10[i] < 价格均线60[i]) {
-        //             return '下跌'
-        //         }
-        //         else if (最高价10[i] > 价格均线60[i]) {
-        //             return '上涨'
-        //         }
-        //         else {
-        //             return '____横盘____'
-        //         }
-        //     }
-        // )
 
         const 自动下单条件 = 指标.lazyMapCache(
             () => Math.min(最高价10.length, 最低价10.length, 波动率.length, 上涨还是下跌.length),
@@ -474,107 +381,6 @@ export class RealDataBase {
         )
 
 
-        const 涨价差 = 指标.lazyMapCache(() => Math.min(最高价10.length, 价格均线60.length), i => Math.abs(最高价10[i] - 价格均线60[i]))
-
-        const 涨价差__交叉 = 指标.lazyMapCache(
-            () => Math.min(最高价10.length, 价格均线60.length),
-            i => i > 0 && is交叉({ a1: 最高价10[i - 1], b1: 价格均线60[i - 1], a2: 最高价10[i], b2: 价格均线60[i] })
-        )
-
-        const 涨价差__累计成交量 = 指标.lazyMapCache2({ 累计成交量: 0 }, (arr: number[], ext) => {
-            for (let i = Math.max(0, arr.length - 1); i < Math.min(涨价差__交叉.length, 成交量买.length, 成交量卖.length); i++) {
-                if (涨价差__交叉[i]) {
-                    ext.累计成交量 = 0
-                } else {
-                    ext.累计成交量 += (成交量买[i] - 成交量卖[i])
-                }
-                arr[i] = ext.累计成交量
-            }
-        })
-
-
-        //涨价差2
-        const 涨价差__交叉点价格 = 指标.lazyMapCache2({ 价格: NaN }, (arr: number[], ext) => {
-            for (let i = Math.max(0, arr.length - 1); i < Math.min(涨价差__交叉.length, 价格.length); i++) {
-                if (涨价差__交叉[i]) {
-                    ext.价格 = 最高价10[i]
-                }
-                arr[i] = ext.价格
-            }
-        })
-        const 涨价差2 = 指标.lazyMapCache(() => Math.min(最高价10.length, 涨价差__交叉点价格.length), i => Math.abs(最高价10[i] - 涨价差__交叉点价格[i]))
-
-        const 涨价差__除以__这一段内的成交量 = 指标.lazyMapCache(
-            () => Math.min(涨价差__累计成交量.length, 涨价差.length),
-            i => 涨价差__累计成交量[i] === 0 ? NaN : to范围({ value: 涨价差__累计成交量[i] / 涨价差2[i], min: 10000, max: 200 * 10000 })
-        )
-        const 涨价差__除以__这一段内的成交量1 = 指标.lazyMapCache(
-            () => Math.min(涨价差__累计成交量.length, 涨价差.length),
-            i => 涨价差__累计成交量[i] === 0 ? NaN : to范围({ value: 涨价差__累计成交量[i] / 涨价差[i], min: 10000, max: 200 * 10000 })
-        )
-
-
-        //重复
-        const 跌价差 = 指标.lazyMapCache(() => Math.min(最低价10.length, 价格均线60.length), i => Math.abs(价格均线60[i] - 最低价10[i]))
-
-        const 跌价差__交叉 = 指标.lazyMapCache(
-            () => Math.min(最低价10.length, 价格均线60.length),
-            i => i > 0 && is交叉({ a1: 最低价10[i - 1], b1: 价格均线60[i - 1], a2: 最低价10[i], b2: 价格均线60[i] })
-        )
-
-
-        const 跌价差__累计成交量 = 指标.lazyMapCache2({ 累计成交量: 0 }, (arr: number[], ext) => {
-            for (let i = Math.max(0, arr.length - 1); i < Math.min(跌价差__交叉.length, 成交量买.length, 成交量卖.length); i++) {
-                if (跌价差__交叉[i]) {
-                    ext.累计成交量 = 0
-                } else {
-                    ext.累计成交量 += (成交量卖[i] - 成交量买[i])
-                }
-                arr[i] = ext.累计成交量
-            }
-        })
-
-        //跌价差2
-        const 跌价差__交叉点价格 = 指标.lazyMapCache2({ 价格: NaN }, (arr: number[], ext) => {
-            for (let i = Math.max(0, arr.length - 1); i < Math.min(跌价差__交叉.length, 价格.length); i++) {
-                if (跌价差__交叉[i]) {
-                    ext.价格 = 最低价10[i]
-                }
-                arr[i] = ext.价格
-            }
-        })
-        const 跌价差2 = 指标.lazyMapCache(() => Math.min(最高价10.length, 跌价差__交叉点价格.length), i => Math.abs(跌价差__交叉点价格[i] - 最低价10[i]))
-
-
-
-        const 跌价差__除以__这一段内的成交量 = 指标.lazyMapCache(
-            () => Math.min(跌价差__累计成交量.length, 跌价差.length),
-            i => 跌价差__累计成交量[i] === 0 ? NaN : to范围({ value: 跌价差__累计成交量[i] / 跌价差2[i], min: 10000, max: 200 * 10000 })
-        )
-        const 跌价差__除以__这一段内的成交量1 = 指标.lazyMapCache(
-            () => Math.min(跌价差__累计成交量.length, 跌价差.length),
-            i => 跌价差__累计成交量[i] === 0 ? NaN : to范围({ value: 跌价差__累计成交量[i] / 跌价差[i], min: 10000, max: 200 * 10000 })
-        )
-
-        const 涨价差__除以__这一段内的成交量12 = 指标.EMA(涨价差__除以__这一段内的成交量, 12, RealDataBase.单位时间)
-        const 涨价差__除以__这一段内的成交量26 = 指标.EMA(涨价差__除以__这一段内的成交量, 26, RealDataBase.单位时间)
-        const 涨价差__除以__这一段内的成交量DIF = 指标.lazyMapCache(() => Math.min(涨价差__除以__这一段内的成交量12.length, 涨价差__除以__这一段内的成交量26.length), i => 涨价差__除以__这一段内的成交量12[i] - 涨价差__除以__这一段内的成交量26[i])
-        const 涨价差__除以__这一段内的成交量DEM = 指标.EMA(涨价差__除以__这一段内的成交量DIF, 9, RealDataBase.单位时间)
-        //const OSC = 指标.lazyMapCache(() => Math.min(DIF.length, DEM.length), i => DIF[i] - DEM[i])
-
-        const 跌价差__除以__这一段内的成交量12 = 指标.EMA(跌价差__除以__这一段内的成交量, 12, RealDataBase.单位时间)
-        const 跌价差__除以__这一段内的成交量26 = 指标.EMA(跌价差__除以__这一段内的成交量, 26, RealDataBase.单位时间)
-        const 跌价差__除以__这一段内的成交量DIF = 指标.lazyMapCache(() => Math.min(跌价差__除以__这一段内的成交量12.length, 跌价差__除以__这一段内的成交量26.length), i => 跌价差__除以__这一段内的成交量12[i] - 跌价差__除以__这一段内的成交量26[i])
-        const 跌价差__除以__这一段内的成交量DEM = 指标.EMA(跌价差__除以__这一段内的成交量DIF, 9, RealDataBase.单位时间)
-
-        //  补完涨价差/这一段内的成交量
-        //  补完跌价差/这一段内的成交量
-
-        // const 价格EMA12 = 指标.EMA(成交量买, 12, RealDataBase.单位时间)
-        // const 价格EMA26 = 指标.EMA(成交量买, 26, RealDataBase.单位时间)
-        // const 价格DIF = 指标.lazyMapCache(() => Math.min(价格EMA12.length, 价格EMA26.length), i => 价格EMA12[i] - 价格EMA26[i])
-        // const 价格DEM = 指标.EMA(价格DIF, 12, RealDataBase.单位时间)
-        // const 价格OSC = 指标.lazyMapCache(() => Math.min(价格DIF.length, 价格DEM.length), i => 价格DIF[i] - 价格DEM[i])
         const 净下跌成交量 = 指标.lazyMapCache(() => data.length, i => 成交量卖[i] - 成交量买[i])
         const 净上涨成交量 = 指标.lazyMapCache(() => data.length, i => 成交量买[i] - 成交量卖[i])
 
@@ -582,329 +388,11 @@ export class RealDataBase {
         const 净下跌成交量26 = 指标.EMA(净下跌成交量, 26, RealDataBase.单位时间)
         const 净下跌成交量DIF = 指标.lazyMapCache(() => Math.min(净下跌成交量12.length, 净下跌成交量26.length), i => 净下跌成交量12[i] - 净下跌成交量26[i])
         const 净下跌成交量DEM = 指标.EMA(净下跌成交量DIF, 9, RealDataBase.单位时间)
-        //净下跌成交量DIF,净下跌成交量DEM,净上涨成交量DIF,净上涨成交量DEM
+        
         const 净上涨成交量12 = 指标.EMA(净上涨成交量, 12, RealDataBase.单位时间)
         const 净上涨成交量26 = 指标.EMA(净上涨成交量, 26, RealDataBase.单位时间)
         const 净上涨成交量DIF = 指标.lazyMapCache(() => Math.min(净上涨成交量12.length, 净上涨成交量26.length), i => 净上涨成交量12[i] - 净上涨成交量26[i])
         const 净上涨成交量DEM = 指标.EMA(净上涨成交量DIF, 9, RealDataBase.单位时间)
-        //MACD  19 40
-        const 买成交量12 = 指标.EMA(成交量买, 12, RealDataBase.单位时间)
-        const 买成交量26 = 指标.EMA(成交量买, 26, RealDataBase.单位时间)
-        const 买成交量DIF = 指标.lazyMapCache(() => Math.min(买成交量12.length, 买成交量26.length), i => 买成交量12[i] - 买成交量26[i])
-        const 买成交量DEM = 指标.EMA(买成交量DIF, 9, RealDataBase.单位时间)
-        //const OSC = 指标.lazyMapCache(() => Math.min(买成交量DIF.length, DEM.length), i => 买成交量DIF[i] - 买成交量DEM[i])
-
-        const 卖成交量12 = 指标.EMA(成交量卖, 12, RealDataBase.单位时间)
-        const 卖成交量26 = 指标.EMA(成交量卖, 26, RealDataBase.单位时间)
-        const 卖成交量DIF = 指标.lazyMapCache(() => Math.min(卖成交量12.length, 卖成交量26.length), i => 卖成交量12[i] - 卖成交量26[i])
-        const 卖成交量DEM = 指标.EMA(卖成交量DIF, 9, RealDataBase.单位时间)
-        //const OSC1 = 指标.lazyMapCache(() => Math.min(卖成交量.length, 卖成交量DEM.length), i => 卖成交量[i] - 卖成交量DEM[i])
-
-        // const 上涨价格12 = 指标.EMA(最高价10, 6, RealDataBase.单位时间)
-        // const 上涨价格26 = 指标.EMA(最高价10, 13, RealDataBase.单位时间)
-        // const 上涨价格DIF = 指标.lazyMapCache(() => Math.min(上涨价格12.length, 上涨价格26.length), i => 上涨价格12[i] - 上涨价格26[i])
-        // const 上涨价格DEM = 指标.EMA(上涨价格DIF, 12, RealDataBase.单位时间)
-        // //const 价格OSC = 指标.lazyMapCache(() => Math.min(DIF.length, DEM.length), i => DIF[i] - DEM[i])
-        // const 下跌价格12 = 指标.EMA(最低价10, 6, RealDataBase.单位时间)
-        // const 下跌价格26 = 指标.EMA(最低价10, 13, RealDataBase.单位时间)
-        // const 下跌价格DIF = 指标.lazyMapCache(() => Math.min(下跌价格12.length, 下跌价格26.length), i => 下跌价格12[i] - 下跌价格26[i])
-        // const 下跌价格DEM = 指标.EMA(下跌价格DIF, 12, RealDataBase.单位时间)
-
-
-        //信号_上涨
-        const 盘口买2秒均线 = 指标.均线(
-            指标.lazyMapCache(() => 盘口买.length, i => 盘口买[i]),
-            1.5,
-            RealDataBase.单位时间
-        )
-
-        // const 信号_上涨 = 指标.lazyMapCache(
-        //     () => Math.min(
-        //         净盘口.length,
-        //         净盘口均线.length,
-        //         盘口买2秒均线.length,
-        //         买成交量DIF.length,
-        //         买成交量DEM.length,
-        //         波动率.length
-        //     ),
-        //     i => [
-        // { name: '真空涨|成交量|阻力', value: 波动率[i] <波动率中大分界||真空信号涨[i]||涨价差__除以__这一段内的成交量DIF[i]<0 },
-        // //{ name: '涨价差/成交量DIF<0', value: 波动率[i] <波动率中大分界||涨价差__除以__这一段内的成交量DIF[i]<0 },
-        // { name: '涨价差/成交量DIF<DEM', value: 波动率[i] <波动率中大分界||(涨价差__除以__这一段内的成交量DIF[i] < 涨价差__除以__这一段内的成交量DEM[i]) },
-        // { name: '成交量DIF<DEM', value: 买成交量DIF[i] < 买成交量DEM[i] &&( 波动率[i] <波动率中大分界?true: 买成交量DIF[i]<0)},
-        // //&&(波动率[i] <波动率小中分界||买成交量DIF[i]<0) 
-        // { name: ' 净盘口<净盘口均线<0', value: b },
-        // { name: '波动率 > 7', value: 波动率[i] > 7 },
-        // //量化用
-        // { name: '量化 is上涨', value: 上涨还是下跌[i] === '上涨' },
-        // { name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
-        //     ]
-        // )
-        //const 波动率大巨大大分界 = 50
-        const 波动率中大分界 = 25
-        //const 波动率中大分界 = 20
-        const 信号_上涨 = 指标.lazyMapCache(
-            () => Math.min(
-                净盘口.length,
-                净盘口均线.length,
-                盘口买2秒均线.length,
-                买成交量DIF.length,
-                买成交量DEM.length,
-                波动率.length,
-                上涨还是下跌.length,
-                自动下单条件.length,
-            ),
-            i => {
-                let b = false
-                if (波动率[i] < 波动率中大分界) {
-                    if (盘口买[i] < 10 * 100000) {
-                        if (净盘口[i] <= (净盘口均线[i] + 5 * 100000)) {
-                            if (净盘口[i] < 5 * 100000) {
-                                b = true
-                            }
-                        }
-                    } else {
-                        if (净盘口[i] <= (净盘口均线[i])) {
-                            if (净盘口[i] < 0) {
-                                b = true
-                            }
-                        }
-                    }
-                } else {
-                    if (盘口买[i] < 5 * 100000) {
-                        if (净盘口[i] <= (净盘口均线[i] + 5 * 100000)) {
-                            if (净盘口[i] < 5 * 100000) {
-                                b = true
-                            }
-                        }
-                    } else {
-                        if (净盘口[i] <= (净盘口均线[i])) {
-                            if (净盘口[i] < 0) {
-                                b = true
-                            }
-                        }
-                    }
-                }
-                //let a = (盘口买[i] < (波动率[i] < 10 ? 10 * 100000 : 5 * 100000) ? 净盘口[i] <= 净盘口均线[i] + 5 * 100000 : 净盘口[i] < 净盘口均线[i]) && (净盘口均线[i] < 0)
-                //(涨价差__除以__这一段内的成交量DIF[i] < 0
-                // let c = false
-                // if(波动率[i] <波动率中大分界){
-                //     if(涨价差__除以__这一段内的成交量DIF[i]<0){
-                //         c = true
-                //     }else{
-                //         c = false
-                //     }
-                // }else{
-                //     if(涨价差__除以__这一段内的成交量DIF[i]<0){
-                //         c = true
-                //     }
-                // }
-
-                return [
-                    { name: '真空', value: 波动率[i] < 波动率中大分界 || 真空信号涨[i] },
-                    //{ name: '涨价差/成交量DIF<0', value: 波动率[i] <波动率中大分界||涨价差__除以__这一段内的成交量DIF[i]<0 },
-                    //{ name: '涨价差/成交量DIF<DEM', value: 波动率[i] <波动率中大分界||(涨价差__除以__这一段内的成交量DIF[i] < 涨价差__除以__这一段内的成交量DEM[i]) },
-                    { name: '成交量DIF<DEM', value: 净上涨成交量DIF[i] < 净上涨成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净上涨成交量DIF[i] < 0) },
-                    { name: '净上涨成交量DIF<DEM', value: 净上涨成交量DIF[i] < 净上涨成交量DEM[i] },
-                    //&&(波动率[i] <波动率小中分界||买成交量DIF[i]<0) 
-                    { name: ' 净盘口<净盘口均线<0', value: b },
-                    { name: '动力<75万', value: 真空信号涨[i] || 涨价差__除以__这一段内的成交量[i] < 75 * 10000 },
-                    { name: '波动率 >=5', value: 波动率[i] >= 5 },
-                    { name: '追涨', value: 涨价差__除以__这一段内的成交量[i] > 110 * 10000 && 波动率[i] >= 5 },
-                    //量化用 净上涨成交量DIF
-                    { name: '量化 is上涨', value: 净成交量均线30[i] > 0 },
-                    //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
-                ]
-            }
-        )
-
-
-        //下跌 重复
-        const 盘口卖2秒均线 = 指标.均线(
-            指标.lazyMapCache(() => 盘口卖.length, i => 盘口卖[i]),
-            1.5,
-            RealDataBase.单位时间
-        )
-        // const 信号_下跌 = 指标.lazyMapCache(
-        //     () => Math.min(
-        //         净盘口.length,
-        //         净盘口均线.length,
-        //         盘口卖2秒均线.length,
-        //         卖成交量DIF.length,
-        //         卖成交量DEM.length,
-        //         波动率.length
-        //     ),
-        // { name: '真空涨|成交量|阻力', value: 波动率[i] <波动率中大分界 || 真空信号跌[i]||跌价差__除以__这一段内的成交量DIF[i]<0},
-        // //{ name: '跌价差/成交量DIF<0', value:  波动率[i] <波动率中大分界||跌价差__除以__这一段内的成交量DIF[i]<0 },
-        // { name: '跌价差/成交量DIF<DEM', value:  波动率[i] <波动率中大分界||(跌价差__除以__这一段内的成交量DIF[i] < 跌价差__除以__这一段内的成交量DEM[i]) },
-        // { name: '卖成交量DIF<DEM', value: 卖成交量DIF[i] < 卖成交量DEM[i]&&( 波动率[i] <波动率中大分界?true: 卖成交量DIF[i]<0) },
-        // //&&(波动率[i] <波动率小中分界||卖成交量DIF[i]<0) 
-        // //(盘口买[i]<5*100000?净盘口[i] <=净盘口均线[i]-5*100000:净盘口[i] < 净盘口均线[i])
-        // { name: ' 净盘口 > 净盘口均线>0', value: b },
-        // //{ name: ' 净盘口 > 净盘口均线>0', value:   净盘口[i] > 净盘口均线[i] &&(净盘口[i]>0)},
-        // { name: '波动率 > 7', value: 波动率[i] > 7 },
-
-        // //量化用
-        // { name: '量化 is下跌', value: 上涨还是下跌[i] === '下跌' },
-        // { name: '量化 自动下单条件', value: 上涨还是下跌[i] === '下跌' && 自动下单条件[i] },
-        // //     ]
-        // )
-        const 信号_下跌 = 指标.lazyMapCache(
-            () => Math.min(
-                净盘口.length,
-                净盘口均线.length,
-                盘口卖2秒均线.length,
-                卖成交量DIF.length,
-                卖成交量DEM.length,
-                波动率.length,
-                上涨还是下跌.length,
-                自动下单条件.length,
-            ),
-            i => {
-                let b = false
-                if (波动率[i] < 波动率中大分界) {
-                    if (盘口卖[i] < 10 * 100000) {
-                        if (净盘口[i] >= (净盘口均线[i] - 5 * 100000)) {
-                            if (净盘口[i] > (- 5 * 100000)) {
-                                b = true
-                            }
-                        }
-                    } else {
-                        if (净盘口[i] >= 净盘口均线[i]) {
-                            if (净盘口[i] > 0) {
-                                b = true
-                            }
-                        }
-                    }
-                } else {
-                    if (盘口卖[i] < 5 * 100000) {
-                        if (净盘口[i] >= (净盘口均线[i] - 5 * 100000)) {
-                            if (净盘口[i] > (- 5 * 100000)) {
-                                b = true
-                            }
-                        }
-                    } else {
-                        if (净盘口[i] >= 净盘口均线[i]) {
-                            if (净盘口[i] > 0) {
-                                b = true
-                            }
-                        }
-                    }
-                }
-                //let a = (Math.abs(盘口卖[i]) < (波动率[i] < 10 ? 10 * 100000 : 5 * 100000) ? 净盘口[i] >= 净盘口均线[i] - 5 * 100000 : 净盘口[i] < 净盘口均线[i]) && (净盘口[i] > 0)
-                // (波动率[i] < 波动率小中分界)
-
-
-
-                return [
-
-                    { name: '真空', value: 波动率[i] < 波动率中大分界 || 真空信号跌[i] },
-                    { name: '卖成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净下跌成交量DIF[i] < 0) },
-                    { name: '净下跌成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] },
-                    //&&(波动率[i] <波动率小中分界||卖成交量DIF[i]<0) 
-                    //(盘口买[i]<5*100000?净盘口[i] <=净盘口均线[i]-5*100000:净盘口[i] < 净盘口均线[i])
-                    { name: ' 净盘口 > 净盘口均线>0', value: b },
-                    //{ name: ' 净盘口 > 净盘口均线>0', value:   净盘口[i] > 净盘口均线[i] &&(净盘口[i]>0)},
-                    { name: '动力<75万', value: 真空信号涨[i] || 跌价差__除以__这一段内的成交量[i] < 75 * 10000 },
-                    { name: '波动率 >=5', value: 波动率[i] >= 5 },
-                    { name: '追跌', value: 跌价差__除以__这一段内的成交量[i] > 110 * 10000 && 波动率[i] >= 5 },
-                    //量化用
-                    { name: '量化 is下跌', value: 净成交量均线30[i] < 0 },
-                    //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '下跌' && 自动下单条件[i] },
-                ]
-            }
-        )
-
-        //上涨速度
-        //下跌速度
-
-
-
-        // const 上涨速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr: number[], ext) => {
-        //     for (let i = Math.max(0, arr.length - 1); i < Math.min(价格均线60.length, 最高价10.length); i++) {
-        //         const 时间ms = (i - ext.last交叉Index) / (1000 / RealDataBase.单位时间)
-        //         if (时间ms === 0) {
-        //             arr[i] = NaN
-        //         } else {
-        //             let a = (最高价10[i] - 价格均线60[i]) / 时间ms
-        //             // let a = 波动率[i]/ 时间ms
-        //             //arr[i] = a
-        //             if (a > 0.5) {
-        //                 arr[i] = 0.5
-        //             } else {
-        //                 arr[i] = a
-        //             }
-        //         }
-        //         //arr[i] = 时间ms === 0 ? NaN : (最高价10[i] - 价格均线60[i]) / 时间ms
-
-        //         if (Math.abs(最高价10[i] - 价格均线60[i]) < 0.1) {
-        //             ext.last交叉Index = i
-        //         }
-        //     }
-        // })
-
-        // const 上涨速度12 = 指标.EMA(上涨速度, 12, RealDataBase.单位时间)
-        // const 上涨速度26 = 指标.EMA(上涨速度, 26, RealDataBase.单位时间)
-        // const 上涨速度DIF = 指标.lazyMapCache(() => Math.min(上涨速度12.length, 上涨速度26.length), i => 上涨速度12[i] - 上涨速度26[i])
-        // const 上涨速度DEM = 指标.EMA(上涨速度DIF, 9, RealDataBase.单位时间)
-        //const 上涨速度OSC = 指标.lazyMapCache(() => Math.min(上涨速度DIF.length, 上涨速度DEM.length), i => 上涨速度DIF[i] - 上涨速度DEM[i])
-
-
-
-        // const 下跌速度 = 指标.lazyMapCache2({ last交叉Index: 0 }, (arr: number[], ext) => {
-        //     for (let i = Math.max(0, arr.length - 1); i < Math.min(价格均线60.length, 最低价10.length); i++) {
-        //         const 时间ms = (i - ext.last交叉Index) / (1000 / RealDataBase.单位时间)
-
-        //         if (时间ms === 0) {
-        //             arr[i] = NaN
-        //         } else {
-        //             let a = (价格均线60[i] - 最低价10[i]) / 时间ms
-        //             // let a = 波动率[i]/ 时间ms
-        //             //arr[i] = a
-        //             if (a > 0.5) {
-        //                 arr[i] = 0.5
-        //             } else {
-        //                 arr[i] = a
-        //             }
-        //         }
-
-
-        //         //arr[i] = 时间ms === 0 ? NaN : (价格均线60[i] - 最低价10[i]) / 时间ms
-
-        //         if (Math.abs(最低价10[i] - 价格均线60[i]) < 0.1) {
-        //             ext.last交叉Index = i
-        //         }
-        //     }
-        // })
-
-        // const 下跌速度12 = 指标.EMA(下跌速度, 12, RealDataBase.单位时间)
-        // const 下跌速度26 = 指标.EMA(下跌速度, 26, RealDataBase.单位时间)
-        // const 下跌速度DIF = 指标.lazyMapCache(() => Math.min(下跌速度12.length, 下跌速度26.length), i => 下跌速度12[i] - 下跌速度26[i])
-        // const 下跌速度DEM = 指标.EMA(上涨速度DIF, 9, RealDataBase.单位时间)
-        //const 下跌速度OSC = 指标.lazyMapCache(() => Math.min(下跌速度DIF.length, 下跌速度DEM.length), i => 下跌速度DIF[i] - 下跌速度DEM[i])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //______________上涨_下跌  新_______________________________________________________________________
-
         const 上涨_下跌 = 指标.lazyMapCache(() => Math.min(净成交量均线30.length), i => 净成交量均线30[i] >= 0 ? '上涨' : '下跌')
 
         const 累计成交量 = (type: '上涨' | '下跌') => 指标.lazyMapCache2({ 累计成交量: NaN }, (arr: number[], ext) => {
@@ -961,31 +449,160 @@ export class RealDataBase {
             价差: 下跌_价差,
             动力: 下跌_动力,
         }
+      
+
+
+        //信号_上涨
+        const 盘口买2秒均线 = 指标.均线(
+            指标.lazyMapCache(() => 盘口买.length, i => 盘口买[i]),
+            1.5,
+            RealDataBase.单位时间
+        )
+
+       
+        //const 波动率大巨大大分界 = 50
+        const 波动率中大分界 = 25
+        //const 波动率中大分界 = 20
+        const 信号_上涨 = 指标.lazyMapCache(
+            () => Math.min(
+                净盘口.length,
+                净盘口均线.length,
+                盘口买2秒均线.length,
+                波动率.length,
+                上涨还是下跌.length,
+                自动下单条件.length,
+            ),
+            i => {
+                let b = false
+                if (波动率[i] < 波动率中大分界) {
+                    if (盘口买[i] < 10 * 100000) {
+                        if (净盘口[i] <= (净盘口均线[i] + 5 * 100000)) {
+                            if (净盘口[i] < 5 * 100000) {
+                                b = true
+                            }
+                        }
+                    } else {
+                        if (净盘口[i] <= (净盘口均线[i])) {
+                            if (净盘口[i] < 0) {
+                                b = true
+                            }
+                        }
+                    }
+                } else {
+                    if (盘口买[i] < 5 * 100000) {
+                        if (净盘口[i] <= (净盘口均线[i] + 5 * 100000)) {
+                            if (净盘口[i] < 5 * 100000) {
+                                b = true
+                            }
+                        }
+                    } else {
+                        if (净盘口[i] <= (净盘口均线[i])) {
+                            if (净盘口[i] < 0) {
+                                b = true
+                            }
+                        }
+                    }
+                }
+               
+                return [
+                    { name: '真空', value: 波动率[i] < 波动率中大分界 || 真空信号涨[i] },
+                    { name: '成交量DIF<DEM', value: 净上涨成交量DIF[i] < 净上涨成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净上涨成交量DIF[i] < 0) },
+                    { name: '净上涨成交量DIF<DEM', value: 净上涨成交量DIF[i] < 净上涨成交量DEM[i] },
+                    { name: ' 净盘口<净盘口均线<0', value: b },
+                    { name: '动力<75万', value: 真空信号涨[i] || 上涨.动力[i] < 75 * 10000 },
+                    { name: '波动率 >=5', value: 波动率[i] >= 5 },
+                    { name: '追涨', value: 上涨.动力[i] > 110 * 10000 && 波动率[i] >= 5 },
+                    //量化用 净上涨成交量DIF
+                    { name: '量化 is上涨', value: 净成交量均线30[i] > 0 },
+                    //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
+                ]
+            }
+        )
+
+
+        //下跌 重复
+        const 盘口卖2秒均线 = 指标.均线(
+            指标.lazyMapCache(() => 盘口卖.length, i => 盘口卖[i]),
+            1.5,
+            RealDataBase.单位时间
+        )
+       
+        const 信号_下跌 = 指标.lazyMapCache(
+            () => Math.min(
+                净盘口.length,
+                净盘口均线.length,
+                盘口卖2秒均线.length,
+                波动率.length,
+                上涨还是下跌.length,
+                自动下单条件.length,
+            ),
+            i => {
+                let b = false
+                if (波动率[i] < 波动率中大分界) {
+                    if (盘口卖[i] < 10 * 100000) {
+                        if (净盘口[i] >= (净盘口均线[i] - 5 * 100000)) {
+                            if (净盘口[i] > (- 5 * 100000)) {
+                                b = true
+                            }
+                        }
+                    } else {
+                        if (净盘口[i] >= 净盘口均线[i]) {
+                            if (净盘口[i] > 0) {
+                                b = true
+                            }
+                        }
+                    }
+                } else {
+                    if (盘口卖[i] < 5 * 100000) {
+                        if (净盘口[i] >= (净盘口均线[i] - 5 * 100000)) {
+                            if (净盘口[i] > (- 5 * 100000)) {
+                                b = true
+                            }
+                        }
+                    } else {
+                        if (净盘口[i] >= 净盘口均线[i]) {
+                            if (净盘口[i] > 0) {
+                                b = true
+                            }
+                        }
+                    }
+                }
+
+
+                return [
+
+                    { name: '真空', value: 波动率[i] < 波动率中大分界 || 真空信号跌[i] },
+                    { name: '卖成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净下跌成交量DIF[i] < 0) },
+                    { name: '净下跌成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] },
+                    { name: ' 净盘口 > 净盘口均线>0', value: b },
+                    { name: '动力<75万', value: 真空信号涨[i] || 下跌.动力[i] < 75 * 10000 },
+                    { name: '波动率 >=5', value: 波动率[i] >= 5 },
+                    { name: '追跌', value: 下跌.动力[i] > 110 * 10000 && 波动率[i] >= 5 },
+                    //量化用
+                    { name: '量化 is下跌', value: 净成交量均线30[i] < 0 },
+                    //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '下跌' && 自动下单条件[i] },
+                ]
+            }
+        )
+        //______________上涨_下跌  新_______________________________________________________________________
+
+       
 
         //______________上涨_下跌  新_______________________________________________________________________
 
 
         return {
+            价格均线,
+            净上涨成交量DIF,
+            净上涨成交量DEM,
+            净下跌成交量DIF,
+            净下跌成交量DEM,
             上涨,
             下跌,
-            涨价差2,
-            跌价差2,
-            涨价差,
-            跌价差,
-            跌价差__累计成交量,
-            涨价差__累计成交量,
-            上涨还是下跌,
-            自动下单条件,
-            价格, 价格均线, 波动率, 成交量买, 成交量买均线: 成交量买均线30, 成交量卖, 盘口买, 盘口卖, 净盘口, 净盘口均线,
-            成交次数买, 成交次数卖,
-            阻力1涨, 阻力1跌,
-            阻力2涨, 阻力2跌,
+            价格, 波动率, 盘口买, 盘口卖, 净盘口, 净盘口均线,
             阻力3涨, 阻力3跌,
-            阻力4涨, 阻力4跌,
-            真空, 真空涨, 真空跌,
             真空信号涨,
             真空信号跌,
-            //成交量波动率比值,
             净成交量,
             净成交量均线30,
             成交量均线买1,
@@ -994,56 +611,26 @@ export class RealDataBase {
             成交量均线卖5,
             成交量买均线30,
             成交量卖均线30,
-            // 盘口买均线,
-            // 盘口卖均线,
-            阻力笔,
+           
 
-            买MACD: {
-                买成交量DIF,
-                买成交量DEM,
-                //OSC,
-            },
+            // 买MACD: {
+            //     买成交量DIF,
+            //     买成交量DEM,
+            //     //OSC,
+            // },
 
-            卖MACD: {
-                卖成交量DIF,
-                卖成交量DEM,
-                //卖成交量OSC1,
-            },
+            // 卖MACD: {
+            //     卖成交量DIF,
+            //     卖成交量DEM,
+            //     //卖成交量OSC1,
+            // },
 
             信号_上涨,
             信号_下跌,
-            // 上涨价格DIF,
-            // 上涨价格DEM,
-            // 下跌价格DIF,
-            // 下跌价格DEM,
-            //价格OSC,
-
-            // 上涨速度,
-            // 下跌速度,
+        
             价格均线60,
             最高价10,
             最低价10,
-            // 上涨速度DIF,
-            // 上涨速度DEM,
-            // 下跌速度DIF,
-            // 下跌速度DEM,
-
-            阻力3涨DIF,
-            阻力3涨DEM,
-            阻力3跌DIF,
-            阻力3跌DEM,
-
-            涨价差__除以__这一段内的成交量DIF,
-            涨价差__除以__这一段内的成交量DEM,
-            跌价差__除以__这一段内的成交量DIF,
-            跌价差__除以__这一段内的成交量DEM,
-            涨价差__除以__这一段内的成交量,
-            跌价差__除以__这一段内的成交量,
-            涨价差__除以__这一段内的成交量1,
-            跌价差__除以__这一段内的成交量1,
-            净下跌成交量DIF, 净下跌成交量DEM, 净上涨成交量DIF, 净上涨成交量DEM,
-            涨价差__交叉点价格, 跌价差__交叉点价格,
-
         }
     }
 
