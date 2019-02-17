@@ -434,7 +434,7 @@ export class RealDataBase {
 
         const 上涨_累计成交量 = 累计成交量('上涨')
         const 上涨_价差 = 价差('上涨')
-        const 上涨_动力 = 指标.lazyMapCache(() => Math.min(上涨_累计成交量.length, 上涨_价差.length), i => isNaN(上涨_价差[i]) ? 0 : 上涨_累计成交量[i] / 上涨_价差[i])
+        const 上涨_动力 = 指标.lazyMapCache(() => Math.min(上涨_累计成交量.length, 上涨_价差.length), i => 上涨_累计成交量[i] / Math.max(1, 上涨_价差[i])) //最小除以1
         const 上涨 = {
             累计成交量: 上涨_累计成交量,
             价差: 上涨_价差,
@@ -443,7 +443,7 @@ export class RealDataBase {
 
         const 下跌_累计成交量 = 累计成交量('下跌')
         const 下跌_价差 = 价差('下跌')
-        const 下跌_动力 = 指标.lazyMapCache(() => Math.min(下跌_累计成交量.length, 下跌_价差.length), i => isNaN(下跌_价差[i]) ? 0 : 下跌_累计成交量[i] / 下跌_价差[i])
+        const 下跌_动力 = 指标.lazyMapCache(() => Math.min(下跌_累计成交量.length, 下跌_价差.length), i => 下跌_累计成交量[i] / Math.max(1, 下跌_价差[i])) //最小除以1
         const 下跌 = {
             累计成交量: 下跌_累计成交量,
             价差: 下跌_价差,
