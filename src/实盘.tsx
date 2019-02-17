@@ -351,7 +351,7 @@ const hopex市价开仓和止损BTC = async (cookie: string, p: { size: number, 
             Cookie: cookie,
         }
     })
-    console.log(p.stopPrice)
+    //console.log(p.stopPrice)
     const 止损side = p.side === 'Sell' ? 'Buy' : 'Sell'
 
     JSONRequest({
@@ -419,7 +419,6 @@ export class 提醒 extends React.Component {
 
         const volum = realTickClient.get期货多少秒内成交量__万为单位('XBTUSD', 15)
         const 波动率 = 指标.波动率(realTickClient.dataExt.XBTUSD.期货.价格, 30, 500)
-        console.log("波动率 = "+lastNumber(波动率))
         if (volum > 200&&lastNumber(波动率)>=5) {
             this.setAndSpeak(
                 '比 特 币 成交量',
