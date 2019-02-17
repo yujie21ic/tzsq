@@ -295,7 +295,7 @@ export class RealDataBase {
         const 成交量买 = 指标.lazyMapCache(() => data.length, i => Math.abs(data[i].buySize))
         const 成交量卖 = 指标.lazyMapCache(() => data.length, i => Math.abs(data[i].sellSize))
         const 净成交量 = 指标.lazyMapCache(() => data.length, i => 成交量买[i] - 成交量卖[i])
-      
+
 
         const 成交量均线买1 = 指标.累加(
             指标.lazyMapCache(() => 成交量买.length, i => 成交量买[i]),
@@ -330,7 +330,7 @@ export class RealDataBase {
             多少秒均线,
             RealDataBase.单位时间
         )
-        
+
         const 净成交量均线30 = 指标.累加(
             指标.lazyMapCache(() => 成交量卖.length, i => 净成交量[i]),
             多少秒均线,
@@ -357,7 +357,7 @@ export class RealDataBase {
 
         const 真空信号涨 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 < 200000) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 >= 3)
         const 真空信号跌 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 > -200000) && 阻力3[i].阻力 < 0 && 阻力3[i].价钱增量 >= 4)
-    
+
         const 价格均线60 = 指标.均线(价格, 60, RealDataBase.单位时间)
 
         const 最高价10 = 指标.最高(价格, 15, RealDataBase.单位时间)
@@ -388,7 +388,7 @@ export class RealDataBase {
         const 净下跌成交量26 = 指标.EMA(净下跌成交量, 26, RealDataBase.单位时间)
         const 净下跌成交量DIF = 指标.lazyMapCache(() => Math.min(净下跌成交量12.length, 净下跌成交量26.length), i => 净下跌成交量12[i] - 净下跌成交量26[i])
         const 净下跌成交量DEM = 指标.EMA(净下跌成交量DIF, 9, RealDataBase.单位时间)
-        
+
         const 净上涨成交量12 = 指标.EMA(净上涨成交量, 12, RealDataBase.单位时间)
         const 净上涨成交量26 = 指标.EMA(净上涨成交量, 26, RealDataBase.单位时间)
         const 净上涨成交量DIF = 指标.lazyMapCache(() => Math.min(净上涨成交量12.length, 净上涨成交量26.length), i => 净上涨成交量12[i] - 净上涨成交量26[i])
@@ -434,7 +434,7 @@ export class RealDataBase {
 
         const 上涨_累计成交量 = 累计成交量('上涨')
         const 上涨_价差 = 价差('上涨')
-        const 上涨_动力 = 指标.lazyMapCache(() => Math.min(上涨_累计成交量.length, 上涨_价差.length), i => 上涨_累计成交量[i] / 上涨_价差[i])
+        const 上涨_动力 = 指标.lazyMapCache(() => Math.min(上涨_累计成交量.length, 上涨_价差.length), i => isNaN(上涨_价差[i]) ? 0 : 上涨_累计成交量[i] / 上涨_价差[i])
         const 上涨 = {
             累计成交量: 上涨_累计成交量,
             价差: 上涨_价差,
@@ -443,13 +443,13 @@ export class RealDataBase {
 
         const 下跌_累计成交量 = 累计成交量('下跌')
         const 下跌_价差 = 价差('下跌')
-        const 下跌_动力 = 指标.lazyMapCache(() => Math.min(下跌_累计成交量.length, 下跌_价差.length), i => 下跌_累计成交量[i] / 下跌_价差[i])
+        const 下跌_动力 = 指标.lazyMapCache(() => Math.min(下跌_累计成交量.length, 下跌_价差.length), i => isNaN(下跌_价差[i]) ? 0 : 下跌_累计成交量[i] / 下跌_价差[i])
         const 下跌 = {
             累计成交量: 下跌_累计成交量,
             价差: 下跌_价差,
             动力: 下跌_动力,
         }
-      
+
 
 
         //信号_上涨
@@ -459,7 +459,7 @@ export class RealDataBase {
             RealDataBase.单位时间
         )
 
-       
+
         //const 波动率大巨大大分界 = 50
         const 波动率中大分界 = 25
         //const 波动率中大分界 = 20
@@ -506,7 +506,7 @@ export class RealDataBase {
                         }
                     }
                 }
-               
+
                 return [
                     { name: '真空', value: 波动率[i] < 波动率中大分界 || 真空信号涨[i] },
                     { name: '成交量DIF<DEM', value: 净上涨成交量DIF[i] < 净上涨成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净上涨成交量DIF[i] < 0) },
@@ -529,7 +529,7 @@ export class RealDataBase {
             1.5,
             RealDataBase.单位时间
         )
-       
+
         const 信号_下跌 = 指标.lazyMapCache(
             () => Math.min(
                 净盘口.length,
@@ -592,7 +592,7 @@ export class RealDataBase {
         )
         //______________上涨_下跌  新_______________________________________________________________________
 
-       
+
 
         //______________上涨_下跌  新_______________________________________________________________________
 
@@ -617,7 +617,7 @@ export class RealDataBase {
             成交量均线卖5,
             成交量买均线30,
             成交量卖均线30,
-           
+
 
             // 买MACD: {
             //     买成交量DIF,
@@ -633,7 +633,7 @@ export class RealDataBase {
 
             信号_上涨,
             信号_下跌,
-        
+
             价格均线60,
             最高价10,
             最低价10,
