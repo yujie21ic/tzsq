@@ -124,7 +124,7 @@ export class Coordinate extends Container {
             //
 
             text.fill = numberColor === undefined ? 0xaaaaaa : numberColor
-            text.text = (Math.abs(value) > 10000) ? (value / 10000) + '万' : value.toFixed(2)
+            text.text = (Math.abs(value) > 100000000) ? (value / 100000000) + '亿' : (Math.abs(value) > 10000) ? (value / 10000) + '万' : value.toFixed(2)
             text.x = x偏移 + width + 15
             text.y = y
             text.visible = true
