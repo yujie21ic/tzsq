@@ -471,6 +471,9 @@ export class RealDataBase {
                 波动率.length,
                 上涨还是下跌.length,
                 自动下单条件.length,
+                净上涨成交量DIF.length,
+                净上涨成交量DEM.length,
+                波动率.length,
             ),
             i => {
                 let b = false
@@ -535,6 +538,9 @@ export class RealDataBase {
                 波动率.length,
                 上涨还是下跌.length,
                 自动下单条件.length,
+                净上涨成交量DIF.length,
+                净上涨成交量DEM.length,
+                波动率.length,
             ),
             i => {
                 let b = false
