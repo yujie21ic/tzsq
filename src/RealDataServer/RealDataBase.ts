@@ -309,12 +309,12 @@ export class RealDataBase {
         )
 
 
-        const 成交量均线买5 = 指标.累加(
+        const 成交量买均线5 = 指标.累加(
             指标.lazyMapCache(() => 成交量买.length, i => 成交量买[i]),
             5,
             RealDataBase.单位时间
         )
-        const 成交量均线卖5 = 指标.累加(
+        const 成交量卖均线5 = 指标.累加(
             指标.lazyMapCache(() => 成交量卖.length, i => 成交量卖[i]),
             5,
             RealDataBase.单位时间
@@ -453,7 +453,38 @@ export class RealDataBase {
             价差: 下跌_价差,
             动力: 下跌_动力,
         }
+        const 上涨_动力12 = 指标.EMA(上涨_动力, 6, RealDataBase.单位时间)
+        const 上涨_动力26 = 指标.EMA(上涨_动力, 13, RealDataBase.单位时间)
+        const 上涨_动力DIF = 指标.lazyMapCache(() => Math.min(上涨_动力12.length, 上涨_动力26.length), i => 上涨_动力12[i] - 上涨_动力26[i])
+        const 上涨_动力DEM = 指标.EMA(上涨_动力DIF, 5, RealDataBase.单位时间)
 
+        const 上涨_动力20均线 = 指标.均线(
+            指标.lazyMapCache(() => 上涨_动力.length, i => 上涨_动力[i]),
+            20,
+            RealDataBase.单位时间
+        )
+        const 上涨_动力10均线 = 指标.均线(
+            指标.lazyMapCache(() => 上涨_动力.length, i => 上涨_动力[i]),
+            10,
+            RealDataBase.单位时间
+        )
+
+        const 下跌_动力12 = 指标.EMA(下跌_动力, 6, RealDataBase.单位时间)
+        const 下跌_动力26 = 指标.EMA(下跌_动力, 13, RealDataBase.单位时间)
+        const 下跌_动力DIF = 指标.lazyMapCache(() => Math.min(下跌_动力12.length, 下跌_动力26.length), i => 下跌_动力12[i] - 下跌_动力26[i])
+        const 下跌_动力DEM = 指标.EMA(下跌_动力DIF, 5, RealDataBase.单位时间)
+        
+        
+        const 下跌_动力20均线 = 指标.均线(
+            指标.lazyMapCache(() => 下跌_动力.length, i => 下跌_动力[i]),
+            20,
+            RealDataBase.单位时间
+        )
+        const 下跌_动力10均线 = 指标.均线(
+            指标.lazyMapCache(() => 下跌_动力.length, i => 下跌_动力[i]),
+            10,
+            RealDataBase.单位时间
+        )
 
 
         //信号_上涨
@@ -480,6 +511,7 @@ export class RealDataBase {
                 波动率.length,
             ),
             i => {
+                //如果波动率比较小，那么对盘口的容忍度要大一些，因为没有经过充分博弈，小波动最大容忍度150万，大波动最大容忍度100万
                 let b = false
                 if (波动率[i] < 波动率中大分界) {
                     if (盘口买[i] < 10 * 100000) {
@@ -489,9 +521,11 @@ export class RealDataBase {
                             }
                         }
                     } else {
-                        if (净盘口[i] <= (净盘口均线[i])) {
-                            if (净盘口[i] < 0) {
-                                b = true
+                        if(盘口买[i] < 15 * 100000){
+                            if (净盘口[i] <= (净盘口均线[i])) {
+                                if (净盘口[i] < 0) {
+                                    b = true
+                                }
                             }
                         }
                     }
@@ -503,9 +537,11 @@ export class RealDataBase {
                             }
                         }
                     } else {
-                        if (净盘口[i] <= (净盘口均线[i])) {
-                            if (净盘口[i] < 0) {
-                                b = true
+                        if(盘口买[i] < 10 * 100000){
+                            if (净盘口[i] <= (净盘口均线[i])) {
+                                if (净盘口[i] < 0) {
+                                    b = true
+                                }
                             }
                         }
                     }
@@ -514,9 +550,8 @@ export class RealDataBase {
                 return [
                     { name: '真空', value: 波动率[i] < 波动率中大分界 || 真空信号涨[i] },
                     { name: '成交量DIF<DEM', value: 净上涨成交量DIF[i] < 净上涨成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净上涨成交量DIF[i] < 0) },
-                    { name: '净上涨成交量DIF<DEM', value: 净上涨成交量DIF[i] < 净上涨成交量DEM[i] },
                     { name: ' 净盘口<净盘口均线<0', value: b },
-                    { name: '动力<75万', value: 真空信号涨[i] || 上涨.动力[i] < 75 * 10000 },
+                    //{ name: '动力<75万', value: 真空信号涨[i] || 上涨.动力[i] < 75 * 10000 },
                     { name: '波动率 >=5', value: 波动率[i] >= 5 },
                     { name: '追涨', value: 上涨.动力[i] > 110 * 10000 && 波动率[i] >= 5 },
                     //量化用 净上涨成交量DIF
@@ -556,9 +591,11 @@ export class RealDataBase {
                             }
                         }
                     } else {
-                        if (净盘口[i] >= 净盘口均线[i]) {
-                            if (净盘口[i] > 0) {
-                                b = true
+                        if(盘口卖[i] < 15 * 100000){
+                            if (净盘口[i] >= 净盘口均线[i]) {
+                                if (净盘口[i] > 0) {
+                                    b = true
+                                }
                             }
                         }
                     }
@@ -570,9 +607,11 @@ export class RealDataBase {
                             }
                         }
                     } else {
-                        if (净盘口[i] >= 净盘口均线[i]) {
-                            if (净盘口[i] > 0) {
-                                b = true
+                        if (盘口卖[i] < 10 * 100000) {
+                            if (净盘口[i] >= 净盘口均线[i]) {
+                                if (净盘口[i] > 0) {
+                                    b = true
+                                }
                             }
                         }
                     }
@@ -583,9 +622,8 @@ export class RealDataBase {
 
                     { name: '真空', value: 波动率[i] < 波动率中大分界 || 真空信号跌[i] },
                     { name: '卖成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净下跌成交量DIF[i] < 0) },
-                    { name: '净下跌成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] },
                     { name: ' 净盘口 > 净盘口均线>0', value: b },
-                    { name: '动力<75万', value: 真空信号涨[i] || 下跌.动力[i] < 75 * 10000 },
+                   // { name: '动力<75万', value: 真空信号涨[i] || 下跌.动力[i] < 75 * 10000 },
                     { name: '波动率 >=5', value: 波动率[i] >= 5 },
                     { name: '追跌', value: 下跌.动力[i] > 110 * 10000 && 波动率[i] >= 5 },
                     //量化用
@@ -602,6 +640,14 @@ export class RealDataBase {
 
 
         return {
+            上涨_动力20均线,
+            上涨_动力10均线,
+            下跌_动力20均线,
+            下跌_动力10均线,
+            上涨_动力DIF,
+            上涨_动力DEM,
+            下跌_动力DIF,
+            下跌_动力DEM,
             价格均线,
             净上涨成交量DIF,
             净上涨成交量DEM,
@@ -617,8 +663,8 @@ export class RealDataBase {
             净成交量均线30,
             成交量均线买1,
             成交量均线卖1,
-            成交量均线买5,
-            成交量均线卖5,
+            成交量买均线5,
+            成交量卖均线5,
             成交量买均线30,
             成交量卖均线30,
 
