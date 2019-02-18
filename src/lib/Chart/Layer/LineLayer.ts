@@ -15,21 +15,24 @@ export class LineLayer extends Layer<{ data: ArrayLike<number>, color: number, �
     render(viewport: Viewport, to: To, tb: TopBottom) {
         const { g } = this
         g.clear()
-        
+
         const { left, right } = viewport
 
         const { data, color, 临时参数 } = this.props
 
         if (data.length === 0) return
 
-       
+
         g.lineStyle(1, color)
 
         let hasMove = false
 
         for (let i = Math.max(0, Math.floor(left)); i <= Math.min(Math.round(right), data.length - 1); i++) {
             const v = data[i]
-            if (isNaN(v)) continue
+            if (isNaN(v)) {
+                hasMove = false
+                continue
+            }
 
             const x = to.x(i)
 
