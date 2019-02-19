@@ -79,6 +79,9 @@ export class RealData extends RealDataBase {
                 this.wsDic.forEach((_, ws) => {
                     try { ws.send(str) } catch (error) { }
                 })
+
+                const d = this.dataExt.XBTUSD.期货.信号_下跌
+                console.log(d.length > 0 ? d[d.length - 1].map(v => v.value ? 'O' : '_').join('') : '')
             }
         )
 

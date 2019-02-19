@@ -28,11 +28,6 @@ const rpc = OrderClient.rpc.func
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
 
-setInterval(() => {
-    const d = realTickClient.dataExt.XBTUSD.期货.信号_下跌
-    console.log(d.length > 0 ? d[d.length - 1].map(v => v.value ? 'O' : '_').join('') : '')
-}, 100)
-
 class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: number, 倍数: number }> {
 
     get止损() {
