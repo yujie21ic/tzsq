@@ -105,4 +105,7 @@ server.func.任务_开关 = async req => {
     任务开关[req.任务名字].value.____set(req.value)
 
     return true
-}  
+}
+
+//
+console.log('运行中...')
