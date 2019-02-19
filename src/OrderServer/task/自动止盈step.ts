@@ -1,7 +1,8 @@
 import { BaseType } from '../../lib/BaseType'
 import { Account } from '../Account'
-import { get波动率, toGridPoint, realData, 信号灯side } from '../realData'
+import { get波动率, realData, 信号灯side } from '../realData'
 import { logToFile } from '../../lib/C/logToFile'
+import { toGridPoint } from '../../lib/F/toGridPoint'
 
 const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account) => {
 

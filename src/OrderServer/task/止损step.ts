@@ -1,7 +1,8 @@
 import { BaseType } from '../../lib/BaseType'
 import { Account } from '../Account'
-import { toGridPoint, get波动率 } from '../realData'
+import { get波动率 } from '../realData'
 import { to范围 } from '../../lib/F/to范围'
+import { toGridPoint } from '../../lib/F/toGridPoint'
 
 const 止损step = ({
     symbol,

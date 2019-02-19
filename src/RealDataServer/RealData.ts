@@ -121,7 +121,7 @@ export class RealData extends RealDataBase {
                 price,
                 side,
                 size,
-            }) 
+            })
         })
 
 

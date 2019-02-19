@@ -11,12 +11,12 @@ import { config } from './config'
 import { BaseType } from './lib/BaseType'
 import { windowExt } from './windowExt'
 import { Button } from './lib/UI/Button'
-import { JSONRequest } from './lib/C/JSONRequest' 
+import { JSONRequest } from './lib/C/JSONRequest'
 import { Switch } from '@material-ui/core'
-import { toGridPoint } from './OrderServer/realData'
 import { to范围 } from './lib/F/to范围'
 import { 指标 } from './RealDataServer/指标'
 import { sleep } from './lib/C/sleep';
+import { toGridPoint } from './lib/F/toGridPoint'
 
 const realTickClient = new DataClient.RealData__Client()
 
@@ -27,6 +27,11 @@ const rpc = OrderClient.rpc.func
 
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
+
+setInterval(() => {
+    const d = realTickClient.dataExt.XBTUSD.期货.信号_下跌
+    console.log(d.length > 0 ? d[d.length - 1].map(v => v.value ? 'O' : '_').join('') : '')
+}, 100)
 
 class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: number, 倍数: number }> {
 
@@ -265,7 +270,7 @@ export class 交易 extends React.Component {
                 <hr />
 
                 <br />
-                <br /> 
+                <br />
 
                 {this.hopexCookie !== '' ?
                     <div>
@@ -361,9 +366,9 @@ const hopex市价开仓和止损BTC = async (cookie: string, p: { size: number, 
             'param': {
                 'expectedQuantity': String(p.size),
                 'marketCode': 'BTCUSDT',
-                'trigPrice': String(止损side === 'Sell' ? String(p.stopPrice ) : String(p.stopPrice )),
+                'trigPrice': String(止损side === 'Sell' ? String(p.stopPrice) : String(p.stopPrice)),
                 'lang': 'cn',
-                'expectedPrice':String(止损side === 'Sell' ? String(p.stopPrice-100 ) : String(p.stopPrice+100 )),
+                'expectedPrice': String(止损side === 'Sell' ? String(p.stopPrice - 100) : String(p.stopPrice + 100)),
                 'trigType': 'market_price',
                 'side': 止损side === 'Sell' ? 1 : 2,
                 'type': 'LimitLoss',
@@ -419,7 +424,7 @@ export class 提醒 extends React.Component {
 
         const volum = realTickClient.get期货多少秒内成交量__万为单位('XBTUSD', 15)
         const 波动率 = 指标.波动率(realTickClient.dataExt.XBTUSD.期货.价格, 30, 500)
-        if (volum > 200&&lastNumber(波动率)>=5) {
+        if (volum > 200 && lastNumber(波动率) >= 5) {
             this.setAndSpeak(
                 '比 特 币 成交量',
                 volum,
