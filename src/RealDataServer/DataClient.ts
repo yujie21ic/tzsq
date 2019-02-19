@@ -24,8 +24,8 @@ export namespace DataClient {
                     this.重新初始化()
                 }
 
-                const d = this.dataExt.XBTUSD.期货.信号_下跌
-                console.log(d.length, d.length > 0 ? d[d.length - 1].map(v => v.value ? 'O' : '_').join('') : '')
+                //const d = this.dataExt.XBTUSD.期货.信号_下跌
+                //console.log(d.length, d.length > 0 ? d[d.length - 1].map(v => v.value ? 'O' : '_').join('') : '')
             }
         }
     }

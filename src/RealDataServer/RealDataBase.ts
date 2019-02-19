@@ -61,8 +61,17 @@ export class RealDataBase {
 
             this.jsonSync.rawData.binance.ethusdt.data.splice(0, deleteCount)
             this.jsonSync.rawData.binance.ethusdt.orderBook.splice(0, deleteCount)
+
+            this.重新初始化()
         }
+
+        
     }
+
+    get data() {
+        return this.jsonSync.rawData
+    }
+
 
     jsonSync = new JSONSync(
         {
@@ -100,16 +109,6 @@ export class RealDataBase {
             }
         }
     )
-
-
-
-
-
-
-    get data() {
-        return this.jsonSync.rawData
-    }
-
 
     get期货多少秒内最高最低(symbol: BaseType.BitmexSymbol, second: number) {
         second = second * (1000 / RealDataBase.单位时间)

@@ -152,6 +152,7 @@ export class RealData extends RealDataBase {
 
     constructor(server = true) {
         super()
+        this.重新初始化()//<-----------fix
         if (server) {
             this.wss = new WebSocket.Server({ port: 6666 })
         }
@@ -207,8 +208,8 @@ export class RealData extends RealDataBase {
                     try { ws.send(str) } catch (error) { }
                 })
 
-                const d = this.dataExt.XBTUSD.期货.信号_下跌
-                console.log(d.length, d.length > 0 ? d[d.length - 1].map(v => v.value ? 'O' : '_').join('') : '')
+                //const d = this.dataExt.XBTUSD.期货.信号_下跌
+                //console.log(d.length, d.length > 0 ? d[d.length - 1].map(v => v.value ? 'O' : '_').join('') : '')
             }
         )
 
