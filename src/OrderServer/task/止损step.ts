@@ -25,13 +25,12 @@ const 止损step = ({
 
             const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
 
-            //ws返回有时间  直接给委托列表加一条记录??
-            await self.order自动.stop({
+            //ws返回有时间  直接给委托列表加一条记录??            
+            return await self.order自动.stop({
                 symbol,
                 side,
                 price: toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点, side),
             })
-            return true
         }
         else {
             return false
@@ -41,9 +40,8 @@ const 止损step = ({
     else if (止损委托.length === 1) {
         //没有仓位 或者 止损方向错了
         if (仓位数量 === 0 || (仓位数量 > 0 && 止损委托[0].side !== 'Sell') || (仓位数量 < 0 && 止损委托[0].side !== 'Buy')) {
-            //ws返回有时间  直接给委托列表加一条记录??
-            await self.order自动.cancel(止损委托.map(v => v.id))
-            return true
+            //ws返回有时间  直接给委托列表加一条记录??           
+            return await self.order自动.cancel(止损委托.map(v => v.id))
         }
         else {
             //修改止损  只能改小  不能改大
@@ -61,20 +59,18 @@ const 止损step = ({
                 (side === 'Buy' && 新的Price < price) ||
                 (side === 'Sell' && 新的Price > price)
             ) {
-                await self.order自动.updateStop({
+                return await self.order自动.updateStop({
                     orderID: id,
                     price: 新的Price,
                 })
-                return true
             }
             return false
         }
     }
     else {
         //多个止损 全部清空
-        //ws返回有时间  直接给委托列表加一条记录??
-        await self.order自动.cancel(止损委托.map(v => v.id))
-        return true
+        //ws返回有时间  直接给委托列表加一条记录??       
+        return await self.order自动.cancel(止损委托.map(v => v.id))
     }
 }
 

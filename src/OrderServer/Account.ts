@@ -148,7 +148,7 @@ export class Account {
             if (await func(this)) {
                 await sleep(2000) //发了请求 休息2秒
             }
-            await sleep(500)
+            await sleep(100)
         }
     }
 

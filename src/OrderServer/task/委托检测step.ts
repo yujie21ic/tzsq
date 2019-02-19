@@ -28,15 +28,13 @@ export const 委托检测step = (symbol: BaseType.BitmexSymbol) => async (self: 
         ) {
             return false
         } else {
-            //ws返回有时间  直接给委托列表加一条记录??
-            await self.order自动.cancel(活动委托.map(v => v.id))
-            return true
+            //ws返回有时间  直接给委托列表加一条记录??            
+            return await self.order自动.cancel(活动委托.map(v => v.id))
         }
     }
     else {
         //多个委托  全部给取消
-        //ws返回有时间  直接给委托列表加一条记录??
-        await self.order自动.cancel(活动委托.map(v => v.id))
-        return true
+        //ws返回有时间  直接给委托列表加一条记录??        
+        return await self.order自动.cancel(活动委托.map(v => v.id))
     }
 } 

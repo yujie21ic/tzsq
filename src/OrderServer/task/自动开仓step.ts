@@ -40,7 +40,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
             reduceOnly: false,
         })
         log('挂单开仓' + (ret ? '成功' : '失败'))
-        return true
+        return ret
     }
 
     //有开仓单(限价)  
@@ -53,7 +53,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                 log('取消开仓' + JSON.stringify({ _15秒取消, 出现反向信号时候取消 }) + ' 信号msg:' + 信号msg)
                 const ret = await self.order自动.cancel([id])
                 log('取消开仓' + (ret ? '成功' : '失败'))
-                return true
+                return ret
             }
         }
     }

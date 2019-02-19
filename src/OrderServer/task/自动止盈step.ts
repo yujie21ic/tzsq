@@ -55,7 +55,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                 reduceOnly: true,
             })
             log('挂单平仓' + side + '  ' + (ret ? '成功' : '失败'))
-            return true
+            return ret
         }
         else if (活动委托.length === 1) {
             //触发了反向开仓信号 提前 修改 止盈
@@ -73,7 +73,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                         })
                     })
                     log('修改平仓  ' + (ret ? '成功' : '失败'))
-                    return true
+                    return ret
                 }
             }
         }
