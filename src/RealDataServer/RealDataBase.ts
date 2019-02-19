@@ -2,7 +2,6 @@ import { JSONSync } from '../lib/C/JSONSync'
 import { BaseType } from '../lib/BaseType'
 import { sum } from 'ramda'
 import { 指标 } from './指标'
-import { Sampling } from '../lib/C/Sampling'
 import { kvs } from '../lib/F/kvs'
 import { to范围 } from '../lib/F/to范围'
 
@@ -11,7 +10,7 @@ import { to范围 } from '../lib/F/to范围'
 export class RealDataBase {
     static 单位时间 = 500
 
-    private 删除历史() {
+    删除历史() {
         const length = Math.min(
 
             //hopex
@@ -102,106 +101,10 @@ export class RealDataBase {
         }
     )
 
-    private on盘口Dic = Object.create(null) as {
-        [symbol: string]: Sampling<BaseType.OrderBook>
-    }
-
-    protected on盘口(p: {
-        symbol: string
-        xxxxxxxx: {
-            ____push: (v: BaseType.OrderBook) => void
-            ____updateLast: (v: BaseType.OrderBook) => void
-        }
-        timestamp: number
-        orderBook: BaseType.OrderBook
-    }) {
-        this.删除历史()
-        const tick = Math.floor(p.timestamp / RealDataBase.单位时间)
-
-        if (this.data.startTick === 0) {
-            this.jsonSync.data.startTick.____set(tick)
-        }
-
-        if (this.on盘口Dic[p.symbol] === undefined) {
-            this.on盘口Dic[p.symbol] = new Sampling<BaseType.OrderBook>({
-                buy: '最新',
-                sell: '最新',
-            })
-            this.on盘口Dic[p.symbol].onNew2 = item => p.xxxxxxxx.____push(item)
-            this.on盘口Dic[p.symbol].onUpdate2 = item => p.xxxxxxxx.____updateLast(item)
-            this.on盘口Dic[p.symbol].in2({
-                id: this.data.startTick,
-                buy: [],
-                sell: [],
-            })
-        }
-
-        this.on盘口Dic[p.symbol].in2(p.orderBook)
-    }
+    
 
 
 
-    private on着笔Dic = Object.create(null) as {
-        [symbol: string]: Sampling<BaseType.KLine>
-    }
-
-    protected on着笔(p: {
-        symbol: string
-        xxxxxxxx: {
-            ____push: (v: BaseType.KLine) => void;
-            ____updateLast: (v: BaseType.KLine) => void;
-        }
-        timestamp: number
-        side: BaseType.Side
-        price: number
-        size: number
-    }) {
-        this.删除历史()
-
-        const tick = Math.floor(p.timestamp / RealDataBase.单位时间)
-
-        if (this.data.startTick === 0) {
-            this.jsonSync.data.startTick.____set(tick)
-        }
-
-        if (this.on着笔Dic[p.symbol] === undefined) {
-            this.on着笔Dic[p.symbol] = new Sampling<BaseType.KLine>({
-                open: '开',
-                high: '高',
-                low: '低',
-                close: '收',
-                buySize: '累加',
-                buyCount: '累加',
-                sellSize: '累加',
-                sellCount: '累加',
-            })
-            this.on着笔Dic[p.symbol].onNew2 = item => p.xxxxxxxx.____push(item)
-            this.on着笔Dic[p.symbol].onUpdate2 = item => p.xxxxxxxx.____updateLast(item)
-            this.on着笔Dic[p.symbol].in2({
-                id: this.data.startTick,
-                open: NaN,
-                high: NaN,
-                low: NaN,
-                close: NaN,
-                buySize: NaN,
-                buyCount: NaN,
-                sellSize: NaN,
-                sellCount: NaN,
-            })
-        }
-
-        this.on着笔Dic[p.symbol].in2({
-            id: tick,
-            open: p.price,
-            high: p.price,
-            low: p.price,
-            close: p.price,
-            buySize: p.side === 'Buy' ? p.size : 0,
-            buyCount: p.side === 'Buy' ? 1 : 0,
-            sellSize: p.side === 'Sell' ? p.size : 0,
-            sellCount: p.side === 'Sell' ? 1 : 0,
-        })
-    }
 
     get data() {
         return this.jsonSync.rawData
@@ -473,8 +376,8 @@ export class RealDataBase {
         const 下跌_动力26 = 指标.EMA(下跌_动力, 13, RealDataBase.单位时间)
         const 下跌_动力DIF = 指标.lazyMapCache(() => Math.min(下跌_动力12.length, 下跌_动力26.length), i => 下跌_动力12[i] - 下跌_动力26[i])
         const 下跌_动力DEM = 指标.EMA(下跌_动力DIF, 5, RealDataBase.单位时间)
-        
-        
+
+
         const 下跌_动力20均线 = 指标.均线(
             指标.lazyMapCache(() => 下跌_动力.length, i => 下跌_动力[i]),
             20,
@@ -521,7 +424,7 @@ export class RealDataBase {
                             }
                         }
                     } else {
-                        if(盘口买[i] < 15 * 100000){
+                        if (盘口买[i] < 15 * 100000) {
                             if (净盘口[i] <= (净盘口均线[i])) {
                                 if (净盘口[i] < 0) {
                                     b = true
@@ -537,7 +440,7 @@ export class RealDataBase {
                             }
                         }
                     } else {
-                        if(盘口买[i] < 10 * 100000){
+                        if (盘口买[i] < 10 * 100000) {
                             if (净盘口[i] <= (净盘口均线[i])) {
                                 if (净盘口[i] < 0) {
                                     b = true
@@ -546,11 +449,11 @@ export class RealDataBase {
                         }
                     }
                 }
-                 //波动率大于25之后，出现一次真空信号，动力慢信号都为true
-                    //波动率大于5之后，出现一次动力10均线小于20均线，动力慢信号都为true，这就表明动力已经经过了一个衰弱过程，
-                    //遗留问题，真空信号的替代问题
-                    //净成交量《0，真空信号可以替代净成交量信号，范围，净成交量的快均线不能大于慢均线太多
-                    //用语言描述出容易止损的波动的不同之处
+                //波动率大于25之后，出现一次真空信号，动力慢信号都为true
+                //波动率大于5之后，出现一次动力10均线小于20均线，动力慢信号都为true，这就表明动力已经经过了一个衰弱过程，
+                //遗留问题，真空信号的替代问题
+                //净成交量《0，真空信号可以替代净成交量信号，范围，净成交量的快均线不能大于慢均线太多
+                //用语言描述出容易止损的波动的不同之处
 
                 return [
                     { name: '真空', value: 波动率[i] < 波动率中大分界 || 真空信号涨[i] },
@@ -558,7 +461,7 @@ export class RealDataBase {
                     { name: ' 净盘口<净盘口均线<0', value: b },
                     { name: '波动率 >=5', value: 波动率[i] >= 5 },
                     //波动率大于25之后，出现一次真空信号，动力慢信号都为true
-                    { name: '动力衰竭', value:  波动率[i] > 波动率中大分界 ||(上涨_动力DIF[i]-上涨_动力DEM[i])/上涨_动力DEM[i]<0.05 },
+                    { name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (上涨_动力DIF[i] - 上涨_动力DEM[i]) / 上涨_动力DEM[i] < 0.05 },
                     { name: '量化 is上涨', value: 净成交量均线30[i] > 0 },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
                 ]
@@ -612,14 +515,14 @@ export class RealDataBase {
                 //         }
                 //     }
                 // }
-                 //波动率大于25之后，出现一次真空信号，动力慢信号都为true
-                    //波动率大于5之后，出现一次动力10均线小于20均线，动力慢信号都为true，这就表明动力已经经过了一个衰弱过程，
-                    //遗留问题，真空信号的替代问题
-                    //净成交量《0，真空信号可以替代净成交量信号，范围，净成交量的快均线不能大于慢均线太多
-                    //用语言描述出容易止损的波动的不同之处
+                //波动率大于25之后，出现一次真空信号，动力慢信号都为true
+                //波动率大于5之后，出现一次动力10均线小于20均线，动力慢信号都为true，这就表明动力已经经过了一个衰弱过程，
+                //遗留问题，真空信号的替代问题
+                //净成交量《0，真空信号可以替代净成交量信号，范围，净成交量的快均线不能大于慢均线太多
+                //用语言描述出容易止损的波动的不同之处
 
                 return [
-                    { name: '成交量DIF>DEM', value: 净上涨成交量DIF[i] > 净上涨成交量DEM[i]},
+                    { name: '成交量DIF>DEM', value: 净上涨成交量DIF[i] > 净上涨成交量DEM[i] },
                     //{ name: '净盘口>0', value: 净盘口[i]>0 },
                     { name: '波动率 >=5', value: 波动率[i] >= 5 },
                     { name: '追涨', value: 上涨.动力[i] > 100 * 10000 },
@@ -660,7 +563,7 @@ export class RealDataBase {
                             }
                         }
                     } else {
-                        if(盘口卖[i] < 15 * 100000){
+                        if (盘口卖[i] < 15 * 100000) {
                             if (净盘口[i] >= 净盘口均线[i]) {
                                 if (净盘口[i] > 0) {
                                     b = true
@@ -692,7 +595,7 @@ export class RealDataBase {
                     { name: '真空', value: 波动率[i] < 波动率中大分界 || 真空信号跌[i] },
                     { name: '卖成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净下跌成交量DIF[i] < 0) },
                     { name: ' 净盘口 > 净盘口均线>0', value: b },
-                    { name: '动力衰竭', value: 波动率[i] > 波动率中大分界 ||(下跌_动力DIF[i]-下跌_动力DEM[i])/下跌_动力DEM[i]<0.05 },
+                    { name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (下跌_动力DIF[i] - 下跌_动力DEM[i]) / 下跌_动力DEM[i] < 0.05 },
                     { name: '波动率 >=5', value: 波动率[i] >= 5 },
                     //量化用
                     { name: '量化 is下跌', value: 净成交量均线30[i] < 0 },
@@ -700,7 +603,7 @@ export class RealDataBase {
                 ]
             }
         )
-        
+
         const 信号_追跌 = 指标.lazyMapCache(
             () => Math.min(
                 净盘口.length,
@@ -843,6 +746,6 @@ export class RealDataBase {
 
     private 默认期货波动率 = 30
 
-   
+
 
 }
