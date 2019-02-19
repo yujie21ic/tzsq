@@ -23,7 +23,7 @@ export class RealData extends RealDataBase {
         bitmex: boolean
         hopex: boolean
     }) => { }
-    
+
 
     期货盘口dic = new Map<BaseType.BitmexSymbol, BaseType.OrderBook>()
     期货价格dic = new Map<BaseType.BitmexSymbol, number>()
@@ -208,7 +208,7 @@ export class RealData extends RealDataBase {
                 })
 
                 const d = this.dataExt.XBTUSD.期货.信号_下跌
-                console.log(d.length > 0 ? d[d.length - 1].map(v => v.value ? 'O' : '_').join('') : '')
+                console.log(d.length, d.length > 0 ? d[d.length - 1].map(v => v.value ? 'O' : '_').join('') : '')
             }
         )
 
