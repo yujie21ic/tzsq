@@ -13,6 +13,10 @@ const menu = Menu.buildFromTemplate([
     label: `实盘(${v.k})`,
     click: () => showWindow('实盘', { accountName: v.k })
   })),
+  ...kvs(config.account || {}).map(v => ({
+    label: `计分板(${v.k})`,
+    click: () => showWindow('计分板', { accountName: v.k })
+  })),
   { type: 'separator' },
   { label: '退出', click: () => app.exit() }
 ])
