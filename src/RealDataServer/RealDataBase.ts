@@ -460,7 +460,7 @@ export class RealDataBase {
                     { name: ' 净盘口<净盘口均线<0', value: b },
                     { name: '波动率 >=5', value: 波动率[i] >= 5 },
                     //波动率大于25之后，出现一次真空信号，动力慢信号都为true
-                    { name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (上涨_动力DIF[i] - 上涨_动力DEM[i]) / 上涨_动力DEM[i] < 0.05 },
+                    //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (上涨_动力DIF[i] - 上涨_动力DEM[i]) / 上涨_动力DEM[i] < 0.05 },
                     { name: '量化 is上涨', value: 净成交量均线30[i] > 0 },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
                 ]
@@ -594,7 +594,7 @@ export class RealDataBase {
                     { name: '真空', value: 波动率[i] < 波动率中大分界 || 真空信号跌[i] },
                     { name: '卖成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净下跌成交量DIF[i] < 0) },
                     { name: ' 净盘口 > 净盘口均线>0', value: b },
-                    { name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (下跌_动力DIF[i] - 下跌_动力DEM[i]) / 下跌_动力DEM[i] < 0.05 },
+                    //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (下跌_动力DIF[i] - 下跌_动力DEM[i]) / 下跌_动力DEM[i] < 0.05 },
                     { name: '波动率 >=5', value: 波动率[i] >= 5 },
                     //量化用
                     { name: '量化 is下跌', value: 净成交量均线30[i] < 0 },
