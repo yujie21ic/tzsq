@@ -54,7 +54,7 @@ export class RealData extends RealDataBase {
         [symbol: string]: Sampling<BaseType.KLine>
     }
 
-    protected on着笔(p: {
+    private on着笔(p: {
         symbol: string
         xxxxxxxx: {
             ____push: (v: BaseType.KLine) => void;
@@ -116,7 +116,7 @@ export class RealData extends RealDataBase {
         [symbol: string]: Sampling<BaseType.OrderBook>
     }
 
-    protected on盘口(p: {
+    private on盘口(p: {
         symbol: string
         xxxxxxxx: {
             ____push: (v: BaseType.OrderBook) => void

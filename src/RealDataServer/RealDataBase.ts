@@ -64,7 +64,7 @@ export class RealDataBase {
         }
     }
 
-    protected jsonSync = new JSONSync(
+    jsonSync = new JSONSync(
         {
             startTick: 0,
             //TODO
@@ -101,7 +101,7 @@ export class RealDataBase {
         }
     )
 
-    
+
 
 
 
