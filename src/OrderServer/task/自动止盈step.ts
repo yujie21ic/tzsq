@@ -1,7 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { Account } from '../Account'
 import { get波动率, realData, 信号灯side } from '../realData'
-import { logToFile } from '../../lib/C/logToFile'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 
 const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account) => {
@@ -10,10 +9,8 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
         return true
     }
 
-    const log = (text: string) => {
-        logToFile(self.accountName + '__' + symbol + '__自动止盈step.txt', text)
-        self.jsonSync.data.symbol[symbol].任务开关.自动止盈.text.____set(new Date().toLocaleString() + text)
-    }
+
+    const path = self.accountName + '__' + symbol + '__自动止盈step.txt'
 
     const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
     const 活动委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v =>
@@ -43,28 +40,23 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
             }
 
             if (isNaN(getPrice())) {
-                log('波动率未出来 先不挂单平仓')
                 return false
             }
 
-            log('挂单平仓' + side + '  price:' + getPrice())
-            const ret = await self.order自动.maker({
+            return await self.order自动.maker({
                 symbol,
                 side,
                 size: Math.abs(仓位数量),
                 price: getPrice,
                 reduceOnly: true,
-            })
-            log('挂单平仓' + side + '  ' + (ret ? '成功' : '失败'))
-            return ret
+            }, { path, text: '挂单平仓' + side + '  price:' + getPrice() })
         }
         else if (活动委托.length === 1) {
             //触发了反向开仓信号 提前 修改 止盈
             if (活动委托[0].side === (仓位数量 > 0 ? 'Sell' : 'Buy') && 活动委托[0].type === '限价只减仓') {
                 const { 信号side, 信号msg } = 信号灯side(symbol)
                 if (信号side === 活动委托[0].side) {
-                    log('修改平仓' + 信号side + ' 信号msg:' + 信号msg)
-                    const ret = await self.order自动.updateMaker({
+                    return await self.order自动.updateMaker({
                         orderID: 活动委托[0].id,
                         price: () => realData.getOrderPrice({
                             symbol,
@@ -72,9 +64,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                             type: 'maker',
                             位置: 0,
                         })
-                    })
-                    log('修改平仓  ' + (ret ? '成功' : '失败'))
-                    return ret
+                    }, { path, text: '修改平仓' + 信号side + ' 信号msg:' + 信号msg })
                 }
             }
         }

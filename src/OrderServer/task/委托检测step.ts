@@ -9,6 +9,8 @@ export const 委托检测step = (symbol: BaseType.BitmexSymbol) => async (self: 
         v.type === '限价' || v.type === '限价只减仓' || v.type === '市价触发'
     )
 
+    const path = self.accountName + '__' + symbol + '__委托检测step.txt'
+
     //没有委托
     if (活动委托.length === 0) {
         return false
@@ -29,12 +31,12 @@ export const 委托检测step = (symbol: BaseType.BitmexSymbol) => async (self: 
             return false
         } else {
             //ws返回有时间  直接给委托列表加一条记录??            
-            return await self.order自动.cancel(活动委托.map(v => v.id))
+            return await self.order自动.cancel(活动委托.map(v => v.id), { path, text: '取消委托 ' + 活动委托[0].type })
         }
     }
     else {
         //多个委托  全部给取消
         //ws返回有时间  直接给委托列表加一条记录??        
-        return await self.order自动.cancel(活动委托.map(v => v.id))
+        return await self.order自动.cancel(活动委托.map(v => v.id), { path, text: '取消多个委托' })
     }
 } 

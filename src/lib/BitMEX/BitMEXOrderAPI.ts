@@ -3,6 +3,12 @@ import { BitMEXRESTAPI } from '../BitMEX/BitMEXRESTAPI'
 import { sleep } from '../C/sleep'
 import { JSONRequestError } from '../C/JSONRequest'
 
+import * as fs from 'fs'
+
+const logToFile = (path: string, text: string) =>
+    fs.writeFileSync(path, text + '  \n', { flag: 'a' })
+
+
 export class BitMEXOrderAPI {
 
     private cookie: string
@@ -16,9 +22,12 @@ export class BitMEXOrderAPI {
     }
 
     DDOS调用 = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError }>) =>
-        async (p: P) => {
+        async (p: P, log?: { path: string, text: string }) => {
+            const startTime = Date.now()
             let success = false
-            for (let i = 0; i < this.重试几次; i++) {
+            let i = 1
+
+            for (let i = 1; i <= this.重试几次; i++) {
                 const ret = await f(this.cookie, p)
 
                 if (ret.error === '网络错误') {
@@ -31,14 +40,23 @@ export class BitMEXOrderAPI {
                 }
                 await sleep(this.重试休息多少毫秒)
             }
+            if (log !== undefined) {
+                logToFile(log.path, new Date(startTime).toLocaleString() + log.text)
+                logToFile(log.path, new Date().toLocaleString() + log.text + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
+            }
             return success
         }
 
+
     DDOS调用_ordStatus = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: { ordStatus: string } }>) =>
-        async (p: P) => {
+        async (p: P, log?: { path: string, text: string }) => {
+            const startTime = Date.now()
             let success = false
-            for (let i = 0; i < this.重试几次; i++) {
+            let i = 1
+
+            for (let i = 1; i <= this.重试几次; i++) {
                 const ret = await f(this.cookie, p)
+
                 if (ret.error === '网络错误') {
                     success = false
                     break
@@ -48,6 +66,10 @@ export class BitMEXOrderAPI {
                     break
                 }
                 await sleep(this.重试休息多少毫秒)
+            }
+            if (log !== undefined) {
+                logToFile(log.path, new Date(startTime).toLocaleString() + log.text)
+                logToFile(log.path, new Date().toLocaleString() + log.text + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
             }
             return success
         }
