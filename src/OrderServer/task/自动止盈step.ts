@@ -2,6 +2,7 @@ import { BaseType } from '../../lib/BaseType'
 import { Account } from '../Account'
 import { get波动率, realData, 信号灯side } from '../realData'
 import { toGridPoint } from '../../lib/F/toGridPoint'
+import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc';
 
 const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account) => {
 
@@ -47,7 +48,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                 symbol,
                 side,
                 size: Math.abs(仓位数量),
-                price: getPrice,
+                price: toBuySellPriceFunc(side, getPrice),
                 reduceOnly: true,
             }, { path, text: '挂单平仓' + side + '  price:' + getPrice() })
         }
@@ -58,12 +59,12 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                 if (信号side === 活动委托[0].side) {
                     return await self.order自动.updateMaker({
                         orderID: 活动委托[0].id,
-                        price: () => realData.getOrderPrice({
+                        price: toBuySellPriceFunc(信号side, () => realData.getOrderPrice({
                             symbol,
                             side: 信号side,
                             type: 'maker',
                             位置: 0,
-                        })
+                        }))
                     }, { path, text: '修改平仓' + 信号side + ' 信号msg:' + 信号msg })
                 }
             }

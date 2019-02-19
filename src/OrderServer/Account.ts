@@ -6,6 +6,7 @@ import { sleep } from '../lib/C/sleep'
 import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
 import { realData } from './realData'
 import { to范围 } from '../lib/F/to范围'
+import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
 
 export class Account {
     jsonSync = createJSONSync()
@@ -222,7 +223,7 @@ export class Account {
                 //ws返回有时间  直接给委托列表加一条记录??
                 return await this.order手动.updateMaker({
                     orderID: 活动委托[0].id,
-                    price: getPrice,
+                    price: toBuySellPriceFunc(req.side, getPrice),
                 })
             } else {
                 throw '已经有委托了'
@@ -255,7 +256,7 @@ export class Account {
                 symbol: req.symbol,
                 side: req.side,
                 size: req.size,
-                price: getPrice,
+                price: toBuySellPriceFunc(req.side, getPrice),
                 reduceOnly: 仓位数量 !== 0,
             })
     }
