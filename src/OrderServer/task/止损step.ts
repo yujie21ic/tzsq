@@ -44,7 +44,7 @@ const 止损step = ({
         //没有仓位 或者 止损方向错了
         if (仓位数量 === 0 || (仓位数量 > 0 && 止损委托[0].side !== 'Sell') || (仓位数量 < 0 && 止损委托[0].side !== 'Buy')) {
             //ws返回有时间  直接给委托列表加一条记录??           
-            return await self.order自动.cancel(止损委托.map(v => v.id), { path, text: '取消止损' + 止损委托[0].price })
+            return await self.order自动.cancel(止损委托.map(v => v.id), { path, text: '取消止损' })
         }
         else {
             //修改止损  只能改小  不能改大
@@ -65,9 +65,7 @@ const 止损step = ({
                 return await self.order自动.updateStop({
                     orderID: id,
                     price: 新的Price,
-                }, {
-                        path, text: '修改止损' + 止损委托[0].price + ' 新的Price' + 新的Price
-                    })
+                }, { path, text: '修改止损' })
             }
             return false
         }

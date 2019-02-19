@@ -31,7 +31,7 @@ export const 委托检测step = (symbol: BaseType.BitmexSymbol) => async (self: 
             return false
         } else {
             //ws返回有时间  直接给委托列表加一条记录??            
-            return await self.order自动.cancel(活动委托.map(v => v.id), { path, text: '取消委托 ' + 活动委托[0].type })
+            return await self.order自动.cancel(活动委托.map(v => v.id), { path, text: '取消委托' + 活动委托[0].type })
         }
     }
     else {

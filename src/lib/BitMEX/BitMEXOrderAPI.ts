@@ -41,8 +41,11 @@ export class BitMEXOrderAPI {
                 await sleep(this.重试休息多少毫秒)
             }
             if (log !== undefined) {
+                logToFile(log.path, '\n\n___________________________________________')
                 logToFile(log.path, new Date(startTime).toLocaleString() + log.text)
+                logToFile(log.path, JSON.stringify(p, undefined, 4))
                 logToFile(log.path, new Date().toLocaleString() + log.text + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
+                logToFile(log.path, '___________________________________________\n\n')
             }
             return success
         }
