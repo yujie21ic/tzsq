@@ -94,9 +94,9 @@ export class Account {
             }[]
 
             this.ws.data.order.filter(v => v.symbol === symbol).forEach(v => {
-                if (v.ordType === 'Limit' /*&& v.execInst === 'ParticipateDoNotInitiate'*/ && v.workingIndicator) { //不勾被动委托也行
+                if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && v.workingIndicator) {
                     arr.push({
-                        type: '限价',
+                        type: '限价只减仓',
                         timestamp: new Date(v.timestamp).getTime(),
                         id: v.orderID,
                         side: v.side as BaseType.Side,
@@ -105,9 +105,9 @@ export class Account {
                         price: v.price,
                     })
                 }
-                else if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && v.workingIndicator) {
+                else if (v.ordType === 'Limit' /*&& v.execInst === 'ParticipateDoNotInitiate'*/ && v.workingIndicator) { //不勾被动委托也行
                     arr.push({
-                        type: '限价只减仓',
+                        type: '限价',
                         timestamp: new Date(v.timestamp).getTime(),
                         id: v.orderID,
                         side: v.side as BaseType.Side,
