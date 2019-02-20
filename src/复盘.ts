@@ -40,7 +40,7 @@ let startRight = 0
 const account = config.account![windowExt.accountName]
 const { cookie } = account
 
-let 止损1m_dic: { [key: number]: boolean } = Object.create(null)
+let 止损1m_dic: { [key: number]: string } = Object.create(null)
 let 止损提示: { name: string, value: boolean }[][] = []
 
 const load = async () => {
@@ -80,13 +80,14 @@ const load = async () => {
     if (res.data !== undefined) {
         console.log(res.data)
         res.data.filter(v => v.ordType === 'Stop' || v.ordType === 'StopLimit').forEach(v =>
-            止损1m_dic[timeID.timestampToOneMinuteID(new Date(v.transactTime).getTime())] = true
+            止损1m_dic[timeID.timestampToOneMinuteID(new Date(v.transactTime).getTime())] = v.ordType
         )
     }
 
 
     止损提示 = data.map(v => [
-        { name: '止损', value: 止损1m_dic[v.id] === true }
+        { name: '止损', value: 止损1m_dic[v.id] === 'Stop' },
+        { name: '强平', value: 止损1m_dic[v.id] === 'StopLimit' },
     ])
 
 }
