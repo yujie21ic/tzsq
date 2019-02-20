@@ -7,15 +7,23 @@ import { showWindow } from './windowExt'
 
 const menu = Menu.buildFromTemplate([
   { label: '测试', click: () => showWindow('测试', {}) },
-  { label: '复盘', click: () => showWindow('复盘', {}) },
   { type: 'separator' },
   ...kvs(config.account || {}).map(v => ({
-    label: `实盘(${v.k})`,
-    click: () => showWindow('实盘', { accountName: v.k })
-  })),
-  ...kvs(config.account || {}).map(v => ({
-    label: `计分板(${v.k})`,
-    click: () => showWindow('计分板', { accountName: v.k })
+    label: v.k,
+    submenu: [
+      {
+        label: `计分板`,
+        click: () => showWindow('计分板', { accountName: v.k })
+      },
+      {
+        label: '复盘',
+        click: () => showWindow('复盘', { accountName: v.k })
+      },
+      {
+        label: `实盘`,
+        click: () => showWindow('实盘', { accountName: v.k })
+      }
+    ]
   })),
   { type: 'separator' },
   { label: '退出', click: () => app.exit() }

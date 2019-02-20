@@ -8,7 +8,10 @@ import { dialog } from './lib/UI/dialog'
 import { timeID } from './lib/F/timeID'
 import { theme } from './lib/Chart/theme'
 import { to范围 } from './lib/F/to范围'
-import { showWindowRemote } from './windowExt'
+import { showWindowRemote, windowExt } from './windowExt'
+import { BitMEXRESTAPI } from './lib/BitMEX/BitMEXRESTAPI'
+import { config } from './config'
+import { 信号Layer } from './lib/Chart/Layer/信号Layer';
 
 theme.右边空白 = 0
 
@@ -34,6 +37,11 @@ let startRight = 0
 
 
 
+const account = config.account![windowExt.accountName]
+const { cookie } = account
+
+let 止损1m_dic: { [key: number]: boolean } = Object.create(null)
+let 止损提示: { name: string, value: boolean }[][] = []
 
 const load = async () => {
     S = {
@@ -42,16 +50,12 @@ const load = async () => {
         data: []
     }
 
-    console.log('load')
-
     const { data, error, msg } = await DBClient.func.getKLine({
         type: '1m',
         symbol: nowSymbol,
         startTime: Date.now() - 24 * 60 * 60 * 1000 * 20,
         endTime: Date.now(),
     })
-
-    console.log('arr', data)
 
     if (data === undefined) {
         console.log('load error', error, msg)
@@ -63,6 +67,27 @@ const load = async () => {
         right: data.length,
         data: data
     }
+
+
+    const res = await BitMEXRESTAPI.Execution.getTradeHistory(cookie, {
+        reverse: true,
+        count: 500,
+        filter: JSON.stringify({ 'symbol': nowSymbol }),
+        columns: JSON.stringify([]),
+    })
+
+
+    if (res.data !== undefined) {
+        console.log(res.data)
+        res.data.filter(v => v.ordType === 'Stop' || v.ordType === 'StopLimit').forEach(v =>
+            止损1m_dic[timeID.timestampToOneMinuteID(new Date(v.transactTime).getTime())] = true
+        )
+    }
+
+
+    止损提示 = data.map(v => [
+        { name: '止损', value: 止损1m_dic[v.id] === true }
+    ])
 
 }
 
@@ -119,7 +144,7 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
         left: S.left,
         right: S.right,
         items: {
-            heightList: [0.6, 0.4],
+            heightList: [0.6, 0.2, 0.2],
             items: [
                 {
                     layerList: [
@@ -127,6 +152,11 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
                         // layer(笔Layer, { data: get笔Index(klineData), color: 0xffff00 }),
                         // layer(线段Layer, { data: get线段(get笔Index(klineData)), color: 0xaa0000 }),
                         // layer(合并后的Layer, { data: 合并后的K线(klineData), color: 0xffff00 }),                    
+                    ]
+                },
+                {
+                    layerList: [
+                        layer(信号Layer, { data: 止损提示, color: 0xe56546 }),
                     ]
                 },
                 {
