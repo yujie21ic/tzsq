@@ -99,7 +99,7 @@ export class BitMEXOrderAPI {
         })
     )
 
-    limit = this.DDOS调用_ordStatus<{
+    limit = this.DDOS调用<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         size: number
