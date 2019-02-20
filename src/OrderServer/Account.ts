@@ -73,11 +73,12 @@ export class Account {
             if (item !== undefined) {
                 仓位数量.____set(item.currentQty)
                 开仓均价.____set(item.avgCostPrice)
+                BitMEXOrderAPI__logToFile(this.accountName + '.txt', `仓位更新: ${symbol} 仓位数量:${item.currentQty}, 开仓均价:${item.avgCostPrice}`)
             } else {
                 仓位数量.____set(0)
                 开仓均价.____set(0)
+                BitMEXOrderAPI__logToFile(this.accountName + '.txt', `仓位更新: ${symbol} 仓位数量:0`)
             }
-            BitMEXOrderAPI__logToFile(this.accountName + '.txt', `仓位更新:  ${symbol} 仓位数量:${仓位数量}, 开仓均价:${开仓均价} `)
         })
     }
 
@@ -148,7 +149,7 @@ export class Account {
     async runTask(func: (self: Account) => Promise<boolean>) {
         while (true) {
             if (await func(this)) {
-                await sleep(2000) //发了请求 休息2秒
+                await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
             }
             await sleep(100)
         }
