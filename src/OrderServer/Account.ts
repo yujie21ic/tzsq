@@ -3,7 +3,7 @@ import { createJSONSync, funcList } from './____API____'
 import { keys } from 'ramda'
 import { BaseType } from '../lib/BaseType'
 import { sleep } from '../lib/C/sleep'
-import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
+import { BitMEXOrderAPI, BitMEXOrderAPI__logToFile } from '../lib/BitMEX/BitMEXOrderAPI'
 import { realData } from './realData'
 import { to范围 } from '../lib/F/to范围'
 import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
@@ -77,6 +77,7 @@ export class Account {
                 仓位数量.____set(0)
                 开仓均价.____set(0)
             }
+            BitMEXOrderAPI__logToFile(this.accountName + '.txt', `仓位更新:  ${symbol} 仓位数量:${仓位数量}, 开仓均价:${开仓均价} `)
         })
     }
 
@@ -94,9 +95,9 @@ export class Account {
             }[]
 
             this.ws.data.order.filter(v => v.symbol === symbol).forEach(v => {
-                if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate' && v.workingIndicator) {
+                if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && v.workingIndicator) {
                     arr.push({
-                        type: '限价',
+                        type: '限价只减仓',
                         timestamp: new Date(v.timestamp).getTime(),
                         id: v.orderID,
                         side: v.side as BaseType.Side,
@@ -105,9 +106,9 @@ export class Account {
                         price: v.price,
                     })
                 }
-                else if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && v.workingIndicator) {
+                else if (v.ordType === 'Limit' /*&& v.execInst === 'ParticipateDoNotInitiate'*/ && v.workingIndicator) { //不勾被动委托也行
                     arr.push({
-                        type: '限价只减仓',
+                        type: '限价',
                         timestamp: new Date(v.timestamp).getTime(),
                         id: v.orderID,
                         side: v.side as BaseType.Side,

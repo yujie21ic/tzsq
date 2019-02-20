@@ -2,7 +2,7 @@ import { BaseType } from '../../lib/BaseType'
 import { Account } from '../Account'
 import { get波动率, realData, 信号灯side } from '../realData'
 import { toGridPoint } from '../../lib/F/toGridPoint'
-import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc';
+import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 
 const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account) => {
 
@@ -11,7 +11,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
     }
 
 
-    const path = self.accountName + '__' + symbol + '__自动止盈step.txt'
+    const path = self.accountName + '.txt'
 
     const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
     const 活动委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v =>
@@ -50,7 +50,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                 size: Math.abs(仓位数量),
                 price: toBuySellPriceFunc(side, getPrice),
                 reduceOnly: true,
-            }, { path, text: '挂单平仓' + side + '  price:' + getPrice() })
+            }, { path, text: '自动止盈step 挂单平仓' + side + '  price:' + getPrice() })
         }
         else if (活动委托.length === 1) {
             //触发了反向开仓信号 提前 修改 止盈
@@ -65,7 +65,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                             type: 'maker',
                             位置: 0,
                         }))
-                    }, { path, text: '修改平仓' + 信号side + ' 信号msg:' + 信号msg })
+                    }, { path, text: '自动止盈step 修改平仓' + 信号side + ' 信号msg:' + 信号msg })
                 }
             }
         }

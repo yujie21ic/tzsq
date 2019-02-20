@@ -16,7 +16,7 @@ const 止损step = ({
     const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
     const 止损委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type === '止损')
 
-    const path = self.accountName + '__' + symbol + '__止损step.txt'
+    const path = self.accountName + '.txt'
 
     //没有止损 
     if (止损委托.length === 0) {
@@ -33,7 +33,7 @@ const 止损step = ({
                 symbol,
                 side,
                 price: toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点, side),
-            }, { path, text: '初始化止损' })
+            }, { path, text: '止损step 初始化止损' })
         }
         else {
             return false
@@ -44,7 +44,7 @@ const 止损step = ({
         //没有仓位 或者 止损方向错了
         if (仓位数量 === 0 || (仓位数量 > 0 && 止损委托[0].side !== 'Sell') || (仓位数量 < 0 && 止损委托[0].side !== 'Buy')) {
             //ws返回有时间  直接给委托列表加一条记录??           
-            return await self.order自动.cancel(止损委托.map(v => v.id), { path, text: '取消止损' })
+            return await self.order自动.cancel(止损委托.map(v => v.id), { path, text: '止损step 取消止损' })
         }
         else {
             //修改止损  只能改小  不能改大
@@ -65,7 +65,7 @@ const 止损step = ({
                 return await self.order自动.updateStop({
                     orderID: id,
                     price: 新的Price,
-                }, { path, text: '修改止损' })
+                }, { path, text: '止损step 修改止损' })
             }
             return false
         }
@@ -73,7 +73,7 @@ const 止损step = ({
     else {
         //多个止损 全部清空
         //ws返回有时间  直接给委托列表加一条记录??       
-        return await self.order自动.cancel(止损委托.map(v => v.id), { path, text: '取消多个止损' })
+        return await self.order自动.cancel(止损委托.map(v => v.id), { path, text: '止损step 取消多个止损' })
     }
 }
 

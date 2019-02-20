@@ -5,7 +5,7 @@ import { JSONRequestError } from '../C/JSONRequest'
 
 import * as fs from 'fs'
 
-const logToFile = (path: string, text: string) =>
+export const BitMEXOrderAPI__logToFile = (path: string, text: string) =>
     fs.writeFileSync(path, text + '  \n', { flag: 'a' })
 
 
@@ -41,11 +41,11 @@ export class BitMEXOrderAPI {
                 await sleep(this.重试休息多少毫秒)
             }
             if (log !== undefined) {
-                logToFile(log.path, '\n\n___________________________________________')
-                logToFile(log.path, new Date(startTime).toLocaleString() + log.text)
-                logToFile(log.path, JSON.stringify(p, undefined, 4))
-                logToFile(log.path, new Date().toLocaleString() + log.text + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
-                logToFile(log.path, '___________________________________________\n\n')
+                BitMEXOrderAPI__logToFile(log.path, '\n\n___________________________________________')
+                BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + log.text)
+                BitMEXOrderAPI__logToFile(log.path, JSON.stringify(p, undefined, 4))
+                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + log.text + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
+                BitMEXOrderAPI__logToFile(log.path, '___________________________________________\n\n')
             }
             return success
         }
@@ -71,11 +71,11 @@ export class BitMEXOrderAPI {
                 await sleep(this.重试休息多少毫秒)
             }
             if (log !== undefined) {
-                logToFile(log.path, '\n\n___________________________________________')
-                logToFile(log.path, new Date(startTime).toLocaleString() + log.text)
-                logToFile(log.path, JSON.stringify(p, undefined, 4))
-                logToFile(log.path, new Date().toLocaleString() + log.text + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
-                logToFile(log.path, '___________________________________________\n\n')
+                BitMEXOrderAPI__logToFile(log.path, '\n\n___________________________________________')
+                BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + log.text)
+                BitMEXOrderAPI__logToFile(log.path, JSON.stringify(p, undefined, 4))
+                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + log.text + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
+                BitMEXOrderAPI__logToFile(log.path, '___________________________________________\n\n')
             }
             return success
         }
@@ -96,6 +96,21 @@ export class BitMEXOrderAPI {
             orderQty: p.size,
             price: p.price(),
             execInst: p.reduceOnly ? ['ParticipateDoNotInitiate', 'ReduceOnly'] : 'ParticipateDoNotInitiate',
+        })
+    )
+
+    limit = this.DDOS调用<{
+        symbol: BaseType.BitmexSymbol
+        side: BaseType.Side
+        size: number
+        price: () => number
+    }>(
+        (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
+            symbol: p.symbol,
+            ordType: 'Limit',
+            side: p.side,
+            orderQty: p.size,
+            price: p.price() + ((p.side === 'Buy' ? 1 : -1) * (p.symbol === 'XBTUSD' ? 0.5 : 0.05)),
         })
     )
 
