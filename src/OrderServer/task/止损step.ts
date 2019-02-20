@@ -82,7 +82,7 @@ export const XBTUSD止损step = 止损step({
     初始止损点: () => to范围({
         min: 3,
         max: 18,
-        value: get波动率('XBTUSD') / 4,
+        value: get波动率('XBTUSD') / 6+4,
     }),
     推止损: 盈利点 => {
         const 波动率 = get波动率('XBTUSD')
