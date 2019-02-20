@@ -148,7 +148,7 @@ export class Account {
     async runTask(func: (self: Account) => Promise<boolean>) {
         while (true) {
             if (await func(this)) {
-                await sleep(2000) //发了请求 休息2秒
+                await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
             }
             await sleep(100)
         }
