@@ -11,7 +11,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
         return true
     }
 
-    const path = self.accountName + '__' + symbol + '__自动开仓step.txt'
+    const path = self.accountName + '.txt'
 
     const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
 
@@ -34,7 +34,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                 位置: 0,
             })),
             // reduceOnly: false,
-        }, { path, text: '自动开仓' })
+        }, { path, text: '自动开仓step 自动开仓' })
     }
 
     //有开仓单(限价)  
@@ -44,7 +44,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
             const _15秒取消 = (Date.now() > (timestamp + 15 * 1000))
             const 出现反向信号时候取消 = (信号side !== 'none' && 信号side !== side)
             if (_15秒取消 || 出现反向信号时候取消) {
-                return await self.order自动.cancel([id], { path, text: '取消开仓 ' + _15秒取消 ? '_15秒取消' : '出现反向信号时候取消' })
+                return await self.order自动.cancel([id], { path, text: '自动开仓step 取消开仓 ' + _15秒取消 ? '_15秒取消' : '出现反向信号时候取消' })
             }
         }
     }

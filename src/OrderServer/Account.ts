@@ -3,7 +3,7 @@ import { createJSONSync, funcList } from './____API____'
 import { keys } from 'ramda'
 import { BaseType } from '../lib/BaseType'
 import { sleep } from '../lib/C/sleep'
-import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
+import { BitMEXOrderAPI, BitMEXOrderAPI__logToFile } from '../lib/BitMEX/BitMEXOrderAPI'
 import { realData } from './realData'
 import { to范围 } from '../lib/F/to范围'
 import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
@@ -77,6 +77,7 @@ export class Account {
                 仓位数量.____set(0)
                 开仓均价.____set(0)
             }
+            BitMEXOrderAPI__logToFile(this.accountName + '.txt', `仓位更新:  ${symbol} 仓位数量:${仓位数量}, 开仓均价:${开仓均价} `)
         })
     }
 
