@@ -2,7 +2,7 @@ import { BaseType } from '../../lib/BaseType'
 import { Account } from '../Account'
 import { get波动率, realData, 信号灯side } from '../realData'
 import { toGridPoint } from '../../lib/F/toGridPoint'
-import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc';
+import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 
 const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: Account) => {
 
