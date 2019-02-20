@@ -710,8 +710,14 @@ export class RealDataBase {
             name: string
             value: boolean
         }[]>, index: number) => {
+            let 连续几根 = 0
             for (let i = index; i >= Math.max(0, index - 5 * (1000 / RealDataBase.单位时间)); i--) {
-                if (arr[i].every(v => v.value)) return true
+                if (arr[i].every(v => v.value)) {
+                    连续几根++
+                    if (连续几根 === 3) return true
+                } else {
+                    连续几根 = 0
+                }
             }
             return false
         }
