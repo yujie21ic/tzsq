@@ -94,7 +94,7 @@ export class Account {
             }[]
 
             this.ws.data.order.filter(v => v.symbol === symbol).forEach(v => {
-                if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate' && v.workingIndicator) {
+                if (v.ordType === 'Limit' /*&& v.execInst === 'ParticipateDoNotInitiate'*/ && v.workingIndicator) { //不勾被动委托也行
                     arr.push({
                         type: '限价',
                         timestamp: new Date(v.timestamp).getTime(),

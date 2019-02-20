@@ -99,6 +99,22 @@ export class BitMEXOrderAPI {
         })
     )
 
+    limit = this.DDOS调用_ordStatus<{
+        symbol: BaseType.BitmexSymbol
+        side: BaseType.Side
+        size: number
+        price: () => number
+        reduceOnly: boolean
+    }>(
+        (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
+            symbol: p.symbol,
+            ordType: 'Limit',
+            side: p.side,
+            orderQty: p.size,
+            price: p.price() + ((p.side === 'Buy' ? 1 : -1) * (p.symbol === 'XBTUSD' ? 0.5 : 0.05)),
+        })
+    )
+
     stop = this.DDOS调用_ordStatus<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
