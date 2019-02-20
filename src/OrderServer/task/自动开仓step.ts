@@ -33,7 +33,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
                 type: 'maker',
                 位置: 0,
             })),
-            reduceOnly: false,
+            // reduceOnly: false,
         }, { path, text: '挂单开仓' + 信号side + ' 信号msg:' + 信号msg })
     }
 

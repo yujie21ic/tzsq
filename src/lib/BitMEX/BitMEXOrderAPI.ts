@@ -104,7 +104,6 @@ export class BitMEXOrderAPI {
         side: BaseType.Side
         size: number
         price: () => number
-        reduceOnly: boolean
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
             symbol: p.symbol,
