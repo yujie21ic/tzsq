@@ -108,4 +108,4 @@ server.func.任务_开关 = async req => {
 }
 
 //
-console.log('运行中...')
+console.log('运行中...   记得 客户端 打开量化 ...')
