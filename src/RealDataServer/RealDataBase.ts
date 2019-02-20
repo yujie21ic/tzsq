@@ -65,7 +65,7 @@ export class RealDataBase {
             this.重新初始化()
         }
 
-        
+
     }
 
     get data() {
@@ -626,11 +626,7 @@ export class RealDataBase {
                 ]
             }
         )
-        //______________上涨_下跌  新_______________________________________________________________________
 
-
-
-        //______________上涨_下跌  新_______________________________________________________________________
 
 
         return {
@@ -699,7 +695,49 @@ export class RealDataBase {
         const 差价 = 指标.lazyMapCache(() => Math.min(现货.价格.length, 期货.价格.length), i => 现货.价格[i] - 期货.价格[i])
         const 差价均线 = 指标.均线(差价, 300, RealDataBase.单位时间)
 
+
+
+
+
+
+        // XXX = 波动率[i] / 5 + 2
+
+        // 折返 =  当前价  -  当前10s极值
+
+        // bm信号---> （ 5秒内 bm价格折返 > XXX ） ---> （当前时间 hopex价格折返 < XXX/2）   --->下单
+
+        const _5秒内有全亮 = (arr: ArrayLike<{
+            name: string
+            value: boolean
+        }[]>, index: number) => {
+            for (let i = index; i >= Math.max(0, index - 5 * (1000 / RealDataBase.单位时间)); i--) {
+                if (arr[i].every(v => v.value)) return true
+            }
+            return false
+        }
+
+        const 信号hopex_下跌 = 指标.lazyMapCache(
+            () => Math.min(期货.信号_下跌.length, 期货.价格.length, 期货.波动率.length, hopex.价格.length),
+            i => [
+                { name: '5秒内信号', value: _5秒内有全亮(期货.信号_下跌, i) },
+                { name: 'bm折返 >', value: 期货.价格[i] - 期货.最低价10[i] > 期货.波动率[i] / 5 + 2 },
+                { name: 'hp折返 <', value: hopex.价格[i] - hopex.最低价10[i] < (期货.波动率[i] / 5 + 2) / 2 },
+            ]
+        )
+
+        const 信号hopex_上涨 = 指标.lazyMapCache(
+            () => Math.min(期货.信号_上涨.length, 期货.价格.length, 期货.波动率.length, hopex.价格.length),
+            i => [
+                { name: '5秒内信号', value: _5秒内有全亮(期货.信号_上涨, i) },
+                { name: 'bm折返 >', value: 期货.最高价10[i] - 期货.价格[i] > 期货.波动率[i] / 5 + 2 },
+                { name: 'hp折返 <', value: hopex.最高价10[i] - hopex.价格[i] < (期货.波动率[i] / 5 + 2) / 2 },
+            ]
+        )
+
+
         return {
+            信号hopex_下跌,
+            信号hopex_上涨,
             现货减去: 0,
             //现货
             现货,
