@@ -23,18 +23,24 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
 
     //没有仓位 没有委托 信号灯全亮 挂单
     if (仓位数量 === 0 && 活动委托.length === 0 && 信号side !== 'none') {
-        return await self.order自动.maker({
+        // return await self.order自动.maker({
+        //     symbol,
+        //     side: 信号side,
+        //     size: 交易数量,
+        //     price: toBuySellPriceFunc(信号side,() => realData.getOrderPrice({
+        //         symbol,
+        //         side: 信号side,
+        //         type: 'maker',
+        //         位置: 0,
+        //     })),
+        //     reduceOnly: false,
+        // }, { path, text: '挂单开仓' + 信号side + ' 信号msg:' + 信号msg })
+
+        return await self.order自动.taker({
             symbol,
             side: 信号side,
-            size: 交易数量,
-            price: toBuySellPriceFunc(信号side,() => realData.getOrderPrice({
-                symbol,
-                side: 信号side,
-                type: 'maker',
-                位置: 0,
-            })),
-            reduceOnly: false,
-        }, { path, text: '挂单开仓' + 信号side + ' 信号msg:' + 信号msg })
+            size: 交易数量,  
+        }, { path, text: '市价开仓' + 信号side + ' 信号msg:' + 信号msg })
     }
 
     //有开仓单(限价)  
