@@ -1,7 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { Account } from '../Account'
-import { 信号灯side, realData } from '../realData'
-import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
+import { 信号灯side } from '../realData'
 
 const 交易数量 = 1
 
@@ -39,7 +38,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
         return await self.order自动.taker({
             symbol,
             side: 信号side,
-            size: 交易数量,  
+            size: 交易数量,
         }, { path, text: '市价开仓' + 信号side + ' 信号msg:' + 信号msg })
     }
 
