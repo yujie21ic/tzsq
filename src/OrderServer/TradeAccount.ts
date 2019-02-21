@@ -21,7 +21,7 @@ type Order = {
 
 export class TradeAccount {
     jsonSync = createJSONSync()
-    private ws: BitMEXWSAPI
+    ws: BitMEXWSAPI
 
     accountName: string
     cookie: string

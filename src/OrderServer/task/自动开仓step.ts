@@ -32,7 +32,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAc
                 位置: 0,
             })),
             // reduceOnly: false,
-        }, { path, text: '自动开仓step 自动开仓' + 信号msg })
+        }, { path, text: '自动开仓step 自动开仓' + 信号msg }, self.ws)
     }
 
     //有开仓单(限价)  

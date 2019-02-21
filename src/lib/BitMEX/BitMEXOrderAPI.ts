@@ -86,7 +86,7 @@ export class BitMEXOrderAPI {
 
                     break
                 }
-                else if (ret.error === undefined && ret.data !== undefined && ret.data.ordStatus === 'New') {
+                else if (ret.error === undefined && ret.data !== undefined && ret.data.ordStatus !== 'Canceled' && ret.data.ordStatus !== 'Rejected') {
                     success = true
 
                     //
@@ -162,6 +162,7 @@ export class BitMEXOrderAPI {
     //     })
     // )
 
+    //insert失败 忽略
     updateStop = this.DDOS调用_ordStatus<{
         orderID: string
         price: number
@@ -172,6 +173,7 @@ export class BitMEXOrderAPI {
         })
     )
 
+    //insert失败 忽略
     updateMaker = this.DDOS调用_ordStatus<{
         orderID: string
         price: () => number
@@ -182,10 +184,7 @@ export class BitMEXOrderAPI {
         })
     )
 
-
-
-    //DDOS调用
-    limit = this.DDOS调用<{
+    limit = this.DDOS调用_ordStatus<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         size: number
@@ -200,6 +199,8 @@ export class BitMEXOrderAPI {
         })
     )
 
+
+    //DDOS调用
     taker = this.DDOS调用<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
