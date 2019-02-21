@@ -48,7 +48,7 @@ export class BitMEXOrderAPI {
             }
 
             if (log !== undefined) {
-                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + `__${callID}__` + log.text + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
+                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + `__${callID}__` + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
             }
 
             callID++
@@ -81,7 +81,7 @@ export class BitMEXOrderAPI {
             }
 
             if (log !== undefined) {
-                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + `__${callID}__` + log.text + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
+                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + `__${callID}__` + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
             }
 
             callID++
