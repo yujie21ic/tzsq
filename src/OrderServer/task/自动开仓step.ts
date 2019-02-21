@@ -1,11 +1,11 @@
 import { BaseType } from '../../lib/BaseType'
-import { Account } from '../Account'
+import { TradeAccount } from '../TradeAccount'
 import { 信号灯side, realData } from '../realData'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 
 const 交易数量 = 2
 
-const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account) => {
+const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAccount) => {
 
     if (self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓.value === false) {
         return true

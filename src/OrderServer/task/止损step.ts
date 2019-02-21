@@ -1,5 +1,5 @@
 import { BaseType } from '../../lib/BaseType'
-import { Account } from '../Account'
+import { TradeAccount } from '../TradeAccount'
 import { get波动率 } from '../realData'
 import { to范围 } from '../../lib/F/to范围'
 import { toGridPoint } from '../../lib/F/toGridPoint'
@@ -12,7 +12,7 @@ const 止损step = ({
     symbol: BaseType.BitmexSymbol
     初始止损点: () => number
     推止损: (盈利点: number) => number //0 成本价  3 盈利3点的价
-}) => async (self: Account) => {
+}) => async (self: TradeAccount) => {
     const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
     const 止损委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type === '止损')
 

@@ -8,7 +8,7 @@ import { realData } from './realData'
 import { to范围 } from '../lib/F/to范围'
 import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
 
-export class Account {
+export class TradeAccount {
     jsonSync = createJSONSync()
     private ws: BitMEXWSAPI
 
@@ -151,7 +151,7 @@ export class Account {
         })
     }
 
-    async runTask(func: (self: Account) => Promise<boolean>) {
+    async runTask(func: (self: TradeAccount) => Promise<boolean>) {
         while (true) {
             if (await func(this)) {
                 await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep

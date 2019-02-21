@@ -1,6 +1,6 @@
 import { JSONRPCServer } from '../lib/C/JSONRPC'
 import { funcList } from './____API____'
-import { Account } from './Account'
+import { TradeAccount } from './TradeAccount'
 import * as WebSocket from 'ws'
 import { config } from '../config'
 import { typeObjectParse } from '../lib/F/typeObjectParse'
@@ -14,11 +14,11 @@ import { XBTUSD自动止盈step } from './task/自动止盈step'
 
 //运行的账户
 //cookie --> Account
-const accountDic = new Map<string, Account>()
+const accountDic = new Map<string, TradeAccount>()
 if (config.orderServer !== undefined) {
     kvs(config.orderServer).forEach(({ k, v }) => {
 
-        const account = new Account({ accountName: k, cookie: v })
+        const account = new TradeAccount({ accountName: k, cookie: v })
 
         account.runTask(XBTUSD止损step)
         account.runTask(ETHUSD止损step)
