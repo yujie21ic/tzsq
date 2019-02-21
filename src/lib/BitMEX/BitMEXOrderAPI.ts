@@ -83,7 +83,7 @@ export class BitMEXOrderAPI {
                         ws.onAction({
                             action: 'insert',
                             table: 'order',
-                            data: { ... (ret.data as any), execInst: '等ws返回中' },
+                            data: [{ ... (ret.data as any), execInst: '等ws返回中' }],
                         })
                     }
                     //
