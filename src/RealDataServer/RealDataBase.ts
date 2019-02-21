@@ -238,9 +238,9 @@ export class RealDataBase {
             多少秒均线,
             RealDataBase.单位时间
         )
-        const 净成交量均线90 = 指标.累加(
+        const 净成交量均线60 = 指标.累加(
             指标.lazyMapCache(() => 成交量卖.length, i => 净成交量[i]),
-            90,
+            60,
             RealDataBase.单位时间
         )
 
@@ -478,7 +478,7 @@ export class RealDataBase {
                     { name: '波动率 >=8', value: 波动率[i] >= 8 },
                     //波动率大于25之后，出现一次真空信号，动力慢信号都为true
                     //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (上涨_动力DIF[i] - 上涨_动力DEM[i]) / 上涨_动力DEM[i] < 0.05 },
-                    { name: '量化 is上涨', value: 净成交量均线30[i] > 0 },
+                    { name: '量化 is上涨', value: 净成交量均线60[i] > 0 },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
                 ]
             }
@@ -543,7 +543,7 @@ export class RealDataBase {
                     { name: '波动率 >=5', value: 波动率[i] >= 5 },
                     { name: '追涨', value: 上涨.动力[i] > 100 * 10000 },
                     //量化用 净上涨成交量DIF
-                    { name: '量化 is上涨', value: 净成交量均线30[i] > 0 },
+                    { name: '量化 is上涨', value: 净成交量均线60[i] > 0 },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
                 ]
             }
@@ -615,7 +615,7 @@ export class RealDataBase {
                     //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (下跌_动力DIF[i] - 下跌_动力DEM[i]) / 下跌_动力DEM[i] < 0.05 },
                     { name: '波动率 >=8', value: 波动率[i] >= 8 },
                     //量化用
-                    { name: '量化 is下跌', value: 净成交量均线30[i] < 0 },
+                    { name: '量化 is下跌', value: 净成交量均线60[i] < 0 },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '下跌' && 自动下单条件[i] },
                 ]
             }
@@ -639,7 +639,7 @@ export class RealDataBase {
                     //{ name: '净盘口<0', value: 净盘口[i]<0 },
                     { name: '波动率 >=5', value: 波动率[i] >= 5 },
                     { name: '追跌', value: 下跌.动力[i] > 100 * 10000 },
-                    { name: '量化 is下跌', value: 净成交量均线30[i] < 0 },
+                    { name: '量化 is下跌', value: 净成交量均线60[i] < 0 },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '下跌' && 自动下单条件[i] },
                 ]
             }
@@ -668,7 +668,7 @@ export class RealDataBase {
             真空信号涨,
             真空信号跌,
             净成交量,
-            净成交量均线90,
+            净成交量均线60,
             净成交量均线30,
             成交量均线买1,
             成交量均线卖1,
