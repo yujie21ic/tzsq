@@ -8,6 +8,8 @@ import * as fs from 'fs'
 export const BitMEXOrderAPI__logToFile = (path: string, text: string) =>
     fs.writeFileSync(path, text + '  \n', { flag: 'a' })
 
+let callID = 0
+
 
 export class BitMEXOrderAPI {
 
@@ -27,6 +29,10 @@ export class BitMEXOrderAPI {
             let success = false
             let i = 1
 
+            if (log !== undefined) {
+                BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + `__${callID}__` + log.text + '\n\nsend:' + JSON.stringify(p, undefined, 4))
+            }
+
             for (let i = 1; i <= this.重试几次; i++) {
                 const ret = await f(this.cookie, p)
 
@@ -40,13 +46,12 @@ export class BitMEXOrderAPI {
                 }
                 await sleep(this.重试休息多少毫秒)
             }
+
             if (log !== undefined) {
-                BitMEXOrderAPI__logToFile(log.path, '\n\n___________________________________________')
-                BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + log.text)
-                BitMEXOrderAPI__logToFile(log.path, JSON.stringify(p, undefined, 4))
-                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + log.text + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
-                BitMEXOrderAPI__logToFile(log.path, '___________________________________________\n\n')
+                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + `__${callID}__` + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
             }
+
+            callID++
             return success
         }
 
@@ -56,6 +61,10 @@ export class BitMEXOrderAPI {
             const startTime = Date.now()
             let success = false
             let i = 1
+
+            if (log !== undefined) {
+                BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + `__${callID}__` + log.text + '\n\nsend:' + JSON.stringify(p, undefined, 4))
+            }
 
             for (let i = 1; i <= this.重试几次; i++) {
                 const ret = await f(this.cookie, p)
@@ -70,13 +79,12 @@ export class BitMEXOrderAPI {
                 }
                 await sleep(this.重试休息多少毫秒)
             }
+
             if (log !== undefined) {
-                BitMEXOrderAPI__logToFile(log.path, '\n\n___________________________________________')
-                BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + log.text)
-                BitMEXOrderAPI__logToFile(log.path, JSON.stringify(p, undefined, 4))
-                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + log.text + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
-                BitMEXOrderAPI__logToFile(log.path, '___________________________________________\n\n')
+                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + `__${callID}__` + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
             }
+
+            callID++
             return success
         }
 

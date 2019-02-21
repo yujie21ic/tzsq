@@ -30,7 +30,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account
             price: toBuySellPriceFunc(信号side, () => realData.getOrderPrice({
                 symbol,
                 side: 信号side,
-                type: 'maker',
+                type: 'taker',// 'maker',
                 位置: 0,
             })),
             // reduceOnly: false,
