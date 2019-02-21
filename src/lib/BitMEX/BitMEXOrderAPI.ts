@@ -5,7 +5,7 @@ import { JSONRequestError } from '../C/JSONRequest'
 
 import * as fs from 'fs'
 import { BitMEXMessage } from './BitMEXMessage'
-import { BitMEXWSAPI } from './BitMEXWSAPI';
+import { BitMEXWSAPI } from './BitMEXWSAPI'
 
 export const BitMEXOrderAPI__logToFile = (path: string, text: string) =>
     fs.writeFileSync(path, text + '  \n', { flag: 'a' })
@@ -73,17 +73,6 @@ export class BitMEXOrderAPI {
 
                 if (ret.error === '网络错误') {
                     success = false
-
-                    //
-                    if (ws !== undefined) {
-                        ws.onAction({
-                            action: 'insert',
-                            table: 'order',
-                            data: ret.data as any,
-                        })
-                    }
-                    //
-
                     break
                 }
                 else if (ret.error === undefined && ret.data !== undefined && ret.data.ordStatus !== 'Canceled' && ret.data.ordStatus !== 'Rejected') {
@@ -94,7 +83,7 @@ export class BitMEXOrderAPI {
                         ws.onAction({
                             action: 'insert',
                             table: 'order',
-                            data: ret.data as any,
+                            data: { ... (ret.data as any), execInst: '等ws返回中' },
                         })
                     }
                     //
