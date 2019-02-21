@@ -267,7 +267,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 numberX: 100,
                 layerList: [
                     layer(ZeroLayer, { color: ETH颜色 }),
-                    layer(LineLayer, { data: d.期货.净成交量均线30, color: ETH颜色 }),
+                    layer(LineLayer, { data: d.期货.净成交量均线90, color: ETH颜色 }),
                 ]
             },
             {
@@ -352,7 +352,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 numberX: 100,
                 layerList: [
                     layer(ZeroLayer, { color: ETH颜色 }),
-                    layer(LineLayer, { data: d.期货.净成交量均线30, color: ETH颜色 }),
+                    layer(LineLayer, { data: d.期货.净成交量均线90, color: ETH颜色 }),
                 ]
             },
             

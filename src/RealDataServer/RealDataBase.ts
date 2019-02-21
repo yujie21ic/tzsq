@@ -238,6 +238,12 @@ export class RealDataBase {
             多少秒均线,
             RealDataBase.单位时间
         )
+        const 净成交量均线90 = 指标.累加(
+            指标.lazyMapCache(() => 成交量卖.length, i => 净成交量[i]),
+            90,
+            RealDataBase.单位时间
+        )
+
 
 
         const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
@@ -285,6 +291,16 @@ export class RealDataBase {
 
         const 净下跌成交量 = 指标.lazyMapCache(() => data.length, i => 成交量卖[i] - 成交量买[i])
         const 净上涨成交量 = 指标.lazyMapCache(() => data.length, i => 成交量买[i] - 成交量卖[i])
+        const 净下跌成交量30 = 指标.累加(
+            指标.lazyMapCache(() => 成交量买.length, i => 净下跌成交量[i]),
+            30,
+            RealDataBase.单位时间
+        )
+        const 净上涨成交量30 = 指标.累加(
+            指标.lazyMapCache(() => 成交量买.length, i => 净上涨成交量[i]),
+            30,
+            RealDataBase.单位时间
+        )
 
         const 净下跌成交量12 = 指标.EMA(净下跌成交量, 12, RealDataBase.单位时间)
         const 净下跌成交量26 = 指标.EMA(净下跌成交量, 26, RealDataBase.单位时间)
@@ -458,7 +474,8 @@ export class RealDataBase {
                     { name: '真空', value: 波动率[i] < 波动率中大分界 || 真空信号涨[i] },
                     { name: '成交量DIF<DEM', value: 净上涨成交量DIF[i] < 净上涨成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净上涨成交量DIF[i] < 0) },
                     { name: ' 净盘口<净盘口均线<0', value: b },
-                    { name: '波动率 >=7', value: 波动率[i] >= 7 },
+                    { name: '30秒净买成交量 >=150万', value: 净上涨成交量30[i] >=150*10000 },
+                    { name: '波动率 >=8', value: 波动率[i] >= 8 },
                     //波动率大于25之后，出现一次真空信号，动力慢信号都为true
                     //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (上涨_动力DIF[i] - 上涨_动力DEM[i]) / 上涨_动力DEM[i] < 0.05 },
                     { name: '量化 is上涨', value: 净成交量均线30[i] > 0 },
@@ -594,8 +611,9 @@ export class RealDataBase {
                     { name: '真空', value: 波动率[i] < 波动率中大分界 || 真空信号跌[i] },
                     { name: '卖成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净下跌成交量DIF[i] < 0) },
                     { name: ' 净盘口 > 净盘口均线>0', value: b },
+                    { name: '30秒净卖成交量>150万', value: 净下跌成交量30[i] >=150*10000 },
                     //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (下跌_动力DIF[i] - 下跌_动力DEM[i]) / 下跌_动力DEM[i] < 0.05 },
-                    { name: '波动率 >=7', value: 波动率[i] >= 7 },
+                    { name: '波动率 >=8', value: 波动率[i] >= 8 },
                     //量化用
                     { name: '量化 is下跌', value: 净成交量均线30[i] < 0 },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '下跌' && 自动下单条件[i] },
@@ -650,6 +668,7 @@ export class RealDataBase {
             真空信号涨,
             真空信号跌,
             净成交量,
+            净成交量均线90,
             净成交量均线30,
             成交量均线买1,
             成交量均线卖1,
