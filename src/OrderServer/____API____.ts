@@ -56,7 +56,7 @@ const symbol = () => ({
         }
     },
     活动委托: [] as {
-        type: '限价' | '限价只减仓' | '止损' | '市价触发'
+        type: '限价' | '限价只减仓' | '止损' | '市价触发' | '等ws返回中'
         timestamp: number
         id: string
         side: BaseType.Side
