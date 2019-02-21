@@ -13,8 +13,9 @@ const 止损step = ({
     初始止损点: () => number
     推止损: (盈利点: number) => number //0 成本价  3 盈利3点的价
 }) => async (self: TradeAccount) => {
+
     const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
-    const 止损委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type === '止损')
+    const 止损委托 = self.活动委托[symbol].filter(v => v.type === '止损')
 
     const path = self.accountName + '.txt'
 
@@ -82,7 +83,7 @@ export const XBTUSD止损step = 止损step({
     初始止损点: () => to范围({
         min: 3,
         max: 18,
-        value: get波动率('XBTUSD') / 6+4,
+        value: get波动率('XBTUSD') / 6 + 4,
     }),
     推止损: 盈利点 => {
         const 波动率 = get波动率('XBTUSD')

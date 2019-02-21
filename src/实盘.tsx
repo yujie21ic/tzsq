@@ -15,7 +15,7 @@ import { JSONRequest } from './lib/C/JSONRequest'
 import { Switch } from '@material-ui/core'
 import { to范围 } from './lib/F/to范围'
 import { 指标 } from './RealDataServer/指标'
-import { sleep } from './lib/C/sleep';
+import { sleep } from './lib/C/sleep'
 import { toGridPoint } from './lib/F/toGridPoint'
 
 const realTickClient = new DataClient.RealData__Client()
@@ -31,25 +31,25 @@ const GREEN = 'rgba(72, 170, 101, 1)'
 class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: number, 倍数: number }> {
 
     get止损() {
-        const arr = orderClient.jsonSync.rawData.symbol[this.props.symbol].活动委托.filter(v => v.type === '止损')
-        if (arr.length === 1) {
-            return arr[0].price
-        } else {
+        const { 止损价格 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
+        if (止损价格 === 0) {
             return undefined
+        } else {
+            return 止损价格
         }
     }
 
     get委托() {
-        const arr = orderClient.jsonSync.rawData.symbol[this.props.symbol].活动委托.filter(v => v.type !== '止损')
-        if (arr.length === 1) {
-            const { id, side, cumQty, orderQty, price, type } = arr[0]
+        const { 委托 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
+        if (委托.id !== '') {
+            const { id, side, cumQty, orderQty, price } = 委托
             return <a
                 href='#'
                 style={{ color: 'white' }}
                 onClick={() => rpc.取消委托({ cookie, orderID: [id] })}
             >
                 <span style={{ color: side === 'Sell' ? RED : GREEN }}>{cumQty}/{orderQty}</span>
-                <span>@{price}{type}</span>
+                <span>@{price}</span>
             </a>
         } else {
             return undefined

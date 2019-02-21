@@ -8,6 +8,17 @@ import { realData } from './realData'
 import { to范围 } from '../lib/F/to范围'
 import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
 
+
+type Order = {
+    type: '限价' | '限价只减仓' | '止损' | '等ws返回中'
+    timestamp: number
+    id: string
+    side: BaseType.Side
+    cumQty: number      //成交数量
+    orderQty: number    //委托数量
+    price: number
+}
+
 export class TradeAccount {
     jsonSync = createJSONSync()
     private ws: BitMEXWSAPI
@@ -17,6 +28,12 @@ export class TradeAccount {
 
     order手动: BitMEXOrderAPI
     order自动: BitMEXOrderAPI
+
+
+    活动委托 = {
+        XBTUSD: [] as Order[],
+        ETHUSD: [] as Order[],
+    }
 
     constructor(p: { accountName: string, cookie: string }) {
         this.accountName = p.accountName
@@ -147,7 +164,25 @@ export class TradeAccount {
                 // }
             })
 
-            this.jsonSync.data.symbol[symbol].活动委托.____set(arr)
+            this.活动委托[symbol] = arr
+
+            const x = this.活动委托[symbol].find(v => v.type !== '止损')
+            if (x === undefined) {
+                this.jsonSync.data.symbol[symbol].委托.id.____set('')
+            } else {
+                this.jsonSync.data.symbol[symbol].委托.cumQty.____set(x.cumQty)
+                this.jsonSync.data.symbol[symbol].委托.id.____set(x.id)
+                this.jsonSync.data.symbol[symbol].委托.orderQty.____set(x.orderQty)
+                this.jsonSync.data.symbol[symbol].委托.price.____set(x.price)
+                this.jsonSync.data.symbol[symbol].委托.side.____set(x.side)
+            }
+
+            const y = this.活动委托[symbol].find(v => v.type === '止损')
+            if (y === undefined) {
+                this.jsonSync.data.symbol[symbol].止损价格.____set(0)
+            } else {
+                this.jsonSync.data.symbol[symbol].止损价格.____set(y.price)
+            }
         })
     }
 
@@ -212,9 +247,7 @@ export class TradeAccount {
 
         const { 仓位数量 } = this.jsonSync.rawData.symbol[req.symbol]
 
-        const 活动委托 = this.jsonSync.rawData.symbol[req.symbol].活动委托.filter(v =>
-            v.type === '限价' || v.type === '限价只减仓'
-        )
+        const 活动委托 = this.活动委托[req.symbol].filter(v => v.type !== '止损')
 
         if (活动委托.length > 1) {
             throw '已经有委托了'

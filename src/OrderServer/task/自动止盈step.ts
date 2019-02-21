@@ -14,9 +14,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAc
     const path = self.accountName + '.txt'
 
     const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
-    const 活动委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v =>
-        v.type === '限价' || v.type === '限价只减仓'  
-    )
+    const 活动委托 = self.活动委托[symbol].filter(v => v.type !== '止损')
 
     //_____________________________________自动交易 止盈任务_____________________________________    
     if (仓位数量 !== 0) {

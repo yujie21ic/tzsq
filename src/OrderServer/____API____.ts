@@ -55,15 +55,15 @@ const symbol = () => ({
             text: '',
         }
     },
-    活动委托: [] as {
-        type: '限价' | '限价只减仓' | '止损' | '等ws返回中'
-        timestamp: number
-        id: string
-        side: BaseType.Side
-        cumQty: number      //成交数量
-        orderQty: number    //委托数量
-        price: number
-    }[],
+
+    委托: {
+        id: '',
+        side: '' as BaseType.Side,
+        cumQty: 0,      //成交数量
+        orderQty: 0,    //委托数量
+        price: 0,
+    },
+    止损价格: 0,
     仓位数量: 0,
     开仓均价: 0,
 })

@@ -15,9 +15,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAc
 
     const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
 
-    const 活动委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v =>
-        v.type === '限价' || v.type === '限价只减仓'
-    )
+    const 活动委托 = self.活动委托[symbol].filter(v => v.type !== '止损')
 
     const { 信号side, 信号msg } = 信号灯side(symbol)
 
