@@ -3,7 +3,7 @@ import { Account } from '../Account'
 import { 信号灯side, realData } from '../realData'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 
-const 交易数量 = 1
+const 交易数量 = 2
 
 const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: Account) => {
 
