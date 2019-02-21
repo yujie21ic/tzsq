@@ -4,6 +4,8 @@ import { sleep } from '../C/sleep'
 import { JSONRequestError } from '../C/JSONRequest'
 
 import * as fs from 'fs'
+import { BitMEXMessage } from './BitMEXMessage'
+import { BitMEXWSAPI } from './BitMEXWSAPI';
 
 export const BitMEXOrderAPI__logToFile = (path: string, text: string) =>
     fs.writeFileSync(path, text + '  \n', { flag: 'a' })
@@ -56,8 +58,8 @@ export class BitMEXOrderAPI {
         }
 
 
-    DDOS调用_ordStatus = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: { ordStatus: string } }>) =>
-        async (p: P, log?: { path: string, text: string }) => {
+    DDOS调用_ordStatus = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: BitMEXMessage.Order }>) =>
+        async (p: P, log?: { path: string, text: string }, ws?: BitMEXWSAPI) => {
             const startTime = Date.now()
             let success = false
             let i = 1
@@ -71,10 +73,32 @@ export class BitMEXOrderAPI {
 
                 if (ret.error === '网络错误') {
                     success = false
+
+                    //
+                    if (ws !== undefined) {
+                        ws.onAction({
+                            action: 'insert',
+                            table: 'order',
+                            data: ret.data as any,
+                        })
+                    }
+                    //
+
                     break
                 }
                 else if (ret.error === undefined && ret.data !== undefined && ret.data.ordStatus === 'New') {
                     success = true
+
+                    //
+                    if (ws !== undefined) {
+                        ws.onAction({
+                            action: 'insert',
+                            table: 'order',
+                            data: ret.data as any,
+                        })
+                    }
+                    //
+
                     break
                 }
                 await sleep(this.重试休息多少毫秒)
