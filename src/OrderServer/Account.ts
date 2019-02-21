@@ -70,14 +70,19 @@ export class Account {
         keys(this.jsonSync.rawData.symbol).forEach(symbol => {
             const item = this.ws.data.position.find(v => v.symbol === symbol && v.isOpen)
             const { 仓位数量, 开仓均价 } = this.jsonSync.data.symbol[symbol]
+            const raw = this.jsonSync.rawData.symbol[symbol]
             if (item !== undefined) {
-                仓位数量.____set(item.currentQty)
-                开仓均价.____set(item.avgCostPrice)
-                BitMEXOrderAPI__logToFile(this.accountName + '.txt', `仓位更新: ${symbol} 仓位数量:${item.currentQty}, 开仓均价:${item.avgCostPrice}`)
+                if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== item.avgCostPrice) {
+                    仓位数量.____set(item.currentQty)
+                    开仓均价.____set(item.avgCostPrice)
+                    BitMEXOrderAPI__logToFile(this.accountName + '.txt', new Date().toLocaleString() + `仓位更新: ${symbol} 仓位数量:${item.currentQty}, 开仓均价:${item.avgCostPrice}`)
+                }
             } else {
-                仓位数量.____set(0)
-                开仓均价.____set(0)
-                BitMEXOrderAPI__logToFile(this.accountName + '.txt', `仓位更新: ${symbol} 仓位数量:0`)
+                if (raw.仓位数量 !== 0 || raw.开仓均价 !== 0) {
+                    仓位数量.____set(0)
+                    开仓均价.____set(0)
+                    BitMEXOrderAPI__logToFile(this.accountName + '.txt', new Date().toLocaleString() + `仓位更新: ${symbol} 仓位数量:0`)
+                }
             }
         })
     }
