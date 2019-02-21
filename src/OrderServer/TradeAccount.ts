@@ -91,7 +91,7 @@ export class TradeAccount {
         keys(this.jsonSync.rawData.symbol).forEach(symbol => {
 
             const arr = [] as {
-                type: '限价' | '限价只减仓' | '止损' | '市价触发'
+                type: '限价' | '限价只减仓' | '止损' | '等ws返回中'
                 timestamp: number
                 id: string
                 side: BaseType.Side
@@ -134,17 +134,17 @@ export class TradeAccount {
                         price: v.stopPx,
                     })
                 }
-                else if (v.ordType === 'MarketIfTouched' && v.execInst === 'LastPrice') {
-                    arr.push({
-                        type: '市价触发',
-                        timestamp: new Date(v.timestamp).getTime(),
-                        id: v.orderID,
-                        side: v.side as BaseType.Side,
-                        cumQty: v.cumQty,
-                        orderQty: v.orderQty,
-                        price: v.stopPx,
-                    })
-                }
+                // else if (v.ordType === 'MarketIfTouched' && v.execInst === 'LastPrice') {
+                //     arr.push({
+                //         type: '市价触发',
+                //         timestamp: new Date(v.timestamp).getTime(),
+                //         id: v.orderID,
+                //         side: v.side as BaseType.Side,
+                //         cumQty: v.cumQty,
+                //         orderQty: v.orderQty,
+                //         price: v.stopPx,
+                //     })
+                // }
             })
 
             this.jsonSync.data.symbol[symbol].活动委托.____set(arr)
@@ -213,7 +213,7 @@ export class TradeAccount {
         const { 仓位数量 } = this.jsonSync.rawData.symbol[req.symbol]
 
         const 活动委托 = this.jsonSync.rawData.symbol[req.symbol].活动委托.filter(v =>
-            v.type === '限价' || v.type === '限价只减仓' || v.type === '市价触发'
+            v.type === '限价' || v.type === '限价只减仓'
         )
 
         if (活动委托.length > 1) {
@@ -246,12 +246,7 @@ export class TradeAccount {
 
         return req.type === 'taker' ?
             (req.最低_最高 ?
-                await this.order手动.市价触发({
-                    symbol: req.symbol,
-                    side: req.side,
-                    size: req.size,
-                    price: getPrice(),
-                }) :
+                false :
                 await this.order手动.taker({
                     symbol: req.symbol,
                     side: req.side,

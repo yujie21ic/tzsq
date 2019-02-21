@@ -122,21 +122,21 @@ export class BitMEXOrderAPI {
         })
     )
 
-    市价触发 = this.DDOS调用_ordStatus<{
-        symbol: BaseType.BitmexSymbol
-        side: BaseType.Side
-        price: number
-        size: number
-    }>(
-        (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
-            symbol: p.symbol,
-            ordType: 'MarketIfTouched',
-            stopPx: p.price,
-            orderQty: p.size,
-            side: p.side,
-            execInst: 'LastPrice',
-        })
-    )
+    // 市价触发 = this.DDOS调用_ordStatus<{
+    //     symbol: BaseType.BitmexSymbol
+    //     side: BaseType.Side
+    //     price: number
+    //     size: number
+    // }>(
+    //     (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
+    //         symbol: p.symbol,
+    //         ordType: 'MarketIfTouched',
+    //         stopPx: p.price,
+    //         orderQty: p.size,
+    //         side: p.side,
+    //         execInst: 'LastPrice',
+    //     })
+    // )
 
     updateStop = this.DDOS调用_ordStatus<{
         orderID: string

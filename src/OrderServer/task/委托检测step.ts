@@ -6,7 +6,7 @@ export const 委托检测step = (symbol: BaseType.BitmexSymbol) => async (self: 
     const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
 
     const 活动委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v =>
-        v.type === '限价' || v.type === '限价只减仓' || v.type === '市价触发'
+        v.type === '限价' || v.type === '限价只减仓'
     )
 
     const path = self.accountName + '.txt'

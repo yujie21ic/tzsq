@@ -49,7 +49,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
                 onClick={() => rpc.取消委托({ cookie, orderID: [id] })}
             >
                 <span style={{ color: side === 'Sell' ? RED : GREEN }}>{cumQty}/{orderQty}</span>
-                <span>@{price}{type === '市价触发' ? '市价' : ''}</span>
+                <span>@{price}{type}</span>
             </a>
         } else {
             return undefined
@@ -139,15 +139,6 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
                             位置: this.props.位置,
                             最低_最高: true,
                         })}
-                        right={() => rpc.下单({
-                            cookie,
-                            symbol: this.props.symbol,
-                            type: 'taker',
-                            side: 'Buy',
-                            size: 下单数量,
-                            位置: this.props.位置,
-                            最低_最高: true,
-                        })}
                     />
                     <br />
                 </div>
@@ -185,15 +176,6 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
                             cookie,
                             symbol: this.props.symbol,
                             type: 'maker',
-                            side: 'Sell',
-                            size: 下单数量,
-                            位置: this.props.位置,
-                            最低_最高: true,
-                        })}
-                        right={() => rpc.下单({
-                            cookie,
-                            symbol: this.props.symbol,
-                            type: 'taker',
                             side: 'Sell',
                             size: 下单数量,
                             位置: this.props.位置,
