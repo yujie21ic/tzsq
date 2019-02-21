@@ -89,7 +89,7 @@ export class BitMEXOrderAPI {
         }
 
 
-    //需要判断 ordStatus
+    //DDOS调用_ordStatus
     maker = this.DDOS调用_ordStatus<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
@@ -104,21 +104,6 @@ export class BitMEXOrderAPI {
             orderQty: p.size,
             price: p.price(),
             execInst: p.reduceOnly ? ['ParticipateDoNotInitiate', 'ReduceOnly'] : 'ParticipateDoNotInitiate',
-        })
-    )
-
-    limit = this.DDOS调用<{
-        symbol: BaseType.BitmexSymbol
-        side: BaseType.Side
-        size: number
-        price: () => number
-    }>(
-        (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
-            symbol: p.symbol,
-            ordType: 'Limit',
-            side: p.side,
-            orderQty: p.size,
-            price: p.price() + ((p.side === 'Buy' ? 1 : -1) * (p.symbol === 'XBTUSD' ? 0.5 : 0.05)),
         })
     )
 
@@ -170,6 +155,24 @@ export class BitMEXOrderAPI {
         (cookie, p) => BitMEXRESTAPI.Order.amend(cookie, {
             orderID: p.orderID,
             price: p.price(),
+        })
+    )
+
+
+
+    //DDOS调用
+    limit = this.DDOS调用<{
+        symbol: BaseType.BitmexSymbol
+        side: BaseType.Side
+        size: number
+        price: () => number
+    }>(
+        (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
+            symbol: p.symbol,
+            ordType: 'Limit',
+            side: p.side,
+            orderQty: p.size,
+            price: p.price() + ((p.side === 'Buy' ? 1 : -1) * (p.symbol === 'XBTUSD' ? 0.5 : 0.05)),
         })
     )
 
