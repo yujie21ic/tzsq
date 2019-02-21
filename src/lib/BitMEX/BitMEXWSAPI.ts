@@ -168,9 +168,7 @@ export class BitMEXWSAPI {
             url: 'wss://www.bitmex.com/realtime'
         })
 
-        let keysDic = new Map<string, string[]>()
 
-        let hasPartial = new Map<string, boolean>()
 
         ws.onStatusChange = () => {
             this.onStatusChange()
@@ -182,91 +180,104 @@ export class BitMEXWSAPI {
                     args: v.filter !== undefined ? v.theme + ':' + v.filter : v.theme
                 }))
 
-                keysDic = new Map<string, string[]>()
-                hasPartial = new Map<string, boolean>()
+                this.keysDic = new Map<string, string[]>()
+                this.hasPartial = new Map<string, boolean>()
             }
         }
 
-        ws.onData = obj => {
-            const fd: FrameData = obj
+        ws.onData = obj => this.onAction(obj)
 
-            const { table, keys, action, data } = fd
+    }
 
-            if (table === 'trade') {//数据太多了 不存啊!!
-                this.onmessage(fd)
-                return
+    keysDic = new Map<string, string[]>()
+
+    hasPartial = new Map<string, boolean>()
+
+    onAction(fd: FrameData) {
+
+        const { table, keys, action, data } = fd
+
+        if (table === 'trade') {//数据太多了 不存啊!!
+            this.onmessage(fd)
+            return
+        }
+
+        //table消息
+        if (table !== undefined) {
+
+            //主键
+            if (keys !== undefined) {
+                this.keysDic.set(table, keys)
             }
 
-            //table消息
-            if (table !== undefined) {
 
-                //主键
+            //完全替换数据
+            if (action === 'partial') {
+                this.data[table] = data as any//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                this.hasPartial.set(table, true)
+            }
+            //插入新数据
+            else if (action === 'insert') {
+
+
+                //____________________________________________________________________________// 有了的不添加了
+                const keys = this.keysDic.get(table) || []
+                const dataXXX = (data as any[]).filter((a: any) => findItem(a, this.data[table], keys) === undefined)
+                //____________________________________________________________________________//
+
+
+                this.data[table] = [...this.data[table], ...dataXXX as any]
+
+                //限制长度
+                // if (this.data[table].length > 100) {
+                //     this.data[table] = this.data[table].slice(this.data[table].length - 100)
+                // }
+            }
+            //更新 删除
+            else {
+                const keys = this.keysDic.get(table)
+
                 if (keys !== undefined) {
-                    keysDic.set(table, keys)
-                }
 
+                    //更新数据
+                    if (action === 'update') {
 
-                //完全替换数据
-                if (action === 'partial') {
-                    this.data[table] = data as any//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    hasPartial.set(table, true)
-                }
-                //插入新数据
-                else if (action === 'insert') {
-                    this.data[table] = [...this.data[table], ...data as any]
+                        this.data[table] = (this.data[table] as any[]).map(a => {
+                            const item = findItem(a, data, keys)
+                            return item === undefined ? a : { ...a, ...item }
+                        })
 
-                    //限制长度
-                    // if (this.data[table].length > 100) {
-                    //     this.data[table] = this.data[table].slice(this.data[table].length - 100)
-                    // }
-                }
-                //更新 删除
-                else {
-                    const keys = keysDic.get(table)
+                        if (table === 'order') {
 
-                    if (keys !== undefined) {
-
-                        //更新数据
-                        if (action === 'update') {
-
-                            this.data[table] = (this.data[table] as any[]).map(a => {
-                                const item = findItem(a, data, keys)
-                                return item === undefined ? a : { ...a, ...item }
-                            })
-
-                            if (table === 'order') {
-
-                                const fill = this.data.order.find(v => v.ordStatus === 'Filled')
-                                if (fill !== undefined) {
-                                    this.onFilled(fill.side as BaseType.Side, fill.price)
-                                }
-
-                                this.data.order = this.data.order.filter(v =>
-                                    v.ordStatus !== 'Rejected'  //拒绝委托
-                                    &&
-                                    v.ordStatus !== 'Canceled'  //取消委托
-                                    &&
-                                    v.ordStatus !== 'Filled'    //完全成交
-                                )
+                            const fill = this.data.order.find(v => v.ordStatus === 'Filled')
+                            if (fill !== undefined) {
+                                this.onFilled(fill.side as BaseType.Side, fill.price)
                             }
-                        }
 
-                        //删除数据
-                        else if (action === 'delete') {
-
-                            this.data[table] = (this.data[table] as any[]).filter(a =>
-                                findItem(a, data, keys) === undefined
+                            this.data.order = this.data.order.filter(v =>
+                                v.ordStatus !== 'Rejected'  //拒绝委托
+                                &&
+                                v.ordStatus !== 'Canceled'  //取消委托
+                                &&
+                                v.ordStatus !== 'Filled'    //完全成交
                             )
                         }
                     }
 
+                    //删除数据
+                    else if (action === 'delete') {
+
+                        this.data[table] = (this.data[table] as any[]).filter(a =>
+                            findItem(a, data, keys) === undefined
+                        )
+                    }
                 }
 
-                if (hasPartial.has(table)) {
-                    this.onmessage(fd)
-                }
+            }
+
+            if (this.hasPartial.has(table)) {
+                this.onmessage(fd)
             }
         }
-
     }
 }

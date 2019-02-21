@@ -129,6 +129,17 @@ export class TradeAccount {
                         price: v.price,
                     })
                 }
+                else if (v.ordType === 'Limit' && v.execInst === '等ws返回中' && v.workingIndicator) { //ext
+                    arr.push({
+                        type: '等ws返回中',
+                        timestamp: new Date(v.timestamp).getTime(),
+                        id: v.orderID,
+                        side: v.side as BaseType.Side,
+                        cumQty: v.cumQty,
+                        orderQty: v.orderQty,
+                        price: v.price,
+                    })
+                }
                 else if (v.ordType === 'Limit' /*&& v.execInst === 'ParticipateDoNotInitiate'*/ && v.workingIndicator) { //不勾被动委托也行
                     arr.push({
                         type: '限价',
