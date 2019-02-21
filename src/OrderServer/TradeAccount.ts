@@ -101,7 +101,7 @@ export class TradeAccount {
             }[]
 
             this.ws.data.order.filter(v => v.symbol === symbol).forEach(v => {
-                if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && v.workingIndicator) {
+                if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && v.workingIndicator) {//先检测只减仓
                     arr.push({
                         type: '限价只减仓',
                         timestamp: new Date(v.timestamp).getTime(),
