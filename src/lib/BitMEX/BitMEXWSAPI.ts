@@ -286,11 +286,20 @@ export class BitMEXWSAPI {
                             const obj = item === undefined ? a : { ...a, ...item }
 
                             //本地维护仓位数量 增量
-                            this.onOrder(obj)
+                            if (table === 'order') this.onOrder(obj)
+
                             return obj
                         })
 
                         if (table === 'order') {
+
+                            //止盈
+                            //v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate,ReduceOnly'
+
+                            //止损
+                            //v.ordType === 'Stop' && v.execInst === 'Close,LastPrice'
+
+
 
                             this.data.order = this.data.order.filter(v =>
                                 v.ordStatus !== 'Rejected'  //拒绝委托
