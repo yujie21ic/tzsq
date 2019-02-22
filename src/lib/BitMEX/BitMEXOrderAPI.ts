@@ -36,7 +36,7 @@ export class BitMEXOrderAPI {
                 BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + `__${callID}__` + log.text + '\n\nsend:' + JSON.stringify(p))
             }
 
-            for (let i = 1; i <= this.重试几次; i++) {
+            for (i = 1; i <= this.重试几次; i++) {
                 const ret = await f(this.cookie, p)
 
                 if (ret.error === '网络错误') {
@@ -72,7 +72,7 @@ export class BitMEXOrderAPI {
                 BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + `__${callID}__` + log.text + '\n\nsend:' + JSON.stringify(p))
             }
 
-            for (let i = 1; i <= this.重试几次; i++) {
+            for (i = 1; i <= this.重试几次; i++) {
                 const ret = await f(this.cookie, p)
 
                 if (ret.error === '网络错误') {
