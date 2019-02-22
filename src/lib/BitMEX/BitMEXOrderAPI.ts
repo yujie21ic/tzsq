@@ -26,10 +26,11 @@ export class BitMEXOrderAPI {
     }
 
     DDOS调用 = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError }>) =>
-        async (p: P, log?: { path: string, text: string }) => {
+        async (p: P, log?: { path: string, text: string }, ws?: BitMEXWSAPI) => {
             const startTime = Date.now()
             let success = false
             let i = 1
+            let errMsg = ''
 
             if (log !== undefined) {
                 BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + `__${callID}__` + log.text + '\n\nsend:' + JSON.stringify(p, undefined, 4))
@@ -40,6 +41,7 @@ export class BitMEXOrderAPI {
 
                 if (ret.error === '网络错误') {
                     success = false
+                    errMsg = JSON.stringify(ret)
                     break
                 }
                 else if (ret.error === undefined) {
@@ -47,10 +49,11 @@ export class BitMEXOrderAPI {
                     break
                 }
                 await sleep(this.重试休息多少毫秒)
+                if (i === this.重试几次) errMsg = JSON.stringify(ret)
             }
 
             if (log !== undefined) {
-                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + `__${callID}__` + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
+                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + `__${callID}__` + `  重试${i}次  ${success ? '成功' : '失败' + errMsg}  耗时:${Date.now() - startTime}ms`)
             }
 
             callID++
@@ -63,6 +66,7 @@ export class BitMEXOrderAPI {
             const startTime = Date.now()
             let success = false
             let i = 1
+            let errMsg = ''
 
             if (log !== undefined) {
                 BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + `__${callID}__` + log.text + '\n\nsend:' + JSON.stringify(p, undefined, 4))
@@ -73,6 +77,7 @@ export class BitMEXOrderAPI {
 
                 if (ret.error === '网络错误') {
                     success = false
+                    errMsg = JSON.stringify(ret)
                     break
                 }
                 else if (ret.error === undefined && ret.data !== undefined && ret.data.ordStatus !== 'Canceled' && ret.data.ordStatus !== 'Rejected') {
@@ -91,10 +96,11 @@ export class BitMEXOrderAPI {
                     break
                 }
                 await sleep(this.重试休息多少毫秒)
+                if (i === this.重试几次) errMsg = JSON.stringify(ret)
             }
 
             if (log !== undefined) {
-                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + `__${callID}__` + `  重试${i}次  ${success ? '成功' : '失败'}  耗时:${Date.now() - startTime}ms`)
+                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + `__${callID}__` + `  重试${i}次  ${success ? '成功' : '失败' + errMsg}  耗时:${Date.now() - startTime}ms`)
             }
 
             callID++
