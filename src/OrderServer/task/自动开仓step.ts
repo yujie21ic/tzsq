@@ -3,8 +3,8 @@ import { TradeAccount } from '../TradeAccount'
 import { 信号灯side, realData, get波动率 } from '../realData'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { sleep } from '../../lib/C/sleep'
+import { task__config } from './task__config'
 
-const 交易数量 = 2
 
 const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAccount) => {
 
@@ -36,12 +36,12 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAc
             await self.order自动.taker({
                 symbol,
                 side: 信号side,
-                size: 交易数量 * (连续止损次数 + 1),
+                size: task__config.交易数量 * (连续止损次数 + 1),
             }, { path, text: '自动开仓step 自动开仓 市价' + 信号msg }, self.ws) :
             await self.order自动.limit({
                 symbol,
                 side: 信号side,
-                size: 交易数量 * (连续止损次数 + 1),
+                size: task__config.交易数量 * (连续止损次数 + 1),
                 price: toBuySellPriceFunc(信号side, () => realData.getOrderPrice({
                     symbol,
                     side: 信号side,
