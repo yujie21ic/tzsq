@@ -2,7 +2,7 @@ import { BaseType } from '../../lib/BaseType'
 import { TradeAccount } from '../TradeAccount'
 import { 信号灯side, realData } from '../realData'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
-import { sleep } from '../../lib/C/sleep';
+import { sleep } from '../../lib/C/sleep'
 
 const 交易数量 = 2
 
