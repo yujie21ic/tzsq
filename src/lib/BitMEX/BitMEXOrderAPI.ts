@@ -4,7 +4,6 @@ import { sleep } from '../C/sleep'
 import { JSONRequestError } from '../C/JSONRequest'
 
 import * as fs from 'fs'
-import { BitMEXMessage } from './BitMEXMessage'
 import { BitMEXWSAPI } from './BitMEXWSAPI'
 
 export const BitMEXOrderAPI__logToFile = (path: string, text: string) =>
@@ -160,7 +159,7 @@ export class BitMEXOrderAPI {
             price: p.price() + ((p.side === 'Buy' ? 1 : -1) * (p.symbol === 'XBTUSD' ? 0.5 : 0.05)),
         })
     )
-    
+
     taker = this.DDOS调用<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
