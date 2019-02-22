@@ -33,7 +33,7 @@ export class BitMEXOrderAPI {
             let errMsg = ''
 
             if (log !== undefined) {
-                BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + `__${callID}__` + log.text + '\n\nsend:' + JSON.stringify(p, undefined, 4))
+                BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + `__${callID}__` + log.text + '\n\nsend:' + JSON.stringify(p))
             }
 
             for (let i = 1; i <= this.重试几次; i++) {
@@ -69,7 +69,7 @@ export class BitMEXOrderAPI {
             let errMsg = ''
 
             if (log !== undefined) {
-                BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + `__${callID}__` + log.text + '\n\nsend:' + JSON.stringify(p, undefined, 4))
+                BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + `__${callID}__` + log.text + '\n\nsend:' + JSON.stringify(p))
             }
 
             for (let i = 1; i <= this.重试几次; i++) {
