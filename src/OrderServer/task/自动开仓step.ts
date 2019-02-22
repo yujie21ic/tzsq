@@ -1,6 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { TradeAccount } from '../TradeAccount'
-import { 信号灯side, realData } from '../realData'
+import { 信号灯side, realData, get波动率 } from '../realData'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { sleep } from '../../lib/C/sleep'
 
@@ -32,18 +32,24 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAc
 
     //没有仓位 没有委托 信号灯全亮 挂单
     if (本地维护仓位数量 === 0 && 仓位数量 === 0 && 活动委托.length === 0 && 信号side !== 'none') {
-        return await self.order自动.limit({
-            symbol,
-            side: 信号side,
-            size: 交易数量 * (连续止损次数 + 1),
-            price: toBuySellPriceFunc(信号side, () => realData.getOrderPrice({
+        return get波动率(symbol) < 30 ?
+            await self.order自动.taker({
                 symbol,
                 side: 信号side,
-                type: 'taker',// 'maker',
-                位置: 0,
-            })),
-            // reduceOnly: false,
-        }, { path, text: '自动开仓step 自动开仓' + 信号msg }, self.ws)
+                size: 交易数量 * (连续止损次数 + 1),
+            }, { path, text: '自动开仓step 自动开仓 市价' + 信号msg }, self.ws) :
+            await self.order自动.limit({
+                symbol,
+                side: 信号side,
+                size: 交易数量 * (连续止损次数 + 1),
+                price: toBuySellPriceFunc(信号side, () => realData.getOrderPrice({
+                    symbol,
+                    side: 信号side,
+                    type: 'taker',// 'maker',
+                    位置: 0,
+                })),
+                // reduceOnly: false,
+            }, { path, text: '自动开仓step 自动开仓 挂单' + 信号msg }, self.ws)
     }
 
     //有开仓单(限价)  
