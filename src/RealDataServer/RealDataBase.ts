@@ -243,11 +243,11 @@ export class RealDataBase {
             60,
             RealDataBase.单位时间
         )
-        const 净成交量均线120 = 指标.累加(
-            指标.lazyMapCache(() => 成交量卖.length, i => 净成交量[i]),
-            60,
-            RealDataBase.单位时间
-        )
+        // const 净成交量均线120 = 指标.累加(
+        //     指标.lazyMapCache(() => 成交量卖.length, i => 净成交量[i]),
+        //     60,
+        //     RealDataBase.单位时间
+        // )
 
 
 
