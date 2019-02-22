@@ -25,44 +25,8 @@ export class BitMEXOrderAPI {
         this.重试休息多少毫秒 = p.重试休息多少毫秒
     }
 
-    DDOS调用 = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError }>) =>
-        async (p: P, log?: { path: string, text: string }, ws?: BitMEXWSAPI) => {
-            const startTime = Date.now()
-            let success = false
-            let i = 1
-            let errMsg = ''
-            const __id__ = callID++
 
-            if (log !== undefined) {
-                BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + `__${__id__}__` + log.text + '\n\nsend:' + JSON.stringify(p))
-            }
-
-            for (i = 1; i <= this.重试几次; i++) {
-                const ret = await f(this.cookie, p)
-
-                if (ret.error === '网络错误') {
-                    success = false
-                    errMsg = JSON.stringify(ret)
-                    break
-                }
-                else if (ret.error === undefined) {
-                    success = true
-                    break
-                }
-                await sleep(this.重试休息多少毫秒)
-                if (i === this.重试几次) errMsg = JSON.stringify(ret)
-            }
-
-            if (log !== undefined) {
-                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + `__${__id__}__` + `  重试${i}次  ${success ? '成功' : '失败' + errMsg}  耗时:${Date.now() - startTime}ms`)
-            }
-
-
-            return success
-        }
-
-
-    DDOS调用_ordStatus = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: BitMEXMessage.Order }>) =>
+    DDOS调用 = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
         async (p: P, log?: { path: string, text: string }, ws?: BitMEXWSAPI) => {
             const startTime = Date.now()
             let success = false
@@ -87,11 +51,13 @@ export class BitMEXOrderAPI {
 
                     //
                     if (ws !== undefined) {
-                        ws.onAction({
-                            action: 'insert',
-                            table: 'order',
-                            data: [ret.data as any],
-                        })
+                        if (ret.data.orderID !== undefined && ret.data.ordStatus !== undefined) {
+                            ws.onAction({
+                                action: 'insert',
+                                table: 'order',
+                                data: [ret.data as any],
+                            })
+                        }
                     }
                     //
 
@@ -110,8 +76,7 @@ export class BitMEXOrderAPI {
         }
 
 
-    //DDOS调用_ordStatus
-    maker = this.DDOS调用_ordStatus<{
+    maker = this.DDOS调用<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         size: number
@@ -128,7 +93,7 @@ export class BitMEXOrderAPI {
         })
     )
 
-    stop = this.DDOS调用_ordStatus<{
+    stop = this.DDOS调用<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         price: number
@@ -143,7 +108,7 @@ export class BitMEXOrderAPI {
         })
     )
 
-    // 市价触发 = this.DDOS调用_ordStatus<{
+    // 市价触发 = this.DDOS调用<{
     //     symbol: BaseType.BitmexSymbol
     //     side: BaseType.Side
     //     price: number
@@ -160,7 +125,7 @@ export class BitMEXOrderAPI {
     // )
 
     //insert失败 忽略
-    updateStop = this.DDOS调用_ordStatus<{
+    updateStop = this.DDOS调用<{
         orderID: string
         price: number
     }>(
@@ -171,7 +136,7 @@ export class BitMEXOrderAPI {
     )
 
     //insert失败 忽略
-    updateMaker = this.DDOS调用_ordStatus<{
+    updateMaker = this.DDOS调用<{
         orderID: string
         price: () => number
     }>(
@@ -181,7 +146,7 @@ export class BitMEXOrderAPI {
         })
     )
 
-    limit = this.DDOS调用_ordStatus<{
+    limit = this.DDOS调用<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         size: number
@@ -195,9 +160,7 @@ export class BitMEXOrderAPI {
             price: p.price() + ((p.side === 'Buy' ? 1 : -1) * (p.symbol === 'XBTUSD' ? 0.5 : 0.05)),
         })
     )
-
-
-    //DDOS调用
+    
     taker = this.DDOS调用<{
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
