@@ -160,6 +160,9 @@ export class BitMEXWSAPI {
     本地维护XBTUSD仓位数量 = 0
     本地维护ETHUSD仓位数量 = 0
 
+    连续止损XBTUSD = 0
+    连续止损ETHUSD = 0
+
     constructor(cookie: string, subscribe: { theme: SubscribeTheme, filter?: string }[]) {
 
         const ws = this.ws = new WebSocketClient({
@@ -206,10 +209,23 @@ export class BitMEXWSAPI {
 
         if (新成交 > 0) {
             (order as any['已经成交']) = order.cumQty
-
             if (order.symbol === 'XBTUSD') this.本地维护XBTUSD仓位数量 += 新成交 * (order.side === 'Buy' ? 1 : -1)
             if (order.symbol === 'ETHUSD') this.本地维护ETHUSD仓位数量 += 新成交 * (order.side === 'Buy' ? 1 : -1)
+        }
 
+
+
+
+        //止盈
+        if (order.ordType === 'Limit' && order.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && order.ordStatus !== 'Filled') {
+            if (order.symbol === 'XBTUSD') this.连续止损XBTUSD = 0
+            if (order.symbol === 'ETHUSD') this.连续止损ETHUSD = 0
+        }
+
+        //止损
+        if (order.ordType === 'Stop' && order.execInst === 'Close,LastPrice' && order.ordStatus !== 'Filled') {
+            if (order.symbol === 'XBTUSD') this.连续止损XBTUSD += 1
+            if (order.symbol === 'ETHUSD') this.连续止损ETHUSD += 1
         }
     }
 
@@ -292,15 +308,6 @@ export class BitMEXWSAPI {
                         })
 
                         if (table === 'order') {
-
-                            //止盈
-                            //v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate,ReduceOnly'
-
-                            //止损
-                            //v.ordType === 'Stop' && v.execInst === 'Close,LastPrice'
-
-
-
                             this.data.order = this.data.order.filter(v =>
                                 v.ordStatus !== 'Rejected'  //拒绝委托
                                 &&

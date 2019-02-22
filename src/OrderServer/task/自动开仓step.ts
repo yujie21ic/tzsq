@@ -2,6 +2,7 @@ import { BaseType } from '../../lib/BaseType'
 import { TradeAccount } from '../TradeAccount'
 import { 信号灯side, realData } from '../realData'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
+import { sleep } from '../../lib/C/sleep';
 
 const 交易数量 = 2
 
@@ -17,16 +18,24 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAc
 
     const 本地维护仓位数量 = symbol === 'XBTUSD' ? self.ws.本地维护XBTUSD仓位数量 : self.ws.本地维护ETHUSD仓位数量
 
+    const 连续止损次数 = symbol === 'XBTUSD' ? self.ws.连续止损XBTUSD : self.ws.连续止损ETHUSD
+
     const 活动委托 = self.活动委托[symbol].filter(v => v.type !== '止损')
 
     const { 信号side, 信号msg } = 信号灯side(symbol)
+
+    if (连续止损次数 >= 4) {
+        await sleep(1000 * 60 * 10)//10min
+        if (symbol === 'XBTUSD') self.ws.连续止损XBTUSD = 0
+        if (symbol === 'ETHUSD') self.ws.连续止损ETHUSD = 0
+    }
 
     //没有仓位 没有委托 信号灯全亮 挂单
     if (本地维护仓位数量 === 0 && 仓位数量 === 0 && 活动委托.length === 0 && 信号side !== 'none') {
         return await self.order自动.limit({
             symbol,
             side: 信号side,
-            size: 交易数量,
+            size: 交易数量 * (连续止损次数 + 1),
             price: toBuySellPriceFunc(信号side, () => realData.getOrderPrice({
                 symbol,
                 side: 信号side,
