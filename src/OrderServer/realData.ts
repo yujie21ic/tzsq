@@ -13,7 +13,7 @@ const get信号msg = (symbol: BaseType.BitmexSymbol) => {
         信号_上涨: up.length > 3 ? [up[up.length - 3], up[up.length - 2], up[up.length - 1]] : '',
         信号_下跌: down.length > 3 ? [down[down.length - 3], down[down.length - 2], down[down.length - 1]] : '',
         波动率: lastNumber(realData.dataExt[symbol].期货.波动率),
-    }, undefined, 4)
+    })
 }
 
 

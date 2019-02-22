@@ -1,5 +1,4 @@
 import { WebSocketClient } from '../C/WebSocketClient'
-import { BaseType } from '../BaseType'
 import { BitMEXMessage } from './BitMEXMessage'
 import { config } from '../../config'
 
@@ -147,7 +146,7 @@ export class BitMEXWSAPI {
         transact: [],
         wallet: [],
     }
-    onFilled = (side: BaseType.Side, price: number) => { }
+
     onmessage = (fd: FrameData) => { }
 
     private ws: WebSocketClient
@@ -157,6 +156,12 @@ export class BitMEXWSAPI {
     }
 
     onStatusChange = () => { }
+
+    本地维护XBTUSD仓位数量 = 0
+    本地维护ETHUSD仓位数量 = 0
+
+    连续止损XBTUSD = 0
+    连续止损ETHUSD = 0
 
     constructor(cookie: string, subscribe: { theme: SubscribeTheme, filter?: string }[]) {
 
@@ -193,16 +198,49 @@ export class BitMEXWSAPI {
 
     hasPartial = new Map<string, boolean>()
 
+
+    //可变数据  直接修改order
+    onOrder(order: BitMEXMessage.Order) {
+        if ((order as any['已经成交']) === undefined) {
+            (order as any['已经成交']) = 0
+        }
+
+        const 新成交 = order.cumQty - (order as any['已经成交'])
+
+        if (新成交 > 0) {
+            (order as any['已经成交']) = order.cumQty
+            if (order.symbol === 'XBTUSD') this.本地维护XBTUSD仓位数量 += 新成交 * (order.side === 'Buy' ? 1 : -1)
+            if (order.symbol === 'ETHUSD') this.本地维护ETHUSD仓位数量 += 新成交 * (order.side === 'Buy' ? 1 : -1)
+        }
+
+
+
+
+        //止盈
+        if (order.ordType === 'Limit' && order.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && order.ordStatus !== 'Filled') {
+            if (order.symbol === 'XBTUSD') this.连续止损XBTUSD = 0
+            if (order.symbol === 'ETHUSD') this.连续止损ETHUSD = 0
+        }
+
+        //止损
+        if (order.ordType === 'Stop' && order.execInst === 'Close,LastPrice' && order.ordStatus !== 'Filled') {
+            if (order.symbol === 'XBTUSD') this.连续止损XBTUSD += 1
+            if (order.symbol === 'ETHUSD') this.连续止损ETHUSD += 1
+        }
+    }
+
+
     onAction(fd: FrameData) {
 
         const { table, keys, action, data } = fd
 
-        if (table === 'trade') {//数据太多了 不存啊!!
+        //数据太多了 不存 
+        if (table === 'trade') {
             this.onmessage(fd)
             return
         }
 
-        //table消息
+
         if (table !== undefined) {
 
             //主键
@@ -215,9 +253,28 @@ export class BitMEXWSAPI {
             if (action === 'partial') {
                 this.data[table] = data as any//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 this.hasPartial.set(table, true)
+
+
+                //本地维护仓位数量 初始化
+                if (table === 'position') {
+                    (data as BitMEXMessage.Position[]).forEach(v => {
+                        if (v.symbol === 'XBTUSD') this.本地维护XBTUSD仓位数量 = v.currentQty
+                        if (v.symbol === 'ETHUSD') this.本地维护ETHUSD仓位数量 = v.currentQty
+                    })
+                }
+
+
             }
             //插入新数据
             else if (action === 'insert') {
+
+                //本地维护仓位数量 增量
+                if (table === 'execution') {
+                    (data as BitMEXMessage.Execution[]).forEach(v => {
+                        if (v.symbol === 'XBTUSD' && v.ordType === 'StopLimit' && v.ordStatus === 'Filled') this.本地维护ETHUSD仓位数量 += v.cumQty * (v.side === 'Buy' ? 1 : -1)
+                        if (v.symbol === 'ETHUSD' && v.ordType === 'StopLimit' && v.ordStatus === 'Filled') this.本地维护ETHUSD仓位数量 += v.cumQty * (v.side === 'Buy' ? 1 : -1)
+                    })
+                }
 
 
                 //____________________________________________________________________________// 有了的不添加了
@@ -225,13 +282,10 @@ export class BitMEXWSAPI {
                 const dataXXX = (data as any[]).filter((a: any) => findItem(a, this.data[table], keys) === undefined)
                 //____________________________________________________________________________//
 
+                //本地维护仓位数量 增量
+                dataXXX.forEach(v => this.onOrder(v))
 
                 this.data[table] = [...this.data[table], ...dataXXX as any]
-
-                //限制长度
-                // if (this.data[table].length > 100) {
-                //     this.data[table] = this.data[table].slice(this.data[table].length - 100)
-                // }
             }
             //更新 删除
             else {
@@ -244,24 +298,13 @@ export class BitMEXWSAPI {
 
                         this.data[table] = (this.data[table] as any[]).map(a => {
                             const item = findItem(a, data, keys)
-                            return item === undefined ? a : { ...a, ...item }
+                            const obj = item === undefined ? a : { ...a, ...item }
+
+                            //本地维护仓位数量 增量
+                            if (table === 'order') this.onOrder(obj)
+
+                            return obj
                         })
-
-                        if (table === 'order') {
-
-                            const fill = this.data.order.find(v => v.ordStatus === 'Filled')
-                            if (fill !== undefined) {
-                                this.onFilled(fill.side as BaseType.Side, fill.price)
-                            }
-
-                            this.data.order = this.data.order.filter(v =>
-                                v.ordStatus !== 'Rejected'  //拒绝委托
-                                &&
-                                v.ordStatus !== 'Canceled'  //取消委托
-                                &&
-                                v.ordStatus !== 'Filled'    //完全成交
-                            )
-                        }
                     }
 
                     //删除数据
@@ -272,7 +315,16 @@ export class BitMEXWSAPI {
                         )
                     }
                 }
+            }
 
+            if (table === 'order') {
+                this.data.order = this.data.order.filter(v =>
+                    v.ordStatus !== 'Rejected'  //拒绝委托
+                    &&
+                    v.ordStatus !== 'Canceled'  //取消委托
+                    &&
+                    v.ordStatus !== 'Filled'    //完全成交
+                )
             }
 
             if (this.hasPartial.has(table)) {

@@ -36,7 +36,7 @@ export const funcList = {
         req: {
             cookie: '',
             symbol: '' as BaseType.BitmexSymbol,
-            任务名字: '' as '自动开仓' | '自动止盈',
+            任务名字: '' as '自动开仓' | '自动止盈' | '自动推止损',
             value: false,
         },
         res: false,
@@ -52,6 +52,10 @@ const symbol = () => ({
         },
         自动止盈: {
             value: false,
+            text: '',
+        },
+        自动推止损: {
+            value: true,
             text: '',
         }
     },

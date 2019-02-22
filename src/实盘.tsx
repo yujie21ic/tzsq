@@ -94,6 +94,10 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
                     rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动止盈', value: v })
                 }} /></p>
                 {/* <p>_{任务开关.自动止盈.text}</p> */}
+                <p>自动推止损:<Switch checked={任务开关.自动推止损.value} onChange={(e, v) => {
+                    rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动推止损', value: v })
+                }} /></p>
+                
             </div>
             <div style={{
                 display: 'flex',
