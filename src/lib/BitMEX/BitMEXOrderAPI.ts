@@ -31,9 +31,10 @@ export class BitMEXOrderAPI {
             let success = false
             let i = 1
             let errMsg = ''
+            const __id__ = callID++
 
             if (log !== undefined) {
-                BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + `__${callID}__` + log.text + '\n\nsend:' + JSON.stringify(p))
+                BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + `__${__id__}__` + log.text + '\n\nsend:' + JSON.stringify(p))
             }
 
             for (i = 1; i <= this.重试几次; i++) {
@@ -53,10 +54,10 @@ export class BitMEXOrderAPI {
             }
 
             if (log !== undefined) {
-                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + `__${callID}__` + `  重试${i}次  ${success ? '成功' : '失败' + errMsg}  耗时:${Date.now() - startTime}ms`)
+                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + `__${__id__}__` + `  重试${i}次  ${success ? '成功' : '失败' + errMsg}  耗时:${Date.now() - startTime}ms`)
             }
 
-            callID++
+
             return success
         }
 
@@ -67,9 +68,10 @@ export class BitMEXOrderAPI {
             let success = false
             let i = 1
             let errMsg = ''
+            const __id__ = callID++
 
             if (log !== undefined) {
-                BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + `__${callID}__` + log.text + '\n\nsend:' + JSON.stringify(p))
+                BitMEXOrderAPI__logToFile(log.path, new Date(startTime).toLocaleString() + `__${__id__}__` + log.text + '\n\nsend:' + JSON.stringify(p))
             }
 
             for (i = 1; i <= this.重试几次; i++) {
@@ -100,10 +102,10 @@ export class BitMEXOrderAPI {
             }
 
             if (log !== undefined) {
-                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + `__${callID}__` + `  重试${i}次  ${success ? '成功' : '失败' + errMsg}  耗时:${Date.now() - startTime}ms`)
+                BitMEXOrderAPI__logToFile(log.path, new Date().toLocaleString() + `__${__id__}__` + `  重试${i}次  ${success ? '成功' : '失败' + errMsg}  耗时:${Date.now() - startTime}ms`)
             }
 
-            callID++
+
             return success
         }
 
