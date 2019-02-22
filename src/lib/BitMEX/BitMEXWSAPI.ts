@@ -1,5 +1,4 @@
 import { WebSocketClient } from '../C/WebSocketClient'
-import { BaseType } from '../BaseType'
 import { BitMEXMessage } from './BitMEXMessage'
 import { config } from '../../config'
 
@@ -147,7 +146,7 @@ export class BitMEXWSAPI {
         transact: [],
         wallet: [],
     }
-    onFilled = (side: BaseType.Side, price: number) => { }
+
     onmessage = (fd: FrameData) => { }
 
     private ws: WebSocketClient
@@ -248,11 +247,6 @@ export class BitMEXWSAPI {
                         })
 
                         if (table === 'order') {
-
-                            const fill = this.data.order.find(v => v.ordStatus === 'Filled')
-                            if (fill !== undefined) {
-                                this.onFilled(fill.side as BaseType.Side, fill.price)
-                            }
 
                             this.data.order = this.data.order.filter(v =>
                                 v.ordStatus !== 'Rejected'  //拒绝委托
