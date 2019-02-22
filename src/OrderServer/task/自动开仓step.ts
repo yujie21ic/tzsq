@@ -45,7 +45,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
             最后一次信号时间 = Date.now()
 
             if (
-                (Date.now() - 最后一次信号时间 < 20 * 1000) || //没有超时
+                (Date.now() - 最后一次信号时间 < 20 * 1000) && //没有超时
                 (                                             //抵消
                     (x === '追涨' && 信号灯Type === '摸顶') ||
                     (x === '追跌' && 信号灯Type === '抄底') ||
