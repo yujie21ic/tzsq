@@ -296,7 +296,6 @@ export class BitMEXWSAPI {
                     //更新数据
                     if (action === 'update') {
 
-
                         this.data[table] = (this.data[table] as any[]).map(a => {
                             const item = findItem(a, data, keys)
                             const obj = item === undefined ? a : { ...a, ...item }
@@ -306,16 +305,6 @@ export class BitMEXWSAPI {
 
                             return obj
                         })
-
-                        if (table === 'order') {
-                            this.data.order = this.data.order.filter(v =>
-                                v.ordStatus !== 'Rejected'  //拒绝委托
-                                &&
-                                v.ordStatus !== 'Canceled'  //取消委托
-                                &&
-                                v.ordStatus !== 'Filled'    //完全成交
-                            )
-                        }
                     }
 
                     //删除数据
@@ -326,7 +315,16 @@ export class BitMEXWSAPI {
                         )
                     }
                 }
+            }
 
+            if (table === 'order') {
+                this.data.order = this.data.order.filter(v =>
+                    v.ordStatus !== 'Rejected'  //拒绝委托
+                    &&
+                    v.ordStatus !== 'Canceled'  //取消委托
+                    &&
+                    v.ordStatus !== 'Filled'    //完全成交
+                )
             }
 
             if (this.hasPartial.has(table)) {
