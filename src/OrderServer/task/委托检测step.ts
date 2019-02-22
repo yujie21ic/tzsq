@@ -24,10 +24,7 @@ export const 委托检测step = (symbol: BaseType.BitmexSymbol) => async (self: 
             (活动委托[0].type === '限价' && 活动委托[0].cumQty !== 0) ||
 
             //或者 限价只减仓委托
-            活动委托[0].type === '限价只减仓' ||
-
-            //或者 等ws返回中 
-            活动委托[0].type === '等ws返回中'
+            活动委托[0].type === '限价只减仓'
         ) {
             return false
         } else {

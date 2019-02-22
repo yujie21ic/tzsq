@@ -10,7 +10,7 @@ import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
 
 
 type Order = {
-    type: '限价' | '限价只减仓' | '止损' | '等ws返回中'
+    type: '限价' | '限价只减仓' | '止损'
     timestamp: number
     id: string
     side: BaseType.Side
@@ -108,7 +108,7 @@ export class TradeAccount {
         keys(this.jsonSync.rawData.symbol).forEach(symbol => {
 
             const arr = [] as {
-                type: '限价' | '限价只减仓' | '止损' | '等ws返回中'
+                type: '限价' | '限价只减仓' | '止损'
                 timestamp: number
                 id: string
                 side: BaseType.Side
@@ -121,17 +121,6 @@ export class TradeAccount {
                 if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && v.workingIndicator) {//先检测只减仓
                     arr.push({
                         type: '限价只减仓',
-                        timestamp: new Date(v.timestamp).getTime(),
-                        id: v.orderID,
-                        side: v.side as BaseType.Side,
-                        cumQty: v.cumQty,
-                        orderQty: v.orderQty,
-                        price: v.price,
-                    })
-                }
-                else if (v.ordType === 'Limit' && v.execInst === '等ws返回中' && v.workingIndicator) { //ext
-                    arr.push({
-                        type: '等ws返回中',
                         timestamp: new Date(v.timestamp).getTime(),
                         id: v.orderID,
                         side: v.side as BaseType.Side,
