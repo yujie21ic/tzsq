@@ -15,10 +15,10 @@ import { JSONRequest } from './lib/C/JSONRequest'
 import { Switch } from '@material-ui/core'
 import { to范围 } from './lib/F/to范围'
 import { 指标 } from './RealDataServer/指标'
-import { sleep } from './lib/C/sleep'
 import { toGridPoint } from './lib/F/toGridPoint'
 
 const realTickClient = new DataClient.RealData__Client()
+let hopex自动开仓一次 = false
 
 const account = config.account![windowExt.accountName]
 const { cookie } = account
@@ -201,8 +201,27 @@ export class 交易 extends React.Component {
 
 
     componentWillMount() {
+
+
         const f = () => {
             requestAnimationFrame(f)
+
+            if (hopex自动开仓一次) {
+                const up = realTickClient.dataExt.XBTUSD.信号hopex_上涨
+                const down = realTickClient.dataExt.XBTUSD.信号hopex_下跌
+
+                if (up.length > 0 && up[up.length - 1].every(v => v.value)) {
+                    speechSynthesis.speak(new SpeechSynthesisUtterance('自动卖一次'))
+                    this.hopex_sell()
+                    hopex自动开仓一次 = false
+                }
+                else if (down.length > 0 && down[down.length - 1].every(v => v.value)) {
+                    speechSynthesis.speak(new SpeechSynthesisUtterance('自动买一次'))
+                    this.hopex_buy()
+                    hopex自动开仓一次 = false
+                }
+            }
+
             this.forceUpdate()
         }
         f()
@@ -223,6 +242,35 @@ export class 交易 extends React.Component {
         })
     }
 
+
+    hopex_buy = () =>
+        hopex市价开仓和止损BTC(this.hopexCookie, {
+            size: (config.hopex数量 || 0) * this.倍数,
+            stopPrice:
+                toGridPoint('XBTUSD',
+                    lastNumber(realTickClient.dataExt.XBTUSD.hopex.价格) - to范围({
+                        min: 3,
+                        max: 18,
+                        value: lastNumber(realTickClient.dataExt.XBTUSD.期货.波动率) / 4,
+                    }), 'Sell')
+            ,
+            side: 'Buy',
+        })
+
+    hopex_sell = () =>
+        hopex市价开仓和止损BTC(this.hopexCookie, {
+            size: (config.hopex数量 || 0) * this.倍数,
+            stopPrice:
+
+                toGridPoint('XBTUSD',
+                    lastNumber(realTickClient.dataExt.XBTUSD.hopex.价格) + to范围({
+                        min: 3,
+                        max: 18,
+                        value: lastNumber(realTickClient.dataExt.XBTUSD.期货.波动率) / 4,
+                    }), 'Buy')
+            ,
+            side: 'Sell',
+        })
 
 
     render() {
@@ -245,12 +293,12 @@ export class 交易 extends React.Component {
                 <hr />
                 <Item symbol='XBTUSD' 位置={this.位置} 倍数={this.倍数} />
                 <hr />
-
-                <br />
                 <br />
 
                 {this.hopexCookie !== '' ?
                     <div>
+                        <p>自动点击一次:<Switch checked={hopex自动开仓一次} onChange={(e, v) => hopex自动开仓一次 = v} /> </p>
+                        <br />
                         <div style={{
                             display: 'flex',
                             flexDirection: 'row',
@@ -261,19 +309,7 @@ export class 交易 extends React.Component {
                                 <Button
                                     bgColor={GREEN}
                                     text={(config.hopex数量 || 0) * this.倍数 + ''}
-                                    left={() =>
-                                        hopex市价开仓和止损BTC(this.hopexCookie, {
-                                            size: (config.hopex数量 || 0) * this.倍数,
-                                            stopPrice:
-                                                toGridPoint('XBTUSD',
-                                                    lastNumber(realTickClient.dataExt.XBTUSD.hopex.价格) - to范围({
-                                                        min: 3,
-                                                        max: 18,
-                                                        value: lastNumber(realTickClient.dataExt.XBTUSD.期货.波动率) / 4,
-                                                    }), 'Sell')
-                                            ,
-                                            side: 'Buy',
-                                        })}
+                                    left={this.hopex_buy}
                                 />
                             </div>
                             <div
@@ -283,19 +319,7 @@ export class 交易 extends React.Component {
                                 <Button
                                     bgColor={RED}
                                     text={-(config.hopex数量 || 0) * this.倍数 + ''}
-                                    left={() => hopex市价开仓和止损BTC(this.hopexCookie, {
-                                        size: (config.hopex数量 || 0) * this.倍数,
-                                        stopPrice:
-
-                                            toGridPoint('XBTUSD',
-                                                lastNumber(realTickClient.dataExt.XBTUSD.hopex.价格) + to范围({
-                                                    min: 3,
-                                                    max: 18,
-                                                    value: lastNumber(realTickClient.dataExt.XBTUSD.期货.波动率) / 4,
-                                                }), 'Buy')
-                                        ,
-                                        side: 'Sell',
-                                    })}
+                                    left={this.hopex_sell}
                                 />
                             </div>
                         </div>
@@ -448,7 +472,6 @@ export class 提醒 extends React.Component {
 
 
         this.forceUpdate()
-        sleep(1000)
     }
 
     componentWillMount() {
