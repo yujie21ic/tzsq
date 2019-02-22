@@ -261,6 +261,13 @@ export class BitMEXWSAPI {
                                 &&
                                 v.ordStatus !== 'Filled'    //完全成交
                             )
+
+                            //Filled 等待仓位更新  多张分开成交？
+                        }
+
+
+                        if (table === 'position') {
+                            //仓位更新了...  TODO
                         }
                     }
 
