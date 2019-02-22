@@ -15,12 +15,14 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAc
 
     const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
 
+    const 本地维护仓位数量 = symbol === 'XBTUSD' ? self.ws.本地维护XBTUSD仓位数量 : self.ws.本地维护ETHUSD仓位数量
+
     const 活动委托 = self.活动委托[symbol].filter(v => v.type !== '止损')
 
     const { 信号side, 信号msg } = 信号灯side(symbol)
 
     //没有仓位 没有委托 信号灯全亮 挂单
-    if (仓位数量 === 0 && 活动委托.length === 0 && 信号side !== 'none') {
+    if (本地维护仓位数量 === 0 && 仓位数量 === 0 && 活动委托.length === 0 && 信号side !== 'none') {
         return await self.order自动.limit({
             symbol,
             side: 信号side,
