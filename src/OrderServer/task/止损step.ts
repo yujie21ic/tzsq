@@ -83,14 +83,14 @@ const 止损step = ({
 export const XBTUSD止损step = 止损step({
     symbol: 'XBTUSD',
     初始止损点: () => to范围({
-        min: 3,
+        min: 4,
         max: 18,
-        value: get波动率('XBTUSD') / 6 + 4,
+        value: get波动率('XBTUSD') / 7 + 4,
     }),
     推止损: 盈利点 => {
         const 波动率 = get波动率('XBTUSD')
-        if (盈利点 >= to范围({ min: 5, max: 30, value: 波动率 / 5 + 6 })) {
-            return 6
+        if (盈利点 >= to范围({ min: 5, max: 30, value: 波动率 / 5 + 8 })) {
+            return 5
         }
         else if (盈利点 >= to范围({ min: 5, max: 15, value: 波动率 / 10 + 5 })) {
             return 0
