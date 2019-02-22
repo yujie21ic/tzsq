@@ -243,6 +243,11 @@ export class RealDataBase {
             60,
             RealDataBase.单位时间
         )
+        const 净成交量均线120 = 指标.累加(
+            指标.lazyMapCache(() => 成交量卖.length, i => 净成交量[i]),
+            60,
+            RealDataBase.单位时间
+        )
 
 
 
@@ -263,8 +268,8 @@ export class RealDataBase {
         const 阻力3涨 = 指标.lazyMapCache(() => 阻力3.length, i => Math.max(0, 阻力3[i].阻力))
         let 阻力3跌 = 指标.lazyMapCache(() => 阻力3.length, i => Math.min(0, 阻力3[i].阻力))
 
-        const 真空信号涨 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 < 200000) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 >= 3)
-        const 真空信号跌 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 > -200000) && 阻力3[i].阻力 < 0 && 阻力3[i].价钱增量 >= 4)
+        const 真空信号涨 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 < 100000) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 >= to范围({min:4,max:20,value:波动率[i]/10}))
+        const 真空信号跌 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 > -100000) && 阻力3[i].阻力 < 0 && 阻力3[i].价钱增量 >= to范围({min:4,max:20,value:波动率[i]/10}))
 
         const 价格均线60 = 指标.均线(价格, 60, RealDataBase.单位时间)
 
@@ -432,14 +437,14 @@ export class RealDataBase {
                 //如果波动率比较小，那么对盘口的容忍度要大一些，因为没有经过充分博弈，小波动最大容忍度150万，大波动最大容忍度100万
                 let b = false
                 if (波动率[i] < 波动率中大分界) {
-                    if (盘口买[i] < 10 * 100000) {
-                        if (净盘口[i] <= (净盘口均线[i] + 5 * 100000)) {
+                    if (盘口买[i] < 100 * 10000) {
+                        if (净盘口[i] <= (净盘口均线[i] + 50 * 10000)) {
                             if (净盘口[i] < 5 * 100000) {
                                 b = true
                             }
                         }
                     } else {
-                        if (盘口买[i] < 15 * 100000) {
+                        if (盘口买[i] < 150 * 10000) {
                             if (净盘口[i] <= (净盘口均线[i])) {
                                 if (净盘口[i] < 0) {
                                     b = true
@@ -448,20 +453,35 @@ export class RealDataBase {
                         }
                     }
                 } else {
-                    if (盘口买[i] < 5 * 100000) {
-                        if (净盘口[i] <= (净盘口均线[i] + 5 * 100000)) {
+                    if (盘口买[i] < 50 * 10000) {
+                        if (净盘口[i] <= (净盘口均线[i] + 50 * 10000)) {
                             if (净盘口[i] < 5 * 100000) {
                                 b = true
                             }
                         }
                     } else {
-                        if (盘口买[i] < 10 * 100000) {
+                        if (盘口买[i] < 100 * 10000) {
                             if (净盘口[i] <= (净盘口均线[i])) {
                                 if (净盘口[i] < 0) {
                                     b = true
                                 }
                             }
                         }
+                    }
+                }
+                if(b===false){
+                    if (波动率[i] > 波动率中大分界) {
+                        if( 真空信号涨[i]){
+                            if(盘口买[i] < 200 * 10000){
+                                b = true
+                            }
+                           
+                        }
+                    }
+                }
+                if(b ===true){
+                    if(盘口买[i] > 300 * 10000){
+                        b = false
                     }
                 }
                 //波动率大于25之后，出现一次真空信号，动力慢信号都为true
@@ -479,6 +499,7 @@ export class RealDataBase {
                     //波动率大于25之后，出现一次真空信号，动力慢信号都为true
                     //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (上涨_动力DIF[i] - 上涨_动力DEM[i]) / 上涨_动力DEM[i] < 0.05 },
                     { name: '量化 is上涨', value: 净成交量均线60[i] > 0 },
+                    { name: '波动率最大限制', value:  波动率[i]  < 200 },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
                 ]
             }
@@ -572,14 +593,14 @@ export class RealDataBase {
             i => {
                 let b = false
                 if (波动率[i] < 波动率中大分界) {
-                    if (盘口卖[i] < 10 * 100000) {
-                        if (净盘口[i] >= (净盘口均线[i] - 5 * 100000)) {
-                            if (净盘口[i] > (- 5 * 100000)) {
+                    if (盘口卖[i] < 100 * 10000) {
+                        if (净盘口[i] >= (净盘口均线[i] - 50 * 10000)) {
+                            if (净盘口[i] > (- 50 * 10000)) {
                                 b = true
                             }
                         }
                     } else {
-                        if (盘口卖[i] < 15 * 100000) {
+                        if (盘口卖[i] < 150 * 10000) {
                             if (净盘口[i] >= 净盘口均线[i]) {
                                 if (净盘口[i] > 0) {
                                     b = true
@@ -588,20 +609,35 @@ export class RealDataBase {
                         }
                     }
                 } else {
-                    if (盘口卖[i] < 5 * 100000) {
-                        if (净盘口[i] >= (净盘口均线[i] - 5 * 100000)) {
-                            if (净盘口[i] > (- 5 * 100000)) {
+                    if (盘口卖[i] < 50 * 10000) {
+                        if (净盘口[i] >= (净盘口均线[i] - 50 * 10000)) {
+                            if (净盘口[i] > (- 50 * 10000)) {
                                 b = true
                             }
                         }
                     } else {
-                        if (盘口卖[i] < 10 * 100000) {
+                        if (盘口卖[i] < 100 * 10000) {
                             if (净盘口[i] >= 净盘口均线[i]) {
                                 if (净盘口[i] > 0) {
                                     b = true
                                 }
                             }
                         }
+                    }
+                }
+                if(b===false){
+                    if (波动率[i] > 波动率中大分界) {
+                        if( 真空信号涨[i]){
+                            if(盘口卖[i] < 200 * 10000){
+                                b = true
+                            }
+                            
+                        }
+                    }
+                }
+                if(b ===true){
+                    if(盘口卖[i] > 300 * 10000){
+                        b = false
                     }
                 }
 
@@ -616,6 +652,7 @@ export class RealDataBase {
                     { name: '波动率 >=8', value: 波动率[i] >= 8 },
                     //量化用
                     { name: '量化 is下跌', value: 净成交量均线60[i] < 0 },
+                    { name: '波动率最大限制', value:  波动率[i]  < 200 },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '下跌' && 自动下单条件[i] },
                 ]
             }
@@ -745,8 +782,8 @@ export class RealDataBase {
             () => Math.min(期货.信号_下跌.length, 期货.价格.length, 期货.波动率.length, hopex.价格.length),
             i => [
                 { name: '5秒内信号', value: _5秒内有全亮(期货.信号_下跌, i) },
-                { name: 'bm折返 >', value: 期货.价格[i] - 期货.最低价10[i] > 期货.波动率[i] / 5 + 2 },
-                { name: 'hp折返 <', value: hopex.价格[i] - hopex.最低价10[i] < (期货.波动率[i] / 5 + 2) / 2 },
+                { name: 'bm折返 >', value: 期货.价格[i] - 期货.最低价10[i] > 期货.波动率[i] / 10 + 2 },
+                { name: 'hp折返 <', value: hopex.价格[i] - hopex.最低价10[i] < (期货.波动率[i] / 10 + 2) / 2 },
             ]
         )
 
@@ -754,8 +791,8 @@ export class RealDataBase {
             () => Math.min(期货.信号_上涨.length, 期货.价格.length, 期货.波动率.length, hopex.价格.length),
             i => [
                 { name: '5秒内信号', value: _5秒内有全亮(期货.信号_上涨, i) },
-                { name: 'bm折返 >', value: 期货.最高价10[i] - 期货.价格[i] > 期货.波动率[i] / 5 + 2 },
-                { name: 'hp折返 <', value: hopex.最高价10[i] - hopex.价格[i] < (期货.波动率[i] / 5 + 2) / 2 },
+                { name: 'bm折返 >', value: 期货.最高价10[i] - 期货.价格[i] > 期货.波动率[i] / 10 + 2 },
+                { name: 'hp折返 <', value: hopex.最高价10[i] - hopex.价格[i] < (期货.波动率[i] / 10 + 2) / 2 },
             ]
         )
 
