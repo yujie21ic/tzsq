@@ -159,13 +159,13 @@ export class BitMEXWSAPI {
 
     }
 
-    keysDic = new Map<string, string[]>()
+    private keysDic = new Map<string, string[]>()
 
-    hasPartial = new Map<string, boolean>()
+    private hasPartial = new Map<string, boolean>()
 
 
 
-    deleteOrder(v: BitMEXMessage.Order) {
+    private deleteOrder(v: BitMEXMessage.Order) {
         if (v.ordStatus === 'Rejected' || v.ordStatus === 'Canceled' || v.ordStatus === 'Filled') {
             this.data.order.delete(v.orderID) //
         }
