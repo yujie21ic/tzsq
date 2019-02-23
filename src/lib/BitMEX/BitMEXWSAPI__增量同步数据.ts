@@ -37,7 +37,7 @@ export class BitMEXWSAPI__增量同步数据 {
                 obj[key] = n
                 this.dic.set(symbol, obj)
             }
-            this.log(`增量同步数据 ${key} update to ${this.dic.get(symbol)}`)
+            this.log(`增量同步数据 ${key} update to ${this.dic.get(symbol)![key]}`)
         },
         get: (symbol: BaseType.BitmexSymbol) => {
             const obj = this.dic.get(symbol)
