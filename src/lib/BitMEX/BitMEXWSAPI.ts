@@ -173,7 +173,7 @@ export class BitMEXWSAPI {
 
     private deleteExecution(v: BitMEXMessage.Execution, key: string) {
         if (v.ordStatus === 'Filled') {
-            this.data.order.delete(key) //
+            this.data.execution.delete(key) //
         }
     }
 

@@ -71,12 +71,12 @@ export class BitMEXWSAPI__增量同步数据 {
         this.新成交(order)
 
         //止盈
-        if (order.ordType === 'Limit' && order.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && order.ordStatus !== 'Filled') {
+        if (order.ordType === 'Limit' && order.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && order.ordStatus === 'Filled') {
             this.连续止损.partial(order.symbol as BaseType.BitmexSymbol, 0)
         }
 
         //止损
-        if (order.ordType === 'Stop' && order.execInst === 'Close,LastPrice' && order.ordStatus !== 'Filled') {
+        if (order.ordType === 'Stop' && order.execInst === 'Close,LastPrice' && order.ordStatus === 'Filled') {
             this.连续止损.update(order.symbol as BaseType.BitmexSymbol, 1)
         }
     }
