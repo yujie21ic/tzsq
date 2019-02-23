@@ -248,7 +248,6 @@ export class BitMEXWSAPI {
 
             //更新
             else if (action === 'update') {
-
                 data.forEach((v: any) => {
                     const key = JSON.stringify((keys || []).map(k => v[k]))
 
@@ -266,7 +265,7 @@ export class BitMEXWSAPI {
 
             //删除
             else if (action === 'delete') {
-                __dic__.forEach((v: any) => {
+                data.forEach((v: any) => {
                     const key = JSON.stringify((keys || []).map(k => v[k]))
                     __dic__.delete(key)
                 })
