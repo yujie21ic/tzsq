@@ -51,14 +51,14 @@ export class BitMEXWSAPI__增量同步数据 {
 
     //可变数据  直接修改order
     onOrder(order: BitMEXMessage.Order) {
-        if ((order as any['已经成交']) === undefined) {
-            (order as any['已经成交']) = 0
+        if (((order as any)['已经成交']) === undefined) {
+            ((order as any)['已经成交']) = 0
         }
 
-        const 新成交 = order.cumQty - (order as any['已经成交'])
+        const 新成交 = order.cumQty - ((order as any)['已经成交'])
 
         if (新成交 > 0) {
-            (order as any['已经成交']) = order.cumQty
+            ((order as any)['已经成交']) = order.cumQty
             this.仓位数量.update(order.symbol as BaseType.BitmexSymbol, 新成交 * (order.side === 'Buy' ? 1 : -1))
         }
 

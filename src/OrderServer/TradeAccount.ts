@@ -50,7 +50,7 @@ export class TradeAccount {
             重试几次: 10,
             重试休息多少毫秒: 10,
         })
-
+        
         this.ws = new BitMEXWSAPI(p.cookie, [
             { theme: 'margin' },
             { theme: 'position' },
@@ -58,6 +58,7 @@ export class TradeAccount {
         ])
 
         this.ws.onmessage = frame => {
+
             if (frame.table === 'margin') {
                 this.updateMargin()
             }
