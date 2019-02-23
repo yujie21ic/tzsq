@@ -251,12 +251,13 @@ export class BitMEXWSAPI {
                     const key = JSON.stringify((keys || []).map(k => v[k]))
 
                     const old = this.data[table].get(key)
-                    this.data[table].set(key, old === undefined ? v : { ...old, ...v })
+                    const newV = old === undefined ? v : { ...old, ...v }
+                    this.data[table].set(key, newV)
 
                     //本地维护仓位数量 增量
                     if (table === 'order') {
-                        this.增量同步数据.onOrder(v)
-                        this.deleteOrder(v)
+                        this.增量同步数据.onOrder(newV)
+                        this.deleteOrder(newV)
                     }
                 })
             }
