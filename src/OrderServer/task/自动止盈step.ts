@@ -14,8 +14,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => {
         if (self.jsonSync.rawData.symbol[symbol].任务开关.自动止盈.value === false) {
             return true
         }
-
-        const path = self.accountName + '.txt'
+        
         const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
         const 活动委托 = self.活动委托[symbol].filter(v => v.type !== '止损')
         const 连续止损次数 = self.ws.增量同步数据.连续止损.get(symbol)

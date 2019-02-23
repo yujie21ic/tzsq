@@ -7,8 +7,6 @@ export const 委托检测step = (symbol: BaseType.BitmexSymbol) => async (self: 
 
     const 活动委托 = self.活动委托[symbol].filter(v => v.type !== '止损')
 
-    const path = self.accountName + '.txt'
-
     //没有委托
     if (活动委托.length === 0) {
         return false
