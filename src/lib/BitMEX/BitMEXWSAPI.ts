@@ -268,11 +268,8 @@ export class BitMEXWSAPI {
         }
 
 
-
-
         if (this.hasPartial.has(table)) {
             this.onmessage(fd)
         }
     }
-}
 }
