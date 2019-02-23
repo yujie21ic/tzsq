@@ -3,7 +3,8 @@ import { BitMEXMessage } from './BitMEXMessage'
 
 export class BitMEXWSAPI__增量同步数据 {
 
-    private orderMap = new Map<string, BitMEXMessage.Order>()
+    //private
+    orderMap = new Map<string, BitMEXMessage.Order>()
 
     private dic = new Map<BaseType.BitmexSymbol, {
         仓位数量: number
