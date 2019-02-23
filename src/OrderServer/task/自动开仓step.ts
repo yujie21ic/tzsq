@@ -10,10 +10,14 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
 
     let 最后一次信号 = 'none' as 'none' | '追涨' | '追跌' | '摸顶' | '抄底'
     let 最后一次信号时间 = 0
+    let 最后一次上涨_下跌 = ''
 
     return async (self: TradeAccount) => {
 
         if (self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓.value === false) {
+            最后一次信号 = 'none'
+            最后一次信号时间 = 0
+            最后一次上涨_下跌 = ''
             return true
         }
 
@@ -30,11 +34,22 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
         const 信号灯Type = get信号灯Type(symbol)
         const 开仓side = { '追涨': 'Buy', '追跌': 'Sell', '抄底': 'Buy', '摸顶': 'Sell', 'none': '_____' }[信号灯Type] as BaseType.Side
 
+        //上涨 下跌 切换 止损次数 清零
+        const x = realData.dataExt[symbol].期货.上涨_下跌
+        if (x.length > 0 && 最后一次上涨_下跌 !== x[x.length - 1]) {
+            最后一次上涨_下跌 = x[x.length - 1]
+            if (symbol === 'XBTUSD') self.ws.连续止损XBTUSD = 0
+            if (symbol === 'ETHUSD') self.ws.连续止损ETHUSD = 0
+        }
+
+
         if (连续止损次数 >= 4) {
             await sleep(1000 * 60 * 10)//10min
             if (symbol === 'XBTUSD') self.ws.连续止损XBTUSD = 0
             if (symbol === 'ETHUSD') self.ws.连续止损ETHUSD = 0
         }
+
+
 
 
         //开仓

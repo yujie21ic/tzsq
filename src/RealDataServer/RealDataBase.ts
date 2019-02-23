@@ -689,6 +689,7 @@ export class RealDataBase {
 
 
         return {
+            上涨_下跌,
             上涨_动力20均线,
             上涨_动力10均线,
             下跌_动力20均线,
