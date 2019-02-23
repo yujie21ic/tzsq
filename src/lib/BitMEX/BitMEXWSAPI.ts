@@ -197,12 +197,13 @@ export class BitMEXWSAPI {
             keys = (this.keysDic.get(table) || [])
 
 
-            const __dic__ = this.data[table] as Map<any, any>
+            let __dic__ = this.data[table] as Map<any, any>
 
             //完全替换数据
             if (action === 'partial') {
 
-                this.data[table] = new Map()
+                __dic__ = this.data[table] = new Map()
+
 
                 data.forEach((v: any) => {
                     const key = JSON.stringify((keys || []).map(k => v[k]))
