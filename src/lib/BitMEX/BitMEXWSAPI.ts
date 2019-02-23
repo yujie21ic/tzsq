@@ -207,7 +207,7 @@ export class BitMEXWSAPI {
 
         if (新成交 > 0) {
             (order as any['已经成交']) = order.cumQty
-            this.增量同步数据.update_仓位数量(order.symbol as BaseType.BitmexSymbol, 新成交 * (order.side === 'Buy' ? 1 : -1))
+            this.增量同步数据.仓位数量.update(order.symbol as BaseType.BitmexSymbol, 新成交 * (order.side === 'Buy' ? 1 : -1))
         }
 
 
@@ -215,12 +215,12 @@ export class BitMEXWSAPI {
 
         //止盈
         if (order.ordType === 'Limit' && order.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && order.ordStatus !== 'Filled') {
-            this.增量同步数据.partial_连续止损(order.symbol as BaseType.BitmexSymbol, 0)
+            this.增量同步数据.连续止损.partial(order.symbol as BaseType.BitmexSymbol, 0)
         }
 
         //止损
         if (order.ordType === 'Stop' && order.execInst === 'Close,LastPrice' && order.ordStatus !== 'Filled') {
-            this.增量同步数据.update_连续止损(order.symbol as BaseType.BitmexSymbol, 1)
+            this.增量同步数据.连续止损.update(order.symbol as BaseType.BitmexSymbol, 1)
         }
     }
 
@@ -253,7 +253,7 @@ export class BitMEXWSAPI {
                 //本地维护仓位数量 初始化
                 if (table === 'position') {
                     (data as BitMEXMessage.Position[]).forEach(v => {
-                        this.增量同步数据.partial_仓位数量(v.symbol as BaseType.BitmexSymbol, v.currentQty)
+                        this.增量同步数据.仓位数量.partial(v.symbol as BaseType.BitmexSymbol, v.currentQty)
                     })
                 }
 
@@ -266,7 +266,7 @@ export class BitMEXWSAPI {
                 if (table === 'execution') {
                     (data as BitMEXMessage.Execution[]).forEach(v => {
                         if (v.ordType === 'StopLimit' && v.ordStatus === 'Filled') {
-                            this.增量同步数据.update_仓位数量(v.symbol as BaseType.BitmexSymbol, v.cumQty * (v.side === 'Buy' ? 1 : -1))
+                            this.增量同步数据.仓位数量.update(v.symbol as BaseType.BitmexSymbol, v.cumQty * (v.side === 'Buy' ? 1 : -1))
                         }
                     })
                 }
