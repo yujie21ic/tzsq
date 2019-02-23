@@ -9,7 +9,7 @@ import { kvs } from '../lib/F/kvs'
 import { XBTUSD止损step, ETHUSD止损step } from './task/止损step'
 import { 委托检测step } from './task/委托检测step'
 import { XBTUSD自动开仓step } from './task/自动开仓step'
-import { XBTUSD自动止盈step } from './task/自动止盈step'
+import { XBTUSD自动止盈波段step } from './task/自动止盈波段step'
 
 
 //运行的账户
@@ -27,7 +27,7 @@ if (config.orderServer !== undefined) {
         account.runTask(委托检测step('ETHUSD'))
 
         account.runTask(XBTUSD自动开仓step)
-        account.runTask(XBTUSD自动止盈step)
+        account.runTask(XBTUSD自动止盈波段step)
 
         accountDic.set(v, account)
     })
