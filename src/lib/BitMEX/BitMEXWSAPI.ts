@@ -81,72 +81,39 @@ type FrameData = (
     keys?: string[]
 }
 
-type WSData = {
-    announcement: BitMEXMessage.Announcement[]
-    chat: BitMEXMessage.Chat[]
-    connected: BitMEXMessage.ConnectedUsers[]
-    funding: BitMEXMessage.Funding[]
-    instrument: BitMEXMessage.Instrument[]
-    insurance: BitMEXMessage.Insurance[]
-    liquidation: BitMEXMessage.Liquidation[]
-    orderBookL2: BitMEXMessage.OrderBookL2[]
-    orderBook10: OrderBook10[]
-    publicNotifications: BitMEXMessage.GlobalNotification[]
-    quote: BitMEXMessage.Quote[]
-    quoteBin1m: BitMEXMessage.Quote[]
-    quoteBin5m: BitMEXMessage.Quote[]
-    quoteBin1h: BitMEXMessage.Quote[]
-    quoteBin1d: BitMEXMessage.Quote[]
-    settlement: BitMEXMessage.Settlement[]
-    trade: BitMEXMessage.Trade[]
-    tradeBin1m: BitMEXMessage.TradeBin[]
-    tradeBin5m: BitMEXMessage.TradeBin[]
-    tradeBin1h: BitMEXMessage.TradeBin[]
-    tradeBin1d: BitMEXMessage.TradeBin[]
-    affiliate: BitMEXMessage.Affiliate[]
-    execution: BitMEXMessage.Execution[]
-    order: BitMEXMessage.Order[]
-    margin: BitMEXMessage.Margin[]
-    position: BitMEXMessage.Position[]
-    privateNotifications: BitMEXMessage.GlobalNotification[]
-    transact: BitMEXMessage.Transaction[]
-    wallet: BitMEXMessage.Wallet[]
-}
-
-const findItem = (a: any, arr: any[], keys: any[]) => arr.find(b => keys.every(key => a[key] === b[key]))
 
 export class BitMEXWSAPI {
 
-    data: WSData = {
-        announcement: [],
-        chat: [],
-        connected: [],
-        funding: [],
-        instrument: [],
-        insurance: [],
-        liquidation: [],
-        orderBookL2: [],
-        orderBook10: [],
-        publicNotifications: [],
-        quote: [],
-        quoteBin1m: [],
-        quoteBin5m: [],
-        quoteBin1h: [],
-        quoteBin1d: [],
-        settlement: [],
-        trade: [],
-        tradeBin1m: [],
-        tradeBin5m: [],
-        tradeBin1h: [],
-        tradeBin1d: [],
-        affiliate: [],
-        execution: [],
-        order: [],
-        margin: [],
-        position: [],
-        privateNotifications: [],
-        transact: [],
-        wallet: [],
+    data = {
+        announcement: new Map<string, BitMEXMessage.Announcement>(),
+        chat: new Map<string, BitMEXMessage.Chat>(),
+        connected: new Map<string, BitMEXMessage.ConnectedUsers>(),
+        funding: new Map<string, BitMEXMessage.Funding>(),
+        instrument: new Map<string, BitMEXMessage.Instrument>(),
+        insurance: new Map<string, BitMEXMessage.Insurance>(),
+        liquidation: new Map<string, BitMEXMessage.Liquidation>(),
+        orderBookL2: new Map<string, BitMEXMessage.OrderBookL2>(),
+        orderBook10: new Map<string, OrderBook10>(),
+        publicNotifications: new Map<string, BitMEXMessage.GlobalNotification>(),
+        quote: new Map<string, BitMEXMessage.Quote>(),
+        quoteBin1m: new Map<string, BitMEXMessage.Quote>(),
+        quoteBin5m: new Map<string, BitMEXMessage.Quote>(),
+        quoteBin1h: new Map<string, BitMEXMessage.Quote>(),
+        quoteBin1d: new Map<string, BitMEXMessage.Quote>(),
+        settlement: new Map<string, BitMEXMessage.Settlement>(),
+        trade: new Map<string, BitMEXMessage.Trade>(),
+        tradeBin1m: new Map<string, BitMEXMessage.TradeBin>(),
+        tradeBin5m: new Map<string, BitMEXMessage.TradeBin>(),
+        tradeBin1h: new Map<string, BitMEXMessage.TradeBin>(),
+        tradeBin1d: new Map<string, BitMEXMessage.TradeBin>(),
+        affiliate: new Map<string, BitMEXMessage.Affiliate>(),
+        execution: new Map<string, BitMEXMessage.Execution>(),
+        order: new Map<string, BitMEXMessage.Order>(),
+        margin: new Map<string, BitMEXMessage.Margin>(),
+        position: new Map<string, BitMEXMessage.Position>(),
+        privateNotifications: new Map<string, BitMEXMessage.GlobalNotification>(),
+        transact: new Map<string, BitMEXMessage.Transaction>(),
+        wallet: new Map<string, BitMEXMessage.Wallet>(),
     }
 
     onmessage = (fd: FrameData) => { }
@@ -198,11 +165,17 @@ export class BitMEXWSAPI {
 
 
 
+    deleteOrder(v: BitMEXMessage.Order) {
+        if (v.ordStatus === 'Rejected' || v.ordStatus === 'Canceled' || v.ordStatus === 'Filled') {
+            this.data.order.delete(v.orderID) //
+        }
+    }
+
 
 
     onAction(fd: FrameData) {
 
-        const { table, keys, action, data } = fd
+        let { table, keys, action, data } = fd
 
         //数据太多了 不存 
         if (table === 'trade') {
@@ -218,12 +191,20 @@ export class BitMEXWSAPI {
                 this.keysDic.set(table, keys)
             }
 
+            keys = (this.keysDic.get(table) || [])
+
 
             //完全替换数据
             if (action === 'partial') {
-                this.data[table] = data as any//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                this.hasPartial.set(table, true)
 
+                this.data[table] = new Map()
+
+                data.forEach((v: any) => {
+                    const key = JSON.stringify((keys || []).map(k => v[k]))
+                    this.data[table].set(key, v)
+                })
+
+                this.hasPartial.set(table, true)
 
                 //本地维护仓位数量 初始化
                 if (table === 'position') {
@@ -231,11 +212,23 @@ export class BitMEXWSAPI {
                         this.增量同步数据.仓位数量.partial(v.symbol as BaseType.BitmexSymbol, v.currentQty)
                     })
                 }
-
-
             }
+
             //插入新数据
             else if (action === 'insert') {
+
+                data.forEach((v: any) => {
+                    const key = JSON.stringify((keys || []).map(k => v[k]))
+                    //有了的不添加了
+                    if (this.data[table].has(key) === false) {
+                        this.data[table].set(key, v)
+                        if (table === 'order') {
+                            this.增量同步数据.onOrder(v)
+                            this.deleteOrder(v)
+                        }
+                    }
+                })
+
 
                 //本地维护仓位数量 增量
                 if (table === 'execution') {
@@ -245,61 +238,41 @@ export class BitMEXWSAPI {
                         }
                     })
                 }
-
-
-                //____________________________________________________________________________// 有了的不添加了
-                const keys = this.keysDic.get(table) || []
-                const dataXXX = (data as any[]).filter((a: any) => findItem(a, this.data[table], keys) === undefined)
-                //____________________________________________________________________________//
-
-                //本地维护仓位数量 增量
-                dataXXX.forEach(v => this.增量同步数据.onOrder(v))
-
-                this.data[table] = [...this.data[table], ...dataXXX as any]
             }
-            //更新 删除
-            else {
-                const keys = this.keysDic.get(table)
 
-                if (keys !== undefined) {
 
-                    //更新数据
-                    if (action === 'update') {
+            //更新
+            else if (action === 'update') {
 
-                        this.data[table] = (this.data[table] as any[]).map(a => {
-                            const item = findItem(a, data, keys)
-                            const obj = item === undefined ? a : { ...a, ...item }
+                data.forEach((v: any) => {
+                    const key = JSON.stringify((keys || []).map(k => v[k]))
 
-                            //本地维护仓位数量 增量
-                            if (table === 'order') this.增量同步数据.onOrder(obj)
+                    const old = this.data[table].get(key)
+                    this.data[table].set(key, old === undefined ? v : { ...old, ...v })
 
-                            return obj
-                        })
+                    //本地维护仓位数量 增量
+                    if (table === 'order') {
+                        this.增量同步数据.onOrder(v)
+                        this.deleteOrder(v)
                     }
-
-                    //删除数据
-                    else if (action === 'delete') {
-
-                        this.data[table] = (this.data[table] as any[]).filter(a =>
-                            findItem(a, data, keys) === undefined
-                        )
-                    }
-                }
+                })
             }
 
-            if (table === 'order') {
-                this.data.order = this.data.order.filter(v =>
-                    v.ordStatus !== 'Rejected'  //拒绝委托
-                    &&
-                    v.ordStatus !== 'Canceled'  //取消委托
-                    &&
-                    v.ordStatus !== 'Filled'    //完全成交
-                )
-            }
-
-            if (this.hasPartial.has(table)) {
-                this.onmessage(fd)
+            //删除
+            else if (action === 'delete') {
+                this.data[table].forEach((v: any) => {
+                    const key = JSON.stringify((keys || []).map(k => v[k]))
+                    this.data[table].delete(key)
+                })
             }
         }
+
+
+
+
+        if (this.hasPartial.has(table)) {
+            this.onmessage(fd)
+        }
     }
+}
 }

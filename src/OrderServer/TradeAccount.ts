@@ -71,34 +71,35 @@ export class TradeAccount {
     }
 
     private updateMargin() {
-        if (this.ws.data.margin.length > 0) {
-            const { walletBalance } = this.ws.data.margin[0]
+        this.ws.data.margin.forEach(({ walletBalance, timestamp }) => {
             const { wallet } = this.jsonSync.rawData
             if (wallet.length === 0 || wallet[wallet.length - 1].total !== walletBalance) {
                 this.jsonSync.data.wallet.____push({
-                    time: new Date(this.ws.data.margin[0].timestamp).getTime(),
+                    time: new Date(timestamp).getTime(),
                     total: walletBalance
                 })
             }
-        }
+        })
     }
 
     private updatePosition() {
         keys(this.jsonSync.rawData.symbol).forEach(symbol => {
-            const item = this.ws.data.position.find(v => v.symbol === symbol && v.isOpen)
-            const { 仓位数量, 开仓均价 } = this.jsonSync.data.symbol[symbol]
-            const raw = this.jsonSync.rawData.symbol[symbol]
+            const item = this.ws.data.position.get(symbol)
             if (item !== undefined) {
-                if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== item.avgCostPrice) {
-                    仓位数量.____set(item.currentQty)
-                    开仓均价.____set(item.avgCostPrice)
-                    BitMEXOrderAPI__logToFile(this.accountName + '.txt', `仓位更新: ${symbol} 仓位数量:${item.currentQty}  本地维护仓位数量:${this.ws.增量同步数据.仓位数量.get(symbol)}  开仓均价:${item.avgCostPrice}`)
-                }
-            } else {
-                if (raw.仓位数量 !== 0 || raw.开仓均价 !== 0) {
-                    仓位数量.____set(0)
-                    开仓均价.____set(0)
-                    BitMEXOrderAPI__logToFile(this.accountName + '.txt', `仓位更新: ${symbol} 仓位数量:0  本地维护仓位数量:${this.ws.增量同步数据.仓位数量.get(symbol)}`)
+                const { 仓位数量, 开仓均价 } = this.jsonSync.data.symbol[symbol]
+                const raw = this.jsonSync.rawData.symbol[symbol]
+                if (item !== undefined) {
+                    if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== item.avgCostPrice) {
+                        仓位数量.____set(item.currentQty)
+                        开仓均价.____set(item.avgCostPrice)
+                        BitMEXOrderAPI__logToFile(this.accountName + '.txt', `仓位更新: ${symbol} 仓位数量:${item.currentQty}  本地维护仓位数量:${this.ws.增量同步数据.仓位数量.get(symbol)}  开仓均价:${item.avgCostPrice}`)
+                    }
+                } else {
+                    if (raw.仓位数量 !== 0 || raw.开仓均价 !== 0) {
+                        仓位数量.____set(0)
+                        开仓均价.____set(0)
+                        BitMEXOrderAPI__logToFile(this.accountName + '.txt', `仓位更新: ${symbol} 仓位数量:0  本地维护仓位数量:${this.ws.增量同步数据.仓位数量.get(symbol)}`)
+                    }
                 }
             }
         })
@@ -117,52 +118,44 @@ export class TradeAccount {
                 price: number
             }[]
 
-            this.ws.data.order.filter(v => v.symbol === symbol).forEach(v => {
-                if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && v.workingIndicator) {//先检测只减仓
-                    arr.push({
-                        type: '限价只减仓',
-                        timestamp: new Date(v.timestamp).getTime(),
-                        id: v.orderID,
-                        side: v.side as BaseType.Side,
-                        cumQty: v.cumQty,
-                        orderQty: v.orderQty,
-                        price: v.price,
-                    })
+            this.ws.data.order.forEach(v => {
+                if (v.symbol === symbol) {
+                    if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && v.workingIndicator) {//先检测只减仓
+                        arr.push({
+                            type: '限价只减仓',
+                            timestamp: new Date(v.timestamp).getTime(),
+                            id: v.orderID,
+                            side: v.side as BaseType.Side,
+                            cumQty: v.cumQty,
+                            orderQty: v.orderQty,
+                            price: v.price,
+                        })
+                    }
+                    else if (v.ordType === 'Limit' /*&& v.execInst === 'ParticipateDoNotInitiate'*/ && v.workingIndicator) { //不勾被动委托也行
+                        arr.push({
+                            type: '限价',
+                            timestamp: new Date(v.timestamp).getTime(),
+                            id: v.orderID,
+                            side: v.side as BaseType.Side,
+                            cumQty: v.cumQty,
+                            orderQty: v.orderQty,
+                            price: v.price,
+                        })
+                    }
+                    else if (v.ordType === 'Stop' && v.execInst === 'Close,LastPrice') {
+                        arr.push({
+                            type: '止损',
+                            timestamp: new Date(v.timestamp).getTime(),
+                            id: v.orderID,
+                            side: v.side as BaseType.Side,
+                            cumQty: v.cumQty,
+                            orderQty: v.orderQty,
+                            price: v.stopPx,
+                        })
+                    }
                 }
-                else if (v.ordType === 'Limit' /*&& v.execInst === 'ParticipateDoNotInitiate'*/ && v.workingIndicator) { //不勾被动委托也行
-                    arr.push({
-                        type: '限价',
-                        timestamp: new Date(v.timestamp).getTime(),
-                        id: v.orderID,
-                        side: v.side as BaseType.Side,
-                        cumQty: v.cumQty,
-                        orderQty: v.orderQty,
-                        price: v.price,
-                    })
-                }
-                else if (v.ordType === 'Stop' && v.execInst === 'Close,LastPrice') {
-                    arr.push({
-                        type: '止损',
-                        timestamp: new Date(v.timestamp).getTime(),
-                        id: v.orderID,
-                        side: v.side as BaseType.Side,
-                        cumQty: v.cumQty,
-                        orderQty: v.orderQty,
-                        price: v.stopPx,
-                    })
-                }
-                // else if (v.ordType === 'MarketIfTouched' && v.execInst === 'LastPrice') {
-                //     arr.push({
-                //         type: '市价触发',
-                //         timestamp: new Date(v.timestamp).getTime(),
-                //         id: v.orderID,
-                //         side: v.side as BaseType.Side,
-                //         cumQty: v.cumQty,
-                //         orderQty: v.orderQty,
-                //         price: v.stopPx,
-                //     })
-                // }
             })
+
 
             this.活动委托[symbol] = arr
 
