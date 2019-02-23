@@ -38,23 +38,8 @@ const getTypeString = (obj: any, tab = 1): string => {
 }
 
 
-const xx = (v: { description: string, type: string }) => {
-    const xx = (v.description || '').match(/Valid options:.*?\./g)
-    const yy = (v.description || '').match(/Available options:.*?\]/g)
-    if (xx && xx[0]) {
-        const type = (xx[0] as string).replace('Valid options:', '').replace(/[ \.]+/g, '').split(',').map(v => `'${v}'`).join(' | ')
-        return `(${type}) | (${type})[]`
-    }
-    else if (yy && yy[0]) {
-        const type = (yy[0] as string).replace('Available options:', '').replace(/[ \[\]]+/g, '').split(',').map(v => `'${v}'`).join(' | ')
-        return type
-    } else {
-        return v.type as string
-    }
-}
-
 const getReqTypeString = (arr: any[]) =>
-    arr.length === 0 ? '{}' : `{${arr.map(v => `${BR}${TAB3}${v.name}${(v.required ? '' : '?')}: ${xx(v)} /* '${v.format || ''}'  ${v.description || ''}*/`).join('')}${BR}${TAB2}}`
+    arr.length === 0 ? '{}' : `{${arr.map(v => `${BR}${TAB3}${v.name}${(v.required ? '' : '?')}: ${v.type} /* '${v.format || ''}'  ${v.description || ''}*/`).join('')}${BR}${TAB2}}`
 
 
 const getResTypeString = (obj: any) => getTypeString(obj.schema, 0)

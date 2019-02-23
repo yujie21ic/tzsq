@@ -619,7 +619,9 @@ export namespace BitMEXMessage {
     export interface UserEvent {
         id: number /* format:double*/
         type: string
+        eventType: string
         status: string
+        eventStatus: string
         userId: number /* format:double*/
         createdById: number /* format:double*/
         ip: string

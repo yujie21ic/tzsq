@@ -84,7 +84,7 @@ export class BitMEXOrderAPI {
             side: p.side,
             orderQty: p.size,
             price: p.price(),
-            execInst: p.reduceOnly ? ['ParticipateDoNotInitiate', 'ReduceOnly'] : 'ParticipateDoNotInitiate',
+            execInst: p.reduceOnly ? 'ParticipateDoNotInitiate,ReduceOnly' : 'ParticipateDoNotInitiate',
         })
     )
 
@@ -99,27 +99,10 @@ export class BitMEXOrderAPI {
             stopPx: p.price,
             orderQty: 100000,
             side: p.side,
-            execInst: ['Close', 'LastPrice'],
+            execInst: 'Close,LastPrice',
         })
     )
 
-    // 市价触发 = this.DDOS调用<{
-    //     symbol: BaseType.BitmexSymbol
-    //     side: BaseType.Side
-    //     price: number
-    //     size: number
-    // }>(
-    //     (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
-    //         symbol: p.symbol,
-    //         ordType: 'MarketIfTouched',
-    //         stopPx: p.price,
-    //         orderQty: p.size,
-    //         side: p.side,
-    //         execInst: 'LastPrice',
-    //     })
-    // )
-
-    //insert失败 忽略
     updateStop = this.DDOS调用<{
         orderID: string
         price: number
@@ -130,7 +113,6 @@ export class BitMEXOrderAPI {
         })
     )
 
-    //insert失败 忽略
     updateMaker = this.DDOS调用<{
         orderID: string
         price: () => number
