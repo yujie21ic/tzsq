@@ -11,7 +11,6 @@ export class BitMEXOrderAPI {
     private cookie: string
     private 重试几次: number
     private 重试休息多少毫秒: number
-
     log = (text: string) => { }
 
     constructor(p: { cookie: string, 重试几次: number, 重试休息多少毫秒: number }) {
@@ -20,8 +19,7 @@ export class BitMEXOrderAPI {
         this.重试休息多少毫秒 = p.重试休息多少毫秒
     }
 
-
-    DDOS调用 = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
+    private DDOS调用 = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
         async (p: P, logText?: string, ws?: BitMEXWSAPI) => {
             const startTime = Date.now()
             let success = false
