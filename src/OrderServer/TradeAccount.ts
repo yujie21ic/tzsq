@@ -92,13 +92,13 @@ export class TradeAccount {
                 if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== item.avgCostPrice) {
                     仓位数量.____set(item.currentQty)
                     开仓均价.____set(item.avgCostPrice)
-                    BitMEXOrderAPI__logToFile(this.accountName + '.txt', new Date().toLocaleString() + `仓位更新: ${symbol} 仓位数量:${item.currentQty}, 开仓均价:${item.avgCostPrice}`)
+                    BitMEXOrderAPI__logToFile(this.accountName + '.txt', `仓位更新: ${symbol} 仓位数量:${item.currentQty}  本地维护仓位数量:${symbol === 'XBTUSD' ? this.ws.本地维护XBTUSD仓位数量 : this.ws.本地维护ETHUSD仓位数量}  开仓均价:${item.avgCostPrice}`)
                 }
             } else {
                 if (raw.仓位数量 !== 0 || raw.开仓均价 !== 0) {
                     仓位数量.____set(0)
                     开仓均价.____set(0)
-                    BitMEXOrderAPI__logToFile(this.accountName + '.txt', new Date().toLocaleString() + `仓位更新: ${symbol} 仓位数量:0`)
+                    BitMEXOrderAPI__logToFile(this.accountName + '.txt', `仓位更新: ${symbol} 仓位数量:0  本地维护仓位数量:${symbol === 'XBTUSD' ? this.ws.本地维护XBTUSD仓位数量 : this.ws.本地维护ETHUSD仓位数量}`)
                 }
             }
         })
