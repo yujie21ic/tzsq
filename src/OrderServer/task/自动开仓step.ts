@@ -25,8 +25,6 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
 
         const 本地维护仓位数量 = self.ws.增量同步数据.仓位数量.get(symbol)
 
-        const 连续止损次数 = self.ws.增量同步数据.连续止损.get(symbol)
-
         const 活动委托 = self.活动委托[symbol].filter(v => v.type !== '止损')
 
         const 信号灯Type = get信号灯Type(symbol)
@@ -39,14 +37,13 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
             self.ws.增量同步数据.连续止损.partial(symbol, 0)
         }
 
+        const 连续止损次数 = self.ws.增量同步数据.连续止损.get(symbol)
 
         if (连续止损次数 >= 4) {
             await sleep(1000 * 60 * 10)//10min
             self.ws.增量同步数据.连续止损.partial(symbol, 0)
+            return true
         }
-
-
-
 
         //开仓
         if (本地维护仓位数量 === 0 && 仓位数量 === 0 && 活动委托.length === 0 && 信号灯Type !== 'none') {
