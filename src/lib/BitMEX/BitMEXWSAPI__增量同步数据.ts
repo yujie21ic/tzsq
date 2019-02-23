@@ -48,4 +48,28 @@ export class BitMEXWSAPI__增量同步数据 {
 
     仓位数量 = this.xxx('仓位数量')
     连续止损 = this.xxx('连续止损')
+
+    //可变数据  直接修改order
+    onOrder(order: BitMEXMessage.Order) {
+        if ((order as any['已经成交']) === undefined) {
+            (order as any['已经成交']) = 0
+        }
+
+        const 新成交 = order.cumQty - (order as any['已经成交'])
+
+        if (新成交 > 0) {
+            (order as any['已经成交']) = order.cumQty
+            this.仓位数量.update(order.symbol as BaseType.BitmexSymbol, 新成交 * (order.side === 'Buy' ? 1 : -1))
+        }
+
+        //止盈
+        if (order.ordType === 'Limit' && order.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && order.ordStatus !== 'Filled') {
+            this.连续止损.partial(order.symbol as BaseType.BitmexSymbol, 0)
+        }
+
+        //止损
+        if (order.ordType === 'Stop' && order.execInst === 'Close,LastPrice' && order.ordStatus !== 'Filled') {
+            this.连续止损.update(order.symbol as BaseType.BitmexSymbol, 1)
+        }
+    }
 }
