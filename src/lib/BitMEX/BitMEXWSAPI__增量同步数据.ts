@@ -72,4 +72,11 @@ export class BitMEXWSAPI__增量同步数据 {
             this.连续止损.update(order.symbol as BaseType.BitmexSymbol, 1)
         }
     }
+
+    //
+    onExecution(execution: BitMEXMessage.Execution) {
+        if (execution.ordType === 'StopLimit' && execution.ordStatus === 'Filled') {
+            this.仓位数量.update(execution.symbol as BaseType.BitmexSymbol, execution.cumQty * (execution.side === 'Buy' ? 1 : -1))
+        }
+    }
 }

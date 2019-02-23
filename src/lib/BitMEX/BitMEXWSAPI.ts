@@ -171,6 +171,12 @@ export class BitMEXWSAPI {
         }
     }
 
+    private deleteExecution(v: BitMEXMessage.Execution, key: string) {
+        if (v.ordStatus === 'Filled') {
+            this.data.order.delete(key) //
+        }
+    }
+
 
 
     onAction(fd: FrameData) {
@@ -220,35 +226,8 @@ export class BitMEXWSAPI {
                 }
             }
 
-            //插入新数据
-            else if (action === 'insert') {
-
-                data.forEach((v: any) => {
-                    const key = JSON.stringify((keys || []).map(k => v[k]))
-                    //有了的不添加了
-                    if (__dic__.has(key) === false) {
-                        __dic__.set(key, v)
-                        if (table === 'order') {
-                            this.增量同步数据.onOrder(v)
-                            this.deleteOrder(v, key)
-                        }
-                    }
-                })
-
-
-                //本地维护仓位数量 增量
-                if (table === 'execution') {
-                    (data as BitMEXMessage.Execution[]).forEach(v => {
-                        if (v.ordType === 'StopLimit' && v.ordStatus === 'Filled') {
-                            this.增量同步数据.仓位数量.update(v.symbol as BaseType.BitmexSymbol, v.cumQty * (v.side === 'Buy' ? 1 : -1))
-                        }
-                    })
-                }
-            }
-
-
-            //更新
-            else if (action === 'update') {
+            //insert update
+            else if (action === 'insert' || action === 'update') {
                 data.forEach((v: any) => {
                     const key = JSON.stringify((keys || []).map(k => v[k]))
 
@@ -256,10 +235,14 @@ export class BitMEXWSAPI {
                     const newV = old === undefined ? v : { ...old, ...v }
                     __dic__.set(key, newV)
 
-                    //本地维护仓位数量 增量
                     if (table === 'order') {
                         this.增量同步数据.onOrder(newV)
                         this.deleteOrder(newV, key)
+                    }
+
+                    if (table === 'execution') {
+                        this.增量同步数据.onExecution(newV)
+                        this.deleteExecution(newV, key)
                     }
                 })
             }
