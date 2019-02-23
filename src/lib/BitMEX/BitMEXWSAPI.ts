@@ -175,7 +175,10 @@ export class BitMEXWSAPI {
 
     onAction(fd: FrameData) {
 
-        let { table, keys, action, data } = fd
+        let keys = fd.keys
+        const table = fd.table
+        const action = fd.action
+        const data = fd.data as any[]
 
         //数据太多了 不存 
         if (table === 'trade') {
