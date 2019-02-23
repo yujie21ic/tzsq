@@ -165,9 +165,9 @@ export class BitMEXWSAPI {
 
 
 
-    private deleteOrder(v: BitMEXMessage.Order) {
+    private deleteOrder(v: BitMEXMessage.Order, key: string) {
         if (v.ordStatus === 'Rejected' || v.ordStatus === 'Canceled' || v.ordStatus === 'Filled') {
-            this.data.order.delete(v.orderID) //
+            this.data.order.delete(key) //
         }
     }
 
@@ -230,7 +230,7 @@ export class BitMEXWSAPI {
                         __dic__.set(key, v)
                         if (table === 'order') {
                             this.增量同步数据.onOrder(v)
-                            this.deleteOrder(v)
+                            this.deleteOrder(v, key)
                         }
                     }
                 })
@@ -259,7 +259,7 @@ export class BitMEXWSAPI {
                     //本地维护仓位数量 增量
                     if (table === 'order') {
                         this.增量同步数据.onOrder(newV)
-                        this.deleteOrder(newV)
+                        this.deleteOrder(newV, key)
                     }
                 })
             }

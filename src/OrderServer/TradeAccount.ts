@@ -82,6 +82,7 @@ export class TradeAccount {
         })
     }
 
+
     private updatePosition() {
         keys(this.jsonSync.rawData.symbol).forEach(symbol => {
             this.ws.data.position.forEach(item => {
@@ -108,6 +109,7 @@ export class TradeAccount {
     }
 
     private updateOrder() {
+
         keys(this.jsonSync.rawData.symbol).forEach(symbol => {
 
             const arr = [] as {
