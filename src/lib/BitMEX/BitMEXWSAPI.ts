@@ -197,6 +197,8 @@ export class BitMEXWSAPI {
             keys = (this.keysDic.get(table) || [])
 
 
+            const __dic__ = this.data[table] as Map<any, any>
+
             //完全替换数据
             if (action === 'partial') {
 
@@ -204,7 +206,7 @@ export class BitMEXWSAPI {
 
                 data.forEach((v: any) => {
                     const key = JSON.stringify((keys || []).map(k => v[k]))
-                    this.data[table].set(key, v)
+                    __dic__.set(key, v)
                 })
 
                 this.hasPartial.set(table, true)
@@ -223,8 +225,8 @@ export class BitMEXWSAPI {
                 data.forEach((v: any) => {
                     const key = JSON.stringify((keys || []).map(k => v[k]))
                     //有了的不添加了
-                    if (this.data[table].has(key) === false) {
-                        this.data[table].set(key, v)
+                    if (__dic__.has(key) === false) {
+                        __dic__.set(key, v)
                         if (table === 'order') {
                             this.增量同步数据.onOrder(v)
                             this.deleteOrder(v)
@@ -250,9 +252,9 @@ export class BitMEXWSAPI {
                 data.forEach((v: any) => {
                     const key = JSON.stringify((keys || []).map(k => v[k]))
 
-                    const old = this.data[table].get(key)
+                    const old = __dic__.get(key)
                     const newV = old === undefined ? v : { ...old, ...v }
-                    this.data[table].set(key, newV)
+                    __dic__.set(key, newV)
 
                     //本地维护仓位数量 增量
                     if (table === 'order') {
@@ -264,9 +266,9 @@ export class BitMEXWSAPI {
 
             //删除
             else if (action === 'delete') {
-                this.data[table].forEach((v: any) => {
+                __dic__.forEach((v: any) => {
                     const key = JSON.stringify((keys || []).map(k => v[k]))
-                    this.data[table].delete(key)
+                    __dic__.delete(key)
                 })
             }
         }
