@@ -27,7 +27,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
 
         const 本地维护仓位数量 = self.ws.增量同步数据.get_仓位数量(symbol)
 
-        const 连续止损次数 = symbol === 'XBTUSD' ? self.ws.连续止损XBTUSD : self.ws.连续止损ETHUSD
+        const 连续止损次数 = self.ws.增量同步数据.get_连续止损(symbol)
 
         const 活动委托 = self.活动委托[symbol].filter(v => v.type !== '止损')
 
@@ -38,15 +38,13 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
         const x = realData.dataExt[symbol].期货.上涨_下跌
         if (x.length > 0 && 最后一次上涨_下跌 !== x[x.length - 1]) {
             最后一次上涨_下跌 = x[x.length - 1]
-            if (symbol === 'XBTUSD') self.ws.连续止损XBTUSD = 0
-            if (symbol === 'ETHUSD') self.ws.连续止损ETHUSD = 0
+            self.ws.增量同步数据.partial_连续止损(symbol, 0)
         }
 
 
         if (连续止损次数 >= 4) {
             await sleep(1000 * 60 * 10)//10min
-            if (symbol === 'XBTUSD') self.ws.连续止损XBTUSD = 0
-            if (symbol === 'ETHUSD') self.ws.连续止损ETHUSD = 0
+            self.ws.增量同步数据.partial_连续止损(symbol, 0)
         }
 
 

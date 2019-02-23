@@ -18,7 +18,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => {
         const path = self.accountName + '.txt'
         const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
         const 活动委托 = self.活动委托[symbol].filter(v => v.type !== '止损')
-        const 连续止损次数 = symbol === 'XBTUSD' ? self.ws.连续止损XBTUSD : self.ws.连续止损ETHUSD
+        const 连续止损次数 = self.ws.增量同步数据.get_连续止损(symbol)
 
         if (仓位数量 !== 0) {
 

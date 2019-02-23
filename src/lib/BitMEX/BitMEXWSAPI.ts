@@ -161,9 +161,6 @@ export class BitMEXWSAPI {
 
     增量同步数据 = new BitMEXWSAPI__增量同步数据()
 
-    连续止损XBTUSD = 0
-    连续止损ETHUSD = 0
-
     constructor(cookie: string, subscribe: { theme: SubscribeTheme, filter?: string }[]) {
 
         const ws = this.ws = new WebSocketClient({
@@ -218,14 +215,12 @@ export class BitMEXWSAPI {
 
         //止盈
         if (order.ordType === 'Limit' && order.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && order.ordStatus !== 'Filled') {
-            if (order.symbol === 'XBTUSD') this.连续止损XBTUSD = 0
-            if (order.symbol === 'ETHUSD') this.连续止损ETHUSD = 0
+            this.增量同步数据.partial_连续止损(order.symbol as BaseType.BitmexSymbol, 0)
         }
 
         //止损
         if (order.ordType === 'Stop' && order.execInst === 'Close,LastPrice' && order.ordStatus !== 'Filled') {
-            if (order.symbol === 'XBTUSD') this.连续止损XBTUSD += 1
-            if (order.symbol === 'ETHUSD') this.连续止损ETHUSD += 1
+            this.增量同步数据.update_连续止损(order.symbol as BaseType.BitmexSymbol, 1)
         }
     }
 
