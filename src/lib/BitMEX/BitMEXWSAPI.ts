@@ -227,6 +227,7 @@ export class BitMEXWSAPI {
             }
 
             //insert update
+            //Market成交  ws 先返回 rest后返回 会插入2次  TODO
             else if (action === 'insert' || action === 'update') {
                 data.forEach((v: any) => {
                     const key = JSON.stringify((keys || []).map(k => v[k]))
