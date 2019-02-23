@@ -34,7 +34,7 @@ const 止损step = ({
                 symbol,
                 side,
                 price: toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点, side),
-            }, { path, text: '止损step 初始化止损' })
+            }, '止损step 初始化止损')
         }
         else {
             return false
@@ -68,7 +68,7 @@ const 止损step = ({
                 return await self.order自动.updateStop({
                     orderID: id,
                     price: 新的Price,
-                }, { path, text: '止损step 修改止损' })
+                }, '止损step 修改止损')
             }
             return false
         }
@@ -76,7 +76,7 @@ const 止损step = ({
     else {
         //多个止损 全部清空
         //ws返回有时间  直接给委托列表加一条记录??       
-        return await self.order自动.cancel(止损委托.map(v => v.id), { path, text: '止损step 取消多个止损' })
+        return await self.order自动.cancel(止损委托.map(v => v.id), '止损step 取消多个止损')
     }
 }
 

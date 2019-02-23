@@ -69,7 +69,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => {
                             size: Math.floor((task__config.交易数量 * (连续止损次数 + 1)) / 2),//一半
                             price: toBuySellPriceFunc(信号side, get位置1价格),
                             reduceOnly: true,
-                        }, { path, text: '自动止盈step 平一半' + 信号side + ' 信号msg:' + 信号msg })
+                        }, '自动止盈step 平一半' + 信号side + ' 信号msg:' + 信号msg)
                     } else {
                         return false
                     }

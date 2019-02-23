@@ -22,15 +22,15 @@ export class BitMEXOrderAPI {
 
 
     DDOS调用 = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
-        async (p: P, log?: { path: string, text: string }, ws?: BitMEXWSAPI) => {
+        async (p: P, logText?: string, ws?: BitMEXWSAPI) => {
             const startTime = Date.now()
             let success = false
             let i = 1
             let errMsg = ''
             const __id__ = callID++
 
-            if (log !== undefined) {
-                this.log(`__${__id__}__` + log.text + '\n\nsend:' + JSON.stringify(p))
+            if (logText !== undefined) {
+                this.log(`__${__id__}__` + logText + '\nsend:' + JSON.stringify(p))
             }
 
             for (i = 1; i <= this.重试几次; i++) {
@@ -62,7 +62,7 @@ export class BitMEXOrderAPI {
                 if (i === this.重试几次) errMsg = JSON.stringify(ret)
             }
 
-            if (log !== undefined) {
+            if (logText !== undefined) {
                 this.log(`__${__id__}__` + `  重试${i}次  ${success ? '成功' : '失败' + errMsg}  耗时:${Date.now() - startTime}ms`)
             }
 
