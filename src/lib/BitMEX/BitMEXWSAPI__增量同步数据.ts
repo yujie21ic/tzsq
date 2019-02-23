@@ -11,6 +11,8 @@ export class BitMEXWSAPI__增量同步数据 {
         连续止损: number
     }>()
 
+    log = (text: string) => { }
+
 
     private xxx = (key: '仓位数量' | '连续止损') => ({
         partial: (symbol: BaseType.BitmexSymbol, n: number) => {
@@ -23,6 +25,7 @@ export class BitMEXWSAPI__增量同步数据 {
                 obj[key] = n
                 this.dic.set(symbol, obj)
             }
+            this.log(`增量同步数据 ${key} partial ${n}`)
         },
         update: (symbol: BaseType.BitmexSymbol, n: number) => {
             const obj = this.dic.get(symbol)
@@ -34,6 +37,7 @@ export class BitMEXWSAPI__增量同步数据 {
                 obj[key] = n
                 this.dic.set(symbol, obj)
             }
+            this.log(`增量同步数据 ${key} update to ${this.dic.get(symbol)}`)
         },
         get: (symbol: BaseType.BitmexSymbol) => {
             const obj = this.dic.get(symbol)

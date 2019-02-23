@@ -3,10 +3,11 @@ import { createJSONSync, funcList } from './____API____'
 import { keys } from 'ramda'
 import { BaseType } from '../lib/BaseType'
 import { sleep } from '../lib/C/sleep'
-import { BitMEXOrderAPI, BitMEXOrderAPI__logToFile } from '../lib/BitMEX/BitMEXOrderAPI'
+import { BitMEXOrderAPI } from '../lib/BitMEX/BitMEXOrderAPI'
 import { realData } from './realData'
 import { to范围 } from '../lib/F/to范围'
 import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
+import { logToFile } from '../lib/C/logToFile'
 
 
 type Order = {
@@ -44,13 +45,15 @@ export class TradeAccount {
             重试几次: 100,
             重试休息多少毫秒: 30,
         })
+        this.order手动.log = logToFile(this.accountName + '.txt')
 
         this.order自动 = new BitMEXOrderAPI({
             cookie: p.cookie,
             重试几次: 10,
             重试休息多少毫秒: 10,
         })
-        
+        this.order自动.log = logToFile(this.accountName + '.txt')
+
         this.ws = new BitMEXWSAPI(p.cookie, [
             { theme: 'margin' },
             { theme: 'position' },
@@ -69,6 +72,8 @@ export class TradeAccount {
                 this.updateOrder()
             }
         }
+
+        this.ws.增量同步数据.log = logToFile(this.accountName + '.txt')
     }
 
     private updateMargin() {
@@ -94,13 +99,13 @@ export class TradeAccount {
                         if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== item.avgCostPrice) {
                             仓位数量.____set(item.currentQty)
                             开仓均价.____set(item.avgCostPrice)
-                            BitMEXOrderAPI__logToFile(this.accountName + '.txt', `仓位更新: ${symbol} 仓位数量:${item.currentQty}  本地维护仓位数量:${this.ws.增量同步数据.仓位数量.get(symbol)}  开仓均价:${item.avgCostPrice}`)
+                            this.order自动.log(`仓位更新: ${symbol} 仓位数量:${item.currentQty}  本地维护仓位数量:${this.ws.增量同步数据.仓位数量.get(symbol)}  开仓均价:${item.avgCostPrice}`)
                         }
                     } else {
                         if (raw.仓位数量 !== 0 || raw.开仓均价 !== 0) {
                             仓位数量.____set(0)
                             开仓均价.____set(0)
-                            BitMEXOrderAPI__logToFile(this.accountName + '.txt', `仓位更新: ${symbol} 仓位数量:0  本地维护仓位数量:${this.ws.增量同步数据.仓位数量.get(symbol)}`)
+                            this.order自动.log(`仓位更新: ${symbol} 仓位数量:0  本地维护仓位数量:${this.ws.增量同步数据.仓位数量.get(symbol)}`)
                         }
                     }
                 }

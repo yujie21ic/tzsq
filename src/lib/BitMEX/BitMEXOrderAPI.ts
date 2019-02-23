@@ -2,33 +2,17 @@ import { BaseType } from '../BaseType'
 import { BitMEXRESTAPI } from '../BitMEX/BitMEXRESTAPI'
 import { sleep } from '../C/sleep'
 import { JSONRequestError } from '../C/JSONRequest'
-
-import * as fs from 'fs'
 import { BitMEXWSAPI } from './BitMEXWSAPI'
 
-const 北京时间 = () => {
-    const date = new Date(Date.now() + 8 * 60 * 60 * 1000)
-    const 月 = (date.getUTCMonth() + 1).toString().padStart(2, '0')
-    const 日 = date.getUTCDate().toString().padStart(2, '0')
-    const hh = date.getUTCHours().toString().padStart(2, '0')
-    const mm = date.getUTCMinutes().toString().padStart(2, '0')
-    const ss = date.getUTCSeconds().toString().padStart(2, '0')
-    const msmsms = date.getUTCMilliseconds().toString().padStart(3, '0')
-    return `${月}/${日} ${hh}:${mm}:${ss}/${msmsms}`
-}
-
-
-export const BitMEXOrderAPI__logToFile = (path: string, text: string) =>
-    fs.writeFileSync(path, 北京时间() + text + '  \n', { flag: 'a' })
-
 let callID = 0
-
 
 export class BitMEXOrderAPI {
 
     private cookie: string
     private 重试几次: number
     private 重试休息多少毫秒: number
+
+    log = (text: string) => { }
 
     constructor(p: { cookie: string, 重试几次: number, 重试休息多少毫秒: number }) {
         this.cookie = p.cookie
@@ -46,7 +30,7 @@ export class BitMEXOrderAPI {
             const __id__ = callID++
 
             if (log !== undefined) {
-                BitMEXOrderAPI__logToFile(log.path, `__${__id__}__` + log.text + '\n\nsend:' + JSON.stringify(p))
+                this.log(`__${__id__}__` + log.text + '\n\nsend:' + JSON.stringify(p))
             }
 
             for (i = 1; i <= this.重试几次; i++) {
@@ -79,7 +63,7 @@ export class BitMEXOrderAPI {
             }
 
             if (log !== undefined) {
-                BitMEXOrderAPI__logToFile(log.path, `__${__id__}__` + `  重试${i}次  ${success ? '成功' : '失败' + errMsg}  耗时:${Date.now() - startTime}ms`)
+                this.log(`__${__id__}__` + `  重试${i}次  ${success ? '成功' : '失败' + errMsg}  耗时:${Date.now() - startTime}ms`)
             }
 
 
