@@ -25,7 +25,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
 
         const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
 
-        const 本地维护仓位数量 = symbol === 'XBTUSD' ? self.ws.本地维护XBTUSD仓位数量 : self.ws.本地维护ETHUSD仓位数量
+        const 本地维护仓位数量 = self.ws.增量同步数据.get_仓位数量(symbol)
 
         const 连续止损次数 = symbol === 'XBTUSD' ? self.ws.连续止损XBTUSD : self.ws.连续止损ETHUSD
 

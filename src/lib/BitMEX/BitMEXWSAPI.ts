@@ -1,6 +1,8 @@
 import { WebSocketClient } from '../C/WebSocketClient'
 import { BitMEXMessage } from './BitMEXMessage'
 import { config } from '../../config'
+import { BitMEXWSAPI__增量同步数据 } from './BitMEXWSAPI__增量同步数据'
+import { BaseType } from '../BaseType'
 
 type OrderBook10 = {
     symbol: string
@@ -157,8 +159,7 @@ export class BitMEXWSAPI {
 
     onStatusChange = () => { }
 
-    本地维护XBTUSD仓位数量 = 0
-    本地维护ETHUSD仓位数量 = 0
+    增量同步数据 = new BitMEXWSAPI__增量同步数据()
 
     连续止损XBTUSD = 0
     连续止损ETHUSD = 0
@@ -209,8 +210,7 @@ export class BitMEXWSAPI {
 
         if (新成交 > 0) {
             (order as any['已经成交']) = order.cumQty
-            if (order.symbol === 'XBTUSD') this.本地维护XBTUSD仓位数量 += 新成交 * (order.side === 'Buy' ? 1 : -1)
-            if (order.symbol === 'ETHUSD') this.本地维护ETHUSD仓位数量 += 新成交 * (order.side === 'Buy' ? 1 : -1)
+            this.增量同步数据.update_仓位数量(order.symbol as BaseType.BitmexSymbol, 新成交 * (order.side === 'Buy' ? 1 : -1))
         }
 
 
@@ -258,8 +258,7 @@ export class BitMEXWSAPI {
                 //本地维护仓位数量 初始化
                 if (table === 'position') {
                     (data as BitMEXMessage.Position[]).forEach(v => {
-                        if (v.symbol === 'XBTUSD') this.本地维护XBTUSD仓位数量 = v.currentQty
-                        if (v.symbol === 'ETHUSD') this.本地维护ETHUSD仓位数量 = v.currentQty
+                        this.增量同步数据.partial_仓位数量(v.symbol as BaseType.BitmexSymbol, v.currentQty)
                     })
                 }
 
@@ -271,8 +270,9 @@ export class BitMEXWSAPI {
                 //本地维护仓位数量 增量
                 if (table === 'execution') {
                     (data as BitMEXMessage.Execution[]).forEach(v => {
-                        if (v.symbol === 'XBTUSD' && v.ordType === 'StopLimit' && v.ordStatus === 'Filled') this.本地维护ETHUSD仓位数量 += v.cumQty * (v.side === 'Buy' ? 1 : -1)
-                        if (v.symbol === 'ETHUSD' && v.ordType === 'StopLimit' && v.ordStatus === 'Filled') this.本地维护ETHUSD仓位数量 += v.cumQty * (v.side === 'Buy' ? 1 : -1)
+                        if (v.ordType === 'StopLimit' && v.ordStatus === 'Filled') {
+                            this.增量同步数据.update_仓位数量(v.symbol as BaseType.BitmexSymbol, v.cumQty * (v.side === 'Buy' ? 1 : -1))
+                        }
                     })
                 }
 
