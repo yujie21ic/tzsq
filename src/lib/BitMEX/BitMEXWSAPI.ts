@@ -188,6 +188,8 @@ export class BitMEXWSAPI {
 
     onAction(fd: FrameData) {
 
+        if (this.ws.isConnected === false) return
+
         let keys = fd.keys
         const table = fd.table
         const action = fd.action
