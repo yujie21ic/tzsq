@@ -268,8 +268,8 @@ export class RealDataBase {
         const 阻力3涨 = 指标.lazyMapCache(() => 阻力3.length, i => Math.max(0, 阻力3[i].阻力))
         let 阻力3跌 = 指标.lazyMapCache(() => 阻力3.length, i => Math.min(0, 阻力3[i].阻力))
 
-        const 真空信号涨 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 < 150000) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 >= to范围({min:4,max:20,value:波动率[i]/10}))
-        const 真空信号跌 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 > -150000) && 阻力3[i].阻力 < 0 && 阻力3[i].价钱增量 >= to范围({min:4,max:20,value:波动率[i]/10}))
+        const 真空信号涨 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 < 150000) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 >= to范围({ min: 4, max: 20, value: 波动率[i] / 10 }))
+        const 真空信号跌 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 > -150000) && 阻力3[i].阻力 < 0 && 阻力3[i].价钱增量 >= to范围({ min: 4, max: 20, value: 波动率[i] / 10 }))
 
         const 价格均线60 = 指标.均线(价格, 60, RealDataBase.单位时间)
 
@@ -469,18 +469,18 @@ export class RealDataBase {
                         }
                     }
                 }
-                if(b===false){
+                if (b === false) {
                     if (波动率[i] > 波动率中大分界) {
-                        if( 真空信号涨[i]){
-                            if(盘口买[i] < 200 * 10000){
+                        if (真空信号涨[i]) {
+                            if (盘口买[i] < 200 * 10000) {
                                 b = true
                             }
-                           
+
                         }
                     }
                 }
-                if(b ===true){
-                    if(盘口买[i] > 300 * 10000){
+                if (b === true) {
+                    if (盘口买[i] > 300 * 10000) {
                         b = false
                     }
                 }
@@ -494,13 +494,13 @@ export class RealDataBase {
                     { name: '真空', value: 波动率[i] < 波动率中大分界 || 真空信号涨[i] },
                     { name: '成交量DIF<DEM', value: 净上涨成交量DIF[i] < 净上涨成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净上涨成交量DIF[i] < 0) },
                     { name: ' 净盘口<净盘口均线<0', value: b },
-                    { name: '30秒净买成交量 >=150万', value: 净上涨成交量30[i] >=150*10000 },
-                    { name: '折返程度<', value: 最高价10[i]- 价格[i] <波动率[i] / 10 + 1},
+                    { name: '30秒净买成交量 >=150万', value: 净上涨成交量30[i] >= 150 * 10000 },
+                    { name: '折返程度<', value: 最高价10[i] - 价格[i] < 波动率[i] / 10 + 1 },
                     { name: '波动率 >=8', value: 波动率[i] >= 8 },
                     //波动率大于25之后，出现一次真空信号，动力慢信号都为true
                     //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (上涨_动力DIF[i] - 上涨_动力DEM[i]) / 上涨_动力DEM[i] < 0.05 },
                     { name: '量化 is上涨', value: 净成交量均线60[i] > 0 },
-                    { name: '波动率最大限制', value:  波动率[i]  < 200 },
+                    { name: '波动率最大限制', value: 波动率[i] < 200 },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
                 ]
             }
@@ -563,7 +563,7 @@ export class RealDataBase {
                     { name: '成交量DIF>DEM', value: 净上涨成交量DIF[i] > 净上涨成交量DEM[i] },
                     //{ name: '净盘口>0', value: 净盘口[i]>0 },
                     { name: '波动率 >=5', value: 波动率[i] >= 5 },
-                    { name: '折返程度<', value: 最高价10[i]- 价格[i] <波动率[i] / 10 + 1},
+                    { name: '折返程度<', value: 最高价10[i] - 价格[i] < 波动率[i] / 10 + 1 },
                     { name: '追涨', value: 上涨.动力[i] > 100 * 10000 },
                     //量化用 净上涨成交量DIF
                     { name: '量化 is上涨', value: 净成交量均线60[i] > 0 },
@@ -627,18 +627,18 @@ export class RealDataBase {
                         }
                     }
                 }
-                if(b===false){
+                if (b === false) {
                     if (波动率[i] > 波动率中大分界) {
-                        if( 真空信号涨[i]){
-                            if(盘口卖[i] < 200 * 10000){
+                        if (真空信号涨[i]) {
+                            if (盘口卖[i] < 200 * 10000) {
                                 b = true
                             }
-                            
+
                         }
                     }
                 }
-                if(b ===true){
-                    if(盘口卖[i] > 300 * 10000){
+                if (b === true) {
+                    if (盘口卖[i] > 300 * 10000) {
                         b = false
                     }
                 }
@@ -649,13 +649,13 @@ export class RealDataBase {
                     { name: '真空', value: 波动率[i] < 波动率中大分界 || 真空信号跌[i] },
                     { name: '卖成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净下跌成交量DIF[i] < 0) },
                     { name: ' 净盘口 > 净盘口均线>0', value: b },
-                    { name: '30秒净卖成交量>150万', value: 净下跌成交量30[i] >=150*10000 },
-                    { name: '折返程度<', value:价格[i] - 最低价10[i] <波动率[i] / 10 + 1},
+                    { name: '30秒净卖成交量>150万', value: 净下跌成交量30[i] >= 150 * 10000 },
+                    { name: '折返程度<', value: 价格[i] - 最低价10[i] < 波动率[i] / 10 + 1 },
                     //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (下跌_动力DIF[i] - 下跌_动力DEM[i]) / 下跌_动力DEM[i] < 0.05 },
                     { name: '波动率 >=8', value: 波动率[i] >= 8 },
                     //量化用
                     { name: '量化 is下跌', value: 净成交量均线60[i] < 0 },
-                    { name: '波动率最大限制', value:  波动率[i]  < 200 },
+                    { name: '波动率最大限制', value: 波动率[i] < 200 },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '下跌' && 自动下单条件[i] },
                 ]
             }
@@ -678,7 +678,7 @@ export class RealDataBase {
                     { name: '卖成交量DIF>DEM', value: 净下跌成交量DIF[i] > 净下跌成交量DEM[i] },
                     //{ name: '净盘口<0', value: 净盘口[i]<0 },
                     { name: '波动率 >=5', value: 波动率[i] >= 5 },
-                    { name: '折返程度<', value:价格[i] - 最低价10[i] <波动率[i] / 10 + 1},
+                    { name: '折返程度<', value: 价格[i] - 最低价10[i] < 波动率[i] / 10 + 1 },
                     { name: '追跌', value: 下跌.动力[i] > 100 * 10000 },
                     { name: '量化 is下跌', value: 净成交量均线60[i] < 0 },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '下跌' && 自动下单条件[i] },
@@ -775,7 +775,7 @@ export class RealDataBase {
             for (let i = index; i >= Math.max(0, index - 5 * (1000 / RealDataBase.单位时间)); i--) {
                 if (arr[i].every(v => v.value)) {
                     连续几根++
-                    if (连续几根 === 2) return true
+                    if (连续几根 === 3) return true
                 } else {
                     连续几根 = 0
                 }
