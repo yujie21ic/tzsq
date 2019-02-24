@@ -21,7 +21,7 @@ export const get信号msg = (symbol: BaseType.BitmexSymbol) => {
 }
 
 
-export const 信号灯side = (symbol: BaseType.BitmexSymbol) => {
+export const 摸顶抄底信号灯side = (symbol: BaseType.BitmexSymbol) => {
     const up = realData.dataExt[symbol].期货.信号_上涨
     const down = realData.dataExt[symbol].期货.信号_下跌
 
