@@ -3,6 +3,7 @@ import { funcList } from './funcList'
 
 export const PKClient = new JSONRPCClient({
     funcList,
-    host: '63.33.56.32',
+    //盘口服务器
+    host: '34.254.250.43',
     port: 5555
 })

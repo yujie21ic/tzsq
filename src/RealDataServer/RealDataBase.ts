@@ -253,12 +253,24 @@ export class RealDataBase {
 
         const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
         const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
+            //盘口买1,盘口卖1,净盘口1,净盘口均线1
+        const 盘口买1 = 指标.lazyMapCache(() => orderBook.length, i => orderBook[i].buy[0].size)
+        const 盘口卖1 = 指标.lazyMapCache(() => orderBook.length, i => orderBook[i].sell[0].size)
+
         const 净盘口 = 指标.lazyMapCache(() => Math.min(盘口买.length, 盘口卖.length), i => 盘口买[i] - Math.abs(盘口卖[i]))
         const 净盘口均线 = 指标.均线(
             指标.lazyMapCache(() => Math.min(盘口买.length, 盘口卖.length), i => 净盘口[i]),
             5,
             RealDataBase.单位时间
         )
+
+        const 净盘口1 = 指标.lazyMapCache(() => Math.min(盘口买1.length, 盘口卖1.length), i => 盘口买1[i] - Math.abs(盘口卖1[i]))
+        const 净盘口均线1 = 指标.均线(
+            指标.lazyMapCache(() => Math.min(盘口买1.length, 盘口卖1.length), i => 净盘口1[i]),
+            5,
+            RealDataBase.单位时间
+        )
+
 
         const 阻力3 = 指标.阻力3({
             price: 价格,
@@ -751,7 +763,7 @@ export class RealDataBase {
             成交量卖均线5,
             成交量买均线30,
             成交量卖均线30,
-            
+            盘口买1,盘口卖1,净盘口1,净盘口均线1,
 
 
             // 买MACD: {
