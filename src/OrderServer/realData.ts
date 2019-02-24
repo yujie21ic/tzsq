@@ -36,21 +36,33 @@ export const 信号灯side = (symbol: BaseType.BitmexSymbol) => {
     }
 }
 
-const is连续3根全亮 = (arr: ArrayLike<{ value: boolean }[]>) =>
-    arr.length > 3 && arr[arr.length - 1].every(v => v.value) && arr[arr.length - 2].every(v => v.value) && arr[arr.length - 3].every(v => v.value)
+const is连续几根全亮 = (几根: number, arr: ArrayLike<{ value: boolean }[]>) => {
+    let 连续几根 = 0
+    for (let i = arr.length - 1; i >= 0; i--) {
+        if (arr[i].every(v => v.value)) {
+            连续几根++
+            if (连续几根 === 几根) return true
+        } else {
+            return false
+        }
+    }
+    return false
+}
+
+
 
 export const get信号灯Type = (symbol: BaseType.BitmexSymbol) => {
 
-    if (is连续3根全亮(realData.dataExt[symbol].期货.信号_上涨)) {
+    if (is连续几根全亮(3, realData.dataExt[symbol].期货.信号_上涨)) {
         return '摸顶'
     }
-    else if (is连续3根全亮(realData.dataExt[symbol].期货.信号_下跌)) {
+    else if (is连续几根全亮(3, realData.dataExt[symbol].期货.信号_下跌)) {
         return '抄底'
     }
-    else if (is连续3根全亮(realData.dataExt[symbol].期货.信号_追涨)) {
+    else if (is连续几根全亮(5, realData.dataExt[symbol].期货.信号_追涨)) {
         return '追涨'
     }
-    else if (is连续3根全亮(realData.dataExt[symbol].期货.信号_追跌)) {
+    else if (is连续几根全亮(5, realData.dataExt[symbol].期货.信号_追跌)) {
         return '追跌'
     } else {
         return 'none'
