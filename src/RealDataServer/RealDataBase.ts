@@ -749,6 +749,7 @@ export class RealDataBase {
             成交量卖均线5,
             成交量买均线30,
             成交量卖均线30,
+            
 
 
             // 买MACD: {
