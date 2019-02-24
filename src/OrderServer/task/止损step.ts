@@ -87,10 +87,10 @@ export const XBTUSD止损step = 止损step({
     }),
     推止损: 盈利点 => {
         const 波动率 = get波动率('XBTUSD')
-        if (盈利点 >= to范围({ min: 5, max: 30, value: 波动率 / 5 + 8 })) {
+        if (盈利点 >= to范围({ min: 5, max: 30, value: 波动率 / 5 + 15 })) {
             return 5
         }
-        else if (盈利点 >= to范围({ min: 5, max: 15, value: 波动率 / 10 + 10 })) {
+        else if (盈利点 >= to范围({ min: 5, max: 15, value: 波动率 / 8 + 6 })) {
             return 0
         } else {
             return NaN
