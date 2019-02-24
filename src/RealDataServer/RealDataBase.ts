@@ -316,7 +316,38 @@ export class RealDataBase {
         const 净上涨成交量26 = 指标.EMA(净上涨成交量, 26, RealDataBase.单位时间)
         const 净上涨成交量DIF = 指标.lazyMapCache(() => Math.min(净上涨成交量12.length, 净上涨成交量26.length), i => 净上涨成交量12[i] - 净上涨成交量26[i])
         const 净上涨成交量DEM = 指标.EMA(净上涨成交量DIF, 9, RealDataBase.单位时间)
+
+
+
+
         const 上涨_下跌 = 指标.lazyMapCache(() => Math.min(净成交量均线30.length), i => 净成交量均线30[i] >= 0 ? '上涨' : '下跌')
+
+
+
+        const 波动率差_除以时间 = 指标.lazyMapCache2({ 起点index: NaN, 起点Type: 'none' as '上涨' | '下跌' }, (arr: number[], ext) => {
+            const length = Math.min(波动率.length, 上涨_下跌.length)
+
+            for (let i = Math.max(0, arr.length - 1); i < length; i++) {
+
+                //开始
+                if (isNaN(ext.起点index) || ext.起点index === length - 1) {   //最后一个重新计算  
+                    if (波动率[i] >= 3) {
+                        ext.起点index = i
+                        ext.起点Type = 上涨_下跌[i]
+                    }
+                }
+                //结束
+                else {
+                    if (波动率[i] >= 30 || 上涨_下跌[i] !== ext.起点Type) {
+                        ext.起点index = NaN
+                    }
+                }
+
+                arr[i] = 波动率[i] > 5 && isNaN(ext.起点index) === false ? (波动率[i] - 3) / (i - ext.起点index) : NaN  //除以根数
+
+            }
+        })
+
 
         const 累计成交量 = (type: '上涨' | '下跌') => 指标.lazyMapCache2({ 累计成交量: NaN }, (arr: number[], ext) => {
             const length = Math.min(上涨_下跌.length, 成交量买.length, 成交量卖.length)
@@ -326,7 +357,7 @@ export class RealDataBase {
                         ext.累计成交量 = 0
                     }
                     if (i !== length - 1) {
-                        ext.累计成交量 += (type === '上涨' ? 成交量买[i] - 成交量卖[i] : 成交量卖[i] - 成交量买[i]) //<---------
+                        ext.累计成交量 += (type === '上涨' ? 成交量买[i] - 成交量卖[i] : 成交量卖[i] - 成交量买[i])   //最后一个重新计算
                     }
                 } else {
                     ext.累计成交量 = NaN
@@ -340,7 +371,7 @@ export class RealDataBase {
             for (let i = Math.max(0, arr.length - 1); i < length; i++) {//最高价10 最低价10 一样长
                 if (上涨_下跌[i] === type) {
                     if (isNaN(ext.起点价格)) {
-                        ext.起点价格 = 价格[i]
+                        ext.起点价格 = 价格[i]    //最后一个重新计算   不用
                     }
                 } else {
                     ext.起点价格 = NaN
@@ -687,8 +718,8 @@ export class RealDataBase {
         )
 
 
-
         return {
+            波动率差_除以时间,
             上涨_下跌,
             上涨_动力20均线,
             上涨_动力10均线,
