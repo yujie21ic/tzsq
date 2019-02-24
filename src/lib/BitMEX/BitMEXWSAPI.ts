@@ -142,7 +142,7 @@ export class BitMEXWSAPI {
 
         ws.onStatusChange = () => {
             this.filledOrder = new Map<string, boolean>()
-            this.executionOrder = new Map<string, boolean>()
+            this.filledExecution = new Map<string, boolean>()
             this.onStatusChange()
 
             if (ws.isConnected) {
@@ -179,12 +179,12 @@ export class BitMEXWSAPI {
         }
     }
 
-    private executionOrder = new Map<string, boolean>()
+    private filledExecution = new Map<string, boolean>()
 
     private deleteExecution(v: BitMEXMessage.Execution, key: string) {
         if (v.ordStatus === 'Filled') {
             this.data.execution.delete(key)
-            this.executionOrder.set(key, true)
+            this.filledExecution.set(key, true)
         }
     }
 
@@ -254,7 +254,7 @@ export class BitMEXWSAPI {
                         this.deleteOrder(newV, key)
                     }
 
-                    if (table === 'execution' && this.executionOrder.has(key) === false) {
+                    if (table === 'execution' && this.filledExecution.has(key) === false) {
                         this.增量同步数据.onExecution(newV)
                         this.deleteExecution(newV, key)
                     }
