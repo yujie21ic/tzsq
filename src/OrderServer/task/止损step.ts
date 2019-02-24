@@ -90,7 +90,7 @@ export const XBTUSD止损step = 止损step({
         if (盈利点 >= to范围({ min: 5, max: 30, value: 波动率 / 5 + 8 })) {
             return 5
         }
-        else if (盈利点 >= to范围({ min: 5, max: 15, value: 波动率 / 10 + 5 })) {
+        else if (盈利点 >= to范围({ min: 5, max: 15, value: 波动率 / 10 + 10 })) {
             return 0
         } else {
             return NaN

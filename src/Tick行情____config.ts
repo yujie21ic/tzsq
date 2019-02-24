@@ -415,14 +415,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layer(LineLayer, { data: d2.XBTUSD.期货.净下跌成交量DEM, color: 买颜色 }),
             ]
         },
-        {
-            numberColor: 波动率颜色,
-            numberX: 100,
-            layerList: [
-                layer(ZeroLayer, { color: ETH颜色 }),
-                layer(LineLayer, { data: d.期货.波动率差_除以时间, color: ETH颜色 }),
-            ]
-        },
+        // {
+        //     numberColor: 波动率颜色,
+        //     numberX: 100,
+        //     layerList: [
+        //         layer(ZeroLayer, { color: ETH颜色 }),
+        //         layer(LineLayer, { data: d.期货.波动率差_除以时间, color: ETH颜色 }),
+        //     ]
+        // },
         // {
         //     numberColor: BTC颜色,
         //     yCoordinate:'对数',
@@ -503,14 +503,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layer(LineLayer, { data: d2.XBTUSD.期货.净上涨成交量DEM, color: 买颜色 }),
             ]
         },
-        {
-            numberColor: 波动率颜色,
-            numberX: 100,
-            layerList: [
-                layer(ZeroLayer, { color: ETH颜色 }),
-                layer(LineLayer, { data: d.期货.波动率差_除以时间, color: ETH颜色 }),
-            ]
-        },
+        // {
+        //     numberColor: 波动率颜色,
+        //     numberX: 100,
+        //     layerList: [
+        //         layer(ZeroLayer, { color: ETH颜色 }),
+        //         layer(LineLayer, { data: d.期货.波动率差_除以时间, color: ETH颜色 }),
+        //     ]
+        // },
         
             // {
             //     numberColor: BTC颜色,
