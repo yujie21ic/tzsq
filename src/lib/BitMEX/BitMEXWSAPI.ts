@@ -254,6 +254,7 @@ export class BitMEXWSAPI {
                         this.deleteOrder(newV, key)
                     }
 
+                    //Filled只能插入一次
                     if (table === 'execution' && this.filledExecution.has(key) === false) {
                         this.增量同步数据.onExecution(newV)
                         this.deleteExecution(newV, key)
