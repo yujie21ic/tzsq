@@ -36,7 +36,7 @@ export const funcList = {
         req: {
             cookie: '',
             symbol: '' as BaseType.BitmexSymbol,
-            任务名字: '' as '自动开仓' | '自动止盈' | '自动止盈波段' | '自动推止损',
+            任务名字: '' as '自动开仓摸顶' | '自动开仓抄底' | '自动开仓追涨' | '自动开仓追跌' | '自动止盈' | '自动止盈波段' | '自动推止损',
             value: false,
         },
         res: false,
@@ -46,7 +46,19 @@ export const funcList = {
 
 const symbol = () => ({
     任务开关: {
-        自动开仓: {
+        自动开仓摸顶: {
+            value: false,
+            text: '',
+        },
+        自动开仓抄底: {
+            value: false,
+            text: '',
+        },
+        自动开仓追涨: {
+            value: false,
+            text: '',
+        },
+        自动开仓追跌: {
             value: false,
             text: '',
         },
