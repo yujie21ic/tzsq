@@ -268,8 +268,8 @@ export class RealDataBase {
         const 阻力3涨 = 指标.lazyMapCache(() => 阻力3.length, i => Math.max(0, 阻力3[i].阻力))
         let 阻力3跌 = 指标.lazyMapCache(() => 阻力3.length, i => Math.min(0, 阻力3[i].阻力))
 
-        const 真空信号涨 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 < 150000) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 >= to范围({ min: 4, max: 20, value: 波动率[i] / 10 }))
-        const 真空信号跌 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 > -150000) && 阻力3[i].阻力 < 0 && 阻力3[i].价钱增量 >= to范围({ min: 4, max: 20, value: 波动率[i] / 10 }))
+        const 真空信号涨 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 < 150000) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 >= to范围({ min: 4, max: 12, value: 波动率[i] / 10 }))
+        const 真空信号跌 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 > -150000) && 阻力3[i].阻力 < 0 && 阻力3[i].价钱增量 >= to范围({ min: 4, max: 12, value: 波动率[i] / 10 }))
 
         const 价格均线60 = 指标.均线(价格, 60, RealDataBase.单位时间)
 
@@ -594,7 +594,7 @@ export class RealDataBase {
                 return [
                     { name: '成交量DIF>DEM', value: 净上涨成交量DIF[i] > 净上涨成交量DEM[i] },
                     //{ name: '净盘口>0', value: 净盘口[i]>0 },
-                    { name: '波动率 >=5', value: 波动率[i] >= 5 },
+                    { name: '波动率 >=2', value: 波动率[i] >= 2 },
                     { name: '折返程度<', value: (最高价10[i] - 价格[i]) < (波动率[i] / 10 + 1) },
                     { name: '追涨', value: 上涨.动力[i] > 100 * 10000 },
                     //量化用 净上涨成交量DIF
@@ -710,7 +710,7 @@ export class RealDataBase {
                 return [
                     { name: '卖成交量DIF>DEM', value: 净下跌成交量DIF[i] > 净下跌成交量DEM[i] },
                     //{ name: '净盘口<0', value: 净盘口[i]<0 },
-                    { name: '波动率 >=5', value: 波动率[i] >= 5 },
+                    { name: '波动率 >=2', value: 波动率[i] >= 2 },
                     { name: '折返程度<', value: (价格[i] - 最低价10[i]) < (波动率[i] / 10 + 1) },
                     { name: '追跌', value: 下跌.动力[i] > 100 * 10000 },
                     { name: '量化 is下跌', value: 净成交量均线60[i] < 0 },
