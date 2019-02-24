@@ -3,8 +3,6 @@ import { TradeAccount } from '../TradeAccount'
 import { get波动率, realData, 摸顶抄底信号灯side } from '../realData'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
-import { task__config } from './task__config'
-
 
 const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
     let 止盈价格 = NaN
