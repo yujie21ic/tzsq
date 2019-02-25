@@ -11,7 +11,7 @@ const 止损step = ({
 }: {
     symbol: BaseType.BitmexSymbol
     初始止损点: () => number
-    推止损: (盈利点: number) => number //0 成本价  3 盈利3点的价
+    推止损: (盈利点: number, type: string) => number //0 成本价  3 盈利3点的价
 }) => async (self: TradeAccount) => {
 
     const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
@@ -53,7 +53,7 @@ const 止损step = ({
             const { price, side, id } = 止损委托[0]
             const 浮盈点数 = self.get浮盈点数(symbol)
 
-            const 推 = 推止损(浮盈点数)
+            const 推 = 推止损(浮盈点数, self.ws.增量同步数据.最后一次自动开仓.get(symbol))
             if (isNaN(推)) {
                 return false
             }
@@ -87,16 +87,29 @@ export const XBTUSD止损step = 止损step({
         max: 18,
         value: get波动率('XBTUSD') / 7 + 4,
     }),
-    推止损: 盈利点 => {
-        const 波动率 = get波动率('XBTUSD')
-        if (盈利点 >= to范围({ min: 5, max: 30, value: 波动率 / 5 + 15 })) {
-            return 5
-        }
-        else if (盈利点 >= to范围({ min: 5, max: 15, value: 波动率 / 8 + 6 })) {
-            return 0
+    推止损: (盈利点, type) => {
+        if (type === '追涨' || type === '追跌') {
+            if (盈利点 >= 6) {
+                return 3
+            }
+            else if (盈利点 >= 3) {
+                return 0
+            } else {
+                return NaN
+            }
+
         } else {
-            return NaN
+            const 波动率 = get波动率('XBTUSD')
+            if (盈利点 >= to范围({ min: 5, max: 30, value: 波动率 / 5 + 15 })) {
+                return 5
+            }
+            else if (盈利点 >= to范围({ min: 5, max: 15, value: 波动率 / 8 + 6 })) {
+                return 0
+            } else {
+                return NaN
+            }
         }
+
     }
 })
 
