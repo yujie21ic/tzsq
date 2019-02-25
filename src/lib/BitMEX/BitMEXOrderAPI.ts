@@ -75,6 +75,7 @@ export class BitMEXOrderAPI {
         size: number
         price: () => number
         reduceOnly: boolean
+        text?: string
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
             symbol: p.symbol,
@@ -83,6 +84,7 @@ export class BitMEXOrderAPI {
             orderQty: p.size,
             price: p.price(),
             execInst: p.reduceOnly ? 'ParticipateDoNotInitiate,ReduceOnly' : 'ParticipateDoNotInitiate',
+            text: p.text,
         })
     )
 
@@ -90,6 +92,7 @@ export class BitMEXOrderAPI {
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         price: number
+        text?: string
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
             symbol: p.symbol,
@@ -98,26 +101,31 @@ export class BitMEXOrderAPI {
             orderQty: 100000,
             side: p.side,
             execInst: 'Close,LastPrice',
+            text: p.text,
         })
     )
 
     updateStop = this.DDOS调用<{
         orderID: string
         price: number
+        text?: string
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.amend(cookie, {
             orderID: p.orderID,
             stopPx: p.price,
+            text: p.text,
         })
     )
 
     updateMaker = this.DDOS调用<{
         orderID: string
         price: () => number
+        text?: string
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.amend(cookie, {
             orderID: p.orderID,
             price: p.price(),
+            text: p.text,
         })
     )
 
@@ -126,6 +134,7 @@ export class BitMEXOrderAPI {
         side: BaseType.Side
         size: number
         price: () => number
+        text?: string
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
             symbol: p.symbol,
@@ -133,6 +142,7 @@ export class BitMEXOrderAPI {
             side: p.side,
             orderQty: p.size,
             price: p.price() + ((p.side === 'Buy' ? 1 : -1) * (p.symbol === 'XBTUSD' ? 0.5 : 0.05)),
+            text: p.text,
         })
     )
 
@@ -140,12 +150,14 @@ export class BitMEXOrderAPI {
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         size: number
+        text?: string
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
             symbol: p.symbol,
             ordType: 'Market',
             side: p.side,
             orderQty: p.size,
+            text: p.text,
         })
     )
 
@@ -154,6 +166,7 @@ export class BitMEXOrderAPI {
             symbol,
             ordType: 'Market',
             execInst: 'Close',
+            text: '市价平仓全部',
         })
     )
 
