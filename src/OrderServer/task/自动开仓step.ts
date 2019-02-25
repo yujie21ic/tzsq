@@ -14,6 +14,12 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
 
     return async (self: TradeAccount) => {
 
+
+        if (self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追涨.value === false
+            && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追跌.value === false
+            && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓抄底.value === false
+            && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓摸顶.value === false) return false
+
         const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
 
         const 本地维护仓位数量 = self.ws.增量同步数据.仓位数量.get(symbol)
