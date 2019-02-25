@@ -48,7 +48,7 @@ export class BitMEXWSAPI__增量同步数据 {
         get: (symbol: BaseType.BitmexSymbol) => {
             const obj = this.dic.get(symbol)
             if (obj !== undefined) {
-                return obj[key]
+                return obj[key] as number
             }
             else {
                 return 0
