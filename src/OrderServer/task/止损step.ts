@@ -89,8 +89,8 @@ export const XBTUSD止损step = 止损step({
     }),
     推止损: (盈利点, type) => {
         if (type === '追涨' || type === '追跌') {
-            if (盈利点 >= 6) {
-                return 3
+            if (盈利点 >= 10) {
+                return 5
             }
             else if (盈利点 >= 3) {
                 return 0
