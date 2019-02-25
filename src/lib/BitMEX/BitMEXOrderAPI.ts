@@ -64,7 +64,9 @@ export class BitMEXOrderAPI {
                 this.log(`__${__id__}__` + `  重试${i}次  ${success ? '成功' : '失败' + errMsg}  耗时:${Date.now() - startTime}ms`)
             }
 
-
+            if (success === false) {
+                await sleep(500)
+            }
             return success
         }
 
