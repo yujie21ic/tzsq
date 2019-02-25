@@ -79,16 +79,17 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
                     size: task__config.交易数量 * (连续止损次数 + 1),
                     text: 信号灯Type,
                 }, '自动开仓step 自动开仓 市价' + get信号msg(symbol), self.ws) :
-                await self.order自动.limit({
+                await self.order自动.maker({//limit
                     symbol,
                     side: 开仓side,
                     size: task__config.交易数量 * (连续止损次数 + 1),
                     price: toBuySellPriceFunc(开仓side, () => realData.getOrderPrice({
                         symbol,
                         side: 开仓side,
-                        type: 'taker',
+                        type: 'maker',//taker
                         位置: 0,
-                    })),
+                    })) as any,
+                    reduceOnly: false, //
                     text: 信号灯Type,
                 }, '自动开仓step 自动开仓 挂单' + get信号msg(symbol), self.ws)
         }
@@ -99,7 +100,8 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
         if (活动委托.length === 1) {
             const { type, timestamp, id, side } = 活动委托[0]
             if (type === '限价') {
-                const _15秒取消 = (Date.now() > (timestamp + 15 * 1000))
+                // const _15秒取消 = (Date.now() > (timestamp + 15 * 1000))
+                const _15秒取消 = (Date.now() > (timestamp + 30 * 1000))
                 const 出现反向信号时候取消 = (信号灯Type !== 'none' && 开仓side !== side)
                 if (_15秒取消 || 出现反向信号时候取消) {
                     return await self.order自动.cancel({ orderID: [id], text: '自动开仓step 取消开仓' }, '自动开仓step 取消开仓 ' + _15秒取消 ? '_15秒取消' : ('出现反向信号时候取消' + get信号msg(symbol)))
