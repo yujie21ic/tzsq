@@ -84,6 +84,7 @@ export class BitMEXWSAPI__增量同步数据 {
     onExecution(execution: BitMEXMessage.Execution) {
         if (execution.ordType === 'StopLimit') {
             this.新成交(execution)
+            this.连续止损.update(execution.symbol as BaseType.BitmexSymbol, 1) //强平也算 
         }
     }
 }
