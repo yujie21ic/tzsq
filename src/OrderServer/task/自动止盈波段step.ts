@@ -63,6 +63,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                         size: Math.floor(最大仓位abs / 2),//一半
                         price: toBuySellPriceFunc(信号side, get位置1价格),
                         reduceOnly: true,
+                        text: '自动止盈波段step 平一半',
                     }, '自动止盈波段step 平一半' + 信号side + ' 信号msg:' + 信号msg)
 
                     // if (

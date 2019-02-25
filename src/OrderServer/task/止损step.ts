@@ -32,6 +32,7 @@ const 止损step = ({
                 symbol,
                 side,
                 price: toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点, side),
+                text: '亏损止损',
             }, '止损step 初始化止损')
         }
         else {
@@ -66,6 +67,7 @@ const 止损step = ({
                 return await self.order自动.updateStop({
                     orderID: id,
                     price: 新的Price,
+                    text: 推 === 0 ? '成本价止损' : '盈利止损',
                 }, '止损step 修改止损')
             }
             return false

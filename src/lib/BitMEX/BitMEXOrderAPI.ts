@@ -75,7 +75,7 @@ export class BitMEXOrderAPI {
         size: number
         price: () => number
         reduceOnly: boolean
-        text?: string
+        text: string
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
             symbol: p.symbol,
@@ -92,7 +92,7 @@ export class BitMEXOrderAPI {
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         price: number
-        text?: string
+        text: string
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
             symbol: p.symbol,
@@ -108,7 +108,7 @@ export class BitMEXOrderAPI {
     updateStop = this.DDOS调用<{
         orderID: string
         price: number
-        text?: string
+        text: string
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.amend(cookie, {
             orderID: p.orderID,
@@ -120,7 +120,7 @@ export class BitMEXOrderAPI {
     updateMaker = this.DDOS调用<{
         orderID: string
         price: () => number
-        text?: string
+        text: string
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.amend(cookie, {
             orderID: p.orderID,
@@ -134,7 +134,7 @@ export class BitMEXOrderAPI {
         side: BaseType.Side
         size: number
         price: () => number
-        text?: string
+        text: string
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
             symbol: p.symbol,
@@ -150,7 +150,7 @@ export class BitMEXOrderAPI {
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         size: number
-        text?: string
+        text: string
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
             symbol: p.symbol,
@@ -171,6 +171,6 @@ export class BitMEXOrderAPI {
     )
 
     cancel = this.DDOS调用<string[]>(
-        (cookie, orderID) => BitMEXRESTAPI.Order.cancel(cookie, { orderID: JSON.stringify(orderID) })
+        (cookie, orderID) => BitMEXRESTAPI.Order.cancel(cookie, { orderID: JSON.stringify(orderID), text: '取消委托' })
     )
 } 

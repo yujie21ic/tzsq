@@ -71,6 +71,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
                     symbol,
                     side: 开仓side,
                     size: task__config.交易数量 * (连续止损次数 + 1),
+                    text: 信号灯Type,
                 }, '自动开仓step 自动开仓 市价' + get信号msg(symbol), self.ws) :
                 await self.order自动.limit({
                     symbol,
@@ -82,6 +83,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
                         type: 'taker',
                         位置: 0,
                     })),
+                    text: 信号灯Type,
                 }, '自动开仓step 自动开仓 挂单' + get信号msg(symbol), self.ws)
         }
 

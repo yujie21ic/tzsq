@@ -267,6 +267,7 @@ export class TradeAccount {
                 return await this.order手动.updateMaker({
                     orderID: 活动委托[0].id,
                     price: toBuySellPriceFunc(req.side, getPrice),
+                    text: '手动updateMaker'
                 })
             } else {
                 throw '已经有委托了'
@@ -287,6 +288,7 @@ export class TradeAccount {
                     symbol: req.symbol,
                     side: req.side,
                     size: req.size,
+                    text: '手动taker',
                 })
             ) :
             //ws返回有时间  直接给委托列表加一条记录??
@@ -296,6 +298,7 @@ export class TradeAccount {
                 size: req.size,
                 price: toBuySellPriceFunc(req.side, getPrice),
                 reduceOnly: 仓位数量 !== 0,
+                text: '手动maker',
             })
     }
 
