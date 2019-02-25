@@ -706,7 +706,7 @@ export class RealDataBase {
                 //用语言描述出容易止损的波动的不同之处
 
                 return [
-                    { name: '成交量DIF<DEM', value: 净上涨成交量DIF[i] < 净上涨成交量DEM[i]},
+                    { name: '成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i]},
                     //{ name: ' 净盘口<净盘口均线<0', value: b },
                     //波动率大于25之后，出现一次真空信号，动力慢信号都为true
                     //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (上涨_动力DIF[i] - 上涨_动力DEM[i]) / 上涨_动力DEM[i] < 0.05 },
@@ -976,7 +976,7 @@ export class RealDataBase {
 
 
                 return [
-                    { name: '卖成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] },
+                    { name: '卖成交量DIF<DEM', value: 净上涨成交量DIF[i] < 净上涨成交量DEM[i] },
                 ]
             }
         )
