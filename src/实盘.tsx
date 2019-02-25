@@ -285,10 +285,6 @@ export class 交易 extends React.Component {
                 userSelect: 'none',
                 cursor: 'default'
             }}>
-                <h3>只做摸顶抄底</h3>
-                <hr />
-                <h3>大波动 变 小波动 视觉误差</h3>
-                <hr />
                 <Item symbol='XBTUSD' 位置={this.位置} 倍数={this.倍数} />
                 <hr />
                 <br />
