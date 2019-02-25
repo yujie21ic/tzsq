@@ -99,16 +99,15 @@ export class BitMEXWSAPI__增量同步数据 {
             v.已经成交 = v.cumQty
             this.仓位数量.update(v.symbol as BaseType.BitmexSymbol, 新成交 * (v.side === 'Buy' ? 1 : -1))
         }
-
-
-        //手动检测下类型
-        if (v.text === '抄底' || v.text === '摸顶' || v.text === '追涨' || v.text === '追跌') {
-            this.最后一次自动开仓.partial(v.symbol as BaseType.BitmexSymbol, v.text)
-        }
     }
 
     onOrder(order: BitMEXMessage.Order) {
         this.新成交(order)
+
+        //开仓
+        if (order.text === '抄底' || order.text === '摸顶' || order.text === '追涨' || order.text === '追跌') {
+            this.最后一次自动开仓.partial(order.symbol as BaseType.BitmexSymbol, order.text)
+        }
 
         //止盈
         if (order.ordType === 'Limit' && order.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && order.ordStatus === 'Filled') {
