@@ -1,6 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { TradeAccount } from '../TradeAccount'
-import { get波动率, realData, 摸顶抄底信号灯side } from '../realData'
+import { get波动率, realData, 摸顶抄底信号灯side, is上涨做空下跌平仓, is下跌抄底上涨平仓 } from '../realData'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 
@@ -45,23 +45,51 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                 }
 
 
+
+
+                const get位置1价格 = () => realData.getOrderPrice({
+                    symbol,
+                    side,
+                    type: 'maker',
+                    位置: 0,
+                })
+
+                //
+                if (self.ws.增量同步数据.最后一次自动开仓.get(symbol) === '摸顶' && is上涨做空下跌平仓(symbol)) {
+                    return await self.order自动.maker({
+                        symbol,
+                        side,
+                        size: Math.floor(最大仓位abs / 2),//一半
+                        price: toBuySellPriceFunc(side, get位置1价格),
+                        reduceOnly: true,
+                        text: '自动止盈波段step 上涨做空下跌平仓',
+                    }, '自动止盈波段step 上涨做空下跌平仓')
+                }
+
+
+                if (self.ws.增量同步数据.最后一次自动开仓.get(symbol) === '抄底' && is下跌抄底上涨平仓(symbol)) {
+                    return await self.order自动.maker({
+                        symbol,
+                        side,
+                        size: Math.floor(最大仓位abs / 2),//一半
+                        price: toBuySellPriceFunc(side, get位置1价格),
+                        reduceOnly: true,
+                        text: '自动止盈波段step 下跌抄底上涨平仓',
+                    }, '自动止盈波段step 下跌抄底上涨平仓')
+                }
+
+
+
                 //触发了反向开仓信号 
                 const { 信号side, 信号msg } = 摸顶抄底信号灯side(symbol)
 
                 if (信号side === side) {
 
-                    const get位置1价格 = () => realData.getOrderPrice({
-                        symbol,
-                        side: 信号side,
-                        type: 'maker',
-                        位置: 0,
-                    })
-
                     return await self.order自动.maker({
                         symbol,
                         side,
                         size: Math.floor(最大仓位abs / 2),//一半
-                        price: toBuySellPriceFunc(信号side, get位置1价格),
+                        price: toBuySellPriceFunc(side, get位置1价格),
                         reduceOnly: true,
                         text: '自动止盈波段step 平一半',
                     }, '自动止盈波段step 平一半' + 信号side + ' 信号msg:' + 信号msg)
