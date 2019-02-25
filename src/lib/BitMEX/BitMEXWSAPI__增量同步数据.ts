@@ -116,7 +116,8 @@ export class BitMEXWSAPI__增量同步数据 {
 
         //止损
         if (order.ordType === 'Stop' && order.execInst === 'Close,LastPrice' && order.ordStatus === 'Filled') {
-            if (order.text !== '盈利止损') {//手动检测下类型
+            //止损给 text 加了前缀  卧槽
+            if (order.text.indexOf('盈利止损') === -1) {//手动检测下类型
                 this.连续止损.update(order.symbol as BaseType.BitmexSymbol, 1)
             }
         }
