@@ -73,8 +73,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'left',
-                margin: '20px 0'
+                justifyContent: 'left', 
             }}>
                 <p style={{ color: this.props.symbol === 'XBTUSD' ? '#cc66ff' : '#aaaa00' }}>{this.props.symbol} {仓位数量 !== 0 ? <a
                     href='#'
@@ -284,15 +283,8 @@ export class 交易 extends React.Component {
                 fontSize: '24px',
                 userSelect: 'none',
                 cursor: 'default'
-            }}>
-                <h3>只做摸顶抄底</h3>
-                <hr />
-                <h3>大波动 变 小波动 视觉误差</h3>
-                <hr />
-                <Item symbol='XBTUSD' 位置={this.位置} 倍数={this.倍数} />
-                <hr />
-                <br />
-
+            }}> 
+                <Item symbol='XBTUSD' 位置={this.位置} 倍数={this.倍数} /> 
                 {this.hopexCookie !== '' ?
                     <div>
                         <p>自动点击一次:<Switch checked={hopex自动开仓一次} onChange={(e, v) => hopex自动开仓一次 = v} /> </p>

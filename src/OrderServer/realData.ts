@@ -69,5 +69,12 @@ export const get信号灯Type = (symbol: BaseType.BitmexSymbol) => {
     }
 }
 
+export const is上涨做空下跌平仓 = (symbol: BaseType.BitmexSymbol) =>
+    is连续几根全亮(2, realData.dataExt[symbol].期货.信号_上涨做空下跌平仓)
+
+export const is下跌抄底上涨平仓 = (symbol: BaseType.BitmexSymbol) =>
+    is连续几根全亮(2, realData.dataExt[symbol].期货.信号_下跌抄底上涨平仓)
+
+
 export const get波动率 = (symbol: BaseType.BitmexSymbol) =>
     lastNumber(realData.dataExt[symbol].期货.波动率)

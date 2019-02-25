@@ -26,11 +26,11 @@ export const 委托检测step = (symbol: BaseType.BitmexSymbol) => async (self: 
         ) {
             return false
         } else {
-            return await self.order自动.cancel(活动委托.map(v => v.id), '委托检测step 取消委托' + 活动委托[0].type)
+            return await self.order自动.cancel({ orderID: 活动委托.map(v => v.id), text: '委托检测step 取消委托' }, '委托检测step 取消委托' + 活动委托[0].type)
         }
     }
     else {
         //多个委托  全部给取消  
-        return await self.order自动.cancel(活动委托.map(v => v.id), '委托检测step 取消多个委托')
+        return await self.order自动.cancel({ orderID: 活动委托.map(v => v.id), text: '委托检测step 取消多个委托' }, '委托检测step 取消多个委托')
     }
 } 
