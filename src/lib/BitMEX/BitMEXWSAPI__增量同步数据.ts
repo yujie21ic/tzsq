@@ -1,39 +1,45 @@
 import { BaseType } from '../BaseType'
 import { BitMEXMessage } from './BitMEXMessage'
 
+
+const createItem = () => ({
+    仓位数量: 0,
+    连续止损: 0,
+    最后一次自动开仓: '',
+})
+const XXX = createItem()
+
+
 export class BitMEXWSAPI__增量同步数据 {
 
     //private
-    orderMap = new Map<string, BitMEXMessage.Order>()
+    // orderMap = new Map<string, BitMEXMessage.Order>()
 
-    private dic = new Map<BaseType.BitmexSymbol, {
-        仓位数量: number
-        连续止损: number
-    }>()
+    private dic = new Map<BaseType.BitmexSymbol, typeof XXX>()
 
     log = (text: string) => { }
 
 
-    private xxx = (key: '仓位数量' | '连续止损') => ({
+    private xxx = (key: keyof typeof XXX) => ({
         partial: (symbol: BaseType.BitmexSymbol, n: number) => {
-            const obj = this.dic.get(symbol)
+            const obj = this.dic.get(symbol) as any
             if (obj !== undefined) {
                 obj[key] = n
             }
             else {
-                const obj = { 仓位数量: 0, 连续止损: 0 }
+                const obj = createItem()
                 obj[key] = n
                 this.dic.set(symbol, obj)
             }
             this.log(`增量同步数据 ${symbol} ${key} partial ${n}`)
         },
         update: (symbol: BaseType.BitmexSymbol, n: number) => {
-            const obj = this.dic.get(symbol)
+            const obj = this.dic.get(symbol) as any
             if (obj !== undefined) {
                 obj[key] += n
             }
             else {
-                const obj = { 仓位数量: 0, 连续止损: 0 }
+                const obj = createItem()
                 obj[key] = n
                 this.dic.set(symbol, obj)
             }
@@ -53,8 +59,36 @@ export class BitMEXWSAPI__增量同步数据 {
     仓位数量 = this.xxx('仓位数量')
     连续止损 = this.xxx('连续止损')
 
+
+    private partial = (key: keyof typeof XXX) => ({
+        partial: (symbol: BaseType.BitmexSymbol, str: string) => {
+            const obj = this.dic.get(symbol) as any
+            if (obj !== undefined) {
+                obj[key] = str
+            }
+            else {
+                const obj = createItem()
+                obj[key] = str
+                this.dic.set(symbol, obj)
+            }
+            this.log(`增量同步数据 ${symbol} ${key} partial ${str}`)
+        },
+        get: (symbol: BaseType.BitmexSymbol) => {
+            const obj = this.dic.get(symbol)
+            if (obj !== undefined) {
+                return obj[key] as string
+            }
+            else {
+                return ''
+            }
+        },
+    })
+
+    最后一次自动开仓 = this.partial('最后一次自动开仓')
+
+
     //可变数据  直接修改 
-    private 新成交(v: { symbol: string, side: string, 已经成交?: number, cumQty: number }) {
+    private 新成交(v: { symbol: string, side: string, 已经成交?: number, cumQty: number, text: string }) {
         if (v.已经成交 === undefined) {
             v.已经成交 = 0
         }
@@ -64,6 +98,12 @@ export class BitMEXWSAPI__增量同步数据 {
         if (新成交 > 0) {
             v.已经成交 = v.cumQty
             this.仓位数量.update(v.symbol as BaseType.BitmexSymbol, 新成交 * (v.side === 'Buy' ? 1 : -1))
+        }
+
+
+        //手动检测下类型
+        if (v.text === '抄底' || v.text === '摸顶' || v.text === '追涨' || v.text === '追跌') {
+            this.最后一次自动开仓.partial(v.symbol as BaseType.BitmexSymbol, v.text)
         }
     }
 
@@ -77,7 +117,9 @@ export class BitMEXWSAPI__增量同步数据 {
 
         //止损
         if (order.ordType === 'Stop' && order.execInst === 'Close,LastPrice' && order.ordStatus === 'Filled') {
-            this.连续止损.update(order.symbol as BaseType.BitmexSymbol, 1)
+            if (order.text !== '盈利止损') {//手动检测下类型
+                this.连续止损.update(order.symbol as BaseType.BitmexSymbol, 1)
+            }
         }
     }
 
