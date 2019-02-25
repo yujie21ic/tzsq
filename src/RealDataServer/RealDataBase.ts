@@ -731,7 +731,8 @@ export class RealDataBase {
                 return [
                     { name: '成交量DIF>DEM', value: 净上涨成交量DIF[i] > 净上涨成交量DEM[i] },
                     //{ name: '净盘口>0', value: 净盘口[i]>0 },
-                    { name: '波动率 >=2', value: 波动率[i] >= 2 },
+                    { name: '波动率 >=1', value: 波动率[i] >= 1 },
+                    { name: '30秒净买成交量 >=100万', value: 净上涨成交量30[i] >= 100 * 10000 },
                     { name: '折返程度<', value: (最高价10[i] - 价格[i]) < (波动率[i] / 10 + 1) },
                     { name: '追涨', value: 上涨.动力[i] > 100 * 10000 },
                     //量化用 净上涨成交量DIF
@@ -995,9 +996,10 @@ export class RealDataBase {
             ),
             i => {
                 return [
-                    { name: '卖成交量DIF>DEM', value: 净下跌成交量DIF[i] > 净下跌成交量DEM[i] },
+                    //{ name: '卖成交量DIF>DEM', value: 净下跌成交量DIF[i] > 净下跌成交量DEM[i] },
                     //{ name: '净盘口<0', value: 净盘口[i]<0 },
-                    { name: '波动率 >=2', value: 波动率[i] >= 2 },
+                    { name: '波动率 >=1', value: 波动率[i] >= 1 },
+                    { name: '30秒净买成交量 >=100万', value: 净下跌成交量30[i] >= 100 * 10000 },
                     { name: '折返程度<', value: (价格[i] - 最低价10[i]) < (波动率[i] / 10 + 1) },
                     { name: '追跌', value: 下跌.动力[i] > 100 * 10000 },
                     { name: '量化 is下跌', value: 净成交量均线60[i] < 0 },
