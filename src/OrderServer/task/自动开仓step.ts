@@ -96,7 +96,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
                 const _15秒取消 = (Date.now() > (timestamp + 15 * 1000))
                 const 出现反向信号时候取消 = (信号灯Type !== 'none' && 开仓side !== side)
                 if (_15秒取消 || 出现反向信号时候取消) {
-                    return await self.order自动.cancel([id], '自动开仓step 取消开仓 ' + _15秒取消 ? '_15秒取消' : ('出现反向信号时候取消' + get信号msg(symbol)))
+                    return await self.order自动.cancel({ orderID: [id], text: '自动开仓step 取消开仓' }, '自动开仓step 取消开仓 ' + _15秒取消 ? '_15秒取消' : ('出现反向信号时候取消' + get信号msg(symbol)))
                 }
             }
         }

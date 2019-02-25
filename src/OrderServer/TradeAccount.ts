@@ -213,10 +213,10 @@ export class TradeAccount {
     }
 
     市价平仓 = async (req: typeof funcList.市价平仓.req) =>
-        await this.order手动.close(req.symbol)
+        await this.order手动.close({ symbol: req.symbol, text: '手动市价平仓' })
 
     取消委托 = async (req: typeof funcList.取消委托.req) =>
-        await this.order手动.cancel(req.orderID)
+        await this.order手动.cancel({ orderID: req.orderID, text: '手动取消委托' })
 
     下单 = async (req: typeof funcList.下单.req) => {
 

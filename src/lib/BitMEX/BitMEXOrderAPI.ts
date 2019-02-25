@@ -161,16 +161,22 @@ export class BitMEXOrderAPI {
         })
     )
 
-    close = this.DDOS调用<BaseType.BitmexSymbol>(
-        (cookie, symbol) => BitMEXRESTAPI.Order.new(cookie, {
-            symbol,
+    close = this.DDOS调用<{
+        symbol: BaseType.BitmexSymbol
+        text: string
+    }>(
+        (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
+            symbol: p.symbol,
             ordType: 'Market',
             execInst: 'Close',
-            text: '市价平仓全部',
+            text: p.text,
         })
     )
 
-    cancel = this.DDOS调用<string[]>(
-        (cookie, orderID) => BitMEXRESTAPI.Order.cancel(cookie, { orderID: JSON.stringify(orderID), text: '取消委托' })
+    cancel = this.DDOS调用<{
+        orderID: string[]
+        text: string
+    }>(
+        (cookie, p) => BitMEXRESTAPI.Order.cancel(cookie, { orderID: JSON.stringify(p.orderID), text: p.text })
     )
 } 
