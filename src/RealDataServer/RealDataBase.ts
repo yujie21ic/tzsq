@@ -1,6 +1,6 @@
 import { JSONSync } from '../lib/C/JSONSync'
 import { BaseType } from '../lib/BaseType'
-//import { sum } from 'ramda'
+import { sum } from 'ramda'
 import { 指标 } from './指标'
 import { kvs } from '../lib/F/kvs'
 import { to范围 } from '../lib/F/to范围'
@@ -251,13 +251,13 @@ export class RealDataBase {
 
 
 
-        // const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
-        // const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
+         const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
+         const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
             //盘口买1,盘口卖1,净盘口1,净盘口均线1
         //const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => orderBook[i].buy[0].size)
         //const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => orderBook[i].sell[0].size)
-        const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => orderBook[i].buy.length > 0 ? orderBook[i].buy[0].size : NaN)
-        const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => orderBook[i].sell.length > 0 ? orderBook[i].sell[0].size : NaN)
+       // const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => orderBook[i].buy.length > 0 ? orderBook[i].buy[0].size : NaN)
+        //const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => orderBook[i].sell.length > 0 ? orderBook[i].sell[0].size : NaN)
 
         const 净盘口 = 指标.lazyMapCache(() => Math.min(盘口买.length, 盘口卖.length), i => 盘口买[i] - Math.abs(盘口卖[i]))
         const 净盘口均线 = 指标.均线(
@@ -602,7 +602,7 @@ export class RealDataBase {
                 if (b === false) {
                     if (波动率[i] > 波动率中大分界) {
                         if (真空信号涨[i]) {
-                            if (盘口买[i] < 150 * 10000) {
+                            if (盘口买[i] < 200 * 10000) {
                                 b = true
                             }
 
@@ -687,7 +687,7 @@ export class RealDataBase {
                 if (b === false) {
                     if (波动率[i] > 波动率中大分界) {
                         if (真空信号涨[i]) {
-                            if (盘口买[i] < 150 * 10000) {
+                            if (盘口买[i] < 200 * 10000) {
                                 b = true
                             }
 
