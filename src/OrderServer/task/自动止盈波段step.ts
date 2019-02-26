@@ -1,6 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { TradeAccount } from '../TradeAccount'
-import { get波动率, realData, 摸顶抄底信号灯side, is上涨做空下跌平仓, is下跌抄底上涨平仓 } from '../realData'
+import { get波动率, realData, 摸顶抄底信号灯side, is上涨做空下跌平仓, is下跌抄底上涨平仓, get信号XXXmsg } from '../realData'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 
@@ -54,16 +54,20 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                     位置: 0,
                 })
 
+                //下单30s后，折返没有超过下单点的折返函数，挂单全平
+                
+
+
                 //
                 if (self.ws.增量同步数据.最后一次自动开仓.get(symbol) === '摸顶' && is上涨做空下跌平仓(symbol)) {
                     return await self.order自动.maker({
                         symbol,
                         side,
-                        size: Math.floor(最大仓位abs / 2),//一半
+                        size: Math.round(最大仓位abs / 2),//一半
                         price: toBuySellPriceFunc(side, get位置1价格),
                         reduceOnly: true,
                         text: '自动止盈波段step 上涨做空下跌平仓',
-                    }, '自动止盈波段step 上涨做空下跌平仓')
+                    }, '自动止盈波段step 上涨做空下跌平仓' + get信号XXXmsg(symbol))
                 }
 
 
@@ -71,11 +75,11 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                     return await self.order自动.maker({
                         symbol,
                         side,
-                        size: Math.floor(最大仓位abs / 2),//一半
+                        size: Math.round(最大仓位abs / 2),//一半
                         price: toBuySellPriceFunc(side, get位置1价格),
                         reduceOnly: true,
                         text: '自动止盈波段step 下跌抄底上涨平仓',
-                    }, '自动止盈波段step 下跌抄底上涨平仓')
+                    }, '自动止盈波段step 下跌抄底上涨平仓' + get信号XXXmsg(symbol))
                 }
 
 
@@ -88,7 +92,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                     return await self.order自动.maker({
                         symbol,
                         side,
-                        size: Math.floor(最大仓位abs / 2),//一半
+                        size: Math.round(最大仓位abs / 2),//一半
                         price: toBuySellPriceFunc(side, get位置1价格),
                         reduceOnly: true,
                         text: '自动止盈波段step 平一半',

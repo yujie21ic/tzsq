@@ -874,6 +874,8 @@ export class RealDataBase {
 
 
         return {
+            成交量买,
+            成交量卖,
             信号_上涨做空下跌平仓,
             信号_下跌抄底上涨平仓,
             波动率差_除以时间,
