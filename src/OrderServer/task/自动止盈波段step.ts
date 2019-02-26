@@ -54,6 +54,10 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                     位置: 0,
                 })
 
+                //下单30s后，折返没有超过下单点的折返函数，挂单全平
+                
+
+
                 //
                 if (self.ws.增量同步数据.最后一次自动开仓.get(symbol) === '摸顶' && is上涨做空下跌平仓(symbol)) {
                     return await self.order自动.maker({
