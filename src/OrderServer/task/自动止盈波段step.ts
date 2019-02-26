@@ -59,7 +59,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                     return await self.order自动.maker({
                         symbol,
                         side,
-                        size: Math.floor(最大仓位abs / 2),//一半
+                        size: Math.round(最大仓位abs / 2),//一半
                         price: toBuySellPriceFunc(side, get位置1价格),
                         reduceOnly: true,
                         text: '自动止盈波段step 上涨做空下跌平仓',
@@ -71,7 +71,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                     return await self.order自动.maker({
                         symbol,
                         side,
-                        size: Math.floor(最大仓位abs / 2),//一半
+                        size: Math.round(最大仓位abs / 2),//一半
                         price: toBuySellPriceFunc(side, get位置1价格),
                         reduceOnly: true,
                         text: '自动止盈波段step 下跌抄底上涨平仓',
@@ -88,7 +88,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                     return await self.order自动.maker({
                         symbol,
                         side,
-                        size: Math.floor(最大仓位abs / 2),//一半
+                        size: Math.round(最大仓位abs / 2),//一半
                         price: toBuySellPriceFunc(side, get位置1价格),
                         reduceOnly: true,
                         text: '自动止盈波段step 平一半',
