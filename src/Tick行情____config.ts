@@ -736,10 +736,9 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 ]
             },
             {
-                layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
+                layerList: [ 
                     layer(LineLayer, { data: d.期货.盘口买, color: 买颜色 }),
-                    layer(LineLayer, { data: d.期货.盘口卖, color: 卖颜色, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d.期货.盘口卖, color: 卖颜色  }),
                     layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
                 ]
             },
