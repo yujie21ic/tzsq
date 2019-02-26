@@ -1,6 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { TradeAccount } from '../TradeAccount'
-import { get波动率, realData, 摸顶抄底信号灯side, is上涨做空下跌平仓, is下跌抄底上涨平仓 } from '../realData'
+import { get波动率, realData, 摸顶抄底信号灯side, is上涨做空下跌平仓, is下跌抄底上涨平仓, get信号XXXmsg } from '../realData'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 
@@ -63,7 +63,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                         price: toBuySellPriceFunc(side, get位置1价格),
                         reduceOnly: true,
                         text: '自动止盈波段step 上涨做空下跌平仓',
-                    }, '自动止盈波段step 上涨做空下跌平仓')
+                    }, '自动止盈波段step 上涨做空下跌平仓' + get信号XXXmsg(symbol))
                 }
 
 
@@ -75,7 +75,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                         price: toBuySellPriceFunc(side, get位置1价格),
                         reduceOnly: true,
                         text: '自动止盈波段step 下跌抄底上涨平仓',
-                    }, '自动止盈波段step 下跌抄底上涨平仓')
+                    }, '自动止盈波段step 下跌抄底上涨平仓' + get信号XXXmsg(symbol))
                 }
 
 
