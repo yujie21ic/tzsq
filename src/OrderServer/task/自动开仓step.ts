@@ -1,6 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { TradeAccount } from '../TradeAccount'
-import { realData, get波动率, get信号msg, get信号灯Type } from '../realData'
+import { realData, get信号msg, get信号灯Type } from '../realData'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { sleep } from '../../lib/C/sleep'
 import { task__config } from './task__config'
