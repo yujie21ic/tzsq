@@ -28,7 +28,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                 最后一次开仓折返率 = lastNumber(realData.dataExt[symbol].期货.折返率)
             }
 
-            if (活动委托.length === 0) {
+            if (活动委托.length <= 1) {
 
                 const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
 
@@ -52,8 +52,6 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                 }
 
 
-
-
                 const get位置1价格 = () => realData.getOrderPrice({
                     symbol,
                     side,
@@ -61,35 +59,51 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                     位置: 0,
                 })
 
+
+
+                let 亏损挂单平仓Text = ''
+
                 //下单30s后，折返没有超过下单点的折返函数，挂单全平 
                 if (Date.now() - 最后一次开仓时间 >= 30 * 1000 && self.get浮盈点数(symbol) < 最后一次开仓折返率) {
-                    return await self.order自动.maker({
-                        symbol,
-                        side,
-                        size: 最大仓位abs,
-                        price: toBuySellPriceFunc(side, get位置1价格),
-                        reduceOnly: true,
-                        text: '单30s后，折返没有超过下单点的折返函数，挂单全平 ',
-                    })
+                    亏损挂单平仓Text = '单30s后，折返没有超过下单点的折返函数，挂单全平 '
                 }
-
 
                 //追涨追跌如果5分钟还没有涨超过10点，挂单全平
                 const 最后一次开仓type = self.ws.增量同步数据.最后一次自动开仓.get(symbol)
                 if ((最后一次开仓type === '追涨' || 最后一次开仓type === '追跌') && Date.now() - 最后一次开仓时间 >= 5 * 60 * 1000 && self.get浮盈点数(symbol) <= 10) {
-                    return await self.order自动.maker({
-                        symbol,
-                        side,
-                        size: 最大仓位abs,
-                        price: toBuySellPriceFunc(side, get位置1价格),
-                        reduceOnly: true,
-                        text: '自动止盈波段step 追涨追跌如果5分钟还没有涨超过10点，挂单全平',
-                    })
+                    亏损挂单平仓Text = '自动止盈波段step 追涨追跌如果5分钟还没有涨超过10点，挂单全平'
+                }
+
+
+                if (亏损挂单平仓Text !== '') {
+
+                    if (活动委托.length === 1) {
+                        if (活动委托[0].type === '限价只减仓' && 活动委托[0].side === side) {
+                            if (活动委托[0].price !== getPrice()) {
+                                return await self.order自动.updateMaker({
+                                    orderID: 活动委托[0].id,
+                                    price: toBuySellPriceFunc(side, getPrice),
+                                    text: 亏损挂单平仓Text + '  updateMaker'
+                                })
+                            } else {
+                                return false
+                            }
+                        } else {
+                            return await self.order自动.maker({
+                                symbol,
+                                side,
+                                size: 最大仓位abs,
+                                price: toBuySellPriceFunc(side, get位置1价格),
+                                reduceOnly: true,
+                                text: 亏损挂单平仓Text,
+                            })
+                        }
+                    }
                 }
 
 
                 //
-                if (self.ws.增量同步数据.最后一次自动开仓.get(symbol) === '摸顶' && is上涨做空下跌平仓(symbol)) {
+                if (self.ws.增量同步数据.最后一次自动开仓.get(symbol) === '摸顶' && is上涨做空下跌平仓(symbol) && 活动委托.length === 0) {
                     return await self.order自动.maker({
                         symbol,
                         side,
@@ -101,7 +115,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                 }
 
 
-                if (self.ws.增量同步数据.最后一次自动开仓.get(symbol) === '抄底' && is下跌抄底上涨平仓(symbol)) {
+                if (self.ws.增量同步数据.最后一次自动开仓.get(symbol) === '抄底' && is下跌抄底上涨平仓(symbol) && 活动委托.length === 0) {
                     return await self.order自动.maker({
                         symbol,
                         side,
@@ -117,7 +131,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                 //触发了反向开仓信号 
                 const { 信号side, 信号msg } = 摸顶抄底信号灯side(symbol)
 
-                if (信号side === side) {
+                if (信号side === side && 活动委托.length === 0) {
 
                     return await self.order自动.maker({
                         symbol,
