@@ -191,7 +191,10 @@ export class RealDataBase {
 
         //和别的时间参数不一样
         const 价格均线 = 指标.均线(价格, 300, RealDataBase.单位时间)
+
         const 波动率 = 指标.波动率(价格, 30, RealDataBase.单位时间)
+        const 折返率 = 指标.lazyMapCache(() => 波动率.length, i => 波动率[i] / 10 + 1)
+
 
 
         const 成交量买 = 指标.lazyMapCache(() => data.length, i => Math.abs(data[i].buySize))
@@ -251,12 +254,12 @@ export class RealDataBase {
 
 
 
-         const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
-         const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
-            //盘口买1,盘口卖1,净盘口1,净盘口均线1
+        const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
+        const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
+        //盘口买1,盘口卖1,净盘口1,净盘口均线1
         //const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => orderBook[i].buy[0].size)
         //const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => orderBook[i].sell[0].size)
-       // const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => orderBook[i].buy.length > 0 ? orderBook[i].buy[0].size : NaN)
+        // const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => orderBook[i].buy.length > 0 ? orderBook[i].buy[0].size : NaN)
         //const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => orderBook[i].sell.length > 0 ? orderBook[i].sell[0].size : NaN)
 
         const 净盘口 = 指标.lazyMapCache(() => Math.min(盘口买.length, 盘口卖.length), i => 盘口买[i] - Math.abs(盘口卖[i]))
@@ -304,7 +307,7 @@ export class RealDataBase {
             i =>
                 Math.abs(价格[i] - (上涨还是下跌[i] === '上涨' ? 最高价10[i] : 最低价10[i]))
                 <=
-                to范围({ value: 波动率[i] / 10 + 2, min: 3, max: 40 })
+                to范围({ value: 折返率[i], min: 3, max: 40 })
         )
 
 
@@ -540,8 +543,8 @@ export class RealDataBase {
                     { name: '成交量DIF<DEM', value: 净上涨成交量DIF[i] < 净上涨成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净上涨成交量DIF[i] < 0) },
                     { name: ' 净盘口<净盘口均线<0', value: b },
                     { name: '30秒净买成交量 >=150万', value: 净上涨成交量30[i] >= 150 * 10000 },
-                    { name: '折返程度<', value: (最高价10[i] - 价格[i]) < (波动率[i] / 10 + 1) },
-                    { name: '价格速度', value: 波动率[i] >= 20||波动率差_除以时间[i] >= 0.06 },
+                    { name: '折返程度<', value: (最高价10[i] - 价格[i]) < 折返率[i] },
+                    { name: '价格速度', value: 波动率[i] >= 20 || 波动率差_除以时间[i] >= 0.06 },
                     { name: '波动率 >=8', value: 波动率[i] >= 8 },
                     //波动率大于25之后，出现一次真空信号，动力慢信号都为true
                     //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (上涨_动力DIF[i] - 上涨_动力DEM[i]) / 上涨_动力DEM[i] < 0.05 },
@@ -621,7 +624,7 @@ export class RealDataBase {
                 //用语言描述出容易止损的波动的不同之处
 
                 return [
-                    { name: '成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i]},
+                    { name: '成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] },
                     //{ name: ' 净盘口<净盘口均线<0', value: b },
                     //波动率大于25之后，出现一次真空信号，动力慢信号都为true
                     //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (上涨_动力DIF[i] - 上涨_动力DEM[i]) / 上涨_动力DEM[i] < 0.05 },
@@ -648,7 +651,7 @@ export class RealDataBase {
                     //{ name: '净盘口>0', value: 净盘口[i]>0 },
                     { name: '波动率 >=1', value: 波动率[i] >= 1 },
                     { name: '60秒净成交量 >=100万', value: 净成交量均线60[i] >= 100 * 10000 },
-                    { name: '折返程度<', value: (最高价10[i] - 价格[i]) < (波动率[i] / 10 + 1) },
+                    { name: '折返程度<', value: (最高价10[i] - 价格[i]) < 折返率[i] },
                     { name: '追涨', value: 上涨.动力[i] > 100 * 10000 },
                     //量化用 净上涨成交量DIF
                     { name: '量化 is上涨', value: 净成交量均线60[i] > 0 },
@@ -735,7 +738,7 @@ export class RealDataBase {
         //             { name: '卖成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净下跌成交量DIF[i] < 0) },
         //             { name: ' 净盘口 > 净盘口均线>0', value: b },
         //             { name: '30秒净卖成交量>150万', value: 净下跌成交量30[i] >= 150 * 10000 },
-        //             { name: '折返程度<', value: (价格[i] - 最低价10[i]) < (波动率[i] / 10 + 1) },
+        //             { name: '折返程度<', value: (价格[i] - 最低价10[i]) < 折返率[i] },
         //             //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (下跌_动力DIF[i] - 下跌_动力DEM[i]) / 下跌_动力DEM[i] < 0.05 },
         //             { name: '价格速度', value: 波动率[i] >= 20||波动率差_除以时间[i] >= 0.06 },
         //             { name: '波动率 >=8', value: 波动率[i] >= 8 },
@@ -816,9 +819,9 @@ export class RealDataBase {
                     { name: '卖成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净下跌成交量DIF[i] < 0) },
                     { name: ' 净盘口 > 净盘口均线>0', value: b },
                     { name: '30秒净卖成交量>150万', value: 净下跌成交量30[i] >= 150 * 10000 },
-                    { name: '折返程度<', value: (价格[i] - 最低价10[i]) < (波动率[i] / 10 + 1) },
+                    { name: '折返程度<', value: (价格[i] - 最低价10[i]) < 折返率[i] },
                     //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (下跌_动力DIF[i] - 下跌_动力DEM[i]) / 下跌_动力DEM[i] < 0.05 },
-                    { name: '价格速度', value: 波动率[i] >= 20||波动率差_除以时间[i] >= 0.06 },
+                    { name: '价格速度', value: 波动率[i] >= 20 || 波动率差_除以时间[i] >= 0.06 },
                     { name: '波动率 >=8', value: 波动率[i] >= 8 },
                     //量化用
                     { name: '量化 is下跌', value: 净成交量均线60[i] < 0 },
@@ -864,7 +867,7 @@ export class RealDataBase {
                     //{ name: '净盘口<0', value: 净盘口[i]<0 },
                     { name: '波动率 >=1', value: 波动率[i] >= 1 },
                     { name: '60秒净成交量<=-100万', value: 净成交量均线60[i] <= -100 * 10000 },
-                    { name: '折返程度<', value: (价格[i] - 最低价10[i]) < (波动率[i] / 10 + 1) },
+                    { name: '折返程度<', value: (价格[i] - 最低价10[i]) < 折返率[i] },
                     { name: '追跌', value: 下跌.动力[i] > 100 * 10000 },
                     { name: '量化 is下跌', value: 净成交量均线60[i] < 0 },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '下跌' && 自动下单条件[i] },
@@ -874,6 +877,7 @@ export class RealDataBase {
 
 
         return {
+            折返率,
             成交量买,
             成交量卖,
             信号_上涨做空下跌平仓,
@@ -979,9 +983,9 @@ export class RealDataBase {
             () => Math.min(期货.信号_下跌.length, 期货.价格.length, 期货.波动率.length, hopex.价格.length),
             i => [
                 { name: '5秒内信号', value: _5秒内有全亮(期货.信号_下跌, i) },
-                { name: '期货.波动率[i] >10 ', value: 期货.波动率[i] >10 },
-                { name: 'bm折返 >', value: 期货.价格[i] - 期货.最低价10[i] > 期货.波动率[i] / 10 + 2 },
-                { name: 'hp折返 <', value: hopex.价格[i] - hopex.最低价10[i] < (期货.波动率[i] / 10 + 2) / 2 },
+                { name: '期货.波动率[i] >10 ', value: 期货.波动率[i] > 10 },
+                { name: 'bm折返 >', value: 期货.价格[i] - 期货.最低价10[i] > 期货.折返率[i] },
+                { name: 'hp折返 <', value: hopex.价格[i] - hopex.最低价10[i] < 期货.折返率[i] / 2 },
             ]
         )
 
@@ -989,9 +993,9 @@ export class RealDataBase {
             () => Math.min(期货.信号_上涨.length, 期货.价格.length, 期货.波动率.length, hopex.价格.length),
             i => [
                 { name: '5秒内信号', value: _5秒内有全亮(期货.信号_上涨, i) },
-                { name: '期货.波动率[i] >10 ', value: 期货.波动率[i] >10 },
-                { name: 'bm折返 >', value: 期货.最高价10[i] - 期货.价格[i] > 期货.波动率[i] / 10 + 2 },
-                { name: 'hp折返 <', value: hopex.最高价10[i] - hopex.价格[i] < (期货.波动率[i] / 10 + 2) / 2 },
+                { name: '期货.波动率[i] >10 ', value: 期货.波动率[i] > 10 },
+                { name: 'bm折返 >', value: 期货.最高价10[i] - 期货.价格[i] > 期货.折返率[i] },
+                { name: 'hp折返 <', value: hopex.最高价10[i] - hopex.价格[i] < 期货.折返率[i] / 2 },
             ]
         )
 
