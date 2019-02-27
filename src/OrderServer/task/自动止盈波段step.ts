@@ -5,6 +5,7 @@ import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { lastNumber } from '../../lib/F/lastNumber'
 import { logToFile } from '../../lib/C/logToFile';
+import { to范围 } from '../../lib/F/to范围';
 
 const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
     let 止盈价格 = NaN
@@ -66,7 +67,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                 let 亏损挂单平仓Text = ''
 
                 //下单30s后，折返没有超过下单点的折返函数，挂单全平 
-                if (Date.now() - 最后一次开仓时间 >= 30 * 1000 && self.get浮盈点数(symbol) < 最后一次开仓折返率) {
+                if (Date.now() - 最后一次开仓时间 >= to范围({min:7,max:30,value:get波动率(symbol) / 7 + 7}) * 1000 && self.get浮盈点数(symbol) < 最后一次开仓折返率) {
                     亏损挂单平仓Text = '下单30s后，折返没有超过下单点的折返函数，挂单全平'
                 }
 
