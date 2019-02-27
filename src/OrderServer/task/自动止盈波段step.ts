@@ -8,7 +8,7 @@ import { logToFile } from '../../lib/C/logToFile';
 
 const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
     let 止盈价格 = NaN
-    let 最大仓位abs = 0
+    let 最大仓位abs = NaN
     let 最后一次开仓时间 = NaN
     let 最后一次开仓折返率 = NaN
 
@@ -160,7 +160,6 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
             最大仓位abs = NaN
             最后一次开仓时间 = NaN
             最后一次开仓折返率 = NaN
-            logToFile(self.accountName + '.txt')(JSON.stringify({ 最大仓位abs, 最后一次开仓时间, 最后一次开仓折返率 }))
         }
 
         return false
