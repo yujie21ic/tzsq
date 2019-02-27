@@ -68,7 +68,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                         price: toBuySellPriceFunc(side, get位置1价格),
                         reduceOnly: true,
                         text: '自动止盈波段step 上涨做空下跌平仓',
-                    }, '自动止盈波段step 上涨做空下跌平仓' + get信号XXXmsg(symbol))
+                    }, get信号XXXmsg(symbol))
                 }
 
 
@@ -80,7 +80,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                         price: toBuySellPriceFunc(side, get位置1价格),
                         reduceOnly: true,
                         text: '自动止盈波段step 下跌抄底上涨平仓',
-                    }, '自动止盈波段step 下跌抄底上涨平仓' + get信号XXXmsg(symbol))
+                    }, get信号XXXmsg(symbol))
                 }
 
 
@@ -97,7 +97,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                         price: toBuySellPriceFunc(side, get位置1价格),
                         reduceOnly: true,
                         text: '自动止盈波段step 平一半',
-                    }, '自动止盈波段step 平一半' + 信号side + ' 信号msg:' + 信号msg)
+                    }, 信号side + ' 信号msg:' + 信号msg)
 
                     // if (
                     //     (side === 'Buy' && get位置1价格() <= 止盈价格) ||

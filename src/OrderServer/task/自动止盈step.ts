@@ -44,7 +44,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAc
                 price: toBuySellPriceFunc(side, getPrice),
                 reduceOnly: true,
                 text: '自动止盈step 挂单平仓',
-            }, '自动止盈step 挂单平仓' + side + '  price:' + getPrice(), self.ws)
+            }, side + ' price:' + getPrice(), self.ws)
         }
         else if (活动委托.length === 1) {
             if (活动委托[0].side === (仓位数量 > 0 ? 'Sell' : 'Buy') && 活动委托[0].type === '限价只减仓') {
@@ -59,7 +59,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAc
                             位置: 0,
                         })),
                         text: '触发了反向开仓信号 提前 修改 止盈',
-                    }, '自动止盈step 修改平仓' + 信号side + ' 信号msg:' + 信号msg)
+                    }, 信号side + ' 信号msg:' + 信号msg)
                 }
             }
         }

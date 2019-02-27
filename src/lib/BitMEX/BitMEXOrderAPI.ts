@@ -19,17 +19,15 @@ export class BitMEXOrderAPI {
         this.重试休息多少毫秒 = p.重试休息多少毫秒
     }
 
-    private DDOS调用 = <P>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
-        async (p: P, logText?: string, ws?: BitMEXWSAPI) => {
+    private DDOS调用 = <P extends { text: string }>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
+        async (p: P, logText = '', ws?: BitMEXWSAPI) => {
             const startTime = Date.now()
             let success = false
             let i = 1
             let errMsg = ''
             const __id__ = callID++
 
-            if (logText !== undefined) {
-                this.log(`__${__id__}__` + logText + '\nsend:' + JSON.stringify(p))
-            }
+            this.log(`__${__id__}__` + p.text + '  ' + logText + '\nsend:' + JSON.stringify(p))
 
             for (i = 1; i <= this.重试几次; i++) {
                 const ret = await f(this.cookie, p)
@@ -60,9 +58,7 @@ export class BitMEXOrderAPI {
                 if (i === this.重试几次) errMsg = JSON.stringify(ret)
             }
 
-            if (logText !== undefined) {
-                this.log(`__${__id__}__` + `  重试${i}次  ${success ? '成功' : '失败' + errMsg}  耗时:${Date.now() - startTime}ms`)
-            }
+            this.log(`__${__id__}__` + `  重试${i}次  ${success ? '成功' : '失败' + errMsg}  耗时:${Date.now() - startTime}ms`)
 
             if (success === false) {
                 await sleep(500)
