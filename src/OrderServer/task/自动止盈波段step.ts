@@ -64,7 +64,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
                 //追涨追跌如果5分钟还没有涨超过10点，挂单全平
                 const 最后一次开仓type = self.ws.增量同步数据.最后一次自动开仓.get(symbol)
-                if ((最后一次开仓type === '追涨' || 最后一次开仓type === '追跌') && Date.now() - 最后一次开仓时间 >= 5 * 60 * 1000) {
+                if ((最后一次开仓type === '追涨' || 最后一次开仓type === '追跌') && Date.now() - 最后一次开仓时间 >= 5 * 60 * 1000 && self.get浮盈点数(symbol) <= 10) {
                     return await self.order自动.maker({
                         symbol,
                         side,
