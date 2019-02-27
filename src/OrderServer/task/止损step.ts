@@ -33,7 +33,7 @@ const 止损step = ({
                 side,
                 price: toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点, side),
                 text: '亏损止损',
-            })
+            }, '', self.ws)
         }
         else {
             return false
@@ -68,7 +68,7 @@ const 止损step = ({
                     orderID: id,
                     price: 新的Price,
                     text: 推 === 0 ? '成本价止损' : '盈利止损',
-                })
+                }, '', self.ws)
             }
             return false
         }

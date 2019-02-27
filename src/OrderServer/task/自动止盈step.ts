@@ -59,7 +59,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAc
                             位置: 0,
                         })),
                         text: '触发了反向开仓信号 提前 修改 止盈',
-                    }, 信号side + ' 信号msg:' + 信号msg)
+                    }, 信号side + ' 信号msg:' + 信号msg, self.ws)
                 }
             }
         }
