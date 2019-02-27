@@ -7,6 +7,7 @@ import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
     let 止盈价格 = NaN
     let 最大仓位abs = 0
+    let 最后一次开仓时间 = NaN
 
     return async (self: TradeAccount) => {
 
@@ -19,7 +20,10 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
         if (仓位数量 !== 0) {
 
-            最大仓位abs = isNaN(最大仓位abs) ? Math.abs(仓位数量) : Math.max(最大仓位abs, Math.abs(仓位数量))
+            if (isNaN(最大仓位abs) || 最大仓位abs < Math.abs(仓位数量)) {
+                最大仓位abs = Math.abs(仓位数量)
+                最后一次开仓时间 = Date.now()
+            }
 
             if (活动委托.length === 0) {
 
@@ -54,9 +58,22 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                     位置: 0,
                 })
 
+
                 //下单30s后，折返没有超过下单点的折返函数，挂单全平
 
-                //追涨追跌如果5分钟还没有涨超过10点，那么就挂单平仓               
+
+                //追涨追跌如果5分钟还没有涨超过10点，挂单全平
+                const 最后一次开仓type = self.ws.增量同步数据.最后一次自动开仓.get(symbol)
+                if ((最后一次开仓type === '追涨' || 最后一次开仓type === '追跌') && Date.now() - 最后一次开仓时间 >= 5 * 60 * 1000) {
+                    return await self.order自动.maker({
+                        symbol,
+                        side,
+                        size: 最大仓位abs,
+                        price: toBuySellPriceFunc(side, get位置1价格),
+                        reduceOnly: true,
+                        text: '自动止盈波段step 追涨追跌如果5分钟还没有涨超过10点，挂单全平',
+                    })
+                }
 
 
                 //
@@ -113,6 +130,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
         } else {
             止盈价格 = NaN
             最大仓位abs = NaN
+            最后一次开仓时间 = NaN
         }
 
         return false
