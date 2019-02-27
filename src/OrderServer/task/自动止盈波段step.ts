@@ -90,16 +90,16 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                             } else {
                                 return false
                             }
-                        } else {
-                            return await self.order自动.maker({
-                                symbol,
-                                side,
-                                size: 最大仓位abs,
-                                price: toBuySellPriceFunc(side, get位置1价格),
-                                reduceOnly: true,
-                                text: 亏损挂单平仓Text,
-                            })
                         }
+                    } else {
+                        return await self.order自动.maker({
+                            symbol,
+                            side,
+                            size: 最大仓位abs,
+                            price: toBuySellPriceFunc(side, get位置1价格),
+                            reduceOnly: true,
+                            text: 亏损挂单平仓Text,
+                        })
                     }
                 }
 
