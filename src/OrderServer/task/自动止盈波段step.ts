@@ -4,6 +4,7 @@ import { get波动率, realData, 摸顶抄底信号灯side, is上涨做空下跌
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { lastNumber } from '../../lib/F/lastNumber'
+import { logToFile } from '../../lib/C/logToFile';
 
 const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
     let 止盈价格 = NaN
@@ -26,6 +27,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                 最大仓位abs = Math.abs(仓位数量)
                 最后一次开仓时间 = Date.now()
                 最后一次开仓折返率 = lastNumber(realData.dataExt[symbol].期货.折返率)
+                logToFile(self.accountName + '.txt')(JSON.stringify({ 最大仓位abs, 最后一次开仓时间, 最后一次开仓折返率 }))
             }
 
             if (活动委托.length <= 1) {
@@ -158,6 +160,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
             最大仓位abs = NaN
             最后一次开仓时间 = NaN
             最后一次开仓折返率 = NaN
+            logToFile(self.accountName + '.txt')(JSON.stringify({ 最大仓位abs, 最后一次开仓时间, 最后一次开仓折返率 }))
         }
 
         return false
