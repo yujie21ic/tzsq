@@ -3,11 +3,13 @@ import { TradeAccount } from '../TradeAccount'
 import { get波动率, realData, 摸顶抄底信号灯side, is上涨做空下跌平仓, is下跌抄底上涨平仓, get信号XXXmsg } from '../realData'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
+import { lastNumber } from '../../lib/F/lastNumber'
 
 const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
     let 止盈价格 = NaN
     let 最大仓位abs = 0
     let 最后一次开仓时间 = NaN
+    let 最后一次开仓折返率 = NaN
 
     return async (self: TradeAccount) => {
 
@@ -23,6 +25,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
             if (isNaN(最大仓位abs) || 最大仓位abs < Math.abs(仓位数量)) {
                 最大仓位abs = Math.abs(仓位数量)
                 最后一次开仓时间 = Date.now()
+                最后一次开仓折返率 = lastNumber(realData.dataExt[symbol].期货.折返率)
             }
 
             if (活动委托.length === 0) {
@@ -58,8 +61,17 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                     位置: 0,
                 })
 
-
-                //下单30s后，折返没有超过下单点的折返函数，挂单全平
+                //下单30s后，折返没有超过下单点的折返函数，挂单全平 
+                if (Date.now() - 最后一次开仓时间 >= 30 * 1000 && self.get浮盈点数(symbol) < 最后一次开仓折返率) {
+                    return await self.order自动.maker({
+                        symbol,
+                        side,
+                        size: 最大仓位abs,
+                        price: toBuySellPriceFunc(side, get位置1价格),
+                        reduceOnly: true,
+                        text: '单30s后，折返没有超过下单点的折返函数，挂单全平 ',
+                    })
+                }
 
 
                 //追涨追跌如果5分钟还没有涨超过10点，挂单全平
@@ -131,6 +143,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
             止盈价格 = NaN
             最大仓位abs = NaN
             最后一次开仓时间 = NaN
+            最后一次开仓折返率 = NaN
         }
 
         return false
