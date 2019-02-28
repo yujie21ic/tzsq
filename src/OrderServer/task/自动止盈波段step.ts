@@ -85,10 +85,10 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
                     if (活动委托.length === 1) {
                         if (活动委托[0].type === '限价只减仓' && 活动委托[0].side === side) {
-                            if (活动委托[0].price !== getPrice()) {
+                            if (活动委托[0].price !== get位置1价格()) {
                                 return await self.order自动.updateMaker({
                                     orderID: 活动委托[0].id,
-                                    price: toBuySellPriceFunc(side, getPrice),
+                                    price: toBuySellPriceFunc(side, get位置1价格),
                                     text: 亏损挂单平仓Text + '  updateMaker'
                                 }, '', self.ws)
                             } else {
