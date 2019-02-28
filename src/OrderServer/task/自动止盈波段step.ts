@@ -64,16 +64,19 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
 
 
+                const 最后一次开仓type = self.ws.增量同步数据.最后一次自动开仓.get(symbol)
                 let 亏损挂单平仓Text = ''
 
                 //下单30s后，折返没有超过下单点的折返函数，挂单全平 
-                if (Date.now() - 最后一次开仓时间 >= to范围({ min: 7, max: 30, value: get波动率(symbol) / 7 + 7 }) * 1000 && self.get浮盈点数(symbol) < 最后一次开仓折返率) {
+                if ((最后一次开仓type === '摸顶' || 最后一次开仓type === '抄底') &&
+                    Date.now() - 最后一次开仓时间 >= to范围({ min: 7, max: 30, value: get波动率(symbol) / 7 + 7 }) * 1000 &&
+                    self.get浮盈点数(symbol) < 最后一次开仓折返率) {
                     亏损挂单平仓Text = '下单30s后，折返没有超过下单点的折返函数，挂单全平'
                 }
 
                 //追涨追跌如果5分钟还没有涨超过10点，挂单全平
-                const 最后一次开仓type = self.ws.增量同步数据.最后一次自动开仓.get(symbol)
-                if ((最后一次开仓type === '追涨' || 最后一次开仓type === '追跌') && Date.now() - 最后一次开仓时间 >= 5 * 60 * 1000 && self.get浮盈点数(symbol) <= 10) {
+                if ((最后一次开仓type === '追涨' || 最后一次开仓type === '追跌') &&
+                    Date.now() - 最后一次开仓时间 >= 5 * 60 * 1000 && self.get浮盈点数(symbol) <= 10) {
                     亏损挂单平仓Text = '自动止盈波段step 追涨追跌如果5分钟还没有涨超过10点，挂单全平'
                 }
 
