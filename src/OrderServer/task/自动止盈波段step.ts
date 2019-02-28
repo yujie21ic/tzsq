@@ -4,8 +4,8 @@ import { get波动率, realData, 摸顶抄底信号灯side, is上涨做空下跌
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { lastNumber } from '../../lib/F/lastNumber'
-import { logToFile } from '../../lib/C/logToFile';
-import { to范围 } from '../../lib/F/to范围';
+import { logToFile } from '../../lib/C/logToFile'
+import { to范围 } from '../../lib/F/to范围'
 
 const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
     let 止盈价格 = NaN
