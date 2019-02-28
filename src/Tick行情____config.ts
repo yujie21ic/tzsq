@@ -340,7 +340,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     }),
 
     复盘下跌动力: (d, d2) => ({
-        heightList: [0.4, 0.2, 0.4],
+        heightList: [0.4, 0.3, 0.3],
         items: [
             [{
                 numberColor: BTC颜色,
@@ -373,26 +373,26 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ],
             [
 
+                // {
+                //     numberColor: BTC颜色,
+                //     layerList: [
+                //         layer(LineLayer, { data: d2.XBTUSD.期货.成交量买均线5, color: 买颜色 }),
+                //         layer(LineLayer, { data: d2.XBTUSD.期货.成交量卖均线5, color: 卖颜色 }),
+                //     ]
+                // },
+
                 {
                     numberColor: BTC颜色,
                     layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.期货.成交量买均线5, color: 买颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.期货.成交量卖均线5, color: 卖颜色 }),
+                        layer(LineLayer, { data: d2.XBTUSD.期货.下跌.累计成交量, color: ETH颜色 }),
                     ]
                 },
-
-                // {
-                //     numberColor: BTC颜色,
-                //     layerList: [
-                //         layer(LineLayer, { data: d2.XBTUSD.期货.下跌.累计成交量, color: ETH颜色 }),
-                //     ]
-                // },
-                // {
-                //     numberColor: BTC颜色,
-                //     layerList: [
-                //         layer(LineLayer, { data: d2.XBTUSD.期货.下跌.价差, color: 波动率颜色 }),
-                //     ]
-                // },
+                {
+                    numberColor: BTC颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d2.XBTUSD.期货.下跌.价差, color: 波动率颜色 }),
+                    ]
+                },
 
             ],
             [
@@ -407,17 +407,17 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 //         layer(LineLayer, { data: d2.XBTUSD.期货.下跌_动力DEM, color: 卖颜色 }),
                 //     ]
                 // },
-                {
-                    numberColor: BTC颜色,
-                    yCoordinate: '对数',
-                    layerList: [
-                        layer(ZeroLayer, { color: 0xaaaaaa }),
-                        //  layer(LineLayer, { data: d2.XBTUSD.期货.下跌_动力10均线, color: 卖颜色1 }),
-                        //  layer(LineLayer, { data: d2.XBTUSD.期货.下跌_动力20均线, color: 卖颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.期货.净下跌成交量DIF, color: 买颜色1 }),
-                        layer(LineLayer, { data: d2.XBTUSD.期货.净下跌成交量DEM, color: 买颜色 }),
-                    ]
-                },
+                // {
+                //     numberColor: BTC颜色,
+                //     yCoordinate: '对数',
+                //     layerList: [
+                //         layer(ZeroLayer, { color: 0xaaaaaa }),
+                //         //  layer(LineLayer, { data: d2.XBTUSD.期货.下跌_动力10均线, color: 卖颜色1 }),
+                //         //  layer(LineLayer, { data: d2.XBTUSD.期货.下跌_动力20均线, color: 卖颜色 }),
+                //         layer(LineLayer, { data: d2.XBTUSD.期货.净下跌成交量DIF, color: 买颜色1 }),
+                //         layer(LineLayer, { data: d2.XBTUSD.期货.净下跌成交量DEM, color: 买颜色 }),
+                //     ]
+                // },
                 // {
                 //     numberColor: 波动率颜色,
                 //     numberX: 100,
@@ -439,7 +439,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
     复盘上涨动力: (d, d2) => ({
-        heightList: [0.4, 0.2, 0.4],
+        heightList: [0.4, 0.3, 0.3],
         items: [
             [{
                 numberColor: BTC颜色,
@@ -473,39 +473,40 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
             ],
             [
+                // {
+                //     numberColor: BTC颜色,
+                //     layerList: [
+                //         layer(LineLayer, { data: d2.XBTUSD.期货.成交量买均线5, color: 买颜色 }),
+                //         layer(LineLayer, { data: d2.XBTUSD.期货.成交量卖均线5, color: 卖颜色 }),
+                //     ]
+                // },
+               
                 {
                     numberColor: BTC颜色,
                     layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.期货.成交量买均线5, color: 买颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.期货.成交量卖均线5, color: 卖颜色 }),
+                        layer(LineLayer, { data: d2.XBTUSD.期货.上涨.累计成交量, color: ETH颜色 }),
                     ]
                 },
-                // {
-                //     numberColor: BTC颜色,
-                //     layerList: [
-                //         layer(LineLayer, { data: d2.XBTUSD.期货.上涨.价差, color: 波动率颜色 }),
-                //     ]
-                // },
-                // {
-                //     numberColor: BTC颜色,
-                //     layerList: [
-                //         layer(LineLayer, { data: d2.XBTUSD.期货.上涨.累计成交量, color: ETH颜色 }),
-                //     ]
-                // },
+                {
+                    numberColor: BTC颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d2.XBTUSD.期货.上涨.价差, color: 波动率颜色 }),
+                    ]
+                },
 
             ],
             [
-                {
-                    numberColor: BTC颜色,
-                    yCoordinate: '对数',
-                    layerList: [
-                        layer(ZeroLayer, { color: 0xaaaaaa }),
-                        //  layer(LineLayer, { data: d2.XBTUSD.期货.下跌_动力10均线, color: 卖颜色1 }),
-                        //  layer(LineLayer, { data: d2.XBTUSD.期货.下跌_动力20均线, color: 卖颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.期货.净上涨成交量DIF, color: 买颜色1 }),
-                        layer(LineLayer, { data: d2.XBTUSD.期货.净上涨成交量DEM, color: 买颜色 }),
-                    ]
-                },
+                // {
+                //     numberColor: BTC颜色,
+                //     yCoordinate: '对数',
+                //     layerList: [
+                //         layer(ZeroLayer, { color: 0xaaaaaa }),
+                //         //  layer(LineLayer, { data: d2.XBTUSD.期货.下跌_动力10均线, color: 卖颜色1 }),
+                //         //  layer(LineLayer, { data: d2.XBTUSD.期货.下跌_动力20均线, color: 卖颜色 }),
+                //         layer(LineLayer, { data: d2.XBTUSD.期货.净上涨成交量DIF, color: 买颜色1 }),
+                //         layer(LineLayer, { data: d2.XBTUSD.期货.净上涨成交量DEM, color: 买颜色 }),
+                //     ]
+                // },
                 // {
                 //     numberColor: 波动率颜色,
                 //     numberX: 100,
@@ -587,11 +588,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         heightList: [0.4, 0.2, 0.2, 0.2],
         items: [
             [
-                // {
-                //     layerList: [净成交量均线30
-                //         layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
-                //     ]
-                // },
+               
                 // {
 
                 {
@@ -603,13 +600,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d.期货.净成交量均线60, color: ETH颜色 }),
                     ]
                 },
-                {
-                    numberColor: 石青,
-                    numberX: 100,
-                    layerList: [
-                        layer(LineLayer, { data: d.期货.波动率, color: 石青 }),
-                    ]
-                },
+                // {
+                //     numberColor: 石青,
+                //     numberX: 100,
+                //     layerList: [
+                //         layer(LineLayer, { data: d.期货.波动率, color: 石青 }),
+                //     ]
+                // },
+               
                 {
                     numberColor: BTC颜色,
                     layerList: [
@@ -624,6 +622,11 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                             color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
                         })
 
+                    ]
+                },
+                {
+                    layerList: [
+                        layer(LineLayer, { data: d.期货.波动率5分钟, color: 波动率颜色 }),
                     ]
                 },
             ],
@@ -747,6 +750,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layer(ZeroLayer, { color: 0xaaaaaa }),
                     layer(LineLayer, { data: d.期货.成交量买, color: 买颜色 }),
                     layer(LineLayer, { data: d.期货.成交量卖, color: 卖颜色, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d.期货.净成交量均线10, color: 波动率颜色 }),
                     layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
                 ]
             }
