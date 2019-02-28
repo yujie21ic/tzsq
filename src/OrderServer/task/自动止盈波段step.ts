@@ -4,8 +4,8 @@ import { get波动率, realData, 摸顶抄底信号灯side, is上涨做空下跌
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { lastNumber } from '../../lib/F/lastNumber'
-import { logToFile } from '../../lib/C/logToFile';
-import { to范围 } from '../../lib/F/to范围';
+import { logToFile } from '../../lib/C/logToFile'
+import { to范围 } from '../../lib/F/to范围'
 
 const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
     let 止盈价格 = NaN
@@ -64,16 +64,19 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
 
 
+                const 最后一次开仓type = self.ws.增量同步数据.最后一次自动开仓.get(symbol)
                 let 亏损挂单平仓Text = ''
 
                 //下单30s后，折返没有超过下单点的折返函数，挂单全平 
-                if (Date.now() - 最后一次开仓时间 >= to范围({min:7,max:30,value:get波动率(symbol) / 7 + 7}) * 1000 && self.get浮盈点数(symbol) < 最后一次开仓折返率) {
+                if ((最后一次开仓type === '摸顶' || 最后一次开仓type === '抄底') &&
+                    Date.now() - 最后一次开仓时间 >= to范围({ min: 7, max: 30, value: get波动率(symbol) / 7 + 7 }) * 1000 &&
+                    self.get浮盈点数(symbol) < 最后一次开仓折返率) {
                     亏损挂单平仓Text = '下单30s后，折返没有超过下单点的折返函数，挂单全平'
                 }
 
                 //追涨追跌如果5分钟还没有涨超过10点，挂单全平
-                const 最后一次开仓type = self.ws.增量同步数据.最后一次自动开仓.get(symbol)
-                if ((最后一次开仓type === '追涨' || 最后一次开仓type === '追跌') && Date.now() - 最后一次开仓时间 >= 5 * 60 * 1000 && self.get浮盈点数(symbol) <= 10) {
+                if ((最后一次开仓type === '追涨' || 最后一次开仓type === '追跌') &&
+                    Date.now() - 最后一次开仓时间 >= 5 * 60 * 1000 && self.get浮盈点数(symbol) <= 10) {
                     亏损挂单平仓Text = '自动止盈波段step 追涨追跌如果5分钟还没有涨超过10点，挂单全平'
                 }
 
@@ -82,10 +85,10 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
                     if (活动委托.length === 1) {
                         if (活动委托[0].type === '限价只减仓' && 活动委托[0].side === side) {
-                            if (活动委托[0].price !== getPrice()) {
+                            if (活动委托[0].price !== get位置1价格()) {
                                 return await self.order自动.updateMaker({
                                     orderID: 活动委托[0].id,
-                                    price: toBuySellPriceFunc(side, getPrice),
+                                    price: toBuySellPriceFunc(side, get位置1价格),
                                     text: 亏损挂单平仓Text + '  updateMaker'
                                 }, '', self.ws)
                             } else {
@@ -168,4 +171,4 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 }
 
 
-export const XBTUSD自动止盈波段step = 自动止盈波段step('XBTUSD')
+export const XBTUSD自动止盈波段step = () => 自动止盈波段step('XBTUSD')

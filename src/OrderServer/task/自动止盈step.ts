@@ -68,4 +68,4 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAc
     return false
 }
 
-export const XBTUSD自动止盈step = 自动止盈step('XBTUSD')
+export const XBTUSD自动止盈step = () => 自动止盈step('XBTUSD')

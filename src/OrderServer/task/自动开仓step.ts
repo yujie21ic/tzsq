@@ -114,4 +114,4 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
 }
 
 
-export const XBTUSD自动开仓step = 自动开仓step('XBTUSD') 
+export const XBTUSD自动开仓step = () => 自动开仓step('XBTUSD') 
