@@ -21,15 +21,15 @@ if (config.orderServer !== undefined) {
 
         const account = new TradeAccount({ accountName: k, cookie: v })
 
-        account.runTask(XBTUSD止损step)
-        account.runTask(ETHUSD止损step)
+        account.runTask(XBTUSD止损step())
+        account.runTask(ETHUSD止损step())
 
         account.runTask(委托检测step('XBTUSD'))
         account.runTask(委托检测step('ETHUSD'))
 
-        account.runTask(XBTUSD自动开仓step)
-        account.runTask(XBTUSD自动止盈step)
-        account.runTask(XBTUSD自动止盈波段step)
+        account.runTask(XBTUSD自动开仓step())
+        account.runTask(XBTUSD自动止盈step())
+        account.runTask(XBTUSD自动止盈波段step())
 
         accountDic.set(v, account)
     })

@@ -67,7 +67,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                 let 亏损挂单平仓Text = ''
 
                 //下单30s后，折返没有超过下单点的折返函数，挂单全平 
-                if (Date.now() - 最后一次开仓时间 >= to范围({min:7,max:30,value:get波动率(symbol) / 7 + 7}) * 1000 && self.get浮盈点数(symbol) < 最后一次开仓折返率) {
+                if (Date.now() - 最后一次开仓时间 >= to范围({ min: 7, max: 30, value: get波动率(symbol) / 7 + 7 }) * 1000 && self.get浮盈点数(symbol) < 最后一次开仓折返率) {
                     亏损挂单平仓Text = '下单30s后，折返没有超过下单点的折返函数，挂单全平'
                 }
 
@@ -168,4 +168,4 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 }
 
 
-export const XBTUSD自动止盈波段step = 自动止盈波段step('XBTUSD')
+export const XBTUSD自动止盈波段step = () => 自动止盈波段step('XBTUSD')

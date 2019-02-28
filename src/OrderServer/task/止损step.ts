@@ -80,7 +80,7 @@ const 止损step = ({
     }
 }
 
-export const XBTUSD止损step = 止损step({
+export const XBTUSD止损step = () => 止损step({
     symbol: 'XBTUSD',
     初始止损点: () => to范围({
         min: 4,
@@ -113,7 +113,7 @@ export const XBTUSD止损step = 止损step({
     }
 })
 
-export const ETHUSD止损step = 止损step({
+export const ETHUSD止损step = () => 止损step({
     symbol: 'ETHUSD',
     初始止损点: () => to范围({
         min: 0.3,
