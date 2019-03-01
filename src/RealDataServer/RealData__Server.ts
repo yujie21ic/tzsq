@@ -6,7 +6,7 @@ import { BinanceTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/Bina
 import { HopexTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/HopexTradeAndOrderBook'
 import { Sampling } from '../lib/C/Sampling'
 
-export class RealData extends RealDataBase {
+export class RealData__Server extends RealDataBase {
 
     private wss?: WebSocket.Server
     private wsDic = new Map<WebSocket, boolean>()

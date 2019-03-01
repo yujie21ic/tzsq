@@ -4,14 +4,14 @@ import { sleep } from '../lib/C/sleep'
 import { to范围 } from '../lib/F/to范围'
 import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
 import { BitmexPositionAndOrder } from './PositionAndOrder/BitmexPositionAndOrder'
-import { RealData } from '../RealDataServer/RealData'
+import { RealData__Server } from '../RealDataServer/RealData__Server'
 import { RealDataBase } from '../RealDataServer/RealDataBase'
 
 
 export class TradeAccount {
 
     //
-    static realData: RealDataBase = new RealData(false)
+    static realData: RealDataBase = new RealData__Server(false)
     bitmexPositionAndOrder: BitmexPositionAndOrder
     get ws() { return this.bitmexPositionAndOrder.ws }
     get bitMEXOrderAPI() { return this.bitmexPositionAndOrder.bitMEXOrderAPI }
