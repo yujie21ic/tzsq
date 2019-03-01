@@ -13,6 +13,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
     let 最大仓位abs = NaN
     let 最后一次开仓时间 = NaN
     let 最后一次开仓折返率 = NaN
+    let 摸顶抄底超时秒 = NaN
 
     return async (self: TradeAccount) => {
 
@@ -29,6 +30,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                 最大仓位abs = Math.abs(仓位数量)
                 最后一次开仓时间 = Date.now()
                 最后一次开仓折返率 = lastNumber(realData.dataExt[symbol].期货.折返率)
+                摸顶抄底超时秒 = to范围({ min: 7, max: 30, value: get波动率(symbol) / 7 + 7 })
                 logToFile(self.accountName + '.txt')(JSON.stringify({ 最大仓位abs, 最后一次开仓时间, 最后一次开仓折返率 }))
             }
 
@@ -70,9 +72,9 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
                 //下单30s后，折返没有超过下单点的折返函数，挂单全平 
                 if ((最后一次开仓type === '摸顶' || 最后一次开仓type === '抄底') &&
-                    Date.now() - 最后一次开仓时间 >= to范围({ min: 7, max: 30, value: get波动率(symbol) / 7 + 7 }) * 1000 &&
+                    Date.now() - 最后一次开仓时间 >= 摸顶抄底超时秒 * 1000 &&
                     self.get浮盈点数(symbol) < 最后一次开仓折返率) {
-                    亏损挂单平仓Text = '下单'+String(to范围({ min: 7, max: 30, value: get波动率(symbol) / 7 + 7 }))+' 秒后，折返没有超过下单点的折返函数，挂单全平'
+                    亏损挂单平仓Text = '下单' + 摸顶抄底超时秒 + ' 秒后，折返没有超过下单点的折返函数，挂单全平'
                 }
 
                 //追涨追跌如果5分钟还没有涨超过10点，挂单全平
@@ -165,6 +167,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
             最大仓位abs = NaN
             最后一次开仓时间 = NaN
             最后一次开仓折返率 = NaN
+            摸顶抄底超时秒 = NaN
         }
 
         return false
