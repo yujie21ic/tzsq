@@ -6,12 +6,12 @@ import { config } from '../config'
 import { typeObjectParse } from '../lib/F/typeObjectParse'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
 import { kvs } from '../lib/F/kvs'
-// import { XBTUSD止损step, ETHUSD止损step } from './task/止损step'
-// import { 委托检测step } from './task/委托检测step'
-// import { XBTUSD自动开仓step } from './task/自动开仓step'
-// import { XBTUSD自动止盈波段step } from './task/自动止盈波段step'
-// import { XBTUSD自动止盈step } from './task/自动止盈step'
-import { 哪边多挂哪边 } from './task/哪边多挂哪边'
+import { XBTUSD止损step, ETHUSD止损step } from './task/止损step'
+import { 委托检测step } from './task/委托检测step'
+import { XBTUSD自动开仓step } from './task/自动开仓step'
+import { XBTUSD自动止盈波段step } from './task/自动止盈波段step'
+import { XBTUSD自动止盈step } from './task/自动止盈step'
+// import { 哪边多挂哪边 } from './task/哪边多挂哪边'
 
 
 //运行的账户
@@ -22,17 +22,17 @@ if (config.orderServer !== undefined) {
 
         const account = new TradeAccount({ accountName: k, cookie: v })
 
-        // account.runTask(XBTUSD止损step())
-        // account.runTask(ETHUSD止损step())
+        account.runTask(XBTUSD止损step())
+        account.runTask(ETHUSD止损step())
 
-        // account.runTask(委托检测step('XBTUSD'))
-        // account.runTask(委托检测step('ETHUSD'))
+        account.runTask(委托检测step('XBTUSD'))
+        account.runTask(委托检测step('ETHUSD'))
 
-        // account.runTask(XBTUSD自动开仓step())
-        // account.runTask(XBTUSD自动止盈step())
-        // account.runTask(XBTUSD自动止盈波段step())
+        account.runTask(XBTUSD自动开仓step())
+        account.runTask(XBTUSD自动止盈step())
+        account.runTask(XBTUSD自动止盈波段step())
 
-        account.runTask(哪边多挂哪边())
+        // account.runTask(哪边多挂哪边())
 
         accountDic.set(v, account)
     })
