@@ -2,7 +2,7 @@ import { Sampling } from '../lib/C/Sampling'
 import { BaseType } from '../lib/BaseType'
 import { DB } from './DB'
 import { timeID } from '../lib/F/timeID'
-import { HopexTradeAndOrderBook } from '../lib/统一接口/TradeAndOrderBook/HopexTradeAndOrderBook'
+import { HopexTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/HopexTradeAndOrderBook'
 
 //重复
 let samplingDic: { [symbol: string]: Sampling<BaseType.KLine> }

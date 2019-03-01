@@ -1,6 +1,5 @@
 import { BaseType } from '../../lib/BaseType'
-import { TradeAccount } from '../TradeAccount'
-import { get波动率, realData, 摸顶抄底信号灯side } from '../realData'
+import { TradeAccount } from '../../统一接口/TradeAccount'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 
@@ -19,10 +18,10 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAc
             const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
 
             const getPrice = () => {
-                const 止盈点 = get波动率(symbol) / 3 + 3
+                const 止盈点 = TradeAccount.realData.get波动率(symbol) / 3 + 3
                 const 止盈点价格 = toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 + 止盈点 : 开仓均价 - 止盈点, side)
 
-                const 位置1价格 = realData.getOrderPrice({
+                const 位置1价格 = TradeAccount.realData.getOrderPrice({
                     symbol,
                     side,
                     type: 'maker',
@@ -37,29 +36,29 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAc
                 return false
             }
 
-            return await self.order自动.maker({
+            return await self.bitMEXOrderAPI.maker({
                 symbol,
                 side,
                 size: Math.abs(仓位数量),
                 price: toBuySellPriceFunc(side, getPrice),
                 reduceOnly: true,
                 text: '自动止盈step 挂单平仓',
-            }, side + ' price:' + getPrice(), self.ws)
+            }, side + ' price:' + getPrice())
         }
         else if (活动委托.length === 1) {
             if (活动委托[0].side === (仓位数量 > 0 ? 'Sell' : 'Buy') && 活动委托[0].type === '限价只减仓') {
-                const { 信号side, 信号msg } = 摸顶抄底信号灯side(symbol)
+                const { 信号side, 信号msg } = TradeAccount.realData.摸顶抄底信号灯side___2根(symbol)
                 if (信号side === 活动委托[0].side) {
-                    return await self.order自动.updateMaker({
+                    return await self.bitMEXOrderAPI.updateMaker({
                         orderID: 活动委托[0].id,
-                        price: toBuySellPriceFunc(信号side, () => realData.getOrderPrice({
+                        price: toBuySellPriceFunc(信号side, () => TradeAccount.realData.getOrderPrice({
                             symbol,
                             side: 信号side,
                             type: 'maker',
                             位置: 0,
                         })),
                         text: '触发了反向开仓信号 提前 修改 止盈',
-                    }, 信号side + ' 信号msg:' + 信号msg, self.ws)
+                    }, 信号side + ' 信号msg:' + 信号msg)
                 }
             }
         }

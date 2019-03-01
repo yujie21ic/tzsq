@@ -1,12 +1,12 @@
 import * as WebSocket from 'ws'
 import { RealDataBase } from './RealDataBase'
 import { BaseType } from '../lib/BaseType'
-import { BitmexTradeAndOrderBook } from '../lib/统一接口/TradeAndOrderBook/BitmexTradeAndOrderBook'
-import { BinanceTradeAndOrderBook } from '../lib/统一接口/TradeAndOrderBook/BinanceTradeAndOrderBook'
-import { HopexTradeAndOrderBook } from '../lib/统一接口/TradeAndOrderBook/HopexTradeAndOrderBook'
+import { BitmexTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/BitmexTradeAndOrderBook'
+import { BinanceTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/BinanceTradeAndOrderBook'
+import { HopexTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/HopexTradeAndOrderBook'
 import { Sampling } from '../lib/C/Sampling'
 
-export class RealData extends RealDataBase {
+export class RealData__Server extends RealDataBase {
 
     private wss?: WebSocket.Server
     private wsDic = new Map<WebSocket, boolean>()
@@ -25,29 +25,7 @@ export class RealData extends RealDataBase {
     }) => { }
 
 
-    期货盘口dic = new Map<BaseType.BitmexSymbol, BaseType.OrderBook>()
-    期货价格dic = new Map<BaseType.BitmexSymbol, number>()
-
-    getOrderPrice = ({ symbol, side, type, 位置 }: { symbol: BaseType.BitmexSymbol, side: BaseType.Side, type: 'taker' | 'maker', 位置: number }) => {
-        const p = this.期货盘口dic.get(symbol)
-        if (p === undefined) return NaN
-
-        if (side === 'Buy') {
-            if (type === 'taker') {
-                return p.sell[位置] ? p.sell[位置].price : NaN
-            } else {
-                return p.buy[位置] ? p.buy[位置].price : NaN
-            }
-        } else if (side === 'Sell') {
-            if (type === 'taker') {
-                return p.buy[位置] ? p.buy[位置].price : NaN
-            } else {
-                return p.sell[位置] ? p.sell[位置].price : NaN
-            }
-        } else {
-            return NaN
-        }
-    }
+    
 
 
     private on着笔Dic = Object.create(null) as {

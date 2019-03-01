@@ -50,7 +50,7 @@ export const JSONRequest = <T>({
         if (response === undefined) {
             resolve({
                 error: '网络错误',
-                msg: JSON.stringify({ error }),
+                msg: String(error),
             })
         }
         else if (response.statusCode !== 200) {

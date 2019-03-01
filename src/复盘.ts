@@ -9,7 +9,7 @@ import { timeID } from './lib/F/timeID'
 import { theme } from './lib/Chart/theme'
 import { to范围 } from './lib/F/to范围'
 import { showWindowRemote, windowExt } from './windowExt'
-import { BitMEXRESTAPI } from './lib/BitMEX/BitMEXRESTAPI'
+import { BitMEXRESTAPI } from './统一接口/BitMEX/BitMEXRESTAPI'
 import { config } from './config'
 import { 信号Layer } from './lib/Chart/Layer/信号Layer'
 

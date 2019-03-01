@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import * as R from 'ramda'
-import { JSONRequest } from '../C/JSONRequest'
+import { JSONRequest } from '../../lib/C/JSONRequest'
 import { config } from '../../config'
 
 const BR = '\n'
@@ -78,7 +78,7 @@ const run = async () => {
 
 
 
-    fs.writeFileSync('./src/lib/BitMEX/BitMEXMessage.ts', `
+    fs.writeFileSync('./src/统一接口/BitMEX/BitMEXMessage.ts', `
 //greate by https://www.bitmex.com/api/explorer/swagger.json
 
 export namespace BitMEXMessage {${
@@ -89,7 +89,7 @@ export namespace BitMEXMessage {${
 }`)
 
 
-    fs.writeFileSync('./src/lib/BitMEX/BitMEXRESTAPI.ts', `
+    fs.writeFileSync('./src/统一接口/BitMEX/BitMEXRESTAPI.ts', `
 //greate by https://www.bitmex.com/api/explorer/swagger.json
 
 import { BitMEXMessage } from './BitMEXMessage'

@@ -1,4 +1,4 @@
-import { BitMEXWSAPI } from '../lib/BitMEX/BitMEXWSAPI'
+import { BitMEXWSAPI } from '../统一接口/BitMEX/BitMEXWSAPI'
 import { Sampling } from '../lib/C/Sampling'
 import { BaseType } from '../lib/BaseType'
 import { DB } from '../DBServer/DB'

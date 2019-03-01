@@ -1,7 +1,7 @@
 import { BaseType } from '../lib/BaseType'
 import { SyncKLine } from './SyncKLine'
 import { DB } from './DB'
-import { BitMEXRESTAPI } from '../lib/BitMEX/BitMEXRESTAPI'
+import { BitMEXRESTAPI } from '../统一接口/BitMEX/BitMEXRESTAPI'
 import { timeID } from '../lib/F/timeID'
 import { sleep } from '../lib/C/sleep'
 

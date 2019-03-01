@@ -1,7 +1,7 @@
-import { BaseType } from '../BaseType'
+import { BaseType } from '../../lib/BaseType'
 import { BitMEXRESTAPI } from '../BitMEX/BitMEXRESTAPI'
-import { sleep } from '../C/sleep'
-import { JSONRequestError } from '../C/JSONRequest'
+import { sleep } from '../../lib/C/sleep'
+import { JSONRequestError } from '../../lib/C/JSONRequest'
 import { BitMEXWSAPI } from './BitMEXWSAPI'
 
 let callID = 0
@@ -12,6 +12,7 @@ export class BitMEXOrderAPI {
     private 重试几次: number
     private 重试休息多少毫秒: number
     log = (text: string) => { }
+    ws?: BitMEXWSAPI
 
     constructor(p: { cookie: string, 重试几次: number, 重试休息多少毫秒: number }) {
         this.cookie = p.cookie
@@ -20,7 +21,7 @@ export class BitMEXOrderAPI {
     }
 
     private DDOS调用 = <P extends { text: string }>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
-        async (p: P, logText = '', ws?: BitMEXWSAPI) => {
+        async (p: P, logText = '') => {
             const startTime = Date.now()
             let success = false
             let i = 1
@@ -41,9 +42,9 @@ export class BitMEXOrderAPI {
                     success = true
 
                     //
-                    if (ws !== undefined) {
+                    if (this.ws !== undefined) {
                         if (ret.data.orderID !== undefined && ret.data.ordStatus !== undefined) {
-                            ws.onAction({
+                            this.ws.onAction({
                                 action: 'insert',
                                 table: 'order',
                                 data: [ret.data as any],

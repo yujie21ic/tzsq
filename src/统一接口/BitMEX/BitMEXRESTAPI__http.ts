@@ -1,5 +1,5 @@
-import { queryStringStringify } from '../F/queryStringStringify'
-import { JSONRequest } from '../C/JSONRequest'
+import { queryStringStringify } from '../../lib/F/queryStringStringify'
+import { JSONRequest } from '../../lib/C/JSONRequest'
 import { config } from '../../config'
 
 export const BitMEXRESTAPI__http = async <T>(obj: { method: string, path: string, cookie: string, req: any }) => {
