@@ -1,16 +1,16 @@
 import { funcList } from '../OrderServer/____API____'
 import { BaseType } from '../lib/BaseType'
 import { sleep } from '../lib/C/sleep'
-import { realData } from '../OrderServer/realData'
 import { to范围 } from '../lib/F/to范围'
 import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
 import { BitmexPositionAndOrder } from './PositionAndOrder/BitmexPositionAndOrder'
-
+import { RealData } from '../RealDataServer/RealData'
 
 
 export class TradeAccount {
 
     //
+    static realData = new RealData(false)
     bitmexPositionAndOrder: BitmexPositionAndOrder
     get ws() { return this.bitmexPositionAndOrder.ws }
     get bitMEXOrderAPI() { return this.bitmexPositionAndOrder.bitMEXOrderAPI }
@@ -33,7 +33,7 @@ export class TradeAccount {
     }
 
     get浮盈点数(symbol: BaseType.BitmexSymbol) {
-        const 最新价 = realData.期货价格dic.get(symbol)
+        const 最新价 = TradeAccount.realData.期货价格dic.get(symbol)
         if (最新价 === undefined) return NaN
         const { 仓位数量, 开仓均价 } = this.jsonSync.rawData.symbol[symbol]
         if (仓位数量 === 0) return NaN
@@ -59,7 +59,7 @@ export class TradeAccount {
         }
 
         const getOrderPrice = () =>
-            realData.getOrderPrice({
+            TradeAccount.realData.getOrderPrice({
                 symbol: req.symbol,
                 side: req.side,
                 type: req.type,
@@ -69,7 +69,7 @@ export class TradeAccount {
         const getPrice = req.最低_最高 ?
             () => {
                 const price = getOrderPrice()
-                const { high, low } = realData.get期货多少秒内最高最低(req.symbol, 5)
+                const { high, low } = TradeAccount.realData.get期货多少秒内最高最低(req.symbol, 5)
                 if (req.side === 'Buy') {
                     return Math.min(price, low)
                 } else {
