@@ -79,6 +79,7 @@ export class BitmexPositionAndOrder {
     private cookie: string
     log = (text: string) => { }
     ws: BitMEXWSAPI
+    get 增量同步数据() { return this.ws.增量同步数据 }
     jsonSync = createJSONSync()
     活动委托 = {
         XBTUSD: [] as Order[],

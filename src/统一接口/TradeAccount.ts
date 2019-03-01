@@ -8,19 +8,9 @@ import { RealData__Server } from '../RealDataServer/RealData__Server'
 import { RealDataBase } from '../RealDataServer/RealDataBase'
 
 
-export class TradeAccount {
+export class TradeAccount extends BitmexPositionAndOrder {
 
-    //
     static realData: RealDataBase = new RealData__Server(false)
-    bitmexPositionAndOrder: BitmexPositionAndOrder
-    get 活动委托() { return this.bitmexPositionAndOrder.活动委托 }
-    get jsonSync() { return this.bitmexPositionAndOrder.jsonSync }
-    get 增量同步数据() { return this.bitmexPositionAndOrder.ws.增量同步数据 }
-    //
-
-    constructor(p: { accountName: string, cookie: string }) {
-        this.bitmexPositionAndOrder = new BitmexPositionAndOrder(p)
-    }
 
 
     async runTask(func: (self: TradeAccount) => Promise<boolean>) {
