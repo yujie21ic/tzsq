@@ -13,7 +13,6 @@ export class TradeAccount {
     //
     static realData: RealDataBase = new RealData__Server(false)
     bitmexPositionAndOrder: BitmexPositionAndOrder
-    get bitMEXOrderAPI() { return this.bitmexPositionAndOrder.bitMEXOrderAPI }
     get 活动委托() { return this.bitmexPositionAndOrder.活动委托 }
     get jsonSync() { return this.bitmexPositionAndOrder.jsonSync }
     get 增量同步数据() { return this.bitmexPositionAndOrder.ws.增量同步数据 }
