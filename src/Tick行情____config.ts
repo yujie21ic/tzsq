@@ -39,7 +39,7 @@ const 石青 = 0x1685a9
 export const Tick行情____config: { [key in string]: ItemFunc } = {
 
     复盘上涨: (d, d2) => ({
-        heightList: [0.4, 0.2, 0.2, 0.2],
+        heightList: [0.4, 0.15, 0.15, 0.15,0.15],
         items: [
             [
                 {
@@ -102,12 +102,27 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 layerList: [
                     layer(信号Layer, { data: d.期货.信号_上涨, color: 卖颜色 }),
+                    layer(TextLayer, {
+                        text:
+                            `上涨摸顶                    `,
+                        color: ETH颜色,
+                    })
+                ]
+            },
+            {
+                layerList: [
+                    layer(信号Layer, { data: d.期货.信号_追跌, color: 卖颜色 }),
+                    layer(TextLayer, {
+                        text:
+                            `下跌追跌                    `,
+                        color: ETH颜色,
+                    })
                 ]
             },
         ]
     }),
     复盘下跌: (d, d2) => ({
-        heightList: [0.4, 0.2, 0.2, 0.2],
+        heightList: [0.4, 0.15, 0.15, 0.15,0.15],
         items: [
             [
                 {
@@ -172,8 +187,24 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 layerList: [
                     layer(信号Layer, { data: d.期货.信号_下跌, color: 买颜色 }),
+                    layer(TextLayer, {
+                        text:
+                            `下跌抄底                    `,
+                        color: ETH颜色,
+                    })
                 ]
             },
+            {
+                layerList: [
+                    layer(信号Layer, { data: d.期货.信号_追涨, color: 买颜色 }),
+                    layer(TextLayer, {
+                        text:
+                            `上涨追涨                    `,
+                        color: ETH颜色,
+                    })
+                ]
+            },
+           
         ]
     }),
 
@@ -750,7 +781,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layer(ZeroLayer, { color: 0xaaaaaa }),
                     layer(LineLayer, { data: d.期货.成交量买, color: 买颜色 }),
                     layer(LineLayer, { data: d.期货.成交量卖, color: 卖颜色, 临时参数: '变成负数' }),
-                    layer(LineLayer, { data: d.期货.净成交量均线10, color: 波动率颜色 }),
+                   // layer(LineLayer, { data: d.期货.净成交量均线10, color: 波动率颜色 }),
                     layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
                 ]
             }
