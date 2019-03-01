@@ -1,13 +1,11 @@
-import { BitMEXWSAPI } from './BitMEX/BitMEXWSAPI'
 import { createJSONSync, funcList } from '../OrderServer/____API____'
 import { keys } from 'ramda'
 import { BaseType } from '../lib/BaseType'
 import { sleep } from '../lib/C/sleep'
-import { BitMEXOrderAPI } from './BitMEX/BitMEXOrderAPI'
 import { realData } from '../OrderServer/realData'
 import { to范围 } from '../lib/F/to范围'
 import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
-import { logToFile } from '../lib/C/logToFile'
+import { BitmexPositionAndOrder } from './PositionAndOrder/BitmexPositionAndOrder'
 
 
 type Order = {
@@ -22,12 +20,13 @@ type Order = {
 
 export class TradeAccount {
     jsonSync = createJSONSync()
-    ws: BitMEXWSAPI
 
-    accountName: string
-    cookie: string
 
-    bitMEXOrderAPI: BitMEXOrderAPI
+    //  
+    bitmexPositionAndOrder: BitmexPositionAndOrder
+    get ws() { return this.bitmexPositionAndOrder.ws }
+    get bitMEXOrderAPI() { return this.bitmexPositionAndOrder.bitMEXOrderAPI }
+    //
 
 
     活动委托 = {
@@ -35,24 +34,10 @@ export class TradeAccount {
         ETHUSD: [] as Order[],
     }
 
+
     constructor(p: { accountName: string, cookie: string }) {
-        this.accountName = p.accountName
-        this.cookie = p.cookie
-
-        this.bitMEXOrderAPI = new BitMEXOrderAPI({
-            cookie: p.cookie,
-            重试几次: 10,
-            重试休息多少毫秒: 10,
-        })
-        this.bitMEXOrderAPI.log = logToFile(this.accountName + '.txt')
-
-        this.ws = new BitMEXWSAPI(p.cookie, [
-            { theme: 'margin' },
-            { theme: 'position' },
-            { theme: 'order' },
-        ])
-
-        this.ws.onmessage = frame => {
+        this.bitmexPositionAndOrder = new BitmexPositionAndOrder(p)
+        this.bitmexPositionAndOrder.ws.onmessage = frame => {
 
             if (frame.table === 'margin') {
                 this.updateMargin()
@@ -65,11 +50,10 @@ export class TradeAccount {
             }
         }
 
-        this.ws.增量同步数据.log = logToFile(this.accountName + '.txt')
     }
 
     private updateMargin() {
-        this.ws.data.margin.forEach(({ walletBalance, timestamp }) => {
+        this.bitmexPositionAndOrder.ws.data.margin.forEach(({ walletBalance, timestamp }) => {
             const { wallet } = this.jsonSync.rawData
             if (wallet.length === 0 || wallet[wallet.length - 1].total !== walletBalance) {
                 this.jsonSync.data.wallet.____push({
@@ -83,7 +67,7 @@ export class TradeAccount {
 
     private updatePosition() {
         keys(this.jsonSync.rawData.symbol).forEach(symbol => {
-            this.ws.data.position.forEach(item => {
+            this.bitmexPositionAndOrder.ws.data.position.forEach(item => {
                 if (item.symbol === symbol) {
                     const { 仓位数量, 开仓均价 } = this.jsonSync.data.symbol[symbol]
                     const raw = this.jsonSync.rawData.symbol[symbol]
@@ -120,7 +104,7 @@ export class TradeAccount {
                 price: number
             }[]
 
-            this.ws.data.order.forEach(v => {
+            this.bitmexPositionAndOrder.ws.data.order.forEach(v => {
                 if (v.symbol === symbol) {
                     if (v.ordType === 'Limit' && v.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && v.workingIndicator) {//先检测只减仓
                         arr.push({
