@@ -6,7 +6,7 @@ import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { lastNumber } from '../../lib/F/lastNumber'
 import { logToFile } from '../../lib/C/logToFile'
 import { to范围 } from '../../lib/F/to范围'
-import { string } from 'prop-types';
+
 
 const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
     let 止盈价格 = NaN
