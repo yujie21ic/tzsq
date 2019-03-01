@@ -1,5 +1,5 @@
 import { BaseType } from '../../lib/BaseType'
-import { BitmexPositionAndOrder } from '../../统一接口/BitmexPositionAndOrder'
+import { BitmexPositionAndOrder } from '../../统一接口/PositionAndOrder/BitmexPositionAndOrder'
 import { to范围 } from '../../lib/F/to范围'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 
@@ -9,8 +9,8 @@ const 止损step = ({
     推止损,
 }: {
     symbol: BaseType.BitmexSymbol
-    初始止损点: () => number
-    推止损: (盈利点: number, type: string) => number //0 成本价  3 盈利3点的价
+    初始止损点: (波动率: number) => number
+    推止损: (波动率: number, 盈利点: number, type: string) => number //0 成本价  3 盈利3点的价
 }) => async (self: BitmexPositionAndOrder) => {
 
     const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
@@ -20,7 +20,7 @@ const 止损step = ({
     if (止损委托.length === 0) {
         //有仓位 初始化止损
         if (仓位数量 !== 0) {
-            const 止损点 = 初始止损点()
+            const 止损点 = 初始止损点(self.realData.get波动率(symbol))
 
             if (isNaN(止损点)) return false //波动率还没出来 不止损
 
@@ -52,7 +52,7 @@ const 止损step = ({
             const { price, side, id } = 止损委托[0]
             const 浮盈点数 = self.get浮盈点数(symbol)
 
-            const 推 = 推止损(浮盈点数, self.增量同步数据.最后一次自动开仓.get(symbol))
+            const 推 = 推止损(self.realData.get波动率(symbol), 浮盈点数, self.增量同步数据.最后一次自动开仓.get(symbol))
             if (isNaN(推)) {
                 return false
             }
@@ -81,12 +81,12 @@ const 止损step = ({
 
 export const XBTUSD止损step = () => 止损step({
     symbol: 'XBTUSD',
-    初始止损点: () => to范围({
+    初始止损点: 波动率 => to范围({
         min: 4,
         max: 18,
-        value: self.realData.get波动率('XBTUSD') / 7 + 4,
+        value: 波动率 / 7 + 4,
     }),
-    推止损: (盈利点, type) => {
+    推止损: (波动率, 盈利点, type) => {
         if (type === '追涨' || type === '追跌') {
             if (盈利点 >= 10) {
                 return 5
@@ -98,7 +98,6 @@ export const XBTUSD止损step = () => 止损step({
             }
 
         } else {
-            const 波动率 = self.realData.get波动率('XBTUSD')
             if (盈利点 >= to范围({ min: 5, max: 30, value: 波动率 / 5 + 15 })) {
                 return 5
             }
@@ -114,13 +113,12 @@ export const XBTUSD止损step = () => 止损step({
 
 export const ETHUSD止损step = () => 止损step({
     symbol: 'ETHUSD',
-    初始止损点: () => to范围({
+    初始止损点: 波动率 => to范围({
         min: 0.3,
         max: 0.9,
-        value: self.realData.get波动率('ETHUSD') / 10 + 0.2,
+        value: 波动率 / 10 + 0.2,
     }),
-    推止损: 盈利点 => {
-        const 波动率 = self.realData.get波动率('ETHUSD')
+    推止损: (波动率, 盈利点) => {
         if (盈利点 >= to范围({ min: 0.3, max: 3, value: 波动率 / 5 + 0.3 })) {
             return 0.2
         }

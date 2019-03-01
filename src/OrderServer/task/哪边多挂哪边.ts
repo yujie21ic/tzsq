@@ -1,4 +1,4 @@
-import { BitmexPositionAndOrder } from '../../统一接口/BitmexPositionAndOrder'
+import { BitmexPositionAndOrder } from '../../统一接口/PositionAndOrder/BitmexPositionAndOrder'
 import { lastNumber } from '../../lib/F/lastNumber'
 
 
