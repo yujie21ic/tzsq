@@ -1,8 +1,8 @@
 import { BaseType } from '../../lib/BaseType'
-import { TradeAccount } from '../../统一接口/TradeAccount'
-import { get波动率 } from '../realData'
+import { TradeAccount } from '../../统一接口/TradeAccount' 
 import { to范围 } from '../../lib/F/to范围'
 import { toGridPoint } from '../../lib/F/toGridPoint'
+import { realData } from '../realData'
 
 const 止损step = ({
     symbol,
@@ -85,7 +85,7 @@ export const XBTUSD止损step = () => 止损step({
     初始止损点: () => to范围({
         min: 4,
         max: 18,
-        value: get波动率('XBTUSD') / 7 + 4,
+        value: realData.get波动率('XBTUSD') / 7 + 4,
     }),
     推止损: (盈利点, type) => {
         if (type === '追涨' || type === '追跌') {
@@ -99,7 +99,7 @@ export const XBTUSD止损step = () => 止损step({
             }
 
         } else {
-            const 波动率 = get波动率('XBTUSD')
+            const 波动率 = realData.get波动率('XBTUSD')
             if (盈利点 >= to范围({ min: 5, max: 30, value: 波动率 / 5 + 15 })) {
                 return 5
             }
@@ -118,10 +118,10 @@ export const ETHUSD止损step = () => 止损step({
     初始止损点: () => to范围({
         min: 0.3,
         max: 0.9,
-        value: get波动率('ETHUSD') / 10 + 0.2,
+        value: realData.get波动率('ETHUSD') / 10 + 0.2,
     }),
     推止损: 盈利点 => {
-        const 波动率 = get波动率('ETHUSD')
+        const 波动率 = realData.get波动率('ETHUSD')
         if (盈利点 >= to范围({ min: 0.3, max: 3, value: 波动率 / 5 + 0.3 })) {
             return 0.2
         }

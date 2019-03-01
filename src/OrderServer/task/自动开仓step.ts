@@ -1,6 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { TradeAccount } from '../../统一接口/TradeAccount'
-import { realData, get波动率 } from '../realData'
+import { realData } from '../realData'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { sleep } from '../../lib/C/sleep'
 import { task__config } from './task__config'
@@ -70,7 +70,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
 
 
 
-            const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' || get波动率(symbol) < 30
+            const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' || realData.get波动率(symbol) < 30
 
             return 市价 ?
                 await self.bitMEXOrderAPI.taker({

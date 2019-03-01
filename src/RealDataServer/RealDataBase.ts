@@ -1087,4 +1087,29 @@ export class RealDataBase {
 
 
 
+    get信号XXXmsg = (symbol: BaseType.BitmexSymbol) => {
+        const 上涨做空下跌平仓 = this.dataExt[symbol].期货.信号_上涨做空下跌平仓
+        const 下跌抄底上涨平仓 = this.dataExt[symbol].期货.信号_下跌抄底上涨平仓
+
+        return JSON.stringify({
+            上涨做空下跌平仓: 上涨做空下跌平仓.length > 3 ? [上涨做空下跌平仓[上涨做空下跌平仓.length - 3], 上涨做空下跌平仓[上涨做空下跌平仓.length - 2], 上涨做空下跌平仓[上涨做空下跌平仓.length - 1]] : '',
+            下跌抄底上涨平仓: 下跌抄底上涨平仓.length > 3 ? [下跌抄底上涨平仓[下跌抄底上涨平仓.length - 3], 下跌抄底上涨平仓[下跌抄底上涨平仓.length - 2], 下跌抄底上涨平仓[下跌抄底上涨平仓.length - 1]] : '',
+        })
+    }
+
+
+    is上涨做空下跌平仓 = (symbol: BaseType.BitmexSymbol) =>
+        is连续几根全亮(2, this.dataExt[symbol].期货.信号_上涨做空下跌平仓)
+
+    is下跌抄底上涨平仓 = (symbol: BaseType.BitmexSymbol) =>
+        is连续几根全亮(2, this.dataExt[symbol].期货.信号_下跌抄底上涨平仓)
+
+
+    get波动率 = (symbol: BaseType.BitmexSymbol) =>
+        lastNumber(this.dataExt[symbol].期货.波动率)
+
+
+
+
+
 }

@@ -1,6 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { TradeAccount } from '../../统一接口/TradeAccount'
-import { get波动率, realData, is上涨做空下跌平仓, is下跌抄底上涨平仓, get信号XXXmsg } from '../realData'
+import { realData } from '../realData'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { lastNumber } from '../../lib/F/lastNumber'
@@ -30,7 +30,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                 最大仓位abs = Math.abs(仓位数量)
                 最后一次开仓时间 = Date.now()
                 最后一次开仓折返率 = lastNumber(realData.dataExt[symbol].期货.折返率)
-                摸顶抄底超时秒 = to范围({ min: 7, max: 30, value: get波动率(symbol) / 7 + 7 })
+                摸顶抄底超时秒 = to范围({ min: 7, max: 30, value: realData.get波动率(symbol) / 7 + 7 })
                 logToFile(self.bitmexPositionAndOrder.accountName + '.txt')(JSON.stringify({ 最大仓位abs, 最后一次开仓时间, 最后一次开仓折返率 }))
             }
 
@@ -39,7 +39,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                 const 平仓side = 仓位数量 > 0 ? 'Sell' : 'Buy'
 
                 const getPrice = () => {
-                    const 止盈点 = get波动率(symbol) / 3 + 3
+                    const 止盈点 = realData.get波动率(symbol) / 3 + 3
                     const 止盈点价格 = toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 + 止盈点 : 开仓均价 - 止盈点, 平仓side)
 
                     const 位置1价格 = realData.getOrderPrice({
@@ -125,7 +125,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
 
                 //
-                if (self.ws.增量同步数据.最后一次自动开仓.get(symbol) === '摸顶' && is上涨做空下跌平仓(symbol) && 活动委托.length === 0) {
+                if (self.ws.增量同步数据.最后一次自动开仓.get(symbol) === '摸顶' && realData.is上涨做空下跌平仓(symbol) && 活动委托.length === 0) {
                     return await self.bitMEXOrderAPI.maker({
                         symbol,
                         side: 平仓side,
@@ -133,11 +133,11 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                         price: toBuySellPriceFunc(平仓side, get位置1价格),
                         reduceOnly: true,
                         text: 最后一次开仓type + '平仓' + '  ' + '自动止盈波段step 上涨做空下跌平仓一半',
-                    }, get信号XXXmsg(symbol), self.ws)
+                    }, realData.get信号XXXmsg(symbol), self.ws)
                 }
 
 
-                if (self.ws.增量同步数据.最后一次自动开仓.get(symbol) === '抄底' && is下跌抄底上涨平仓(symbol) && 活动委托.length === 0) {
+                if (self.ws.增量同步数据.最后一次自动开仓.get(symbol) === '抄底' && realData.is下跌抄底上涨平仓(symbol) && 活动委托.length === 0) {
                     return await self.bitMEXOrderAPI.maker({
                         symbol,
                         side: 平仓side,
@@ -145,7 +145,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                         price: toBuySellPriceFunc(平仓side, get位置1价格),
                         reduceOnly: true,
                         text: 最后一次开仓type + '平仓' + '  ' + '自动止盈波段step 下跌抄底上涨平仓一半',
-                    }, get信号XXXmsg(symbol), self.ws)
+                    }, realData.get信号XXXmsg(symbol), self.ws)
                 }
 
 
