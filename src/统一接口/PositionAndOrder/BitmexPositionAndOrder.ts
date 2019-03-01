@@ -6,6 +6,7 @@ import { logToFile } from '../../lib/C/logToFile'
 import { keys } from 'ramda'
 import { JSONSync } from '../../lib/C/JSONSync'
 import { BitMEXWSAPI } from '../BitMEX/BitMEXWSAPI'
+import { RealData__Server } from '../../RealDataServer/RealData__Server'
 
 const symbol = () => ({
     任务开关: {
@@ -371,4 +372,42 @@ export class BitmexPositionAndOrder {
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.cancel(cookie, { orderID: JSON.stringify(p.orderID), text: p.text })
     )
+
+
+
+
+
+
+
+
+    realData = __realData__()
+
+    async runTask(func: (self: BitmexPositionAndOrder) => Promise<boolean>) {
+        while (true) {
+            if (await func(this)) {
+                await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
+            }
+            await sleep(100)
+        }
+    }
+
+    get浮盈点数(symbol: BaseType.BitmexSymbol) {
+        const 最新价 = this.realData.期货价格dic.get(symbol)
+        if (最新价 === undefined) return NaN
+        const { 仓位数量, 开仓均价 } = this.jsonSync.rawData.symbol[symbol]
+        if (仓位数量 === 0) return NaN
+        if (仓位数量 > 0) {
+            return 最新价 - 开仓均价
+        } else if (仓位数量 < 0) {
+            return 开仓均价 - 最新价
+        } else {
+            return 0
+        }
+    }
+}
+
+let x: any = null
+const __realData__ = () => {
+    if (x === null) x = new RealData__Server(false)
+    return x as RealData__Server
 } 

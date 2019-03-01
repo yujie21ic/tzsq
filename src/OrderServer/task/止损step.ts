@@ -84,7 +84,7 @@ export const XBTUSD止损step = () => 止损step({
     初始止损点: () => to范围({
         min: 4,
         max: 18,
-        value: TradeAccount.realData.get波动率('XBTUSD') / 7 + 4,
+        value: self.realData.get波动率('XBTUSD') / 7 + 4,
     }),
     推止损: (盈利点, type) => {
         if (type === '追涨' || type === '追跌') {
@@ -98,7 +98,7 @@ export const XBTUSD止损step = () => 止损step({
             }
 
         } else {
-            const 波动率 = TradeAccount.realData.get波动率('XBTUSD')
+            const 波动率 = self.realData.get波动率('XBTUSD')
             if (盈利点 >= to范围({ min: 5, max: 30, value: 波动率 / 5 + 15 })) {
                 return 5
             }
@@ -117,10 +117,10 @@ export const ETHUSD止损step = () => 止损step({
     初始止损点: () => to范围({
         min: 0.3,
         max: 0.9,
-        value: TradeAccount.realData.get波动率('ETHUSD') / 10 + 0.2,
+        value: self.realData.get波动率('ETHUSD') / 10 + 0.2,
     }),
     推止损: 盈利点 => {
-        const 波动率 = TradeAccount.realData.get波动率('ETHUSD')
+        const 波动率 = self.realData.get波动率('ETHUSD')
         if (盈利点 >= to范围({ min: 0.3, max: 3, value: 波动率 / 5 + 0.3 })) {
             return 0.2
         }

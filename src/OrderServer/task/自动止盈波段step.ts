@@ -28,8 +28,8 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
             if (isNaN(最大仓位abs) || 最大仓位abs < Math.abs(仓位数量)) {
                 最大仓位abs = Math.abs(仓位数量)
                 最后一次开仓时间 = Date.now()
-                最后一次开仓折返率 = lastNumber(TradeAccount.realData.dataExt[symbol].期货.折返率)
-                摸顶抄底超时秒 = to范围({ min: 7, max: 30, value: TradeAccount.realData.get波动率(symbol) / 7 + 7 })
+                最后一次开仓折返率 = lastNumber(self.realData.dataExt[symbol].期货.折返率)
+                摸顶抄底超时秒 = to范围({ min: 7, max: 30, value: self.realData.get波动率(symbol) / 7 + 7 })
                 logToFile(self.accountName + '.txt')(JSON.stringify({ 最大仓位abs, 最后一次开仓时间, 最后一次开仓折返率 }))
             }
 
@@ -38,10 +38,10 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                 const 平仓side = 仓位数量 > 0 ? 'Sell' : 'Buy'
 
                 const getPrice = () => {
-                    const 止盈点 = TradeAccount.realData.get波动率(symbol) / 3 + 3
+                    const 止盈点 = self.realData.get波动率(symbol) / 3 + 3
                     const 止盈点价格 = toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 + 止盈点 : 开仓均价 - 止盈点, 平仓side)
 
-                    const 位置1价格 = TradeAccount.realData.getOrderPrice({
+                    const 位置1价格 = self.realData.getOrderPrice({
                         symbol,
                         side: 平仓side,
                         type: 'maker',
@@ -57,7 +57,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                 }
 
 
-                const get位置1价格 = () => TradeAccount.realData.getOrderPrice({
+                const get位置1价格 = () => self.realData.getOrderPrice({
                     symbol,
                     side: 平仓side,
                     type: 'maker',
@@ -79,7 +79,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                     }
                 }
                 else if (最后一次开仓type === '追涨' || 最后一次开仓type === '追跌') {
-                    const 净成交量 = lastNumber(TradeAccount.realData.dataExt[symbol].期货.净成交量)
+                    const 净成交量 = lastNumber(self.realData.dataExt[symbol].期货.净成交量)
 
                     if ((平仓side === 'Sell' && 净成交量 < 0) || (平仓side === 'Buy' && 净成交量 > 0)) {
                         亏损挂单平仓Text = '如果净成交量反向，那么立刻挂单平仓'
@@ -124,7 +124,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
 
                 //
-                if (self.增量同步数据.最后一次自动开仓.get(symbol) === '摸顶' && TradeAccount.realData.is上涨做空下跌平仓(symbol) && 活动委托.length === 0) {
+                if (self.增量同步数据.最后一次自动开仓.get(symbol) === '摸顶' && self.realData.is上涨做空下跌平仓(symbol) && 活动委托.length === 0) {
                     return await self.maker({
                         symbol,
                         side: 平仓side,
@@ -132,11 +132,11 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                         price: toBuySellPriceFunc(平仓side, get位置1价格),
                         reduceOnly: true,
                         text: 最后一次开仓type + '平仓' + '  ' + '自动止盈波段step 上涨做空下跌平仓一半',
-                    }, TradeAccount.realData.get信号XXXmsg(symbol))
+                    }, self.realData.get信号XXXmsg(symbol))
                 }
 
 
-                if (self.增量同步数据.最后一次自动开仓.get(symbol) === '抄底' && TradeAccount.realData.is下跌抄底上涨平仓(symbol) && 活动委托.length === 0) {
+                if (self.增量同步数据.最后一次自动开仓.get(symbol) === '抄底' && self.realData.is下跌抄底上涨平仓(symbol) && 活动委托.length === 0) {
                     return await self.maker({
                         symbol,
                         side: 平仓side,
@@ -144,13 +144,13 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                         price: toBuySellPriceFunc(平仓side, get位置1价格),
                         reduceOnly: true,
                         text: 最后一次开仓type + '平仓' + '  ' + '自动止盈波段step 下跌抄底上涨平仓一半',
-                    }, TradeAccount.realData.get信号XXXmsg(symbol))
+                    }, self.realData.get信号XXXmsg(symbol))
                 }
 
 
 
                 //触发了反向开仓信号 
-                const { 信号side, 信号msg } = TradeAccount.realData.摸顶抄底信号灯side___2根(symbol)
+                const { 信号side, 信号msg } = self.realData.摸顶抄底信号灯side___2根(symbol)
 
                 if (信号side === 平仓side && 活动委托.length === 0) {
 

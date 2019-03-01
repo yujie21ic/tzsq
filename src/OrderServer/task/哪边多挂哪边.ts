@@ -3,8 +3,8 @@ import { lastNumber } from '../../lib/F/lastNumber'
 
 
 export const 哪边多挂哪边 = () => async (self: TradeAccount) => {
-    const 盘口买 = lastNumber(TradeAccount.realData.dataExt.XBTUSD.期货.盘口买)
-    const 盘口卖 = lastNumber(TradeAccount.realData.dataExt.XBTUSD.期货.盘口卖)
+    const 盘口买 = lastNumber(self.realData.dataExt.XBTUSD.期货.盘口买)
+    const 盘口卖 = lastNumber(self.realData.dataExt.XBTUSD.期货.盘口卖)
     const nowSide = 盘口买 > 盘口卖 ? 'Buy' : 'Sell'
 
     const arr = [
@@ -18,7 +18,7 @@ export const 哪边多挂哪边 = () => async (self: TradeAccount) => {
         },
     ]
 
-    const getPrice = () => TradeAccount.realData.getOrderPrice({
+    const getPrice = () => self.realData.getOrderPrice({
         symbol: 'XBTUSD',
         side: nowSide,
         type: 'maker',
