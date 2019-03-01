@@ -1,5 +1,5 @@
 import { BaseType } from '../../lib/BaseType'
-import { TradeAccount } from '../../统一接口/TradeAccount'
+import { BitmexPositionAndOrder } from '../../统一接口/BitmexPositionAndOrder'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { sleep } from '../../lib/C/sleep'
 import { task__config } from './task__config'
@@ -11,7 +11,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
     let 最后一次信号时间 = 0
     let 最后一次上涨_下跌 = ''
 
-    return async (self: TradeAccount) => {
+    return async (self: BitmexPositionAndOrder) => {
 
 
         if (self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追涨.value === false

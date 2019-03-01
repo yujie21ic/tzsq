@@ -1,6 +1,6 @@
 import { JSONRPCServer } from '../lib/C/JSONRPC'
 import { funcList } from './____API____'
-import { TradeAccount } from '../统一接口/TradeAccount'
+import { BitmexPositionAndOrder } from '../统一接口/PositionAndOrder/BitmexPositionAndOrder'
 import * as WebSocket from 'ws'
 import { config } from '../config'
 import { typeObjectParse } from '../lib/F/typeObjectParse'
@@ -18,11 +18,11 @@ import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
 
 //运行的账户
 //cookie --> Account
-const accountDic = new Map<string, TradeAccount>()
+const accountDic = new Map<string, BitmexPositionAndOrder>()
 if (config.orderServer !== undefined) {
     kvs(config.orderServer).forEach(({ k, v }) => {
 
-        const account = new TradeAccount({ accountName: k, cookie: v })
+        const account = new BitmexPositionAndOrder({ accountName: k, cookie: v })
 
         account.runTask(XBTUSD止损step())
         account.runTask(ETHUSD止损step())

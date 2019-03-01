@@ -1,9 +1,9 @@
 import { BaseType } from '../../lib/BaseType'
-import { TradeAccount } from '../../统一接口/TradeAccount'
+import { BitmexPositionAndOrder } from '../../统一接口/BitmexPositionAndOrder'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 
-const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAccount) => {
+const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: BitmexPositionAndOrder) => {
 
     if (self.jsonSync.rawData.symbol[symbol].任务开关.自动止盈.value === false) {
         return true

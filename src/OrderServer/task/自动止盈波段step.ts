@@ -1,5 +1,5 @@
 import { BaseType } from '../../lib/BaseType'
-import { TradeAccount } from '../../统一接口/TradeAccount'
+import { BitmexPositionAndOrder } from '../../统一接口/BitmexPositionAndOrder'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { lastNumber } from '../../lib/F/lastNumber'
@@ -14,7 +14,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
     let 最后一次开仓折返率 = NaN
     let 摸顶抄底超时秒 = NaN
 
-    return async (self: TradeAccount) => {
+    return async (self: BitmexPositionAndOrder) => {
 
         if (self.jsonSync.rawData.symbol[symbol].任务开关.自动止盈波段.value === false) {
             return true

@@ -1,8 +1,8 @@
-import { TradeAccount } from '../../统一接口/TradeAccount'
+import { BitmexPositionAndOrder } from '../../统一接口/BitmexPositionAndOrder'
 import { lastNumber } from '../../lib/F/lastNumber'
 
 
-export const 哪边多挂哪边 = () => async (self: TradeAccount) => {
+export const 哪边多挂哪边 = () => async (self: BitmexPositionAndOrder) => {
     const 盘口买 = lastNumber(self.realData.dataExt.XBTUSD.期货.盘口买)
     const 盘口卖 = lastNumber(self.realData.dataExt.XBTUSD.期货.盘口卖)
     const nowSide = 盘口买 > 盘口卖 ? 'Buy' : 'Sell'
