@@ -71,15 +71,16 @@ export class BitmexPositionAndOrder {
 
     accountName: string
     cookie: string
-    ws: BitMEXWSAPI
-    bitMEXOrderAPI: BitMEXOrderAPI
-
     jsonSync = createJSONSync()
-
     活动委托 = {
         XBTUSD: [] as Order[],
         ETHUSD: [] as Order[],
     }
+
+
+    //
+    ws: BitMEXWSAPI
+    bitMEXOrderAPI: BitMEXOrderAPI
 
     constructor(p: { accountName: string, cookie: string }) {
         this.accountName = p.accountName
