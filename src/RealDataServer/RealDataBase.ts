@@ -5,6 +5,7 @@ import { 指标 } from './指标'
 import { kvs } from '../lib/F/kvs'
 import { to范围 } from '../lib/F/to范围'
 import { lastNumber } from '../lib/F/lastNumber'
+import { is连续几根全亮 } from '../lib/C/is连续几根全亮'
 
 
 
@@ -1058,7 +1059,23 @@ export class RealDataBase {
 
 
 
-
+    get信号灯Type = (symbol: BaseType.BitmexSymbol) => {
+        const realData = this
+        if (is连续几根全亮(3, realData.dataExt[symbol].期货.信号_上涨)) {
+            return '摸顶'
+        }
+        else if (is连续几根全亮(3, realData.dataExt[symbol].期货.信号_下跌)) {
+            return '抄底'
+        }
+        else if (is连续几根全亮(5, realData.dataExt[symbol].期货.信号_追涨)) {
+            return '追涨'
+        }
+        else if (is连续几根全亮(5, realData.dataExt[symbol].期货.信号_追跌)) {
+            return '追跌'
+        } else {
+            return 'none'
+        }
+    }
 
 
 

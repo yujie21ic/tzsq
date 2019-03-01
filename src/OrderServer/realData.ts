@@ -6,23 +6,7 @@ import { is连续几根全亮 } from '../lib/C/is连续几根全亮'
 
 //_________________________________________________________________________//
 
-export const get信号灯Type = (symbol: BaseType.BitmexSymbol) => {
 
-    if (is连续几根全亮(3, realData.dataExt[symbol].期货.信号_上涨)) {
-        return '摸顶'
-    }
-    else if (is连续几根全亮(3, realData.dataExt[symbol].期货.信号_下跌)) {
-        return '抄底'
-    }
-    else if (is连续几根全亮(5, realData.dataExt[symbol].期货.信号_追涨)) {
-        return '追涨'
-    }
-    else if (is连续几根全亮(5, realData.dataExt[symbol].期货.信号_追跌)) {
-        return '追跌'
-    } else {
-        return 'none'
-    }
-}
 
 
 export const get信号XXXmsg = (symbol: BaseType.BitmexSymbol) => {

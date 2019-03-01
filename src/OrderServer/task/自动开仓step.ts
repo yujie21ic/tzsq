@@ -1,6 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { TradeAccount } from '../../统一接口/TradeAccount'
-import { realData, get信号灯Type, get波动率 } from '../realData'
+import { realData, get波动率 } from '../realData'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { sleep } from '../../lib/C/sleep'
 import { task__config } from './task__config'
@@ -26,7 +26,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
 
         const 活动委托 = self.活动委托[symbol].filter(v => v.type !== '止损')
 
-        const 信号灯Type = get信号灯Type(symbol)
+        const 信号灯Type = realData.get信号灯Type(symbol)
         const 开仓side = { '追涨': 'Buy', '追跌': 'Sell', '抄底': 'Buy', '摸顶': 'Sell', 'none': '_____' }[信号灯Type] as BaseType.Side
 
         //上涨 下跌 切换 止损次数 清零
