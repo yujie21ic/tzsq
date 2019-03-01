@@ -3,10 +3,9 @@ import { BitMEXRESTAPI } from '../BitMEX/BitMEXRESTAPI'
 import { sleep } from '../../lib/C/sleep'
 import { JSONRequestError } from '../../lib/C/JSONRequest'
 import { BitMEXWSAPI } from './BitMEXWSAPI'
-import { logToFile } from '../../lib/C/logToFile';
+import { logToFile } from '../../lib/C/logToFile'
 import { keys } from 'ramda'
 import { JSONSync } from '../../lib/C/JSONSync'
-
 
 const symbol = () => ({
     任务开关: {
@@ -72,11 +71,12 @@ type Order = {
 
 let callID = 0
 
+const 重试几次 = 10
+const 重试休息多少毫秒 = 10
+
 export class BitMEXOrderAPI {
 
     private cookie: string
-    private 重试几次: number
-    private 重试休息多少毫秒: number
     log = (text: string) => { }
     ws: BitMEXWSAPI
     jsonSync = createJSONSync()
@@ -85,15 +85,18 @@ export class BitMEXOrderAPI {
         ETHUSD: [] as Order[],
     }
 
-    constructor(p: { accountName: string, cookie: string, 重试几次: number, 重试休息多少毫秒: number }) {
+    accountName: string
+
+    constructor(p: { accountName: string, cookie: string }) {
+        this.accountName = p.accountName
         this.cookie = p.cookie
-        this.重试几次 = p.重试几次
-        this.重试休息多少毫秒 = p.重试休息多少毫秒
 
         this.ws = new BitMEXWSAPI(p.cookie, [
             { theme: 'position' },
             { theme: 'order' },
         ])
+
+        this.log = logToFile(p.accountName + '.txt')
         this.ws.增量同步数据.log = logToFile(p.accountName + '.txt')
 
         this.ws.onmessage = frame => {
@@ -219,7 +222,7 @@ export class BitMEXOrderAPI {
 
             this.log(`__${__id__}__` + p.text + '  ' + logText + '\nsend:' + JSON.stringify(p))
 
-            for (i = 1; i <= this.重试几次; i++) {
+            for (i = 1; i <= 重试几次; i++) {
                 const ret = await f(this.cookie, p)
 
                 if (ret.error === '网络错误') {
@@ -244,8 +247,8 @@ export class BitMEXOrderAPI {
 
                     break
                 }
-                await sleep(this.重试休息多少毫秒)
-                if (i === this.重试几次) errMsg = JSON.stringify(ret)
+                await sleep(重试休息多少毫秒)
+                if (i === 重试几次) errMsg = JSON.stringify(ret)
             }
 
             this.log(`__${__id__}__` + `  重试${i}次  ${success ? '成功' : '失败' + errMsg}  耗时:${Date.now() - startTime}ms`)
