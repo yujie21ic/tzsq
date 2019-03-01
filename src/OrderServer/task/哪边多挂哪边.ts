@@ -29,7 +29,6 @@ export const 哪边多挂哪边 = () => async (self: TradeAccount) => {
     for (let i = 0; i < arr.length; i++) {
         const { orderList, side } = arr[i]
         if (orderList.length === 0 && side === nowSide) {
-            console.log('挂单' + nowSide)
             return await self.order自动.maker({
                 symbol: 'XBTUSD',
                 side: nowSide,
@@ -41,22 +40,15 @@ export const 哪边多挂哪边 = () => async (self: TradeAccount) => {
         }
         else if (orderList.length === 1 && side === nowSide) {
             if (orderList[0].price !== getPrice()) {
-                //     console.log('改单' + nowSide)
-                //     return self.order自动.updateMaker({
-                //         orderID: orderList[0].id,
-                //         price: getPrice,
-                //         text: '改单',
-                //     })
-                console.log('撤单' + nowSide)
-                return self.order自动.cancel({
-                    orderID: orderList.map(v => v.id),
-                    text: '撤单'
+                return self.order自动.updateMaker({
+                    orderID: orderList[0].id,
+                    price: getPrice,
+                    text: '改单',
                 })
             }
 
         }
         else if (orderList.length > 0) {
-            console.log('撤单' + nowSide)
             return self.order自动.cancel({
                 orderID: orderList.map(v => v.id),
                 text: '撤单'
