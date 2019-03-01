@@ -5,7 +5,7 @@ import { realData } from '../realData'
 
 export const 哪边多挂哪边 = () => async (self: TradeAccount) => {
     const 盘口买 = lastNumber(realData.dataExt.XBTUSD.期货.盘口买)
-    const 盘口卖 = lastNumber(realData.dataExt.XBTUSD.期货.盘口买)
+    const 盘口卖 = lastNumber(realData.dataExt.XBTUSD.期货.盘口卖)
     const nowSide = 盘口买 > 盘口卖 ? 'Buy' : 'Sell'
 
     const arr = [
@@ -26,6 +26,8 @@ export const 哪边多挂哪边 = () => async (self: TradeAccount) => {
         位置: 0,
     })
 
+    console.log('nowSide', nowSide)
+
     for (let i = 0; i < arr.length; i++) {
         const { orderList, side } = arr[i]
         if (orderList.length === 0 && side === nowSide) {
@@ -41,13 +43,19 @@ export const 哪边多挂哪边 = () => async (self: TradeAccount) => {
         }
         else if (orderList.length === 1 && side === nowSide) {
             if (orderList[0].price !== getPrice()) {
-                console.log('改单' + nowSide)
-                return self.order自动.updateMaker({
-                    orderID: orderList[0].id,
-                    price: getPrice,
-                    text: '改单',
+                //     console.log('改单' + nowSide)
+                //     return self.order自动.updateMaker({
+                //         orderID: orderList[0].id,
+                //         price: getPrice,
+                //         text: '改单',
+                //     })
+                console.log('撤单' + nowSide)
+                return self.order自动.cancel({
+                    orderID: orderList.map(v => v.id),
+                    text: '撤单'
                 })
             }
+
         }
         else if (orderList.length > 0) {
             console.log('撤单' + nowSide)
