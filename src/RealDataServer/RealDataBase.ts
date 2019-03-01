@@ -326,21 +326,21 @@ export class RealDataBase {
             30,
             RealDataBase.单位时间
         )
-        const 净下跌成交量2 = 指标.累加(
-            指标.lazyMapCache(() => 成交量买.length, i => 净下跌成交量[i]),
-            2,
-            RealDataBase.单位时间
-        )
+        // const 净下跌成交量2 = 指标.累加(
+        //     指标.lazyMapCache(() => 成交量买.length, i => 净下跌成交量[i]),
+        //     2,
+        //     RealDataBase.单位时间
+        // )
         const 净上涨成交量30 = 指标.累加(
             指标.lazyMapCache(() => 成交量买.length, i => 净上涨成交量[i]),
             30,
             RealDataBase.单位时间
         )
-        const 净上涨成交量2 = 指标.累加(
-            指标.lazyMapCache(() => 成交量买.length, i => 净上涨成交量[i]),
-            2,
-            RealDataBase.单位时间
-        )
+        // const 净上涨成交量2 = 指标.累加(
+        //     指标.lazyMapCache(() => 成交量买.length, i => 净上涨成交量[i]),
+        //     2,
+        //     RealDataBase.单位时间
+        // )
 
         const 净下跌成交量12 = 指标.EMA(净下跌成交量, 12, RealDataBase.单位时间)
         const 净下跌成交量26 = 指标.EMA(净下跌成交量, 26, RealDataBase.单位时间)
@@ -640,7 +640,7 @@ export class RealDataBase {
                     //{ name: '净盘口>0', value: 净盘口[i]>0 },
                     //{ name: '卖盘低量', value: 盘口卖[i] < 50 * 10000 },波动率5分钟 净上涨成交量2
                     { name: '5分钟波动率低量', value: 波动率5分钟[i] < 30 },
-                    { name: '大单', value: 净上涨成交量2[i] > 100 * 10000 },
+                    { name: '大单', value: 净成交量均线10[i] > 100 * 10000 },
                     //{ name: '波动率 >=1', value: 波动率[i] >= 1 },
                     //{ name: '60秒净成交量 >=100万', value: 净成交量均线60[i] >= 100 * 10000 },
                     { name: '折返程度<', value: (最高价10[i] - 价格[i]) < 折返率[i] },
@@ -800,7 +800,7 @@ export class RealDataBase {
                     //{ name: '净盘口<0', value: 净盘口[i]<0 },
                     { name: '5分钟波动率低量', value: 波动率5分钟[i] < 30 },
                     //{ name: '波动率 >=1', value: 波动率[i] >= 1 },
-                    { name: '大单', value: 净下跌成交量2[i] > 100 * 10000 },
+                    { name: '大单', value: 净成交量均线10[i] < -100 * 10000 },
                     // { name: '买盘低量', value: 盘口买[i] < 50 * 10000 },
                     // { name: '60秒净成交量<=-100万', value: 净成交量均线60[i] <= -100 * 10000 },
                     { name: '折返程度<', value: (价格[i] - 最低价10[i]) < 折返率[i] },

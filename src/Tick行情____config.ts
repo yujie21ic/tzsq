@@ -763,12 +763,21 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     原始数据: (d, d2) => ({
         heightList: [0.6, 0.2, 0.2],
         items: [
-            {
+            [{
                 numberColor: BTC颜色,
                 layerList: [
                     layer(LineLayer, { data: d2.XBTUSD.期货.价格, color: BTC颜色 }),
                 ]
             },
+            {
+                numberColor: 波动率颜色,
+                numberX: 100,
+                layerList: [
+                    layer(ZeroLayer, { color: 波动率颜色 }),
+                    layer(LineLayer, { data: d.期货.净成交量均线10, color: 波动率颜色 }),
+                ]
+            },
+        ],
             {
                 layerList: [
                     layer(LineLayer, { data: d.期货.盘口买, color: 买颜色 }),
