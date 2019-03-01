@@ -36,11 +36,7 @@ export class TradeAccount extends BitmexPositionAndOrder {
         }
     }
 
-    市价平仓 = async (req: typeof funcList.市价平仓.req) =>
-        await this.close({ symbol: req.symbol, text: '手动市价平仓' })
 
-    取消委托 = async (req: typeof funcList.取消委托.req) =>
-        await this.cancel({ orderID: req.orderID, text: '手动取消委托' })
 
     下单 = async (req: typeof funcList.下单.req) => {
 

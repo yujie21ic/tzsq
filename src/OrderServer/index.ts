@@ -84,13 +84,14 @@ const server = new JSONRPCServer({ funcList, port: 3456 })
 server.func.取消委托 = async req => {
     const account = accountDic.get(req.cookie)
     if (account === undefined) throw 'cookie不存在'
-    return account.取消委托(req)
+    return await account.cancel({ orderID: req.orderID, text: '手动取消委托' })
 }
+
 
 server.func.市价平仓 = async req => {
     const account = accountDic.get(req.cookie)
     if (account === undefined) throw 'cookie不存在'
-    return account.市价平仓(req)
+    return await account.close({ symbol: req.symbol, text: '手动市价平仓' })
 }
 
 server.func.下单 = async req => {
