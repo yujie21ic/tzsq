@@ -1,6 +1,17 @@
 import { BitMEXWSAPI } from '../BitMEX/BitMEXWSAPI'
 import { BitMEXOrderAPI } from '../BitMEX/BitMEXOrderAPI'
 import { logToFile } from '../../lib/C/logToFile'
+import { BaseType } from '../../lib/BaseType'
+
+type Order = {
+    type: '限价' | '限价只减仓' | '止损'
+    timestamp: number
+    id: string
+    side: BaseType.Side
+    cumQty: number      //成交数量
+    orderQty: number    //委托数量
+    price: number
+}
 
 export class BitmexPositionAndOrder {
 
@@ -8,6 +19,11 @@ export class BitmexPositionAndOrder {
     cookie: string
     ws: BitMEXWSAPI
     bitMEXOrderAPI: BitMEXOrderAPI
+
+    活动委托 = {
+        XBTUSD: [] as Order[],
+        ETHUSD: [] as Order[],
+    }
 
     constructor(p: { accountName: string, cookie: string }) {
         this.accountName = p.accountName

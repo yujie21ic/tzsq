@@ -8,17 +8,10 @@ import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
 import { BitmexPositionAndOrder } from './PositionAndOrder/BitmexPositionAndOrder'
 
 
-type Order = {
-    type: '限价' | '限价只减仓' | '止损'
-    timestamp: number
-    id: string
-    side: BaseType.Side
-    cumQty: number      //成交数量
-    orderQty: number    //委托数量
-    price: number
-}
+
 
 export class TradeAccount {
+
     jsonSync = createJSONSync()
 
 
@@ -26,17 +19,17 @@ export class TradeAccount {
     bitmexPositionAndOrder: BitmexPositionAndOrder
     get ws() { return this.bitmexPositionAndOrder.ws }
     get bitMEXOrderAPI() { return this.bitmexPositionAndOrder.bitMEXOrderAPI }
+    get 活动委托() { return this.bitmexPositionAndOrder.活动委托 }
     //
 
 
-    活动委托 = {
-        XBTUSD: [] as Order[],
-        ETHUSD: [] as Order[],
-    }
+
 
 
     constructor(p: { accountName: string, cookie: string }) {
+
         this.bitmexPositionAndOrder = new BitmexPositionAndOrder(p)
+
         this.bitmexPositionAndOrder.ws.onmessage = frame => {
 
             if (frame.table === 'margin') {
