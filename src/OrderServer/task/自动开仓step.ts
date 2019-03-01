@@ -1,6 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { TradeAccount } from '../../统一接口/TradeAccount'
-import { realData, get信号msg, get信号灯Type, get波动率 } from '../realData'
+import { realData, get信号灯Type, get波动率 } from '../realData'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { sleep } from '../../lib/C/sleep'
 import { task__config } from './task__config'
@@ -78,7 +78,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
                     side: 开仓side,
                     size: task__config.交易数量 * (连续止损次数 + 1),
                     text: 信号灯Type,
-                }, '自动开仓step 自动开仓 市价' + get信号msg(symbol), self.ws) :
+                }, '自动开仓step 自动开仓 市价' + realData.get信号msg(symbol), self.ws) :
                 await self.bitMEXOrderAPI.limit({
                     symbol,
                     side: 开仓side,
@@ -90,7 +90,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
                         位置: 0,
                     })) as any,
                     text: 信号灯Type,
-                }, '自动开仓step 自动开仓 挂单' + get信号msg(symbol), self.ws)
+                }, '自动开仓step 自动开仓 挂单' + realData.get信号msg(symbol), self.ws)
         }
 
 
@@ -102,7 +102,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
                 const _15秒取消 = (Date.now() > (timestamp + 15 * 1000))
                 const 出现反向信号时候取消 = (信号灯Type !== 'none' && 开仓side !== side)
                 if (_15秒取消 || 出现反向信号时候取消) {
-                    return await self.bitMEXOrderAPI.cancel({ orderID: [id], text: '自动开仓step 取消开仓' }, '自动开仓step 取消开仓 ' + _15秒取消 ? '_15秒取消' : ('出现反向信号时候取消' + get信号msg(symbol)))
+                    return await self.bitMEXOrderAPI.cancel({ orderID: [id], text: '自动开仓step 取消开仓' }, '自动开仓step 取消开仓 ' + _15秒取消 ? '_15秒取消' : ('出现反向信号时候取消' + realData.get信号msg(symbol)))
                 }
             }
         }

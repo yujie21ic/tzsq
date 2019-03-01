@@ -5,20 +5,7 @@ import { lastNumber } from '../lib/F/lastNumber'
 
 //_________________________________________________________________________//
 
-export const get信号msg = (symbol: BaseType.BitmexSymbol) => {
-    const 上涨 = realData.dataExt[symbol].期货.信号_上涨
-    const 下跌 = realData.dataExt[symbol].期货.信号_下跌
-    const 追涨 = realData.dataExt[symbol].期货.信号_追涨
-    const 追跌 = realData.dataExt[symbol].期货.信号_追跌
 
-    return JSON.stringify({
-        上涨: 上涨.length > 3 ? [上涨[上涨.length - 3], 上涨[上涨.length - 2], 上涨[上涨.length - 1]] : '',
-        下跌: 下跌.length > 3 ? [下跌[下跌.length - 3], 下跌[下跌.length - 2], 下跌[下跌.length - 1]] : '',
-        追涨: 追涨.length > 3 ? [追涨[追涨.length - 3], 追涨[追涨.length - 2], 追涨[追涨.length - 1]] : '',
-        追跌: 追跌.length > 3 ? [追跌[追跌.length - 3], 追跌[追跌.length - 2], 追跌[追跌.length - 1]] : '',
-        波动率: lastNumber(realData.dataExt[symbol].期货.波动率),
-    })
-}
 
 
 export const 摸顶抄底信号灯side___2根 = (symbol: BaseType.BitmexSymbol) => {
@@ -26,10 +13,10 @@ export const 摸顶抄底信号灯side___2根 = (symbol: BaseType.BitmexSymbol) 
     const down = realData.dataExt[symbol].期货.信号_下跌
 
     if (up.length > 2 && up[up.length - 1].every(v => v.value) && up[up.length - 2].every(v => v.value)) {
-        return { 信号side: 'Sell' as 'Sell', 信号msg: get信号msg(symbol) }
+        return { 信号side: 'Sell' as 'Sell', 信号msg: realData.get信号msg(symbol) }
     }
     else if (down.length > 2 && down[down.length - 1].every(v => v.value) && down[down.length - 2].every(v => v.value)) {
-        return { 信号side: 'Buy' as 'Buy', 信号msg: get信号msg(symbol) }
+        return { 信号side: 'Buy' as 'Buy', 信号msg: realData.get信号msg(symbol) }
     }
     else {
         return { 信号side: 'none' as 'none', 信号msg: '' }
