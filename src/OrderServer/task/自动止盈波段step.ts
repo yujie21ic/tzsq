@@ -1,5 +1,5 @@
 import { BaseType } from '../../lib/BaseType'
-import { TradeAccount } from '../../统一接口/TradeAccount' 
+import { TradeAccount } from '../../统一接口/TradeAccount'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { lastNumber } from '../../lib/F/lastNumber'
@@ -105,7 +105,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                                     orderID: 活动委托[0].id,
                                     price: toBuySellPriceFunc(平仓side, get位置1价格),
                                     text: 最后一次开仓type + '平仓' + '  ' + 亏损挂单平仓Text + '  重新挂' + 平仓side + '1'
-                                }, '', self.ws)
+                                }, '')
                             } else {
                                 return false
                             }
@@ -118,7 +118,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                             price: toBuySellPriceFunc(平仓side, get位置1价格),
                             reduceOnly: true,
                             text: 最后一次开仓type + '平仓' + '  ' + 亏损挂单平仓Text,
-                        }, '', self.ws)
+                        }, '')
                     }
                 }
 
@@ -132,7 +132,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                         price: toBuySellPriceFunc(平仓side, get位置1价格),
                         reduceOnly: true,
                         text: 最后一次开仓type + '平仓' + '  ' + '自动止盈波段step 上涨做空下跌平仓一半',
-                    }, TradeAccount.realData.get信号XXXmsg(symbol), self.ws)
+                    }, TradeAccount.realData.get信号XXXmsg(symbol))
                 }
 
 
@@ -144,7 +144,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                         price: toBuySellPriceFunc(平仓side, get位置1价格),
                         reduceOnly: true,
                         text: 最后一次开仓type + '平仓' + '  ' + '自动止盈波段step 下跌抄底上涨平仓一半',
-                    }, TradeAccount.realData.get信号XXXmsg(symbol), self.ws)
+                    }, TradeAccount.realData.get信号XXXmsg(symbol))
                 }
 
 
@@ -161,7 +161,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                         price: toBuySellPriceFunc(平仓side, get位置1价格),
                         reduceOnly: true,
                         text: 最后一次开仓type + '平仓' + '  ' + '自动止盈波段step 平一半',
-                    }, 信号side + ' 信号msg:' + 信号msg, self.ws)
+                    }, 信号side + ' 信号msg:' + 信号msg)
 
                     // if (
                     //     (side === 'Buy' && get位置1价格() <= 止盈价格) ||

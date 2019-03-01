@@ -112,6 +112,7 @@ export class BitmexPositionAndOrder {
             }
         }
 
+        this.bitMEXOrderAPI.ws = this.ws
     }
 
     private updatePosition() {

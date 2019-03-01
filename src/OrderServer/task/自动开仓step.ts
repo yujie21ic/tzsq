@@ -1,5 +1,5 @@
 import { BaseType } from '../../lib/BaseType'
-import { TradeAccount } from '../../统一接口/TradeAccount' 
+import { TradeAccount } from '../../统一接口/TradeAccount'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { sleep } from '../../lib/C/sleep'
 import { task__config } from './task__config'
@@ -77,7 +77,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
                     side: 开仓side,
                     size: task__config.交易数量 * (连续止损次数 + 1),
                     text: 信号灯Type,
-                }, '自动开仓step 自动开仓 市价' + TradeAccount.realData.get信号msg(symbol), self.ws) :
+                }, '自动开仓step 自动开仓 市价' + TradeAccount.realData.get信号msg(symbol)) :
                 await self.bitMEXOrderAPI.limit({
                     symbol,
                     side: 开仓side,
@@ -89,7 +89,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
                         位置: 0,
                     })) as any,
                     text: 信号灯Type,
-                }, '自动开仓step 自动开仓 挂单' + TradeAccount.realData.get信号msg(symbol), self.ws)
+                }, '自动开仓step 自动开仓 挂单' + TradeAccount.realData.get信号msg(symbol))
         }
 
 

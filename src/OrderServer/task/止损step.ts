@@ -1,7 +1,7 @@
 import { BaseType } from '../../lib/BaseType'
-import { TradeAccount } from '../../统一接口/TradeAccount' 
+import { TradeAccount } from '../../统一接口/TradeAccount'
 import { to范围 } from '../../lib/F/to范围'
-import { toGridPoint } from '../../lib/F/toGridPoint' 
+import { toGridPoint } from '../../lib/F/toGridPoint'
 
 const 止损step = ({
     symbol,
@@ -32,7 +32,7 @@ const 止损step = ({
                 side,
                 price: toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点, side),
                 text: '亏损止损',
-            }, '', self.ws)
+            }, '')
         }
         else {
             return false
@@ -67,7 +67,7 @@ const 止损step = ({
                     orderID: id,
                     price: 新的Price,
                     text: 推 === 0 ? '成本价止损' : '盈利止损',
-                }, '', self.ws)
+                }, '')
             }
             return false
         }

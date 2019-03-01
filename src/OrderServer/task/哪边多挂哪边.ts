@@ -1,5 +1,5 @@
 import { TradeAccount } from '../../统一接口/TradeAccount'
-import { lastNumber } from '../../lib/F/lastNumber' 
+import { lastNumber } from '../../lib/F/lastNumber'
 
 
 export const 哪边多挂哪边 = () => async (self: TradeAccount) => {
@@ -35,7 +35,7 @@ export const 哪边多挂哪边 = () => async (self: TradeAccount) => {
                 price: getPrice,
                 text: '挂单',
                 reduceOnly: false,
-            }, '', self.ws)
+            }, '')
         }
         else if (orderList.length === 1 && side === nowSide) {
             if (orderList[0].price !== getPrice()) {
