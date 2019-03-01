@@ -48,10 +48,10 @@ export class TradeAccount {
     }
 
     市价平仓 = async (req: typeof funcList.市价平仓.req) =>
-        await this.bitMEXOrderAPI.close({ symbol: req.symbol, text: '手动市价平仓' })
+        await this.close({ symbol: req.symbol, text: '手动市价平仓' })
 
     取消委托 = async (req: typeof funcList.取消委托.req) =>
-        await this.bitMEXOrderAPI.cancel({ orderID: req.orderID, text: '手动取消委托' })
+        await this.cancel({ orderID: req.orderID, text: '手动取消委托' })
 
     下单 = async (req: typeof funcList.下单.req) => {
 
@@ -99,7 +99,7 @@ export class TradeAccount {
                 )
                 && 活动委托[0].side === req.side && req.type === 'maker') {
                 //ws返回有时间  直接给委托列表加一条记录??
-                return await this.bitMEXOrderAPI.updateMaker({
+                return await this.updateMaker({
                     orderID: 活动委托[0].id,
                     price: toBuySellPriceFunc(req.side, getPrice),
                     text: '手动updateMaker'
@@ -119,7 +119,7 @@ export class TradeAccount {
         return req.type === 'taker' ?
             (req.最低_最高 ?
                 false :
-                await this.bitMEXOrderAPI.taker({
+                await this.taker({
                     symbol: req.symbol,
                     side: req.side,
                     size: req.size,
@@ -127,7 +127,7 @@ export class TradeAccount {
                 })
             ) :
             //ws返回有时间  直接给委托列表加一条记录??
-            await this.bitMEXOrderAPI.maker({
+            await this.maker({
                 symbol: req.symbol,
                 side: req.side,
                 size: req.size,

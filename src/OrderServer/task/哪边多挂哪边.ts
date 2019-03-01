@@ -28,7 +28,7 @@ export const 哪边多挂哪边 = () => async (self: TradeAccount) => {
     for (let i = 0; i < arr.length; i++) {
         const { orderList, side } = arr[i]
         if (orderList.length === 0 && side === nowSide) {
-            return await self.bitMEXOrderAPI.maker({
+            return await self.maker({
                 symbol: 'XBTUSD',
                 side: nowSide,
                 size: 1,
@@ -39,7 +39,7 @@ export const 哪边多挂哪边 = () => async (self: TradeAccount) => {
         }
         else if (orderList.length === 1 && side === nowSide) {
             if (orderList[0].price !== getPrice()) {
-                return self.bitMEXOrderAPI.updateMaker({
+                return self.updateMaker({
                     orderID: orderList[0].id,
                     price: getPrice,
                     text: '改单',
@@ -48,7 +48,7 @@ export const 哪边多挂哪边 = () => async (self: TradeAccount) => {
 
         }
         else if (orderList.length > 0) {
-            return self.bitMEXOrderAPI.cancel({
+            return self.cancel({
                 orderID: orderList.map(v => v.id),
                 text: '撤单'
             })
