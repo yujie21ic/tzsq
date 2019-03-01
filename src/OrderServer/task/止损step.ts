@@ -1,5 +1,5 @@
 import { BaseType } from '../../lib/BaseType'
-import { TradeAccount } from '../TradeAccount'
+import { TradeAccount } from '../../统一接口/TradeAccount'
 import { get波动率 } from '../realData'
 import { to范围 } from '../../lib/F/to范围'
 import { toGridPoint } from '../../lib/F/toGridPoint'

@@ -1,5 +1,5 @@
 import { BaseType } from '../../lib/BaseType'
-import { TradeAccount } from '../TradeAccount'
+import { TradeAccount } from '../../统一接口/TradeAccount'
 
 export const 委托检测step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAccount) => {
 

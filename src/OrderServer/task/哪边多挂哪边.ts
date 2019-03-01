@@ -1,4 +1,4 @@
-import { TradeAccount } from '../TradeAccount'
+import { TradeAccount } from '../../统一接口/TradeAccount'
 import { lastNumber } from '../../lib/F/lastNumber'
 import { realData } from '../realData'
 

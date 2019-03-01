@@ -1,6 +1,6 @@
 import { JSONRPCServer } from '../lib/C/JSONRPC'
 import { funcList } from './____API____'
-import { TradeAccount } from './TradeAccount'
+import { TradeAccount } from '../统一接口/TradeAccount'
 import * as WebSocket from 'ws'
 import { config } from '../config'
 import { typeObjectParse } from '../lib/F/typeObjectParse'

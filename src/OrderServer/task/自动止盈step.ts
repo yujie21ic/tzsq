@@ -1,5 +1,5 @@
 import { BaseType } from '../../lib/BaseType'
-import { TradeAccount } from '../TradeAccount'
+import { TradeAccount } from '../../统一接口/TradeAccount'
 import { get波动率, realData, 摸顶抄底信号灯side___2根 } from '../realData'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
