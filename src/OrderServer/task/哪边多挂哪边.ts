@@ -26,8 +26,6 @@ export const 哪边多挂哪边 = () => async (self: TradeAccount) => {
         位置: 0,
     })
 
-    console.log('nowSide', nowSide)
-
     for (let i = 0; i < arr.length; i++) {
         const { orderList, side } = arr[i]
         if (orderList.length === 0 && side === nowSide) {
