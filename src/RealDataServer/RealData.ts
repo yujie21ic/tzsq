@@ -1,9 +1,9 @@
 import * as WebSocket from 'ws'
 import { RealDataBase } from './RealDataBase'
 import { BaseType } from '../lib/BaseType'
-import { BitmexTradeAndOrderBook } from '../lib/统一接口/TradeAndOrderBook/BitmexTradeAndOrderBook'
-import { BinanceTradeAndOrderBook } from '../lib/统一接口/TradeAndOrderBook/BinanceTradeAndOrderBook'
-import { HopexTradeAndOrderBook } from '../lib/统一接口/TradeAndOrderBook/HopexTradeAndOrderBook'
+import { BitmexTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/BitmexTradeAndOrderBook'
+import { BinanceTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/BinanceTradeAndOrderBook'
+import { HopexTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/HopexTradeAndOrderBook'
 import { Sampling } from '../lib/C/Sampling'
 
 export class RealData extends RealDataBase {
