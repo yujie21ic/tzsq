@@ -1,5 +1,4 @@
 import { BaseType } from '../lib/BaseType'
-import { JSONSync } from '../lib/C/JSONSync'
 
 export const funcList = {
 
