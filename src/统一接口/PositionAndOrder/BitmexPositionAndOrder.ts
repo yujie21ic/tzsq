@@ -95,8 +95,7 @@ export class BitmexPositionAndOrder {
         this.bitMEXOrderAPI.log = logToFile(this.accountName + '.txt')
 
 
-        this.ws = new BitMEXWSAPI(p.cookie, [
-            { theme: 'margin' },
+        this.ws = new BitMEXWSAPI(p.cookie, [ 
             { theme: 'position' },
             { theme: 'order' },
         ])
