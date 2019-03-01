@@ -1,6 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { TradeAccount } from '../TradeAccount'
-import { get波动率, realData, 摸顶抄底信号灯side, is上涨做空下跌平仓, is下跌抄底上涨平仓, get信号XXXmsg } from '../realData'
+import { get波动率, realData, 摸顶抄底信号灯side___2根, is上涨做空下跌平仓, is下跌抄底上涨平仓, get信号XXXmsg } from '../realData'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { lastNumber } from '../../lib/F/lastNumber'
@@ -151,7 +151,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
 
                 //触发了反向开仓信号 
-                const { 信号side, 信号msg } = 摸顶抄底信号灯side(symbol)
+                const { 信号side, 信号msg } = 摸顶抄底信号灯side___2根(symbol)
 
                 if (信号side === 平仓side && 活动委托.length === 0) {
 
