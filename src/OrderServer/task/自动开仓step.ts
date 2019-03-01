@@ -1,5 +1,5 @@
 import { BaseType } from '../../lib/BaseType'
-import { BitmexPositionAndOrder } from '../../统一接口/BitmexPositionAndOrder'
+import { BitmexPositionAndOrder } from '../../统一接口/PositionAndOrder/BitmexPositionAndOrder'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { sleep } from '../../lib/C/sleep'
 import { task__config } from './task__config'

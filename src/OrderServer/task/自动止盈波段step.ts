@@ -1,5 +1,5 @@
 import { BaseType } from '../../lib/BaseType'
-import { BitmexPositionAndOrder } from '../../统一接口/BitmexPositionAndOrder'
+import { BitmexPositionAndOrder } from '../../统一接口/PositionAndOrder/BitmexPositionAndOrder'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { lastNumber } from '../../lib/F/lastNumber'

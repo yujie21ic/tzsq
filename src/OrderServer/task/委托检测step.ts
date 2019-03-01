@@ -1,5 +1,5 @@
 import { BaseType } from '../../lib/BaseType'
-import { BitmexPositionAndOrder } from '../../统一接口/BitmexPositionAndOrder'
+import { BitmexPositionAndOrder } from '../../统一接口/PositionAndOrder/BitmexPositionAndOrder'
 
 export const 委托检测step = (symbol: BaseType.BitmexSymbol) => async (self: BitmexPositionAndOrder) => {
 
