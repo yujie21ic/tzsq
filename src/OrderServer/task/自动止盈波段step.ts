@@ -66,7 +66,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
 
 
-                const 最后一次开仓type = self.ws.增量同步数据.最后一次自动开仓.get(symbol)
+                const 最后一次开仓type = self.增量同步数据.最后一次自动开仓.get(symbol)
                 let 亏损挂单平仓Text = ''
 
 
@@ -124,7 +124,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
 
                 //
-                if (self.ws.增量同步数据.最后一次自动开仓.get(symbol) === '摸顶' && TradeAccount.realData.is上涨做空下跌平仓(symbol) && 活动委托.length === 0) {
+                if (self.增量同步数据.最后一次自动开仓.get(symbol) === '摸顶' && TradeAccount.realData.is上涨做空下跌平仓(symbol) && 活动委托.length === 0) {
                     return await self.bitMEXOrderAPI.maker({
                         symbol,
                         side: 平仓side,
@@ -136,7 +136,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                 }
 
 
-                if (self.ws.增量同步数据.最后一次自动开仓.get(symbol) === '抄底' && TradeAccount.realData.is下跌抄底上涨平仓(symbol) && 活动委托.length === 0) {
+                if (self.增量同步数据.最后一次自动开仓.get(symbol) === '抄底' && TradeAccount.realData.is下跌抄底上涨平仓(symbol) && 活动委托.length === 0) {
                     return await self.bitMEXOrderAPI.maker({
                         symbol,
                         side: 平仓side,

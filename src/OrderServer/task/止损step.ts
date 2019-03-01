@@ -52,7 +52,7 @@ const 止损step = ({
             const { price, side, id } = 止损委托[0]
             const 浮盈点数 = self.get浮盈点数(symbol)
 
-            const 推 = 推止损(浮盈点数, self.ws.增量同步数据.最后一次自动开仓.get(symbol))
+            const 推 = 推止损(浮盈点数, self.增量同步数据.最后一次自动开仓.get(symbol))
             if (isNaN(推)) {
                 return false
             }
