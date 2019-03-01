@@ -46,15 +46,15 @@ export class TradeAccount {
     }
 
     private updateMargin() {
-        this.bitmexPositionAndOrder.ws.data.margin.forEach(({ walletBalance, timestamp }) => {
-            const { wallet } = this.jsonSync.rawData
-            if (wallet.length === 0 || wallet[wallet.length - 1].total !== walletBalance) {
-                this.jsonSync.data.wallet.____push({
-                    time: new Date(timestamp).getTime(),
-                    total: walletBalance
-                })
-            }
-        })
+        // this.bitmexPositionAndOrder.ws.data.margin.forEach(({ walletBalance, timestamp }) => {
+        //     const { wallet } = this.jsonSync.rawData
+        //     if (wallet.length === 0 || wallet[wallet.length - 1].total !== walletBalance) {
+        //         this.jsonSync.data.wallet.____push({
+        //             time: new Date(timestamp).getTime(),
+        //             total: walletBalance
+        //         })
+        //     }
+        // })
     }
 
 

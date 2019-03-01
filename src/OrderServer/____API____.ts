@@ -91,11 +91,11 @@ const symbol = () => ({
 export const createJSONSync = () =>
     new JSONSync(
         {
-            //资金曲线
-            wallet: [] as {
-                time: number
-                total: number
-            }[],
+            // //资金曲线
+            // wallet: [] as {
+            //     time: number
+            //     total: number
+            // }[],
             //
             symbol: {
                 XBTUSD: symbol(),
