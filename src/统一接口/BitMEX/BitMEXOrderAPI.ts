@@ -42,9 +42,9 @@ export class BitMEXOrderAPI {
                     success = true
 
                     //
-                    if (ws !== undefined) {
+                    if (this.ws !== undefined) {
                         if (ret.data.orderID !== undefined && ret.data.ordStatus !== undefined) {
-                            ws.onAction({
+                            this.ws.onAction({
                                 action: 'insert',
                                 table: 'order',
                                 data: [ret.data as any],
