@@ -30,7 +30,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                 最后一次开仓时间 = Date.now()
                 最后一次开仓折返率 = lastNumber(TradeAccount.realData.dataExt[symbol].期货.折返率)
                 摸顶抄底超时秒 = to范围({ min: 7, max: 30, value: TradeAccount.realData.get波动率(symbol) / 7 + 7 })
-                logToFile(self.bitmexPositionAndOrder.accountName + '.txt')(JSON.stringify({ 最大仓位abs, 最后一次开仓时间, 最后一次开仓折返率 }))
+                logToFile(self.accountName + '.txt')(JSON.stringify({ 最大仓位abs, 最后一次开仓时间, 最后一次开仓折返率 }))
             }
 
             if (活动委托.length <= 1) {
