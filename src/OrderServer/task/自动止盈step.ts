@@ -37,7 +37,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAc
                 return false
             }
 
-            return await self.order自动.maker({
+            return await self.bitMEXOrderAPI.maker({
                 symbol,
                 side,
                 size: Math.abs(仓位数量),
@@ -50,7 +50,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAc
             if (活动委托[0].side === (仓位数量 > 0 ? 'Sell' : 'Buy') && 活动委托[0].type === '限价只减仓') {
                 const { 信号side, 信号msg } = 摸顶抄底信号灯side___2根(symbol)
                 if (信号side === 活动委托[0].side) {
-                    return await self.order自动.updateMaker({
+                    return await self.bitMEXOrderAPI.updateMaker({
                         orderID: 活动委托[0].id,
                         price: toBuySellPriceFunc(信号side, () => realData.getOrderPrice({
                             symbol,

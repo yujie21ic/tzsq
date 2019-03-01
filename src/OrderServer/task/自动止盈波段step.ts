@@ -102,7 +102,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                     if (活动委托.length === 1) {
                         if (活动委托[0].type === '限价只减仓' && 活动委托[0].side === 平仓side) {
                             if (活动委托[0].price !== get位置1价格()) {
-                                return await self.order自动.updateMaker({
+                                return await self.bitMEXOrderAPI.updateMaker({
                                     orderID: 活动委托[0].id,
                                     price: toBuySellPriceFunc(平仓side, get位置1价格),
                                     text: 最后一次开仓type + '平仓' + '  ' + 亏损挂单平仓Text + '  重新挂' + 平仓side + '1'
@@ -112,7 +112,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                             }
                         }
                     } else {
-                        return await self.order自动.maker({
+                        return await self.bitMEXOrderAPI.maker({
                             symbol,
                             side: 平仓side,
                             size: 最大仓位abs,
@@ -126,7 +126,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
                 //
                 if (self.ws.增量同步数据.最后一次自动开仓.get(symbol) === '摸顶' && is上涨做空下跌平仓(symbol) && 活动委托.length === 0) {
-                    return await self.order自动.maker({
+                    return await self.bitMEXOrderAPI.maker({
                         symbol,
                         side: 平仓side,
                         size: Math.round(最大仓位abs / 2),//一半
@@ -138,7 +138,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
 
                 if (self.ws.增量同步数据.最后一次自动开仓.get(symbol) === '抄底' && is下跌抄底上涨平仓(symbol) && 活动委托.length === 0) {
-                    return await self.order自动.maker({
+                    return await self.bitMEXOrderAPI.maker({
                         symbol,
                         side: 平仓side,
                         size: Math.round(最大仓位abs / 2),//一半
@@ -155,7 +155,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
                 if (信号side === 平仓side && 活动委托.length === 0) {
 
-                    return await self.order自动.maker({
+                    return await self.bitMEXOrderAPI.maker({
                         symbol,
                         side: 平仓side,
                         size: Math.round(最大仓位abs / 2),//一半

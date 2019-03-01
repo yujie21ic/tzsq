@@ -27,8 +27,7 @@ export class TradeAccount {
     accountName: string
     cookie: string
 
-    order手动: BitMEXOrderAPI
-    order自动: BitMEXOrderAPI
+    bitMEXOrderAPI: BitMEXOrderAPI
 
 
     活动委托 = {
@@ -40,19 +39,12 @@ export class TradeAccount {
         this.accountName = p.accountName
         this.cookie = p.cookie
 
-        this.order手动 = new BitMEXOrderAPI({
-            cookie: p.cookie,
-            重试几次: 100,
-            重试休息多少毫秒: 30,
-        })
-        this.order手动.log = logToFile(this.accountName + '.txt')
-
-        this.order自动 = new BitMEXOrderAPI({
+        this.bitMEXOrderAPI = new BitMEXOrderAPI({
             cookie: p.cookie,
             重试几次: 10,
             重试休息多少毫秒: 10,
         })
-        this.order自动.log = logToFile(this.accountName + '.txt')
+        this.bitMEXOrderAPI.log = logToFile(this.accountName + '.txt')
 
         this.ws = new BitMEXWSAPI(p.cookie, [
             { theme: 'margin' },
@@ -99,13 +91,13 @@ export class TradeAccount {
                         if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== item.avgCostPrice) {
                             仓位数量.____set(item.currentQty)
                             开仓均价.____set(item.avgCostPrice)
-                            this.order自动.log(`仓位更新: ${symbol} 仓位数量:${item.currentQty}  本地维护仓位数量:${this.ws.增量同步数据.仓位数量.get(symbol)}  开仓均价:${item.avgCostPrice}`)
+                            this.bitMEXOrderAPI.log(`仓位更新: ${symbol} 仓位数量:${item.currentQty}  本地维护仓位数量:${this.ws.增量同步数据.仓位数量.get(symbol)}  开仓均价:${item.avgCostPrice}`)
                         }
                     } else {
                         if (raw.仓位数量 !== 0 || raw.开仓均价 !== 0) {
                             仓位数量.____set(0)
                             开仓均价.____set(0)
-                            this.order自动.log(`仓位更新: ${symbol} 仓位数量:0  本地维护仓位数量:${this.ws.增量同步数据.仓位数量.get(symbol)}`)
+                            this.bitMEXOrderAPI.log(`仓位更新: ${symbol} 仓位数量:0  本地维护仓位数量:${this.ws.增量同步数据.仓位数量.get(symbol)}`)
                         }
                     }
                 }
@@ -213,10 +205,10 @@ export class TradeAccount {
     }
 
     市价平仓 = async (req: typeof funcList.市价平仓.req) =>
-        await this.order手动.close({ symbol: req.symbol, text: '手动市价平仓' })
+        await this.bitMEXOrderAPI.close({ symbol: req.symbol, text: '手动市价平仓' })
 
     取消委托 = async (req: typeof funcList.取消委托.req) =>
-        await this.order手动.cancel({ orderID: req.orderID, text: '手动取消委托' })
+        await this.bitMEXOrderAPI.cancel({ orderID: req.orderID, text: '手动取消委托' })
 
     下单 = async (req: typeof funcList.下单.req) => {
 
@@ -264,7 +256,7 @@ export class TradeAccount {
                 )
                 && 活动委托[0].side === req.side && req.type === 'maker') {
                 //ws返回有时间  直接给委托列表加一条记录??
-                return await this.order手动.updateMaker({
+                return await this.bitMEXOrderAPI.updateMaker({
                     orderID: 活动委托[0].id,
                     price: toBuySellPriceFunc(req.side, getPrice),
                     text: '手动updateMaker'
@@ -284,7 +276,7 @@ export class TradeAccount {
         return req.type === 'taker' ?
             (req.最低_最高 ?
                 false :
-                await this.order手动.taker({
+                await this.bitMEXOrderAPI.taker({
                     symbol: req.symbol,
                     side: req.side,
                     size: req.size,
@@ -292,7 +284,7 @@ export class TradeAccount {
                 })
             ) :
             //ws返回有时间  直接给委托列表加一条记录??
-            await this.order手动.maker({
+            await this.bitMEXOrderAPI.maker({
                 symbol: req.symbol,
                 side: req.side,
                 size: req.size,

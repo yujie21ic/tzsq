@@ -73,13 +73,13 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
             const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' || get波动率(symbol) < 30
 
             return 市价 ?
-                await self.order自动.taker({
+                await self.bitMEXOrderAPI.taker({
                     symbol,
                     side: 开仓side,
                     size: task__config.交易数量 * (连续止损次数 + 1),
                     text: 信号灯Type,
                 }, '自动开仓step 自动开仓 市价' + get信号msg(symbol), self.ws) :
-                await self.order自动.limit({
+                await self.bitMEXOrderAPI.limit({
                     symbol,
                     side: 开仓side,
                     size: task__config.交易数量 * (连续止损次数 + 1),
@@ -102,7 +102,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
                 const _15秒取消 = (Date.now() > (timestamp + 15 * 1000))
                 const 出现反向信号时候取消 = (信号灯Type !== 'none' && 开仓side !== side)
                 if (_15秒取消 || 出现反向信号时候取消) {
-                    return await self.order自动.cancel({ orderID: [id], text: '自动开仓step 取消开仓' }, '自动开仓step 取消开仓 ' + _15秒取消 ? '_15秒取消' : ('出现反向信号时候取消' + get信号msg(symbol)))
+                    return await self.bitMEXOrderAPI.cancel({ orderID: [id], text: '自动开仓step 取消开仓' }, '自动开仓step 取消开仓 ' + _15秒取消 ? '_15秒取消' : ('出现反向信号时候取消' + get信号msg(symbol)))
                 }
             }
         }
