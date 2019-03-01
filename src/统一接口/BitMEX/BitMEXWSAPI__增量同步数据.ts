@@ -1,4 +1,4 @@
-import { BaseType } from '../BaseType'
+import { BaseType } from '../../lib/BaseType'
 import { BitMEXMessage } from './BitMEXMessage'
 
 

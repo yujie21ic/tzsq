@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "build/main.js",
   "scripts": {
-    "greate": "node --max_old_space_size=8192 -r ts-node/register ./src/lib/BitMEX/BitMEXGreate",
+    "greate": "node --max_old_space_size=8192 -r ts-node/register ./src/统一接口/BitMEX/BitMEXGreate",
     "order_server": "node --max_old_space_size=8192 -r ts-node/register ./src/OrderServer",
     "db_server": "node --max_old_space_size=8192 -r ts-node/register ./src/DBServer",
     "pk_server": "node --max_old_space_size=8192 -r ts-node/register ./src/PKServer",

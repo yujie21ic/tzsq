@@ -1,7 +1,7 @@
-import { BaseType } from '../BaseType'
+import { BaseType } from '../../lib/BaseType'
 import { BitMEXRESTAPI } from '../BitMEX/BitMEXRESTAPI'
-import { sleep } from '../C/sleep'
-import { JSONRequestError } from '../C/JSONRequest'
+import { sleep } from '../../lib/C/sleep'
+import { JSONRequestError } from '../../lib/C/JSONRequest'
 import { BitMEXWSAPI } from './BitMEXWSAPI'
 
 let callID = 0

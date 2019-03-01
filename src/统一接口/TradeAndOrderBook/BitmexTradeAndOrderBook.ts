@@ -1,5 +1,5 @@
 import { TradeAndOrderBook } from './TradeAndOrderBook'
-import { BitMEXWSAPI } from '../../lib/BitMEX/BitMEXWSAPI'
+import { BitMEXWSAPI } from '../BitMEX/BitMEXWSAPI'
 import { BaseType } from '../../lib/BaseType'
 
 const 盘口map = (v: any) => ({

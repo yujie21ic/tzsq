@@ -1,8 +1,8 @@
-import { WebSocketClient } from '../C/WebSocketClient'
+import { WebSocketClient } from '../../lib/C/WebSocketClient'
 import { BitMEXMessage } from './BitMEXMessage'
 import { config } from '../../config'
 import { BitMEXWSAPI__增量同步数据 } from './BitMEXWSAPI__增量同步数据'
-import { BaseType } from '../BaseType'
+import { BaseType } from '../../lib/BaseType'
 
 type OrderBook10 = {
     symbol: string
