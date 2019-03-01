@@ -1,6 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { TradeAccount } from '../../统一接口/TradeAccount'
-import { get波动率, realData, 摸顶抄底信号灯side___2根, is上涨做空下跌平仓, is下跌抄底上涨平仓, get信号XXXmsg } from '../realData'
+import { get波动率, realData, is上涨做空下跌平仓, is下跌抄底上涨平仓, get信号XXXmsg } from '../realData'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { lastNumber } from '../../lib/F/lastNumber'
@@ -84,7 +84,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
                     if ((平仓side === 'Sell' && 净成交量 < 0) || (平仓side === 'Buy' && 净成交量 > 0)) {
                         亏损挂单平仓Text = '如果净成交量反向，那么立刻挂单平仓'
-                    } 
+                    }
                     else if (Date.now() - 最后一次开仓时间 > 5 * 60 * 1000) {
                         亏损挂单平仓Text = '如果净成交量没有反向，那么最多等待5分钟，然后挂单平仓'
                     } else {
@@ -151,7 +151,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
 
                 //触发了反向开仓信号 
-                const { 信号side, 信号msg } = 摸顶抄底信号灯side___2根(symbol)
+                const { 信号side, 信号msg } = realData.摸顶抄底信号灯side___2根(symbol)
 
                 if (信号side === 平仓side && 活动委托.length === 0) {
 

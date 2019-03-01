@@ -1039,7 +1039,21 @@ export class RealDataBase {
 
 
 
+    摸顶抄底信号灯side___2根 = (symbol: BaseType.BitmexSymbol) => {
+        const realData = this
+        const up = realData.dataExt[symbol].期货.信号_上涨
+        const down = realData.dataExt[symbol].期货.信号_下跌
 
+        if (up.length > 2 && up[up.length - 1].every(v => v.value) && up[up.length - 2].every(v => v.value)) {
+            return { 信号side: 'Sell' as 'Sell', 信号msg: realData.get信号msg(symbol) }
+        }
+        else if (down.length > 2 && down[down.length - 1].every(v => v.value) && down[down.length - 2].every(v => v.value)) {
+            return { 信号side: 'Buy' as 'Buy', 信号msg: realData.get信号msg(symbol) }
+        }
+        else {
+            return { 信号side: 'none' as 'none', 信号msg: '' }
+        }
+    }
 
 
 

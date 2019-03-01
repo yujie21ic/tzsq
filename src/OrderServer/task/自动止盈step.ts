@@ -1,6 +1,6 @@
 import { BaseType } from '../../lib/BaseType'
 import { TradeAccount } from '../../统一接口/TradeAccount'
-import { get波动率, realData, 摸顶抄底信号灯side___2根 } from '../realData'
+import { get波动率, realData } from '../realData'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 
@@ -48,7 +48,7 @@ const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: TradeAc
         }
         else if (活动委托.length === 1) {
             if (活动委托[0].side === (仓位数量 > 0 ? 'Sell' : 'Buy') && 活动委托[0].type === '限价只减仓') {
-                const { 信号side, 信号msg } = 摸顶抄底信号灯side___2根(symbol)
+                const { 信号side, 信号msg } = realData.摸顶抄底信号灯side___2根(symbol)
                 if (信号side === 活动委托[0].side) {
                     return await self.bitMEXOrderAPI.updateMaker({
                         orderID: 活动委托[0].id,
