@@ -1,4 +1,4 @@
-import { createJSONSync, funcList } from '../OrderServer/____API____'
+import { funcList } from '../OrderServer/____API____'
 import { keys } from 'ramda'
 import { BaseType } from '../lib/BaseType'
 import { sleep } from '../lib/C/sleep'
@@ -12,20 +12,14 @@ import { BitmexPositionAndOrder } from './PositionAndOrder/BitmexPositionAndOrde
 
 export class TradeAccount {
 
-    jsonSync = createJSONSync()
-
-
     //  
     bitmexPositionAndOrder: BitmexPositionAndOrder
     get ws() { return this.bitmexPositionAndOrder.ws }
     get bitMEXOrderAPI() { return this.bitmexPositionAndOrder.bitMEXOrderAPI }
     get 活动委托() { return this.bitmexPositionAndOrder.活动委托 }
+    get jsonSync() { return this.bitmexPositionAndOrder.jsonSync }
     //
-
-
-
-
-
+    
     constructor(p: { accountName: string, cookie: string }) {
 
         this.bitmexPositionAndOrder = new BitmexPositionAndOrder(p)
