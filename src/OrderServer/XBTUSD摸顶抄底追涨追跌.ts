@@ -12,11 +12,11 @@ const symbol = 'XBTUSD'
 
 
 export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTask {
-    摸顶 = false
-    抄底 = false
-    追涨 = false
-    追跌 = false
-    止盈 = false
+    // 摸顶 = false
+    // 抄底 = false
+    // 追涨 = false
+    // 追跌 = false
+    // 止盈 = false
 
     async onTick(self: BitmexPositionAndOrder) {
         const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
