@@ -7,7 +7,7 @@ import { keys } from 'ramda'
 import { JSONSync } from '../../lib/C/JSONSync'
 import { BitMEXWSAPI } from '../BitMEX/BitMEXWSAPI'
 import { RealData__Server } from '../../RealDataServer/RealData__Server'
-import { toCacheFunc } from '../../lib/C/toCacheFunc';
+import { toCacheFunc } from '../../lib/C/toCacheFunc'
 
 const symbol = () => ({
     任务开关: {
