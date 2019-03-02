@@ -5,7 +5,6 @@ import { BitMEXMessage } from './BitMEXMessage'
 const createItem = () => ({
     仓位数量: 0,
     连续止损: 0,
-    最后一次自动开仓: '',
 })
 const XXX = createItem()
 
@@ -60,32 +59,6 @@ export class BitMEXWSAPI__增量同步数据 {
     连续止损 = this.xxx('连续止损')
 
 
-    private partial = (key: keyof typeof XXX) => ({
-        partial: (symbol: BaseType.BitmexSymbol, str: string) => {
-            const obj = this.dic.get(symbol) as any
-            if (obj !== undefined) {
-                obj[key] = str
-            }
-            else {
-                const obj = createItem()
-                obj[key] = str
-                this.dic.set(symbol, obj)
-            }
-            this.log(`增量同步数据 ${symbol} ${key} partial ${str}`)
-        },
-        get: (symbol: BaseType.BitmexSymbol) => {
-            const obj = this.dic.get(symbol)
-            if (obj !== undefined) {
-                return obj[key] as string
-            }
-            else {
-                return ''
-            }
-        },
-    })
-
-    最后一次自动开仓 = this.partial('最后一次自动开仓')
-
 
     //可变数据  直接修改 
     private 新成交(v: { symbol: string, side: string, 已经成交?: number, cumQty: number, text: string }) {
@@ -103,11 +76,6 @@ export class BitMEXWSAPI__增量同步数据 {
 
     onOrder(order: BitMEXMessage.Order) {
         this.新成交(order)
-
-        //开仓
-        if (order.text === '抄底' || order.text === '摸顶' || order.text === '追涨' || order.text === '追跌') {
-            this.最后一次自动开仓.partial(order.symbol as BaseType.BitmexSymbol, order.text)
-        }
 
         //止盈
         if (order.ordType === 'Limit' && order.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && order.ordStatus === 'Filled') {

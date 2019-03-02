@@ -85,7 +85,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
                 const { price, side, id } = 止损委托[0]
                 const 浮盈点数 = self.get浮盈点数(symbol)
 
-                const 推 = this.推止损(self.realData.get波动率(symbol), 浮盈点数, self.增量同步数据.最后一次自动开仓.get(symbol))
+                const 推 = this.推止损(self.realData.get波动率(symbol), 浮盈点数, this.最后一次信号)
                 if (isNaN(推)) {
                     return false
                 }
@@ -335,11 +335,10 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
 
 
 
-            const 最后一次开仓type = self.增量同步数据.最后一次自动开仓.get(symbol)
             let 亏损挂单平仓Text = ''
 
 
-            if (最后一次开仓type === '摸顶' || 最后一次开仓type === '抄底') {
+            if (this.最后一次信号 === '摸顶' || this.最后一次信号 === '抄底') {
                 if (
                     Date.now() - this.最后一次开仓时间 >= this.摸顶抄底超时秒 * 1000 &&
                     self.get浮盈点数(symbol) < this.最后一次开仓折返率
@@ -347,7 +346,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
                     亏损挂单平仓Text = '下单' + this.摸顶抄底超时秒 + ' 秒后，折返没有超过下单点的折返函数，挂单全平'
                 }
             }
-            else if (最后一次开仓type === '追涨' || 最后一次开仓type === '追跌') {
+            else if (this.最后一次信号 === '追涨' || this.最后一次信号 === '追跌') {
                 const 净成交量均线60 = lastNumber(self.realData.dataExt[symbol].期货.净成交量均线60)
 
                 if ((平仓side === 'Sell' && 净成交量均线60 < 0) || (平仓side === 'Buy' && 净成交量均线60 > 0)) {
@@ -373,7 +372,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
                             return await self.updateMaker({
                                 orderID: 活动委托[0].id,
                                 price: toBuySellPriceFunc(平仓side, get位置1价格),
-                                text: 最后一次开仓type + '平仓' + '  ' + 亏损挂单平仓Text + '  重新挂' + 平仓side + '1'
+                                text: this.最后一次信号 + '平仓' + '  ' + 亏损挂单平仓Text + '  重新挂' + 平仓side + '1'
                             }, '')
                         } else {
                             return false
@@ -386,33 +385,33 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
                         size: this.最大仓位abs,
                         price: toBuySellPriceFunc(平仓side, get位置1价格),
                         reduceOnly: true,
-                        text: 最后一次开仓type + '平仓' + '  ' + 亏损挂单平仓Text,
+                        text: this.最后一次信号 + '平仓' + '  ' + 亏损挂单平仓Text,
                     }, '')
                 }
             }
 
 
             //
-            if (self.增量同步数据.最后一次自动开仓.get(symbol) === '摸顶' && self.realData.is上涨做空下跌平仓(symbol) && 活动委托.length === 0) {
+            if (this.最后一次信号 === '摸顶' && self.realData.is上涨做空下跌平仓(symbol) && 活动委托.length === 0) {
                 return await self.maker({
                     symbol,
                     side: 平仓side,
                     size: Math.round(this.最大仓位abs / 2),//一半
                     price: toBuySellPriceFunc(平仓side, get位置1价格),
                     reduceOnly: true,
-                    text: 最后一次开仓type + '平仓' + '  ' + '自动止盈波段step 上涨做空下跌平仓一半',
+                    text: this.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 上涨做空下跌平仓一半',
                 }, self.realData.get信号XXXmsg(symbol))
             }
 
 
-            if (self.增量同步数据.最后一次自动开仓.get(symbol) === '抄底' && self.realData.is下跌抄底上涨平仓(symbol) && 活动委托.length === 0) {
+            if (this.最后一次信号 === '抄底' && self.realData.is下跌抄底上涨平仓(symbol) && 活动委托.length === 0) {
                 return await self.maker({
                     symbol,
                     side: 平仓side,
                     size: Math.round(this.最大仓位abs / 2),//一半
                     price: toBuySellPriceFunc(平仓side, get位置1价格),
                     reduceOnly: true,
-                    text: 最后一次开仓type + '平仓' + '  ' + '自动止盈波段step 下跌抄底上涨平仓一半',
+                    text: this.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 下跌抄底上涨平仓一半',
                 }, self.realData.get信号XXXmsg(symbol))
             }
 
@@ -429,7 +428,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
                     size: Math.round(this.最大仓位abs / 2),//一半
                     price: toBuySellPriceFunc(平仓side, get位置1价格),
                     reduceOnly: true,
-                    text: 最后一次开仓type + '平仓' + '  ' + '自动止盈波段step 平一半',
+                    text: this.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 平一半',
                 }, 信号side + ' 信号msg:' + 信号msg)
 
                 // if (
