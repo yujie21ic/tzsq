@@ -48,6 +48,10 @@ let callID = 0
 const 重试几次 = 10
 const 重试休息多少毫秒 = 10
 
+export interface BitmexPositionAndOrderTask {
+    onTick(self: BitmexPositionAndOrder): Promise<boolean>
+}
+
 export class BitmexPositionAndOrder extends PositionAndOrder {
 
     private cookie: string
@@ -61,7 +65,7 @@ export class BitmexPositionAndOrder extends PositionAndOrder {
 
     constructor(p: { accountName: string, cookie: string }) {
         super()
-        this.cookie = p.cookie       
+        this.cookie = p.cookie
 
         this.ws = new BitMEXWSAPI(p.cookie, [
             { theme: 'position' },
@@ -328,9 +332,9 @@ export class BitmexPositionAndOrder extends PositionAndOrder {
 
     realData = __realData__()
 
-    async runTask(func: (self: BitmexPositionAndOrder) => Promise<boolean>) {
+    async runTask(task: BitmexPositionAndOrderTask) {
         while (true) {
-            if (await func(this)) {
+            if (await task.onTick(this)) {
                 await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
             }
             await sleep(100)

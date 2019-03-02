@@ -1,6 +1,6 @@
 import { JSONRPCServer } from '../lib/C/JSONRPC'
 import { funcList } from './____API____'
-import { BitmexPositionAndOrder } from '../统一接口/PositionAndOrder/BitmexPositionAndOrder'
+import { BitmexPositionAndOrder, BitmexPositionAndOrderTask } from '../统一接口/PositionAndOrder/BitmexPositionAndOrder'
 import * as WebSocket from 'ws'
 import { config } from '../config'
 import { typeObjectParse } from '../lib/F/typeObjectParse'
@@ -15,6 +15,13 @@ import { to范围 } from '../lib/F/to范围'
 import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
 // import { 哪边多挂哪边 } from './task/哪边多挂哪边'
 
+const toTask = (func: (self: BitmexPositionAndOrder) => Promise<boolean>) => {
+    const obj: BitmexPositionAndOrderTask = {
+        onTick: func
+    }
+    return obj
+}
+
 
 //运行的账户
 //cookie --> Account
@@ -24,17 +31,17 @@ if (config.orderServer !== undefined) {
 
         const account = new BitmexPositionAndOrder({ accountName: k, cookie: v })
 
-        account.runTask(XBTUSD止损step())
-        account.runTask(ETHUSD止损step())
+        account.runTask(toTask(XBTUSD止损step()))
+        account.runTask(toTask(ETHUSD止损step()))
 
-        account.runTask(委托检测step('XBTUSD'))
-        account.runTask(委托检测step('ETHUSD'))
+        account.runTask(toTask(委托检测step('XBTUSD')))
+        account.runTask(toTask(委托检测step('ETHUSD')))
 
-        account.runTask(XBTUSD自动开仓step())
-        account.runTask(XBTUSD自动止盈step())
-        account.runTask(XBTUSD自动止盈波段step())
+        account.runTask(toTask(XBTUSD自动开仓step()))
+        account.runTask(toTask(XBTUSD自动止盈step()))
+        account.runTask(toTask(XBTUSD自动止盈波段step()))
 
-        // account.runTask(哪边多挂哪边())
+        // account.runTask(toTask(哪边多挂哪边()))
 
         accountDic.set(v, account)
     })
