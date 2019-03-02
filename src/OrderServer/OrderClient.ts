@@ -1,7 +1,7 @@
 import { WebSocketClient } from '../lib/C/WebSocketClient'
 import { deepMapNullToNaN } from '../lib/F/deepMapNullToNaN'
 import { JSONRPCClient } from '../lib/C/JSONRPC'
-import { funcList } from './____API____'
+import { funcList } from './funcList'
 import { config } from '../config'
 import { createJSONSync } from '../统一接口/PositionAndOrder/BitmexPositionAndOrder'
 

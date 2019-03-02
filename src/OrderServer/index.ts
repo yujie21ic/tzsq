@@ -1,22 +1,15 @@
 import { JSONRPCServer } from '../lib/C/JSONRPC'
-import { funcList } from './____API____'
-import { BitmexPositionAndOrder, BitmexPositionAndOrderTask } from '../统一接口/PositionAndOrder/BitmexPositionAndOrder'
+import { funcList } from './funcList'
+import { BitmexPositionAndOrder } from '../统一接口/PositionAndOrder/BitmexPositionAndOrder'
 import * as WebSocket from 'ws'
 import { config } from '../config'
 import { typeObjectParse } from '../lib/F/typeObjectParse'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
 import { kvs } from '../lib/F/kvs'
-import { XBTUSD止损step, ETHUSD止损step } from './止损step'
 import { to范围 } from '../lib/F/to范围'
 import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
-import { XBTUSD摸顶抄底追涨追跌 } from './XBTUSD摸顶抄底追涨追跌'
+import { XBTUSD摸顶抄底追涨追跌 } from '../统一接口/task/XBTUSD摸顶抄底追涨追跌'
 
-const toTask = (func: (self: BitmexPositionAndOrder) => Promise<boolean>) => {
-    const obj: BitmexPositionAndOrderTask = {
-        onTick: func
-    }
-    return obj
-}
 
 
 //运行的账户
@@ -24,14 +17,8 @@ const toTask = (func: (self: BitmexPositionAndOrder) => Promise<boolean>) => {
 const accountDic = new Map<string, BitmexPositionAndOrder>()
 if (config.orderServer !== undefined) {
     kvs(config.orderServer).forEach(({ k, v }) => {
-
         const account = new BitmexPositionAndOrder({ accountName: k, cookie: v })
-
-        account.runTask(toTask(XBTUSD止损step()))
-        account.runTask(toTask(ETHUSD止损step()))
-
         account.runTask(new XBTUSD摸顶抄底追涨追跌())
-
         accountDic.set(v, account)
     })
 } else {
