@@ -219,23 +219,20 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
             if (信号灯Type === '追跌' && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追跌 === false) return false
             if (信号灯Type === '抄底' && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓抄底 === false) return false
             if (信号灯Type === '摸顶' && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓摸顶 === false) return false
-
-            const x = this.最后一次信号
-            this.最后一次信号 = 信号灯Type
-            this.最后一次信号时间 = Date.now()
-
             if (
                 (Date.now() - this.最后一次信号时间 < 20 * 1000) && //没有超时
                 (                                             //抵消
-                    (x === '追涨' && 信号灯Type === '摸顶') ||
-                    (x === '追跌' && 信号灯Type === '抄底') ||
-                    (x === '抄底' && 信号灯Type === '追跌') ||
-                    (x === '摸顶' && 信号灯Type === '追涨')
+                    (this.最后一次信号 === '追涨' && 信号灯Type === '摸顶') ||
+                    (this.最后一次信号 === '追跌' && 信号灯Type === '抄底') ||
+                    (this.最后一次信号 === '抄底' && 信号灯Type === '追跌') ||
+                    (this.最后一次信号 === '摸顶' && 信号灯Type === '追涨')
                 )
             ) {
                 return false
             }
 
+            this.最后一次信号 = 信号灯Type
+            this.最后一次信号时间 = Date.now()
 
 
             const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' || self.realData.get波动率(symbol) < 30
