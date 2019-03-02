@@ -369,11 +369,15 @@ export class BitMEXWSAPI {
         }
 
         //止损
-        if (order.ordType === 'Stop' && order.execInst === 'Close,LastPrice' && order.ordStatus === 'Filled') {
+        else if (order.ordType === 'Stop' && order.execInst === 'Close,LastPrice' && order.ordStatus === 'Filled') {
             //止损给 text 加了前缀  卧槽
             if (order.text.indexOf('盈利止损') === -1) {//手动检测下类型
                 this.连续止损.update(order.symbol as BaseType.BitmexSymbol, 1)
             }
+        }
+
+        else if (order.ordType === 'Limit' && order.ordStatus === 'Filled') {
+            //限价
         }
     }
 
@@ -383,4 +387,8 @@ export class BitMEXWSAPI {
             this.连续止损.update(execution.symbol as BaseType.BitmexSymbol, 1) //强平也算 
         }
     }
+
+
+    //
+    onFilled: (type: '限价' | '只减仓' | '强平' | '盈利止损' | '成本止损' | '亏损止损') => void = () => { }
 }
