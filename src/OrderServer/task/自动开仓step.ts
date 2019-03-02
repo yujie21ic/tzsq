@@ -23,7 +23,7 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
 
         const 本地维护仓位数量 = self.增量同步数据.仓位数量.get(symbol)
 
-        const 活动委托 = self.活动委托[symbol].filter(v => v.type !== '止损')
+        const 活动委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type !== '止损')
 
         const 信号灯Type = self.realData.get信号灯Type(symbol)
         const 开仓side = { '追涨': 'Buy', '追跌': 'Sell', '抄底': 'Buy', '摸顶': 'Sell', 'none': '_____' }[信号灯Type] as BaseType.Side

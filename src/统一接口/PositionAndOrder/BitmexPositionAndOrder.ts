@@ -19,6 +19,8 @@ const symbol = () => ({
         自动止盈波段: false,
         自动推止损: true,
     },
+
+    //
     委托: {
         id: '',
         side: '' as BaseType.Side,
@@ -27,6 +29,9 @@ const symbol = () => ({
         price: 0,
     },
     止损价格: 0,
+    活动委托: [] as Order[],
+    //
+
     仓位数量: 0,
     开仓均价: 0,
 })
@@ -64,10 +69,7 @@ export class BitmexPositionAndOrder {
     accountName: string
     get 增量同步数据() { return this.ws.增量同步数据 }
     jsonSync = createJSONSync()
-    活动委托 = {
-        XBTUSD: [] as Order[],
-        ETHUSD: [] as Order[],
-    }
+
 
 
     constructor(p: { accountName: string, cookie: string }) {
@@ -173,9 +175,10 @@ export class BitmexPositionAndOrder {
             })
 
 
-            this.活动委托[symbol] = arr
+            this.jsonSync.data.symbol[symbol].活动委托.____set(arr)
 
-            const x = this.活动委托[symbol].find(v => v.type !== '止损')
+            //
+            const x = arr.find(v => v.type !== '止损')
             if (x === undefined) {
                 this.jsonSync.data.symbol[symbol].委托.id.____set('')
             } else {
@@ -186,7 +189,7 @@ export class BitmexPositionAndOrder {
                 this.jsonSync.data.symbol[symbol].委托.side.____set(x.side)
             }
 
-            const y = this.活动委托[symbol].find(v => v.type === '止损')
+            const y = arr.find(v => v.type === '止损')
             if (y === undefined) {
                 this.jsonSync.data.symbol[symbol].止损价格.____set(0)
             } else {

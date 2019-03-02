@@ -21,7 +21,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
         }
 
         const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
-        const 活动委托 = self.活动委托[symbol].filter(v => v.type !== '止损')
+        const 活动委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type !== '止损')
 
         if (仓位数量 !== 0) {
 

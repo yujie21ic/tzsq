@@ -14,7 +14,7 @@ const 止损step = ({
 }) => async (self: BitmexPositionAndOrder) => {
 
     const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
-    const 止损委托 = self.活动委托[symbol].filter(v => v.type === '止损')
+    const 止损委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type === '止损')
 
     //没有止损 
     if (止损委托.length === 0) {

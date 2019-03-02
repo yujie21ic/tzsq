@@ -5,7 +5,7 @@ export const 委托检测step = (symbol: BaseType.BitmexSymbol) => async (self: 
 
     const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
 
-    const 活动委托 = self.活动委托[symbol].filter(v => v.type !== '止损')
+    const 活动委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type !== '止损')
 
     //没有委托
     if (活动委托.length === 0) {
