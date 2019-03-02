@@ -361,33 +361,35 @@ export class RealDataBase {
 
         const 价格差_除以时间 = 指标.lazyMapCache2({ 起点index: NaN, 起点Type: 'none' as '上涨' | '下跌' }, (arr: number[], ext) => {
             const length = Math.min(波动率.length, 上涨_下跌.length)
-
+            let 上涨下跌价差 = ext.起点Type==='上涨'?上涨_价差:下跌_价差
             for (let i = Math.max(0, arr.length - 1); i < length; i++) {
-
                 //开始
                 if (isNaN(ext.起点index) || ext.起点index === length - 1) {   //最后一个重新计算  
-                    if (波动率[i] >= 3) {
+                    if (上涨下跌价差[i] >= 2) {
                         ext.起点index = i
                         ext.起点Type = 上涨_下跌[i]
                     }
                 }
                 //结束
                 else {
-                    if (波动率[i] >= 20 || 上涨_下跌[i] !== ext.起点Type) {
+                    if (上涨下跌价差[i] >= 20 || 上涨_下跌[i] !== ext.起点Type) {
                         ext.起点index = NaN
                     }
                 }
                 let a = i - ext.起点index
                 if(a===0)a=NaN
-                if(ext.起点Type==='上涨'){
-                    arr[i] =上涨_价差[i] > 5 && isNaN(ext.起点index) === false ? 上涨_价差[i] /a : NaN  //除以根数
-                }else{
-                    arr[i] =下跌_价差[i] > 5 && isNaN(ext.起点index) === false ? 下跌_价差[i] / a : NaN  //除以根数
-                }
+                arr[i] =上涨下跌价差[i] >=4 && isNaN(ext.起点index) === false ? 上涨_价差[i] /a : NaN  //除以根数
+               
+                // if(ext.起点Type==='上涨'){
+                //     arr[i] =上涨_价差[i] > 3 && isNaN(ext.起点index) === false ? 上涨_价差[i] /a : NaN  //除以根数
+                // }else{
+                //     arr[i] =下跌_价差[i] > 3 && isNaN(ext.起点index) === false ? 下跌_价差[i] / a : NaN  //除以根数
+                // }
 
                 
 
             }
+            console.log(arr[arr.length - 1])
         })
 
 
@@ -847,6 +849,7 @@ export class RealDataBase {
             净下跌成交量DIF,
             净下跌成交量DEM,
             上涨,
+            上涨_价差,
             下跌,
             价格, 波动率, 盘口买, 盘口卖, 净盘口, 净盘口均线,
             阻力3涨, 阻力3跌,
