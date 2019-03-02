@@ -113,6 +113,10 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
     }
 
 
+    onFilled: (p: { symbol: BaseType.BitmexSymbol, type: '开仓' | '盈利挂单' | '成本挂单' | '亏损挂单' | '盈利止损' | '成本止损' | '亏损止损' | '强平' }) => void = () => {
+
+    }
+
 
     // 摸顶 = false
     // 抄底 = false

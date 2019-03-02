@@ -2,6 +2,7 @@ import { WebSocketClient } from '../../lib/C/WebSocketClient'
 import { BitMEXMessage } from './BitMEXMessage'
 import { config } from '../../config'
 import { BaseType } from '../../lib/BaseType'
+import { Subject } from 'rxjs'
 
 
 
@@ -366,14 +367,21 @@ export class BitMEXWSAPI {
         //止盈
         if (order.ordType === 'Limit' && order.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && order.ordStatus === 'Filled') {
             this.连续止损.partial(order.symbol as BaseType.BitmexSymbol, 0)
+            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '盈利挂单' })
         }
 
         //止损
-        if (order.ordType === 'Stop' && order.execInst === 'Close,LastPrice' && order.ordStatus === 'Filled') {
+        else if (order.ordType === 'Stop' && order.execInst === 'Close,LastPrice' && order.ordStatus === 'Filled') {
             //止损给 text 加了前缀  卧槽
             if (order.text.indexOf('盈利止损') === -1) {//手动检测下类型
                 this.连续止损.update(order.symbol as BaseType.BitmexSymbol, 1)
             }
+
+            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '亏损止损' })
+        }
+
+        else if (order.ordType === 'Limit' && order.ordStatus === 'Filled') {
+            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '开仓' })
         }
     }
 
@@ -381,6 +389,14 @@ export class BitMEXWSAPI {
         if (execution.ordType === 'StopLimit') {
             this.新成交(execution)
             this.连续止损.update(execution.symbol as BaseType.BitmexSymbol, 1) //强平也算 
+            this.filledObservable.next({ symbol: execution.symbol as BaseType.BitmexSymbol, type: '强平' })
         }
     }
+
+
+    //
+    filledObservable = new Subject<{
+        symbol: BaseType.BitmexSymbol,
+        type: '开仓' | '盈利挂单' | '成本挂单' | '亏损挂单' | '盈利止损' | '成本止损' | '亏损止损' | '强平'
+    }>()
 }
