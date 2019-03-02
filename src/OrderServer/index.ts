@@ -12,7 +12,6 @@ import { XBTUSD自动开仓step } from './task/自动开仓step'
 import { XBTUSD自动止盈波段step } from './task/自动止盈波段step'
 import { to范围 } from '../lib/F/to范围'
 import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
-// import { 哪边多挂哪边 } from './task/哪边多挂哪边'
 
 const toTask = (func: (self: BitmexPositionAndOrder) => Promise<boolean>) => {
     const obj: BitmexPositionAndOrderTask = {
@@ -38,8 +37,6 @@ if (config.orderServer !== undefined) {
 
         account.runTask(toTask(XBTUSD自动开仓step()))
         account.runTask(toTask(XBTUSD自动止盈波段step()))
-
-        // account.runTask(toTask(哪边多挂哪边()))
 
         accountDic.set(v, account)
     })
