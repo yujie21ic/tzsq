@@ -17,6 +17,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
     // 追涨 = false
     // 追跌 = false
     // 止盈 = false
+    // 先写到 jsonSync 里面
 
     async onTick(self: BitmexPositionAndOrder) {
         const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
