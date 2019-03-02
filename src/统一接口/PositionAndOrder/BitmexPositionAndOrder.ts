@@ -11,34 +11,13 @@ import { toCacheFunc } from '../../lib/C/toCacheFunc'
 
 const symbol = () => ({
     任务开关: {
-        自动开仓摸顶: {
-            value: false,
-            text: '',
-        },
-        自动开仓抄底: {
-            value: false,
-            text: '',
-        },
-        自动开仓追涨: {
-            value: false,
-            text: '',
-        },
-        自动开仓追跌: {
-            value: false,
-            text: '',
-        },
-        自动止盈: {
-            value: false,
-            text: '',
-        },
-        自动止盈波段: {
-            value: false,
-            text: '',
-        },
-        自动推止损: {
-            value: true,
-            text: '',
-        }
+        自动开仓摸顶: false,
+        自动开仓抄底: false,
+        自动开仓追涨: false,
+        自动开仓追跌: false,
+        自动止盈: false,
+        自动止盈波段: false,
+        自动推止损: true,
     },
     委托: {
         id: '',

@@ -16,7 +16,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
     return async (self: BitmexPositionAndOrder) => {
 
-        if (self.jsonSync.rawData.symbol[symbol].任务开关.自动止盈波段.value === false) {
+        if (self.jsonSync.rawData.symbol[symbol].任务开关.自动止盈波段 === false) {
             return true
         }
 

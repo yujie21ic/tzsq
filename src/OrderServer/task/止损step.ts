@@ -46,7 +46,7 @@ const 止损step = ({
             return await self.cancel({ orderID: 止损委托.map(v => v.id), text: '止损step 取消止损' })
         }
         else {
-            if (self.jsonSync.rawData.symbol[symbol].任务开关.自动推止损.value === false) return false //自动推止损 任务没打开
+            if (self.jsonSync.rawData.symbol[symbol].任务开关.自动推止损 === false) return false //自动推止损 任务没打开
 
             //修改止损  只能改小  不能改大
             const { price, side, id } = 止损委托[0]

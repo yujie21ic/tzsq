@@ -5,7 +5,7 @@ import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 
 const 自动止盈step = (symbol: BaseType.BitmexSymbol) => async (self: BitmexPositionAndOrder) => {
 
-    if (self.jsonSync.rawData.symbol[symbol].任务开关.自动止盈.value === false) {
+    if (self.jsonSync.rawData.symbol[symbol].任务开关.自动止盈 === false) {
         return true
     }
     const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]

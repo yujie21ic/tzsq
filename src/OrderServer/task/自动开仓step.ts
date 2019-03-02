@@ -14,10 +14,10 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
     return async (self: BitmexPositionAndOrder) => {
 
 
-        if (self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追涨.value === false
-            && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追跌.value === false
-            && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓抄底.value === false
-            && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓摸顶.value === false) return false
+        if (self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追涨 === false
+            && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追跌 === false
+            && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓抄底 === false
+            && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓摸顶 === false) return false
 
         const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
 
@@ -46,10 +46,10 @@ const 自动开仓step = (symbol: BaseType.BitmexSymbol) => {
         //开仓
         if (本地维护仓位数量 === 0 && 仓位数量 === 0 && 活动委托.length === 0 && 信号灯Type !== 'none') {
 
-            if (信号灯Type === '追涨' && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追涨.value === false) return false
-            if (信号灯Type === '追跌' && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追跌.value === false) return false
-            if (信号灯Type === '抄底' && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓抄底.value === false) return false
-            if (信号灯Type === '摸顶' && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓摸顶.value === false) return false
+            if (信号灯Type === '追涨' && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追涨 === false) return false
+            if (信号灯Type === '追跌' && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追跌 === false) return false
+            if (信号灯Type === '抄底' && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓抄底 === false) return false
+            if (信号灯Type === '摸顶' && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓摸顶 === false) return false
 
             const x = 最后一次信号
             最后一次信号 = 信号灯Type

@@ -190,7 +190,7 @@ server.func.任务_开关 = async req => {
     const { 任务开关 } = account.jsonSync.data.symbol[req.symbol]
     if (Object.keys(任务开关).some(v => v === req.任务名字) === false) throw '任务不存在'
 
-    任务开关[req.任务名字].value.____set(req.value)
+    任务开关[req.任务名字].____set(req.value)
 
     return true
 }
