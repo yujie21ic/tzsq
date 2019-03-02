@@ -1,10 +1,10 @@
-import { BitmexPositionAndOrderTask, BitmexPositionAndOrder } from '../统一接口/PositionAndOrder/BitmexPositionAndOrder'
-import { BaseType } from '../lib/BaseType'
-import { sleep } from '../lib/C/sleep'
-import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
-import { lastNumber } from '../lib/F/lastNumber'
-import { to范围 } from '../lib/F/to范围'
-import { toGridPoint } from '../lib/F/toGridPoint'
+import { BitmexPositionAndOrderTask, BitmexPositionAndOrder } from '../PositionAndOrder/BitmexPositionAndOrder'
+import { BaseType } from '../../lib/BaseType'
+import { sleep } from '../../lib/C/sleep'
+import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
+import { lastNumber } from '../../lib/F/lastNumber'
+import { to范围 } from '../../lib/F/to范围'
+import { toGridPoint } from '../../lib/F/toGridPoint'
 
 
 const symbol = 'XBTUSD'
