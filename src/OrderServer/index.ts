@@ -10,7 +10,6 @@ import { XBTUSD止损step, ETHUSD止损step } from './task/止损step'
 import { 委托检测step } from './task/委托检测step'
 import { XBTUSD自动开仓step } from './task/自动开仓step'
 import { XBTUSD自动止盈波段step } from './task/自动止盈波段step'
-import { XBTUSD自动止盈step } from './task/自动止盈step'
 import { to范围 } from '../lib/F/to范围'
 import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
 // import { 哪边多挂哪边 } from './task/哪边多挂哪边'
@@ -38,7 +37,6 @@ if (config.orderServer !== undefined) {
         account.runTask(toTask(委托检测step('ETHUSD')))
 
         account.runTask(toTask(XBTUSD自动开仓step()))
-        account.runTask(toTask(XBTUSD自动止盈step()))
         account.runTask(toTask(XBTUSD自动止盈波段step()))
 
         // account.runTask(toTask(哪边多挂哪边()))
