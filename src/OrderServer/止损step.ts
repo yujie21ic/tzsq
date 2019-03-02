@@ -1,7 +1,7 @@
-import { BaseType } from '../../lib/BaseType'
-import { BitmexPositionAndOrder } from '../../统一接口/PositionAndOrder/BitmexPositionAndOrder'
-import { to范围 } from '../../lib/F/to范围'
-import { toGridPoint } from '../../lib/F/toGridPoint'
+import { BaseType } from '../lib/BaseType'
+import { BitmexPositionAndOrder } from '../统一接口/PositionAndOrder/BitmexPositionAndOrder'
+import { to范围 } from '../lib/F/to范围'
+import { toGridPoint } from '../lib/F/toGridPoint'
 
 const 止损step = ({
     symbol,
