@@ -8,6 +8,7 @@ import { JSONSync } from '../../lib/C/JSONSync'
 import { BitMEXWSAPI } from '../BitMEX/BitMEXWSAPI'
 import { RealData__Server } from '../../RealDataServer/RealData__Server'
 import { toCacheFunc } from '../../lib/C/toCacheFunc'
+import { PositionAndOrder } from './PositionAndOrder'
 
 const symbol = () => ({
     任务开关: {
@@ -18,7 +19,7 @@ const symbol = () => ({
         自动止盈: false,
         自动止盈波段: false,
         自动推止损: true,
-    },     
+    },
     活动委托: [] as Order[],
     仓位数量: 0,
     开仓均价: 0,
@@ -47,7 +48,7 @@ let callID = 0
 const 重试几次 = 10
 const 重试休息多少毫秒 = 10
 
-export class BitmexPositionAndOrder {
+export class BitmexPositionAndOrder extends PositionAndOrder {
 
     private cookie: string
     private log = (text: string) => { }
@@ -61,6 +62,7 @@ export class BitmexPositionAndOrder {
 
 
     constructor(p: { accountName: string, cookie: string }) {
+        super()
         this.accountName = p.accountName
         this.cookie = p.cookie
 
@@ -163,7 +165,7 @@ export class BitmexPositionAndOrder {
             })
 
 
-            this.jsonSync.data.symbol[symbol].活动委托.____set(arr) 
+            this.jsonSync.data.symbol[symbol].活动委托.____set(arr)
         })
     }
 
