@@ -18,20 +18,8 @@ const symbol = () => ({
         自动止盈: false,
         自动止盈波段: false,
         自动推止损: true,
-    },
-
-    //
-    委托: {
-        id: '',
-        side: '' as BaseType.Side,
-        cumQty: 0,      //成交数量
-        orderQty: 0,    //委托数量
-        price: 0,
-    },
-    止损价格: 0,
+    },     
     活动委托: [] as Order[],
-    //
-
     仓位数量: 0,
     开仓均价: 0,
 })
@@ -175,26 +163,7 @@ export class BitmexPositionAndOrder {
             })
 
 
-            this.jsonSync.data.symbol[symbol].活动委托.____set(arr)
-
-            //
-            const x = arr.find(v => v.type !== '止损')
-            if (x === undefined) {
-                this.jsonSync.data.symbol[symbol].委托.id.____set('')
-            } else {
-                this.jsonSync.data.symbol[symbol].委托.cumQty.____set(x.cumQty)
-                this.jsonSync.data.symbol[symbol].委托.id.____set(x.id)
-                this.jsonSync.data.symbol[symbol].委托.orderQty.____set(x.orderQty)
-                this.jsonSync.data.symbol[symbol].委托.price.____set(x.price)
-                this.jsonSync.data.symbol[symbol].委托.side.____set(x.side)
-            }
-
-            const y = arr.find(v => v.type === '止损')
-            if (y === undefined) {
-                this.jsonSync.data.symbol[symbol].止损价格.____set(0)
-            } else {
-                this.jsonSync.data.symbol[symbol].止损价格.____set(y.price)
-            }
+            this.jsonSync.data.symbol[symbol].活动委托.____set(arr) 
         })
     }
 
