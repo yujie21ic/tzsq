@@ -190,7 +190,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
 
         const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
 
-        const 本地维护仓位数量 = self.仓位数量.get(symbol)
+        const 本地维护仓位数量 = self.ws.仓位数量.get(symbol)
 
         const 活动委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type !== '止损')
 
@@ -201,14 +201,14 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
         const x = self.realData.dataExt[symbol].期货.上涨_下跌
         if (x.length > 0 && this.最后一次上涨_下跌 !== x[x.length - 1]) {
             this.最后一次上涨_下跌 = x[x.length - 1]
-            self.连续止损.partial(symbol, 0)
+            self.ws.连续止损.partial(symbol, 0)
         }
 
-        const 连续止损次数 = self.连续止损.get(symbol)
+        const 连续止损次数 = self.ws.连续止损.get(symbol)
 
         if (连续止损次数 >= 4) {
             await sleep(1000 * 60 * 10)//10min
-            self.连续止损.partial(symbol, 0)
+            self.ws.连续止损.partial(symbol, 0)
             return true
         }
 

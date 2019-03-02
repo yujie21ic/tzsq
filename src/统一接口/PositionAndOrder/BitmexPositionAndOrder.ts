@@ -55,10 +55,8 @@ export class BitmexPositionAndOrder extends PositionAndOrder {
 
     private cookie: string
     private log = (text: string) => { }
-    private ws: BitMEXWSAPI
 
-
-    get 增量同步数据() { return this.ws.增量同步数据 }
+    ws: BitMEXWSAPI
     jsonSync = createJSONSync()
 
 
