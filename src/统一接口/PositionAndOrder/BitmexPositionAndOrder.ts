@@ -49,6 +49,7 @@ const 重试休息多少毫秒 = 10
 
 export interface BitmexPositionAndOrderTask {
     onTick(self: BitmexPositionAndOrder): Promise<boolean>
+    onFilled(type: '开仓' | '盈利挂单' | '成本挂单' | '亏损挂单' | '盈利止损' | '成本止损' | '亏损止损' | '强平'): void
 }
 
 export class BitmexPositionAndOrder extends PositionAndOrder {
@@ -330,6 +331,7 @@ export class BitmexPositionAndOrder extends PositionAndOrder {
     realData = __realData__()
 
     async runTask(task: BitmexPositionAndOrderTask) {
+        this.ws.filledObservable.subscribe(v => task.onFilled(v.type))
         while (true) {
             if (await task.onTick(this)) {
                 await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
