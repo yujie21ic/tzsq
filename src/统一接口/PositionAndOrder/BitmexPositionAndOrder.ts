@@ -55,16 +55,13 @@ export class BitmexPositionAndOrder extends PositionAndOrder {
     private ws: BitMEXWSAPI
 
 
-    accountName: string
     get 增量同步数据() { return this.ws.增量同步数据 }
     jsonSync = createJSONSync()
 
 
-
     constructor(p: { accountName: string, cookie: string }) {
         super()
-        this.accountName = p.accountName
-        this.cookie = p.cookie
+        this.cookie = p.cookie       
 
         this.ws = new BitMEXWSAPI(p.cookie, [
             { theme: 'position' },
