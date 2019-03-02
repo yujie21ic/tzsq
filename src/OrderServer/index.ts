@@ -7,7 +7,6 @@ import { typeObjectParse } from '../lib/F/typeObjectParse'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
 import { kvs } from '../lib/F/kvs'
 import { XBTUSD止损step, ETHUSD止损step } from './止损step'
-import { 委托检测step } from './委托检测step'
 import { to范围 } from '../lib/F/to范围'
 import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
 import { XBTUSD摸顶抄底追涨追跌 } from './XBTUSD摸顶抄底追涨追跌'
@@ -30,9 +29,6 @@ if (config.orderServer !== undefined) {
 
         account.runTask(toTask(XBTUSD止损step()))
         account.runTask(toTask(ETHUSD止损step()))
-
-        account.runTask(toTask(委托检测step('XBTUSD')))
-        account.runTask(toTask(委托检测step('ETHUSD')))
 
         account.runTask(new XBTUSD摸顶抄底追涨追跌())
 
