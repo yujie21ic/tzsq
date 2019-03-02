@@ -72,7 +72,7 @@ export class BitmexPositionAndOrder extends PositionAndOrder {
         ])
 
         this.log = logToFile(p.accountName + '.txt')
-        this.ws.增量同步数据.log = logToFile(p.accountName + '.txt')
+        this.ws.log = logToFile(p.accountName + '.txt')
 
         this.ws.onmessage = frame => {
 
@@ -97,13 +97,13 @@ export class BitmexPositionAndOrder extends PositionAndOrder {
                         if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== item.avgCostPrice) {
                             仓位数量.____set(item.currentQty)
                             开仓均价.____set(item.avgCostPrice)
-                            this.log(`仓位更新: ${symbol} 仓位数量:${item.currentQty}  本地维护仓位数量:${this.ws.增量同步数据.仓位数量.get(symbol)}  开仓均价:${item.avgCostPrice}`)
+                            this.log(`仓位更新: ${symbol} 仓位数量:${item.currentQty}  本地维护仓位数量:${this.ws.仓位数量.get(symbol)}  开仓均价:${item.avgCostPrice}`)
                         }
                     } else {
                         if (raw.仓位数量 !== 0 || raw.开仓均价 !== 0) {
                             仓位数量.____set(0)
                             开仓均价.____set(0)
-                            this.log(`仓位更新: ${symbol} 仓位数量:0  本地维护仓位数量:${this.ws.增量同步数据.仓位数量.get(symbol)}`)
+                            this.log(`仓位更新: ${symbol} 仓位数量:0  本地维护仓位数量:${this.ws.仓位数量.get(symbol)}`)
                         }
                     }
                 }
