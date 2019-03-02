@@ -240,7 +240,7 @@ export class RealDataBase {
         )
         const 净成交量均线10 = 指标.累加(
             指标.lazyMapCache(() => 成交量卖.length, i => 净成交量[i]),
-            10,
+            5,
             RealDataBase.单位时间
         )
 
@@ -359,7 +359,7 @@ export class RealDataBase {
 
 
 
-        const 波动率差_除以时间 = 指标.lazyMapCache2({ 起点index: NaN, 起点Type: 'none' as '上涨' | '下跌' }, (arr: number[], ext) => {
+        const 价格差_除以时间 = 指标.lazyMapCache2({ 起点index: NaN, 起点Type: 'none' as '上涨' | '下跌' }, (arr: number[], ext) => {
             const length = Math.min(波动率.length, 上涨_下跌.length)
 
             for (let i = Math.max(0, arr.length - 1); i < length; i++) {
@@ -377,8 +377,13 @@ export class RealDataBase {
                         ext.起点index = NaN
                     }
                 }
+                if(ext.起点Type==='上涨'){
+                    arr[i] =上涨_价差[i] > 5 && isNaN(ext.起点index) === false ? 上涨_价差[i] / (i - ext.起点index) : NaN  //除以根数
+                }else{
+                    arr[i] =下跌_价差[i] > 5 && isNaN(ext.起点index) === false ? 下跌_价差[i] / (i - ext.起点index) : NaN  //除以根数
+                }
 
-                arr[i] = 波动率[i] > 5 && isNaN(ext.起点index) === false ? (波动率[i] - 3) / (i - ext.起点index) : NaN  //除以根数
+                
 
             }
         })
@@ -485,7 +490,9 @@ export class RealDataBase {
 
 
         //const 波动率大巨大大分界 = 50
-        const 波动率中大分界 = 25
+        //const 波动率中大分界 = 25
+        const 价差中大分界= 20
+        const 价差大巨大分界 = 100
         //const 波动率中大分界 = 20
         const 信号_上涨 = 指标.lazyMapCache(
             () => Math.min(
@@ -502,7 +509,7 @@ export class RealDataBase {
             i => {
                 //如果波动率比较小，那么对盘口的容忍度要大一些，因为没有经过充分博弈，小波动最大容忍度150万，大波动最大容忍度100万
                 let b = false
-                if (波动率[i] < 波动率中大分界) {
+                if (上涨_价差[i] < 价差中大分界) {
                     if (盘口买[i] < 100 * 10000) {
                         if (净盘口[i] <= (净盘口均线[i] + 50 * 10000)) {
                             if (净盘口[i] < 5 * 100000) {
@@ -536,7 +543,7 @@ export class RealDataBase {
                     }
                 }
                 if (b === false) {
-                    if (波动率[i] > 波动率中大分界) {
+                    if (上涨_价差[i] > 价差中大分界) {
                         if (真空信号涨[i]) {
                             if (盘口买[i] < 200 * 10000) {
                                 b = true
@@ -556,7 +563,7 @@ export class RealDataBase {
                 //净成交量《0，真空信号可以替代净成交量信号，范围，净成交量的快均线不能大于慢均线太多
                 //用语言描述出容易止损的波动的不同之处
                 let c = false
-                if (波动率[i] < 波动率中大分界) {
+                if (上涨_价差[i] < 价差中大分界) {
                     if (净上涨成交量DIF[i] < 净上涨成交量DEM[i]) {
                         c = true
                     } else {
@@ -583,18 +590,18 @@ export class RealDataBase {
 
 
                 return [
-                    { name: '真空', value: 波动率[i] < 波动率中大分界 || 真空信号涨[i] },
+                    { name: '真空', value: 上涨_价差[i] < 价差中大分界|| 真空信号涨[i] },
                     { name: '成交量DIF<DEM', value: c },
                     { name: ' 净盘口<净盘口均线<0', value: b },
                     { name: '30秒净买成交量 >=150万', value: 净上涨成交量30[i] >= 150 * 10000 },
                     { name: '折返程度<', value: (最高价10[i] - 价格[i]) < 折返率[i] },
-                    { name: '价格速度', value: 波动率[i] >= 20 || 波动率差_除以时间[i] >= 0.06 },
-                    { name: '波动率 >=8', value: 波动率[i] >= 8 },
+                    { name: '价格速度', value: 上涨_价差[i] > 价差中大分界 || 价格差_除以时间[i] >= 0.06 },
+                    { name: '上涨_价差 >=6', value: 上涨_价差[i] >= 6 },
                     //波动率大于25之后，出现一次真空信号，动力慢信号都为true
                     //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (上涨_动力DIF[i] - 上涨_动力DEM[i]) / 上涨_动力DEM[i] < 0.05 },
                     { name: '量化 is上涨', value: 净成交量均线60[i] > 0 },
-                    { name: '波动率最大限制', value: 波动率[i] < 200 },
-                    //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
+                    { name: '波动率最大限制', value:上涨_价差[i] < 价差大巨大分界  },
+                    //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },价差大巨大分界
                 ]
             }
         )
@@ -641,7 +648,7 @@ export class RealDataBase {
                     //{ name: '卖盘低量', value: 盘口卖[i] < 50 * 10000 },波动率5分钟 净上涨成交量2
                     { name: '5分钟波动率低量', value: 波动率5分钟[i] < 30 },
                     { name: '大单', value: 净成交量均线10[i] > 100 * 10000 },
-                    //{ name: '波动率 >=1', value: 波动率[i] >= 1 },
+                    { name: '上涨_价差<6', value: 上涨_价差[i]<= 6 },
                     //{ name: '60秒净成交量 >=100万', value: 净成交量均线60[i] >= 100 * 10000 },
                     { name: '折返程度<', value: (最高价10[i] - 价格[i]) < 折返率[i] },
                     //{ name: '追涨', value: 上涨.动力[i] > 100 * 10000 },
@@ -673,7 +680,7 @@ export class RealDataBase {
             ),
             i => {
                 let b = false
-                if (波动率[i] < 波动率中大分界) {
+                if (下跌_价差[i] < 价差中大分界) {
                     if (盘口卖[i] < 100 * 10000) {
                         if (净盘口[i] >= (净盘口均线[i] - 50 * 10000)) {
                             if (净盘口[i] > (- 50 * 10000)) {
@@ -707,7 +714,7 @@ export class RealDataBase {
                     }
                 }
                 if (b === false) {
-                    if (波动率[i] > 波动率中大分界) {
+                    if (下跌_价差[i] > 价差中大分界) {
                         if (真空信号涨[i]) {
                             if (盘口卖[i] < 150 * 10000) {
                                 b = true
@@ -723,7 +730,7 @@ export class RealDataBase {
                 }
                 //净下跌成交量DIF[i] < 净下跌成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净下跌成交量DIF[i] < 0) 
                 let c = false
-                if (波动率[i] < 波动率中大分界) {
+                if (下跌_价差[i] < 价差中大分界) {
                     if (净下跌成交量DIF[i] < 净下跌成交量DEM[i]) {
                         c = true
                     } else if (净下跌成交量DIF[i] < 净下跌成交量DEM[i] * 1.1) {
@@ -746,18 +753,18 @@ export class RealDataBase {
 
                 //净成交量均线10
                 return [
-                    { name: '真空', value: 波动率[i] < 波动率中大分界 || 真空信号跌[i] },
+                    { name: '真空', value:下跌_价差[i] < 价差中大分界 || 真空信号跌[i] },
                     { name: '卖成交量DIF<DEM', value: c },
                     //{ name: '卖成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净下跌成交量DIF[i] < 0) },
                     { name: ' 净盘口 > 净盘口均线>0', value: b },
                     { name: '30秒净卖成交量>150万', value: 净下跌成交量30[i] >= 150 * 10000 },
                     { name: '折返程度<', value: (价格[i] - 最低价10[i]) < 折返率[i] },
                     //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (下跌_动力DIF[i] - 下跌_动力DEM[i]) / 下跌_动力DEM[i] < 0.05 },
-                    { name: '价格速度', value: 波动率[i] >= 20 || 波动率差_除以时间[i] >= 0.06 },
-                    { name: '波动率 >=8', value: 波动率[i] >= 8 },
+                    { name: '价格速度', value: 下跌_价差[i] > 价差中大分界 || 价格差_除以时间[i] >= 0.06 },
+                    { name: '下跌_价差 >=6', value: 下跌_价差[i] >= 6 },
                     //量化用
                     { name: '量化 is下跌', value: 净成交量均线60[i] < 0 },
-                    { name: '波动率最大限制', value: 波动率[i] < 200 },
+                    { name: '下跌_价差最大限制', value: 下跌_价差[i] < 价差大巨大分界 },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '下跌' && 自动下单条件[i] },
                 ]
             }
@@ -800,6 +807,7 @@ export class RealDataBase {
                     //{ name: '净盘口<0', value: 净盘口[i]<0 },
                     { name: '5分钟波动率低量', value: 波动率5分钟[i] < 30 },
                     //{ name: '波动率 >=1', value: 波动率[i] >= 1 },
+                    { name: '下跌_价差<6', value: 下跌_价差[i]<= 6 },
                     { name: '大单', value: 净成交量均线10[i] < -100 * 10000 },
                     // { name: '买盘低量', value: 盘口买[i] < 50 * 10000 },
                     // { name: '60秒净成交量<=-100万', value: 净成交量均线60[i] <= -100 * 10000 },
@@ -821,7 +829,7 @@ export class RealDataBase {
             成交量卖,
             信号_上涨做空下跌平仓,
             信号_下跌抄底上涨平仓,
-            波动率差_除以时间,
+            价格差_除以时间,
             上涨_下跌,
             上涨_动力20均线,
             上涨_动力10均线,
