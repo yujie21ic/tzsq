@@ -7,6 +7,7 @@ import { keys } from 'ramda'
 import { JSONSync } from '../../lib/C/JSONSync'
 import { BitMEXWSAPI } from '../BitMEX/BitMEXWSAPI'
 import { RealData__Server } from '../../RealDataServer/RealData__Server'
+import { toCacheFunc } from '../../lib/C/toCacheFunc';
 
 const symbol = () => ({
     任务开关: {
@@ -39,7 +40,6 @@ const symbol = () => ({
             text: '',
         }
     },
-
     委托: {
         id: '',
         side: '' as BaseType.Side,
@@ -78,8 +78,11 @@ const 重试休息多少毫秒 = 10
 export class BitmexPositionAndOrder {
 
     private cookie: string
-    log = (text: string) => { }
-    ws: BitMEXWSAPI
+    private log = (text: string) => { }
+    private ws: BitMEXWSAPI
+
+
+    accountName: string
     get 增量同步数据() { return this.ws.增量同步数据 }
     jsonSync = createJSONSync()
     活动委托 = {
@@ -87,7 +90,6 @@ export class BitmexPositionAndOrder {
         ETHUSD: [] as Order[],
     }
 
-    accountName: string
 
     constructor(p: { accountName: string, cookie: string }) {
         this.accountName = p.accountName
@@ -374,12 +376,6 @@ export class BitmexPositionAndOrder {
     )
 
 
-
-
-
-
-
-
     realData = __realData__()
 
     async runTask(func: (self: BitmexPositionAndOrder) => Promise<boolean>) {
@@ -406,8 +402,4 @@ export class BitmexPositionAndOrder {
     }
 }
 
-let x: any = null
-const __realData__ = () => {
-    if (x === null) x = new RealData__Server(false)
-    return x as RealData__Server
-} 
+const __realData__ = toCacheFunc(() => new RealData__Server(false))
