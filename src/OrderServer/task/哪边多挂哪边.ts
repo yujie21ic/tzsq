@@ -9,11 +9,11 @@ export const 哪边多挂哪边 = () => async (self: BitmexPositionAndOrder) => 
 
     const arr = [
         {
-            orderList: self.活动委托['XBTUSD'].filter(v => v.type === '限价' && v.side === 'Buy'),
+            orderList: self.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => v.type === '限价' && v.side === 'Buy'),
             side: 'Buy' as 'Buy',
         },
         {
-            orderList: self.活动委托['XBTUSD'].filter(v => v.type === '限价' && v.side === 'Sell'),
+            orderList: self.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => v.type === '限价' && v.side === 'Sell'),
             side: 'Sell' as 'Sell',
         },
     ]

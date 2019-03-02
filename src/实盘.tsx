@@ -30,31 +30,7 @@ const GREEN = 'rgba(72, 170, 101, 1)'
 
 class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: number, 倍数: number }> {
 
-    get止损() {
-        const { 止损价格 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
-        if (止损价格 === 0) {
-            return undefined
-        } else {
-            return 止损价格
-        }
-    }
 
-    get委托() {
-        const { 委托 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
-        if (委托.id !== '') {
-            const { id, side, cumQty, orderQty, price } = 委托
-            return <a
-                href='#'
-                style={{ color: 'white' }}
-                onClick={() => rpc.取消委托({ cookie, orderID: [id] })}
-            >
-                <span style={{ color: side === 'Sell' ? RED : GREEN }}>{cumQty}/{orderQty}</span>
-                <span>@{price}</span>
-            </a>
-        } else {
-            return undefined
-        }
-    }
 
     get仓位() {
         const { 仓位数量, 开仓均价 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
@@ -69,6 +45,61 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
         const { 仓位数量, 任务开关 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
         const 下单数量 = account.交易[this.props.symbol].数量 * this.props.倍数
 
+
+        // 
+        const arr = orderClient.jsonSync.rawData.symbol[this.props.symbol].活动委托
+        const 委托 = {
+            id: '',
+            side: '' as BaseType.Side,
+            cumQty: 0,      //成交数量
+            orderQty: 0,    //委托数量
+            price: 0,
+        }
+        const x = arr.find(v => v.type !== '止损')
+        if (x === undefined) {
+            委托.id = ''
+        } else {
+            委托.cumQty = x.cumQty
+            委托.id = x.id
+            委托.orderQty = x.orderQty
+            委托.price = x.price
+            委托.side = x.side
+        }
+
+        let 止损价格 = 0
+        const y = arr.find(v => v.type === '止损')
+        if (y === undefined) {
+            止损价格 = 0
+        } else {
+            止损价格 = y.price
+        }
+
+
+        const get止损 = () => {
+            if (止损价格 === 0) {
+                return undefined
+            } else {
+                return 止损价格
+            }
+        }
+
+        const get委托 = () => {
+            if (委托.id !== '') {
+                const { id, side, cumQty, orderQty, price } = 委托
+                return <a
+                    href='#'
+                    style={{ color: 'white' }}
+                    onClick={() => rpc.取消委托({ cookie, orderID: [id] })}
+                >
+                    <span style={{ color: side === 'Sell' ? RED : GREEN }}>{cumQty}/{orderQty}</span>
+                    <span>@{price}</span>
+                </a>
+            } else {
+                return undefined
+            }
+        }
+
+
         return <div>
             <div style={{
                 display: 'flex',
@@ -82,15 +113,15 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
                     onClick={() => rpc.市价平仓({ cookie, symbol: this.props.symbol })}
                 >市价平仓</a> : undefined} </p>
                 <p>仓位:{this.get仓位()}</p>
-                <p>止损:{this.get止损()}</p>
-                <p>委托:{this.get委托()}</p>
-                <p>自动开仓摸顶:<Switch checked={任务开关.自动开仓摸顶.value} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓摸顶', value: v }) }} /> </p>
-                <p>自动开仓抄底:<Switch checked={任务开关.自动开仓抄底.value} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓抄底', value: v }) }} /> </p>
-                <p>自动开仓追涨:<Switch checked={任务开关.自动开仓追涨.value} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓追涨', value: v }) }} /> </p>
-                <p>自动开仓追跌:<Switch checked={任务开关.自动开仓追跌.value} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓追跌', value: v }) }} /> </p>
-                <p>自动止盈:<Switch checked={任务开关.自动止盈.value} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动止盈', value: v }) }} /></p>
-                <p>自动止盈波段:<Switch checked={任务开关.自动止盈波段.value} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动止盈波段', value: v }) }} /></p>
-                <p>自动推止损:<Switch checked={任务开关.自动推止损.value} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动推止损', value: v }) }} /></p>
+                <p>止损:{get止损()}</p>
+                <p>委托:{get委托()}</p>
+                <p>自动开仓摸顶:<Switch checked={任务开关.自动开仓摸顶} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓摸顶', value: v }) }} /> </p>
+                <p>自动开仓抄底:<Switch checked={任务开关.自动开仓抄底} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓抄底', value: v }) }} /> </p>
+                <p>自动开仓追涨:<Switch checked={任务开关.自动开仓追涨} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓追涨', value: v }) }} /> </p>
+                <p>自动开仓追跌:<Switch checked={任务开关.自动开仓追跌} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓追跌', value: v }) }} /> </p>
+                <p>自动止盈:<Switch checked={任务开关.自动止盈} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动止盈', value: v }) }} /></p>
+                <p>自动止盈波段:<Switch checked={任务开关.自动止盈波段} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动止盈波段', value: v }) }} /></p>
+                <p>自动推止损:<Switch checked={任务开关.自动推止损} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动推止损', value: v }) }} /></p>
 
             </div>
             <div style={{

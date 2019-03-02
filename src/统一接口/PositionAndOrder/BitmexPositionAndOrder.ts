@@ -7,47 +7,20 @@ import { keys } from 'ramda'
 import { JSONSync } from '../../lib/C/JSONSync'
 import { BitMEXWSAPI } from '../BitMEX/BitMEXWSAPI'
 import { RealData__Server } from '../../RealDataServer/RealData__Server'
+import { toCacheFunc } from '../../lib/C/toCacheFunc'
+import { PositionAndOrder } from './PositionAndOrder'
 
 const symbol = () => ({
     任务开关: {
-        自动开仓摸顶: {
-            value: false,
-            text: '',
-        },
-        自动开仓抄底: {
-            value: false,
-            text: '',
-        },
-        自动开仓追涨: {
-            value: false,
-            text: '',
-        },
-        自动开仓追跌: {
-            value: false,
-            text: '',
-        },
-        自动止盈: {
-            value: false,
-            text: '',
-        },
-        自动止盈波段: {
-            value: false,
-            text: '',
-        },
-        自动推止损: {
-            value: true,
-            text: '',
-        }
+        自动开仓摸顶: false,
+        自动开仓抄底: false,
+        自动开仓追涨: false,
+        自动开仓追跌: false,
+        自动止盈: false,
+        自动止盈波段: false,
+        自动推止损: true,
     },
-
-    委托: {
-        id: '',
-        side: '' as BaseType.Side,
-        cumQty: 0,      //成交数量
-        orderQty: 0,    //委托数量
-        price: 0,
-    },
-    止损价格: 0,
+    活动委托: [] as Order[],
     仓位数量: 0,
     开仓均价: 0,
 })
@@ -75,22 +48,23 @@ let callID = 0
 const 重试几次 = 10
 const 重试休息多少毫秒 = 10
 
-export class BitmexPositionAndOrder {
+export interface BitmexPositionAndOrderTask {
+    onTick(self: BitmexPositionAndOrder): Promise<boolean>
+}
+
+export class BitmexPositionAndOrder extends PositionAndOrder {
 
     private cookie: string
-    log = (text: string) => { }
-    ws: BitMEXWSAPI
+    private log = (text: string) => { }
+    private ws: BitMEXWSAPI
+
+
     get 增量同步数据() { return this.ws.增量同步数据 }
     jsonSync = createJSONSync()
-    活动委托 = {
-        XBTUSD: [] as Order[],
-        ETHUSD: [] as Order[],
-    }
 
-    accountName: string
 
     constructor(p: { accountName: string, cookie: string }) {
-        this.accountName = p.accountName
+        super()
         this.cookie = p.cookie
 
         this.ws = new BitMEXWSAPI(p.cookie, [
@@ -192,25 +166,7 @@ export class BitmexPositionAndOrder {
             })
 
 
-            this.活动委托[symbol] = arr
-
-            const x = this.活动委托[symbol].find(v => v.type !== '止损')
-            if (x === undefined) {
-                this.jsonSync.data.symbol[symbol].委托.id.____set('')
-            } else {
-                this.jsonSync.data.symbol[symbol].委托.cumQty.____set(x.cumQty)
-                this.jsonSync.data.symbol[symbol].委托.id.____set(x.id)
-                this.jsonSync.data.symbol[symbol].委托.orderQty.____set(x.orderQty)
-                this.jsonSync.data.symbol[symbol].委托.price.____set(x.price)
-                this.jsonSync.data.symbol[symbol].委托.side.____set(x.side)
-            }
-
-            const y = this.活动委托[symbol].find(v => v.type === '止损')
-            if (y === undefined) {
-                this.jsonSync.data.symbol[symbol].止损价格.____set(0)
-            } else {
-                this.jsonSync.data.symbol[symbol].止损价格.____set(y.price)
-            }
+            this.jsonSync.data.symbol[symbol].活动委托.____set(arr)
         })
     }
 
@@ -374,17 +330,11 @@ export class BitmexPositionAndOrder {
     )
 
 
-
-
-
-
-
-
     realData = __realData__()
 
-    async runTask(func: (self: BitmexPositionAndOrder) => Promise<boolean>) {
+    async runTask(task: BitmexPositionAndOrderTask) {
         while (true) {
-            if (await func(this)) {
+            if (await task.onTick(this)) {
                 await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
             }
             await sleep(100)
@@ -406,8 +356,4 @@ export class BitmexPositionAndOrder {
     }
 }
 
-let x: any = null
-const __realData__ = () => {
-    if (x === null) x = new RealData__Server(false)
-    return x as RealData__Server
-} 
+const __realData__ = toCacheFunc(() => new RealData__Server(false))

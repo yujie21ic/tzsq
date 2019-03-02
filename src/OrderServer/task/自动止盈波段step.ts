@@ -2,8 +2,7 @@ import { BaseType } from '../../lib/BaseType'
 import { BitmexPositionAndOrder } from '../../统一接口/PositionAndOrder/BitmexPositionAndOrder'
 import { toGridPoint } from '../../lib/F/toGridPoint'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
-import { lastNumber } from '../../lib/F/lastNumber'
-import { logToFile } from '../../lib/C/logToFile'
+import { lastNumber } from '../../lib/F/lastNumber' 
 import { to范围 } from '../../lib/F/to范围'
 
 
@@ -16,12 +15,12 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
 
     return async (self: BitmexPositionAndOrder) => {
 
-        if (self.jsonSync.rawData.symbol[symbol].任务开关.自动止盈波段.value === false) {
+        if (self.jsonSync.rawData.symbol[symbol].任务开关.自动止盈波段 === false) {
             return true
         }
 
         const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
-        const 活动委托 = self.活动委托[symbol].filter(v => v.type !== '止损')
+        const 活动委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type !== '止损')
 
         if (仓位数量 !== 0) {
 
@@ -29,8 +28,7 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                 最大仓位abs = Math.abs(仓位数量)
                 最后一次开仓时间 = Date.now()
                 最后一次开仓折返率 = lastNumber(self.realData.dataExt[symbol].期货.折返率)
-                摸顶抄底超时秒 = to范围({ min: 7, max: 30, value: self.realData.get波动率(symbol) / 7 + 7 })
-                logToFile(self.accountName + '.txt')(JSON.stringify({ 最大仓位abs, 最后一次开仓时间, 最后一次开仓折返率 }))
+                摸顶抄底超时秒 = to范围({ min: 7, max: 30, value: self.realData.get波动率(symbol) / 7 + 7 }) 
             }
 
             if (活动委托.length <= 1) {
