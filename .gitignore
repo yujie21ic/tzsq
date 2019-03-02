@@ -8,3 +8,6 @@ build
 
 src/config.ts
 db/*
+
+
+*.txt
