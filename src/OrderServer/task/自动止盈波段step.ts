@@ -79,9 +79,9 @@ const 自动止盈波段step = (symbol: BaseType.BitmexSymbol) => {
                     }
                 }
                 else if (最后一次开仓type === '追涨' || 最后一次开仓type === '追跌') {
-                    const 净成交量 = lastNumber(self.realData.dataExt[symbol].期货.净成交量)
+                    const 净成交量均线60 = lastNumber(self.realData.dataExt[symbol].期货.净成交量均线60)
 
-                    if ((平仓side === 'Sell' && 净成交量 < 0) || (平仓side === 'Buy' && 净成交量 > 0)) {
+                    if ((平仓side === 'Sell' && 净成交量均线60 < 0) || (平仓side === 'Buy' && 净成交量均线60 > 0)) {
                         亏损挂单平仓Text = '如果净成交量反向，那么立刻挂单平仓'
                     }
                     else if (Date.now() - 最后一次开仓时间 > 5 * 60 * 1000) {
