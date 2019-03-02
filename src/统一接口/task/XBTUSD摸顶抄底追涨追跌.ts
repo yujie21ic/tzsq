@@ -299,7 +299,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
             this.最大仓位abs = Math.abs(仓位数量)
             this.最后一次开仓时间 = Date.now()
             this.最后一次开仓折返率 = lastNumber(self.realData.dataExt[symbol].期货.折返率)
-            this.摸顶抄底超时秒 = to范围({ min: 7, max: 30, value: self.realData.get波动率(symbol) / 7 + 7 })
+            this.摸顶抄底超时秒 = to范围({ min: 7, max: 30, value: self.realData.get波动率(symbol) / 7 + 10 })
         }
 
         if (活动委托.length <= 1) {

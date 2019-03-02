@@ -429,7 +429,7 @@ export class RealDataBase {
             }
         })
 
-
+       
         const 上涨_累计成交量 = 累计成交量('上涨')
         const 上涨_价差 = 价差('上涨')
         const 上涨_动力 = 指标.lazyMapCache(() => Math.min(上涨_累计成交量.length, 上涨_价差.length), i => to范围({ min: 30 * 10000, max: 130 * 10000, value: 上涨_累计成交量[i] / Math.max(1, 上涨_价差[i]) })) //最小除以1
@@ -447,6 +447,8 @@ export class RealDataBase {
             价差: 下跌_价差,
             动力: 下跌_动力,
         }
+        
+
         const 上涨_动力12 = 指标.EMA(上涨_动力, 6, RealDataBase.单位时间)
         const 上涨_动力26 = 指标.EMA(上涨_动力, 13, RealDataBase.单位时间)
         const 上涨_动力DIF = 指标.lazyMapCache(() => Math.min(上涨_动力12.length, 上涨_动力26.length), i => 上涨_动力12[i] - 上涨_动力26[i])
@@ -1098,10 +1100,10 @@ export class RealDataBase {
         else if (is连续几根全亮(3, realData.dataExt[symbol].期货.信号_下跌)) {
             return '抄底'
         }
-        else if (is连续几根全亮(5, realData.dataExt[symbol].期货.信号_追涨)) {
+        else if (is连续几根全亮(1, realData.dataExt[symbol].期货.信号_追涨)) {
             return '追涨'
         }
-        else if (is连续几根全亮(5, realData.dataExt[symbol].期货.信号_追跌)) {
+        else if (is连续几根全亮(1, realData.dataExt[symbol].期货.信号_追跌)) {
             return '追跌'
         } else {
             return 'none'
