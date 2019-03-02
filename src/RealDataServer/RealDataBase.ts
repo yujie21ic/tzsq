@@ -378,7 +378,7 @@ export class RealDataBase {
                 }
                 let a = i - ext.起点index
                 if(a===0)a=NaN
-                arr[i] =上涨下跌价差[i] >=4 && isNaN(ext.起点index) === false ? 上涨_价差[i] /a : NaN  //除以根数
+                arr[i] =上涨下跌价差[i] >=4 && isNaN(ext.起点index) === false ? 上涨下跌价差[i] /a : NaN  //除以根数
                
                 // if(ext.起点Type==='上涨'){
                 //     arr[i] =上涨_价差[i] > 3 && isNaN(ext.起点index) === false ? 上涨_价差[i] /a : NaN  //除以根数
@@ -388,8 +388,7 @@ export class RealDataBase {
 
                 
 
-            }
-            console.log(arr[arr.length - 1])
+            } 
         })
 
 
