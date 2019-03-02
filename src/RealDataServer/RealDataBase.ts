@@ -244,11 +244,11 @@ export class RealDataBase {
             RealDataBase.单位时间
         )
 
-        const 净成交量均线30 = 指标.累加(
-            指标.lazyMapCache(() => 成交量卖.length, i => 净成交量[i]),
-            多少秒均线,
-            RealDataBase.单位时间
-        )
+        // const 净成交量均线30 = 指标.累加(
+        //     指标.lazyMapCache(() => 成交量卖.length, i => 净成交量[i]),
+        //     多少秒均线,
+        //     RealDataBase.单位时间
+        // )
         const 净成交量均线60 = 指标.累加(
             指标.lazyMapCache(() => 成交量卖.length, i => 净成交量[i]),
             60,
@@ -355,7 +355,7 @@ export class RealDataBase {
 
 
 
-        const 上涨_下跌 = 指标.lazyMapCache(() => Math.min(净成交量均线30.length), i => 净成交量均线30[i] >= 0 ? '上涨' : '下跌')
+        const 上涨_下跌 = 指标.lazyMapCache(() => Math.min(净成交量均线60.length), i => 净成交量均线60[i] >= 0 ? '上涨' : '下跌')
 
 
 
@@ -377,10 +377,12 @@ export class RealDataBase {
                         ext.起点index = NaN
                     }
                 }
+                let a = i - ext.起点index
+                if(a===0)a=NaN
                 if(ext.起点Type==='上涨'){
-                    arr[i] =上涨_价差[i] > 5 && isNaN(ext.起点index) === false ? 上涨_价差[i] / (i - ext.起点index) : NaN  //除以根数
+                    arr[i] =上涨_价差[i] > 5 && isNaN(ext.起点index) === false ? 上涨_价差[i] /a : NaN  //除以根数
                 }else{
-                    arr[i] =下跌_价差[i] > 5 && isNaN(ext.起点index) === false ? 下跌_价差[i] / (i - ext.起点index) : NaN  //除以根数
+                    arr[i] =下跌_价差[i] > 5 && isNaN(ext.起点index) === false ? 下跌_价差[i] / a : NaN  //除以根数
                 }
 
                 
@@ -852,7 +854,7 @@ export class RealDataBase {
             真空信号跌,
             净成交量,
             净成交量均线60,
-            净成交量均线30,
+            //净成交量均线30,
             成交量均线买1,
             成交量均线卖1,
             成交量买均线5,
