@@ -361,34 +361,31 @@ export class RealDataBase {
 
         const 价格差_除以时间 = 指标.lazyMapCache2({ 起点index: NaN, 起点Type: 'none' as '上涨' | '下跌' }, (arr: number[], ext) => {
             const length = Math.min(波动率.length, 上涨_下跌.length)
-            let 上涨下跌价差 = ext.起点Type==='上涨'?上涨_价差:下跌_价差
+
+            let 上涨下跌价差 = (xx: '上涨' | '下跌') => xx === '上涨' ? 上涨_价差 : 下跌_价差 //每个地方都不同！！！！
+
+
             for (let i = Math.max(0, arr.length - 1); i < length; i++) {
                 //开始
                 if (isNaN(ext.起点index) || ext.起点index === length - 1) {   //最后一个重新计算  
-                    if (上涨下跌价差[i] >= 2) {
+                    if (上涨下跌价差(上涨_下跌[i])[i] >= 2) { //<---------------------------------------------------
                         ext.起点index = i
                         ext.起点Type = 上涨_下跌[i]
                     }
                 }
                 //结束
                 else {
-                    if (上涨下跌价差[i] >= 20 || 上涨_下跌[i] !== ext.起点Type) {
+                    if (上涨下跌价差(ext.起点Type)[i] >= 20 || 上涨_下跌[i] !== ext.起点Type) { //<---------------------------------------------------
                         ext.起点index = NaN
                     }
                 }
+
+
                 let a = i - ext.起点index
-                if(a===0)a=NaN
-                arr[i] =上涨下跌价差[i] >=4 && isNaN(ext.起点index) === false ? 上涨下跌价差[i] /a : NaN  //除以根数
-               
-                // if(ext.起点Type==='上涨'){
-                //     arr[i] =上涨_价差[i] > 3 && isNaN(ext.起点index) === false ? 上涨_价差[i] /a : NaN  //除以根数
-                // }else{
-                //     arr[i] =下跌_价差[i] > 3 && isNaN(ext.起点index) === false ? 下跌_价差[i] / a : NaN  //除以根数
-                // }
-
-                
-
-            } 
+                if (a === 0) a = NaN
+                arr[i] = isNaN(ext.起点index) === false && 上涨下跌价差(ext.起点Type)[i] >= 4 ? 上涨下跌价差(ext.起点Type)[i] / a : NaN  //除以根数 
+                //<---------------------------------------------------
+            }
         })
 
 
@@ -494,7 +491,7 @@ export class RealDataBase {
 
         //const 波动率大巨大大分界 = 50
         //const 波动率中大分界 = 25
-        const 价差中大分界= 20
+        const 价差中大分界 = 20
         const 价差大巨大分界 = 100
         //const 波动率中大分界 = 20
         const 信号_上涨 = 指标.lazyMapCache(
@@ -593,7 +590,7 @@ export class RealDataBase {
 
 
                 return [
-                    { name: '真空', value: 上涨_价差[i] < 价差中大分界|| 真空信号涨[i] },
+                    { name: '真空', value: 上涨_价差[i] < 价差中大分界 || 真空信号涨[i] },
                     { name: '成交量DIF<DEM', value: c },
                     { name: ' 净盘口<净盘口均线<0', value: b },
                     { name: '30秒净买成交量 >=150万', value: 净上涨成交量30[i] >= 150 * 10000 },
@@ -602,8 +599,8 @@ export class RealDataBase {
                     { name: '上涨_价差 >=6', value: 上涨_价差[i] >= 6 },
                     //波动率大于25之后，出现一次真空信号，动力慢信号都为true
                     //{ name: '动力衰竭', value: 波动率[i] > 波动率中大分界 || (上涨_动力DIF[i] - 上涨_动力DEM[i]) / 上涨_动力DEM[i] < 0.05 },
-                    { name: '量化 is上涨', value: 上涨_下跌[i]=='上涨' },
-                    { name: '波动率最大限制', value:上涨_价差[i] < 价差大巨大分界  },
+                    { name: '量化 is上涨', value: 上涨_下跌[i] == '上涨' },
+                    { name: '波动率最大限制', value: 上涨_价差[i] < 价差大巨大分界 },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },价差大巨大分界
                 ]
             }
@@ -651,12 +648,12 @@ export class RealDataBase {
                     //{ name: '卖盘低量', value: 盘口卖[i] < 50 * 10000 },波动率5分钟 净上涨成交量2
                     { name: '5分钟波动率低量', value: 波动率5分钟[i] < 30 },
                     { name: '大单', value: 净成交量均线10[i] > 100 * 10000 },
-                    { name: '上涨_价差<6', value: 上涨_价差[i]<= 6 },
+                    { name: '上涨_价差<6', value: 上涨_价差[i] <= 6 },
                     //{ name: '60秒净成交量 >=100万', value: 净成交量均线60[i] >= 100 * 10000 },
                     { name: '折返程度<', value: (最高价10[i] - 价格[i]) < 折返率[i] },
                     //{ name: '追涨', value: 上涨.动力[i] > 100 * 10000 },
                     //量化用 净上涨成交量DIF
-                    { name: '量化 is上涨', value: 上涨_下跌[i]=='上涨' },
+                    { name: '量化 is上涨', value: 上涨_下跌[i] == '上涨' },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '上涨' && 自动下单条件[i] },
                 ]
             }
@@ -756,7 +753,7 @@ export class RealDataBase {
 
                 //净成交量均线10
                 return [
-                    { name: '真空', value:下跌_价差[i] < 价差中大分界 || 真空信号跌[i] },
+                    { name: '真空', value: 下跌_价差[i] < 价差中大分界 || 真空信号跌[i] },
                     { name: '卖成交量DIF<DEM', value: c },
                     //{ name: '卖成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净下跌成交量DIF[i] < 0) },
                     { name: ' 净盘口 > 净盘口均线>0', value: b },
@@ -766,7 +763,7 @@ export class RealDataBase {
                     { name: '价格速度', value: 下跌_价差[i] > 价差中大分界 || 价格差_除以时间[i] >= 0.06 },
                     { name: '下跌_价差 >=6', value: 下跌_价差[i] >= 6 },
                     //量化用
-                    { name: '量化 is下跌', value: 上涨_下跌[i] =='下跌' },
+                    { name: '量化 is下跌', value: 上涨_下跌[i] == '下跌' },
                     { name: '下跌_价差最大限制', value: 下跌_价差[i] < 价差大巨大分界 },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '下跌' && 自动下单条件[i] },
                 ]
@@ -810,13 +807,13 @@ export class RealDataBase {
                     //{ name: '净盘口<0', value: 净盘口[i]<0 },
                     { name: '5分钟波动率低量', value: 波动率5分钟[i] < 30 },
                     //{ name: '波动率 >=1', value: 波动率[i] >= 1 },
-                    { name: '下跌_价差<6', value: 下跌_价差[i]<= 6 },
+                    { name: '下跌_价差<6', value: 下跌_价差[i] <= 6 },
                     { name: '大单', value: 净成交量均线10[i] < -100 * 10000 },
                     // { name: '买盘低量', value: 盘口买[i] < 50 * 10000 },
                     // { name: '60秒净成交量<=-100万', value: 净成交量均线60[i] <= -100 * 10000 },
                     { name: '折返程度<', value: (价格[i] - 最低价10[i]) < 折返率[i] },
                     //{ name: '追跌', value: 下跌.动力[i] > 100 * 10000 },
-                    { name: '量化 is下跌', value: 上涨_下跌[i]=='下跌' },
+                    { name: '量化 is下跌', value: 上涨_下跌[i] == '下跌' },
                     //{ name: '量化 自动下单条件', value: 上涨还是下跌[i] === '下跌' && 自动下单条件[i] },
                 ]
             }
