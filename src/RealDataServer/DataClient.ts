@@ -176,12 +176,9 @@ export namespace DataClient {
         //回测ext
         async 回测load(startTime: number, endTime: number) {
             this.data.startTick = Math.floor(startTime / RealDataBase.单位时间)
-            this.data.bitmex.XBTUSD.data = []
-            this.data.bitmex.ETHUSD.data = []
-            this.data.bitmex.XBTUSD.orderBook = []
-            this.data.bitmex.ETHUSD.orderBook = []
 
-            //bitmex
+            this.data.bitmex.XBTUSD.data = []
+            this.data.bitmex.XBTUSD.orderBook = []
             this.data.bitmex.XBTUSD.orderBook = await this.get_bitmex_orderBook('XBTUSD', startTime, endTime)
             this.data.bitmex.XBTUSD.data = await this.get500msKLine('XBTUSD', startTime, endTime)
             this.重新初始化()
