@@ -232,6 +232,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
             this.jsonSync.rawData.symbol.XBTUSD.开仓均价 = 0
         }
 
+        console.log(`单位taker = ${this.单位taker}      单位maker  = ${this.单位maker}      单位盈利  = ${this.单位盈利}`)
 
         return true
     }
