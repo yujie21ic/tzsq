@@ -130,7 +130,6 @@ server.func.下单 = async req => {
             return await account.updateMaker({
                 orderID: 活动委托[0].id,
                 price: toBuySellPriceFunc(req.side, getPrice),
-                text: '手动updateMaker'
             })
         } else {
             throw '已经有委托了'

@@ -99,8 +99,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
                     return await self.updateStop({
                         orderID: id,
                         price: 新的Price,
-                        text: 推 === 0 ? '成本价止损' : '盈利止损',
-                    }, '')
+                    }, this.最后一次止损状态)
                 }
                 return false
             }
@@ -368,8 +367,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
                             return await self.updateMaker({
                                 orderID: 活动委托[0].id,
                                 price: toBuySellPriceFunc(平仓side, get位置1价格),
-                                text: this.最后一次信号 + '平仓' + '  ' + 亏损挂单平仓Text + '  重新挂' + 平仓side + '1'
-                            }, '')
+                            }, this.最后一次信号 + '平仓' + '  ' + 亏损挂单平仓Text + '  重新挂' + 平仓side + '1')
                         } else {
                             return false
                         }

@@ -58,7 +58,7 @@ export class BitmexPositionAndOrder extends PositionAndOrder {
     private log = (text: string) => { }
     private ws: BitMEXWSAPI
 
-    
+
     get本地维护仓位数量(symbol: BaseType.BitmexSymbol) {
         return this.ws.仓位数量.get(symbol)
     }
@@ -173,7 +173,7 @@ export class BitmexPositionAndOrder extends PositionAndOrder {
         })
     }
 
-    private DDOS调用 = <P extends { text: string }>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
+    private DDOS调用 = <P extends any>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
         async (p: P, logText = '') => {
             const startTime = Date.now()
             let success = false
@@ -181,7 +181,7 @@ export class BitmexPositionAndOrder extends PositionAndOrder {
             let errMsg = ''
             const __id__ = callID++
 
-            this.log(`__${__id__}__` + p.text + '  ' + logText + '\nsend:' + JSON.stringify(p))
+            this.log(`__${__id__}__` + (p['text'] || '') + '  ' + logText + '\nsend:' + JSON.stringify(p))
 
             for (i = 1; i <= 重试几次; i++) {
                 const ret = await f(this.cookie, p)
@@ -260,24 +260,20 @@ export class BitmexPositionAndOrder extends PositionAndOrder {
     updateStop = this.DDOS调用<{
         orderID: string
         price: number
-        text: string
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.amend(cookie, {
             orderID: p.orderID,
             stopPx: p.price,
-            text: p.text,
         })
     )
 
     updateMaker = this.DDOS调用<{
         orderID: string
         price: () => number
-        text: string
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.amend(cookie, {
             orderID: p.orderID,
             price: p.price(),
-            text: p.text,
         })
     )
 
