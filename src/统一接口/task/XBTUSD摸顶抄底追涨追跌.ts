@@ -1,4 +1,4 @@
-import { BitmexPositionAndOrder } from '../PositionAndOrder/BitmexPositionAndOrder'
+import { PositionAndOrder } from '../PositionAndOrder/PositionAndOrder'
 import { BaseType } from '../../lib/BaseType'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { lastNumber } from '../../lib/F/lastNumber'
@@ -38,7 +38,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
     }
 
-    async 止损step(self: BitmexPositionAndOrder) {
+    async 止损step(self: PositionAndOrder) {
         const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
         const 止损委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type === '止损')
 
@@ -139,7 +139,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
     // 止盈 = false
     // 先写到 jsonSync 里面
 
-    async onTick(self: BitmexPositionAndOrder) {
+    async onTick(self: PositionAndOrder) {
         const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
 
         //委托检测
@@ -199,7 +199,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
     private 最后一次上涨_下跌 = ''
     private 到什么时间不开仓 = 0
 
-    private async 自动开仓(self: BitmexPositionAndOrder) {
+    private async 自动开仓(self: PositionAndOrder) {
 
         if (self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追涨 === false
             && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追跌 === false
@@ -302,7 +302,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
     private 最后一次开仓折返率 = NaN
     private 摸顶抄底超时秒 = NaN
 
-    private async 自动止盈(self: BitmexPositionAndOrder) {
+    private async 自动止盈(self: PositionAndOrder) {
 
         if (self.jsonSync.rawData.symbol[symbol].任务开关.自动止盈波段 === false) {
             return true
