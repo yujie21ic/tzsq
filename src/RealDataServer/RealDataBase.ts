@@ -646,11 +646,11 @@ export class RealDataBase {
             i => {
                 return [
                     // { name: '成交量DIF>DEM', value: 净上涨成交量DIF[i] > 净上涨成交量DEM[i] },
-                    //{ name: '净盘口>0', value: 净盘口[i]>0 },
+                    { name: '净盘口>0', value: 净盘口[i]>0 },
                     //{ name: '卖盘低量', value: 盘口卖[i] < 50 * 10000 },波动率5分钟 净上涨成交量2
                     { name: '5分钟波动率低量', value: 波动率5分钟[i] < 30 },
                     { name: '大单', value: 净成交量均线10[i] > 100 * 10000 },
-                    { name: '上涨_价差<6', value: 上涨_价差[i] <= 6 },
+                    { name: '上涨_价差<4', value: 上涨_价差[i] <= 4 },
                     //{ name: '60秒净成交量 >=100万', value: 净成交量均线60[i] >= 100 * 10000 },
                     { name: '折返程度<', value: (最高价10[i] - 价格[i]) < 折返率[i] },
                     //{ name: '追涨', value: 上涨.动力[i] > 100 * 10000 },
@@ -771,6 +771,7 @@ export class RealDataBase {
                 ]
             }
         )
+        
         const 信号_下跌抄底上涨平仓 = 指标.lazyMapCache(
             () => Math.min(
                 净盘口.length,
@@ -806,10 +807,10 @@ export class RealDataBase {
             i => {
                 return [
                     //{ name: '卖成交量DIF>DEM', value: 净下跌成交量DIF[i] > 净下跌成交量DEM[i] },
-                    //{ name: '净盘口<0', value: 净盘口[i]<0 },
+                    { name: '净盘口<0', value: 净盘口[i]<0 },
                     { name: '5分钟波动率低量', value: 波动率5分钟[i] < 30 },
                     //{ name: '波动率 >=1', value: 波动率[i] >= 1 },
-                    { name: '下跌_价差<6', value: 下跌_价差[i] <= 6 },
+                    { name: '下跌_价差<4', value: 下跌_价差[i] <= 4 },
                     { name: '大单', value: 净成交量均线10[i] < -100 * 10000 },
                     // { name: '买盘低量', value: 盘口买[i] < 50 * 10000 },
                     // { name: '60秒净成交量<=-100万', value: 净成交量均线60[i] <= -100 * 10000 },
@@ -904,8 +905,8 @@ export class RealDataBase {
 
 
 
-        const bitmex_hopex_差价 = 指标.lazyMapCache(() => Math.min(期货.价格.length, hopex.价格.length), i => 期货.价格[i] - hopex.价格[i])
-
+        const bitmex_hopex_差价 = 指标.lazyMapCache(() => Math.min(期货.价格.length, hopex.价格.length), i => Math.abs(期货.价格[i] - hopex.价格[i]))
+        const bitmex_hopex_差价均线 = 指标.均线(bitmex_hopex_差价, 5, RealDataBase.单位时间)
 
 
         // XXX = 波动率[i] / 5 + 2
@@ -953,6 +954,7 @@ export class RealDataBase {
 
         return {
             bitmex_hopex_差价,
+            bitmex_hopex_差价均线,
 
             信号hopex_下跌,
             信号hopex_上涨,
