@@ -184,8 +184,17 @@ export namespace DataClient {
             this.data.startTick = Math.floor(startTime / RealDataBase.单位时间)
             this.data.bitmex.XBTUSD.data = []
             this.data.bitmex.XBTUSD.orderBook = []
+
+
+            console.log('加载盘口...')
             this.回测ext__orderBook = await this.get_bitmex_orderBook('XBTUSD', startTime, endTime, true)
+            console.log('加载盘口', this.回测ext__orderBook.length)
+
+            console.log('加载价格...')
             this.回测ext__data = await this.get500msKLine('XBTUSD', startTime, endTime, true)
+            console.log('加载价格', this.回测ext__data.length)
+
+
             this.nowIndex = 0
             this.重新初始化()
         }
