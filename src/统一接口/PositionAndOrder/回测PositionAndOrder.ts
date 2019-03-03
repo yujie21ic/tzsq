@@ -46,6 +46,8 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     }
 
 
+    private order_id = 1234
+
     async maker(p: {
         symbol: BaseType.BitmexSymbol;
         side: BaseType.Side;
@@ -55,6 +57,16 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         text: string;
     }, logText?: string) {
         if (p.symbol !== 'XBTUSD') return false
+
+        this.jsonSync.rawData.symbol.XBTUSD.活动委托.push({
+            type: p.reduceOnly ? '限价只减仓' : '限价',
+            timestamp: Date.now(),
+            id: String(this.order_id++),
+            side: p.side,
+            cumQty: 0,
+            orderQty: p.size,
+            price: p.price(),
+        })
 
         return true
     }
@@ -67,6 +79,16 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     }, logText?: string) {
         if (p.symbol !== 'XBTUSD') return false
 
+        this.jsonSync.rawData.symbol.XBTUSD.活动委托.push({
+            type: '止损',
+            timestamp: Date.now(),
+            id: String(this.order_id++),
+            side: p.side,
+            cumQty: 0,
+            orderQty: 100000,
+            price: p.price,
+        })
+
         return true
     }
 
@@ -75,6 +97,13 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         price: number;
     }, logText?: string) {
 
+        this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.map(v => {
+            if (v.id === p.orderID) {
+                return { ...v, price: p.price }
+            } else {
+                return v
+            }
+        })
 
         return true
     }
@@ -83,6 +112,14 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         orderID: string;
         price: () => number;
     }, logText?: string) {
+
+        this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.map(v => {
+            if (v.id === p.orderID) {
+                return { ...v, price: p.price() }
+            } else {
+                return v
+            }
+        })
 
         return true
     }
@@ -96,6 +133,8 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     }, logText?: string) {
         if (p.symbol !== 'XBTUSD') return false
 
+        //直接成交
+
         return true
     }
 
@@ -107,6 +146,8 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     }, logText?: string) {
         if (p.symbol !== 'XBTUSD') return false
 
+        //TODO 直接成交
+
         return true
     }
 
@@ -116,6 +157,8 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     }, logText?: string) {
         if (p.symbol !== 'XBTUSD') return false
 
+        //TODO 直接成交
+
         return true
     }
 
@@ -124,14 +167,24 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         text: string;
     }, logText?: string) {
 
+        this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v =>
+            p.orderID.every(__id__ => v.id !== __id__)
+        )
+
         return true
     }
 
     async runTask(task: PositionAndOrderTask) {
         this.realData.回测load(this.startTime, this.endTime)
+
         // this.ws.filledObservable.subscribe(v => task.onFilled(v))
+
         while (true) {
             this.realData.回测step()
+
+            //TODO 成交
+            //TODO task.onFilled
+
             await task.onTick(this)
         }
     }
