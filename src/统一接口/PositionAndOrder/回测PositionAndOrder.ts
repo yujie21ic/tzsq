@@ -35,6 +35,14 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         this.startTime = startTime
         this.endTime = endTime
         this.realData = new DataClient.RealData__History()
+
+        //临时
+        this.jsonSync.rawData.symbol.XBTUSD.任务开关.自动开仓抄底 = true
+        this.jsonSync.rawData.symbol.XBTUSD.任务开关.自动开仓摸顶 = true
+        this.jsonSync.rawData.symbol.XBTUSD.任务开关.自动开仓追涨 = true
+        this.jsonSync.rawData.symbol.XBTUSD.任务开关.自动开仓追跌 = true
+        this.jsonSync.rawData.symbol.XBTUSD.任务开关.自动推止损 = true
+        this.jsonSync.rawData.symbol.XBTUSD.任务开关.自动止盈波段 = true
     }
 
 
