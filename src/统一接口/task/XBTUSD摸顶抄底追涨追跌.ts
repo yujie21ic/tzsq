@@ -1,6 +1,5 @@
 import { BitmexPositionAndOrderTask, BitmexPositionAndOrder } from '../PositionAndOrder/BitmexPositionAndOrder'
 import { BaseType } from '../../lib/BaseType'
-import { sleep } from '../../lib/C/sleep'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { lastNumber } from '../../lib/F/lastNumber'
 import { to范围 } from '../../lib/F/to范围'
@@ -183,6 +182,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
     private 最后一次信号 = 'none' as 'none' | '追涨' | '追跌' | '摸顶' | '抄底'
     private 最后一次信号时间 = 0
     private 最后一次上涨_下跌 = ''
+    private 到什么时间不开仓 = 0
 
     private async 自动开仓(self: BitmexPositionAndOrder) {
 
@@ -210,9 +210,8 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
         const 连续止损次数 = self.ws.连续止损.get(symbol)
 
         if (连续止损次数 >= 4) {
-            await sleep(1000 * 60 * 10)//10min
+            this.到什么时间不开仓 = Date.now() + 1000 * 60 * 10
             self.ws.连续止损.partial(symbol, 0)
-            return true
         }
 
         //开仓
@@ -240,25 +239,31 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
 
             const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' || self.realData.get波动率(symbol) < 30
 
-            return 市价 ?
-                await self.taker({
-                    symbol,
-                    side: 开仓side,
-                    size: 交易数量 * (连续止损次数 + 1),
-                    text: 信号灯Type,
-                }, '自动开仓step 自动开仓 市价' + self.realData.get信号msg(symbol)) :
-                await self.limit({
-                    symbol,
-                    side: 开仓side,
-                    size: 交易数量 * (连续止损次数 + 1),
-                    price: toBuySellPriceFunc(开仓side, () => self.realData.getOrderPrice({
+
+            if (Date.now() > this.到什么时间不开仓) {
+                return 市价 ?
+                    await self.taker({
                         symbol,
                         side: 开仓side,
-                        type: 'taker',
-                        位置: 0,
-                    })) as any,
-                    text: 信号灯Type,
-                }, '自动开仓step 自动开仓 挂单' + self.realData.get信号msg(symbol))
+                        size: 交易数量 * (连续止损次数 + 1),
+                        text: 信号灯Type,
+                    }, '自动开仓step 自动开仓 市价' + self.realData.get信号msg(symbol)) :
+                    await self.limit({
+                        symbol,
+                        side: 开仓side,
+                        size: 交易数量 * (连续止损次数 + 1),
+                        price: toBuySellPriceFunc(开仓side, () => self.realData.getOrderPrice({
+                            symbol,
+                            side: 开仓side,
+                            type: 'taker',
+                            位置: 0,
+                        })) as any,
+                        text: 信号灯Type,
+                    }, '自动开仓step 自动开仓 挂单' + self.realData.get信号msg(symbol))
+            } else {
+                return true
+            }
+
         }
 
 
