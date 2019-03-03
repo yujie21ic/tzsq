@@ -49,7 +49,7 @@ const 重试休息多少毫秒 = 10
 
 export interface BitmexPositionAndOrderTask {
     onTick(self: BitmexPositionAndOrder): Promise<boolean>
-    onFilled(p: { symbol: BaseType.BitmexSymbol, type: '开仓' | '盈利挂单' | '成本挂单' | '亏损挂单' | '盈利止损' | '成本止损' | '亏损止损' | '强平' }): void
+    onFilled(p: { symbol: BaseType.BitmexSymbol, type: '限价' | '减仓' | '止损' | '强平' }): void
 }
 
 export class BitmexPositionAndOrder extends PositionAndOrder {

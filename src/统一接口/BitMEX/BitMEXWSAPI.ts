@@ -367,7 +367,7 @@ export class BitMEXWSAPI {
         //止盈
         if (order.ordType === 'Limit' && order.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && order.ordStatus === 'Filled') {
             this.连续止损.partial(order.symbol as BaseType.BitmexSymbol, 0)
-            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '盈利挂单' })
+            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '减仓' })
         }
 
         //止损
@@ -377,11 +377,11 @@ export class BitMEXWSAPI {
                 this.连续止损.update(order.symbol as BaseType.BitmexSymbol, 1)
             }
 
-            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '亏损止损' })
+            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '止损' })
         }
 
         else if (order.ordType === 'Limit' && order.ordStatus === 'Filled') {
-            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '开仓' })
+            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '限价' })
         }
     }
 
@@ -397,6 +397,6 @@ export class BitMEXWSAPI {
     //
     filledObservable = new Subject<{
         symbol: BaseType.BitmexSymbol,
-        type: '开仓' | '盈利挂单' | '成本挂单' | '亏损挂单' | '盈利止损' | '成本止损' | '亏损止损' | '强平'
+        type: '限价' | '减仓' | '止损' | '强平'
     }>()
 }
