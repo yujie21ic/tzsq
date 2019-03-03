@@ -64,7 +64,6 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
 
     constructor(p: { accountName: string, cookie: string }) {
-        super()
         this.cookie = p.cookie
 
         this.ws = new BitMEXWSAPI(p.cookie, [
