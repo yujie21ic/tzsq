@@ -6,6 +6,8 @@ import { BaseType } from '../lib/BaseType'
 import { DBClient } from '../DBServer/DBClient'
 import { timeID } from '../lib/F/timeID'
 import { PKClient } from '../PKServer/PKClient'
+import { DBServer } from '../DBServer/DBServer'
+import { PKServer } from '../PKServer/PKServer'
 
 export namespace DataClient {
 
@@ -34,9 +36,9 @@ export namespace DataClient {
 
     export class RealData__History extends RealDataBase {
 
-        private get_bitmex_orderBook = async (symbol: BaseType.BitmexSymbol | BaseType.HopexSymbol, startTime: number, endTime: number) => {
+        private get_bitmex_orderBook = async (symbol: BaseType.BitmexSymbol | BaseType.HopexSymbol, startTime: number, endTime: number, 本地 = false) => {
 
-            const { data, error, msg } = await PKClient.func.getBitmex500msOrderBook({
+            const { data, error, msg } = await (本地 ? PKServer.模拟客户端调用.getBitmex500msOrderBook : PKClient.func.getBitmex500msOrderBook)({
                 symbol,
                 startTime,
                 endTime,
@@ -65,8 +67,8 @@ export namespace DataClient {
             return ret
         }
 
-        async get500msKLine(symbol: BaseType.BitmexSymbol | BaseType.BinanceSymbol | BaseType.HopexSymbol, startTime: number, endTime: number) {
-            const { data, msg, error, } = await DBClient.func.getKLine({
+        async get500msKLine(symbol: BaseType.BitmexSymbol | BaseType.BinanceSymbol | BaseType.HopexSymbol, startTime: number, endTime: number, 本地 = false) {
+            const { data, msg, error, } = await (本地 ? DBServer.模拟客户端调用.getKLine : DBClient.func.getKLine)({
                 type: '500ms',
                 symbol,
                 startTime,
@@ -176,14 +178,16 @@ export namespace DataClient {
         //回测ext
         async 回测load(startTime: number, endTime: number) {
             this.data.startTick = Math.floor(startTime / RealDataBase.单位时间)
-
             this.data.bitmex.XBTUSD.data = []
             this.data.bitmex.XBTUSD.orderBook = []
-            this.data.bitmex.XBTUSD.orderBook = await this.get_bitmex_orderBook('XBTUSD', startTime, endTime)
-            this.data.bitmex.XBTUSD.data = await this.get500msKLine('XBTUSD', startTime, endTime)
+            this.data.bitmex.XBTUSD.orderBook = await this.get_bitmex_orderBook('XBTUSD', startTime, endTime, true)
+            this.data.bitmex.XBTUSD.data = await this.get500msKLine('XBTUSD', startTime, endTime, true)
             this.重新初始化()
         }
+
+        回测step() {
+
+        }
+
     }
-
-
 }
