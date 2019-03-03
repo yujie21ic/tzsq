@@ -240,10 +240,15 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
 
     async runTask(task: PositionAndOrderTask) {
+        console.log('_________________________回测开始_________________________')
+
         await this.realData.回测load(this.startTime, this.endTime)
 
         while (true) {
-            this.realData.回测step()
+            if (this.realData.回测step() === false) {
+                console.log('_________________________回测结束_________________________')
+                return
+            }
 
             this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => {
                 const 买1 = this.realData.getOrderPrice({

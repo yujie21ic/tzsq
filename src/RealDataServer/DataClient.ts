@@ -204,6 +204,9 @@ export namespace DataClient {
                 this.data.bitmex.XBTUSD.orderBook.push(this.回测ext__orderBook[this.nowIndex])
                 this.data.bitmex.XBTUSD.data.push(this.回测ext__data[this.nowIndex])
                 this.nowIndex++
+                return true
+            } else {
+                return false
             }
         }
 
