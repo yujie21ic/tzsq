@@ -1,16 +1,17 @@
-import { BitmexPositionAndOrderTask, BitmexPositionAndOrder } from '../PositionAndOrder/BitmexPositionAndOrder'
+import { BitmexPositionAndOrder } from '../PositionAndOrder/BitmexPositionAndOrder'
 import { BaseType } from '../../lib/BaseType'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { lastNumber } from '../../lib/F/lastNumber'
 import { to范围 } from '../../lib/F/to范围'
 import { toGridPoint } from '../../lib/F/toGridPoint'
+import { PositionAndOrderTask } from '../PositionAndOrder/PositionAndOrder'
 
 
 const symbol = 'XBTUSD'
 const 交易数量 = 2
 
 
-export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTask {
+export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
 
     推止损(波动率: number, 盈利点: number, type: string) {

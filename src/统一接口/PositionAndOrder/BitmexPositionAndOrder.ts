@@ -8,7 +8,7 @@ import { JSONSync } from '../../lib/C/JSONSync'
 import { BitMEXWSAPI } from '../BitMEX/BitMEXWSAPI'
 import { RealData__Server } from '../../RealDataServer/RealData__Server'
 import { toCacheFunc } from '../../lib/C/toCacheFunc'
-import { PositionAndOrder } from './PositionAndOrder'
+import { PositionAndOrder, PositionAndOrderTask } from './PositionAndOrder'
 
 const symbol = () => ({
     任务开关: {
@@ -47,12 +47,9 @@ let callID = 0
 const 重试几次 = 10
 const 重试休息多少毫秒 = 10
 
-export interface BitmexPositionAndOrderTask {
-    onTick(self: BitmexPositionAndOrder): Promise<boolean>
-    onFilled(p: { symbol: BaseType.BitmexSymbol, type: '限价' | '限价只减仓' | '止损' | '强平' }): void
-}
 
-export class BitmexPositionAndOrder extends PositionAndOrder {
+
+export class BitmexPositionAndOrder implements PositionAndOrder {
 
     private cookie: string
     private log = (text: string) => { }
@@ -331,7 +328,7 @@ export class BitmexPositionAndOrder extends PositionAndOrder {
 
     realData = __realData__()
 
-    async runTask(task: BitmexPositionAndOrderTask) {
+    async runTask(task: PositionAndOrderTask) {
         this.ws.filledObservable.subscribe(v => task.onFilled(v))
         while (true) {
             if (await task.onTick(this)) {
