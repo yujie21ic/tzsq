@@ -36,6 +36,8 @@ const server = new JSONRPCServer({
     funcList,
     port: 5555
 })
+server.run()
+
 
 server.func.getKLine = async req => {
     const timeFunc = req.type === '1m' ? timeID.timestampToOneMinuteID : timeID.timestampTo500msID
@@ -51,3 +53,4 @@ server.func.getKLine = async req => {
     }) as BaseType.KLine[]
     return retData
 }
+

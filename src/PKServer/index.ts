@@ -13,6 +13,7 @@ const server = new JSONRPCServer({
     funcList,
     port: 5555
 })
+server.run()
 
 server.func.getBitmex500msOrderBook = async req => {
     const arr = await DB.getBitmex500msOrderBook(req.symbol).findAll<{}>({

@@ -66,6 +66,7 @@ wss.on('connection', ws => {
 
 //http
 const server = new JSONRPCServer({ funcList, port: 3456 })
+server.run()
 
 server.func.取消委托 = async req => {
     const account = accountDic.get(req.cookie)
