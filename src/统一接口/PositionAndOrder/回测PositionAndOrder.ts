@@ -46,7 +46,9 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         reduceOnly: boolean;
         text: string;
     }, logText?: string) {
-        return false
+        if (p.symbol !== 'XBTUSD') return false
+
+        return true
     }
 
     async stop(p: {
@@ -55,21 +57,26 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         price: number;
         text: string;
     }, logText?: string) {
-        return false
+        if (p.symbol !== 'XBTUSD') return false
+
+        return true
     }
 
     async updateStop(p: {
         orderID: string;
         price: number;
     }, logText?: string) {
-        return false
+
+
+        return true
     }
 
     async updateMaker(p: {
         orderID: string;
         price: () => number;
     }, logText?: string) {
-        return false
+
+        return true
     }
 
     async limit(p: {
@@ -79,7 +86,9 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         price: () => number;
         text: string;
     }, logText?: string) {
-        return false
+        if (p.symbol !== 'XBTUSD') return false
+
+        return true
     }
 
     async taker(p: {
@@ -88,21 +97,26 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         size: number;
         text: string;
     }, logText?: string) {
-        return false
+        if (p.symbol !== 'XBTUSD') return false
+
+        return true
     }
 
     async close(p: {
         symbol: BaseType.BitmexSymbol;
         text: string;
     }, logText?: string) {
-        return false
+        if (p.symbol !== 'XBTUSD') return false
+
+        return true
     }
 
     async cancel(p: {
         orderID: string[];
         text: string;
     }, logText?: string) {
-        return false
+
+        return true
     }
 
     async runTask(task: PositionAndOrderTask) {
