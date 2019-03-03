@@ -240,7 +240,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
 
     async runTask(task: PositionAndOrderTask) {
-        this.realData.回测load(this.startTime, this.endTime)
+        await this.realData.回测load(this.startTime, this.endTime)
 
         while (true) {
             this.realData.回测step()
