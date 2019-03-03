@@ -176,17 +176,26 @@ export namespace DataClient {
 
 
         //回测ext
+        回测ext__orderBook: BaseType.OrderBook[] = []
+        回测ext__data: BaseType.KLine[] = []
+        nowIndex = 0
+
         async 回测load(startTime: number, endTime: number) {
             this.data.startTick = Math.floor(startTime / RealDataBase.单位时间)
             this.data.bitmex.XBTUSD.data = []
             this.data.bitmex.XBTUSD.orderBook = []
-            this.data.bitmex.XBTUSD.orderBook = await this.get_bitmex_orderBook('XBTUSD', startTime, endTime, true)
-            this.data.bitmex.XBTUSD.data = await this.get500msKLine('XBTUSD', startTime, endTime, true)
+            this.回测ext__orderBook = await this.get_bitmex_orderBook('XBTUSD', startTime, endTime, true)
+            this.回测ext__data = await this.get500msKLine('XBTUSD', startTime, endTime, true)
+            this.nowIndex = 0
             this.重新初始化()
         }
 
         回测step() {
-
+            if (this.nowIndex < this.回测ext__orderBook.length) {
+                this.data.bitmex.XBTUSD.orderBook.push(this.回测ext__orderBook[this.nowIndex])
+                this.data.bitmex.XBTUSD.data.push(this.回测ext__data[this.nowIndex])
+                this.nowIndex++
+            }
         }
 
     }
