@@ -7,7 +7,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
     realData: DataClient.RealData__History
 
-    jsonSync = createJSONSync()
+    jsonSync = createJSONSync() //不支持 subject.subscribe
 
     get本地维护仓位数量(symbol: BaseType.BitmexSymbol): number {
         return this.jsonSync.rawData.symbol[symbol].仓位数量

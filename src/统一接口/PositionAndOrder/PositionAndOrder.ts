@@ -4,7 +4,7 @@ import { RealDataBase } from '../../RealDataServer/RealDataBase'
 
 export interface PositionAndOrder {
 
-    //
+    //先写成这样  需要改  
     jsonSync: JSONSync<{
         symbol: {
             XBTUSD: {
