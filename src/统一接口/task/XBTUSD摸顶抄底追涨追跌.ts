@@ -258,13 +258,13 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
                     await self.taker({
                         symbol,
                         side: 开仓side,
-                        size: 交易数量 * (连续止损次数 + 1),
+                        size: 交易数量 * (this.连续止损2 + 1),
                         text: 信号灯Type,
                     }, '自动开仓step 自动开仓 市价' + self.realData.get信号msg(symbol)) :
                     await self.limit({
                         symbol,
                         side: 开仓side,
-                        size: 交易数量 * (连续止损次数 + 1),
+                        size: 交易数量 * (this.连续止损2 + 1),
                         price: toBuySellPriceFunc(开仓side, () => self.realData.getOrderPrice({
                             symbol,
                             side: 开仓side,
