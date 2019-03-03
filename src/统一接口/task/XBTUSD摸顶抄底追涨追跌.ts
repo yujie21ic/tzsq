@@ -58,7 +58,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
 
                 const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
 
-                //ws返回有时间  直接给委托列表加一条记录??            
+                this.最后一次止损状态 = '亏损止损'
                 return await self.stop({
                     symbol,
                     side,
@@ -95,6 +95,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
                     (side === 'Buy' && 新的Price < price) ||
                     (side === 'Sell' && 新的Price > price)
                 ) {
+                    this.最后一次止损状态 = 推 === 0 ? '成本价止损' : '盈利止损'
                     return await self.updateStop({
                         orderID: id,
                         price: 新的Price,
@@ -112,8 +113,22 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
     }
 
 
+    private 连续止损2 = 0
+    private 最后一次止损状态 = ''
     onFilled(p: { symbol: BaseType.BitmexSymbol, type: '限价' | '限价只减仓' | '止损' | '强平' }) {
-
+        if (p.symbol === 'XBTUSD') {
+            if (p.type === '限价只减仓') {
+                this.连续止损2 = 0 //不考虑 亏损挂单
+            }
+            else if (p.type === '止损') {
+                if (this.最后一次止损状态 === '亏损止损') {
+                    this.连续止损2 += 1
+                }
+            }
+            else if (p.type === '强平') {
+                this.连续止损2 += 1
+            }
+        }
     }
 
 
@@ -204,14 +219,12 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
         const x = self.realData.dataExt[symbol].期货.上涨_下跌
         if (x.length > 0 && this.最后一次上涨_下跌 !== x[x.length - 1]) {
             this.最后一次上涨_下跌 = x[x.length - 1]
-            self.ws.连续止损.partial(symbol, 0)
+            this.连续止损2 = 0
         }
 
-        const 连续止损次数 = self.ws.连续止损.get(symbol)
-
-        if (连续止损次数 >= 4) {
+        if (this.连续止损2 >= 4) {
             this.到什么时间不开仓 = Date.now() + 1000 * 60 * 10
-            self.ws.连续止损.partial(symbol, 0)
+            this.连续止损2 = 0
         }
 
         //开仓
