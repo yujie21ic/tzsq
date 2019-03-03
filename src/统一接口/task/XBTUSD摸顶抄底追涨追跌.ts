@@ -270,7 +270,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                             side: 开仓side,
                             type: 'taker',
                             位置: 0,
-                        })) as any,
+                        })),
                         text: 信号灯Type,
                     }, '自动开仓step 自动开仓 挂单' + self.realData.get信号msg(symbol))
             } else {

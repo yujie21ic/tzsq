@@ -5,19 +5,6 @@ import { BaseType } from '../../lib/BaseType'
 
 export class 回测PositionAndOrder implements PositionAndOrder {
 
-
-
-    回测结果 = [] as {
-        时间: string
-        单位taker: number
-        单位maker: number
-        单位盈利: number
-        单位亏损: number
-    }[]
-
-
-
-
     realData: DataClient.RealData__History
 
     jsonSync = createJSONSync() //不支持 subject.subscribe
@@ -144,11 +131,14 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         price: () => number;
         text: string;
     }, logText?: string) {
-        if (p.symbol !== 'XBTUSD') return false
-
-        //TODO 直接成交
-
-        return true
+        return this.成交({
+            symbol: p.symbol,
+            side: p.side,
+            size: p.size,
+            price: p.price(),
+            text: p.text,
+            被动: false,
+        })
     }
 
     async taker(p: {
@@ -157,22 +147,31 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         size: number;
         text: string;
     }, logText?: string) {
-        if (p.symbol !== 'XBTUSD') return false
-
-        //TODO 直接成交
-
-        return true
+        return this.limit({
+            symbol: p.symbol,
+            side: p.side,
+            size: p.size,
+            price: () => this.realData.getOrderPrice({
+                symbol: p.symbol,
+                side: p.side,
+                type: 'taker',
+                位置: 0,
+            }),
+            text: p.text,
+        }, logText)
     }
 
     async close(p: {
         symbol: BaseType.BitmexSymbol;
         text: string;
     }, logText?: string) {
-        if (p.symbol !== 'XBTUSD') return false
-
-        //TODO 直接成交
-
-        return true
+        const countAbs = this.get本地维护仓位数量(p.symbol)
+        return this.taker({
+            symbol: p.symbol,
+            side: countAbs > 0 ? 'Sell' : 'Buy',
+            size: Math.abs(countAbs),
+            text: p.text
+        }, logText)
     }
 
     async cancel(p: {
@@ -187,16 +186,113 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         return true
     }
 
+
+    单位taker = 0
+    单位maker = 0
+    单位盈利 = 0
+
+    async 成交(p: {
+        symbol: BaseType.BitmexSymbol
+        side: BaseType.Side
+        size: number
+        price: number
+        text: string
+        被动: boolean
+    }) {
+        if (p.symbol !== 'XBTUSD') return false
+
+        const count = p.side === 'Buy' ? p.size : -p.size
+        let is减仓 = false
+        if (this.jsonSync.rawData.symbol.XBTUSD.仓位数量 > 0 && count < 0) {
+            is减仓 = true
+        }
+        else if (this.jsonSync.rawData.symbol.XBTUSD.仓位数量 < 0 && count > 0) {
+            is减仓 = true
+        }
+
+        //手续费
+        if (p.被动) {
+            this.单位maker += p.size
+        } else {
+            this.单位taker += p.size
+        }
+
+        //盈利 亏损
+        if (is减仓) {
+            const 开仓价 = this.jsonSync.rawData.symbol.XBTUSD.开仓均价
+            const 平仓价 = p.price
+            this.单位盈利 += (p.side === 'Buy' ? 平仓价 - 开仓价 : 开仓价 - 平仓价) * p.size
+        } else {
+            //不会有加仓
+            this.jsonSync.rawData.symbol.XBTUSD.开仓均价 = p.price
+        }
+
+        this.jsonSync.rawData.symbol.XBTUSD.仓位数量 += count
+        if (this.jsonSync.rawData.symbol.XBTUSD.仓位数量 === 0) {
+            this.jsonSync.rawData.symbol.XBTUSD.开仓均价 = 0
+        }
+
+
+        return true
+    }
+
+
+
     async runTask(task: PositionAndOrderTask) {
         this.realData.回测load(this.startTime, this.endTime)
-
-        // this.ws.filledObservable.subscribe(v => task.onFilled(v))
 
         while (true) {
             this.realData.回测step()
 
-            //TODO 成交
-            //TODO task.onFilled
+            this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => {
+                const 买1 = this.realData.getOrderPrice({
+                    symbol: 'XBTUSD',
+                    side: 'Buy',
+                    type: 'maker',
+                    位置: 0,
+                })
+                const 卖1 = this.realData.getOrderPrice({
+                    symbol: 'XBTUSD',
+                    side: 'Sell',
+                    type: 'maker',
+                    位置: 0,
+                })
+
+                if (v.type === '限价' || v.type === '限价只减仓') {
+                    if ((v.side === 'Buy' && 买1 < v.price) ||
+                        (v.side === 'Sell' && 卖1 > v.price)
+                    ) {
+                        this.成交({
+                            symbol: 'XBTUSD',
+                            side: v.side,
+                            size: v.orderQty,
+                            price: v.price,
+                            text: v.type + '',
+                            被动: true,
+                        })
+                        task.onFilled({ symbol: 'XBTUSD', type: v.type })
+                        return false
+                    }
+                }
+                else if (v.type === '止损') {
+                    if ((v.side === 'Buy' && 买1 <= v.price) ||
+                        (v.side === 'Sell' && 卖1 >= v.price)
+                    ) {
+                        this.成交({
+                            symbol: 'XBTUSD',
+                            side: v.side,
+                            size: v.orderQty,
+                            price: v.price,
+                            text: v.type + '',
+                            被动: false,
+                        })
+                        task.onFilled({ symbol: 'XBTUSD', type: v.type })
+                        return false
+                    }
+                }
+                return true
+            })
+
 
             await task.onTick(this)
         }
