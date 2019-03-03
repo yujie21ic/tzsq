@@ -169,7 +169,6 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
 
 
         if (仓位数量 === 0) {
-            this.止盈价格 = NaN
             this.最大仓位abs = NaN
             this.最后一次开仓时间 = NaN
             this.最后一次开仓折返率 = NaN
@@ -280,9 +279,6 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
         return false
     }
 
-
-
-    private 止盈价格 = NaN
     private 最大仓位abs = NaN
     private 最后一次开仓时间 = NaN
     private 最后一次开仓折返率 = NaN
@@ -310,34 +306,12 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
 
             const 平仓side = 仓位数量 > 0 ? 'Sell' : 'Buy'
 
-            const getPrice = () => {
-                const 止盈点 = self.realData.get波动率(symbol) / 3 + 3
-                const 止盈点价格 = toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 + 止盈点 : 开仓均价 - 止盈点, 平仓side)
-
-                const 位置1价格 = self.realData.getOrderPrice({
-                    symbol,
-                    side: 平仓side,
-                    type: 'maker',
-                    位置: 0,
-                })
-                return 平仓side === 'Buy' ?
-                    Math.min(止盈点价格, 位置1价格) :
-                    Math.max(止盈点价格, 位置1价格)
-            }
-
-            if (isNaN(this.止盈价格)) {
-                this.止盈价格 = getPrice()
-            }
-
-
             const get位置1价格 = () => self.realData.getOrderPrice({
                 symbol,
                 side: 平仓side,
                 type: 'maker',
                 位置: 0,
             })
-
-
 
             let 亏损挂单平仓Text = ''
 
@@ -435,15 +409,6 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
                     text: this.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 平一半',
                 }, 信号side + ' 信号msg:' + 信号msg)
 
-                // if (
-                //     (side === 'Buy' && get位置1价格() <= 止盈价格) ||
-                //     (side === 'Sell' && get位置1价格() >= 止盈价格)
-
-                // ) {
-
-                // } else {
-                //     return false
-                // }
             }
         }
 
