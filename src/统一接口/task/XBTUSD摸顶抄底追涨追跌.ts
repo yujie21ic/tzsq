@@ -290,7 +290,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
             return true
         }
 
-        const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
+        const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
         const 活动委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type !== '止损')
 
 
