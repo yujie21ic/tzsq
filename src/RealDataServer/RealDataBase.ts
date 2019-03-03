@@ -429,7 +429,7 @@ export class RealDataBase {
             }
         })
 
-       
+
         const 上涨_累计成交量 = 累计成交量('上涨')
         const 上涨_价差 = 价差('上涨')
         const 上涨_动力 = 指标.lazyMapCache(() => Math.min(上涨_累计成交量.length, 上涨_价差.length), i => to范围({ min: 30 * 10000, max: 130 * 10000, value: 上涨_累计成交量[i] / Math.max(1, 上涨_价差[i]) })) //最小除以1
@@ -447,7 +447,7 @@ export class RealDataBase {
             价差: 下跌_价差,
             动力: 下跌_动力,
         }
-        
+
 
         const 上涨_动力12 = 指标.EMA(上涨_动力, 6, RealDataBase.单位时间)
         const 上涨_动力26 = 指标.EMA(上涨_动力, 13, RealDataBase.单位时间)
@@ -904,6 +904,7 @@ export class RealDataBase {
 
 
 
+        const bitmex_hopex_差价 = 指标.lazyMapCache(() => Math.min(期货.价格.length, hopex.价格.length), i => 期货.价格[i] - hopex.价格[i])
 
 
 
@@ -951,6 +952,8 @@ export class RealDataBase {
 
 
         return {
+            bitmex_hopex_差价,
+
             信号hopex_下跌,
             信号hopex_上涨,
             现货减去: 0,
