@@ -5,6 +5,19 @@ import { BaseType } from '../../lib/BaseType'
 
 export class 回测PositionAndOrder implements PositionAndOrder {
 
+
+
+    回测结果 = [] as {
+        时间: string
+        单位taker: number
+        单位maker: number
+        单位盈利: number
+        单位亏损: number
+    }[]
+
+
+
+
     realData: DataClient.RealData__History
 
     jsonSync = createJSONSync() //不支持 subject.subscribe
@@ -133,7 +146,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     }, logText?: string) {
         if (p.symbol !== 'XBTUSD') return false
 
-        //直接成交
+        //TODO 直接成交
 
         return true
     }
