@@ -781,7 +781,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     原始数据: (d, d2) => ({
         heightList: [0.6, 0.2, 0.2],
         items: [
-            [{
+            [
+                {
+                    numberColor: '0x000000',
+                    layerList: [
+                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+                    ]
+                },
+                {
                 numberColor: BTC颜色,
                 layerList: [
                     layer(LineLayer, { data: d2.XBTUSD.期货.价格, color: BTC颜色 }),
