@@ -40,7 +40,7 @@ export class JSONRPCServer<T extends FuncList> {
             (value, key) =>
                 async (req: any) => {
                     try {
-                        return { data: this.func[key]!(req) }
+                        return { data: await this.func[key]!(req) }
                     } catch (error) {
                         return { error }
                     }
