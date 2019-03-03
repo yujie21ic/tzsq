@@ -17,6 +17,14 @@ export class JSONRPCServer<T extends FuncList> {
         [K in keyof T]?: (req: T[K]['req']) => Promise<T[K]['res']>
     } = Object.create(null)
 
+    readonly 模拟客户端调用: {
+        [K in keyof T]: (req: T[K]['req']) => Promise<{
+            error?: JSONRequestError
+            data?: T[K]['res']
+            msg?: string
+        }>
+    }
+
 
     private funcList: T
     private port: number
@@ -27,6 +35,18 @@ export class JSONRPCServer<T extends FuncList> {
     }) {
         this.funcList = p.funcList
         this.port = p.port
+
+        this.模拟客户端调用 = mapObjIndexed(
+            (value, key) =>
+                async (req: any) => {
+                    try {
+                        return { data: this.func[key]!(req) }
+                    } catch (error) {
+                        return { error }
+                    }
+                },
+            p.funcList
+        )
     }
 
     run() {
