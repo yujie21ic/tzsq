@@ -802,6 +802,15 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layer(LineLayer, { data: d.期货.净成交量均线60, color: 波动率颜色 }),
                 ]
             },
+            {
+                numberColor: 买颜色,
+                numberX: 100,
+                layerList: [
+                    layer(ZeroLayer, { color: 买颜色 }),
+                    layer(LineLayer, { data: d2.XBTUSD.bitmex_hopex_差价, color: 买颜色 }),
+                ]
+            },
+          
           
         ],
             {
