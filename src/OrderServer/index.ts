@@ -9,12 +9,13 @@ import { kvs } from '../lib/F/kvs'
 import { to范围 } from '../lib/F/to范围'
 import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
 import { XBTUSD摸顶抄底追涨追跌 } from '../统一接口/task/XBTUSD摸顶抄底追涨追跌'
+import { PositionAndOrder } from '../统一接口/PositionAndOrder/PositionAndOrder'
 
 
 
 //运行的账户
 //cookie --> Account
-const accountDic = new Map<string, BitmexPositionAndOrder>()
+const accountDic = new Map<string, PositionAndOrder>()
 if (config.orderServer !== undefined) {
     kvs(config.orderServer).forEach(({ k, v }) => {
         const account = new BitmexPositionAndOrder({ accountName: k, cookie: v })
@@ -65,6 +66,7 @@ wss.on('connection', ws => {
 
 //http
 const server = new JSONRPCServer({ funcList, port: 3456 })
+server.run()
 
 server.func.取消委托 = async req => {
     const account = accountDic.get(req.cookie)
@@ -130,7 +132,6 @@ server.func.下单 = async req => {
             return await account.updateMaker({
                 orderID: 活动委托[0].id,
                 price: toBuySellPriceFunc(req.side, getPrice),
-                text: '手动updateMaker'
             })
         } else {
             throw '已经有委托了'

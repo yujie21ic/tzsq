@@ -1,20 +1,20 @@
-import { BitmexPositionAndOrderTask, BitmexPositionAndOrder } from '../PositionAndOrder/BitmexPositionAndOrder'
+import { PositionAndOrder } from '../PositionAndOrder/PositionAndOrder'
 import { BaseType } from '../../lib/BaseType'
-import { sleep } from '../../lib/C/sleep'
 import { toBuySellPriceFunc } from '../../lib/C/toBuySellPriceFunc'
 import { lastNumber } from '../../lib/F/lastNumber'
 import { to范围 } from '../../lib/F/to范围'
 import { toGridPoint } from '../../lib/F/toGridPoint'
+import { PositionAndOrderTask } from '../PositionAndOrder/PositionAndOrder'
 
 
 const symbol = 'XBTUSD'
 const 交易数量 = 2
 
 
-export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTask {
+export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
 
-    推止损 = (波动率: number, 盈利点: number, type: string) => {
+    推止损(波动率: number, 盈利点: number, type: string) {
         if (type === '追涨' || type === '追跌') {
             if (盈利点 >= 10) {
                 return 5
@@ -38,7 +38,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
 
     }
 
-    止损step = async (self: BitmexPositionAndOrder) => {
+    async 止损step(self: PositionAndOrder) {
         const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
         const 止损委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type === '止损')
 
@@ -59,7 +59,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
 
                 const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
 
-                //ws返回有时间  直接给委托列表加一条记录??            
+                this.最后一次止损状态 = '亏损止损'
                 return await self.stop({
                     symbol,
                     side,
@@ -96,11 +96,11 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
                     (side === 'Buy' && 新的Price < price) ||
                     (side === 'Sell' && 新的Price > price)
                 ) {
+                    this.最后一次止损状态 = 推 === 0 ? '成本价止损' : '盈利止损'
                     return await self.updateStop({
                         orderID: id,
                         price: 新的Price,
-                        text: 推 === 0 ? '成本价止损' : '盈利止损',
-                    }, '')
+                    }, this.最后一次止损状态)
                 }
                 return false
             }
@@ -113,8 +113,22 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
     }
 
 
-    onFilled: (p: { symbol: BaseType.BitmexSymbol, type: '开仓' | '盈利挂单' | '成本挂单' | '亏损挂单' | '盈利止损' | '成本止损' | '亏损止损' | '强平' }) => void = () => {
-
+    private 连续止损2 = 0
+    private 最后一次止损状态 = ''
+    onFilled(p: { symbol: BaseType.BitmexSymbol, type: '限价' | '限价只减仓' | '止损' | '强平' }) {
+        if (p.symbol === 'XBTUSD') {
+            if (p.type === '限价只减仓') {
+                this.连续止损2 = 0 //不考虑 亏损挂单
+            }
+            else if (p.type === '止损') {
+                if (this.最后一次止损状态 === '亏损止损') {
+                    this.连续止损2 += 1
+                }
+            }
+            else if (p.type === '强平') {
+                this.连续止损2 += 1
+            }
+        }
     }
 
 
@@ -125,7 +139,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
     // 止盈 = false
     // 先写到 jsonSync 里面
 
-    async onTick(self: BitmexPositionAndOrder) {
+    async onTick(self: PositionAndOrder) {
         const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
 
         //委托检测
@@ -169,7 +183,6 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
 
 
         if (仓位数量 === 0) {
-            this.止盈价格 = NaN
             this.最大仓位abs = NaN
             this.最后一次开仓时间 = NaN
             this.最后一次开仓折返率 = NaN
@@ -184,8 +197,9 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
     private 最后一次信号 = 'none' as 'none' | '追涨' | '追跌' | '摸顶' | '抄底'
     private 最后一次信号时间 = 0
     private 最后一次上涨_下跌 = ''
+    private 到什么时间不开仓 = 0
 
-    private 自动开仓 = async (self: BitmexPositionAndOrder) => {
+    private async 自动开仓(self: PositionAndOrder) {
 
         if (self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追涨 === false
             && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追跌 === false
@@ -194,7 +208,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
 
         const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
 
-        const 本地维护仓位数量 = self.ws.仓位数量.get(symbol)
+        const 本地维护仓位数量 = self.get本地维护仓位数量(symbol)
 
         const 活动委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type !== '止损')
 
@@ -205,15 +219,12 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
         const x = self.realData.dataExt[symbol].期货.上涨_下跌
         if (x.length > 0 && this.最后一次上涨_下跌 !== x[x.length - 1]) {
             this.最后一次上涨_下跌 = x[x.length - 1]
-            self.ws.连续止损.partial(symbol, 0)
+            this.连续止损2 = 0
         }
 
-        const 连续止损次数 = self.ws.连续止损.get(symbol)
-
-        if (连续止损次数 >= 4) {
-            await sleep(1000 * 60 * 10)//10min
-            self.ws.连续止损.partial(symbol, 0)
-            return true
+        if (this.连续止损2 >= 4) {
+            this.到什么时间不开仓 = Date.now() + 1000 * 60 * 10
+            this.连续止损2 = 0
         }
 
         //开仓
@@ -241,25 +252,31 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
 
             const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' || self.realData.get波动率(symbol) < 30
 
-            return 市价 ?
-                await self.taker({
-                    symbol,
-                    side: 开仓side,
-                    size: 交易数量 * (连续止损次数 + 1),
-                    text: 信号灯Type,
-                }, '自动开仓step 自动开仓 市价' + self.realData.get信号msg(symbol)) :
-                await self.limit({
-                    symbol,
-                    side: 开仓side,
-                    size: 交易数量 * (连续止损次数 + 1),
-                    price: toBuySellPriceFunc(开仓side, () => self.realData.getOrderPrice({
+
+            if (Date.now() > this.到什么时间不开仓) {
+                return 市价 ?
+                    await self.taker({
                         symbol,
                         side: 开仓side,
-                        type: 'taker',
-                        位置: 0,
-                    })) as any,
-                    text: 信号灯Type,
-                }, '自动开仓step 自动开仓 挂单' + self.realData.get信号msg(symbol))
+                        size: 交易数量 * (this.连续止损2 + 1),
+                        text: 信号灯Type,
+                    }, '自动开仓step 自动开仓 市价' + self.realData.get信号msg(symbol)) :
+                    await self.limit({
+                        symbol,
+                        side: 开仓side,
+                        size: 交易数量 * (this.连续止损2 + 1),
+                        price: toBuySellPriceFunc(开仓side, () => self.realData.getOrderPrice({
+                            symbol,
+                            side: 开仓side,
+                            type: 'taker',
+                            位置: 0,
+                        })) as any,
+                        text: 信号灯Type,
+                    }, '自动开仓step 自动开仓 挂单' + self.realData.get信号msg(symbol))
+            } else {
+                return true
+            }
+
         }
 
 
@@ -280,21 +297,18 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
         return false
     }
 
-
-
-    private 止盈价格 = NaN
     private 最大仓位abs = NaN
     private 最后一次开仓时间 = NaN
     private 最后一次开仓折返率 = NaN
     private 摸顶抄底超时秒 = NaN
 
-    private 自动止盈 = async (self: BitmexPositionAndOrder) => {
+    private async 自动止盈(self: PositionAndOrder) {
 
         if (self.jsonSync.rawData.symbol[symbol].任务开关.自动止盈波段 === false) {
             return true
         }
 
-        const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
+        const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
         const 活动委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type !== '止损')
 
 
@@ -310,34 +324,12 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
 
             const 平仓side = 仓位数量 > 0 ? 'Sell' : 'Buy'
 
-            const getPrice = () => {
-                const 止盈点 = self.realData.get波动率(symbol) / 3 + 3
-                const 止盈点价格 = toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 + 止盈点 : 开仓均价 - 止盈点, 平仓side)
-
-                const 位置1价格 = self.realData.getOrderPrice({
-                    symbol,
-                    side: 平仓side,
-                    type: 'maker',
-                    位置: 0,
-                })
-                return 平仓side === 'Buy' ?
-                    Math.min(止盈点价格, 位置1价格) :
-                    Math.max(止盈点价格, 位置1价格)
-            }
-
-            if (isNaN(this.止盈价格)) {
-                this.止盈价格 = getPrice()
-            }
-
-
             const get位置1价格 = () => self.realData.getOrderPrice({
                 symbol,
                 side: 平仓side,
                 type: 'maker',
                 位置: 0,
             })
-
-
 
             let 亏损挂单平仓Text = ''
 
@@ -376,8 +368,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
                             return await self.updateMaker({
                                 orderID: 活动委托[0].id,
                                 price: toBuySellPriceFunc(平仓side, get位置1价格),
-                                text: this.最后一次信号 + '平仓' + '  ' + 亏损挂单平仓Text + '  重新挂' + 平仓side + '1'
-                            }, '')
+                            }, this.最后一次信号 + '平仓' + '  ' + 亏损挂单平仓Text + '  重新挂' + 平仓side + '1')
                         } else {
                             return false
                         }
@@ -435,15 +426,6 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
                     text: this.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 平一半',
                 }, 信号side + ' 信号msg:' + 信号msg)
 
-                // if (
-                //     (side === 'Buy' && get位置1价格() <= 止盈价格) ||
-                //     (side === 'Sell' && get位置1价格() >= 止盈价格)
-
-                // ) {
-
-                // } else {
-                //     return false
-                // }
             }
         }
 

@@ -8,7 +8,6 @@ import { Subject } from 'rxjs'
 
 const createItem = () => ({
     仓位数量: 0,
-    连续止损: 0,
 })
 const XXX = createItem()
 
@@ -343,7 +342,6 @@ export class BitMEXWSAPI {
     })
 
     仓位数量 = this.xxx('仓位数量')
-    连续止损 = this.xxx('连续止损')
 
 
 
@@ -364,31 +362,20 @@ export class BitMEXWSAPI {
     onOrder(order: BitMEXMessage.Order) {
         this.新成交(order)
 
-        //止盈
         if (order.ordType === 'Limit' && order.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && order.ordStatus === 'Filled') {
-            this.连续止损.partial(order.symbol as BaseType.BitmexSymbol, 0)
-            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '盈利挂单' })
+            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '限价只减仓' })
         }
-
-        //止损
         else if (order.ordType === 'Stop' && order.execInst === 'Close,LastPrice' && order.ordStatus === 'Filled') {
-            //止损给 text 加了前缀  卧槽
-            if (order.text.indexOf('盈利止损') === -1) {//手动检测下类型
-                this.连续止损.update(order.symbol as BaseType.BitmexSymbol, 1)
-            }
-
-            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '亏损止损' })
+            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '止损' })
         }
-
         else if (order.ordType === 'Limit' && order.ordStatus === 'Filled') {
-            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '开仓' })
+            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '限价' })
         }
     }
 
     onExecution(execution: BitMEXMessage.Execution) {
         if (execution.ordType === 'StopLimit') {
             this.新成交(execution)
-            this.连续止损.update(execution.symbol as BaseType.BitmexSymbol, 1) //强平也算 
             this.filledObservable.next({ symbol: execution.symbol as BaseType.BitmexSymbol, type: '强平' })
         }
     }
@@ -397,6 +384,6 @@ export class BitMEXWSAPI {
     //
     filledObservable = new Subject<{
         symbol: BaseType.BitmexSymbol,
-        type: '开仓' | '盈利挂单' | '成本挂单' | '亏损挂单' | '盈利止损' | '成本止损' | '亏损止损' | '强平'
+        type: '限价' | '限价只减仓' | '止损' | '强平'
     }>()
 }

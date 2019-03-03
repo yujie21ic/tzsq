@@ -8,7 +8,7 @@ import { JSONSync } from '../../lib/C/JSONSync'
 import { BitMEXWSAPI } from '../BitMEX/BitMEXWSAPI'
 import { RealData__Server } from '../../RealDataServer/RealData__Server'
 import { toCacheFunc } from '../../lib/C/toCacheFunc'
-import { PositionAndOrder } from './PositionAndOrder'
+import { PositionAndOrder, PositionAndOrderTask } from './PositionAndOrder'
 
 const symbol = () => ({
     任务开关: {
@@ -47,22 +47,23 @@ let callID = 0
 const 重试几次 = 10
 const 重试休息多少毫秒 = 10
 
-export interface BitmexPositionAndOrderTask {
-    onTick(self: BitmexPositionAndOrder): Promise<boolean>
-    onFilled(p: { symbol: BaseType.BitmexSymbol, type: '开仓' | '盈利挂单' | '成本挂单' | '亏损挂单' | '盈利止损' | '成本止损' | '亏损止损' | '强平' }): void
-}
 
-export class BitmexPositionAndOrder extends PositionAndOrder {
+
+export class BitmexPositionAndOrder implements PositionAndOrder {
 
     private cookie: string
     private log = (text: string) => { }
+    private ws: BitMEXWSAPI
 
-    ws: BitMEXWSAPI
+
+    get本地维护仓位数量(symbol: BaseType.BitmexSymbol) {
+        return this.ws.仓位数量.get(symbol)
+    }
+
     jsonSync = createJSONSync()
 
 
     constructor(p: { accountName: string, cookie: string }) {
-        super()
         this.cookie = p.cookie
 
         this.ws = new BitMEXWSAPI(p.cookie, [
@@ -168,7 +169,7 @@ export class BitmexPositionAndOrder extends PositionAndOrder {
         })
     }
 
-    private DDOS调用 = <P extends { text: string }>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
+    private DDOS调用 = <P extends any>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
         async (p: P, logText = '') => {
             const startTime = Date.now()
             let success = false
@@ -176,7 +177,7 @@ export class BitmexPositionAndOrder extends PositionAndOrder {
             let errMsg = ''
             const __id__ = callID++
 
-            this.log(`__${__id__}__` + p.text + '  ' + logText + '\nsend:' + JSON.stringify(p))
+            this.log(`__${__id__}__` + (p['text'] || '') + '  ' + logText + '\nsend:' + JSON.stringify(p))
 
             for (i = 1; i <= 重试几次; i++) {
                 const ret = await f(this.cookie, p)
@@ -255,24 +256,20 @@ export class BitmexPositionAndOrder extends PositionAndOrder {
     updateStop = this.DDOS调用<{
         orderID: string
         price: number
-        text: string
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.amend(cookie, {
             orderID: p.orderID,
             stopPx: p.price,
-            text: p.text,
         })
     )
 
     updateMaker = this.DDOS调用<{
         orderID: string
         price: () => number
-        text: string
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.amend(cookie, {
             orderID: p.orderID,
             price: p.price(),
-            text: p.text,
         })
     )
 
@@ -330,7 +327,7 @@ export class BitmexPositionAndOrder extends PositionAndOrder {
 
     realData = __realData__()
 
-    async runTask(task: BitmexPositionAndOrderTask) {
+    async runTask(task: PositionAndOrderTask) {
         this.ws.filledObservable.subscribe(v => task.onFilled(v))
         while (true) {
             if (await task.onTick(this)) {
