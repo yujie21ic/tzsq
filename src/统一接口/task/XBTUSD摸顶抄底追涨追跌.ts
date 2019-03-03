@@ -112,7 +112,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements BitmexPositionAndOrderTas
     }
 
 
-    onFilled(p: { symbol: BaseType.BitmexSymbol, type: '限价' | '减仓' | '止损' | '强平' }) {
+    onFilled(p: { symbol: BaseType.BitmexSymbol, type: '限价' | '限价只减仓' | '止损' | '强平' }) {
 
     }
 

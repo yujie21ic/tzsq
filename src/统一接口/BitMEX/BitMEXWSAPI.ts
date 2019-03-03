@@ -367,7 +367,7 @@ export class BitMEXWSAPI {
         //止盈
         if (order.ordType === 'Limit' && order.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && order.ordStatus === 'Filled') {
             this.连续止损.partial(order.symbol as BaseType.BitmexSymbol, 0)
-            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '减仓' })
+            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '限价只减仓' })
         }
 
         //止损
@@ -397,6 +397,6 @@ export class BitMEXWSAPI {
     //
     filledObservable = new Subject<{
         symbol: BaseType.BitmexSymbol,
-        type: '限价' | '减仓' | '止损' | '强平'
+        type: '限价' | '限价只减仓' | '止损' | '强平'
     }>()
 }
