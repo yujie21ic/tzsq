@@ -240,7 +240,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         console.log(`${new Date(p.timestamp).toLocaleString()}      ${p.text}       仓位数量 = ${this.jsonSync.rawData.symbol.XBTUSD.仓位数量}     单位taker = ${this.单位taker}       单位maker = ${this.单位maker}       单位盈利 = ${this.单位盈利}`)
 
         if (this.jsonSync.rawData.symbol.XBTUSD.仓位数量 === 0) {
-            console.log('____________________________________________')
+            console.log('____________________________________________________________________________________________________________________________________________________________________________________')
         }
 
         return true
