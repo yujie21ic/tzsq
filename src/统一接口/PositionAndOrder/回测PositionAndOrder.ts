@@ -59,6 +59,8 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     }, logText?: string) {
         if (p.symbol !== 'XBTUSD') return false
 
+        console.log(p.text)
+
         this.jsonSync.rawData.symbol.XBTUSD.活动委托.push({
             type: p.reduceOnly ? '限价只减仓' : '限价',
             timestamp: lastNumber(this.realData.dataExt[p.symbol].期货.时间),
@@ -304,8 +306,8 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                 return true
             })
 
-            
-            if (this.jsonSync.rawData.symbol.XBTUSD.仓位数量 === 0) { 
+
+            if (this.jsonSync.rawData.symbol.XBTUSD.仓位数量 === 0) {
                 //删除 只减仓
                 this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => v.type !== '限价只减仓')
             }
