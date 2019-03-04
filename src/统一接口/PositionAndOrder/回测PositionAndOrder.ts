@@ -310,6 +310,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
             if (this.jsonSync.rawData.symbol.XBTUSD.仓位数量 === 0) {
                 //删除 只减仓
                 this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => v.type !== '限价只减仓')
+                console.log('____________________________________________')
             }
 
 
