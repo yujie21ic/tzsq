@@ -272,7 +272,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                         (v.side === 'Sell' && 卖1 > v.price)
                     ) {
                         this.成交({
-                            timestamp: v.timestamp,
+                            timestamp: lastNumber(this.realData.dataExt.XBTUSD.期货.时间),
                             symbol: 'XBTUSD',
                             side: v.side,
                             size: v.orderQty,
@@ -285,11 +285,11 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                     }
                 }
                 else if (v.type === '止损') {
-                    if ((v.side === 'Buy' && 买1 <= v.price) ||
-                        (v.side === 'Sell' && 卖1 >= v.price)
+                    if ((v.side === 'Buy' && 卖1 >= v.price) ||
+                        (v.side === 'Sell' && 买1 <= v.price)
                     ) {
                         this.成交({
-                            timestamp: v.timestamp,
+                            timestamp: lastNumber(this.realData.dataExt.XBTUSD.期货.时间),
                             symbol: 'XBTUSD',
                             side: v.side,
                             size: Math.abs(this.jsonSync.rawData.symbol.XBTUSD.仓位数量),//________________
