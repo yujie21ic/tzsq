@@ -343,7 +343,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 }
             }
             else if (this.最后一次信号 === '追涨' || this.最后一次信号 === '追跌') {
-                const 净成交量均线60 = lastNumber(self.realData.dataExt[symbol].期货.净成交量均线60)
+                const 净成交量均线60 = lastNumber(self.realData.dataExt[symbol].期货.净成交量60)
 
                 if ((平仓side === 'Sell' && 净成交量均线60 < 0) || (平仓side === 'Buy' && 净成交量均线60 > 0)) {
                     亏损挂单平仓Text = '如果净成交量反向，那么立刻挂单平仓'
