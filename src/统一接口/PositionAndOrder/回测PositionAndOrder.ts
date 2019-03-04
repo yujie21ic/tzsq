@@ -40,8 +40,8 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         //临时
         this.jsonSync.rawData.symbol.XBTUSD.任务开关.自动开仓抄底 = true
         this.jsonSync.rawData.symbol.XBTUSD.任务开关.自动开仓摸顶 = true
-        this.jsonSync.rawData.symbol.XBTUSD.任务开关.自动开仓追涨 = true
-        this.jsonSync.rawData.symbol.XBTUSD.任务开关.自动开仓追跌 = true
+        this.jsonSync.rawData.symbol.XBTUSD.任务开关.自动开仓追涨 = false
+        this.jsonSync.rawData.symbol.XBTUSD.任务开关.自动开仓追跌 = false
         this.jsonSync.rawData.symbol.XBTUSD.任务开关.自动推止损 = true
         this.jsonSync.rawData.symbol.XBTUSD.任务开关.自动止盈波段 = true
     }
@@ -233,6 +233,9 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         this.jsonSync.rawData.symbol.XBTUSD.仓位数量 += count
         if (this.jsonSync.rawData.symbol.XBTUSD.仓位数量 === 0) {
             this.jsonSync.rawData.symbol.XBTUSD.开仓均价 = 0
+
+            //删除 只减仓
+            this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => v.type !== '限价只减仓')
         }
 
         console.log(`${new Date(p.timestamp).toLocaleString()}      ${p.text}       仓位数量 = ${this.jsonSync.rawData.symbol.XBTUSD.仓位数量}     单位taker = ${this.单位taker}       单位maker = ${this.单位maker}       单位盈利 = ${this.单位盈利}`)
