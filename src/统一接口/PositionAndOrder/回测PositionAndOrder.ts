@@ -215,9 +215,9 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
         //手续费
         if (p.被动) {
-            this.单位maker += p.size * 3 //是被动的3倍
+            this.单位maker += p.size
         } else {
-            this.单位taker += p.size
+            this.单位taker += p.size * 3 //是被动的3倍
         }
 
         //盈利 亏损
