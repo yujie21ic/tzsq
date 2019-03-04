@@ -145,7 +145,7 @@ export class RealDataBase {
         const DIF = 指标.lazyMapCache(() => Math.min(_12.length, _26.length), i => _12[i] - _26[i])
         const DEM = 指标.EMA(DIF, 9, RealDataBase.单位时间)
         return { DIF, DEM }
-        }
+    }
 
 
     //!!!
@@ -355,9 +355,9 @@ export class RealDataBase {
         //     2,
         //     RealDataBase.单位时间
         // )
-        const 净下跌成交量macd  = this.macd(净下跌成交量)
-        const 净上涨成交量macd  = this.macd(净上涨成交量)
-      
+        const 净下跌成交量macd = this.macd(净下跌成交量)
+        const 净上涨成交量macd = this.macd(净上涨成交量)
+
 
         const 上涨_下跌 = 指标.lazyMapCache(() => Math.min(净成交量均线60.length), i => 净成交量均线60[i] >= 0 ? '上涨' : '下跌')
 
@@ -391,39 +391,50 @@ export class RealDataBase {
                 //<---------------------------------------------------
             }
         })
+
+
         // const 震荡指数 = 指标.lazyMapCache(() => Math.min(价差.length,波动率.length), i => 波动率[i]/to范围({min:2,max:100,value:价差(上涨_下跌[i])[i]}))
-        const  震荡指数= 指标.lazyMapCache2({ 起点index: NaN, 起点Type: 'none' as '上涨' | '下跌' }, (arr: number[], ext) => {
-            const length = Math.min(波动率.length, 上涨_下跌.length)
+        // const  震荡指数= 指标.lazyMapCache2({ 起点index: NaN, 起点Type: 'none' as '上涨' | '下跌' }, (arr: number[], ext) => {
+        //     const length = Math.min(波动率.length, 上涨_下跌.length)
 
-            let 上涨下跌价差 = (xx: '上涨' | '下跌') => xx === '上涨' ? 上涨_价差 : 下跌_价差 //每个地方都不同！！！！
-
-
-            for (let i = Math.max(0, arr.length - 1); i < length; i++) {
-                //开始
-                if (isNaN(ext.起点index) || ext.起点index === length - 1) {   //最后一个重新计算  
-                    if (上涨下跌价差(上涨_下跌[i])[i] >= 2) { //<---------------------------------------------------
-                        ext.起点index = i
-                        ext.起点Type = 上涨_下跌[i]
-                    }
-                }
-                //结束
-                else {
-                    if (上涨下跌价差(ext.起点Type)[i] >= 200 || 上涨_下跌[i] !== ext.起点Type) { //<---------------------------------------------------
-                        ext.起点index = NaN
-                    }
-                }
+        //     let 上涨下跌价差 = (xx: '上涨' | '下跌') => xx === '上涨' ? 上涨_价差 : 下跌_价差 //每个地方都不同！！！！
 
 
-                // let a = i - ext.起点index
-                // if (a === 0) a = NaN
-                arr[i] = isNaN(ext.起点index) === false && 上涨下跌价差(ext.起点Type)[i] >= 2 ? (波动率[i]/上涨下跌价差(ext.起点Type)[i]) : NaN  //除以根数 
-                //<---------------------------------------------------
-            }
+        //     for (let i = Math.max(0, arr.length - 1); i < length; i++) {
+        //         //开始
+        //         if (isNaN(ext.起点index) || ext.起点index === length - 1) {   //最后一个重新计算  
+        //             if (上涨下跌价差(上涨_下跌[i])[i] >= 2) { //<---------------------------------------------------
+        //                 ext.起点index = i
+        //                 ext.起点Type = 上涨_下跌[i]
+        //             }
+        //         }
+        //         //结束
+        //         else {
+        //             if (上涨下跌价差(ext.起点Type)[i] >= 200 || 上涨_下跌[i] !== ext.起点Type) { //<---------------------------------------------------
+        //                 ext.起点index = NaN
+        //             }
+        //         }
+
+
+        //         // let a = i - ext.起点index
+        //         // if (a === 0) a = NaN
+        //         arr[i] = isNaN(ext.起点index) === false && 上涨下跌价差(ext.起点Type)[i] >= 2 ? (波动率[i]/上涨下跌价差(ext.起点Type)[i]) : NaN  //除以根数 
+        //         //<---------------------------------------------------
+        //     }
+        // })
+
+
+        const 震荡指数 = 指标.lazyMapCache(() => Math.min(上涨_价差.length, 下跌_价差.length, 上涨_下跌.length, 波动率.length), i => {
+            const 上涨下跌价差 = (上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)[i]
+            return 上涨下跌价差 > 2 ? 波动率[i] / 上涨下跌价差 : NaN
+
         })
+
+
         const 震荡指数macd = this.macd(震荡指数)
 
         //const 价格加速度 = 指标.lazyMapCache(() => Math.min(价格差_除以时间.length), i => (价格差_除以时间[i]- 价格差_除以时间[i-5]))
-       
+
         const 累计成交量 = (type: '上涨' | '下跌') => 指标.lazyMapCache2({ 累计成交量: NaN }, (arr: number[], ext) => {
             const length = Math.min(上涨_下跌.length, 成交量买.length, 成交量卖.length)
             for (let i = Math.max(0, arr.length - 1); i < length; i++) {
@@ -464,7 +475,7 @@ export class RealDataBase {
             }
         })
 
-       
+
 
 
 
@@ -487,7 +498,7 @@ export class RealDataBase {
         }
 
         const 上涨_动力macd = this.macd(上涨_动力)
-      
+
 
         const 上涨_动力20均线 = 指标.均线(
             指标.lazyMapCache(() => 上涨_动力.length, i => 上涨_动力[i]),
