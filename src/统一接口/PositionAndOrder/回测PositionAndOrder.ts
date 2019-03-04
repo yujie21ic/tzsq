@@ -2,6 +2,7 @@ import { PositionAndOrder, PositionAndOrderTask } from './PositionAndOrder'
 import { DataClient } from '../../RealDataServer/DataClient'
 import { createJSONSync } from './BitmexPositionAndOrder'
 import { BaseType } from '../../lib/BaseType'
+import { lastNumber } from '../../lib/F/lastNumber'
 
 export class 回测PositionAndOrder implements PositionAndOrder {
 
@@ -15,7 +16,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
     //重复
     get浮盈点数(symbol: BaseType.BitmexSymbol) {
-        const 最新价 = this.realData.期货价格dic.get(symbol)
+        const 最新价 = lastNumber(this.realData.dataExt[symbol].期货.最新价)
         if (最新价 === undefined) return NaN
         const { 仓位数量, 开仓均价 } = this.jsonSync.rawData.symbol[symbol]
         if (仓位数量 === 0) return NaN
@@ -250,20 +251,20 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                 return
             }
 
-            this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => {
-                const 买1 = this.realData.getOrderPrice({
-                    symbol: 'XBTUSD',
-                    side: 'Buy',
-                    type: 'maker',
-                    位置: 0,
-                })
-                const 卖1 = this.realData.getOrderPrice({
-                    symbol: 'XBTUSD',
-                    side: 'Sell',
-                    type: 'maker',
-                    位置: 0,
-                })
+            const 买1 = this.realData.getOrderPrice({
+                symbol: 'XBTUSD',
+                side: 'Buy',
+                type: 'maker',
+                位置: 0,
+            })
+            const 卖1 = this.realData.getOrderPrice({
+                symbol: 'XBTUSD',
+                side: 'Sell',
+                type: 'maker',
+                位置: 0,
+            })
 
+            this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => {
                 if (v.type === '限价' || v.type === '限价只减仓') {
                     if ((v.side === 'Buy' && 买1 < v.price) ||
                         (v.side === 'Sell' && 卖1 > v.price)

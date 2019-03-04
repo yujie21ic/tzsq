@@ -25,7 +25,7 @@ export class RealData__Server extends RealDataBase {
     }) => { }
 
 
-    
+
 
 
     private on着笔Dic = Object.create(null) as {
@@ -201,7 +201,6 @@ export class RealData__Server extends RealDataBase {
                 size,
                 price,
             })
-            this.期货价格dic.set(symbol as BaseType.BitmexSymbol, price)
         })
 
         this.bitmex.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
@@ -214,11 +213,6 @@ export class RealData__Server extends RealDataBase {
                     buy,
                     sell,
                 }
-            })
-            this.期货盘口dic.set(symbol as BaseType.BitmexSymbol, {
-                id: Math.floor(timestamp / RealDataBase.单位时间),
-                buy,
-                sell,
             })
         })
 

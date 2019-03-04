@@ -183,6 +183,9 @@ export class RealDataBase {
 
         const 多少秒均线 = this.默认期货波动率
 
+
+        const 最新价 = 指标.lazyMapCache(() => data.length, i => data[i].close)
+
         const 价格 = 盘口算价格 ?
 
             指标.lazyMapCache(() => orderBook.length, i =>
@@ -827,6 +830,8 @@ export class RealDataBase {
 
 
         return {
+            最新价,
+            盘口: orderBook,
             时间,
             波动率5分钟,
             净成交量均线10,
@@ -1007,24 +1012,11 @@ export class RealDataBase {
 
     private 默认期货波动率 = 30
 
-
-
-
-
-
-
-
-
-
-
-
-
-    期货盘口dic = new Map<BaseType.BitmexSymbol, BaseType.OrderBook>()
-    期货价格dic = new Map<BaseType.BitmexSymbol, number>()
-
     getOrderPrice = ({ symbol, side, type, 位置 }: { symbol: BaseType.BitmexSymbol, side: BaseType.Side, type: 'taker' | 'maker', 位置: number }) => {
-        const p = this.期货盘口dic.get(symbol)
-        if (p === undefined) return NaN
+        const pk = this.dataExt[symbol].期货.盘口
+
+        if (pk.length < 1) return NaN
+        const p = pk[pk.length - 1]
 
         if (side === 'Buy') {
             if (type === 'taker') {
