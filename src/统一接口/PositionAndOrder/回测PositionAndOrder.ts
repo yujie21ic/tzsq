@@ -233,9 +233,6 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         this.jsonSync.rawData.symbol.XBTUSD.仓位数量 += count
         if (this.jsonSync.rawData.symbol.XBTUSD.仓位数量 === 0) {
             this.jsonSync.rawData.symbol.XBTUSD.开仓均价 = 0
-
-            //删除 只减仓
-            this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => v.type !== '限价只减仓')
         }
 
         console.log(`${new Date(p.timestamp).toLocaleString()}      ${p.text}       仓位数量 = ${this.jsonSync.rawData.symbol.XBTUSD.仓位数量}     单位taker = ${this.单位taker}       单位maker = ${this.单位maker}       单位盈利 = ${this.单位盈利}`)
@@ -280,7 +277,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                             side: v.side,
                             size: v.orderQty,
                             price: v.price,
-                            text: '平仓',
+                            text: v.type === '限价' ? '开仓' : '平仓',
                             被动: true,
                         })
                         task.onFilled({ symbol: 'XBTUSD', type: v.type })
@@ -306,6 +303,12 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                 }
                 return true
             })
+
+            
+            if (this.jsonSync.rawData.symbol.XBTUSD.仓位数量 === 0) { 
+                //删除 只减仓
+                this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => v.type !== '限价只减仓')
+            }
 
 
             await task.onTick(this)
