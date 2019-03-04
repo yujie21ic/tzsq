@@ -61,7 +61,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
         this.jsonSync.rawData.symbol.XBTUSD.活动委托.push({
             type: p.reduceOnly ? '限价只减仓' : '限价',
-            timestamp: Date.now(),
+            timestamp: lastNumber(this.realData.dataExt[p.symbol].期货.时间),
             id: String(this.order_id++),
             side: p.side,
             cumQty: 0,
@@ -82,7 +82,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
         this.jsonSync.rawData.symbol.XBTUSD.活动委托.push({
             type: '止损',
-            timestamp: Date.now(),
+            timestamp: lastNumber(this.realData.dataExt[p.symbol].期货.时间),
             id: String(this.order_id++),
             side: p.side,
             cumQty: 0,
@@ -133,6 +133,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         text: string;
     }, logText?: string) {
         return this.成交({
+            timestamp: lastNumber(this.realData.dataExt[p.symbol].期货.时间),
             symbol: p.symbol,
             side: p.side,
             size: p.size,
@@ -193,6 +194,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     单位盈利 = 0
 
     async 成交(p: {
+        timestamp: number
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         size: number
@@ -233,7 +235,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
             this.jsonSync.rawData.symbol.XBTUSD.开仓均价 = 0
         }
 
-        console.log(p.text, `仓位数量 = ${this.jsonSync.rawData.symbol.XBTUSD.仓位数量}     单位taker = ${this.单位taker}       单位maker = ${this.单位maker}       单位盈利 = ${this.单位盈利}`)
+        console.log(`${new Date(p.timestamp).toLocaleString()}      ${p.text}       仓位数量 = ${this.jsonSync.rawData.symbol.XBTUSD.仓位数量}     单位taker = ${this.单位taker}       单位maker = ${this.单位maker}       单位盈利 = ${this.单位盈利}`)
 
         return true
     }
@@ -270,11 +272,12 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                         (v.side === 'Sell' && 卖1 > v.price)
                     ) {
                         this.成交({
+                            timestamp: v.timestamp,
                             symbol: 'XBTUSD',
                             side: v.side,
                             size: v.orderQty,
                             price: v.price,
-                            text: v.type + '',
+                            text: '平仓',
                             被动: true,
                         })
                         task.onFilled({ symbol: 'XBTUSD', type: v.type })
@@ -286,6 +289,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                         (v.side === 'Sell' && 卖1 >= v.price)
                     ) {
                         this.成交({
+                            timestamp: v.timestamp,
                             symbol: 'XBTUSD',
                             side: v.side,
                             size: Math.abs(this.jsonSync.rawData.symbol.XBTUSD.仓位数量),//________________
