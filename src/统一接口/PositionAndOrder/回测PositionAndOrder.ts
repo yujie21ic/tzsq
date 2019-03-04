@@ -239,6 +239,10 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
         console.log(`${new Date(p.timestamp).toLocaleString()}      ${p.text}       仓位数量 = ${this.jsonSync.rawData.symbol.XBTUSD.仓位数量}     单位taker = ${this.单位taker}       单位maker = ${this.单位maker}       单位盈利 = ${this.单位盈利}`)
 
+        if (this.jsonSync.rawData.symbol.XBTUSD.仓位数量 === 0) {
+            console.log('____________________________________________')
+        }
+
         return true
     }
 
@@ -310,7 +314,6 @@ export class 回测PositionAndOrder implements PositionAndOrder {
             if (this.jsonSync.rawData.symbol.XBTUSD.仓位数量 === 0) {
                 //删除 只减仓
                 this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => v.type !== '限价只减仓')
-                console.log('____________________________________________')
             }
 
 
