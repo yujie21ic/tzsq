@@ -6,6 +6,7 @@ import { kvs } from '../lib/F/kvs'
 import { to范围 } from '../lib/F/to范围'
 import { lastNumber } from '../lib/F/lastNumber'
 import { is连续几根全亮 } from '../lib/C/is连续几根全亮'
+import { timeID } from '../lib/F/timeID'
 
 
 
@@ -189,6 +190,8 @@ export class RealDataBase {
                     ((orderBook[i].buy[0].price + orderBook[i].sell[0].price) / 2) : NaN) :
 
             指标.lazyMapCache(() => data.length, i => data[i].close)
+
+        const 时间 = 指标.lazyMapCache(() => data.length, i => timeID._500msIDToTimestamp(data[i].id))
 
 
         //和别的时间参数不一样
@@ -646,7 +649,7 @@ export class RealDataBase {
             i => {
                 return [
                     // { name: '成交量DIF>DEM', value: 净上涨成交量DIF[i] > 净上涨成交量DEM[i] },
-                    { name: '净盘口>0', value: 净盘口[i]>0 },
+                    { name: '净盘口>0', value: 净盘口[i] > 0 },
                     //{ name: '卖盘低量', value: 盘口卖[i] < 50 * 10000 },波动率5分钟 净上涨成交量2
                     { name: '5分钟波动率低量', value: 波动率5分钟[i] < 30 },
                     { name: '大单', value: 净成交量均线10[i] > 100 * 10000 },
@@ -771,7 +774,7 @@ export class RealDataBase {
                 ]
             }
         )
-        
+
         const 信号_下跌抄底上涨平仓 = 指标.lazyMapCache(
             () => Math.min(
                 净盘口.length,
@@ -807,7 +810,7 @@ export class RealDataBase {
             i => {
                 return [
                     //{ name: '卖成交量DIF>DEM', value: 净下跌成交量DIF[i] > 净下跌成交量DEM[i] },
-                    { name: '净盘口<0', value: 净盘口[i]<0 },
+                    { name: '净盘口<0', value: 净盘口[i] < 0 },
                     { name: '5分钟波动率低量', value: 波动率5分钟[i] < 30 },
                     //{ name: '波动率 >=1', value: 波动率[i] >= 1 },
                     { name: '下跌_价差<4', value: 下跌_价差[i] <= 4 },
@@ -824,6 +827,7 @@ export class RealDataBase {
 
 
         return {
+            时间,
             波动率5分钟,
             净成交量均线10,
             净成交量均线120,
