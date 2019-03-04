@@ -9,3 +9,4 @@ export const to范围 = ({ min, max, value }: { min: number, max: number, value:
         return value
     }
 }
+

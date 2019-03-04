@@ -113,6 +113,7 @@ export class RealDataBase {
         }
     )
 
+
     get期货多少秒内最高最低(symbol: BaseType.BitmexSymbol, second: number) {
         second = second * (1000 / RealDataBase.单位时间)
 
@@ -138,6 +139,13 @@ export class RealDataBase {
         }
         return { high, low }
     }
+    macd(arr: ArrayLike<number>) {
+        const _12 = 指标.EMA(arr, 12, RealDataBase.单位时间)
+        const _26 = 指标.EMA(arr, 26, RealDataBase.单位时间)
+        const DIF = 指标.lazyMapCache(() => Math.min(_12.length, _26.length), i => _12[i] - _26[i])
+        const DEM = 指标.EMA(DIF, 9, RealDataBase.单位时间)
+        return { DIF, DEM }
+        }
 
 
     //!!!
@@ -347,19 +355,9 @@ export class RealDataBase {
         //     2,
         //     RealDataBase.单位时间
         // )
-
-        const 净下跌成交量12 = 指标.EMA(净下跌成交量, 12, RealDataBase.单位时间)
-        const 净下跌成交量26 = 指标.EMA(净下跌成交量, 26, RealDataBase.单位时间)
-        const 净下跌成交量DIF = 指标.lazyMapCache(() => Math.min(净下跌成交量12.length, 净下跌成交量26.length), i => 净下跌成交量12[i] - 净下跌成交量26[i])
-        const 净下跌成交量DEM = 指标.EMA(净下跌成交量DIF, 9, RealDataBase.单位时间)
-
-        const 净上涨成交量12 = 指标.EMA(净上涨成交量, 12, RealDataBase.单位时间)
-        const 净上涨成交量26 = 指标.EMA(净上涨成交量, 26, RealDataBase.单位时间)
-        const 净上涨成交量DIF = 指标.lazyMapCache(() => Math.min(净上涨成交量12.length, 净上涨成交量26.length), i => 净上涨成交量12[i] - 净上涨成交量26[i])
-        const 净上涨成交量DEM = 指标.EMA(净上涨成交量DIF, 9, RealDataBase.单位时间)
-
-
-
+        const 净下跌成交量macd  = this.macd(净下跌成交量)
+        const 净上涨成交量macd  = this.macd(净上涨成交量)
+      
 
         const 上涨_下跌 = 指标.lazyMapCache(() => Math.min(净成交量均线60.length), i => 净成交量均线60[i] >= 0 ? '上涨' : '下跌')
 
@@ -393,8 +391,39 @@ export class RealDataBase {
                 //<---------------------------------------------------
             }
         })
+        // const 震荡指数 = 指标.lazyMapCache(() => Math.min(价差.length,波动率.length), i => 波动率[i]/to范围({min:2,max:100,value:价差(上涨_下跌[i])[i]}))
+        const  震荡指数= 指标.lazyMapCache2({ 起点index: NaN, 起点Type: 'none' as '上涨' | '下跌' }, (arr: number[], ext) => {
+            const length = Math.min(波动率.length, 上涨_下跌.length)
+
+            let 上涨下跌价差 = (xx: '上涨' | '下跌') => xx === '上涨' ? 上涨_价差 : 下跌_价差 //每个地方都不同！！！！
 
 
+            for (let i = Math.max(0, arr.length - 1); i < length; i++) {
+                //开始
+                if (isNaN(ext.起点index) || ext.起点index === length - 1) {   //最后一个重新计算  
+                    if (上涨下跌价差(上涨_下跌[i])[i] >= 2) { //<---------------------------------------------------
+                        ext.起点index = i
+                        ext.起点Type = 上涨_下跌[i]
+                    }
+                }
+                //结束
+                else {
+                    if (上涨下跌价差(ext.起点Type)[i] >= 200 || 上涨_下跌[i] !== ext.起点Type) { //<---------------------------------------------------
+                        ext.起点index = NaN
+                    }
+                }
+
+
+                // let a = i - ext.起点index
+                // if (a === 0) a = NaN
+                arr[i] = isNaN(ext.起点index) === false && 上涨下跌价差(ext.起点Type)[i] >= 2 ? (波动率[i]/上涨下跌价差(ext.起点Type)[i]) : NaN  //除以根数 
+                //<---------------------------------------------------
+            }
+        })
+        const 震荡指数macd = this.macd(震荡指数)
+
+        //const 价格加速度 = 指标.lazyMapCache(() => Math.min(价格差_除以时间.length), i => (价格差_除以时间[i]- 价格差_除以时间[i-5]))
+       
         const 累计成交量 = (type: '上涨' | '下跌') => 指标.lazyMapCache2({ 累计成交量: NaN }, (arr: number[], ext) => {
             const length = Math.min(上涨_下跌.length, 成交量买.length, 成交量卖.length)
             for (let i = Math.max(0, arr.length - 1); i < length; i++) {
@@ -435,6 +464,9 @@ export class RealDataBase {
             }
         })
 
+       
+
+
 
         const 上涨_累计成交量 = 累计成交量('上涨')
         const 上涨_价差 = 价差('上涨')
@@ -454,11 +486,8 @@ export class RealDataBase {
             动力: 下跌_动力,
         }
 
-
-        const 上涨_动力12 = 指标.EMA(上涨_动力, 6, RealDataBase.单位时间)
-        const 上涨_动力26 = 指标.EMA(上涨_动力, 13, RealDataBase.单位时间)
-        const 上涨_动力DIF = 指标.lazyMapCache(() => Math.min(上涨_动力12.length, 上涨_动力26.length), i => 上涨_动力12[i] - 上涨_动力26[i])
-        const 上涨_动力DEM = 指标.EMA(上涨_动力DIF, 5, RealDataBase.单位时间)
+        const 上涨_动力macd = this.macd(上涨_动力)
+      
 
         const 上涨_动力20均线 = 指标.均线(
             指标.lazyMapCache(() => 上涨_动力.length, i => 上涨_动力[i]),
@@ -471,10 +500,7 @@ export class RealDataBase {
             RealDataBase.单位时间
         )
 
-        const 下跌_动力12 = 指标.EMA(下跌_动力, 6, RealDataBase.单位时间)
-        const 下跌_动力26 = 指标.EMA(下跌_动力, 13, RealDataBase.单位时间)
-        const 下跌_动力DIF = 指标.lazyMapCache(() => Math.min(下跌_动力12.length, 下跌_动力26.length), i => 下跌_动力12[i] - 下跌_动力26[i])
-        const 下跌_动力DEM = 指标.EMA(下跌_动力DIF, 5, RealDataBase.单位时间)
+        const 下跌_动力macd = this.macd(上涨_动力)
 
 
         const 下跌_动力20均线 = 指标.均线(
@@ -510,8 +536,8 @@ export class RealDataBase {
                 波动率.length,
                 上涨还是下跌.length,
                 自动下单条件.length,
-                净上涨成交量DIF.length,
-                净上涨成交量DEM.length,
+                净上涨成交量macd.DIF.length,
+                净上涨成交量macd.DEM.length,
                 波动率.length,
             ),
             i => {
@@ -572,22 +598,22 @@ export class RealDataBase {
                 //用语言描述出容易止损的波动的不同之处
                 let c = false
                 if (上涨_价差[i] < 价差中大分界) {
-                    if (净上涨成交量DIF[i] < 净上涨成交量DEM[i]) {
+                    if (净上涨成交量macd.DIF[i] < 净上涨成交量macd.DEM[i]) {
                         c = true
                     } else {
                         //macd刻画的是局部性质，当快均线只大于慢均线一点点的时候，如果净下跌量又很小了，那么可以认为成交量萎缩也是成立的
-                        if (净上涨成交量DIF[i] < 净上涨成交量DEM[i] * 1.1) {
+                        if (净上涨成交量macd.DIF[i] < 净上涨成交量macd.DEM[i] * 1.1) {
                             if (净成交量均线10[i] < 50 * 10000) {
                                 c = true
                             }
                         }
                     }
                 } else {
-                    if (净上涨成交量DIF[i] < 净上涨成交量DEM[i] && 净上涨成交量DIF[i] < 0) {
+                    if (净上涨成交量macd.DIF[i] < 净上涨成交量macd.DEM[i] && 净上涨成交量macd.DIF[i] < 0) {
                         c = true
                     } else {
                         //macd刻画的是局部性质，当快均线只大于慢均线一点点的时候，如果净下跌量又很小了，那么可以认为成交量萎缩也是成立的
-                        if (净上涨成交量DIF[i] < 净上涨成交量DEM[i] * 1.1) {
+                        if (净上涨成交量macd.DIF[i] < 净上涨成交量macd.DEM[i] * 1.1) {
                             if (净成交量均线10[i] < 50 * 10000) {
                                 c = true
                             }
@@ -621,13 +647,13 @@ export class RealDataBase {
                 波动率.length,
                 上涨还是下跌.length,
                 自动下单条件.length,
-                净上涨成交量DIF.length,
-                净上涨成交量DEM.length,
+                净上涨成交量macd.DIF.length,
+                净上涨成交量macd.DEM.length,
                 波动率.length,
             ),
             i => {
                 return [
-                    { name: '成交量DIF<DEM', value: 净下跌成交量DIF[i] < 净下跌成交量DEM[i] },
+                    { name: '成交量DIF<DEM', value: 净下跌成交量macd.DIF[i] < 净下跌成交量macd.DEM[i] },
                     { name: '折返程度<', value: (最高价10[i] - 价格[i]) > 折返率[i] },
                     //{ name: ' 净盘口<净盘口均线<0', value: b },
                     //波动率大于25之后，出现一次真空信号，动力慢信号都为true
@@ -645,8 +671,8 @@ export class RealDataBase {
                 波动率.length,
                 上涨还是下跌.length,
                 自动下单条件.length,
-                净上涨成交量DIF.length,
-                净上涨成交量DEM.length,
+                净上涨成交量macd.DIF.length,
+                净上涨成交量macd.DEM.length,
                 波动率.length,
             ),
             i => {
@@ -682,8 +708,8 @@ export class RealDataBase {
                 波动率.length,
                 上涨还是下跌.length,
                 自动下单条件.length,
-                净上涨成交量DIF.length,
-                净上涨成交量DEM.length,
+                净上涨成交量macd.DIF.length,
+                净上涨成交量macd.DEM.length,
                 波动率.length,
             ),
             i => {
@@ -739,19 +765,19 @@ export class RealDataBase {
                 //净下跌成交量DIF[i] < 净下跌成交量DEM[i] && (波动率[i] < 波动率中大分界 ? true : 净下跌成交量DIF[i] < 0) 
                 let c = false
                 if (下跌_价差[i] < 价差中大分界) {
-                    if (净下跌成交量DIF[i] < 净下跌成交量DEM[i]) {
+                    if (净下跌成交量macd.DIF[i] < 净下跌成交量macd.DEM[i]) {
                         c = true
-                    } else if (净下跌成交量DIF[i] < 净下跌成交量DEM[i] * 1.1) {
+                    } else if (净下跌成交量macd.DIF[i] < 净下跌成交量macd.DEM[i] * 1.1) {
                         if (净成交量均线10[i] > -50 * 10000) {
                             c = true
                         }
                     }
                 } else {
-                    if (净下跌成交量DIF[i] < 净下跌成交量DEM[i] && 净下跌成交量DIF[i] < 0) {
+                    if (净下跌成交量macd.DIF[i] < 净下跌成交量macd.DEM[i] && 净下跌成交量macd.DIF[i] < 0) {
                         c = true
                     } else {
                         //macd刻画的是局部性质，当快均线只大于慢均线一点点的时候，如果净下跌量又很小了，那么可以认为成交量萎缩也是成立的
-                        if (净下跌成交量DIF[i] < 净下跌成交量DEM[i] * 1.1) {
+                        if (净下跌成交量macd.DIF[i] < 净下跌成交量macd.DEM[i] * 1.1) {
                             if (净成交量均线10[i] > -50 * 10000) {
                                 c = true
                             }
@@ -786,13 +812,13 @@ export class RealDataBase {
                 波动率.length,
                 上涨还是下跌.length,
                 自动下单条件.length,
-                净上涨成交量DIF.length,
-                净上涨成交量DEM.length,
+                净上涨成交量macd.DIF.length,
+                净上涨成交量macd.DEM.length,
                 波动率.length,
             ),
             i => {
                 return [
-                    { name: '卖成交量DIF<DEM', value: 净上涨成交量DIF[i] < 净上涨成交量DEM[i] },
+                    { name: '卖成交量DIF<DEM', value: 净上涨成交量macd.DIF[i] < 净上涨成交量macd.DEM[i] },
                     { name: '折返程度<', value: (价格[i] - 最低价10[i]) > 折返率[i] },
                 ]
             }
@@ -806,8 +832,8 @@ export class RealDataBase {
                 波动率.length,
                 上涨还是下跌.length,
                 自动下单条件.length,
-                净上涨成交量DIF.length,
-                净上涨成交量DEM.length,
+                净上涨成交量macd.DIF.length,
+                净上涨成交量macd.DEM.length,
                 波动率.length,
             ),
             i => {
@@ -830,6 +856,9 @@ export class RealDataBase {
 
 
         return {
+            震荡指数macd,
+            震荡指数,
+            //价格加速度,
             最新价,
             盘口: orderBook,
             时间,
@@ -847,15 +876,11 @@ export class RealDataBase {
             上涨_动力10均线,
             下跌_动力20均线,
             下跌_动力10均线,
-            上涨_动力DIF,
-            上涨_动力DEM,
-            下跌_动力DIF,
-            下跌_动力DEM,
+            上涨_动力macd,
+            下跌_动力macd,
             价格均线,
-            净上涨成交量DIF,
-            净上涨成交量DEM,
-            净下跌成交量DIF,
-            净下跌成交量DEM,
+            净上涨成交量macd,
+            净下跌成交量macd,
             上涨,
             上涨_价差,
             下跌,
