@@ -222,7 +222,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         if (is减仓) {
             const 开仓价 = this.jsonSync.rawData.symbol.XBTUSD.开仓均价
             const 平仓价 = p.price
-            this.单位盈利 += (p.side === 'Buy' ? 平仓价 - 开仓价 : 开仓价 - 平仓价) * p.size
+            this.单位盈利 += (p.side === 'Sell' ? 平仓价 - 开仓价 : 开仓价 - 平仓价) * p.size
         } else {
             //不会有加仓
             this.jsonSync.rawData.symbol.XBTUSD.开仓均价 = p.price
@@ -233,7 +233,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
             this.jsonSync.rawData.symbol.XBTUSD.开仓均价 = 0
         }
 
-        console.log(p.text, `单位taker = ${this.单位taker}      单位maker  = ${this.单位maker}      单位盈利  = ${this.单位盈利}`)
+        console.log(p.text, `仓位数量 = ${this.jsonSync.rawData.symbol.XBTUSD.仓位数量}     单位taker = ${this.单位taker}       单位maker = ${this.单位maker}       单位盈利 = ${this.单位盈利}`)
 
         return true
     }
@@ -288,7 +288,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                         this.成交({
                             symbol: 'XBTUSD',
                             side: v.side,
-                            size: v.orderQty,
+                            size: Math.abs(this.jsonSync.rawData.symbol.XBTUSD.仓位数量),//________________
                             price: v.price,
                             text: v.type + '',
                             被动: false,
