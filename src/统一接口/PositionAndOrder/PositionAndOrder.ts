@@ -6,6 +6,10 @@ export interface PositionAndOrder {
 
     //先写成这样  需要改  
     jsonSync: JSONSync<{
+        wallet: {
+            time: number
+            total: number
+        }[]
         symbol: {
             XBTUSD: {
                 任务开关: {

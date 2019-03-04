@@ -27,6 +27,10 @@ const symbol = () => ({
 
 export const createJSONSync = () =>
     new JSONSync({
+        wallet: [] as {
+            time: number
+            total: number
+        }[],
         symbol: {
             XBTUSD: symbol(),
             ETHUSD: symbol(),
@@ -68,6 +72,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         this.cookie = p.cookie
 
         this.ws = new BitMEXWSAPI(p.cookie, [
+            { theme: 'margin' },
             { theme: 'position' },
             { theme: 'order' },
         ])
@@ -77,6 +82,9 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
         this.ws.onmessage = frame => {
 
+            if (frame.table === 'margin') {
+                this.updateMargin()
+            }
             if (frame.table === 'position') {
                 this.updatePosition()
             }
@@ -84,6 +92,18 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                 this.updateOrder()
             }
         }
+    }
+
+    private updateMargin() {
+        this.ws.data.margin.forEach(({ walletBalance, timestamp }) => {
+            const { wallet } = this.jsonSync.rawData
+            if (wallet.length === 0 || wallet[wallet.length - 1].total !== walletBalance) {
+                this.jsonSync.data.wallet.____push({
+                    time: new Date(timestamp).getTime(),
+                    total: walletBalance
+                })
+            }
+        })
     }
 
 
