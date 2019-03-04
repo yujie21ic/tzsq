@@ -52,7 +52,7 @@ export namespace DataClient {
             //data 处理
             let index = 0
             let ret = [] as typeof data
-            for (let i = timeID.timestampTo500msID(new Date(startTime).getTime()); i <= timeID.timestampTo500msID(new Date(startTime + 加载多少秒数据 * 1000).getTime()); i++) {
+            for (let i = timeID.timestampTo500msID(startTime); i <= timeID.timestampTo500msID(endTime); i++) {
                 if (data[index] === undefined || i < data[index].id) {
                     ret.push({
                         id: i,
@@ -84,7 +84,7 @@ export namespace DataClient {
             //data 处理
             let index = 0
             let ret = [] as typeof data
-            for (let i = timeID.timestampTo500msID(new Date(startTime).getTime()); i <= timeID.timestampTo500msID(new Date(startTime + 加载多少秒数据 * 1000).getTime()); i++) {
+            for (let i = timeID.timestampTo500msID(startTime); i <= timeID.timestampTo500msID(endTime); i++) {
                 if (data[index] === undefined || i < data[index].id) {
                     ret.push({
                         id: i,
