@@ -241,20 +241,9 @@ export class RealDataBase {
         const 真空信号涨 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 < 150000) && 阻力3[i].阻力 > 0 && 阻力3[i].价钱增量 >= to范围({ min: 4, max: 12, value: 波动率[i] / 10 }))
         const 真空信号跌 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 > -150000) && 阻力3[i].阻力 < 0 && 阻力3[i].价钱增量 >= to范围({ min: 4, max: 12, value: 波动率[i] / 10 }))
 
-
-
         //上涨_下跌
         const 最高价10 = 指标.最高(价格, 15, RealDataBase.单位时间)      //<------------------ 最高价10 = 15 ？？？
         const 最低价10 = 指标.最低(价格, 15, RealDataBase.单位时间)      //<------------------ 最低价10 = 15 ？？？
-
-        // 删除
-        // const 最高价10index = 指标.最高index(价格, 15, RealDataBase.单位时间)
-        // const 最低价10index = 指标.最低index(价格, 15, RealDataBase.单位时间) 
-        // const 上涨还是下跌 = 指标.lazyMapCache(
-        //     () => Math.min(最高价10index.length, 最低价10index.length),
-        //     i => 最高价10index[i] > 最低价10index[i] ? '上涨' : '下跌'
-        // )
-
         const 上涨_下跌 = 指标.lazyMapCache(() => Math.min(净成交量60.length), i => 净成交量60[i] >= 0 ? '上涨' : '下跌')
 
 
