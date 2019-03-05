@@ -220,7 +220,7 @@ export class RealDataBase {
 
         const 净成交量60 = 指标.累加(净成交量, 60, RealDataBase.单位时间)
         const 净成交量120 = 指标.累加(净成交量, 500, RealDataBase.单位时间)    //<------------------ 净成交量120 = 500 ？？？
-
+        const 净成交量macd = this.macd(净成交量60)
 
         //盘口
         const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
@@ -242,18 +242,21 @@ export class RealDataBase {
         const 真空信号跌 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 > -150000) && 阻力3[i].阻力 < 0 && 阻力3[i].价钱增量 >= to范围({ min: 4, max: 12, value: 波动率[i] / 10 }))
 
 
+
+        //上涨_下跌
         const 最高价10 = 指标.最高(价格, 15, RealDataBase.单位时间)
         const 最低价10 = 指标.最低(价格, 15, RealDataBase.单位时间)
 
-        const 最高价10index = 指标.最高index(价格, 15, RealDataBase.单位时间)
-        const 最低价10index = 指标.最低index(价格, 15, RealDataBase.单位时间)
+        // 删除
+        // const 最高价10index = 指标.最高index(价格, 15, RealDataBase.单位时间)
+        // const 最低价10index = 指标.最低index(价格, 15, RealDataBase.单位时间) 
+        // const 上涨还是下跌 = 指标.lazyMapCache(
+        //     () => Math.min(最高价10index.length, 最低价10index.length),
+        //     i => 最高价10index[i] > 最低价10index[i] ? '上涨' : '下跌'
+        // )
 
-        const 上涨还是下跌 = 指标.lazyMapCache(
-            () => Math.min(最高价10index.length, 最低价10index.length),
-            i => 最高价10index[i] > 最低价10index[i] ? '上涨' : '下跌'
-        )
-        const 净成交量macd = this.macd(净成交量60)
         const 上涨_下跌 = 指标.lazyMapCache(() => Math.min(净成交量60.length), i => 净成交量60[i] >= 0 ? '上涨' : '下跌')
+
 
         const 价格差_除以时间 = 指标.lazyMapCache2({ 起点index: NaN, 起点Type: 'none' as '上涨' | '下跌' }, (arr: number[], ext) => {
             const length = Math.min(波动率.length, 上涨_下跌.length)
@@ -406,8 +409,6 @@ export class RealDataBase {
                 净盘口均线.length,
                 盘口买2秒均线.length,
                 波动率.length,
-                上涨还是下跌.length,
-
                 波动率.length,
             ),
             i => {
@@ -503,7 +504,6 @@ export class RealDataBase {
                 净盘口均线.length,
                 盘口买2秒均线.length,
                 波动率.length,
-                上涨还是下跌.length,
                 净成交量macd.DIF.length,
                 净成交量macd.DEM.length,
                 波动率.length,
@@ -520,7 +520,6 @@ export class RealDataBase {
                 净盘口均线.length,
                 盘口买2秒均线.length,
                 波动率.length,
-                上涨还是下跌.length,
                 净成交量macd.DIF.length,
                 净成交量macd.DEM.length,
                 波动率.length,
@@ -549,7 +548,6 @@ export class RealDataBase {
                 净盘口均线.length,
                 盘口卖2秒均线.length,
                 波动率.length,
-                上涨还是下跌.length,
                 净成交量macd.DIF.length,
                 净成交量macd.DEM.length,
                 波动率.length,
@@ -645,7 +643,6 @@ export class RealDataBase {
                 净盘口均线.length,
                 盘口卖2秒均线.length,
                 波动率.length,
-                上涨还是下跌.length,
                 净成交量macd.DIF.length,
                 净成交量macd.DEM.length,
                 波动率.length,
@@ -663,7 +660,6 @@ export class RealDataBase {
                 净盘口均线.length,
                 盘口卖2秒均线.length,
                 波动率.length,
-                上涨还是下跌.length,
                 净成交量macd.DIF.length,
                 净成交量macd.DEM.length,
                 波动率.length,
