@@ -590,48 +590,47 @@ export class RealDataBase {
 
 
 
-        //追涨  追跌
+        //追涨 追跌
         const 信号_追涨 = 指标.lazyMapCache(
             () => Math.min(
                 净盘口.length,
-                净盘口_均线5.length,
-                盘口买_均线_1d5.length,
-                价格_波动率30.length,
-                净成交量_macd.DIF.length,
-                净成交量_macd.DEM.length,
-                价格_波动率30.length,
+                价格_波动率300.length,
+                净成交量_累加5.length,
+                上涨_价差.length,
+                价格_最高15.length,
+                价格.length,
+                折返率.length,
+                上涨_下跌.length,
             ),
-            i =>
-                [
-                    { name: '净盘口>0', value: 净盘口[i] > 0 },
-                    { name: '5分钟波动率低量', value: 价格_波动率300[i] < 30 },
-                    { name: '大单', value: 净成交量_累加5[i] > 100 * 10000 },
-                    { name: '上涨_价差<4', value: 上涨_价差[i] <= 4 },
-                    { name: '折返程度<', value: (价格_最高15[i] - 价格[i]) < 折返率[i] },
-                    { name: '量化 is上涨', value: 上涨_下跌[i] === '上涨' },
-                ]
+            i => [
+                { name: '净盘口>0', value: 净盘口[i] > 0 },
+                { name: '5分钟波动率低量', value: 价格_波动率300[i] < 30 },
+                { name: '大单', value: 净成交量_累加5[i] > 100 * 10000 },
+                { name: '上涨_价差<4', value: 上涨_价差[i] <= 4 },
+                { name: '折返程度<', value: (价格_最高15[i] - 价格[i]) < 折返率[i] },
+                { name: '量化 is上涨', value: 上涨_下跌[i] === '上涨' },
+            ]
         )
-
 
         const 信号_追跌 = 指标.lazyMapCache(
             () => Math.min(
                 净盘口.length,
-                净盘口_均线5.length,
-                盘口卖_均线_1d5.length,
-                价格_波动率30.length,
-                净成交量_macd.DIF.length,
-                净成交量_macd.DEM.length,
-                价格_波动率30.length,
+                价格_波动率300.length,
+                净成交量_累加5.length,
+                下跌_价差.length,
+                价格.length,
+                价格_最低15.length,
+                折返率.length,
+                上涨_下跌.length,
             ),
-            i =>
-                [
-                    { name: '净盘口<0', value: 净盘口[i] < 0 },
-                    { name: '5分钟波动率低量', value: 价格_波动率300[i] < 30 },
-                    { name: '大单', value: 净成交量_累加5[i] < -100 * 10000 },
-                    { name: '下跌_价差<4', value: 下跌_价差[i] <= 4 },
-                    { name: '折返程度<', value: (价格[i] - 价格_最低15[i]) < 折返率[i] },
-                    { name: '量化 is下跌', value: 上涨_下跌[i] === '下跌' },
-                ]
+            i => [
+                { name: '净盘口<0', value: 净盘口[i] < 0 },
+                { name: '5分钟波动率低量', value: 价格_波动率300[i] < 30 },
+                { name: '大单', value: 净成交量_累加5[i] < -100 * 10000 },
+                { name: '下跌_价差<4', value: 下跌_价差[i] <= 4 },
+                { name: '折返程度<', value: (价格[i] - 价格_最低15[i]) < 折返率[i] },
+                { name: '量化 is下跌', value: 上涨_下跌[i] === '下跌' },
+            ]
         )
 
 
