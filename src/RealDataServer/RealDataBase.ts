@@ -188,7 +188,7 @@ export class RealDataBase {
             净成交量_累加500,
             净盘口,
             净盘口_均线5: 指标.均线(净盘口, 5, RealDataBase.单位时间),
-            is上涨: 指标.lazyMapCache(() => Math.min(净成交量_累加60.length), i => 净成交量_累加60[i] >= 0)
+            is趋势: 指标.lazyMapCache(() => Math.min(净成交量_累加60.length), i => 净成交量_累加60[i] >= 0)
         }
     }
 
@@ -552,7 +552,7 @@ export class RealDataBase {
                     },
                     {
                         name: '方向 is ' + str,
-                        value: v.is上涨[i],
+                        value: v.is趋势[i],
                     },
                 ]
             )
