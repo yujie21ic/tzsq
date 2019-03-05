@@ -486,11 +486,11 @@ export class RealDataBase {
                 //净成交量_macd 分段
                 const v__0 = 净成交量abs_macd.DIF[i] < 0
                 const v__1 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i]
-                const v__0_9 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] * 0.9
+                const v__0_9 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] * 1.1
 
                 //c
                 const c =
-                    (v__0_9 && 净成交量_累加5[i] < 50 * 10000) ||
+                    (v__0_9 && 净成交量_累加5[i] >- 50 * 10000) ||
                     (小 && v__1) ||
                     (大 && v__0 && v__1)
 
