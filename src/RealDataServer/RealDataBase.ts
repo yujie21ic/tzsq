@@ -532,23 +532,23 @@ export class RealDataBase {
                 i => [
                     {
                         name: type + '净盘口 > 0',
-                        value: v.净盘口[i] > 0
+                        value: v.净盘口[i] > 0,
                     },
                     {
                         name: '5分钟波动率低量',
-                        value: 价格_波动率300[i] < 30
+                        value: 价格_波动率300[i] < 30,
                     },
                     {
                         name: '大单',
-                        value: v.净成交量_累加5[i] > 100 * 10000
+                        value: v.净成交量_累加5[i] > 100 * 10000,
                     },
                     {
-                        name: 上涨 + '_价差 < 4',
-                        value: 价差[i] <= 4
+                        name: str + '_价差 < 4',
+                        value: 价差[i] <= 4,
                     },
                     {
                         name: 'abs(极值 - 价格) < 折返率',
-                        value: type === '追涨' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i]
+                        value: type === '追涨' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i],
                     },
                     {
                         name: '方向 is ' + str,
@@ -558,7 +558,6 @@ export class RealDataBase {
             )
         }
 
-        //追涨 追跌
         const 信号_追涨 = 追涨_追跌('追涨')
         const 信号_追跌 = 追涨_追跌('追跌')
 
