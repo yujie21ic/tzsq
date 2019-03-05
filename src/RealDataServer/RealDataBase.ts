@@ -570,7 +570,7 @@ export class RealDataBase {
             价格差_除以时间,
             上涨_下跌,
             价格_均线300,
-            净成交量_macd: 净成交量abs_macd,
+            净成交量abs_macd,
             上涨,
             上涨_价差,
             下跌,

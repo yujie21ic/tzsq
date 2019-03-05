@@ -95,8 +95,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.期货.净成交量_macd.DIF, color: 买颜色1 }),
-                    layer(LineLayer, { data: d.期货.净成交量_macd.DEM, color: 买颜色 }),
+                    layer(LineLayer, { data: d.期货.净成交量abs_macd.DIF, color: 买颜色1 }),
+                    layer(LineLayer, { data: d.期货.净成交量abs_macd.DEM, color: 买颜色 }),
                 ]
             },
             {
@@ -176,8 +176,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.期货.净成交量_macd.DIF, color: 卖颜色1 }),
-                    layer(LineLayer, { data: d.期货.净成交量_macd.DEM, color: 卖颜色 }),
+                    layer(LineLayer, { data: d.期货.净成交量abs_macd.DIF, color: 卖颜色1 }),
+                    layer(LineLayer, { data: d.期货.净成交量abs_macd.DEM, color: 卖颜色 }),
                     // layer(LineLayer, { data: d.期货.买MACD.买成交量DEM, color: 买颜色 }),
                     // layer(LineLayer, { data: d.期货.买MACD.买成交量DIF, color: 买颜色1 }),
                     // layer(LineLayer, { data: d.期货.卖MACD.卖成交量DEM, color: 卖颜色 }),
@@ -730,8 +730,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.期货.净成交量_macd.DIF, color: 买颜色1 }),
-                    layer(LineLayer, { data: d.期货.净成交量_macd.DEM, color: 买颜色 }),
+                    layer(LineLayer, { data: d.期货.净成交量abs_macd.DIF, color: 买颜色1 }),
+                    layer(LineLayer, { data: d.期货.净成交量abs_macd.DEM, color: 买颜色 }),
                 ]
             },
             {
@@ -799,8 +799,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.期货.净成交量_macd.DIF, color: 买颜色1 }),
-                    layer(LineLayer, { data: d.期货.净成交量_macd.DEM, color: 买颜色 }),
+                    layer(LineLayer, { data: d.期货.净成交量abs_macd.DIF, color: 买颜色1 }),
+                    layer(LineLayer, { data: d.期货.净成交量abs_macd.DEM, color: 买颜色 }),
                 ]
             },
             {
