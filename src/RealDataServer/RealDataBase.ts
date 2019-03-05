@@ -417,43 +417,34 @@ export class RealDataBase {
                     const 盘口买_50_100万 = v >= 50 && v < 100
                     const 盘口买_100_150万 = v >= 100 && v < 150
 
-                    const x__1 = 净盘口[i] <= 净盘口_均线5[i] + 50 * 10000 && 净盘口[i] < 5 * 100000
-                    const x__2 = 净盘口[i] <= 净盘口_均线5[i] && 净盘口[i] < 0
+                    const A = 净盘口[i] <= 净盘口_均线5[i] + 50 * 10000 && 净盘口[i] < 5 * 100000
+                    const B = 净盘口[i] <= 净盘口_均线5[i] && 净盘口[i] < 0
 
                     //
-                    const aaa = 小 && 盘口买_0_100万 && x__1
-                    const bbb = 小 && 盘口买_100_150万 && x__2
+                    const aaa = 小 && 盘口买_0_100万 && A
+                    const bbb = 小 && 盘口买_100_150万 && B
                     const ccc = 大 && 真空信号涨[i] && 盘口买_0_200万
-                    const ddd = 大 && 盘口买_0_50万 && x__1
-                    const eee = 大 && 盘口买_50_100万 && x__2
+                    const ddd = 大 && 盘口买_0_50万 && A
+                    const eee = 大 && 盘口买_50_100万 && B
                     b = aaa || bbb || ccc || ddd || eee
                 }
 
 
 
 
-                let c = false
-                if (上涨_价差[i] < 价差中大分界) {
-                    if (净成交量_macd.DIF[i] < 净成交量_macd.DEM[i]) {
-                        c = true
-                    } else {
-                        if (净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] * 1.1) {
-                            if (净成交量_累加5[i] < 50 * 10000) {
-                                c = true
-                            }
-                        }
-                    }
-                } else {
-                    if (净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] && 净成交量_macd.DIF[i] < 0) {
-                        c = true
-                    } else {
-                        if (净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] * 1.1) {
-                            if (净成交量_累加5[i] < 50 * 10000) {
-                                c = true
-                            }
-                        }
-                    }
-                }
+                //c
+                const 小 = 上涨_价差[i] < 价差中大分界
+                const 大 = 上涨_价差[i] >= 价差中大分界
+
+                const x__0 = 净成交量_macd.DIF[i] < 0
+                const x__1 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i]
+                const x__1_1 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] * 1.1
+
+                const aaa = x__1_1 && 净成交量_累加5[i] < 50 * 10000
+                const bbb = 小 && x__1
+                const ccc = 大 && x__0 && x__1
+
+                const c = aaa || bbb || ccc
 
 
                 return [
@@ -498,40 +489,33 @@ export class RealDataBase {
                     const 盘口卖_50_100万 = v >= 50 && v < 100
                     const 盘口卖_100_150万 = v >= 100 && v < 150
 
-                    const x__1 = 净盘口[i] >= 净盘口_均线5[i] - 50 * 10000 && 净盘口[i] > (- 50 * 10000)
-                    const x__2 = 净盘口[i] >= 净盘口_均线5[i] && 净盘口[i] > 0
+                    const A = 净盘口[i] >= 净盘口_均线5[i] - 50 * 10000 && 净盘口[i] > (- 50 * 10000)
+                    const B = 净盘口[i] >= 净盘口_均线5[i] && 净盘口[i] > 0
 
-                    const aaa = 小 && 盘口卖_0_100万 && x__1
-                    const bbb = 小 && 盘口卖_100_150万 && x__2
+                    const aaa = 小 && 盘口卖_0_100万 && A
+                    const bbb = 小 && 盘口卖_100_150万 && B
                     const ccc = 大 && 真空信号涨[i] && 盘口卖_0_150万
-                    const ddd = 大 && 盘口卖_0_50万 && x__1
-                    const eee = 大 && 盘口卖_50_100万 && x__2
+                    const ddd = 大 && 盘口卖_0_50万 && A
+                    const eee = 大 && 盘口卖_50_100万 && B
                     b = aaa || bbb || ccc || ddd || eee
                 }
 
 
 
+                //c
+                const 小 = 下跌_价差[i] < 价差中大分界
+                const 大 = 下跌_价差[i] >= 价差中大分界
 
-                let c = false
-                if (下跌_价差[i] < 价差中大分界) {
-                    if (净成交量_macd.DIF[i] < 净成交量_macd.DEM[i]) {
-                        c = true
-                    } else if (净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] * 0.9) {
-                        if (净成交量_累加5[i] < 50 * 10000) {
-                            c = true
-                        }
-                    }
-                } else {
-                    if (净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] && 净成交量_macd.DIF[i] < 0) {
-                        c = true
-                    } else {
-                        if (净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] * 0.9) {
-                            if (净成交量_累加5[i] < 50 * 10000) {
-                                c = true
-                            }
-                        }
-                    }
-                }
+                const x__0 = 净成交量_macd.DIF[i] < 0
+                const x__1 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i]
+                const x__0_9 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] * 0.9
+
+                const aaa = x__0_9 && 净成交量_累加5[i] < 50 * 10000
+                const bbb = 小 && x__1
+                const ccc = 大 && x__0 && x__1
+
+                const c = aaa || bbb || ccc
+
 
                 return [
                     { name: '震荡指数', value: 震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i] || 价差走平x秒[i] },
