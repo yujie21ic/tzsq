@@ -421,7 +421,8 @@ export class RealDataBase {
                     const B = 净盘口[i] <= 净盘口_均线5[i] && 净盘口[i] < 0
 
                     //
-                    b = (小 && 盘口买_0_100万 && A) ||
+                    b =
+                        (小 && 盘口买_0_100万 && A) ||
                         (小 && 盘口买_100_150万 && B) ||
                         (大 && 真空信号涨[i] && 盘口买_0_200万) ||
                         (大 && 盘口买_0_50万 && A) ||
@@ -439,11 +440,11 @@ export class RealDataBase {
                 const x__1 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i]
                 const x__1_1 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] * 1.1
 
-                const aaa = x__1_1 && 净成交量_累加5[i] < 50 * 10000
-                const bbb = 小 && x__1
-                const ccc = 大 && x__0 && x__1
+                const c =
+                    (x__1_1 && 净成交量_累加5[i] < 50 * 10000) ||
+                    (小 && x__1) ||
+                    (大 && x__0 && x__1)
 
-                const c = aaa || bbb || ccc
 
 
                 return [
@@ -508,11 +509,11 @@ export class RealDataBase {
                 const x__1 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i]
                 const x__0_9 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] * 0.9
 
-                const aaa = x__0_9 && 净成交量_累加5[i] < 50 * 10000
-                const bbb = 小 && x__1
-                const ccc = 大 && x__0 && x__1
+                const c =
+                    (x__0_9 && 净成交量_累加5[i] < 50 * 10000) ||
+                    (小 && x__1) ||
+                    (大 && x__0 && x__1)
 
-                const c = aaa || bbb || ccc
 
 
                 return [
