@@ -375,34 +375,6 @@ export class RealDataBase {
         const 价差中大分界 = 20
         const 价差大巨大分界 = 100
 
-        const 信号_摸顶_下跌平仓 = 指标.lazyMapCache(
-            () => Math.min(
-                价格_波动率30.length,
-                净成交量abs_macd.DIF.length,
-                净成交量abs_macd.DEM.length,
-                价格_波动率30.length,
-            ),
-            i => [
-                { name: '成交量DIF<DEM', value: 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] },
-                { name: '折返程度<', value: (价格_最高15[i] - 价格[i]) > 折返率[i] },
-            ]
-        )
-
-        const 信号_抄底_上涨平仓 = 指标.lazyMapCache(
-            () => Math.min(
-                价格_波动率30.length,
-                净成交量abs_macd.DIF.length,
-                净成交量abs_macd.DEM.length,
-                价格_波动率30.length,
-            ),
-            i => [
-                { name: '卖成交量DIF<DEM', value: 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] },
-                { name: '折返程度<', value: (价格[i] - 价格_最低15[i]) > 折返率[i] },
-            ]
-        )
- 
-
-
         const 摸顶抄底 = (type: '摸顶' | '抄底') => {
 
             const xx = type === '摸顶' ? 买 : 卖
@@ -465,9 +437,23 @@ export class RealDataBase {
                 }
             )
         }
-
         const 信号_摸顶 = 摸顶抄底('摸顶')
         const 信号_抄底 = 摸顶抄底('抄底')
+
+
+        const 摸顶抄底_平仓 = (type: '摸顶' | '抄底') => 指标.lazyMapCache(
+            () => Math.min(
+                data.length,
+                orderBook.length,
+            ),
+            i => [
+                { name: '成交量DIF<DEM', value: 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] },
+                { name: '折返程度<', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) > 折返率[i] : (价格[i] - 价格_最低15[i]) > 折返率[i] },
+            ]
+        )
+        const 信号_摸顶_下跌平仓 = 摸顶抄底_平仓('摸顶')
+        const 信号_抄底_上涨平仓 = 摸顶抄底_平仓('抄底')
+
 
         const 追涨_追跌 = (type: '追涨' | '追跌') => {
             const v = type === '追涨' ? 买 : 卖
@@ -488,7 +474,6 @@ export class RealDataBase {
                 ]
             )
         }
-
         const 信号_追涨 = 追涨_追跌('追涨')
         const 信号_追跌 = 追涨_追跌('追跌')
 
