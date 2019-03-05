@@ -244,8 +244,8 @@ export class RealDataBase {
 
 
         //上涨_下跌
-        const 最高价10 = 指标.最高(价格, 15, RealDataBase.单位时间)
-        const 最低价10 = 指标.最低(价格, 15, RealDataBase.单位时间)
+        const 最高价10 = 指标.最高(价格, 15, RealDataBase.单位时间)      //<------------------ 最高价10 = 15 ？？？
+        const 最低价10 = 指标.最低(价格, 15, RealDataBase.单位时间)      //<------------------ 最低价10 = 15 ？？？
 
         // 删除
         // const 最高价10index = 指标.最高index(价格, 15, RealDataBase.单位时间)
