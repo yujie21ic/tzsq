@@ -382,8 +382,7 @@ export class RealDataBase {
         const 价差大巨大分界 = 100
 
         const 摸顶抄底 = (type: '摸顶' | '抄底') => {
-
-            const xx = type === '摸顶' ? 买 : 卖
+            const bs = type === '摸顶' ? 买 : 卖
             const 价差 = type === '摸顶' ? 上涨_价差 : 下跌_价差
             const 真空信号 = type === '摸顶' ? 真空信号涨 : 真空信号跌
 
@@ -397,20 +396,16 @@ export class RealDataBase {
                     const 小 = 价差[i] < 价差中大分界
                     const 大 = 价差[i] >= 价差中大分界
 
-                    //盘口分段
-                    const v = xx.盘口[i] / 10000
+                    //盘口!! 
+                    const v = bs.盘口[i] / 10000
                     const 盘口_0_50万 = v < 50
                     const 盘口_0_100万 = v < 100
                     const 盘口_0_200万 = v < 200
                     const 盘口_50_100万 = v >= 50 && v < 100
                     const 盘口_100_150万 = v >= 100 && v < 150
-
-                    //
-                    const A = xx.净盘口[i] <= xx.净盘口_均线5[i] + 50 * 10000 && xx.净盘口[i] < 5 * 100000
-                    const B = xx.净盘口[i] <= xx.净盘口_均线5[i] && xx.净盘口[i] < 0
-
-                    //b
-                    const b =
+                    const A = bs.净盘口[i] <= bs.净盘口_均线5[i] + 50 * 10000 && bs.净盘口[i] < 5 * 100000
+                    const B = bs.净盘口[i] <= bs.净盘口_均线5[i] && bs.净盘口[i] < 0
+                    const 盘口XXX =
                         (小 && 盘口_0_100万 && A) ||
                         (小 && 盘口_100_150万 && B) ||
                         (大 && 盘口_0_200万 && 真空信号[i]) ||
@@ -418,26 +413,24 @@ export class RealDataBase {
                         (大 && 盘口_50_100万 && B)
 
 
-                    //净成交量_macd 分段
+                    //成交量衰竭
                     const v__0 = 净成交量abs_macd.DIF[i] < 0
                     const v__1 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i]
                     const v__1_1 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] * 1.1
-
-                    //c
-                    const c =
-                        (v__1_1 && xx.净成交量_累加5[i] < 50 * 10000) ||
+                    const 成交量衰竭 =
+                        (v__1_1 && bs.净成交量_累加5[i] < 50 * 10000) ||
                         (小 && v__1) ||
                         (大 && v__0 && v__1)
 
                     return [
                         { name: '震荡指数', value: 震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i] || 价差走平x秒[i] },
-                        { name: '成交量衰竭', value: c },
-                        { name: '盘口 ！!', value: b },
-                        { name: '60秒净买成交量 >= 150万', value: xx.净成交量_累加60[i] >= 150 * 10000 },
+                        { name: '成交量衰竭', value: 成交量衰竭 },
+                        { name: '盘口 ！!', value: 盘口XXX },
+                        { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 150 * 10000 },
                         { name: '折返程度', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
                         { name: '价格速度', value: 价差[i] > 价差中大分界 || 价格差_除以时间[i] >= 0.1 },
                         { name: '价差 >=6', value: 价差[i] >= 6 },
-                        { name: 'is趋势', value: xx.is趋势[i] },
+                        { name: 'is趋势', value: bs.is趋势[i] },
                         { name: '波动率最大限制', value: 价差[i] < 价差大巨大分界 },
                     ]
                 }
@@ -462,7 +455,7 @@ export class RealDataBase {
 
 
         const 追涨_追跌 = (type: '追涨' | '追跌') => {
-            const v = type === '追涨' ? 买 : 卖
+            const bs = type === '追涨' ? 买 : 卖
             const 价差 = type === '追涨' ? 上涨_价差 : 下跌_价差
 
             return 指标.lazyMapCache(
@@ -471,12 +464,12 @@ export class RealDataBase {
                     orderBook.length,
                 ),
                 i => [
-                    { name: type + '净盘口 > 0', value: v.净盘口[i] > 0 },
+                    { name: '净盘口 > 0', value: bs.净盘口[i] > 0 },
                     { name: '5分钟波动率低量', value: 价格_波动率300[i] < 30 },
-                    { name: '大单', value: v.净成交量_累加5[i] > 100 * 10000 },
+                    { name: '大单', value: bs.净成交量_累加5[i] > 100 * 10000 },
                     { name: '价差 < 4', value: 价差[i] <= 4 },
                     { name: '折返程度', value: type === '追涨' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
-                    { name: 'is趋势', value: v.is趋势[i] },
+                    { name: 'is趋势', value: bs.is趋势[i] },
                 ]
             )
         }
