@@ -199,10 +199,15 @@ export class RealDataBase {
         const 成交量卖_累加5 = 指标.累加(成交量卖, 5, RealDataBase.单位时间)
 
         const 净成交量 = 指标.lazyMapCache(() => Math.min(成交量买.length, 成交量卖.length), i => 成交量买[i] - 成交量卖[i])
+        const 净成交量abs = 指标.lazyMapCache(() => 净成交量.length, i => Math.abs(净成交量[i]))
+
         const 净成交量_累加5 = 指标.累加(净成交量, 5, RealDataBase.单位时间)
         const 净成交量_累加60 = 指标.累加(净成交量, 60, RealDataBase.单位时间)
         const 净成交量_累加500 = 指标.累加(净成交量, 500, RealDataBase.单位时间)
-        const 净成交量_macd = 指标.macd(净成交量_累加60, RealDataBase.单位时间)
+
+        //
+        const 净成交量abs_累加60 = 指标.累加(净成交量abs, 60, RealDataBase.单位时间)
+        const 净成交量abs_macd = 指标.macd(净成交量abs_累加60, RealDataBase.单位时间)
 
         //盘口
         const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
@@ -353,12 +358,12 @@ export class RealDataBase {
                 净盘口_均线5.length,
                 盘口买_均线_1d5.length,
                 价格_波动率30.length,
-                净成交量_macd.DIF.length,
-                净成交量_macd.DEM.length,
+                净成交量abs_macd.DIF.length,
+                净成交量abs_macd.DEM.length,
                 价格_波动率30.length,
             ),
             i => [
-                { name: '成交量DIF<DEM', value: 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] },
+                { name: '成交量DIF<DEM', value: 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] },
                 { name: '折返程度<', value: (价格_最高15[i] - 价格[i]) > 折返率[i] },
             ]
         )
@@ -369,12 +374,12 @@ export class RealDataBase {
                 净盘口_均线5.length,
                 盘口卖_均线_1d5.length,
                 价格_波动率30.length,
-                净成交量_macd.DIF.length,
-                净成交量_macd.DEM.length,
+                净成交量abs_macd.DIF.length,
+                净成交量abs_macd.DEM.length,
                 价格_波动率30.length,
             ),
             i => [
-                { name: '卖成交量DIF<DEM', value: 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] },
+                { name: '卖成交量DIF<DEM', value: 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] },
                 { name: '折返程度<', value: (价格[i] - 价格_最低15[i]) > 折返率[i] },
             ]
         )
@@ -417,9 +422,9 @@ export class RealDataBase {
 
 
                 //净成交量_macd 分段
-                const v__0 = 净成交量_macd.DIF[i] < 0
-                const v__1 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i]
-                const v__1_1 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] * 1.1
+                const v__0 = 净成交量abs_macd.DIF[i] < 0
+                const v__1 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i]
+                const v__1_1 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] * 1.1
 
                 //c
                 const c =
@@ -449,8 +454,8 @@ export class RealDataBase {
                 净盘口_均线5.length,
                 盘口卖_均线_1d5.length,
                 价格_波动率30.length,
-                净成交量_macd.DIF.length,
-                净成交量_macd.DEM.length,
+                净成交量abs_macd.DIF.length,
+                净成交量abs_macd.DEM.length,
                 价格_波动率30.length,
             ),
             i => {
@@ -479,9 +484,9 @@ export class RealDataBase {
                     (大 && 盘口卖_50_100万 && B)
 
                 //净成交量_macd 分段
-                const v__0 = 净成交量_macd.DIF[i] < 0
-                const v__1 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i]
-                const v__0_9 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] * 0.9
+                const v__0 = 净成交量abs_macd.DIF[i] < 0
+                const v__1 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i]
+                const v__0_9 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] * 0.9
 
                 //c
                 const c =
@@ -565,7 +570,7 @@ export class RealDataBase {
             价格差_除以时间,
             上涨_下跌,
             价格_均线300,
-            净成交量_macd,
+            净成交量_macd: 净成交量abs_macd,
             上涨,
             上涨_价差,
             下跌,
