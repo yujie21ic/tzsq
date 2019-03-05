@@ -524,7 +524,7 @@ export class RealDataBase {
                     { name: '折返程度<', value: (最高价10[i] - 价格[i]) < 折返率[i] },
                     { name: '价格速度', value: 上涨_价差[i] > 价差中大分界 || 价格差_除以时间[i] >= 0.1 },
                     { name: '上涨_价差 >=6', value: 上涨_价差[i] >= 6 },
-                    { name: '量化 is上涨', value: 上涨_下跌[i] == '上涨' },
+                    { name: '量化 is上涨', value: 上涨_下跌[i] === '上涨' },
                     { name: '波动率最大限制', value: 上涨_价差[i] < 价差大巨大分界 },
                 ]
             }
@@ -540,12 +540,11 @@ export class RealDataBase {
                 净成交量macd.DEM.length,
                 波动率.length,
             ),
-            i => {
-                return [
+            i =>
+                [
                     { name: '成交量DIF<DEM', value: 净成交量macd.DIF[i] < 净成交量macd.DEM[i] },
                     { name: '折返程度<', value: (最高价10[i] - 价格[i]) > 折返率[i] },
                 ]
-            }
         )
         const 信号_追涨 = 指标.lazyMapCache(
             () => Math.min(
@@ -558,16 +557,15 @@ export class RealDataBase {
                 净成交量macd.DEM.length,
                 波动率.length,
             ),
-            i => {
-                return [
+            i =>
+                [
                     { name: '净盘口>0', value: 净盘口[i] > 0 },
                     { name: '5分钟波动率低量', value: 波动率5分钟[i] < 30 },
                     { name: '大单', value: 净成交量10[i] > 100 * 10000 },
                     { name: '上涨_价差<4', value: 上涨_价差[i] <= 4 },
                     { name: '折返程度<', value: (最高价10[i] - 价格[i]) < 折返率[i] },
-                    { name: '量化 is上涨', value: 上涨_下跌[i] == '上涨' },
+                    { name: '量化 is上涨', value: 上涨_下跌[i] === '上涨' },
                 ]
-            }
         )
 
 
@@ -667,7 +665,7 @@ export class RealDataBase {
                     { name: '折返程度<', value: (价格[i] - 最低价10[i]) < 折返率[i] },
                     { name: '价格速度', value: 下跌_价差[i] > 价差中大分界 || 价格差_除以时间[i] >= 0.1 },
                     { name: '下跌_价差 >=6', value: 下跌_价差[i] >= 6 },
-                    { name: '量化 is下跌', value: 上涨_下跌[i] == '下跌' },
+                    { name: '量化 is下跌', value: 上涨_下跌[i] === '下跌' },
                     { name: '下跌_价差最大限制', value: 下跌_价差[i] < 价差大巨大分界 },
                 ]
             }
@@ -684,12 +682,11 @@ export class RealDataBase {
                 净成交量macd.DEM.length,
                 波动率.length,
             ),
-            i => {
-                return [
+            i =>
+                [
                     { name: '卖成交量DIF<DEM', value: 净成交量macd.DIF[i] < 净成交量macd.DEM[i] },
                     { name: '折返程度<', value: (价格[i] - 最低价10[i]) > 折返率[i] },
                 ]
-            }
         )
 
         const 信号_追跌 = 指标.lazyMapCache(
@@ -703,16 +700,15 @@ export class RealDataBase {
                 净成交量macd.DEM.length,
                 波动率.length,
             ),
-            i => {
-                return [
+            i =>
+                [
                     { name: '净盘口<0', value: 净盘口[i] < 0 },
                     { name: '5分钟波动率低量', value: 波动率5分钟[i] < 30 },
                     { name: '下跌_价差<4', value: 下跌_价差[i] <= 4 },
                     { name: '大单', value: 净成交量10[i] < -100 * 10000 },
                     { name: '折返程度<', value: (价格[i] - 最低价10[i]) < 折返率[i] },
-                    { name: '量化 is下跌', value: 上涨_下跌[i] == '下跌' },
+                    { name: '量化 is下跌', value: 上涨_下跌[i] === '下跌' },
                 ]
-            }
         )
 
 
