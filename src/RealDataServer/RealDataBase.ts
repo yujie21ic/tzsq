@@ -402,7 +402,6 @@ export class RealDataBase {
                 价格_波动率30.length,
             ),
             i => {
-
                 //
                 const 小 = 上涨_价差[i] < 价差中大分界
                 const 大 = 上涨_价差[i] >= 价差中大分界
@@ -439,8 +438,6 @@ export class RealDataBase {
                     (小 && v__1) ||
                     (大 && v__0 && v__1)
 
-
-
                 return [
                     { name: '震荡指数', value: 震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i] || 价差走平x秒[i] },
                     { name: '成交量衰竭', value: c },
@@ -468,7 +465,6 @@ export class RealDataBase {
                 价格_波动率30.length,
             ),
             i => {
-
                 //
                 const 小 = 下跌_价差[i] < 价差中大分界
                 const 大 = 下跌_价差[i] >= 价差中大分界
@@ -493,9 +489,6 @@ export class RealDataBase {
                     (大 && 盘口卖_0_50万 && A) ||
                     (大 && 盘口卖_50_100万 && B)
 
-
-
-
                 //净成交量_macd 分段
                 const v__0 = 净成交量_macd.DIF[i] < 0
                 const v__1 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i]
@@ -506,8 +499,6 @@ export class RealDataBase {
                     (v__0_9 && 净成交量_累加5[i] < 50 * 10000) ||
                     (小 && v__1) ||
                     (大 && v__0 && v__1)
-
-
 
                 return [
                     { name: '震荡指数', value: 震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i] || 价差走平x秒[i] },
@@ -522,9 +513,6 @@ export class RealDataBase {
                 ]
             }
         )
-
-
-
 
 
         //追涨 追跌
