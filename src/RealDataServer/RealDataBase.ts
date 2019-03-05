@@ -518,7 +518,7 @@ export class RealDataBase {
         )
 
         const 追涨_追跌 = (type: '追涨' | '追跌') => {
-            const { 净盘口, 净成交量_累加5 } = type === '追涨' ? 买 : 卖
+            const v = type === '追涨' ? 买 : 卖
             const 上涨下跌str = type === '追涨' ? '上涨' : '下跌'
             const 价差 = type === '追涨' ? 上涨_价差 : 下跌_价差
 
@@ -530,7 +530,7 @@ export class RealDataBase {
                 i => [
                     {
                         name: type + '净盘口 > 0',
-                        value: 净盘口[i] > 0
+                        value: v.净盘口[i] > 0
                     },
                     {
                         name: '5分钟波动率低量',
@@ -538,10 +538,10 @@ export class RealDataBase {
                     },
                     {
                         name: '大单',
-                        value: 净成交量_累加5[i] > 100 * 10000
+                        value: v.净成交量_累加5[i] > 100 * 10000
                     },
                     {
-                        name: 上涨下跌str + ' _价差<4',
+                        name: 上涨下跌str + ' _价差 < 4',
                         value: 价差[i] <= 4
                     },
                     {
