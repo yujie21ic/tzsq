@@ -321,12 +321,10 @@ export class RealDataBase {
             }
         })
 
-
         const 价差走平x秒 = 指标.lazyMapCache(
             () => Math.min(价差走平多少根.length, 上涨_价差.length, 下跌_价差.length),
             i => 价差走平多少根[i] >= ((上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)[i] / 8) * 2,
         )
-
 
         const 上涨_累计成交量 = 累计成交量('上涨')
         const 上涨_价差 = 价差('上涨')
@@ -346,7 +344,6 @@ export class RealDataBase {
             动力: 下跌_动力,
         }
 
-
         const 价差中大分界 = 20
         const 价差大巨大分界 = 100
 
@@ -360,13 +357,11 @@ export class RealDataBase {
                 净成交量_macd.DEM.length,
                 价格_波动率30.length,
             ),
-            i =>
-                [
-                    { name: '成交量DIF<DEM', value: 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] },
-                    { name: '折返程度<', value: (价格_最高15[i] - 价格[i]) > 折返率[i] },
-                ]
+            i => [
+                { name: '成交量DIF<DEM', value: 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] },
+                { name: '折返程度<', value: (价格_最高15[i] - 价格[i]) > 折返率[i] },
+            ]
         )
-
 
         const 信号_下跌抄底上涨平仓 = 指标.lazyMapCache(
             () => Math.min(
@@ -378,21 +373,15 @@ export class RealDataBase {
                 净成交量_macd.DEM.length,
                 价格_波动率30.length,
             ),
-            i =>
-                [
-                    { name: '卖成交量DIF<DEM', value: 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] },
-                    { name: '折返程度<', value: (价格[i] - 价格_最低15[i]) > 折返率[i] },
-                ]
+            i => [
+                { name: '卖成交量DIF<DEM', value: 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] },
+                { name: '折返程度<', value: (价格[i] - 价格_最低15[i]) > 折返率[i] },
+            ]
         )
 
 
 
-
-
-
-
-        //上涨  下跌
-
+        //上涨  下跌  ()=>length 不对 ？
         const 信号_上涨 = 指标.lazyMapCache(
             () => Math.min(
                 净盘口.length,
