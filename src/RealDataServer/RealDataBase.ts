@@ -173,6 +173,7 @@ export class RealDataBase {
         orderBook: BaseType.OrderBook[]
     }, 盘口算价格: boolean) {
 
+        //0阶
         const 收盘价 = 指标.lazyMapCache(() => data.length, i => data[i].close)
 
         const 价格 = 盘口算价格 ?
@@ -181,10 +182,14 @@ export class RealDataBase {
                     ((orderBook[i].buy[0].price + orderBook[i].sell[0].price) / 2) : NaN) :
             指标.lazyMapCache(() => data.length, i => data[i].close)
 
-        //时间
         const 时间 = 指标.lazyMapCache(() => data.length, i => timeID._500msIDToTimestamp(data[i].id))
+        const 成交量买 = 指标.lazyMapCache(() => data.length, i => data[i].buySize)
+        const 成交量卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellSize)
+        const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
+        const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
 
 
+        //1阶
         //价格
         const 价格_均线300 = 指标.均线(价格, 300, RealDataBase.单位时间)
         const 价格_波动率30 = 指标.波动率(价格, 30, RealDataBase.单位时间)
@@ -192,30 +197,23 @@ export class RealDataBase {
         const 折返率 = 指标.lazyMapCache(() => 价格_波动率30.length, i => 价格_波动率30[i] / 10 + 1)
 
         //成交量
-        const 成交量买 = 指标.lazyMapCache(() => data.length, i => data[i].buySize)
         const 成交量买_累加5 = 指标.累加(成交量买, 5, RealDataBase.单位时间)
-
-        const 成交量卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellSize)
         const 成交量卖_累加5 = 指标.累加(成交量卖, 5, RealDataBase.单位时间)
 
+        //
         const 净成交量 = 指标.lazyMapCache(() => Math.min(成交量买.length, 成交量卖.length), i => 成交量买[i] - 成交量卖[i])
         const 净成交量abs = 指标.lazyMapCache(() => 净成交量.length, i => Math.abs(净成交量[i]))
-
         const 净成交量_累加5 = 指标.累加(净成交量, 5, RealDataBase.单位时间)
         const 净成交量_累加60 = 指标.累加(净成交量, 60, RealDataBase.单位时间)
         const 净成交量_累加500 = 指标.累加(净成交量, 500, RealDataBase.单位时间)
-
-        //
         const 净成交量abs_累加60 = 指标.累加(净成交量abs, 60, RealDataBase.单位时间)
         const 净成交量abs_macd = 指标.macd(净成交量abs_累加60, RealDataBase.单位时间)
 
         //盘口
-        const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
         const 盘口买_均线_1d5 = 指标.均线(盘口买, 1.5, RealDataBase.单位时间)
-
-        const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
         const 盘口卖_均线_1d5 = 指标.均线(盘口卖, 1.5, RealDataBase.单位时间)
 
+        //
         const 净盘口 = 指标.lazyMapCache(() => Math.min(盘口买.length, 盘口卖.length), i => 盘口买[i] - 盘口卖[i])
         const 净盘口_均线5 = 指标.均线(净盘口, 5, RealDataBase.单位时间)
 
@@ -490,7 +488,7 @@ export class RealDataBase {
 
                 //c
                 const c =
-                    (v__0_9 && 净成交量_累加5[i] >- 50 * 10000) ||
+                    (v__0_9 && 净成交量_累加5[i] > - 50 * 10000) ||
                     (小 && v__1) ||
                     (大 && v__0 && v__1)
 
