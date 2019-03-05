@@ -349,6 +349,50 @@ export class RealDataBase {
 
         const 价差中大分界 = 20
         const 价差大巨大分界 = 100
+
+        const 信号_上涨做空下跌平仓 = 指标.lazyMapCache(
+            () => Math.min(
+                净盘口.length,
+                净盘口_均线5.length,
+                盘口买_均线_1d5.length,
+                价格_波动率30.length,
+                净成交量_macd.DIF.length,
+                净成交量_macd.DEM.length,
+                价格_波动率30.length,
+            ),
+            i =>
+                [
+                    { name: '成交量DIF<DEM', value: 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] },
+                    { name: '折返程度<', value: (价格_最高15[i] - 价格[i]) > 折返率[i] },
+                ]
+        )
+
+
+        const 信号_下跌抄底上涨平仓 = 指标.lazyMapCache(
+            () => Math.min(
+                净盘口.length,
+                净盘口_均线5.length,
+                盘口卖_均线_1d5.length,
+                价格_波动率30.length,
+                净成交量_macd.DIF.length,
+                净成交量_macd.DEM.length,
+                价格_波动率30.length,
+            ),
+            i =>
+                [
+                    { name: '卖成交量DIF<DEM', value: 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] },
+                    { name: '折返程度<', value: (价格[i] - 价格_最低15[i]) > 折返率[i] },
+                ]
+        )
+
+
+
+
+
+
+
+        //上涨  下跌
+
         const 信号_上涨 = 指标.lazyMapCache(
             () => Math.min(
                 净盘口.length,
@@ -444,26 +488,8 @@ export class RealDataBase {
                 ]
             }
         )
-        const 信号_上涨做空下跌平仓 = 指标.lazyMapCache(
-            () => Math.min(
-                净盘口.length,
-                净盘口_均线5.length,
-                盘口买_均线_1d5.length,
-                价格_波动率30.length,
-                净成交量_macd.DIF.length,
-                净成交量_macd.DEM.length,
-                价格_波动率30.length,
-            ),
-            i =>
-                [
-                    { name: '成交量DIF<DEM', value: 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] },
-                    { name: '折返程度<', value: (价格_最高15[i] - 价格[i]) > 折返率[i] },
-                ]
-        )
 
 
-
-        //下跌 重复
 
         const 信号_下跌 = 指标.lazyMapCache(
             () => Math.min(
@@ -559,32 +585,6 @@ export class RealDataBase {
                 ]
             }
         )
-
-        const 信号_下跌抄底上涨平仓 = 指标.lazyMapCache(
-            () => Math.min(
-                净盘口.length,
-                净盘口_均线5.length,
-                盘口卖_均线_1d5.length,
-                价格_波动率30.length,
-                净成交量_macd.DIF.length,
-                净成交量_macd.DEM.length,
-                价格_波动率30.length,
-            ),
-            i =>
-                [
-                    { name: '卖成交量DIF<DEM', value: 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] },
-                    { name: '折返程度<', value: (价格[i] - 价格_最低15[i]) > 折返率[i] },
-                ]
-        )
-
-
-
-
-
-
-
-
-
 
 
 
