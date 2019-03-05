@@ -436,16 +436,18 @@ export class RealDataBase {
                         }
                     }
                 }
-                if (b === false) {
-                    if (上涨_价差[i] > 价差中大分界) {
-                        if (真空信号涨[i]) {
-                            if (盘口买[i] < 200 * 10000) {
-                                b = true
-                            }
 
+
+                if (上涨_价差[i] > 价差中大分界) {
+                    if (真空信号涨[i]) {
+                        if (盘口买[i] < 200 * 10000) {
+                            b = true
                         }
+
                     }
                 }
+
+
                 if (b === true) {
                     if (盘口买[i] > 250 * 10000) {
                         b = false
@@ -536,16 +538,18 @@ export class RealDataBase {
                         }
                     }
                 }
-                if (b === false) {
-                    if (下跌_价差[i] > 价差中大分界) {
-                        if (真空信号涨[i]) {
-                            if (盘口卖[i] < 150 * 10000) {
-                                b = true
-                            }
 
+
+                if (下跌_价差[i] > 价差中大分界) {
+                    if (真空信号涨[i]) {
+                        if (盘口卖[i] < 150 * 10000) {
+                            b = true
                         }
+
                     }
                 }
+
+
                 if (b === true) {
                     if (盘口卖[i] > 250 * 10000) {
                         b = false
@@ -583,7 +587,7 @@ export class RealDataBase {
                     { name: '量化 is下跌', value: 上涨_下跌[i] === '下跌' },
                     { name: '下跌_价差最大限制', value: 下跌_价差[i] < 价差大巨大分界 },
                 ]
-             }
+            }
         )
 
 
