@@ -279,7 +279,7 @@ export class 交易 extends React.Component {
                     lastNumber(realTickClient.dataExt.XBTUSD.hopex.价格) - to范围({
                         min: 3,
                         max: 18,
-                        value: lastNumber(realTickClient.dataExt.XBTUSD.期货.波动率) / 4,
+                        value: lastNumber(realTickClient.dataExt.XBTUSD.期货.价格_波动率30) / 4,
                     }), 'Sell')
             ,
             side: 'Buy',
@@ -294,7 +294,7 @@ export class 交易 extends React.Component {
                     lastNumber(realTickClient.dataExt.XBTUSD.hopex.价格) + to范围({
                         min: 3,
                         max: 18,
-                        value: lastNumber(realTickClient.dataExt.XBTUSD.期货.波动率) / 4,
+                        value: lastNumber(realTickClient.dataExt.XBTUSD.期货.价格_波动率30) / 4,
                     }), 'Buy')
             ,
             side: 'Sell',

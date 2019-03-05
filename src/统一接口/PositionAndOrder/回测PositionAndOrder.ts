@@ -16,7 +16,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
     //重复
     get浮盈点数(symbol: BaseType.BitmexSymbol) {
-        const 最新价 = lastNumber(this.realData.dataExt[symbol].期货.最新价)
+        const 最新价 = lastNumber(this.realData.dataExt[symbol].期货.收盘价)
         if (最新价 === undefined) return NaN
         const { 仓位数量, 开仓均价 } = this.jsonSync.rawData.symbol[symbol]
         if (仓位数量 === 0) return NaN

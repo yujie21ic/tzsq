@@ -57,7 +57,7 @@ export class TickBase {
         chartInit(element, () => {
             const d = this.real.dataExt[this.nowTickSymbol]
 
-            const xxx = lastNumber(d.现货.价格均线) - lastNumber(d.期货.价格均线) //<------------
+            const xxx = lastNumber(d.现货.价格_均线300) - lastNumber(d.期货.价格_均线300) //<------------
             if (isNaN(xxx) === false) {
                 this.real.set现货减去(xxx)
             }

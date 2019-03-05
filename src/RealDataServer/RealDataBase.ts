@@ -634,15 +634,14 @@ export class RealDataBase {
 
 
         return {
-
-            震荡指数macd: 震荡指数_macd,
+            震荡指数_macd,
             震荡指数,
-            最新价: 收盘价,
+            收盘价,
             盘口: orderBook,
             时间,
-            波动率5分钟: 价格_波动率300,
-            净成交量10: 净成交量_累加5,
-            净成交量120: 净成交量_累加500,
+            价格_波动率300,
+            净成交量_累加5,
+            净成交量_累加500,
             折返率,
             成交量买,
             成交量卖,
@@ -650,28 +649,31 @@ export class RealDataBase {
             信号_下跌抄底上涨平仓,
             价格差_除以时间,
             上涨_下跌,
-
-            价格均线: 价格_均线300,
-            净成交量macd: 净成交量_macd,
+            价格_均线300,
+            净成交量_macd,
             上涨,
             上涨_价差,
             下跌,
-            价格, 波动率: 价格_波动率30, 盘口买, 盘口卖, 净盘口, 净盘口均线: 净盘口_均线5,
-            阻力3涨, 阻力3跌,
+            价格,
+            价格_波动率30,
+            盘口买,
+            盘口卖,
+            净盘口,
+            净盘口_均线5,
+            阻力3涨,
+            阻力3跌,
             真空信号涨,
             真空信号跌,
             净成交量,
-            净成交量60: 净成交量_累加60,
-
-            成交量买均线5: 成交量买_累加5,
-            成交量卖均线5: 成交量卖_累加5,
+            净成交量_累加60,
+            成交量买_累加5,
+            成交量卖_累加5,
             信号_上涨,
             信号_追涨,
             信号_下跌,
             信号_追跌,
-
-            最高价10: 价格_最高15,
-            最低价10: 价格_最低15,
+            价格_最高15,
+            价格_最低15,
         }
     }
 
@@ -717,22 +719,22 @@ export class RealDataBase {
         }
 
         const 信号hopex_下跌 = 指标.lazyMapCache(
-            () => Math.min(期货.信号_下跌.length, 期货.价格.length, 期货.波动率.length, hopex.价格.length),
+            () => Math.min(期货.信号_下跌.length, 期货.价格.length, 期货.价格_波动率30.length, hopex.价格.length),
             i => [
                 { name: '5秒内信号', value: _5秒内有全亮(期货.信号_下跌, i) },
-                { name: '期货.波动率[i] >10 ', value: 期货.波动率[i] > 10 },
-                { name: 'bm折返 >', value: 期货.价格[i] - 期货.最低价10[i] > 期货.折返率[i] },
-                { name: 'hp折返 <', value: hopex.价格[i] - hopex.最低价10[i] < 期货.折返率[i] / 2 },
+                { name: '期货.波动率[i] >10 ', value: 期货.价格_波动率30[i] > 10 },
+                { name: 'bm折返 >', value: 期货.价格[i] - 期货.价格_最低15[i] > 期货.折返率[i] },
+                { name: 'hp折返 <', value: hopex.价格[i] - hopex.价格_最低15[i] < 期货.折返率[i] / 2 },
             ]
         )
 
         const 信号hopex_上涨 = 指标.lazyMapCache(
-            () => Math.min(期货.信号_上涨.length, 期货.价格.length, 期货.波动率.length, hopex.价格.length),
+            () => Math.min(期货.信号_上涨.length, 期货.价格.length, 期货.价格_波动率30.length, hopex.价格.length),
             i => [
                 { name: '5秒内信号', value: _5秒内有全亮(期货.信号_上涨, i) },
-                { name: '期货.波动率[i] >10 ', value: 期货.波动率[i] > 10 },
-                { name: 'bm折返 >', value: 期货.最高价10[i] - 期货.价格[i] > 期货.折返率[i] },
-                { name: 'hp折返 <', value: hopex.最高价10[i] - hopex.价格[i] < 期货.折返率[i] / 2 },
+                { name: '期货.波动率[i] >10 ', value: 期货.价格_波动率30[i] > 10 },
+                { name: 'bm折返 >', value: 期货.价格_最高15[i] - 期货.价格[i] > 期货.折返率[i] },
+                { name: 'hp折返 <', value: hopex.价格_最高15[i] - hopex.价格[i] < 期货.折返率[i] / 2 },
             ]
         )
 
@@ -747,7 +749,7 @@ export class RealDataBase {
             //现货
             现货,
             现货减去价格: 现货.价格,
-            现货减去价格均线: 现货.价格均线,
+            现货减去价格均线: 现货.价格_均线300,
             现货30秒内成交量: () => this.get现货多少秒内成交量(binanceSymbol, 30),
 
             //期货
@@ -780,7 +782,7 @@ export class RealDataBase {
             if (v.现货减去 !== n) {
                 v.现货减去 = n
                 v.现货减去价格 = 指标.lazyMapCache(() => v.现货.价格.length, i => v.现货.价格[i] - n)
-                v.现货减去价格均线 = 指标.lazyMapCache(() => v.现货.价格均线.length, i => v.现货.价格均线[i] - n)
+                v.现货减去价格均线 = 指标.lazyMapCache(() => v.现货.价格_均线300.length, i => v.现货.价格_均线300[i] - n)
             }
         })
     }
@@ -842,7 +844,7 @@ export class RealDataBase {
             下跌: 下跌.length > 3 ? [下跌[下跌.length - 3], 下跌[下跌.length - 2], 下跌[下跌.length - 1]] : '',
             追涨: 追涨.length > 3 ? [追涨[追涨.length - 3], 追涨[追涨.length - 2], 追涨[追涨.length - 1]] : '',
             追跌: 追跌.length > 3 ? [追跌[追跌.length - 3], 追跌[追跌.length - 2], 追跌[追跌.length - 1]] : '',
-            波动率: lastNumber(realData.dataExt[symbol].期货.波动率),
+            波动率: lastNumber(realData.dataExt[symbol].期货.价格_波动率30),
         })
     }
 
@@ -915,7 +917,7 @@ export class RealDataBase {
 
 
     get波动率 = (symbol: BaseType.BitmexSymbol) =>
-        lastNumber(this.dataExt[symbol].期货.波动率)
+        lastNumber(this.dataExt[symbol].期货.价格_波动率30)
 
 
 
