@@ -139,16 +139,7 @@ export class RealDataBase {
         }
         return { high, low }
     }
-    macd(arr: ArrayLike<number>) {
-        const _12 = 指标.EMA(arr, 12, RealDataBase.单位时间)
-        const _26 = 指标.EMA(arr, 26, RealDataBase.单位时间)
-        const DIF = 指标.lazyMapCache(() => Math.min(_12.length, _26.length), i => _12[i] - _26[i])
-        const DEM = 指标.EMA(DIF, 9, RealDataBase.单位时间)
-        return { DIF, DEM }
-    }
 
-
-    //!!!
     get现货多少秒内成交量(symbol: BaseType.BinanceSymbol, second: number) {
         second = second * (1000 / RealDataBase.单位时间)
         let volume = 0
@@ -163,7 +154,6 @@ export class RealDataBase {
         }
     }
 
-    //!!!
     get期货多少秒内成交量__万为单位(symbol: BaseType.BitmexSymbol, second: number) {
         second = second * (1000 / RealDataBase.单位时间)
         let volume = 0
@@ -177,11 +167,6 @@ export class RealDataBase {
             return NaN
         }
     }
-
-
-
-
-
 
     private item2({ data, orderBook }: {
         data: BaseType.KLine[]
@@ -217,7 +202,7 @@ export class RealDataBase {
         const 净成交量_累加5 = 指标.累加(净成交量, 5, RealDataBase.单位时间)
         const 净成交量_累加60 = 指标.累加(净成交量, 60, RealDataBase.单位时间)
         const 净成交量_累加500 = 指标.累加(净成交量, 500, RealDataBase.单位时间)
-        const 净成交量_macd = this.macd(净成交量_累加60)
+        const 净成交量_macd = 指标.macd(净成交量_累加60, RealDataBase.单位时间)
 
         //盘口
         const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
@@ -279,7 +264,7 @@ export class RealDataBase {
         })
 
 
-        const 震荡指数_macd = this.macd(震荡指数)
+        const 震荡指数_macd = 指标.macd(震荡指数, RealDataBase.单位时间)
 
 
         const 累计成交量 = (type: '上涨' | '下跌') => 指标.lazyMapCache2({ 累计成交量: NaN }, (arr: number[], ext) => {
