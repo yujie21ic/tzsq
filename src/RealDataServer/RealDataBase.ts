@@ -446,8 +446,8 @@ export class RealDataBase {
                 orderBook.length,
             ),
             i => [
-                { name: '成交量DIF<DEM', value: 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] },
-                { name: '折返程度<', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) > 折返率[i] : (价格[i] - 价格_最低15[i]) > 折返率[i] },
+                { name: '成交量 DIF < DEM', value: 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] },
+                { name: '折返程度', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) > 折返率[i] : (价格[i] - 价格_最低15[i]) > 折返率[i] },
             ]
         )
         const 信号_摸顶_下跌平仓 = 摸顶抄底_平仓('摸顶')
