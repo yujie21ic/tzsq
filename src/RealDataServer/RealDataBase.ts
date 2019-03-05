@@ -477,8 +477,8 @@ export class RealDataBase {
 
                 return [
                     { name: '震荡指数', value: 震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i] || 价差走平x秒[i] },
-                    { name: '成交量DIF<DEM', value: c },
-                    { name: ' 净盘口<净盘口均线<0', value: b },
+                    { name: '成交量衰竭', value: c },
+                    { name: '盘口 ！!', value: b },
                     { name: '30秒净买成交量 >=150万', value: 净成交量_累加60[i] >= 150 * 10000 },
                     { name: '折返程度<', value: (价格_最高15[i] - 价格[i]) < 折返率[i] },
                     { name: '价格速度', value: 上涨_价差[i] > 价差中大分界 || 价格差_除以时间[i] >= 0.1 },
@@ -574,8 +574,8 @@ export class RealDataBase {
 
                 return [
                     { name: '震荡指数', value: 震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i] || 价差走平x秒[i] },
-                    { name: '卖成交量DIF<DEM', value: c },
-                    { name: ' 净盘口 > 净盘口均线>0', value: b },
+                    { name: '成交量衰竭', value: c },
+                    { name: '盘口 ！!', value: b },
                     { name: '30秒净卖成交量>150万', value: 净成交量_累加60[i] <= -150 * 10000 },
                     { name: '折返程度<', value: (价格[i] - 价格_最低15[i]) < 折返率[i] },
                     { name: '价格速度', value: 下跌_价差[i] > 价差中大分界 || 价格差_除以时间[i] >= 0.1 },
@@ -583,7 +583,7 @@ export class RealDataBase {
                     { name: '量化 is下跌', value: 上涨_下跌[i] === '下跌' },
                     { name: '下跌_价差最大限制', value: 下跌_价差[i] < 价差大巨大分界 },
                 ]
-            }
+             }
         )
 
 
