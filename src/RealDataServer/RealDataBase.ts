@@ -547,7 +547,7 @@ export class RealDataBase {
                         value: 价差[i] <= 4
                     },
                     {
-                        name: '折返程度<',
+                        name: 'abs(极值 - 价格) < 折返率',
                         value: type === '追涨' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i]
                     },
                     {
