@@ -173,7 +173,9 @@ export class RealDataBase {
 
         const 净成交量 = 指标.lazyMapCache(() => Math.min(p.成交量.length, p.反向成交量.length), i => p.成交量[i] - p.反向成交量[i])
         const 净盘口 = 指标.lazyMapCache(() => Math.min(p.盘口.length, p.反向盘口.length), i => p.盘口[i] - p.反向盘口[i])
-
+        const 净成交量_累加5 = 指标.累加(净成交量, 5, RealDataBase.单位时间)
+        const 净成交量_累加60 = 指标.累加(净成交量, 60, RealDataBase.单位时间)
+        const 净成交量_累加500 = 指标.累加(净成交量, 500, RealDataBase.单位时间)
 
         return {
             成交量: p.成交量,
@@ -181,13 +183,13 @@ export class RealDataBase {
             成交量_累加5: 指标.累加(p.成交量, 5, RealDataBase.单位时间),
             盘口_均线_1d5: 指标.均线(p.盘口, 1.5, RealDataBase.单位时间),
             净成交量,
-            净成交量_累加5: 指标.累加(净成交量, 5, RealDataBase.单位时间),
-            净成交量_累加60: 指标.累加(净成交量, 60, RealDataBase.单位时间),
-            净成交量_累加500: 指标.累加(净成交量, 500, RealDataBase.单位时间),
+            净成交量_累加5,
+            净成交量_累加60,
+            净成交量_累加500,
             净盘口,
             净盘口_均线5: 指标.均线(净盘口, 5, RealDataBase.单位时间),
+            is上涨: 指标.lazyMapCache(() => Math.min(净成交量_累加60.length), i => 净成交量_累加60[i] >= 0)
         }
-
     }
 
 
@@ -519,8 +521,8 @@ export class RealDataBase {
 
         const 追涨_追跌 = (type: '追涨' | '追跌') => {
             const v = type === '追涨' ? 买 : 卖
-            const 上涨下跌str = type === '追涨' ? '上涨' : '下跌'
             const 价差 = type === '追涨' ? 上涨_价差 : 下跌_价差
+            const str = type === '追涨' ? '上涨' : '下跌'
 
             return 指标.lazyMapCache(
                 () => Math.min(
@@ -541,7 +543,7 @@ export class RealDataBase {
                         value: v.净成交量_累加5[i] > 100 * 10000
                     },
                     {
-                        name: 上涨下跌str + ' _价差 < 4',
+                        name: 上涨 + '_价差 < 4',
                         value: 价差[i] <= 4
                     },
                     {
@@ -549,8 +551,8 @@ export class RealDataBase {
                         value: type === '追涨' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i]
                     },
                     {
-                        name: '量化 is ' + 上涨下跌str,
-                        value: 上涨_下跌[i] === 上涨下跌str
+                        name: '方向 is ' + str,
+                        value: v.is上涨[i],
                     },
                 ]
             )
