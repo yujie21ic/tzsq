@@ -101,7 +101,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.期货.信号_上涨, color: 卖颜色 }),
+                    layer(信号Layer, { data: d.期货.信号_摸顶, color: 卖颜色 }),
                     layer(TextLayer, {
                         text:
                             `上涨摸顶                    `,
@@ -186,7 +186,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.期货.信号_下跌, color: 买颜色 }),
+                    layer(信号Layer, { data: d.期货.信号_抄底, color: 买颜色 }),
                     layer(TextLayer, {
                         text:
                             `下跌抄底                    `,
@@ -251,7 +251,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ],
             {
                 layerList: [
-                    layer(信号Layer, { data: d.期货.信号_上涨, color: 卖颜色 }),
+                    layer(信号Layer, { data: d.期货.信号_摸顶, color: 卖颜色 }),
                     layer(TextLayer, {
                         text:
                             `上涨摸顶                    `,
@@ -272,7 +272,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
             {
                 layerList: [
-                    layer(信号Layer, { data: d.期货.信号_下跌, color: 买颜色 }),
+                    layer(信号Layer, { data: d.期货.信号_抄底, color: 买颜色 }),
                     layer(TextLayer, {
                         text:
                             `下跌抄底                    `,
@@ -328,7 +328,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 }],
             {
                 layerList: [
-                    layer(信号Layer, { data: d.期货.信号_上涨, color: 卖颜色 }),
+                    layer(信号Layer, { data: d.期货.信号_摸顶, color: 卖颜色 }),
                     layer(TextLayer, {
                         text:
                             `上涨摸顶                    `,
@@ -338,7 +338,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.期货.信号_下跌, color: 买颜色 }),
+                    layer(信号Layer, { data: d.期货.信号_抄底, color: 买颜色 }),
                     layer(TextLayer, {
                         text:
                             `下跌抄底                    `,
@@ -736,7 +736,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.期货.信号_上涨, color: 卖颜色 }),
+                    layer(信号Layer, { data: d.期货.信号_摸顶, color: 卖颜色 }),
                 ]
             },
         ]
@@ -805,7 +805,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.期货.信号_下跌, color: 买颜色 }),
+                    layer(信号Layer, { data: d.期货.信号_抄底, color: 买颜色 }),
                 ]
             },
         ]

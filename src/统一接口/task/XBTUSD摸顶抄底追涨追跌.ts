@@ -387,7 +387,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
 
             //
-            if (this.最后一次信号 === '摸顶' && self.realData.is上涨做空下跌平仓(symbol) && 活动委托.length === 0) {
+            if (this.最后一次信号 === '摸顶' && self.realData.is摸顶_下跌平仓(symbol) && 活动委托.length === 0) {
                 return await self.maker({
                     symbol,
                     side: 平仓side,
@@ -399,7 +399,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             }
 
 
-            if (this.最后一次信号 === '抄底' && self.realData.is下跌抄底上涨平仓(symbol) && 活动委托.length === 0) {
+            if (this.最后一次信号 === '抄底' && self.realData.is抄底_上涨平仓(symbol) && 活动委托.length === 0) {
                 return await self.maker({
                     symbol,
                     side: 平仓side,
