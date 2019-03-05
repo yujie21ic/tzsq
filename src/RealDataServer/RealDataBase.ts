@@ -436,14 +436,14 @@ export class RealDataBase {
                 const 小 = 上涨_价差[i] < 价差中大分界
                 const 大 = 上涨_价差[i] >= 价差中大分界
 
-                const x__0 = 净成交量_macd.DIF[i] < 0
-                const x__1 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i]
-                const x__1_1 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] * 1.1
+                const v__0 = 净成交量_macd.DIF[i] < 0
+                const v__1 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i]
+                const v__1_1 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] * 1.1
 
                 const c =
-                    (x__1_1 && 净成交量_累加5[i] < 50 * 10000) ||
-                    (小 && x__1) ||
-                    (大 && x__0 && x__1)
+                    (v__1_1 && 净成交量_累加5[i] < 50 * 10000) ||
+                    (小 && v__1) ||
+                    (大 && v__0 && v__1)
 
 
 
@@ -505,14 +505,14 @@ export class RealDataBase {
                 const 小 = 下跌_价差[i] < 价差中大分界
                 const 大 = 下跌_价差[i] >= 价差中大分界
 
-                const x__0 = 净成交量_macd.DIF[i] < 0
-                const x__1 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i]
-                const x__0_9 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] * 0.9
+                const v__0 = 净成交量_macd.DIF[i] < 0
+                const v__1 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i]
+                const v__0_9 = 净成交量_macd.DIF[i] < 净成交量_macd.DEM[i] * 0.9
 
                 const c =
-                    (x__0_9 && 净成交量_累加5[i] < 50 * 10000) ||
-                    (小 && x__1) ||
-                    (大 && x__0 && x__1)
+                    (v__0_9 && 净成交量_累加5[i] < 50 * 10000) ||
+                    (小 && v__1) ||
+                    (大 && v__0 && v__1)
 
 
 
