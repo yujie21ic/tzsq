@@ -217,7 +217,7 @@ export class RealDataBase {
         const 净成交量 = 指标.lazyMapCache(() => data.length, i => 成交量买[i] - 成交量卖[i])
 
 
-    
+
 
 
         const 成交量买均线5 = 指标.累加(
@@ -230,13 +230,13 @@ export class RealDataBase {
             5,
             RealDataBase.单位时间
         )
-      
+
         const 净成交量10 = 指标.累加(
             指标.lazyMapCache(() => 成交量卖.length, i => 净成交量[i]),
             5,
             RealDataBase.单位时间
         )
-      
+
         const 净成交量60 = 指标.累加(
             指标.lazyMapCache(() => 成交量卖.length, i => 净成交量[i]),
             60,
@@ -252,7 +252,7 @@ export class RealDataBase {
 
         const 盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
         const 盘口卖 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
-       
+
 
         const 净盘口 = 指标.lazyMapCache(() => Math.min(盘口买.length, 盘口卖.length), i => 盘口买[i] - Math.abs(盘口卖[i]))
         const 净盘口均线 = 指标.均线(
@@ -326,7 +326,7 @@ export class RealDataBase {
 
 
         const 震荡指数macd = this.macd(震荡指数)
-      
+
 
         const 累计成交量 = (type: '上涨' | '下跌') => 指标.lazyMapCache2({ 累计成交量: NaN }, (arr: number[], ext) => {
             const length = Math.min(上涨_下跌.length, 成交量买.length, 成交量卖.length)
@@ -371,23 +371,34 @@ export class RealDataBase {
         const 价差走平 = 指标.lazyMapCache(() => Math.min(上涨_下跌.length, 上涨_价差.length, 下跌_价差.length), i => {
             const x = (上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)
             return i >= 1 && x[i] - x[i - 1] <= 0
-        }
-        )
-        const 价差走平x秒 = 指标.lazyMapCache(() => 价差走平.length,
-        i => {
-            const xxx = (上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)
-            let 持续多少true = 0
-            for (let x = i; i >= 0; i--) {
-                if (价差走平[x]) {
-                    持续多少true++
-                    if (持续多少true === (xxx[i] / 8) * 2) return true
-                } else {
-                    return false
-                }
+        })
+
+
+
+        const 价差走平多少根 = 指标.lazyMapCache2({}, (arr: number[]) => {
+            const length = 价差走平.length
+            for (let i = Math.max(0, arr.length - 1); i < length; i++) {
+                arr[i] = 价差走平[i] ? arr[i - 1] + 1 : 0
             }
-            return false
-        }
-    )
+        })
+
+
+        const 价差走平x秒 = 指标.lazyMapCache(() => Math.min(价差走平多少根.length, 上涨_价差.length, 下跌_价差.length),
+            i => {
+                const xxx = (上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)
+                // let 持续多少true = 0
+                // for (let x = i; i >= 0; i--) {
+                //     if (价差走平[x]) {
+                //         持续多少true++
+                //         if (持续多少true === (xxx[i] / 8) * 2) return true
+                //     } else {
+                //         return false
+                //     }
+                // }
+                // return false
+                return 价差走平多少根[i] >= (xxx[i] / 8) * 2
+            }
+        )
 
 
 
@@ -409,7 +420,7 @@ export class RealDataBase {
             动力: 下跌_动力,
         }
 
-     
+
 
         const 盘口买2秒均线 = 指标.均线(
             指标.lazyMapCache(() => 盘口买.length, i => 盘口买[i]),
@@ -428,7 +439,7 @@ export class RealDataBase {
                 盘口买2秒均线.length,
                 波动率.length,
                 上涨还是下跌.length,
-              
+
                 波动率.length,
             ),
             i => {
@@ -503,10 +514,10 @@ export class RealDataBase {
                         }
                     }
                 }
-                
+
 
                 return [
-                    { name: '震荡指数', value: 震荡指数[i] <1.1 || 震荡指数macd.DIF[i] < 震荡指数macd.DEM[i]||价差走平x秒[i]},
+                    { name: '震荡指数', value: 震荡指数[i] < 1.1 || 震荡指数macd.DIF[i] < 震荡指数macd.DEM[i] || 价差走平x秒[i] },
                     { name: '成交量DIF<DEM', value: c },
                     { name: ' 净盘口<净盘口均线<0', value: b },
                     { name: '30秒净买成交量 >=150万', value: 净成交量60[i] >= 150 * 10000 },
@@ -647,9 +658,9 @@ export class RealDataBase {
                         }
                     }
                 }
-           
+
                 return [
-                    { name: '震荡指数', value: 震荡指数[i] < 1.1 || 震荡指数macd.DIF[i] < 震荡指数macd.DEM[i]|| 价差走平x秒[i]},
+                    { name: '震荡指数', value: 震荡指数[i] < 1.1 || 震荡指数macd.DIF[i] < 震荡指数macd.DEM[i] || 价差走平x秒[i] },
                     { name: '卖成交量DIF<DEM', value: c },
                     { name: ' 净盘口 > 净盘口均线>0', value: b },
                     { name: '30秒净卖成交量>150万', value: 净成交量60[i] <= -150 * 10000 },
@@ -706,7 +717,7 @@ export class RealDataBase {
 
 
         return {
-            
+
             震荡指数macd,
             震荡指数,
             最新价,
@@ -722,7 +733,7 @@ export class RealDataBase {
             信号_下跌抄底上涨平仓,
             价格差_除以时间,
             上涨_下跌,
-           
+
             价格均线,
             净成交量macd,
             上涨,
@@ -734,7 +745,7 @@ export class RealDataBase {
             真空信号跌,
             净成交量,
             净成交量60,
-           
+
             成交量买均线5,
             成交量卖均线5,
             信号_上涨,
