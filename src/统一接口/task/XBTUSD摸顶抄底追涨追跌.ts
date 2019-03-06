@@ -8,7 +8,7 @@ import { PositionAndOrderTask } from '../PositionAndOrder/PositionAndOrder'
 
 
 const symbol = 'XBTUSD'
-const 交易数量 = 2
+const 交易数量 = 100
 
 
 export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
@@ -250,7 +250,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             this.最后一次信号时间 = lastNumber(self.realData.dataExt[symbol].期货.时间)
 
 
-            const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' || self.realData.get波动率(symbol) < 30
+            const 市价 = false//信号灯Type === '追涨' || 信号灯Type === '追跌' || self.realData.get波动率(symbol) < 30
 
 
             if (lastNumber(self.realData.dataExt[symbol].期货.时间) > this.到什么时间不开仓) {
@@ -261,7 +261,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         size: 交易数量 * (this.连续止损2 + 1),
                         text: 信号灯Type,
                     }, '自动开仓step 自动开仓 市价' + self.realData.get信号msg(symbol)) :
-                    await self.limit({
+                    await self.maker({ //limit
                         symbol,
                         side: 开仓side,
                         size: 交易数量 * (this.连续止损2 + 1),
@@ -271,6 +271,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                             type: 'taker',
                             位置: 0,
                         })),
+                        reduceOnly: false,
                         text: 信号灯Type,
                     }, '自动开仓step 自动开仓 挂单' + self.realData.get信号msg(symbol))
             } else {
@@ -285,7 +286,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         if (活动委托.length === 1) {
             const { type, timestamp, id, side } = 活动委托[0]
             if (type === '限价') {
-                const _15秒取消 = (lastNumber(self.realData.dataExt[symbol].期货.时间) > (timestamp + 15 * 1000))
+                const _15秒取消 = (lastNumber(self.realData.dataExt[symbol].期货.时间) > (timestamp + 60 * 1000)) //60秒
                 const 出现反向信号时候取消 = (信号灯Type !== 'none' && 开仓side !== side)
                 if (_15秒取消 || 出现反向信号时候取消) {
                     return await self.cancel({ orderID: [id], text: '自动开仓step 取消开仓' }, '自动开仓step 取消开仓 ' + _15秒取消 ? '_15秒取消' : ('出现反向信号时候取消' + self.realData.get信号msg(symbol)))
