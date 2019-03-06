@@ -269,11 +269,29 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                     if ((v.side === 'Buy' && 买1 < v.price) ||
                         (v.side === 'Sell' && 卖1 > v.price)
                     ) {
+
+                        //只减仓
+                        let size = v.orderQty
+                        if (v.type === '限价只减仓') {
+                            const count = this.get本地维护仓位数量('XBTUSD')
+                            if (count === 0) {
+                                return false
+                            }
+                            else if (v.side === 'Buy' && count > 0) {
+                                return false
+                            }
+                            if (v.side === 'Sell' && count < 0) {
+                                return false
+                            } else {
+                                size = Math.min(Math.abs(count), v.orderQty)
+                            }
+                        }
+
                         this.成交({
                             timestamp: lastNumber(this.realData.dataExt.XBTUSD.期货.时间),
                             symbol: 'XBTUSD',
                             side: v.side,
-                            size: v.orderQty,
+                            size,
                             price: v.price,
                             text: v.type === '限价' ? '开仓' : '平仓',
                             被动: true,
@@ -303,10 +321,24 @@ export class 回测PositionAndOrder implements PositionAndOrder {
             })
 
 
-            if (this.jsonSync.rawData.symbol.XBTUSD.仓位数量 === 0) {
-                //删除 只减仓
-                this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => v.type !== '限价只减仓')
-            }
+            //只减仓
+            this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => {
+
+                if (v.type === '限价只减仓') {
+                    const count = this.get本地维护仓位数量('XBTUSD')
+                    if (count === 0) {
+                        return false
+                    }
+                    else if (v.side === 'Buy' && count > 0) {
+                        return false
+                    }
+                    if (v.side === 'Sell' && count < 0) {
+                        return false
+                    }
+                }
+
+                return true
+            })
 
 
             await task.onTick(this)
