@@ -8,7 +8,7 @@ import { PositionAndOrderTask } from '../PositionAndOrder/PositionAndOrder'
 
 
 const symbol = 'XBTUSD'
-const 交易数量 = 32
+const 交易数量 = 2
 
 
 export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
