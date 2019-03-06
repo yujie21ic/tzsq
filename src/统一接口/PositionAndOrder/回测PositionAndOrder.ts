@@ -320,27 +320,6 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                 return true
             })
 
-
-            //只减仓
-            this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => {
-
-                if (v.type === '限价只减仓') {
-                    const count = this.get本地维护仓位数量('XBTUSD')
-                    if (count === 0) {
-                        return false
-                    }
-                    else if (v.side === 'Buy' && count > 0) {
-                        return false
-                    }
-                    if (v.side === 'Sell' && count < 0) {
-                        return false
-                    }
-                }
-
-                return true
-            })
-
-
             await task.onTick(this)
         }
     }
