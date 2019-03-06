@@ -8,7 +8,7 @@ import { PositionAndOrderTask } from '../PositionAndOrder/PositionAndOrder'
 
 
 const symbol = 'XBTUSD'
-const 交易数量 = 100
+const 交易数量 = 32
 
 
 export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
@@ -250,7 +250,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             this.最后一次信号时间 = lastNumber(self.realData.dataExt[symbol].期货.时间)
 
 
-            const 市价 = false//信号灯Type === '追涨' || 信号灯Type === '追跌' || self.realData.get波动率(symbol) < 30
+            const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' //|| self.realData.get波动率(symbol) < 30
 
 
             if (lastNumber(self.realData.dataExt[symbol].期货.时间) > this.到什么时间不开仓) {
@@ -261,7 +261,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         size: 交易数量 * (this.连续止损2 + 1),
                         text: 信号灯Type,
                     }, '自动开仓step 自动开仓 市价' + self.realData.get信号msg(symbol)) :
-                    await self.maker({ //limit
+                    await self.maker({ //limit 挂单
                         symbol,
                         side: 开仓side,
                         size: 交易数量 * (this.连续止损2 + 1),
