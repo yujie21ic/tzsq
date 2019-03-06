@@ -241,7 +241,7 @@ export class RealDataBase {
         //_______________________________________________________________________________________________________________________________//
         const 净成交量abs = 指标.lazyMapCache(() => Math.min(买.成交量.length, 卖.成交量.length), i => Math.abs(买.成交量[i] - 卖.成交量[i]))
         const 净成交量abs_累加60 = 指标.累加(净成交量abs, 60, RealDataBase.单位时间)
-        const 净成交量abs_macd = 指标.macd(净成交量abs_累加60, RealDataBase.单位时间)
+        const 净成交量abs_macd = 指标.macd(净成交量abs, RealDataBase.单位时间)
 
         //阻力3
         const 阻力3 = 指标.阻力3({ price: 价格, volumeBuy: 买.成交量, volumeSell: 卖.成交量, })
