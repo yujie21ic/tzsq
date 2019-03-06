@@ -111,7 +111,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.期货.信号_追跌, color: 卖颜色 }),
+                    layer(信号Layer, { data: d.期货.信号_摸顶_下跌平仓, color: 卖颜色 }),
                     layer(TextLayer, {
                         text:
                             `下跌追跌                    `,
@@ -122,7 +122,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
     复盘下跌: (d, d2) => ({
-        heightList: [0.4, 0.15, 0.3, 0.15,],
+        heightList: [0.4, 0.15, 0.15, 0.15,0.15],
         items: [
             [
                 {
@@ -178,10 +178,6 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layer(ZeroLayer, { color: 0xaaaaaa }),
                     layer(LineLayer, { data: d.期货.净成交量abs_macd.DIF, color: 卖颜色1 }),
                     layer(LineLayer, { data: d.期货.净成交量abs_macd.DEM, color: 卖颜色 }),
-                    // layer(LineLayer, { data: d.期货.买MACD.买成交量DEM, color: 买颜色 }),
-                    // layer(LineLayer, { data: d.期货.买MACD.买成交量DIF, color: 买颜色1 }),
-                    // layer(LineLayer, { data: d.期货.卖MACD.卖成交量DEM, color: 卖颜色 }),
-                    // layer(LineLayer, { data: d.期货.卖MACD.卖成交量DIF, color: 卖颜色1 }),
                 ]
             },
             {
@@ -194,16 +190,16 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     })
                 ]
             },
-            // {
-            //     layerList: [
-            //         layer(信号Layer, { data: d.期货.信号_追涨, color: 买颜色 }),
-            //         layer(TextLayer, {
-            //             text:
-            //                 `上涨追涨                    `,
-            //             color: ETH颜色,
-            //         })
-            //     ]
-            // },
+            {
+                layerList: [
+                    layer(信号Layer, { data: d.期货.信号_抄底_上涨平仓, color: 买颜色 }),
+                    layer(TextLayer, {
+                        text:
+                            `信号_抄底_上涨平仓                    `,
+                        color: ETH颜色,
+                    })
+                ]
+            },
 
         ]
     }),
@@ -456,36 +452,6 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
             ],
             [
-                // {
-                //     numberColor: BTC颜色,
-                //     yCoordinate:'对数',
-                //     layerList: [
-                //         layer(ZeroLayer, { color: 0xaaaaaa }),
-                //         // layer(LineLayer, { data: d2.XBTUSD.期货.下跌_动力10均线, color: 卖颜色1 }),
-                //         // layer(LineLayer, { data: d2.XBTUSD.期货.下跌_动力20均线, color: 卖颜色 }),
-                //         layer(LineLayer, { data: d2.XBTUSD.期货.下跌_动力DIF, color: 卖颜色1 }),
-                //         layer(LineLayer, { data: d2.XBTUSD.期货.下跌_动力DEM, color: 卖颜色 }),
-                //     ]
-                // },
-                // {
-                //     numberColor: BTC颜色,
-                //     yCoordinate: '对数',
-                //     layerList: [
-                //         layer(ZeroLayer, { color: 0xaaaaaa }),
-                //         //  layer(LineLayer, { data: d2.XBTUSD.期货.下跌_动力10均线, color: 卖颜色1 }),
-                //         //  layer(LineLayer, { data: d2.XBTUSD.期货.下跌_动力20均线, color: 卖颜色 }),
-                //         layer(LineLayer, { data: d2.XBTUSD.期货.净下跌成交量DIF, color: 买颜色1 }),
-                //         layer(LineLayer, { data: d2.XBTUSD.期货.净下跌成交量DEM, color: 买颜色 }),
-                //     ]
-                // },
-                // {
-                //     numberColor: 波动率颜色,
-                //     numberX: 100,
-                //     layerList: [
-                //         layer(ZeroLayer, { color: ETH颜色 }),
-                //         layer(LineLayer, { data: d.期货.波动率差_除以时间, color: ETH颜色 }),
-                //     ]
-                // },
                 {
                     numberColor: BTC颜色,
                     yCoordinate: '对数',
