@@ -32,4 +32,4 @@ tqsdk.on('error', x => {
 })
 
 
-tqsdk.subscribe_quote('rtn_data') 
+tqsdk.subscribe_quote('SHFE.cu1612') 
