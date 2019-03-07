@@ -36,7 +36,7 @@ export namespace DataClient {
 
     export class RealData__History extends RealDataBase {
 
-        private get_bitmex_orderBook = async (symbol: BaseType.BitmexSymbol | BaseType.HopexSymbol, startTime: number, endTime: number, 本地 = true) => {
+        private get_bitmex_orderBook = async (symbol: BaseType.BitmexSymbol | BaseType.HopexSymbol, startTime: number, endTime: number, 本地 = false) => {
 
             const { data, error, msg } = await (本地 ? PKServer.模拟客户端调用.getBitmex500msOrderBook : PKClient.func.getBitmex500msOrderBook)({
                 symbol,
@@ -67,7 +67,7 @@ export namespace DataClient {
             return ret
         }
 
-        async get500msKLine(symbol: BaseType.BitmexSymbol | BaseType.BinanceSymbol | BaseType.HopexSymbol, startTime: number, endTime: number, 本地 = true) {
+        async get500msKLine(symbol: BaseType.BitmexSymbol | BaseType.BinanceSymbol | BaseType.HopexSymbol, startTime: number, endTime: number, 本地 = false) {
             const { data, msg, error, } = await (本地 ? DBServer.模拟客户端调用.getKLine : DBClient.func.getKLine)({
                 type: '500ms',
                 symbol,

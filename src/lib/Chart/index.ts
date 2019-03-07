@@ -92,6 +92,7 @@ export const chartInit = (element: HTMLElement, func: typeof dataSourceFunc) => 
     } else {
         setInterval(chartRender, 1000 / FPS)
     }
+    //setInterval(chartRender, 1000 / FPS)
 
 
 
