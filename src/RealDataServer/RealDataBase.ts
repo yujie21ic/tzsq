@@ -374,7 +374,10 @@ export class RealDataBase {
         //_______________________________________________________________________________________________________________________________//
 
 
-
+        const bitmex_hopex_差价: ArrayLike<number> = (指标.lazyMapCache(() => this.dataExt.XBTUSD.bitmex_hopex_差价.length, i => this.dataExt.XBTUSD.bitmex_hopex_差价[i])) as any
+        const bitmex_hopex_差价均线 = 指标.均线(bitmex_hopex_差价, 60, RealDataBase.单位时间)
+        const bitmex_hopex_相对价差 = 指标.lazyMapCache(() => Math.min(bitmex_hopex_差价.length, bitmex_hopex_差价均线.length), i => bitmex_hopex_差价[i] - bitmex_hopex_差价均线[i])
+        const bitmex_hopex_差价macd = 指标.macd(bitmex_hopex_相对价差, RealDataBase.单位时间)
 
 
         const 价差中大分界 = 20
@@ -456,7 +459,16 @@ export class RealDataBase {
         const 追涨_追跌 = (type: '追涨' | '追跌') => {
             const bs = type === '追涨' ? 买 : 卖
             const 价差 = type === '追涨' ? 上涨_价差 : 下跌_价差
-
+            let 相对价差ok  =false
+            if( type === '上涨'){
+                if(bitmex_hopex_相对价差[i]>0){
+                    相对价差ok = true
+                }
+            }else if(type === '下跌'){
+                if(bitmex_hopex_相对价差[i]<0){
+                    相对价差ok = true
+                }
+            }
             return 指标.lazyMapCache(
                 () => Math.min(
                     data.length,
@@ -464,6 +476,7 @@ export class RealDataBase {
                 ),
                 i => [
                     { name: '净盘口 > 0', value: bs.净盘口[i] > 0 },
+                    { name: '相对价差 ', value: 相对价差ok },
                     { name: '5分钟波动率低量', value: 价格_波动率300[i] < 30 },
                     { name: '大单', value: bs.净成交量_累加5[i] > 100 * 10000 },
                     { name: '价差 < 4', value: 价差[i] <= 4 },
@@ -476,12 +489,12 @@ export class RealDataBase {
         const 信号_追跌 = 追涨_追跌('追跌')
 
 
-        const bitmex_hopex_差价: ArrayLike<number> = (指标.lazyMapCache(() => this.dataExt.XBTUSD.bitmex_hopex_差价.length, i => this.dataExt.XBTUSD.bitmex_hopex_差价[i])) as any
-
+        
         return {
             bitmex_hopex_差价,
-
-            //bitmex_hopex_差价macd,
+             bitmex_hopex_相对价差,
+             bitmex_hopex_差价均线,
+             bitmex_hopex_差价macd,
             买,
             卖,
             震荡指数_macd,
@@ -531,9 +544,7 @@ export class RealDataBase {
 
 
         const bitmex_hopex_差价 = 指标.lazyMapCache(() => Math.min(期货.价格.length, hopex.价格.length), i => Math.abs(期货.价格[i] - hopex.价格[i]))
-        const bitmex_hopex_差价均线 = 指标.均线(bitmex_hopex_差价, 60, RealDataBase.单位时间)
-        const bitmex_hopex_相对价差 = 指标.lazyMapCache(() => Math.min(期货.价格.length, hopex.价格.length), i => bitmex_hopex_差价[i] - bitmex_hopex_差价均线[i])
-        const bitmex_hopex_差价macd = 指标.macd(bitmex_hopex_相对价差, RealDataBase.单位时间)
+        
 
         // XXX = 波动率[i] / 5 + 2
 
@@ -579,10 +590,10 @@ export class RealDataBase {
 
 
         return {
-            bitmex_hopex_相对价差,
+           // bitmex_hopex_相对价差,
             bitmex_hopex_差价,
-            bitmex_hopex_差价均线,
-            bitmex_hopex_差价macd,
+            //bitmex_hopex_差价均线,
+            //bitmex_hopex_差价macd,
 
             信号hopex_下跌,
             信号hopex_上涨,
