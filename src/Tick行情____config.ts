@@ -130,19 +130,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
                     ]
                 },
-                {
-                    layerList: [
+                // {
+                //     layerList: [
                         
-                        layer(LineLayer, { data:  d.期货.bitmex_hopex_差价macd.DIF, color: 买颜色1 }),
-                        layer(LineLayer, { data: d.期货.bitmex_hopex_差价macd.DEM, color: 买颜色 }),
-                    ]
-                },
-                {   numberColor: 石青,
-                    layerList: [
-                        layer(ZeroLayer, { color: 石青 }),
-                        layer(LineLayer, { data:  d.期货.bitmex_hopex_相对价差, color: 石青 }),
-                    ]
-                },
+                //         layer(LineLayer, { data:  d.期货.bitmex_hopex_差价macd.DIF, color: 买颜色1 }),
+                //         layer(LineLayer, { data: d.期货.bitmex_hopex_差价macd.DEM, color: 买颜色 }),
+                //     ]
+                // },
+               
 
                 {
 
@@ -174,6 +169,12 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                             color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
                         })
 
+                    ]
+                },
+                {   numberColor: 石青,
+                    layerList: [
+                        layer(ZeroLayer, { color: 石青 }),
+                        layer(LineLayer, { data:  d.期货.bitmex_hopex_相对价差, color: 石青 }),
                     ]
                 },
             ],
