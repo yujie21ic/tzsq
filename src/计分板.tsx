@@ -20,7 +20,7 @@ class APP extends React.Component {
     }
 
     render() {
-        const wallet = orderClient.jsonSync.rawData.wallet.filter(v => v.time > Date.now() - 12 * 60 * 60 * 1000)
+        const wallet = orderClient.jsonSync.rawData.wallet //.filter(v => v.time > Date.now() - 12 * 60 * 60 * 1000)
 
         const data = [] as {
             id: number
