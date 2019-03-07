@@ -463,6 +463,7 @@ export class RealDataBase {
                 () => Math.min(
                     data.length,
                     orderBook.length,
+                    bitmex_hopex_相对价差.length,//<----------------------------
                 ),
                 i => [
                     { name: '净盘口 > 0', value: bs.净盘口[i] > 0 },
