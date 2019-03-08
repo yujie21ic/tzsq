@@ -371,6 +371,8 @@ export class RealDataBase {
             价差: 下跌_价差,
             动力: 下跌_动力,
         }
+
+        const 绝对价差 = 指标.lazyMapCache(() => Math.min(上涨_价差.length, 下跌_价差.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 上涨_价差[i] : 下跌_价差[i])
         //_______________________________________________________________________________________________________________________________//
 
 
@@ -482,6 +484,7 @@ export class RealDataBase {
 
 
         return {
+            绝对价差,
             bitmex_hopex_差价,
             bitmex_hopex_相对价差,
             bitmex_hopex_差价均线,

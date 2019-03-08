@@ -250,7 +250,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             this.最后一次信号时间 = lastNumber(self.realData.dataExt[symbol].期货.时间)
 
 
-            const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' //|| self.realData.get波动率(symbol) < 30
+            const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' || lastNumber(self.realData.dataExt.XBTUSD.期货.绝对价差) > 12
 
 
             if (lastNumber(self.realData.dataExt[symbol].期货.时间) > this.到什么时间不开仓) {
