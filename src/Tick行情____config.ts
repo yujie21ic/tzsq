@@ -570,21 +570,21 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layer(LineLayer, { data: d.期货.价格差_除以时间, color: 买颜色 }),
                 ]
             },
-            {
-                numberColor: 买颜色,
-                layerList: [
-                    layer(ZeroLayer, { color: 买颜色 }),
-                    layer(LineLayer, { data: d.期货.震荡指数, color: 买颜色 }),
-                ]
-            },
+            // {
+            //     numberColor: 买颜色,
+            //     layerList: [
+            //         layer(ZeroLayer, { color: 买颜色 }),
+            //         layer(LineLayer, { data: d.期货.震荡指数, color: 买颜色 }),
+            //     ]
+            // },
 
 
 
-            {
-                layerList: [
-                    layer(LineLayer, { data: d2.XBTUSD.期货.价格_波动率30, color: 石青 }),
-                ]
-            },
+            // {
+            //     layerList: [
+            //         layer(LineLayer, { data: d2.XBTUSD.期货.价格_波动率30, color: 石青 }),
+            //     ]
+            // },
                 // {
                 //     layerList: [
                 //         layer(LineLayer, { data: d2.XBTUSD.期货.阻力3涨, color: 波动率颜色 }),
@@ -614,14 +614,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d2.XBTUSD.期货.上涨.价差, color: 波动率颜色 }),
                     ]
                 },
-                {
-                    numberColor: 买颜色,
-                    layerList: [
-                        layer(ZeroLayer, { color: 买颜色 }),
-                        layer(LineLayer, { data: d.期货.震荡指数_macd.DIF, color: 买颜色1 }),
-                        layer(LineLayer, { data: d.期货.震荡指数_macd.DEM, color: 买颜色 }),
-                    ]
-                },
+                // {
+                //     numberColor: 买颜色,
+                //     layerList: [
+                //         layer(ZeroLayer, { color: 买颜色 }),
+                //         layer(LineLayer, { data: d.期货.震荡指数_macd.DIF, color: 买颜色1 }),
+                //         layer(LineLayer, { data: d.期货.震荡指数_macd.DEM, color: 买颜色 }),
+                //     ]
+                // },
 
 
             ],

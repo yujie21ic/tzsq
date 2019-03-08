@@ -173,7 +173,7 @@ export class RealDataBase {
 
         const 净成交量 = 指标.lazyMapCache(() => Math.min(p.成交量.length, p.反向成交量.length), i => p.成交量[i] - p.反向成交量[i])
         const 净盘口 = 指标.lazyMapCache(() => Math.min(p.盘口.length, p.反向盘口.length), i => p.盘口[i] - p.反向盘口[i])
-        const 净成交量_累加5 = 指标.累加(净成交量, 5, RealDataBase.单位时间)
+        const 净成交量_累加5 = 指标.累加(净成交量, 2, RealDataBase.单位时间)
         const 净成交量_累加60 = 指标.累加(净成交量, 60, RealDataBase.单位时间)
         const 净成交量_累加500 = 指标.累加(净成交量, 500, RealDataBase.单位时间)
 
@@ -483,7 +483,7 @@ export class RealDataBase {
                     { name: '相对价差 ', value: type === '追涨' ? bitmex_hopex_上涨相对差价均线[i] > 0 : bitmex_hopex_下跌相对价差均线[i] < 0 },
                     { name: '5分钟波动率低量', value: 价格_波动率300[i] < 30 },
                     { name: '大单', value: bs.净成交量_累加5[i] > 100 * 10000 },
-                    { name: '价差 < 4', value: 价差[i] <= 4 },
+                    { name: '价差 < 4', value: 价差[i] <= 4||(价格差_除以时间[i] <= 0.04?价差[i] <= 8:false) },
                     { name: '折返程度', value: type === '追涨' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
                     { name: 'is趋势', value: bs.is趋势[i] },
                 ]
