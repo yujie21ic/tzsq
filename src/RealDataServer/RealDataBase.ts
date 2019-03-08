@@ -553,8 +553,8 @@ export class RealDataBase {
         const 差价均线 = 指标.均线(差价, 300, RealDataBase.单位时间)
 
 
-        const bitmex_hopex_上涨差价 = 指标.lazyMapCache(() => Math.min(期货.价格.length, hopex.价格.length), i =>Math.abs(期货.价格_最高15[i]- hopex.价格[i]))
-        const bitmex_hopex_下跌差价 = 指标.lazyMapCache(() => Math.min(期货.价格.length, hopex.价格.length), i => Math.abs(期货.价格_最低15[i] - hopex.价格[i]))
+        const bitmex_hopex_上涨差价 = 指标.lazyMapCache(() => Math.min(期货.价格_最高15.length, hopex.价格.length), i =>Math.abs(期货.价格_最高15[i]- hopex.价格[i]))
+        const bitmex_hopex_下跌差价 = 指标.lazyMapCache(() => Math.min(期货.价格_最低15.length, hopex.价格.length), i => Math.abs(期货.价格_最低15[i] - hopex.价格[i]))
 
         // XXX = 波动率[i] / 5 + 2
 
