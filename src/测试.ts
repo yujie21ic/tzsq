@@ -53,9 +53,12 @@ request({
     console.log('token', error, response, token)
 
     let requestData = {
-        'method': 'get_security_info',
-        'token': token,
-        'code': '502050.XSHG'
+        "method": "get_ticks",
+        token,
+        "code": "000001.XSHE",
+        "count": 15,
+        "end_date": "2018-07-03"
+
     }
     request({
         url: url,
