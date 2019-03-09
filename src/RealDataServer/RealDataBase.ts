@@ -343,22 +343,23 @@ export class RealDataBase {
         })
 
 
-        const __波动率 = (type: '上涨' | '下跌', src: ArrayLike<number>) => 指标.lazyMapCache2({ 波动率: NaN }, (arr: number[], ext) => {
+        const __波动率 = (type: '上涨' | '下跌', src: ArrayLike<number>) => 指标.lazyMapCache2({ 起点Index: NaN, 波动率: NaN }, (arr: number[], ext) => {
             const length = Math.min(上涨_下跌.length, src.length)
 
             for (let i = Math.max(0, arr.length - 1); i < length; i++) {
                 if (上涨_下跌[i] === type) {
                     if (isNaN(ext.波动率)) {
-                        ext.波动率 = 0  //起i点不用
+                        ext.波动率 = 0
+                        ext.起点Index = i
                     }
-                    //else //起i点不用
-                    else if (i !== length - 1) {
+                    //起点是0
+                    if (i !== ext.起点Index && i !== length - 1) {
                         ext.波动率 += Math.abs(src[i] - src[i - 1])   //最后一个重新计算
                     }
                 } else {
                     ext.波动率 = NaN
                 }
-                arr[i] = ext.波动率 + Math.abs(src[i] - src[i - 1])
+                arr[i] = ext.波动率 + Math.abs(src[i] - src[i - 1])   //最后一个重新计算
             }
         })
 
