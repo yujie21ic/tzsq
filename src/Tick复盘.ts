@@ -63,3 +63,12 @@ class Tick复盘 extends TickBase {
 }
 
 new Tick复盘(document.querySelector('#root') as HTMLElement)
+
+
+    ; (window as any)['log'] = (arr: ArrayLike<any>) => {
+        const x: any = []
+        for (let i = 0; i < arr.length; i++) {
+            x.push(arr[i])
+        }
+        console.log(JSON.stringify(x))
+    }
