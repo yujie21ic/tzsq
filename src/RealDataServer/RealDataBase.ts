@@ -476,7 +476,8 @@ export class RealDataBase {
                 () => Math.min(
                     data.length,
                     orderBook.length,
-                    //bitmex_hopex_相对价差.length,//<----------------------------
+                    bitmex_hopex_上涨相对价差.length,//<----------------------------
+                    bitmex_hopex_下跌相对价差.length,
                 ),
                 i => [
                     { name: '净盘口 > 0', value: bs.净盘口_均线5[i] > 0 },
