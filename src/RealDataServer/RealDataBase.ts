@@ -349,17 +349,25 @@ export class RealDataBase {
             for (let i = Math.max(0, arr.length - 1); i < length; i++) {
                 if (上涨_下跌[i] === type) {
                     if (isNaN(ext.波动率)) {
-                        ext.波动率 = 0
                         ext.起点Index = i
+                        ext.波动率 = 0
+                        arr[i] = 0
                     }
-                    //起点是0
+
+                    
                     if (i !== ext.起点Index && i !== length - 1) {
                         ext.波动率 += Math.abs(src[i] - src[i - 1])   //最后一个重新计算
+                        ext.起点Index = i //更新起点 ?
+                        arr[i] = ext.波动率// + Math.abs(src[i] - src[i - 1])   //最后一个重新计算
+                    }
+                    else if (i !== ext.起点Index && i !== length - 1) {
+                        arr[i] = ext.波动率 + Math.abs(src[i] - src[i - 1])   //最后一个重新计算
                     }
                 } else {
                     ext.波动率 = NaN
+                    arr[i] = NaN
                 }
-                arr[i] = ext.波动率 + Math.abs(src[i] - src[i - 1])   //最后一个重新计算
+               
             }
         })
 
