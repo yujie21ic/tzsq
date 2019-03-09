@@ -824,7 +824,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 },
                 {   numberColor: 石青,
                     layerList: [
-                        layer(LineLayer, { data: d.期货.下跌_动力波动率, color: 石青 }),
+                        layer(LineLayer, { data: d.期货.下跌.动力波动率, color: 石青 }),
                     ]
                     
                 },
