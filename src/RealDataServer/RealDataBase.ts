@@ -153,6 +153,7 @@ export class RealDataBase {
             return NaN
         }
     }
+    
 
     get期货多少秒内成交量__万为单位(symbol: BaseType.BitmexSymbol, second: number) {
         second = second * (1000 / RealDataBase.单位时间)
@@ -173,7 +174,8 @@ export class RealDataBase {
 
         const 净成交量 = 指标.lazyMapCache(() => Math.min(p.成交量.length, p.反向成交量.length), i => p.成交量[i] - p.反向成交量[i])
         const 净盘口 = 指标.lazyMapCache(() => Math.min(p.盘口.length, p.反向盘口.length), i => p.盘口[i] - p.反向盘口[i])
-        const 净成交量_累加5 = 指标.累加(净成交量, 2, RealDataBase.单位时间)
+        const 净成交量_累加5 = 指标.累加(净成交量, 5, RealDataBase.单位时间)
+        const 净成交量_累加7 = 指标.累加(净成交量, 7, RealDataBase.单位时间)
         const 净成交量_累加60 = 指标.累加(净成交量, 60, RealDataBase.单位时间)
         const 净成交量_累加500 = 指标.累加(净成交量, 500, RealDataBase.单位时间)
 
@@ -184,6 +186,7 @@ export class RealDataBase {
             //盘口_均线_1d5: 指标.均线(p.盘口, 1.5, RealDataBase.单位时间),
             净成交量,
             净成交量_累加5,
+            净成交量_累加7,
             净成交量_累加60,
             净成交量_累加500,
             净盘口,
@@ -191,6 +194,7 @@ export class RealDataBase {
             is趋势: 指标.lazyMapCache(() => Math.min(净成交量_累加60.length), i => 净成交量_累加60[i] >= 0),//买是上涨  卖是下跌
         }
     }
+    
 
 
     private item2({ data, orderBook }: {
@@ -239,8 +243,11 @@ export class RealDataBase {
 
 
         //_______________________________________________________________________________________________________________________________//
-        const 净成交量abs = 指标.lazyMapCache(() => Math.min(买.成交量.length, 卖.成交量.length), i => Math.abs(买.成交量[i]*Math.log(买.成交量[i]) - 卖.成交量[i]*Math.log(卖.成交量[i])))
-        const 净成交量abs_macd = 指标.macd(净成交量abs, RealDataBase.单位时间)
+        const 净成交量abs = 指标.lazyMapCache(() => Math.min(买.成交量.length, 卖.成交量.length), i => 买.成交量[i]-卖.成交量[i])
+        const 净成交量abs原始 = 指标.lazyMapCache(() => Math.min(买.成交量.length, 卖.成交量.length), i => Math.abs(买.成交量[i] - 卖.成交量[i]))
+        
+        const 净成交量均线10 = 指标.均线(净成交量abs, 10, RealDataBase.单位时间)
+        const 净成交量abs_macd = 指标.macd(净成交量abs原始, RealDataBase.单位时间)
 
         //阻力3
         const 阻力3 = 指标.阻力3({ price: 价格, volumeBuy: 买.成交量, volumeSell: 卖.成交量, })
@@ -366,6 +373,7 @@ export class RealDataBase {
         const 下跌_累计成交量 = 累计成交量('下跌')
         const 下跌_价差 = 价差('下跌')
         const 下跌_动力 = 指标.lazyMapCache(() => Math.min(下跌_累计成交量.length, 下跌_价差.length), i => to范围({ min: 30 * 10000, max: 130 * 10000, value: 下跌_累计成交量[i] / Math.max(1, 下跌_价差[i]) })) //最小除以1
+        const 下跌_动力波动率 = 指标.波动率(下跌_动力,10, RealDataBase.单位时间)
         const 下跌 = {
             累计成交量: 下跌_累计成交量,
             价差: 下跌_价差,
@@ -439,6 +447,7 @@ export class RealDataBase {
 
                     return [
                         { name: '震荡指数', value: 震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i] || 价差走平x秒[i] },
+                        { name: '价差走平x秒[i]', value: 价差走平x秒[i] },
                         { name: '成交量衰竭', value: 成交量衰竭 },
                         { name: '盘口 ！!', value: 盘口XXX },
                         { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 150 * 10000 },
@@ -496,6 +505,8 @@ export class RealDataBase {
 
 
         return {
+            下跌_动力波动率,
+            净成交量均线10,
             绝对价差,
             bitmex_hopex_上涨相对差价均线,
             bitmex_hopex_下跌相对价差均线,
