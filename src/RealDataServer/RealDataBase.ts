@@ -343,31 +343,27 @@ export class RealDataBase {
         })
 
 
-        const __波动率 = (type: '上涨' | '下跌', src: ArrayLike<number>) => 指标.lazyMapCache2({ 起点Index: NaN, 波动率: NaN }, (arr: number[], ext) => {
+        const __波动率 = (src: ArrayLike<number>) => 指标.lazyMapCache2({ 波动率: NaN }, (arr: number[], ext) => {
             const length = Math.min(上涨_下跌.length, src.length)
 
             for (let i = Math.max(0, arr.length - 1); i < length; i++) {
-                if (上涨_下跌[i] === type) {
+                if (isNaN(src[i]) === false) {
                     if (isNaN(ext.波动率)) {
-                        ext.起点Index = i
                         ext.波动率 = 0
                         arr[i] = 0
                     }
-
-                    
-                    if (i !== ext.起点Index && i !== length - 1) {
-                        ext.波动率 += Math.abs(src[i] - src[i - 1])   //最后一个重新计算
-                        ext.起点Index = i //更新起点 ?
-                        arr[i] = ext.波动率// + Math.abs(src[i] - src[i - 1])   //最后一个重新计算
+                    //
+                    else if (i !== length - 1) {
+                        ext.波动率 += Math.abs(src[i] - src[i - 1])
+                        arr[i] = ext.波动率
                     }
-                    else if (i !== ext.起点Index && i !== length - 1) {
+                    else {
                         arr[i] = ext.波动率 + Math.abs(src[i] - src[i - 1])   //最后一个重新计算
                     }
                 } else {
                     ext.波动率 = NaN
                     arr[i] = NaN
                 }
-               
             }
         })
 
@@ -395,7 +391,7 @@ export class RealDataBase {
             累计成交量: 上涨_累计成交量,
             价差: 上涨_价差,
             动力: 上涨_动力,
-            动力波动率: __波动率('上涨', 上涨_动力),
+            动力波动率: __波动率(上涨_动力),
         }
 
         const 下跌_累计成交量 = 累计成交量('下跌')
@@ -405,7 +401,7 @@ export class RealDataBase {
             累计成交量: 下跌_累计成交量,
             价差: 下跌_价差,
             动力: 下跌_动力,
-            动力波动率: __波动率('上涨', 下跌_动力),
+            动力波动率: __波动率(下跌_动力),
         }
 
         const 绝对价差 = 指标.lazyMapCache(() => Math.min(上涨_价差.length, 下跌_价差.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 上涨_价差[i] : 下跌_价差[i])
