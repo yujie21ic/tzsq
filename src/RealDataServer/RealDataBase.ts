@@ -215,15 +215,15 @@ export class RealDataBase {
 
 
         const KLine = 指标.lazyMapCache(() => data.length, i => ({
-            // open: data[i].open,
-            // high: data[i].high,
-            // low: data[i].low,
-            // close: data[i].close,
+            open: data[i].open,
+            high: data[i].high,
+            low: data[i].low,
+            close: data[i].close,
 
-            open: 价格[i],
-            high: 价格[i],
-            low: 价格[i],
-            close: 价格[i],
+            // open: 价格[i],
+            // high: 价格[i],
+            // low: 价格[i],
+            // close: 价格[i],
         }))
 
 
