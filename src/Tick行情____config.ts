@@ -5,6 +5,7 @@ import { TextLayer } from './lib/Chart/Layer/TextLayer'
 import { lastNumber } from './lib/F/lastNumber'
 import { ZeroLayer } from './lib/Chart/Layer/ZeroLayer'
 import { 信号Layer } from './lib/Chart/Layer/信号Layer'
+import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
 
 
 
@@ -873,7 +874,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
         ]
     }),
- 
+
 
     '3D 测试': (d, d2) => ({
         heightList: [0.4, 0.4, 0.2],
@@ -881,7 +882,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 numberColor: BTC颜色,
                 layerList: [
-                    layer(LineLayer, { data: d2.XBTUSD.期货.价格, color: BTC颜色 }),
+                    layer(KLineLayer, { data: d2.XBTUSD.期货.KLine }),
                 ]
             },
             {

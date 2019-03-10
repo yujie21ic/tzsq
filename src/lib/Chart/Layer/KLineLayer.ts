@@ -7,7 +7,7 @@ import { getTopAndBottomK } from '../getTopAndBottom'
 const COLOR_UP = 0x48aa65
 const COLOR_DOWN = 0xe56546
 
-export class KLineLayer extends Layer<{ data: { open: number, close: number, high: number, low: number }[] }>{
+export class KLineLayer extends Layer<{ data: ArrayLike<{ open: number, close: number, high: number, low: number }> }>{
 
     private g = new Graphics()
 

@@ -202,6 +202,13 @@ export class RealDataBase {
         orderBook: BaseType.OrderBook[]
     }, 盘口算价格: boolean) {
 
+        const KLine = 指标.lazyMapCache(() => data.length, i => ({
+            open: data[i].open,
+            high: data[i].high,
+            low: data[i].low,
+            close: data[i].close,
+        }))
+
         //0阶
         const 收盘价 = 指标.lazyMapCache(() => data.length, i => data[i].close)
 
@@ -529,6 +536,7 @@ export class RealDataBase {
 
 
         return {
+            KLine,
             净成交量均线10,
             绝对价差,
             bitmex_hopex_上涨相对差价均线,
