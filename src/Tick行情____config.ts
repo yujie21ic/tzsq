@@ -130,8 +130,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
                     ]
                 },
-               
-               
+
+
 
                 {
 
@@ -165,7 +165,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
                     ]
                 },
-              
+
             ],
 
             {
@@ -200,7 +200,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
     复盘下跌: (d, d2) => ({
-        heightList: [0.4, 0.15, 0.15, 0.15,0.15],
+        heightList: [0.4, 0.15, 0.15, 0.15, 0.15],
         items: [
             [
                 {
@@ -570,24 +570,24 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layer(LineLayer, { data: d.期货.价格差_除以时间, color: 买颜色 }),
                 ]
             },
-           
+
 
 
             ],
             [
-               
+
                 {
                     numberColor: BTC颜色,
                     layerList: [
                         layer(LineLayer, { data: d2.XBTUSD.期货.上涨.价差, color: 波动率颜色 }),
                     ]
                 },
-              
+
 
 
             ],
             [
-               
+
 
                 {
                     numberColor: BTC颜色,
@@ -663,7 +663,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             [
                 {
                     layerList: [
-                        layer(LineLayer, { data:  d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
                     ]
                 },
                 {
@@ -688,7 +688,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 //         layer(LineLayer, { data: d.期货.bitmex_hopex_上涨相对差价macd.DEM, color: 买颜色 }),
                 //     ]
                 // },
-                
+
             ],
             {
                 layerList: [
@@ -710,7 +710,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             [
                 {
                     layerList: [
-                        layer(LineLayer, { data:  d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
                     ]
                 },
                 {
@@ -772,13 +772,13 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layerList: [
                         layer(LineLayer, { data: d.期货.上涨.价差, color: 波动率颜色 }),
                     ]
-                    
+
                 },
                 {
                     layerList: [
                         layer(LineLayer, { data: d.期货.上涨.累计成交量, color: ETH颜色 }),
                     ]
-                    
+
                 },
             ]
         ]
@@ -808,31 +808,33 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 //     layerList: [
                 //         layer(LineLayer, { data: d.期货.下跌.价差, color: 波动率颜色 }),
                 //     ]
-                    
+
                 // },
                 // {numberColor: ETH颜色,
                 //     layerList: [
                 //         layer(LineLayer, { data: d.期货.下跌.累计成交量, color: ETH颜色 }),
                 //     ]
-                    
+
                 // },
-                {   numberColor: BTC颜色,
+                {
+                    numberColor: BTC颜色,
                     layerList: [
                         layer(LineLayer, { data: d.期货.下跌.动力, color: BTC颜色 }),
                     ]
-                    
+
                 },
-                {   numberColor: 石青,
+                {
+                    numberColor: 石青,
                     layerList: [
                         layer(LineLayer, { data: d.期货.下跌.动力波动率, color: 石青 }),
                     ]
-                    
+
                 },
             ]
         ]
     }),
     两种成交量macd: (d, d2) => ({
-        heightList: [0.4,0.3, 0.3],
+        heightList: [0.4, 0.3, 0.3],
         items: [
             [
                 {
@@ -857,21 +859,48 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d.期货.净成交量abs_macd.DIF, color: 买颜色1 }),
                         layer(LineLayer, { data: d.期货.净成交量abs_macd.DEM, color: 买颜色 }),
                     ]
-                    
+
                 },
-               
-                
+
+
             ],
             {
                 layerList: [
                     layer(LineLayer, { data: d.期货.净成交量abs_macd.DIF, color: 卖颜色1 }),
                     layer(LineLayer, { data: d.期货.净成交量abs_macd.DEM, color: 卖颜色 }),
                 ]
-                
+
             },
         ]
     }),
+ 
 
+    '3D 测试': (d, d2) => ({
+        heightList: [0.4, 0.4, 0.2],
+        items: [
+            {
+                numberColor: BTC颜色,
+                layerList: [
+                    layer(LineLayer, { data: d2.XBTUSD.期货.价格, color: BTC颜色 }),
+                ]
+            },
+            {
+                layerList: [
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
+                    layer(LineLayer, { data: d.期货.买.成交量, color: 买颜色 }),
+                    layer(LineLayer, { data: d.期货.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
+                    layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
+                ]
+            },
+            {
+                layerList: [
+                    layer(LineLayer, { data: d.期货.买.盘口, color: 买颜色 }),
+                    layer(LineLayer, { data: d.期货.卖.盘口, color: 卖颜色 }),
+                    layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
+                ]
+            },
+        ]
+    }),
 
 
 
@@ -899,11 +928,11 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d.期货.买.净成交量_累加60, color: 波动率颜色 }),
                     ]
                 },
-               
+
 
 
             ],
-          
+
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
