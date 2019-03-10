@@ -23,14 +23,18 @@ export const getTopAndBottom = (data: ArrayLike<number>) => ({ left, right }: Le
 
 
 
-export const getTopAndBottomK = (data: { high: number, low: number }[]) => ({ left, right }: LeftRight) => {
+export const getTopAndBottomK = (data: ArrayLike<{ high: number, low: number }>) => ({ left, right }: LeftRight) => {
     let max = -Number.MIN_VALUE
     let min = Number.MAX_VALUE
 
     //start
     for (let i = Math.max(0, Math.floor(left)); i <= Math.min(Math.round(right), data.length - 1); i++) {
-        max = Math.max(max, data[i].high)
-        min = Math.min(min, data[i].low)
+        if (isNaN(data[i].high) === false) {
+            max = Math.max(max, data[i].high)
+        }
+        if (isNaN(data[i].low) === false) {
+            min = Math.min(min, data[i].low)
+        }
     }
     //end
 
