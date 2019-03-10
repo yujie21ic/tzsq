@@ -61,8 +61,8 @@ export namespace 指标 {
         const cache = [] as T[]
 
         const get = (_: any, key: any): any => {
-            f(cache, ext)
             if (key === 'length') {
+                f(cache, ext)
                 return cache.length
             } else {
                 return cache[parseInt(String(key))]
