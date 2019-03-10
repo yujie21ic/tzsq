@@ -56,7 +56,12 @@ const K线包含处理 = (arr: HighLow[]) => {
 const 笔的顶底需要隔几根K线 = 3  //小周期3  大周期2 (合并后的K线的 index 用后面那个) 
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-export const 合并后的K线 = (arr: HighLow[]) => {
+export const 合并后的K线 = (arr2: ArrayLike<HighLow>) => {
+    const arr: HighLow[] = []
+    for (let i = 0; i < arr2.length; i++)arr.push(arr2[i])
+
+
+
     let ret: ({ startIndex: number, endIndex: number } & HighLow)[] = []
     let startIndex = NaN
 

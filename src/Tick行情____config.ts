@@ -7,7 +7,9 @@ import { ZeroLayer } from './lib/Chart/Layer/ZeroLayer'
 import { 信号Layer } from './lib/Chart/Layer/信号Layer'
 import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
 import { 笔Layer } from './lib/Chart/Layer/笔Layer'
-import { get笔Index } from './lib/缠中说禅'
+import { get笔Index, get线段, 合并后的K线 } from './lib/缠中说禅'
+import { 线段Layer } from './lib/Chart/Layer/线段Layer'
+import { 合并后的Layer } from './lib/Chart/Layer/合并后的Layer'
 
 
 
@@ -886,6 +888,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layerList: [
                     layer(KLineLayer, { data: d2.XBTUSD.期货.KLine }),
                     layer(笔Layer, { data: get笔Index(d2.XBTUSD.期货.KLine), color: 0xffff00 }),
+                    layer(线段Layer, { data: get线段(get笔Index(d2.XBTUSD.期货.KLine)), color: 0xaa0000 }),
+                    layer(合并后的Layer, { data: 合并后的K线(d2.XBTUSD.期货.KLine), color: 0xffff00 }),
                 ]
             },
             {
