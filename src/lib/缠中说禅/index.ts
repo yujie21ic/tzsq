@@ -156,8 +156,6 @@ export const get笔Index = (arr2: ArrayLike<HighLow>) => {
 
         }
     }
-
-    console.log('ret', ret.length)
     return ret
 }
 
