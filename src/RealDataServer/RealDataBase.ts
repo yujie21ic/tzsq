@@ -202,12 +202,7 @@ export class RealDataBase {
         orderBook: BaseType.OrderBook[]
     }, 盘口算价格: boolean) {
 
-        const KLine = 指标.lazyMapCache(() => data.length, i => ({
-            open: data[i].open,
-            high: data[i].high,
-            low: data[i].low,
-            close: data[i].close,
-        }))
+
 
         //0阶
         const 收盘价 = 指标.lazyMapCache(() => data.length, i => data[i].close)
@@ -217,6 +212,20 @@ export class RealDataBase {
                 (orderBook[i].buy && orderBook[i].buy.length > 0 && orderBook[i].sell && orderBook[i].sell.length > 0) ?
                     ((orderBook[i].buy[0].price + orderBook[i].sell[0].price) / 2) : NaN) :
             指标.lazyMapCache(() => data.length, i => data[i].close)
+
+
+        const KLine = 指标.lazyMapCache(() => data.length, i => ({
+            // open: data[i].open,
+            // high: data[i].high,
+            // low: data[i].low,
+            // close: data[i].close,
+
+            open: 价格[i],
+            high: 价格[i],
+            low: 价格[i],
+            close: 价格[i],
+        }))
+
 
         const 时间 = 指标.lazyMapCache(() => data.length, i => timeID._500msIDToTimestamp(data[i].id))
         const __成交量买 = 指标.lazyMapCache(() => data.length, i => data[i].buySize)

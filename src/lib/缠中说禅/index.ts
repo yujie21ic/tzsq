@@ -91,7 +91,10 @@ export const 合并后的K线 = (arr: HighLow[]) => {
 相应那三笔下来就构成一段了，整个划分就不会出现比较古怪的线段。
  
 */
-export const get笔Index = (arr: HighLow[]) => {
+export const get笔Index = (arr2: ArrayLike<HighLow>) => {
+
+    const arr: HighLow[] = []
+    for (let i = 0; i < arr2.length; i++)arr.push(arr2[i])
 
     const arr1 = K线包含处理(arr) //包含处理 
         .map((v, i) => ({ index: i, value: v })) //加上索引
@@ -154,6 +157,7 @@ export const get笔Index = (arr: HighLow[]) => {
         }
     }
 
+    console.log('ret', ret.length)
     return ret
 }
 
