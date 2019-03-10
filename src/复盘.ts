@@ -16,11 +16,10 @@ import { 信号Layer } from './lib/Chart/Layer/信号Layer'
 theme.右边空白 = 0
 
 
-// import { get笔Index, 合并后的K线, get线段 } from './lib/缠中说禅'
-// import { 线段Layer } from './lib/Chart/Layer/线段Layer'
-// import { 合并后的Layer } from './lib/Chart/Layer/合并后的Layer'
-// import { LineLayer } from './lib/Chart/Layer/LineLayer'
-// import { 笔Layer } from './lib/Chart/Layer/笔Layer'
+import { get笔Index, 合并后的K线, get线段 } from './lib/缠中说禅'
+import { 线段Layer } from './lib/Chart/Layer/线段Layer'
+import { 合并后的Layer } from './lib/Chart/Layer/合并后的Layer'
+import { 笔Layer } from './lib/Chart/Layer/笔Layer'
 
 let nowSymbol: BaseType.BitmexSymbol = 'XBTUSD'
 
@@ -126,7 +125,6 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
     const arr = S.data
     const klineData = arr
 
-    // const { OSC, DIF, DEM } = MACD(arr.map(v => v.close))
     const 成交买 = arr.map(v => -v.buySize)
     const 成交卖 = arr.map(v => v.sellSize)
 
@@ -150,9 +148,9 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
                 {
                     layerList: [
                         layer(KLineLayer, { data: klineData }),
-                        // layer(笔Layer, { data: get笔Index(klineData), color: 0xffff00 }),
-                        // layer(线段Layer, { data: get线段(get笔Index(klineData)), color: 0xaa0000 }),
-                        // layer(合并后的Layer, { data: 合并后的K线(klineData), color: 0xffff00 }),                    
+                        layer(笔Layer, { data: get笔Index(klineData), color: 0xffff00 }),
+                        layer(线段Layer, { data: get线段(get笔Index(klineData)), color: 0xaa0000 }),
+                        layer(合并后的Layer, { data: 合并后的K线(klineData), color: 0xffff00 }),
                     ]
                 },
                 {
@@ -166,17 +164,7 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
                         layer(BarLayer, { data: 成交卖, color: 0xe56546 }),
                     ]
                 },
-                // {
-                //     layerList: [
-                //         layer(BarLayer, { data: OSC, color: 0xaaaaaa }),
-                //         layer(LineLayer, { data: DIF, color: 0xaa0000 }),
-                //         layer(LineLayer, { data: DEM, color: 0xffff00 }),
-                //         layer(TextLayer, {
-                //             text: '',
-                //             color: 0xffffff
-                //         })
-                //     ]
-                // },
+
             ]
         }
     }
