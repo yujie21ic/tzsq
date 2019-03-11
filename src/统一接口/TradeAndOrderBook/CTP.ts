@@ -26,7 +26,8 @@ export class CTP {
         this.udpServer.on('message', (message, remote) => {
             const arr = safeJSONParse(message.toString())
             if (Array.isArray(arr)) {
-                this.subject.next({
+
+                const obj = {
                     合约代码: String(arr[0]),
                     时间: String(arr[1]),
                     毫秒: fix浮点(Number(arr[2])),
@@ -38,7 +39,9 @@ export class CTP {
                     盘口卖量: fix浮点(Number(arr[8])),
                     持仓量: fix浮点(Number(arr[9])),
                     成交金额: fix浮点(Number(arr[10])),
-                })
+                }
+
+                this.subject.next(obj)
             }
         })
 
