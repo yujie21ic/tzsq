@@ -79,7 +79,12 @@ export class RealDataBase {
     jsonSync = new JSONSync(
         {
             startTick: 0,
-            //TODO
+            ctp: {
+                rb1905: {
+                    data: [] as BaseType.KLine[],
+                    orderBook: [] as BaseType.OrderBook[],
+                }
+            },
             hopex: {
                 BTCUSDT: {
                     data: [] as BaseType.KLine[],

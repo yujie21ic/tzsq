@@ -1,11 +1,11 @@
 import { BaseType } from '../BaseType'
 
-export const get成交性质 = (p: { side: BaseType.Side, 持仓量新增: number, 成交量: number }): BaseType.成交性质Type => {
+export const get成交性质 = (p: { side: BaseType.Side, size: number, 持仓量新增: number }): BaseType.成交性质Type => {
 
-    if (p.持仓量新增 === p.成交量) {
+    if (p.持仓量新增 === p.size) {
         return '双开'
     }
-    else if (p.持仓量新增 === -p.成交量) {
+    else if (p.持仓量新增 === -p.size) {
         return '双平'
     }
     else if (p.持仓量新增 === 0 && p.side === 'Buy') {

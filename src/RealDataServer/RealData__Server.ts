@@ -133,11 +133,6 @@ export class RealData__Server extends RealDataBase {
     constructor(server = true) {
         super()
 
-        this.ctp.run()
-        this.ctp.subject.subscribe(obj => {
-            console.log(JSON.stringify(obj, undefined, 4))
-        })
-
         this.重新初始化()//<-----------fix
         if (server) {
             this.wss = new WebSocket.Server({ port: 6666 })
@@ -151,6 +146,7 @@ export class RealData__Server extends RealDataBase {
                 hopex: this._hopex,
             })
         })
+
 
         this.binance.statusObservable.subscribe(v => {
             this._binance = v.isConnected
@@ -198,6 +194,35 @@ export class RealData__Server extends RealDataBase {
                 //console.log(d.length, d.length > 0 ? d[d.length - 1].map(v => v.value ? 'O' : '_').join('') : '')
             }
         )
+
+        //
+        this.ctp.run()
+        this.ctp.tradeObservable.subscribe(({ symbol, timestamp, side, size, price }) => {
+            if (symbol === 'rb1905')
+                this.on着笔({
+                    symbol,
+                    xxxxxxxx: this.jsonSync.data.ctp[symbol].data,
+                    timestamp,
+                    side: side as BaseType.Side,
+                    size,
+                    price,
+                })
+        })
+
+        this.ctp.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
+            if (symbol === 'rb1905')
+                this.on盘口({
+                    symbol,
+                    xxxxxxxx: this.jsonSync.data.ctp[symbol].orderBook,
+                    timestamp,
+                    orderBook: {
+                        id: Math.floor(timestamp / RealDataBase.单位时间),
+                        buy,
+                        sell,
+                    }
+                })
+        })
+
 
         //run期货
         this.bitmex.tradeObservable.subscribe(({ symbol, timestamp, side, size, price }) => {
