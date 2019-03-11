@@ -3,7 +3,7 @@ import { safeJSONParse } from '../../lib/F/safeJSONParse'
 import { fix浮点 } from '../../lib/F/fix浮点'
 import { BaseType } from '../../lib/BaseType'
 import { TradeAndOrderBook } from './TradeAndOrderBook'
-import { get成交性质 } from '../../lib/F/get成交性质';
+import { get成交性质 } from '../../lib/F/get成交性质'
 
 export class CTP extends TradeAndOrderBook<string>{
 
@@ -89,7 +89,7 @@ export class CTP extends TradeAndOrderBook<string>{
                     price: obj.盘口卖价,
                     size: obj.盘口卖量,
                 }],
-            }) 
+            })
 
         })
 
