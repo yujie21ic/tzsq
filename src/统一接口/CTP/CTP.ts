@@ -1,6 +1,6 @@
 import * as dgram from 'dgram'
 import { safeJSONParse } from '../../lib/F/safeJSONParse'
-import { Subject } from 'rxjs';
+import { Subject } from 'rxjs'
 
 export class CTP {
 
@@ -19,7 +19,7 @@ export class CTP {
         持仓量: number
         成交金额: number
     }>()
-    
+
 
     run() {
         this.udpServer.on('message', (message, remote) => {

@@ -5,8 +5,7 @@ import { BinanceTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/Bina
 import { BitmexTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/BitmexTradeAndOrderBook'
 import { HopexTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
-import { safeJSONParse } from '../lib/F/safeJSONParse'
-import { CTP } from '../统一接口/CTP/CTP';
+import { CTP } from '../统一接口/CTP/CTP'
 
 export class RealData__Server extends RealDataBase {
 
