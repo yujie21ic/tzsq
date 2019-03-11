@@ -688,24 +688,26 @@ export class RealDataBase {
     dataExt = {
         XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT'),
         ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT'),
+        ctp: this.item2(this.data.ctp.rb1905, false),
     }
 
     重新初始化 = () => {
         this.dataExt = {
             XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT'),
             ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT'),
+            ctp: this.item2(this.data.ctp.rb1905, false),
         }
     }
 
     set现货减去(n: number) {
-        const arr = kvs(this.dataExt)
-        arr.forEach(({ v }) => {
-            if (v.现货减去 !== n) {
-                v.现货减去 = n
-                v.现货减去价格 = 指标.lazyMapCache(() => v.现货.价格.length, i => v.现货.价格[i] - n)
-                v.现货减去价格均线 = 指标.lazyMapCache(() => v.现货.价格_均线300.length, i => v.现货.价格_均线300[i] - n)
-            }
-        })
+        // const arr = kvs(this.dataExt)
+        // arr.forEach(({ v }) => {
+        //     if (v.现货减去 !== n) {
+        //         v.现货减去 = n
+        //         v.现货减去价格 = 指标.lazyMapCache(() => v.现货.价格.length, i => v.现货.价格[i] - n)
+        //         v.现货减去价格均线 = 指标.lazyMapCache(() => v.现货.价格_均线300.length, i => v.现货.价格_均线300[i] - n)
+        //     }
+        // })
     }
 
 
