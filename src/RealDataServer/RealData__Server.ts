@@ -1,4 +1,3 @@
-import * as dgram from 'dgram'
 import * as WebSocket from 'ws'
 import { BaseType } from '../lib/BaseType'
 import { Sampling } from '../lib/C/Sampling'
@@ -7,6 +6,7 @@ import { BitmexTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/Bitme
 import { HopexTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
+import { CTP } from '../统一接口/CTP/CTP';
 
 export class RealData__Server extends RealDataBase {
 
@@ -129,44 +129,15 @@ export class RealData__Server extends RealDataBase {
         this.on盘口Dic[p.symbol].in2(p.orderBook)
     }
 
-    private udpServer = dgram.createSocket('udp4')  //接收 CTP 行情 
+    private ctp = new CTP()
 
     constructor(server = true) {
         super()
 
-        //
-        this.udpServer.on('listening', () => {
-            const address = this.udpServer.address()
-            console.log('UDP Server listening on ' + (typeof address === 'string' ? address : address.address + ':' + address.port))
+        this.ctp.run()
+        this.ctp.subject.subscribe(obj => {
+            console.log(JSON.stringify(obj, undefined, 4))
         })
-
-        this.udpServer.on('message', (message, remote) => {
-            const arr = safeJSONParse(message.toString())
-
-            if (Array.isArray(arr) === false) return
-
-            const obj = {
-                合约代码: String(arr[0]),
-                时间: String(arr[1]),
-                毫秒: Number(arr[2]),
-                最新价: Number(arr[3]),
-                成交量: Number(arr[4]),
-                盘口买价: Number(arr[5]),
-                盘口买量: Number(arr[6]),
-                盘口卖价: Number(arr[7]),
-                盘口卖量: Number(arr[8]),
-                持仓量: Number(arr[9]),
-                成交金额: Number(arr[10]),
-            }
-
-
-            console.log(remote.address + ':' + remote.port + ' - ', JSON.stringify(obj, undefined, 4))
-        })
-
-        this.udpServer.bind(8888, '127.0.0.1')
-        //
-
-
 
         this.重新初始化()//<-----------fix
         if (server) {
