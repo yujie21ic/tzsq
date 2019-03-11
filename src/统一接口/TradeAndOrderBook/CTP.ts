@@ -1,6 +1,7 @@
 import * as dgram from 'dgram'
 import { safeJSONParse } from '../../lib/F/safeJSONParse'
 import { Subject } from 'rxjs'
+import { fix浮点 } from '../../lib/F/fix浮点'
 
 export class CTP {
 
@@ -28,15 +29,15 @@ export class CTP {
                 this.subject.next({
                     合约代码: String(arr[0]),
                     时间: String(arr[1]),
-                    毫秒: Number(arr[2]),
-                    最新价: Number(arr[3]),
-                    成交量: Number(arr[4]),
-                    盘口买价: Number(arr[5]),
-                    盘口买量: Number(arr[6]),
-                    盘口卖价: Number(arr[7]),
-                    盘口卖量: Number(arr[8]),
-                    持仓量: Number(arr[9]),
-                    成交金额: Number(arr[10]),
+                    毫秒: fix浮点(Number(arr[2])),
+                    最新价: fix浮点(Number(arr[3])),
+                    成交量: fix浮点(Number(arr[4])),
+                    盘口买价: fix浮点(Number(arr[5])),
+                    盘口买量: fix浮点(Number(arr[6])),
+                    盘口卖价: fix浮点(Number(arr[7])),
+                    盘口卖量: fix浮点(Number(arr[8])),
+                    持仓量: fix浮点(Number(arr[9])),
+                    成交金额: fix浮点(Number(arr[10])),
                 })
             }
         })
