@@ -73,20 +73,22 @@ export class CTP extends TradeAndOrderBook<string>{
             date.setSeconds(s)
             date.setMilliseconds(obj.毫秒)
 
-            const timestamp = 0
+            const timestamp = date.getTime() 
 
-            this.tradeObservable.next({
-                symbol: obj.合约代码,
-                timestamp,
-                side,
-                size,
-                price: obj.最新价,
-                成交性质: get成交性质({
+            if (size !== 0) {
+                this.tradeObservable.next({
+                    symbol: obj.合约代码,
+                    timestamp,
                     side,
                     size,
-                    持仓量新增,
+                    price: obj.最新价,
+                    成交性质: get成交性质({
+                        side,
+                        size,
+                        持仓量新增,
+                    })
                 })
-            })
+            }
 
             this.orderBookObservable.next({
                 symbol: obj.合约代码,
