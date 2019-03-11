@@ -24,6 +24,8 @@ export namespace BaseType {
 
     export type Side = 'Buy' | 'Sell'
 
+    export type 成交性质Type = '双开' | '空换' | '多换' | '多平' | '空平' | '双平' | '空开' | '多开'
+
 
     export type OrderBook = { //订单薄
         id: number
@@ -78,6 +80,7 @@ export namespace BaseType {
         sellSize: number
         buyCount: number
         sellCount: number
+        成交性质?: 成交性质Type
     }
 
     export type Omit<T, K extends string> = Pick<T, Exclude<keyof T, K>>
