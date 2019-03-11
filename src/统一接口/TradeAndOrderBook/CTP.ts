@@ -20,7 +20,7 @@ export class CTP extends TradeAndOrderBook<string>{
     run() {
         this.statusObservable.next({ isConnected: true })
 
-        this.udpServer.on('message', (message, remote) => {
+        this.udpServer.on('message', message => {
             const arr = safeJSONParse(message.toString())
 
             if (Array.isArray(arr) === false) return
