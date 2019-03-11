@@ -1,7 +1,7 @@
 import { JSONSync } from '../lib/C/JSONSync'
 import { BaseType } from '../lib/BaseType'
 import { sum } from 'ramda'
-import { 指标 } from './指标' 
+import { 指标 } from './指标'
 import { to范围 } from '../lib/F/to范围'
 import { lastNumber } from '../lib/F/lastNumber'
 import { is连续几根全亮 } from '../lib/F/is连续几根全亮'
@@ -687,14 +687,14 @@ export class RealDataBase {
     dataExt = {
         XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT'),
         ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT'),
-        ctp: this.item2(this.data.ctp.rb1905, false),
+        ctp: this.item2(this.data.ctp.rb1905, true),
     }
 
     重新初始化 = () => {
         this.dataExt = {
             XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT'),
             ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT'),
-            ctp: this.item2(this.data.ctp.rb1905, false),
+            ctp: this.item2(this.data.ctp.rb1905, true),
         }
     }
 
