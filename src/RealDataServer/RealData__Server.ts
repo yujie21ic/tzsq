@@ -1,10 +1,11 @@
-import * as WebSocket from 'ws'
+import * as WebSocket from 'ws';
+import { BaseType } from '../lib/BaseType';
+import { Sampling } from '../lib/C/Sampling';
+import { BinanceTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/BinanceTradeAndOrderBook';
+import { BitmexTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/BitmexTradeAndOrderBook';
+import { HopexTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/HopexTradeAndOrderBook';
 import { RealDataBase } from './RealDataBase'
-import { BaseType } from '../lib/BaseType'
-import { BitmexTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/BitmexTradeAndOrderBook'
-import { BinanceTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/BinanceTradeAndOrderBook'
-import { HopexTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/HopexTradeAndOrderBook'
-import { Sampling } from '../lib/C/Sampling'
+import * as dgram from 'dgram'
 
 export class RealData__Server extends RealDataBase {
 
@@ -127,9 +128,26 @@ export class RealData__Server extends RealDataBase {
         this.on盘口Dic[p.symbol].in2(p.orderBook)
     }
 
+    private udpServer = dgram.createSocket('udp4')  //接收 CTP 行情 
 
     constructor(server = true) {
         super()
+
+        //
+        this.udpServer.on('listening', () => {
+            const address = this.udpServer.address()
+            console.log('UDP Server listening on ' + (typeof address === 'string' ? address : address.address + ':' + address.port))
+        })
+
+        this.udpServer.on('message', (message, remote) => {
+            console.log(remote.address + ':' + remote.port + ' - ' + message)
+        })
+
+        this.udpServer.bind(8888, '127.0.0.1')
+        //
+
+
+
         this.重新初始化()//<-----------fix
         if (server) {
             this.wss = new WebSocket.Server({ port: 6666 })
