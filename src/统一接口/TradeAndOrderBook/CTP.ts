@@ -65,9 +65,19 @@ export class CTP extends TradeAndOrderBook<string>{
             this.last.累计成交量 = obj.累计成交量
             this.last.持仓量 = obj.持仓量
 
+
+            const date = new Date()
+            const [h, m, s] = obj.时间.split(':').map(Number)
+            date.setHours(h)
+            date.setMinutes(m)
+            date.setSeconds(s)
+            date.setMilliseconds(obj.毫秒)
+
+            const timestamp = 0
+
             this.tradeObservable.next({
                 symbol: obj.合约代码,
-                timestamp: 0,
+                timestamp,
                 side,
                 size,
                 price: obj.最新价,
@@ -80,7 +90,7 @@ export class CTP extends TradeAndOrderBook<string>{
 
             this.orderBookObservable.next({
                 symbol: obj.合约代码,
-                timestamp: 0,
+                timestamp,
                 buy: [{
                     price: obj.盘口买价,
                     size: obj.盘口买量,
