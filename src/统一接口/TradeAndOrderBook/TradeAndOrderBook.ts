@@ -13,7 +13,7 @@ export class TradeAndOrderBook<T extends string> {
         side: BaseType.Side
         size: number
         price: number
-        成交性质: BaseType.成交性质Type
+        成交性质?: BaseType.成交性质Type
     }>()
 
     orderBookObservable = new Subject<{
