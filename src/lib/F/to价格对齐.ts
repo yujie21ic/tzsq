@@ -1,6 +1,5 @@
 import { BaseType } from '../BaseType'
-
-const fix浮点 = (n: number) => Number(n.toFixed(5))
+import { fix浮点 } from './fix浮点'
 
 export const to价格对齐 = ({ grid, side, value }: { grid: number, side: BaseType.Side, value: number }) => {
     const ret = Math.floor(value / grid) * grid

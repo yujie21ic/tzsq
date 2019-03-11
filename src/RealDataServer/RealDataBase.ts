@@ -5,7 +5,7 @@ import { 指标 } from './指标'
 import { kvs } from '../lib/F/kvs'
 import { to范围 } from '../lib/F/to范围'
 import { lastNumber } from '../lib/F/lastNumber'
-import { is连续几根全亮 } from '../lib/C/is连续几根全亮'
+import { is连续几根全亮 } from '../lib/F/is连续几根全亮'
 import { timeID } from '../lib/F/timeID'
 
 
