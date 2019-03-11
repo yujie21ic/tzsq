@@ -43,6 +43,7 @@ export class RealData__Server extends RealDataBase {
         side: BaseType.Side
         price: number
         size: number
+        成交性质?: BaseType.成交性质Type
     }) {
         this.删除历史()
 
@@ -62,6 +63,7 @@ export class RealData__Server extends RealDataBase {
                 buyCount: '累加',
                 sellSize: '累加',
                 sellCount: '累加',
+                成交性质: '收',
             })
             this.on着笔Dic[p.symbol].onNew2 = item => p.xxxxxxxx.____push(item)
             this.on着笔Dic[p.symbol].onUpdate2 = item => p.xxxxxxxx.____updateLast(item)
@@ -75,6 +77,7 @@ export class RealData__Server extends RealDataBase {
                 buyCount: NaN,
                 sellSize: NaN,
                 sellCount: NaN,
+                成交性质: '不知道',
             })
         }
 
@@ -88,6 +91,7 @@ export class RealData__Server extends RealDataBase {
             buyCount: p.side === 'Buy' ? 1 : 0,
             sellSize: p.side === 'Sell' ? p.size : 0,
             sellCount: p.side === 'Sell' ? 1 : 0,
+            成交性质: p.成交性质,
         })
     }
 
@@ -197,7 +201,7 @@ export class RealData__Server extends RealDataBase {
 
         //
         this.ctp.run()
-        this.ctp.tradeObservable.subscribe(({ symbol, timestamp, side, size, price }) => {
+        this.ctp.tradeObservable.subscribe(({ symbol, timestamp, side, size, price, 成交性质 }) => {
             if (symbol === 'rb1905')
                 this.on着笔({
                     symbol,
@@ -206,6 +210,7 @@ export class RealData__Server extends RealDataBase {
                     side: side as BaseType.Side,
                     size,
                     price,
+                    成交性质,
                 })
         })
 
