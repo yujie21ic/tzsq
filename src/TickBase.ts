@@ -8,7 +8,7 @@ import { keys } from 'ramda'
 import { BaseType } from './lib/BaseType'
 
 
-const 显示秒 = [250,50, 150, 500, 1000, 2000,20000]
+const 显示秒 = [250, 50, 150, 500, 1000, 2000, 20000]
 
 export class TickBase {
 
@@ -30,8 +30,8 @@ export class TickBase {
                         label: v,
                         checked: v === this.nowTickSymbol,
                         onClick: () => {
-                            this.nowTickSymbol = v
-                            this.real.set现货减去(0)
+                            // this.nowTickSymbol = v
+                            // this.real.set现货减去(0)
                         }
                     })),
                     undefined,
