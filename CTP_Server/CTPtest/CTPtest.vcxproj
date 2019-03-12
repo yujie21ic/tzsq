@@ -21,6 +21,14 @@
     <ClInclude Include="..\src\CustomTradeSpi.h" />
     <ClInclude Include="..\src\json11.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\CTP_API\thostmduserapi.dll" />
+    <None Include="..\src\CTP_API\thosttraderapi.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\src\CTP_API\thostmduserapi.lib" />
+    <Library Include="..\src\CTP_API\thosttraderapi.lib" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6E4CF70-7540-45BB-9DBF-C49EAA6E32E8}</ProjectGuid>
     <RootNamespace>CTPtest</RootNamespace>
@@ -56,7 +64,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -67,7 +75,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

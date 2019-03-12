@@ -1,9 +1,13 @@
+#pragma   warning(disable:4996) 
+
 #include <iostream>
 #include <stdio.h>
 #include <string>
 #include <unordered_map>
 #include "CustomMdSpi.h"
 #include "CustomTradeSpi.h" 
+
+
 
 using namespace std;
 

@@ -39,4 +39,20 @@
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\CTP_API\thostmduserapi.dll">
+      <Filter>头文件</Filter>
+    </None>
+    <None Include="..\src\CTP_API\thosttraderapi.dll">
+      <Filter>头文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\src\CTP_API\thostmduserapi.lib">
+      <Filter>头文件</Filter>
+    </Library>
+    <Library Include="..\src\CTP_API\thosttraderapi.lib">
+      <Filter>头文件</Filter>
+    </Library>
+  </ItemGroup>
 </Project>
