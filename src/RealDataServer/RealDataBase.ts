@@ -305,7 +305,7 @@ export class RealDataBase {
 
                 let a = i - ext.起点index
                 if (a === 0) a = NaN
-                if(a<=5)a=5
+                if (a <= 5) a = 5
                 arr[i] = isNaN(ext.起点index) === false && 上涨下跌价差(ext.起点Type)[i] >= 4 ? 上涨下跌价差(ext.起点Type)[i] / a : NaN  //除以根数 
                 //<---------------------------------------------------
             }
@@ -404,8 +404,8 @@ export class RealDataBase {
             () => Math.min(价差走平多少根.length, 上涨_价差.length, 下跌_价差.length),
             i => 价差走平多少根[i] >= ((上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)[i] / 10) * 2,
         )
-       
-       
+
+
 
         const 上涨_累计成交量 = 累计成交量('上涨')
         const 上涨_价差 = 价差('上涨')
@@ -446,8 +446,8 @@ export class RealDataBase {
 
         const bitmex_hopex_上涨相对差价macd = 指标.macd(bitmex_hopex_上涨相对价差, RealDataBase.单位时间)
         const bitmex_hopex_下跌相对差价macd = 指标.macd(bitmex_hopex_下跌相对价差, RealDataBase.单位时间)
-        const 累计成交量阈值 = 指标.lazyMapCache(() => Math.min(上涨_价差.length, 下跌_价差.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 65*10000*上涨_价差[i]+300*10000 : 60*10000*下跌_价差[i]+300*10000)
-       // const 经累计成交量阈值 = type === '摸顶' ?60*10000*价差[i]+300*10000:60*10000*价差[i]+300*10000
+        const 累计成交量阈值 = 指标.lazyMapCache(() => Math.min(上涨_价差.length, 下跌_价差.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 65 * 10000 * 上涨_价差[i] + 300 * 10000 : 60 * 10000 * 下跌_价差[i] + 300 * 10000)
+        // const 经累计成交量阈值 = type === '摸顶' ?60*10000*价差[i]+300*10000:60*10000*价差[i]+300*10000
 
         const 价差中大分界 = 20
         const 价差大巨大分界 = 100
@@ -456,19 +456,25 @@ export class RealDataBase {
             const bs = type === '摸顶' ? 买 : 卖
             const 价差 = type === '摸顶' ? 上涨_价差 : 下跌_价差
             const 真空信号 = type === '摸顶' ? 真空信号涨 : 真空信号跌
-            const 净累计成交量 = type === '摸顶' ?上涨_累计成交量:下跌_累计成交量
-            
-            
+            const 净累计成交量 = type === '摸顶' ? 上涨_累计成交量 : 下跌_累计成交量
+
+
             return 指标.lazyMapCache(
                 () => Math.min(
                     data.length,
                     orderBook.length,
+
+
+                    //_____________________fix______________________________________
+                    上涨.累计成交量.length,
+                    下跌.累计成交量.length,
+                    累计成交量阈值.length,
                 ),
                 i => {
                     //
                     const 小 = 价差[i] < 价差中大分界
                     const 大 = 价差[i] >= 价差中大分界
-                    
+
                     //盘口!! 
                     const v = bs.盘口[i] / 10000
                     const 盘口_0_50万 = v < 50
@@ -491,25 +497,25 @@ export class RealDataBase {
                     const v__1 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i]
                     const v__1_1 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] * 1.1
                     //const 净累计成交量阈值 = type === '摸顶' ?65*10000*价差[i]+200*10000:60*10000*价差[i]+300*10000
-                    
-                    const 净成交量5反向 = type === '摸顶' ?净成交量均线10[i]<0:净成交量均线10[i]>0
+
+                    const 净成交量5反向 = type === '摸顶' ? 净成交量均线10[i] < 0 : 净成交量均线10[i] > 0
                     const 成交量衰竭 =
                         (v__1_1 && bs.净成交量_累加5[i] < 50 * 10000) ||
                         (小 && v__1) ||
-                        (大 && v__0 && v__1)&&净累计成交量[i]<累计成交量阈值[i]
+                        (大 && v__0 && v__1) && 净累计成交量[i] < 累计成交量阈值[i]
 
                     return [
                         //局部精确信号
-                        { name: '净成交量5反向[', value:净成交量5反向},
-                        { name: '成交量衰竭', value: 价差[i]>30||成交量衰竭 },
+                        { name: '净成交量5反向[', value: 净成交量5反向 },
+                        { name: '成交量衰竭', value: 价差[i] > 30 || 成交量衰竭 },
                         { name: '盘口 ！!', value: 盘口XXX },
                         //范围信号
                         { name: '震荡指数', value: 震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i] || 价差走平x秒[i] },
                         { name: '价差走平x秒[i]', value: 价差走平x秒[i] },
-                        
-                        
+
+
                         //过滤条件
-                        { name: '净累计成交量[i]<y', value: 净累计成交量[i]<累计成交量阈值[i] },
+                        { name: '净累计成交量[i]<y', value: 净累计成交量[i] < 累计成交量阈值[i] },
                         { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 150 * 10000 },
                         { name: '折返程度', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
                         { name: '价格速度', value: 价差[i] > 价差中大分界 || 价格差_除以时间[i] >= 0.1 },
@@ -561,7 +567,7 @@ export class RealDataBase {
         }
         const 信号_追涨 = 追涨_追跌('追涨')
         const 信号_追跌 = 追涨_追跌('追跌')
-        
+
         // export type 成交性质Type =  双开,'双平','多换','空换','多平','空平','空开','多开', '不知道'
 
         const 双开 = 指标.lazyMapCache(() => data.length, i => data[i].成交性质 === '双开' ? data[i].buySize + data[i].sellSize : 0)
@@ -578,7 +584,7 @@ export class RealDataBase {
         return {
             价格速度macd,
             累计成交量阈值,
-            双开,双平,多换,空换,多平,空平,空开,多开,
+            双开, 双平, 多换, 空换, 多平, 空平, 空开, 多开,
             KLine,
             净成交量均线10,
             绝对价差,
