@@ -95,7 +95,11 @@ export class WebSocketClient {
                     this.reconnect()
                 } else {
                     pong = false
-                    ws.ping()
+                    try {
+                        ws.ping()
+                    } catch (error) {
+
+                    }
                     setTimeout(f, pingTimeout)
                 }
             }
