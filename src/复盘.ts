@@ -16,7 +16,7 @@ import { 信号Layer } from './lib/Chart/Layer/信号Layer'
 theme.右边空白 = 0
 
 
-import { get笔Index, 合并后的K线, get线段 } from './lib/缠中说禅'
+import { get笔Index, 合并后的K线, get线段 } from './RealDataServer/缠中说禅'
 import { 线段Layer } from './lib/Chart/Layer/线段Layer'
 import { 合并后的Layer } from './lib/Chart/Layer/合并后的Layer'
 import { 笔Layer } from './lib/Chart/Layer/笔Layer'
