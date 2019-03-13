@@ -44,7 +44,7 @@ const 石青 = 0x1685a9
 export const Tick行情____config: { [key in string]: ItemFunc } = {
 
     复盘上涨: (d, d2) => ({
-        heightList: [0.4, 0.15, 0.15, 0.15, 0.15],
+        heightList: [0.4, 0.15, 0.15, 0.2, 0.1],
         items: [
             [
                 {
@@ -205,7 +205,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
     复盘下跌: (d, d2) => ({
-        heightList: [0.4, 0.15, 0.15, 0.15, 0.15],
+        heightList: [0.4, 0.15, 0.15, 0.2, 0.1],
         items: [
             [
                 {
@@ -809,32 +809,46 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 },
             ],
             [
-                // {   numberColor: 波动率颜色,
+                //累计成交量阈值
+                {   numberColor: 买颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d.期货.累计成交量阈值, color: 买颜色 }),
+                        layer(LineLayer, { data: d.期货.下跌.累计成交量, color: ETH颜色 }),
+                    ]
+
+                },
+                {   numberColor: 波动率颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d.期货.下跌.价差, color: 波动率颜色 }),
+                    ]
+
+                },
+                // {numberColor: ETH颜色,
                 //     layerList: [
-                //         layer(LineLayer, { data: d.期货.下跌.价差, color: 波动率颜色 }),
+                        
                 //     ]
 
                 // },
                 // {numberColor: ETH颜色,
                 //     layerList: [
-                //         layer(LineLayer, { data: d.期货.下跌.累计成交量, color: ETH颜色 }),
+                //         layer(LineLayer, { data: d.期货.价格差_除以时间, color: BTC颜色 }),
                 //     ]
 
                 // },
-                {
-                    numberColor: BTC颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d.期货.下跌.动力, color: BTC颜色 }),
-                    ]
+                // {价格差_除以时间
+                //     numberColor: BTC颜色,
+                //     layerList: [
+                //         layer(LineLayer, { data: d.期货.下跌.动力, color: BTC颜色 }),
+                //     ]
 
-                },
-                {
-                    numberColor: 石青,
-                    layerList: [
-                        layer(LineLayer, { data: d.期货.下跌.动力波动率, color: 石青 }),
-                    ]
-
-                },
+                // },
+                // {
+                //     numberColor: 石青,
+                //     layerList: [
+                //         layer(LineLayer, { data: d.期货.价格速度macd.DIF, color: 卖颜色1 }),
+                //         layer(LineLayer, { data: d.期货.价格速度macd.DEM, color: 卖颜色 }),
+                //     ]
+                // },
             ]
         ]
     }),
@@ -879,16 +893,25 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
 
-
+// 双开,双平,多换,空换,多平,空平,空开,多开,
     '螺纹1905': (d, d2) => ({
         heightList: [0.4, 0.4, 0.2],
         items: [
+           [
             {
                 numberColor: BTC颜色,
                 layerList: [
                     layer(LineLayer, { data: d2.ctp.价格, color: BTC颜色 }),
                 ]
             },
+            {
+                numberColor: 波动率颜色,
+                layerList: [
+                    layer(ZeroLayer, { color: 波动率颜色 }),
+                    layer(LineLayer, { data: d2.ctp.买.净成交量_累加60, color: 波动率颜色 }),
+                ]
+            },
+           ],
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
@@ -904,6 +927,82 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
                 ]
             },
+        ]
+    }),
+    // 双开,双平,多换,空换,多平,空平,空开,多开,
+    '螺纹成交量1': (d, d2) => ({
+        heightList: [0.4, 0.4, 0.2],
+        items: [
+           [
+            {
+                numberColor: BTC颜色,
+                layerList: [
+                    layer(LineLayer, { data: d2.ctp.价格, color: BTC颜色 }),
+                ]
+            },
+            {
+                numberColor: 波动率颜色,
+                layerList: [
+                    layer(ZeroLayer, { color: 波动率颜色 }),
+                    layer(LineLayer, { data: d2.ctp.买.净成交量_累加60, color: 波动率颜色 }),
+                ]
+            },
+           ],
+            {
+                layerList: [
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
+                    layer(LineLayer, { data: d2.ctp.双开, color: BTC颜色 }),
+                    layer(LineLayer, { data: d2.ctp.双平, color: ETH颜色}),
+                    layer(TextLayer, { text: '双开 双平      ', color: 0xffff00 })
+                ]
+            },
+            {
+                layerList: [
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
+                    layer(LineLayer, { data: d2.ctp.多换, color: BTC颜色}),
+                    layer(LineLayer, { data: d2.ctp.空换, color: ETH颜色}),
+                    layer(TextLayer, { text: '多换 空换      ', color: 0xffff00 })
+                ]
+            },
+          
+        ]
+    }),
+    // 双开,双平,多换,空换,多平,空平,空开,多开,
+    '螺纹成交量2': (d, d2) => ({
+        heightList: [0.4, 0.4, 0.2],
+        items: [
+           [
+            {
+                numberColor: BTC颜色,
+                layerList: [
+                    layer(LineLayer, { data: d2.ctp.价格, color: BTC颜色 }),
+                ]
+            },
+            {
+                numberColor: 波动率颜色,
+                layerList: [
+                    layer(ZeroLayer, { color: 波动率颜色 }),
+                    layer(LineLayer, { data: d2.ctp.买.净成交量_累加60, color: 波动率颜色 }),
+                ]
+            },
+           ],
+            {
+                layerList: [
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
+                    layer(LineLayer, { data: d2.ctp.多平, color: BTC颜色 }),
+                    layer(LineLayer, { data: d2.ctp.空平, color: ETH颜色}),
+                    layer(TextLayer, { text: '多平 空平      ', color: 0xffff00 })
+                ]
+            },
+            {
+                layerList: [
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
+                    layer(LineLayer, { data: d2.ctp.空开, color: BTC颜色}),
+                    layer(LineLayer, { data: d2.ctp.多开, color: ETH颜色}),
+                    layer(TextLayer, { text: '空开 多开      ', color: 0xffff00 })
+                ]
+            },
+           
         ]
     }),
 
@@ -941,7 +1040,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
 
     原始数据: (d, d2) => ({
-        heightList: [0.4, 0.4, 0.2],
+        heightList: [0.4, 0.6],
         items: [
             [
                 {
@@ -975,17 +1074,17 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layer(LineLayer, { data: d.期货.买.成交量, color: 买颜色 }),
                     layer(LineLayer, { data: d.期货.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
                     //layer(LineLayer, { data: d.期货.买.净成交量_累加5, color: ETH颜色 }),
-                    layer(LineLayer, { data: d.期货.卖.净成交量_累加5, color: ETH颜色 }),
+                    layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
                     layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
                 ]
             },
-            {
-                layerList: [
-                    layer(LineLayer, { data: d.期货.买.盘口, color: 买颜色 }),
-                    layer(LineLayer, { data: d.期货.卖.盘口, color: 卖颜色 }),
-                    layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
-                ]
-            },
+            // {
+            //     layerList: [
+            //         layer(LineLayer, { data: d.期货.买.盘口, color: 买颜色 }),
+            //         layer(LineLayer, { data: d.期货.卖.盘口, color: 卖颜色 }),
+            //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
+            //     ]
+            // },
         ]
     }),
 }
