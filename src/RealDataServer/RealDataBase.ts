@@ -453,12 +453,12 @@ export class RealDataBase {
         // const 经累计成交量阈值 = type === '摸顶' ?60*10000*价差[i]+300*10000:60*10000*价差[i]+300*10000
 
         const 价差中大分界 = 20
-        const 价差大巨大分界 = 100
+        //const 价差大巨大分界 = 100
 
         const 摸顶抄底 = (type: '摸顶' | '抄底') => {
             const bs = type === '摸顶' ? 买 : 卖
             const 价差 = type === '摸顶' ? 上涨_价差 : 下跌_价差
-            const 真空信号 = type === '摸顶' ? 真空信号涨 : 真空信号跌
+            //const 真空信号 = type === '摸顶' ? 真空信号涨 : 真空信号跌
             const 净累计成交量 = type === '摸顶' ? 上涨_累计成交量 : 下跌_累计成交量
 
 
@@ -517,7 +517,7 @@ export class RealDataBase {
                         //{ name: '成交量衰竭', value: 价差[i] >价差中大分界  || 成交量衰竭 },
                         { name: '盘口 ！!', value: 盘口XXX },
                         //范围信号  
-                        { name: '震荡指数', value: 震荡指数_最高30[i] > 1.1 && (震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i] || 价差走平x秒[i]) },
+                        { name: '震荡指数', value: (震荡指数_最高30[i] > 1.1 && (震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i])) || 价差走平x秒[i] },
                         //{ name: '价差走平x秒[i]', value: 价差走平x秒[i] },
 
 
