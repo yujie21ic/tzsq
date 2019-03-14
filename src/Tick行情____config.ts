@@ -852,8 +852,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ]
         ]
     }),
-    两种成交量macd: (d, d2) => ({
-        heightList: [0.4, 0.3, 0.3],
+    价格速度震荡指数: (d, d2) => ({
+        heightList: [0.4, 0.6],
         items: [
             [
                 {
@@ -873,23 +873,27 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 },
             ],
             [
-                {
+               
+                //  {numberColor: BTC颜色,
+                //     layerList: [
+                //         layer(LineLayer, { data: d.期货.价格差_除以时间, color: BTC颜色 }),
+                //         layer(TextLayer, { text: '价格速度      ', color: 0xffff00 })
+                //     ]
+                // },
+                {numberColor: 买颜色,
                     layerList: [
-                        layer(LineLayer, { data: d.期货.净成交量abs_macd.DIF, color: 买颜色1 }),
-                        layer(LineLayer, { data: d.期货.净成交量abs_macd.DEM, color: 买颜色 }),
+                        layer(ZeroLayer, { color: BTC颜色 }),
+                        layer(LineLayer, { data: d.期货.震荡指数_macd.DIF, color: 买颜色1 }),
+                        layer(LineLayer, { data: d.期货.震荡指数_macd.DEM, color: 买颜色 }),
                     ]
-
                 },
-
-
+                {numberColor: ETH颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d.期货.震荡指数, color: ETH颜色 }),
+                    ]
+                },
+                
             ],
-            {
-                layerList: [
-                    layer(LineLayer, { data: d.期货.净成交量abs_macd.DIF, color: 卖颜色1 }),
-                    layer(LineLayer, { data: d.期货.净成交量abs_macd.DEM, color: 卖颜色 }),
-                ]
-
-            },
         ]
     }),
 

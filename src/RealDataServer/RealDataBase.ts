@@ -256,6 +256,7 @@ export class RealDataBase {
         //价格
         const 价格_均线300 = 指标.均线(价格, 300, RealDataBase.单位时间)
         const 价格_波动率30 = 指标.波动率(价格, 30, RealDataBase.单位时间)
+        const 价格_波动率15 = 指标.波动率(价格, 15, RealDataBase.单位时间)
         const 价格_波动率300 = 指标.波动率(价格, 300, RealDataBase.单位时间)
         const 折返率 = 指标.lazyMapCache(() => 价格_波动率30.length, i => 价格_波动率30[i] / 10 + 1)
 
@@ -277,8 +278,8 @@ export class RealDataBase {
         const 真空信号跌 = 指标.lazyMapCache(() => 价格.length, i => (阻力3[i].阻力 > -150000) && 阻力3[i].阻力 < 0 && 阻力3[i].价钱增量 >= to范围({ min: 4, max: 12, value: 价格_波动率30[i] / 10 }))
 
         //上涨_下跌
-        const 价格_最高15 = 指标.最高(价格, 60, RealDataBase.单位时间)
-        const 价格_最低15 = 指标.最低(价格, 60, RealDataBase.单位时间)
+        const 价格_最高15 = 指标.最高(价格, 15, RealDataBase.单位时间)
+        const 价格_最低15 = 指标.最低(价格, 15, RealDataBase.单位时间)
         const 上涨_下跌 = 指标.lazyMapCache(() => Math.min(买.净成交量_累加60.length), i => 买.净成交量_累加60[i] >= 0 ? '上涨' : '下跌')
 
         const 价格差_除以时间 = 指标.lazyMapCache2({ 起点index: NaN, 起点Type: 'none' as '上涨' | '下跌' }, (arr: number[], ext) => {
@@ -305,8 +306,8 @@ export class RealDataBase {
 
                 let a = i - ext.起点index
                 if (a === 0) a = NaN
-                if (a <= 5) a = 5
-                arr[i] = isNaN(ext.起点index) === false && 上涨下跌价差(ext.起点Type)[i] >= 4 ? 上涨下跌价差(ext.起点Type)[i] / a : NaN  //除以根数 
+                //if (a <= 5) a = 5
+                arr[i] = isNaN(ext.起点index) === false && 上涨下跌价差(ext.起点Type)[i] >= 4 ? to范围({min:0.01,max:1,value:上涨下跌价差(ext.起点Type)[i]/a}) : NaN  //除以根数 
                 //<---------------------------------------------------
             }
         })
@@ -315,7 +316,7 @@ export class RealDataBase {
 
         const 震荡指数 = 指标.lazyMapCache(() => Math.min(上涨_价差.length, 下跌_价差.length, 上涨_下跌.length, 价格_波动率30.length), i => {
             const 上涨下跌价差 = (上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)[i]
-            return 上涨下跌价差 > 2 ? 价格_波动率30[i] / 上涨下跌价差 : NaN
+            return 上涨下跌价差 > 2 ? to范围({min:0.01,max:3,value:价格_波动率15[i] / 上涨下跌价差})  : NaN
 
         })
 
@@ -402,7 +403,7 @@ export class RealDataBase {
 
         const 价差走平x秒 = 指标.lazyMapCache(
             () => Math.min(价差走平多少根.length, 上涨_价差.length, 下跌_价差.length),
-            i => 价差走平多少根[i] >= ((上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)[i] / 10) * 2,
+            i => 价差走平多少根[i] >= ((上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)[i] / 12) * 2,
         )
 
 
@@ -476,24 +477,28 @@ export class RealDataBase {
                     const 大 = 价差[i] >= 价差中大分界
 
                     //盘口!! 
-                    const v = bs.盘口[i] / 10000
-                    const 盘口_0_50万 = v < 50
-                    const 盘口_0_100万 = v < 100
-                    const 盘口_0_200万 = v < 200
-                    const 盘口_50_100万 = v >= 50 && v < 100
-                    const 盘口_100_150万 = v >= 100 && v < 150
-                    const A = bs.净盘口[i] <= bs.净盘口_均线5[i] + 50 * 10000 && bs.净盘口[i] < 5 * 100000
-                    const B = bs.净盘口[i] <= bs.净盘口_均线5[i] && bs.净盘口[i] < 0
-                    const 盘口XXX =
-                        (小 && 盘口_0_100万 && A) ||
-                        (小 && 盘口_100_150万 && B) ||
-                        (大 && 盘口_0_200万 && 真空信号[i]) ||
-                        (大 && 盘口_0_50万 && A) ||
-                        (大 && 盘口_50_100万 && B)
+                    // const v = bs.盘口[i] / 10000
+                    // const 盘口_0_50万 = v < 50
+                    // const 盘口_0_100万 = v < 100
+                    // const 盘口_0_200万 = v < 200
+                    // const 盘口_50_100万 = v >= 50 && v < 100
+                    // const 盘口_100_150万 = v >= 100 && v < 150
+                    // // const A = bs.净盘口[i] <= bs.净盘口_均线5[i] + 50 * 10000 && bs.净盘口[i] < 5 * 100000
+                    // // const B = bs.净盘口[i] <= bs.净盘口_均线5[i] && bs.净盘口[i] < 0
+                    // const A = bs.净盘口[i] <= bs.净盘口_均线5[i] + 50 * 10000 && bs.净盘口[i] < 5 * 100000
+                    // const B = bs.净盘口[i] <= bs.净盘口_均线5[i] && bs.净盘口[i] < 0
+                    // const 盘口XXX =
+                    //     (小 && 盘口_0_100万 && A) ||
+                    //     (小 && 盘口_100_150万 && B) ||
+                    //     (大 && 盘口_0_200万 && 真空信号[i]) ||
+                    //     (大 && 盘口_0_50万 && A) ||
+                    //     (大 && 盘口_50_100万 && B)
+                    const 盘口XXX = bs.净盘口_均线5[i]<0
 
 
                     //成交量衰竭
                     const v__0 = 净成交量abs_macd.DIF[i] < 0
+                    //const v__0 = true
                     const v__1 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i]
                     const v__1_1 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] * 1.1
                     //const 净累计成交量阈值 = type === '摸顶' ?65*10000*价差[i]+200*10000:60*10000*价差[i]+300*10000
@@ -506,22 +511,22 @@ export class RealDataBase {
 
                     return [
                         //局部精确信号
-                        { name: '净成交量5反向[', value: 净成交量5反向 },
-                        { name: '成交量衰竭', value: 价差[i] > 30 || 成交量衰竭 },
+                        { name: '净成交量5反向||成交量衰竭', value:  成交量衰竭||净成交量5反向 },
+                        //{ name: '成交量衰竭', value: 价差[i] >价差中大分界  || 成交量衰竭 },
                         { name: '盘口 ！!', value: 盘口XXX },
-                        //范围信号
-                        { name: '震荡指数', value: 震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i] || 价差走平x秒[i] },
-                        { name: '价差走平x秒[i]', value: 价差走平x秒[i] },
+                        //范围信号  
+                        { name: '震荡指数', value: 震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i]|| 价差走平x秒[i]},
+                        //{ name: '价差走平x秒[i]', value: 价差走平x秒[i] },
 
 
                         //过滤条件
                         { name: '净累计成交量[i]<y', value: 净累计成交量[i] < 累计成交量阈值[i] },
                         { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 150 * 10000 },
                         { name: '折返程度', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
-                        { name: '价格速度', value: 价差[i] > 价差中大分界 || 价格差_除以时间[i] >= 0.1 },
+                        //{ name: '价格速度', value: 价差[i] > 价差中大分界 || 价格差_除以时间[i] >= 0.1 },
                         { name: '价差 >=6', value: 价差[i] >= 6 },
                         { name: 'is趋势', value: bs.is趋势[i] },
-                        { name: '波动率最大限制', value: 价差[i] < 价差大巨大分界 },
+                        //{ name: '波动率最大限制', value: 价差[i] < 价差大巨大分界 },
                     ]
                 }
             )
