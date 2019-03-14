@@ -339,8 +339,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             //如果超时了 
             if (lastNumber(self.realData.dataExt[symbol].期货.时间) - this.最后一次开仓时间 >= this.摸顶抄底超时秒 * 1000 && this.第2次超时 === false) {
                 this.第2次超时 = true
-
-                if (true) { //dif>dem 
+                if (lastNumber(self.realData.dataExt[symbol].期货.震荡指数_macd.DIF)<lastNumber(self.realData.dataExt[symbol].期货.震荡指数_macd.DEM)) { //dif>dem 
                     this.摸顶抄底超时秒 = 15 * 1000
                 }
             }
