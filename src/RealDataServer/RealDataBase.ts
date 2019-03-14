@@ -267,7 +267,7 @@ export class RealDataBase {
         const 净成交量abs = 指标.lazyMapCache(() => Math.min(买.成交量.length, 卖.成交量.length), i => 买.成交量[i] - 卖.成交量[i])
         const 净成交量abs原始 = 指标.lazyMapCache(() => Math.min(买.成交量.length, 卖.成交量.length), i => Math.abs(买.成交量[i] - 卖.成交量[i]))
 
-        const 净成交量均线10 = 指标.累加(净成交量abs, 5, RealDataBase.单位时间)
+        const 净成交量累加5 = 指标.累加(净成交量abs, 5, RealDataBase.单位时间)
         const 净成交量abs_macd = 指标.macd(净成交量abs原始, RealDataBase.单位时间)
 
         //阻力3
@@ -307,7 +307,7 @@ export class RealDataBase {
                 let a = i - ext.起点index
                 if (a === 0) a = NaN
                 //if (a <= 5) a = 5
-                arr[i] = isNaN(ext.起点index) === false && 上涨下跌价差(ext.起点Type)[i] >= 4 ? to范围({ min: 0.01, max: 1, value: 上涨下跌价差(ext.起点Type)[i] / a }) : NaN  //除以根数 
+                arr[i] = isNaN(ext.起点index) === false && 上涨下跌价差(ext.起点Type)[i] >= 4 ? to范围({ min: 0.01, max: 10, value: 上涨下跌价差(ext.起点Type)[i] / a }) : NaN  //除以根数 
                 //<---------------------------------------------------
             }
         })
@@ -316,11 +316,11 @@ export class RealDataBase {
 
         const 震荡指数 = 指标.lazyMapCache(() => Math.min(上涨_价差.length, 下跌_价差.length, 上涨_下跌.length, 价格_波动率30.length), i => {
             const 上涨下跌价差 = (上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)[i]
-            return 上涨下跌价差 > 2 ? to范围({ min: 0.01, max: 3, value: 价格_波动率15[i] / 上涨下跌价差 }) : NaN
+            return 上涨下跌价差 > 2 ? to范围({ min: 0.01, max: 10, value: 价格_波动率15[i] / 上涨下跌价差 }) : NaN
 
         })
 
-        const 震荡指数_最高30 = 指标.最高(震荡指数, 30, RealDataBase.单位时间)
+       // const 震荡指数_最高30 = 指标.最高(震荡指数, 30, RealDataBase.单位时间)
 
 
         const 震荡指数_macd = 指标.macd(震荡指数, RealDataBase.单位时间)
@@ -393,7 +393,7 @@ export class RealDataBase {
 
         const 价差走平 = 指标.lazyMapCache(() => Math.min(上涨_下跌.length, 上涨_价差.length, 下跌_价差.length), i => {
             const x = (上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)
-            return i >= 1 && x[i] - x[i - 1] <= 1.5
+            return i >= 1 && x[i] - x[i - 1] <= 1
         })
 
         const 价差走平多少根 = 指标.lazyMapCache2({}, (arr: number[]) => {
@@ -405,9 +405,12 @@ export class RealDataBase {
 
         const 价差走平x秒 = 指标.lazyMapCache(
             () => Math.min(价差走平多少根.length, 上涨_价差.length, 下跌_价差.length),
-            i => 价差走平多少根[i] >= ((上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)[i] / 12) * 2,
+            i => 价差走平多少根[i] >= to范围({min:4,max:20,value: ((上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)[i] / 12) }) * 2,
         )
-
+        const 价差走平x秒大 = 指标.lazyMapCache(
+            () => Math.min(价差走平多少根.length, 上涨_价差.length, 下跌_价差.length),
+            i => 价差走平多少根[i] >= to范围({min:4,max:20,value: ((上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)[i] / 6) }) * 2,
+        )
 
 
         const 上涨_累计成交量 = 累计成交量('上涨')
@@ -450,10 +453,13 @@ export class RealDataBase {
         const bitmex_hopex_上涨相对差价macd = 指标.macd(bitmex_hopex_上涨相对价差, RealDataBase.单位时间)
         const bitmex_hopex_下跌相对差价macd = 指标.macd(bitmex_hopex_下跌相对价差, RealDataBase.单位时间)
         const 累计成交量阈值 = 指标.lazyMapCache(() => Math.min(上涨_价差.length, 下跌_价差.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 65 * 10000 * 上涨_价差[i] + 300 * 10000 : 60 * 10000 * 下跌_价差[i] + 300 * 10000)
+        const 实时成交量 =  指标.lazyMapCache(() => Math.min(上涨_累计成交量.length, 下跌_累计成交量.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 上涨_累计成交量[i]: 下跌_累计成交量[i])
+        const 实时与标准成交量之差 = 指标.lazyMapCache(() => Math.min(累计成交量阈值.length, 实时成交量.length), i => (实时成交量[i] - 累计成交量阈值[i]))
+        const 实时与标准成交量之差macd = 指标.macd(实时与标准成交量之差, RealDataBase.单位时间)
         // const 经累计成交量阈值 = type === '摸顶' ?60*10000*价差[i]+300*10000:60*10000*价差[i]+300*10000
 
         const 价差中大分界 = 20
-        //const 价差大巨大分界 = 100
+        const 价差大巨大分界 = 50
 
         const 摸顶抄底 = (type: '摸顶' | '抄底') => {
             const bs = type === '摸顶' ? 买 : 卖
@@ -487,46 +493,83 @@ export class RealDataBase {
                     // const 盘口_100_150万 = v >= 100 && v < 150
                     // // const A = bs.净盘口[i] <= bs.净盘口_均线5[i] + 50 * 10000 && bs.净盘口[i] < 5 * 100000
                     // // const B = bs.净盘口[i] <= bs.净盘口_均线5[i] && bs.净盘口[i] < 0
-                    // const A = bs.净盘口[i] <= bs.净盘口_均线5[i] + 50 * 10000 && bs.净盘口[i] < 5 * 100000
-                    // const B = bs.净盘口[i] <= bs.净盘口_均线5[i] && bs.净盘口[i] < 0
+                    // const A =  bs.净盘口[i] < 5 * 100000
+                    // const B =bs.净盘口[i] < 0
                     // const 盘口XXX =
                     //     (小 && 盘口_0_100万 && A) ||
                     //     (小 && 盘口_100_150万 && B) ||
                     //     (大 && 盘口_0_200万 && 真空信号[i]) ||
                     //     (大 && 盘口_0_50万 && A) ||
                     //     (大 && 盘口_50_100万 && B)
-                    const 盘口XXX = bs.净盘口_均线5[i] < 0
+                    
 
 
                     //成交量衰竭
-                    const v__0 = 净成交量abs_macd.DIF[i] < 0
-                    //const v__0 = true
+                    //const v__0 = 净成交量abs_macd.DIF[i] < 0
+                    const v__0 = true
                     const v__1 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i]
                     const v__1_1 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] * 1.1
                     //const 净累计成交量阈值 = type === '摸顶' ?65*10000*价差[i]+200*10000:60*10000*价差[i]+300*10000
 
-                    const 净成交量5反向 = type === '摸顶' ? 净成交量均线10[i] < 0 : 净成交量均线10[i] > 0
+                    const 净成交量5反向 = type === '摸顶' ? 净成交量累加5[i] < 0 : 净成交量累加5[i] > 0
                     const 成交量衰竭 =
                         (v__1_1 && bs.净成交量_累加5[i] < 50 * 10000) ||
                         (小 && v__1) ||
-                        (大 && v__0 && v__1) && 净累计成交量[i] < 累计成交量阈值[i]
+                        (大 && v__0 && v__1) 
+                    // const 震荡指数_最高30a = 震荡指数_最高30[i] > 1.1
+                    // const 震荡指数小于2 =震荡指数[i] < 2
+                    // const 震荡指数小于1点1 = 震荡指数[i] < 1.1
+                    // const 震荡指数_macd判断 = 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i]
+                    const 震荡 = (震荡指数[i] < 2&& (震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i]))
+                    
+                    const 价差走平 = 价差走平x秒[i]
+                    
+                    const 盘口XXX = bs.净盘口[i] < 0||(价差[i] > 价差中大分界&&价差走平)
+                    
+                    let 形态 = false
+                    if(价差[i] < 价差中大分界){
+                        形态 = 震荡||价差走平
+                    }else if(价差[i] > 价差中大分界){
+                        形态 = 震荡||价差走平
+                    }else if(价差[i] >价差大巨大分界){
+                        if(价差走平){
+                            形态 = true
+                        }
+                        //形态 = 震荡&&价差走平
+                    }
+                    let 大价差走平x秒 = 价差[i] >价差大巨大分界&&价差走平x秒大[i]
+                   // 形态 = 震荡&&价差走平
+                    let 标准成交量差值衰竭 = false
+                    标准成交量差值衰竭 = (实时与标准成交量之差macd.DIF[i]<实时与标准成交量之差macd.DEM[i])||(实时与标准成交量之差[i]<-100*10000)||大价差走平x秒
+                    
+                    
+                    // if(价差[i] <价差大巨大分界){
+                        
+                    // }else{
+                    //     标准成交量差值衰竭 = (实时与标准成交量之差macd.DIF[i]<实时与标准成交量之差macd.DEM[i])||(实时与标准成交量之差[i]<-100*10000)
+                    // }
 
+
+                   
                     return [
                         //局部精确信号
                         { name: '净成交量5反向||成交量衰竭', value: 成交量衰竭 || 净成交量5反向 },
                         //{ name: '成交量衰竭', value: 价差[i] >价差中大分界  || 成交量衰竭 },
                         { name: '盘口 ！!', value: 盘口XXX },
                         //范围信号  
-                        { name: '震荡指数', value: (震荡指数_最高30[i] > 1.1 && (震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i])) || 价差走平x秒[i] },
-                        //{ name: '价差走平x秒[i]', value: 价差走平x秒[i] },
+                        { name: '形态', value: 形态},
+                        { name: '标准成交量差值衰竭', value: 标准成交量差值衰竭},
+                        //{ name: '实时与标准成交量之差', value: 实时与标准成交量之差[i]<-200*10000},
+                        { name: '价差走平', value: 价差走平},
+                        //{ name: '大价差走平x秒', value: 价差走平x秒大[i]},
 
 
-                        //过滤条件
-                        { name: '净累计成交量[i]<y', value: 净累计成交量[i] < 累计成交量阈值[i] },
-                        { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 150 * 10000 },
+                        // //过滤条件
+                        { name: '净累计成交量[i]<y', value: 净累计成交量[i] < 累计成交量阈值[i] ||大价差走平x秒},
+                        { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 200 * 10000 },
                         { name: '折返程度', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
                         //{ name: '价格速度', value: 价差[i] > 价差中大分界 || 价格差_除以时间[i] >= 0.1 },
-                        { name: '价差 >=6', value: 价差[i] >= 6 },
+                        { name: '价差 >=8', value: 价差[i] >= 8 },
                         { name: 'is趋势', value: bs.is趋势[i] },
                         //{ name: '波动率最大限制', value: 价差[i] < 价差大巨大分界 },
                     ]
@@ -589,11 +632,13 @@ export class RealDataBase {
 
 
         return {
+            实时与标准成交量之差macd,
+            实时与标准成交量之差,
             价格速度macd,
             累计成交量阈值,
             双开, 双平, 多换, 空换, 多平, 空平, 空开, 多开,
             KLine,
-            净成交量均线10,
+            净成交量均线10: 净成交量累加5,
             绝对价差,
             bitmex_hopex_上涨相对差价均线,
             bitmex_hopex_下跌相对价差均线,
