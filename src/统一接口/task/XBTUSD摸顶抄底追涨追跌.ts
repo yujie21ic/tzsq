@@ -321,6 +321,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             this.最后一次开仓时间 = lastNumber(self.realData.dataExt[symbol].期货.时间)
             this.最后一次开仓折返率 = lastNumber(self.realData.dataExt[symbol].期货.折返率)
             this.摸顶抄底超时秒 = to范围({ min: 15, max: 30, value: self.realData.get波动率(symbol) / 7 + 15 })
+            this.第2次超时 = false
         }
 
         if (活动委托.length <= 1) {
@@ -338,7 +339,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             //如果超时了 
             if (lastNumber(self.realData.dataExt[symbol].期货.时间) - this.最后一次开仓时间 >= this.摸顶抄底超时秒 * 1000 && this.第2次超时 === false) {
                 this.第2次超时 = true
-                
+
                 if (true) { //dif>dem 
                     this.摸顶抄底超时秒 = 15 * 1000
                 }
