@@ -1,12 +1,12 @@
 import * as Sequelize from 'sequelize'
 import { JSONRPCServer } from '../lib/C/JSONRPC'
 import { BaseType } from '../lib/BaseType'
-import { funcList } from './funcList'
+import { DBServer__funcList } from './DBServer__funcList'
 import { DB } from './DB'
 import { timeID } from '../lib/F/timeID'
 
 export const DBServer = new JSONRPCServer({
-    funcList,
+    funcList: DBServer__funcList,
     port: 5555
 })
 

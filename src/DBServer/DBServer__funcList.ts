@@ -1,6 +1,6 @@
 import { BaseType } from '../lib/BaseType'
 
-export const funcList = {
+export const DBServer__funcList = {
     //K线
     getKLine: {
         req: {
