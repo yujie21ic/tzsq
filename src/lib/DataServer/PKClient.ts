@@ -1,4 +1,4 @@
-import { JSONRPCClient } from '../lib/C/JSONRPC'
+import { JSONRPCClient } from '../C/JSONRPC'
 import { PKServer__funcList } from './PKServer__funcList'
 
 export const PKClient = new JSONRPCClient({

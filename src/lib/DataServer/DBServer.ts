@@ -1,9 +1,9 @@
 import * as Sequelize from 'sequelize'
-import { JSONRPCServer } from '../lib/C/JSONRPC'
-import { BaseType } from '../lib/BaseType'
+import { JSONRPCServer } from '../C/JSONRPC'
+import { BaseType } from '../BaseType'
 import { DBServer__funcList } from './DBServer__funcList'
 import { DB } from './DB'
-import { timeID } from '../lib/F/timeID'
+import { timeID } from '../F/timeID'
 
 export const DBServer = new JSONRPCServer({
     funcList: DBServer__funcList,
