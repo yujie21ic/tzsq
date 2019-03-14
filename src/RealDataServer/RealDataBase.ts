@@ -307,7 +307,7 @@ export class RealDataBase {
                 let a = i - ext.起点index
                 if (a === 0) a = NaN
                 //if (a <= 5) a = 5
-                arr[i] = isNaN(ext.起点index) === false && 上涨下跌价差(ext.起点Type)[i] >= 4 ? to范围({min:0.01,max:1,value:上涨下跌价差(ext.起点Type)[i]/a}) : NaN  //除以根数 
+                arr[i] = isNaN(ext.起点index) === false && 上涨下跌价差(ext.起点Type)[i] >= 4 ? to范围({ min: 0.01, max: 1, value: 上涨下跌价差(ext.起点Type)[i] / a }) : NaN  //除以根数 
                 //<---------------------------------------------------
             }
         })
@@ -316,9 +316,11 @@ export class RealDataBase {
 
         const 震荡指数 = 指标.lazyMapCache(() => Math.min(上涨_价差.length, 下跌_价差.length, 上涨_下跌.length, 价格_波动率30.length), i => {
             const 上涨下跌价差 = (上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)[i]
-            return 上涨下跌价差 > 2 ? to范围({min:0.01,max:3,value:价格_波动率15[i] / 上涨下跌价差})  : NaN
+            return 上涨下跌价差 > 2 ? to范围({ min: 0.01, max: 3, value: 价格_波动率15[i] / 上涨下跌价差 }) : NaN
 
         })
+
+        const 震荡指数_最高30 = 指标.最高(震荡指数, 30, RealDataBase.单位时间)
 
 
         const 震荡指数_macd = 指标.macd(震荡指数, RealDataBase.单位时间)
@@ -493,7 +495,7 @@ export class RealDataBase {
                     //     (大 && 盘口_0_200万 && 真空信号[i]) ||
                     //     (大 && 盘口_0_50万 && A) ||
                     //     (大 && 盘口_50_100万 && B)
-                    const 盘口XXX = bs.净盘口_均线5[i]<0
+                    const 盘口XXX = bs.净盘口_均线5[i] < 0
 
 
                     //成交量衰竭
@@ -511,11 +513,11 @@ export class RealDataBase {
 
                     return [
                         //局部精确信号
-                        { name: '净成交量5反向||成交量衰竭', value:  成交量衰竭||净成交量5反向 },
+                        { name: '净成交量5反向||成交量衰竭', value: 成交量衰竭 || 净成交量5反向 },
                         //{ name: '成交量衰竭', value: 价差[i] >价差中大分界  || 成交量衰竭 },
                         { name: '盘口 ！!', value: 盘口XXX },
                         //范围信号  
-                        { name: '震荡指数', value: 震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i]|| 价差走平x秒[i]},
+                        { name: '震荡指数', value: 震荡指数_最高30[i] > 1.1 && (震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i] || 价差走平x秒[i]) },
                         //{ name: '价差走平x秒[i]', value: 价差走平x秒[i] },
 
 
