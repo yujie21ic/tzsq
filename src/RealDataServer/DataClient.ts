@@ -3,11 +3,11 @@ import { WebSocketClient } from '../lib/C/WebSocketClient'
 import { deepMapNullToNaN } from '../lib/F/deepMapNullToNaN'
 import { config } from '../config'
 import { BaseType } from '../lib/BaseType'
-import { DBClient } from '../DBServer/DBClient'
+import { DBClient } from '../DataServer/DBClient'
 import { timeID } from '../lib/F/timeID'
-import { PKClient } from '../PKServer/PKClient'
-import { DBServer } from '../DBServer/DBServer'
-import { PKServer } from '../PKServer/PKServer'
+import { PKClient } from '../DataServer/PKClient'
+import { DBServer } from '../DataServer/DBServer'
+import { PKServer } from '../DataServer/PKServer'
 
 export namespace DataClient {
 

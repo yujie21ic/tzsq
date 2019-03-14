@@ -1,7 +1,7 @@
 import { BitMEXWSAPI } from '../统一接口/BitMEX/BitMEXWSAPI'
 import { Sampling } from '../lib/C/Sampling'
 import { BaseType } from '../lib/BaseType'
-import { DB } from '../DBServer/DB'
+import { DB } from './DB'
 import { timeID } from '../lib/F/timeID'
 
 const 盘口map = (v: any) => ({

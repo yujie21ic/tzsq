@@ -1,6 +1,6 @@
 import { Sampling } from '../lib/C/Sampling'
 import { BaseType } from '../lib/BaseType'
-import { DB } from '../DBServer/DB'
+import { DB } from './DB'
 import { timeID } from '../lib/F/timeID'
 import { HopexTradeAndOrderBook } from '../统一接口/TradeAndOrderBook/HopexTradeAndOrderBook'
 

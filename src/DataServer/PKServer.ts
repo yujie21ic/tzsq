@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
 import { JSONRPCServer } from '../lib/C/JSONRPC'
 import { PKServer__funcList } from './PKServer__funcList'
-import { DB } from '../DBServer/DB'
+import { DB } from './DB'
 import { timeID } from '../lib/F/timeID'
 
 export const PKServer = new JSONRPCServer({
