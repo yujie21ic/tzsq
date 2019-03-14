@@ -187,6 +187,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             this.最后一次开仓时间 = NaN
             this.最后一次开仓折返率 = NaN
             this.摸顶抄底超时秒 = NaN
+            this.第2次超时 = false
             return this.自动开仓(self)
         } else {
             return this.自动止盈(self)
@@ -302,6 +303,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
     private 最后一次开仓时间 = NaN
     private 最后一次开仓折返率 = NaN
     private 摸顶抄底超时秒 = NaN
+    private 第2次超时 = false
 
     private async 自动止盈(self: PositionAndOrder) {
 
@@ -332,9 +334,19 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 位置: 0,
             })
 
+
+            //如果超时了 
+            if (lastNumber(self.realData.dataExt[symbol].期货.时间) - this.最后一次开仓时间 >= this.摸顶抄底超时秒 * 1000 && this.第2次超时 === false) {
+                this.第2次超时 = true
+                
+                if (true) { //dif>dem 
+                    this.摸顶抄底超时秒 = 15 * 1000
+                }
+            }
+
+
+
             let 亏损挂单平仓Text = ''
-
-
             if (this.最后一次信号 === '摸顶' || this.最后一次信号 === '抄底') {
                 if (
                     lastNumber(self.realData.dataExt[symbol].期货.时间) - this.最后一次开仓时间 >= this.摸顶抄底超时秒 * 1000 &&

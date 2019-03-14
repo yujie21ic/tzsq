@@ -1,8 +1,8 @@
-import { BitMEXWSAPI } from '../统一接口/BitMEX/BitMEXWSAPI'
-import { Sampling } from '../lib/C/Sampling'
-import { BaseType } from '../lib/BaseType'
-import { DB } from '../DBServer/DB'
-import { timeID } from '../lib/F/timeID'
+import { BitMEXWSAPI } from '../../统一接口/BitMEX/BitMEXWSAPI'
+import { Sampling } from '../C/Sampling'
+import { BaseType } from '../BaseType'
+import { DB } from './DB'
+import { timeID } from '../F/timeID'
 
 const 盘口map = (v: any) => ({
     price: Number(v[0]),

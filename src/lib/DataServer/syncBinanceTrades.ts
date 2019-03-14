@@ -1,9 +1,9 @@
-import { BaseType } from '../lib/BaseType'
+import { BaseType } from '../BaseType'
 import { DB } from './DB'
-import { JSONRequest } from '../lib/C/JSONRequest'
-import { sleep } from '../lib/C/sleep'
-import { config } from '../config'
-import { queryStringStringify } from '../lib/F/queryStringStringify'
+import { JSONRequest } from '../C/JSONRequest'
+import { sleep } from '../C/sleep'
+import { config } from '../../config'
+import { queryStringStringify } from '../F/queryStringStringify'
 
 export const syncBinanceTrades = async (
     symbol: BaseType.BinanceSymbol,

@@ -1,5 +1,5 @@
 import { syncBinanceTrades } from './syncBinanceTrades'
-import { syncBitmex500msOrderBook } from '../PKServer/syncBitmex500msOrderBook'
+import { syncBitmex500msOrderBook } from './syncBitmex500msOrderBook'
 import { syncBinance500ms } from './syncBinance500ms'
 import { syncBitmex500msKLine } from './syncBitmex500msKLine'
 import { sync1M } from './sync1M'

@@ -1,6 +1,6 @@
-import { BaseType } from '../lib/BaseType'
+import { BaseType } from '../BaseType'
 
-export const funcList = {
+export const PKServer__funcList = {
 
     getBitmex500msOrderBook: {
         req: {

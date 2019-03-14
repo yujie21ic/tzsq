@@ -1,9 +1,9 @@
-import { BaseType } from '../lib/BaseType'
+import { BaseType } from '../BaseType'
 import { SyncKLine } from './SyncKLine'
 import { DB } from './DB'
-import { BitMEXRESTAPI } from '../统一接口/BitMEX/BitMEXRESTAPI'
-import { timeID } from '../lib/F/timeID'
-import { sleep } from '../lib/C/sleep'
+import { BitMEXRESTAPI } from '../../统一接口/BitMEX/BitMEXRESTAPI'
+import { timeID } from '../F/timeID'
+import { sleep } from '../C/sleep'
 
 
 const get500sData = async (startTime: number, symbol: BaseType.BitmexSymbol) => {

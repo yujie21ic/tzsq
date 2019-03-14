@@ -1,9 +1,9 @@
 import * as Sequelize from 'sequelize'
-import { BaseType } from '../lib/BaseType'
+import { BaseType } from '../BaseType'
 import { SyncKLine } from './SyncKLine'
 import { DB } from './DB'
-import { timeID } from '../lib/F/timeID'
-import { sleep } from '../lib/C/sleep'
+import { timeID } from '../F/timeID'
+import { sleep } from '../C/sleep'
 
 
 export const syncBinance500ms = (symbol: BaseType.BinanceSymbol) =>
