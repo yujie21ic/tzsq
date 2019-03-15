@@ -323,7 +323,7 @@ export class RealDataBase {
             })
 
             const 动力 = 指标.lazyMapCache(
-                () => Math.min(上涨_下跌_分开_的.length, 价差.length),
+                () => Math.min(累计成交量.length, 价差.length),
                 i => to范围({ min: 30 * 10000, max: 130 * 10000, value: 累计成交量[i] / Math.max(1, 价差[i]) }) //最小除以1
             )
 
