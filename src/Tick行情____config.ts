@@ -948,7 +948,6 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     numberColor: BTC颜色,
                     layerList: [
                         layer(LineLayer, { data: d2.XBTUSD.期货.价格, color: BTC颜色 }),
-                        layer(LineLayer, { data: d.期货.下跌.x秒内极值点价格, color: ETH颜色 }),
                         layer(LineLayer, { data: d.期货.价格_最低15, color: 波动率颜色 }),
                         layer(TextLayer, {
                             text:
@@ -969,6 +968,12 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 ]
             },
             [
+                
+                {numberColor: BTC颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d.期货.下跌.x秒内极值点价格, color: BTC颜色 }),
+                    ]
+                },
                 {numberColor: BTC颜色,
                     layerList: [
                         layer(LineLayer, { data: d.期货.下跌.动态时间_x秒, color: ETH颜色 }),
