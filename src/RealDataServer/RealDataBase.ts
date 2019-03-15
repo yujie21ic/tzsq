@@ -505,6 +505,8 @@ export class RealDataBase {
 
         const bitmex_hopex_上涨相对差价macd = 指标.macd(bitmex_hopex_上涨相对价差, RealDataBase.单位时间)
         const bitmex_hopex_下跌相对差价macd = 指标.macd(bitmex_hopex_下跌相对价差, RealDataBase.单位时间)
+        
+        //????????????????
         const 累计成交量阈值 = 指标.lazyMapCache(() => Math.min(__上涨_价差.length, __下跌_价差.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 65 * 10000 * __上涨_价差[i] + 300 * 10000 : 60 * 10000 * __下跌_价差[i] + 300 * 10000)
         const 实时成交量 = 指标.lazyMapCache(() => Math.min(__上涨_累计成交量.length, __下跌_累计成交量.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? __上涨_累计成交量[i] : __下跌_累计成交量[i])
         const 实时与标准成交量之差 = 指标.lazyMapCache(() => Math.min(累计成交量阈值.length, 实时成交量.length), i => (实时成交量[i] - 累计成交量阈值[i]))
