@@ -327,11 +327,24 @@ export class RealDataBase {
                 i => to范围({ min: 30 * 10000, max: 130 * 10000, value: 累计成交量[i] / Math.max(1, 价差[i]) }) //最小除以1
             )
 
+
+            const 动态时间_x_秒 = 指标.lazyMapCache(
+                () => Math.min(价差.length),
+                i => to范围({ min: 10, max: 30, value: 价差[i] / 2 }),
+            )
+
+            const 动态时间_y_秒 = 指标.lazyMapCache(
+                () => Math.min(价差.length),
+                i => to范围({ min: 4, max: 20, value: 价差[i] / 12 }),
+            )
+
             return {
                 累计成交量,
                 价差,
                 动力,
                 动力波动率: __波动率(动力),
+                动态时间_x_秒,
+                动态时间_y_秒,
             }
         }
 
@@ -374,16 +387,6 @@ export class RealDataBase {
         })
 
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!先不分开了！！！！！！！！！！！！！！！！！！
-        const 动态时间_x_秒 = 指标.lazyMapCache(
-            () => Math.min(上涨.价差.length, 下跌.价差.length),
-            i => to范围({ min: 10, max: 30, value: (上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 2 }),
-        )
-
-        const 动态时间_y_秒 = 指标.lazyMapCache(
-            () => Math.min(上涨.价差.length, 下跌.价差.length),
-            i => to范围({ min: 4, max: 20, value: (上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 12 }),
-        )
 
 
 
