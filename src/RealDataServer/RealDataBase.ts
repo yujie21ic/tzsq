@@ -339,7 +339,7 @@ export class RealDataBase {
             )
 
             const x秒内极值点价格 = 指标.lazyMapCache(
-                () => Math.min(动态时间_x秒.length),
+                () => Math.min(动态时间_x秒.length, 价格.length),
                 i => {
 
                     //1秒2根
@@ -358,7 +358,7 @@ export class RealDataBase {
 
             //y秒
             const 价差走平 = 指标.lazyMapCache(
-                () => Math.min(动态时间_x秒.length),
+                () => Math.min(动态时间_y秒.length, 价格.length, x秒内极值点价格.length),
                 i => {
 
                     //1秒2根
