@@ -274,6 +274,16 @@ export class RealDataBase {
         const 价格_最高15 = 指标.最高(价格, 15, RealDataBase.单位时间)
         const 价格_最低15 = 指标.最低(价格, 15, RealDataBase.单位时间)
 
+
+
+
+
+
+
+
+
+
+
         //________________________________________________FFFFFFFFFFFFFFFFFFFFFFF________________________________________________
         const 价格差_除以时间 = 指标.lazyMapCache2({ 起点index: NaN, 起点Type: 'none' as '上涨' | '下跌' }, (arr: number[], ext) => {
             const length = Math.min(价格_波动率30.length, 上涨_下跌.length)
@@ -317,6 +327,9 @@ export class RealDataBase {
 
 
         //________________________________________________FFFFFFFFFFFFFFFFFFFFFFF________________________________________________
+
+
+
 
 
 
@@ -501,7 +514,7 @@ export class RealDataBase {
         const 价差中大分界 = 20
         const 价差大巨大分界 = 50
 
-        const 摸顶抄底 = (type: '摸顶' | '抄底') => {
+        const __摸顶抄底 = (type: '摸顶' | '抄底') => {
             const bs = type === '摸顶' ? 买 : 卖
             const 价差 = type === '摸顶' ? __上涨_价差 : __下跌_价差
             //const 真空信号 = type === '摸顶' ? 真空信号涨 : 真空信号跌
@@ -617,11 +630,11 @@ export class RealDataBase {
                 }
             )
         }
-        const 信号_摸顶 = 摸顶抄底('摸顶')
-        const 信号_抄底 = 摸顶抄底('抄底')
+        const 信号_摸顶 = __摸顶抄底('摸顶')
+        const 信号_抄底 = __摸顶抄底('抄底')
 
 
-        const 摸顶抄底_平仓 = (type: '摸顶' | '抄底') => 指标.lazyMapCache(
+        const __摸顶抄底_平仓 = (type: '摸顶' | '抄底') => 指标.lazyMapCache(
             () => Math.min(
                 data.length,
                 orderBook.length,
@@ -631,11 +644,11 @@ export class RealDataBase {
                 { name: '折返程度', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) > 折返率[i] : (价格[i] - 价格_最低15[i]) > 折返率[i] },
             ]
         )
-        const 信号_摸顶_下跌平仓 = 摸顶抄底_平仓('摸顶')
-        const 信号_抄底_上涨平仓 = 摸顶抄底_平仓('抄底')
+        const 信号_摸顶_下跌平仓 = __摸顶抄底_平仓('摸顶')
+        const 信号_抄底_上涨平仓 = __摸顶抄底_平仓('抄底')
 
 
-        const 追涨_追跌 = (type: '追涨' | '追跌') => {
+        const __追涨_追跌 = (type: '追涨' | '追跌') => {
             const bs = type === '追涨' ? 买 : 卖
             const 价差 = type === '追涨' ? __上涨_价差 : __下跌_价差
             return 指标.lazyMapCache(
@@ -656,10 +669,8 @@ export class RealDataBase {
                 ]
             )
         }
-        const 信号_追涨 = 追涨_追跌('追涨')
-        const 信号_追跌 = 追涨_追跌('追跌')
-
-        // export type 成交性质Type =  双开,'双平','多换','空换','多平','空平','空开','多开', '不知道'
+        const 信号_追涨 = __追涨_追跌('追涨')
+        const 信号_追跌 = __追涨_追跌('追跌')
 
         const 双开 = 指标.lazyMapCache(() => data.length, i => data[i].成交性质 === '双开' ? data[i].buySize + data[i].sellSize : 0)
         const 双平 = 指标.lazyMapCache(() => data.length, i => data[i].成交性质 === '双平' ? data[i].buySize + data[i].sellSize : 0)
