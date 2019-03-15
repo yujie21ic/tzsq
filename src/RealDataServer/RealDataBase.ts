@@ -338,6 +338,23 @@ export class RealDataBase {
                 i => to范围({ min: 4, max: 20, value: 价差[i] / 12 }),
             )
 
+            const x_秒内极值点价格 = 指标.lazyMapCache(
+                () => Math.min(动态时间_x_秒.length),
+                i => {
+
+                    //1秒2根
+                    const x根 = 动态时间_x_秒[i] * 2
+
+                    let 极值点 = 价格[i]
+
+                    for (let k = i; k > i - x根; k--) {
+                        极值点 = (type === '上涨' ? Math.max : Math.min)(价格[k])
+                    }
+
+                    return 极值点
+                }
+            )
+
             return {
                 累计成交量,
                 价差,
@@ -345,6 +362,7 @@ export class RealDataBase {
                 动力波动率: __波动率(动力),
                 动态时间_x_秒,
                 动态时间_y_秒,
+                x_秒内极值点价格,
             }
         }
 
