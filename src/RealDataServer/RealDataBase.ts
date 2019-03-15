@@ -358,7 +358,11 @@ export class RealDataBase {
             const 走平了_y秒 = 指标.lazyMapCache(
                 () => Math.min(动态时间_x_秒.length),
                 i => {
-                    for (let k = i; k > i - 动态时间_y_秒[i] * 2; k--) {
+
+                    //1秒2根
+                    const y根 = 动态时间_y_秒[i] * 2
+
+                    for (let k = i; k > i - y根; k--) {
                         if (价格[k] - x_秒内极值点价格[k] <= 0) {
                             return false
                         }
