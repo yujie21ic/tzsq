@@ -404,6 +404,21 @@ export class RealDataBase {
                     return true
                 }
             )
+            const 当前价格与极值关系 = 指标.lazyMapCache(
+                () => Math.min(价格.length, 价格_最高15.length,价格_最低15.length),
+                i => {
+                        // if (type === '上涨' && 价格[i] - 价格_最高15[i]<=0) {
+                        //     return true
+                        // }else{
+                            // if (type === '下跌' && ) {
+                            //     return true
+                            // }
+                            return 价格[i] - 价格_最低15[i] >=0
+                        //}
+                    //return false
+                }
+            )
+            
             const 价差走平大 = 指标.lazyMapCache(
                 () => Math.min(动态时间_大y秒.length, 价格.length, x秒内极值点价格.length),
                 i => {
@@ -436,6 +451,7 @@ export class RealDataBase {
                 价差走平,
                 价差走平大,
                 价差走平4s,
+                当前价格与极值关系,
             }
         }
 
@@ -737,7 +753,7 @@ export class RealDataBase {
                         { name: '价差走平', value: 价差走平 },
                         { name: '大价差走平x秒', value: 价差走平大 },
                         { name: '价差走平4s', value: 下跌.价差走平4s[i] },
-
+                        { name: '当前价格与极值关系', value: 下跌.当前价格与极值关系[i]},
 
                         // //过滤条件
                         { name: '净累计成交量[i]<y', value: 净累计成交量[i] < 累计成交量阈值[i] || 大价差走平x秒 },
