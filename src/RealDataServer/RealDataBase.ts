@@ -276,6 +276,31 @@ export class RealDataBase {
 
 
 
+        //_______________________________________________________________________________________________________________________
+
+
+        const 上涨_下跌_分开_的 = (type: '上涨' | '下跌') => {
+
+            const 累计成交量 = __累计成交量(type)
+
+            const 价差 = __价差(type)
+
+            const 动力 = 指标.lazyMapCache(
+                () => Math.min(上涨_下跌_分开_的.length, 价差.length),
+                i => to范围({ min: 30 * 10000, max: 130 * 10000, value: 累计成交量[i] / Math.max(1, 价差[i]) }) //最小除以1
+            )
+
+            return {
+                累计成交量,
+                价差,
+                动力,
+                动力波动率: __波动率(动力),
+            }
+        }
+
+
+        const 上涨 = 上涨_下跌_分开_的('上涨')
+        const 下跌 = 上涨_下跌_分开_的('下跌')
 
 
 
@@ -288,7 +313,7 @@ export class RealDataBase {
         const 价格差_除以时间 = 指标.lazyMapCache2({ 起点index: NaN, 起点Type: 'none' as '上涨' | '下跌' }, (arr: number[], ext) => {
             const length = Math.min(价格_波动率30.length, 上涨_下跌.length)
 
-            let 上涨下跌价差 = (xx: '上涨' | '下跌') => xx === '上涨' ? __上涨_价差 : __下跌_价差 //每个地方都不同！！！！
+            let 上涨下跌价差 = (xx: '上涨' | '下跌') => xx === '上涨' ? 上涨.价差 : 下跌.价差 //每个地方都不同！！！！
 
 
             for (let i = Math.max(0, arr.length - 1); i < length; i++) {
@@ -317,8 +342,8 @@ export class RealDataBase {
 
         const 价格速度_macd = 指标.macd(价格差_除以时间, RealDataBase.单位时间)
 
-        const 震荡指数 = 指标.lazyMapCache(() => Math.min(__上涨_价差.length, __下跌_价差.length, 上涨_下跌.length, 价格_波动率30.length), i => {
-            const 上涨下跌价差 = (上涨_下跌[i] === '上涨' ? __上涨_价差 : __下跌_价差)[i]
+        const 震荡指数 = 指标.lazyMapCache(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌.length, 价格_波动率30.length), i => {
+            const 上涨下跌价差 = (上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i]
             return 上涨下跌价差 > 2 ? to范围({ min: 0.01, max: 10, value: 价格_波动率15[i] / 上涨下跌价差 }) : NaN
         })
 
@@ -407,11 +432,11 @@ export class RealDataBase {
 
 
         const 价差走平 = 指标.lazyMapCache2({}, (arr: boolean[]) => {
-            const length = Math.min(上涨_下跌.length, __上涨_价差.length, __下跌_价差.length)
+            const length = Math.min(上涨_下跌.length, 上涨.价差.length, 下跌.价差.length)
 
             for (let i = Math.max(0, arr.length - 1); i < length; i++) {
-                const 多少根 = to范围({ min: 4, max: 20, value: ((上涨_下跌[i] === '上涨' ? __上涨_价差 : __下跌_价差)[i] / 12) }) * 2
-                const x = 上涨_下跌[i] === '上涨' ? __上涨_价差 : __下跌_价差
+                const 多少根 = to范围({ min: 4, max: 20, value: ((上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 12) }) * 2
+                const x = 上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差
 
                 if (i - 多少根 < 0) {
                     arr[i] = false
@@ -443,17 +468,17 @@ export class RealDataBase {
         })
 
         const 价差走平x秒 = 指标.lazyMapCache(
-            () => Math.min(价差走平多少根.length, __上涨_价差.length, __下跌_价差.length),
-            i => 价差走平多少根[i] >= to范围({ min: 4, max: 20, value: ((上涨_下跌[i] === '上涨' ? __上涨_价差 : __下跌_价差)[i] / 12) }) * 2,
+            () => Math.min(价差走平多少根.length, 上涨.价差.length, 下跌.价差.length),
+            i => 价差走平多少根[i] >= to范围({ min: 4, max: 20, value: ((上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 12) }) * 2,
         )
 
         const 价差走平x秒大 = 指标.lazyMapCache(
-            () => Math.min(价差走平多少根.length, __上涨_价差.length, __下跌_价差.length),
-            i => 价差走平多少根[i] >= to范围({ min: 6, max: 20, value: ((上涨_下跌[i] === '上涨' ? __上涨_价差 : __下跌_价差)[i] / 6) }) * 2,
+            () => Math.min(价差走平多少根.length, 上涨.价差.length, 下跌.价差.length),
+            i => 价差走平多少根[i] >= to范围({ min: 6, max: 20, value: ((上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 6) }) * 2,
         )
         const 动态价格秒数 = 指标.lazyMapCache(
-            () => Math.min(价格.length, __上涨_价差.length, __下跌_价差.length),
-            i => to范围({ min: 15, max: 25, value: ((上涨_下跌[i] === '上涨' ? __上涨_价差 : __下跌_价差)[i] / 5) }) ,
+            () => Math.min(价格.length, 上涨.价差.length, 下跌.价差.length),
+            i => to范围({ min: 15, max: 25, value: ((上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 5) }) ,
         )
         const 动态价格_均线 = 指标.均线(价格, 7, RealDataBase.单位时间)
         const 动态价格_均线方差 = 指标.lazyMapCache(() => Math.min(动态价格_均线.length, 价格.length), i => {
@@ -466,27 +491,9 @@ export class RealDataBase {
         })
         const 动态价格_均线方差macd = 指标.macd(动态价格_均线方差, RealDataBase.单位时间)
 
-        const __上涨_累计成交量 = __累计成交量('上涨')
-        const __上涨_价差 = __价差('上涨')
-        const __上涨_动力 = 指标.lazyMapCache(() => Math.min(__上涨_累计成交量.length, __上涨_价差.length), i => to范围({ min: 30 * 10000, max: 130 * 10000, value: __上涨_累计成交量[i] / Math.max(1, __上涨_价差[i]) })) //最小除以1
-        const 上涨 = {
-            累计成交量: __上涨_累计成交量,
-            价差: __上涨_价差,
-            动力: __上涨_动力,
-            动力波动率: __波动率(__上涨_动力),
-        }
 
-        const __下跌_累计成交量 = __累计成交量('下跌')
-        const __下跌_价差 = __价差('下跌')
-        const __下跌_动力 = 指标.lazyMapCache(() => Math.min(__下跌_累计成交量.length, __下跌_价差.length), i => to范围({ min: 30 * 10000, max: 130 * 10000, value: __下跌_累计成交量[i] / Math.max(1, __下跌_价差[i]) })) //最小除以1
-        const __下跌 = {
-            累计成交量: __下跌_累计成交量,
-            价差: __下跌_价差,
-            动力: __下跌_动力,
-            动力波动率: __波动率(__下跌_动力),
-        }
 
-        const 绝对价差 = 指标.lazyMapCache(() => Math.min(__上涨_价差.length, __下跌_价差.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? __上涨_价差[i] : __下跌_价差[i])
+        const 绝对价差 = 指标.lazyMapCache(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 上涨.价差[i] : 下跌.价差[i])
         //_______________________________________________________________________________________________________________________________//
 
 
@@ -505,10 +512,10 @@ export class RealDataBase {
 
         const bitmex_hopex_上涨相对差价macd = 指标.macd(bitmex_hopex_上涨相对价差, RealDataBase.单位时间)
         const bitmex_hopex_下跌相对差价macd = 指标.macd(bitmex_hopex_下跌相对价差, RealDataBase.单位时间)
-        
+
         //????????????????
-        const 累计成交量阈值 = 指标.lazyMapCache(() => Math.min(__上涨_价差.length, __下跌_价差.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 65 * 10000 * __上涨_价差[i] + 300 * 10000 : 60 * 10000 * __下跌_价差[i] + 300 * 10000)
-        const 实时成交量 = 指标.lazyMapCache(() => Math.min(__上涨_累计成交量.length, __下跌_累计成交量.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? __上涨_累计成交量[i] : __下跌_累计成交量[i])
+        const 累计成交量阈值 = 指标.lazyMapCache(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 65 * 10000 * 上涨.价差[i] + 300 * 10000 : 60 * 10000 * 下跌.价差[i] + 300 * 10000)
+        const 实时成交量 = 指标.lazyMapCache(() => Math.min(上涨.累计成交量.length, 下跌.累计成交量.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 上涨.累计成交量[i] : 下跌.累计成交量[i])
         const 实时与标准成交量之差 = 指标.lazyMapCache(() => Math.min(累计成交量阈值.length, 实时成交量.length), i => (实时成交量[i] - 累计成交量阈值[i]))
         const 实时与标准成交量之差macd = 指标.macd(实时与标准成交量之差, RealDataBase.单位时间)
         // const 经累计成交量阈值 = type === '摸顶' ?60*10000*价差[i]+300*10000:60*10000*价差[i]+300*10000
@@ -518,9 +525,9 @@ export class RealDataBase {
 
         const __摸顶抄底 = (type: '摸顶' | '抄底') => {
             const bs = type === '摸顶' ? 买 : 卖
-            const 价差 = type === '摸顶' ? __上涨_价差 : __下跌_价差
+            const 价差 = type === '摸顶' ? 上涨.价差 : 下跌.价差
             //const 真空信号 = type === '摸顶' ? 真空信号涨 : 真空信号跌
-            const 净累计成交量 = type === '摸顶' ? __上涨_累计成交量 : __下跌_累计成交量
+            const 净累计成交量 = type === '摸顶' ? 上涨.累计成交量 : 下跌.累计成交量
 
 
             return 指标.lazyMapCache(
@@ -531,7 +538,7 @@ export class RealDataBase {
 
                     //_____________________fix______________________________________
                     上涨.累计成交量.length,
-                    __下跌.累计成交量.length,
+                    下跌.累计成交量.length,
                     累计成交量阈值.length,
                 ),
                 i => {
@@ -652,7 +659,7 @@ export class RealDataBase {
 
         const __追涨_追跌 = (type: '追涨' | '追跌') => {
             const bs = type === '追涨' ? 买 : 卖
-            const 价差 = type === '追涨' ? __上涨_价差 : __下跌_价差
+            const 价差 = type === '追涨' ? 上涨.价差 : 下跌.价差
             return 指标.lazyMapCache(
                 () => Math.min(
                     data.length,
@@ -723,8 +730,8 @@ export class RealDataBase {
             价格_均线300,
             净成交量abs_macd,
             上涨,
-            上涨_价差: __上涨_价差,
-            下跌: __下跌,
+            上涨_价差: 上涨.价差,//???????????????????
+            下跌,
             价格,
             价格_波动率30,
             阻力3涨,
