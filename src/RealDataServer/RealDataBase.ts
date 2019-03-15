@@ -337,6 +337,10 @@ export class RealDataBase {
                 () => Math.min(价差.length),
                 i => to范围({ min: 4, max: 20, value: 价差[i] / 12 }),
             )
+            const 动态时间_大y秒 = 指标.lazyMapCache(
+                () => Math.min(价差.length),
+                i => to范围({ min: 4, max: 25, value: 价差[i] / 6 }),
+            )
 
             const x秒内极值点价格 = 指标.lazyMapCache(
                 () => Math.min(动态时间_x秒.length, 价格.length),
@@ -377,16 +381,37 @@ export class RealDataBase {
                 }
             )
 
+            const 价差走平大 = 指标.lazyMapCache(
+                () => Math.min(动态时间_大y秒.length, 价格.length, x秒内极值点价格.length),
+                i => {
+
+                    //1秒2根
+                    const y根 = 动态时间_大y秒[i] * 2
+
+                    for (let k = i; k > i - y根; k--) {
+                        if (type === '上涨' && 价格[k] - x秒内极值点价格[k] >= 0) {
+                            return false
+                        }
+
+                        if (type === '下跌' && 价格[k] - x秒内极值点价格[k] <= 0) {
+                            return false
+                        }
+                    }
+                    return true
+                }
+            )
+
 
             return {
                 累计成交量,
                 价差,
                 动力,
-                动力波动率: __波动率(动力),
+                //动力波动率: __波动率(动力),
                 动态时间_x秒,
                 动态时间_y秒,
                 x秒内极值点价格,
                 价差走平,
+                价差走平大,
             }
         }
 
@@ -448,29 +473,29 @@ export class RealDataBase {
 
 
 
-        const __波动率 = (src: ArrayLike<number>) => 指标.lazyMapCache2({ 波动率: NaN }, (arr: number[], ext) => {
-            const length = Math.min(上涨_下跌.length, src.length)
+        // const __波动率 = (src: ArrayLike<number>) => 指标.lazyMapCache2({ 波动率: NaN }, (arr: number[], ext) => {
+        //     const length = Math.min(上涨_下跌.length, src.length)
 
-            for (let i = Math.max(0, arr.length - 1); i < length; i++) {
-                if (isNaN(src[i]) === false) {
-                    if (isNaN(ext.波动率)) {
-                        ext.波动率 = 0
-                        arr[i] = 0
-                    }
-                    //
-                    else if (i !== length - 1) {
-                        ext.波动率 += Math.abs(src[i] - src[i - 1])
-                        arr[i] = ext.波动率
-                    }
-                    else {
-                        arr[i] = ext.波动率 + Math.abs(src[i] - src[i - 1])   //最后一个重新计算
-                    }
-                } else {
-                    ext.波动率 = NaN
-                    arr[i] = NaN
-                }
-            }
-        })
+        //     for (let i = Math.max(0, arr.length - 1); i < length; i++) {
+        //         if (isNaN(src[i]) === false) {
+        //             if (isNaN(ext.波动率)) {
+        //                 ext.波动率 = 0
+        //                 arr[i] = 0
+        //             }
+        //             //
+        //             else if (i !== length - 1) {
+        //                 ext.波动率 += Math.abs(src[i] - src[i - 1])
+        //                 arr[i] = ext.波动率
+        //             }
+        //             else {
+        //                 arr[i] = ext.波动率 + Math.abs(src[i] - src[i - 1])   //最后一个重新计算
+        //             }
+        //         } else {
+        //             ext.波动率 = NaN
+        //             arr[i] = NaN
+        //         }
+        //     }
+        // })
 
 
 
@@ -480,51 +505,51 @@ export class RealDataBase {
         // })
 
 
-        const 价差走平 = 指标.lazyMapCache2({}, (arr: boolean[]) => {
-            const length = Math.min(上涨_下跌.length, 上涨.价差.length, 下跌.价差.length)
+        // const 价差走平 = 指标.lazyMapCache2({}, (arr: boolean[]) => {
+        //     const length = Math.min(上涨_下跌.length, 上涨.价差.length, 下跌.价差.length)
 
-            for (let i = Math.max(0, arr.length - 1); i < length; i++) {
-                const 多少根 = to范围({ min: 4, max: 20, value: ((上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 12) }) * 2
-                const x = 上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差
+        //     for (let i = Math.max(0, arr.length - 1); i < length; i++) {
+        //         const 多少根 = to范围({ min: 4, max: 20, value: ((上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 12) }) * 2
+        //         const x = 上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差
 
-                if (i - 多少根 < 0) {
-                    arr[i] = false
-                    continue
-                }
+        //         if (i - 多少根 < 0) {
+        //             arr[i] = false
+        //             continue
+        //         }
 
-                let v = false
-                for (let k = i - 多少根; k < i; k++) {
-                    if (上涨_下跌[i] === '下跌' && x[i] - x[k] >= -0.1) {//!!!!!!!!!!!!!!!!!!!!!
-                        v = true
-                        break
-                    }
-                    if (上涨_下跌[i] === '上涨' && x[i] - x[k] <= 0.1) {//!!!!!!!!!!!!!!!!!!!!!
-                        v = true
-                        break
-                    }
-                }
-                arr[i] = v
-            }
-        })
+        //         let v = false
+        //         for (let k = i - 多少根; k < i; k++) {
+        //             if (上涨_下跌[i] === '下跌' && x[i] - x[k] >= -0.1) {//!!!!!!!!!!!!!!!!!!!!!
+        //                 v = true
+        //                 break
+        //             }
+        //             if (上涨_下跌[i] === '上涨' && x[i] - x[k] <= 0.1) {//!!!!!!!!!!!!!!!!!!!!!
+        //                 v = true
+        //                 break
+        //             }
+        //         }
+        //         arr[i] = v
+        //     }
+        // })
 
 
 
-        const 价差走平多少根 = 指标.lazyMapCache2({}, (arr: number[]) => {
-            const length = 价差走平.length
-            for (let i = Math.max(0, arr.length - 1); i < length; i++) {
-                arr[i] = 价差走平[i] ? arr[i - 1] + 1 : 0
-            }
-        })
+        // const 价差走平多少根 = 指标.lazyMapCache2({}, (arr: number[]) => {
+        //     const length = 价差走平.length
+        //     for (let i = Math.max(0, arr.length - 1); i < length; i++) {
+        //         arr[i] = 价差走平[i] ? arr[i - 1] + 1 : 0
+        //     }
+        // })
 
-        const 价差走平x秒 = 指标.lazyMapCache(
-            () => Math.min(价差走平多少根.length, 上涨.价差.length, 下跌.价差.length),
-            i => 价差走平多少根[i] >= to范围({ min: 4, max: 20, value: ((上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 12) }) * 2,
-        )
+        // const 价差走平x秒 = 指标.lazyMapCache(
+        //     () => Math.min(价差走平多少根.length, 上涨.价差.length, 下跌.价差.length),
+        //     i => 价差走平多少根[i] >= to范围({ min: 4, max: 20, value: ((上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 12) }) * 2,
+        // )
 
-        const 价差走平x秒大 = 指标.lazyMapCache(
-            () => Math.min(价差走平多少根.length, 上涨.价差.length, 下跌.价差.length),
-            i => 价差走平多少根[i] >= to范围({ min: 6, max: 20, value: ((上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 6) }) * 2,
-        )
+        // const 价差走平x秒大 = 指标.lazyMapCache(
+        //     () => Math.min(价差走平多少根.length, 上涨.价差.length, 下跌.价差.length),
+        //     i => 价差走平多少根[i] >= to范围({ min: 6, max: 20, value: ((上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 6) }) * 2,
+        // )
         const 动态价格秒数 = 指标.lazyMapCache(
             () => Math.min(价格.length, 上涨.价差.length, 下跌.价差.length),
             i => to范围({ min: 15, max: 25, value: ((上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 5) }) ,
@@ -644,8 +669,10 @@ export class RealDataBase {
                     // const 震荡指数_macd判断 = 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i]
                     const 震荡 = (震荡指数[i] < 2 && (震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i]))
 
-                    const 价差走平 = 价差走平x秒[i]
-                    let 大价差走平x秒 = 价差[i] > 价差大巨大分界 && 价差走平x秒大[i]
+                    const 价差走平 = type === '摸顶' ?上涨.价差走平[i]:下跌.价差走平[i]
+                    const 价差走平大 = type === '摸顶' ?上涨.价差走平大[i]:下跌.价差走平大[i]
+                   
+                    let 大价差走平x秒 = 价差[i] > 价差大巨大分界 && 价差走平大
 
                     const 盘口XXX = bs.净盘口[i] < 0 || (价差[i] > 价差中大分界 && 大价差走平x秒)
 
@@ -684,16 +711,16 @@ export class RealDataBase {
                         { name: '标准成交量差值衰竭', value: 标准成交量差值衰竭 },
                         { name: '实时与标准成交量之差', value: 实时与标准成交量之差[i] < -200 * 10000 },
                         { name: '价差走平', value: 价差走平 },
-                        { name: '大价差走平x秒', value: 价差走平x秒大[i] },
+                        { name: '大价差走平x秒', value: 价差走平大 },
 
 
                         // //过滤条件
                         { name: '净累计成交量[i]<y', value: 净累计成交量[i] < 累计成交量阈值[i] || 大价差走平x秒 },
-                        { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 200 * 10000 },
-                        { name: '折返程度', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
-                        { name: '价格速度', value: 价差[i] > 价差中大分界 || 价格差_除以时间[i] >= 0.1 },
-                        { name: '价差 >=8', value: 价差[i] >= 8 },
-                        { name: 'is趋势', value: bs.is趋势[i] },
+                        // { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 200 * 10000 },
+                        // { name: '折返程度', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
+                        // { name: '价格速度', value: 价差[i] > 价差中大分界 || 价格差_除以时间[i] >= 0.1 },
+                        // { name: '价差 >=8', value: 价差[i] >= 8 },
+                        // { name: 'is趋势', value: bs.is趋势[i] },
                         //{ name: '波动率最大限制', value: 价差[i] < 价差大巨大分界 },
                     ]
                 }
