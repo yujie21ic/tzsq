@@ -410,7 +410,7 @@ export class RealDataBase {
                 }
 
                 let v = false
-                for (let k = i - 多少根; k <= i; k++) {
+                for (let k = i - 多少根; k < i; k++) {
                     if (上涨_下跌[i] === '下跌' && x[i] - x[k] >= -2) {//!!!!!!!!!!!!!!!!!!!!!
                         v = true
                         break
