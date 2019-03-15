@@ -373,6 +373,21 @@ export class RealDataBase {
             }
         })
 
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!先不分开了！！！！！！！！！！！！！！！！！！
+        const 动态时间_x_秒 = 指标.lazyMapCache(
+            () => Math.min(上涨.价差.length, 下跌.价差.length),
+            i => to范围({ min: 10, max: 30, value: (上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 2 }),
+        )
+
+        const 动态时间_y_秒 = 指标.lazyMapCache(
+            () => Math.min(上涨.价差.length, 下跌.价差.length),
+            i => to范围({ min: 4, max: 20, value: (上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 12 }),
+        )
+
+
+
+
         const 价格速度_macd = 指标.macd(价格差_除以时间, RealDataBase.单位时间)
 
         const 震荡指数 = 指标.lazyMapCache(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌.length, 价格_波动率30.length), i => {
