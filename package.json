@@ -12,6 +12,7 @@
     "w": "tsc -w",
     "real_data_server": "ts-node ./src/RealDataServer",
     "ui": "electron ./build/main.js",
+    "packager": "electron-packager . APP --overwrite --platform=win32 --arch=ia32 --out=release-builds --electron-version=2.0.5 --ignore=./src",
     "start": "concurrently \"tsc -w\" \"ts-node ./src/RealDataServer\" \"electron ./build/main.js\""
   },
   "devDependencies": {
@@ -31,6 +32,7 @@
     "concurrently": "^4.1.0",
     "electron": "^2.0.5",
     "electron-builder": "^20.38.2",
+    "electron-packager": "^13.1.1",
     "mocha": "^5.2.0",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
