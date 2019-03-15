@@ -561,7 +561,7 @@ export class RealDataBase {
                         { name: '标准成交量差值衰竭', value: 标准成交量差值衰竭},
                         //{ name: '实时与标准成交量之差', value: 实时与标准成交量之差[i]<-200*10000},
                         { name: '价差走平', value: 价差走平},
-                        //{ name: '大价差走平x秒', value: 价差走平x秒大[i]},
+                        { name: '大价差走平x秒', value: 价差走平x秒大[i]},
 
 
                         // //过滤条件
