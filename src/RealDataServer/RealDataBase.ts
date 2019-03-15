@@ -281,9 +281,45 @@ export class RealDataBase {
 
         const 上涨_下跌_分开_的 = (type: '上涨' | '下跌') => {
 
-            const 累计成交量 = __累计成交量(type)
+            const 累计成交量 = 指标.lazyMapCache2({ 累计成交量: NaN }, (arr: number[], ext) => {
+                const length = Math.min(上涨_下跌.length, 买.成交量.length, 卖.成交量.length)
+                for (let i = Math.max(0, arr.length - 1); i < length; i++) {
+                    if (上涨_下跌[i] === type) {
+                        if (isNaN(ext.累计成交量)) {
+                            ext.累计成交量 = 0
+                        }
+                        if (i !== length - 1) {
+                            ext.累计成交量 += (type === '上涨' ? 买.成交量[i] - 卖.成交量[i] : 卖.成交量[i] - 买.成交量[i])   //最后一个重新计算
+                        }
+                    } else {
+                        ext.累计成交量 = NaN
+                    }
+                    arr[i] = ext.累计成交量 + (type === '上涨' ? 买.成交量[i] - 卖.成交量[i] : 卖.成交量[i] - 买.成交量[i])
+                }
+            })
 
-            const 价差 = __价差(type)
+            const 价差 = 指标.lazyMapCache2({ 起点价格: NaN }, (arr: number[], ext) => {
+                const length = Math.min(上涨_下跌.length, 价格_最高15.length, 价格_最低15.length)
+                for (let i = Math.max(0, arr.length - 1); i < length; i++) {//最高价10 最低价10 一样长
+                    if (上涨_下跌[i] === type) {
+                        if (isNaN(ext.起点价格)) {
+                            ext.起点价格 = 价格[i]    //最后一个重新计算   不用
+                        }
+                    } else {
+                        ext.起点价格 = NaN
+                    }
+
+                    if (isNaN(ext.起点价格)) {
+                        arr[i] = NaN
+                    }
+                    else if (type === '上涨') {
+                        arr[i] = 价格_最高15[i] - ext.起点价格
+                    }
+                    else if (type === '下跌') {
+                        arr[i] = ext.起点价格 - 价格_最低15[i]
+                    }
+                }
+            })
 
             const 动力 = 指标.lazyMapCache(
                 () => Math.min(上涨_下跌_分开_的.length, 价差.length),
@@ -301,11 +337,7 @@ export class RealDataBase {
 
         const 上涨 = 上涨_下跌_分开_的('上涨')
         const 下跌 = 上涨_下跌_分开_的('下跌')
-
-
-
-
-
+        
 
 
 
@@ -353,51 +385,7 @@ export class RealDataBase {
 
         //________________________________________________FFFFFFFFFFFFFFFFFFFFFFF________________________________________________
 
-
-
-
-
-
-        const __累计成交量 = (type: '上涨' | '下跌') => 指标.lazyMapCache2({ 累计成交量: NaN }, (arr: number[], ext) => {
-            const length = Math.min(上涨_下跌.length, 买.成交量.length, 卖.成交量.length)
-            for (let i = Math.max(0, arr.length - 1); i < length; i++) {
-                if (上涨_下跌[i] === type) {
-                    if (isNaN(ext.累计成交量)) {
-                        ext.累计成交量 = 0
-                    }
-                    if (i !== length - 1) {
-                        ext.累计成交量 += (type === '上涨' ? 买.成交量[i] - 卖.成交量[i] : 卖.成交量[i] - 买.成交量[i])   //最后一个重新计算
-                    }
-                } else {
-                    ext.累计成交量 = NaN
-                }
-                arr[i] = ext.累计成交量 + (type === '上涨' ? 买.成交量[i] - 卖.成交量[i] : 卖.成交量[i] - 买.成交量[i])
-            }
-        })
-
-        const __价差 = (type: '上涨' | '下跌') => 指标.lazyMapCache2({ 起点价格: NaN }, (arr: number[], ext) => {
-            const length = Math.min(上涨_下跌.length, 价格_最高15.length, 价格_最低15.length)
-            for (let i = Math.max(0, arr.length - 1); i < length; i++) {//最高价10 最低价10 一样长
-                if (上涨_下跌[i] === type) {
-                    if (isNaN(ext.起点价格)) {
-                        ext.起点价格 = 价格[i]    //最后一个重新计算   不用
-                    }
-                } else {
-                    ext.起点价格 = NaN
-                }
-
-                if (isNaN(ext.起点价格)) {
-                    arr[i] = NaN
-                }
-                else if (type === '上涨') {
-                    arr[i] = 价格_最高15[i] - ext.起点价格
-                }
-                else if (type === '下跌') {
-                    arr[i] = ext.起点价格 - 价格_最低15[i]
-                }
-            }
-        })
-
+ 
 
         const __波动率 = (src: ArrayLike<number>) => 指标.lazyMapCache2({ 波动率: NaN }, (arr: number[], ext) => {
             const length = Math.min(上涨_下跌.length, src.length)
