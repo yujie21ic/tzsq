@@ -915,6 +915,11 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
                     ]
                 },
+                {numberColor: 波动率颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d.期货.动态价格_均线方差, color: 波动率颜色 }),
+                    ]
+                },
             ],
             [
                
@@ -926,8 +931,9 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 // },
                 {numberColor: BTC颜色,
                     layerList: [
-                        layer(LineLayer, { data: d.期货.动态价格_均线, color: BTC颜色 }),
-                        layer(TextLayer, { text: '价格速度      ', color: 0xffff00 })
+                        layer(LineLayer, { data: d.期货.动态价格_均线方差macd.DIF, color: 买颜色1 }),
+                        layer(LineLayer, { data: d.期货.动态价格_均线方差macd.DEM, color: 买颜色 }),
+                        layer(ZeroLayer, { color: 波动率颜色 }),
                     ]
                 },
                 

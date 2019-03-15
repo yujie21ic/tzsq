@@ -411,11 +411,11 @@ export class RealDataBase {
 
                 let v = false
                 for (let k = i - 多少根; k < i; k++) {
-                    if (上涨_下跌[i] === '下跌' && x[i] - x[k] >= -2) {//!!!!!!!!!!!!!!!!!!!!!
+                    if (上涨_下跌[i] === '下跌' && x[i] - x[k] >= -0.1) {//!!!!!!!!!!!!!!!!!!!!!
                         v = true
                         break
                     }
-                    if (上涨_下跌[i] === '上涨' && x[i] - x[k] <= 2) {//!!!!!!!!!!!!!!!!!!!!!
+                    if (上涨_下跌[i] === '上涨' && x[i] - x[k] <= 0.1) {//!!!!!!!!!!!!!!!!!!!!!
                         v = true
                         break
                     }
@@ -440,9 +440,22 @@ export class RealDataBase {
 
         const 价差走平x秒大 = 指标.lazyMapCache(
             () => Math.min(价差走平多少根.length, 上涨_价差.length, 下跌_价差.length),
-            i => 价差走平多少根[i] >= to范围({ min: 4, max: 20, value: ((上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)[i] / 6) }) * 2,
+            i => 价差走平多少根[i] >= to范围({ min: 6, max: 20, value: ((上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)[i] / 6) }) * 2,
         )
-        const 动态价格_均线 = 指标.均线(价格, 10, RealDataBase.单位时间)
+        const 动态价格秒数 = 指标.lazyMapCache(
+            () => Math.min(价格.length, 上涨_价差.length, 下跌_价差.length),
+            i => to范围({ min: 15, max: 25, value: ((上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)[i] / 5) }) ,
+        )
+        const 动态价格_均线 = 指标.均线(价格, 7, RealDataBase.单位时间)
+        const 动态价格_均线方差 = 指标.lazyMapCache(() => Math.min(动态价格_均线.length, 价格.length), i => {
+            let sum = 0
+            for (let n = (价格.length-动态价格秒数[i]*2); n <价格.length; n++) {
+                sum = sum+Math.pow((价格[n]-动态价格_均线[i]),2)
+            }
+            let 方差 = Math.sqrt(sum/(7*2))
+            return 方差
+        })
+        const 动态价格_均线方差macd = 指标.macd(动态价格_均线方差,RealDataBase.单位时间)
 
         const 上涨_累计成交量 = 累计成交量('上涨')
         const 上涨_价差 = 价差('上涨')
@@ -554,8 +567,9 @@ export class RealDataBase {
                     const 震荡 = (震荡指数[i] < 2 && (震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i]))
 
                     const 价差走平 = 价差走平x秒[i]
+                    let 大价差走平x秒 = 价差[i] > 价差大巨大分界 && 价差走平x秒大[i]
 
-                    const 盘口XXX = bs.净盘口[i] < 0 || (价差[i] > 价差中大分界 && 价差走平)
+                    const 盘口XXX = bs.净盘口[i] < 0 || (价差[i] > 价差中大分界 && 大价差走平x秒)
 
                     let 形态 = false
                     if (价差[i] < 价差中大分界) {
@@ -568,7 +582,7 @@ export class RealDataBase {
                         }
                         //形态 = 震荡&&价差走平
                     }
-                    let 大价差走平x秒 = 价差[i] > 价差大巨大分界 && 价差走平x秒大[i]
+                   
                     // 形态 = 震荡&&价差走平
                     let 标准成交量差值衰竭 = false
                     标准成交量差值衰竭 = (实时与标准成交量之差macd.DIF[i] < 实时与标准成交量之差macd.DEM[i]) || (实时与标准成交量之差[i] < -100 * 10000) || 大价差走平x秒
@@ -590,7 +604,7 @@ export class RealDataBase {
                         //范围信号  
                         { name: '形态', value: 形态 },
                         { name: '标准成交量差值衰竭', value: 标准成交量差值衰竭 },
-                        //{ name: '实时与标准成交量之差', value: 实时与标准成交量之差[i]<-200*10000},
+                        { name: '实时与标准成交量之差', value: 实时与标准成交量之差[i]<-200*10000},
                         { name: '价差走平', value: 价差走平 },
                         { name: '大价差走平x秒', value: 价差走平x秒大[i] },
 
@@ -599,7 +613,7 @@ export class RealDataBase {
                         { name: '净累计成交量[i]<y', value: 净累计成交量[i] < 累计成交量阈值[i] || 大价差走平x秒 },
                         { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 200 * 10000 },
                         { name: '折返程度', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
-                        //{ name: '价格速度', value: 价差[i] > 价差中大分界 || 价格差_除以时间[i] >= 0.1 },
+                        { name: '价格速度', value: 价差[i] > 价差中大分界 || 价格差_除以时间[i] >= 0.1 },
                         { name: '价差 >=8', value: 价差[i] >= 8 },
                         { name: 'is趋势', value: bs.is趋势[i] },
                         //{ name: '波动率最大限制', value: 价差[i] < 价差大巨大分界 },
@@ -663,6 +677,8 @@ export class RealDataBase {
 
 
         return {
+            动态价格_均线方差macd,
+            动态价格_均线方差,
             动态价格_均线,
             实时与标准成交量之差macd,
             实时与标准成交量之差,
