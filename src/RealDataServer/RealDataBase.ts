@@ -330,7 +330,7 @@ export class RealDataBase {
 
             const 动态时间_x秒 = 指标.lazyMapCache(
                 () => Math.min(价差.length),
-                i => to范围({ min: 10, max: 30, value: 价差[i] / 2 }),
+                i => to范围({ min: 15, max: 20, value: 价差[i] / 10 }),
             )
 
             const 动态时间_y秒 = 指标.lazyMapCache(
@@ -389,11 +389,11 @@ export class RealDataBase {
                     const y根 = 动态时间_大y秒[i] * 2
 
                     for (let k = i; k > i - y根; k--) {
-                        if (type === '上涨' && 价格[k] - x秒内极值点价格[k] >= 0) {
+                        if (type === '上涨' && 价格[k] - x秒内极值点价格[k] >= 2) {
                             return false
                         }
 
-                        if (type === '下跌' && 价格[k] - x秒内极值点价格[k] <= 0) {
+                        if (type === '下跌' && 价格[k] - x秒内极值点价格[k] <= -2) {
                             return false
                         }
                     }
