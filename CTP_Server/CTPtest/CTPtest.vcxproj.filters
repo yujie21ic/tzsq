@@ -18,23 +18,11 @@
     <ClCompile Include="..\src\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CustomMdSpi.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CustomTradeSpi.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\json11.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\CustomMdSpi.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\CustomTradeSpi.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\json11.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
