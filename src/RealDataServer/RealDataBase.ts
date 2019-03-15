@@ -276,7 +276,8 @@ export class RealDataBase {
 
 
 
-        //_______________________________________________________________________________________________________________________
+        //________________上涨_下跌_分开_的 全用这个 返回______________________
+        //引用 统一 上涨.xxx 下跌.xxx
 
 
         const 上涨_下跌_分开_的 = (type: '上涨' | '下跌') => {
@@ -337,7 +338,7 @@ export class RealDataBase {
 
         const 上涨 = 上涨_下跌_分开_的('上涨')
         const 下跌 = 上涨_下跌_分开_的('下跌')
-        
+
 
 
 
@@ -385,7 +386,7 @@ export class RealDataBase {
 
         //________________________________________________FFFFFFFFFFFFFFFFFFFFFFF________________________________________________
 
- 
+
 
         const __波动率 = (src: ArrayLike<number>) => 指标.lazyMapCache2({ 波动率: NaN }, (arr: number[], ext) => {
             const length = Math.min(上涨_下跌.length, src.length)
@@ -485,6 +486,9 @@ export class RealDataBase {
         //_______________________________________________________________________________________________________________________________//
 
 
+
+
+        //这些 不用放 上涨 下跌 那个里面   临时不要动
         //const bitmex_hopex_差价: ArrayLike<number> = (指标.lazyMapCache(() => this.dataExt.XBTUSD.bitmex_hopex_差价.length, i => this.dataExt.XBTUSD.bitmex_hopex_差价[i])) as any
         const bitmex_hopex_上涨差价: ArrayLike<number> = (指标.lazyMapCache(() => this.dataExt.XBTUSD.bitmex_hopex_上涨差价.length, i => this.dataExt.XBTUSD.bitmex_hopex_上涨差价[i])) as any
         const bitmex_hopex_下跌差价: ArrayLike<number> = (指标.lazyMapCache(() => this.dataExt.XBTUSD.bitmex_hopex_下跌差价.length, i => this.dataExt.XBTUSD.bitmex_hopex_下跌差价[i])) as any
@@ -500,6 +504,14 @@ export class RealDataBase {
 
         const bitmex_hopex_上涨相对差价macd = 指标.macd(bitmex_hopex_上涨相对价差, RealDataBase.单位时间)
         const bitmex_hopex_下跌相对差价macd = 指标.macd(bitmex_hopex_下跌相对价差, RealDataBase.单位时间)
+        //
+
+
+
+
+
+
+
 
         //????????????????
         const 累计成交量阈值 = 指标.lazyMapCache(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 65 * 10000 * 上涨.价差[i] + 300 * 10000 : 60 * 10000 * 下跌.价差[i] + 300 * 10000)
