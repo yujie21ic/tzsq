@@ -341,7 +341,7 @@ export class RealDataBase {
 
 
 
-
+        //起点  结束 点  要专门 封装起来！！！！！！！！！！！
         //________________________________________________FFFFFFFFFFFFFFFFFFFFFFF________________________________________________
         const 价格差_除以时间 = 指标.lazyMapCache2({ 起点index: NaN, 起点Type: 'none' as '上涨' | '下跌' }, (arr: number[], ext) => {
             const length = Math.min(价格_波动率30.length, 上涨_下跌.length)
