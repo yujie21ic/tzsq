@@ -355,6 +355,18 @@ export class RealDataBase {
                 }
             )
 
+            const 走平了_y秒 = 指标.lazyMapCache(
+                () => Math.min(动态时间_x_秒.length),
+                i => {
+                    for (let k = i; k > i - 动态时间_y_秒[i] * 2; k--) {
+                        if (价格[k] - x_秒内极值点价格[k] <= 0) {
+                            return false
+                        }
+                    }
+                    return true
+                }
+            )
+
             return {
                 累计成交量,
                 价差,
@@ -363,6 +375,7 @@ export class RealDataBase {
                 动态时间_x_秒,
                 动态时间_y_秒,
                 x_秒内极值点价格,
+                走平了_y秒,
             }
         }
 
