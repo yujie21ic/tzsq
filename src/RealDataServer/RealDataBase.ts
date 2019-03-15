@@ -328,22 +328,22 @@ export class RealDataBase {
             )
 
 
-            const 动态时间_x_秒 = 指标.lazyMapCache(
+            const 动态时间_x秒 = 指标.lazyMapCache(
                 () => Math.min(价差.length),
                 i => to范围({ min: 10, max: 30, value: 价差[i] / 2 }),
             )
 
-            const 动态时间_y_秒 = 指标.lazyMapCache(
+            const 动态时间_y秒 = 指标.lazyMapCache(
                 () => Math.min(价差.length),
                 i => to范围({ min: 4, max: 20, value: 价差[i] / 12 }),
             )
 
-            const x_秒内极值点价格 = 指标.lazyMapCache(
-                () => Math.min(动态时间_x_秒.length),
+            const x秒内极值点价格 = 指标.lazyMapCache(
+                () => Math.min(动态时间_x秒.length),
                 i => {
 
                     //1秒2根
-                    const x根 = 动态时间_x_秒[i] * 2
+                    const x根 = 动态时间_x秒[i] * 2
 
                     let 极值点 = 价格[i]
 
@@ -355,15 +355,21 @@ export class RealDataBase {
                 }
             )
 
-            const 走平了_y秒 = 指标.lazyMapCache(
-                () => Math.min(动态时间_x_秒.length),
+
+            //y秒
+            const 价差走平 = 指标.lazyMapCache(
+                () => Math.min(动态时间_x秒.length),
                 i => {
 
                     //1秒2根
-                    const y根 = 动态时间_y_秒[i] * 2
+                    const y根 = 动态时间_y秒[i] * 2
 
                     for (let k = i; k > i - y根; k--) {
-                        if (价格[k] - x_秒内极值点价格[k] <= 0) {
+                        if (type === '上涨' && 价格[k] - x秒内极值点价格[k] >= 0) {
+                            return false
+                        }
+
+                        if (type === '下跌' && 价格[k] - x秒内极值点价格[k] <= 0) {
                             return false
                         }
                     }
@@ -371,15 +377,16 @@ export class RealDataBase {
                 }
             )
 
+
             return {
                 累计成交量,
                 价差,
                 动力,
                 动力波动率: __波动率(动力),
-                动态时间_x_秒,
-                动态时间_y_秒,
-                x_秒内极值点价格,
-                走平了_y秒,
+                动态时间_x秒,
+                动态时间_y秒,
+                x秒内极值点价格,
+                价差走平,
             }
         }
 
