@@ -896,13 +896,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
     价格速度: (d, d2) => ({
-        heightList: [0.4, 0.6],
+        heightList: [0.6, 0.4],
         items: [
             [
                 {
                     numberColor: BTC颜色,
                     layerList: [
                         layer(LineLayer, { data: d2.XBTUSD.期货.价格, color: BTC颜色 }),
+                        layer(LineLayer, { data: d.期货.动态价格_均线, color: ETH颜色 }),
                         layer(TextLayer, {
                             text:
                                 `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -917,9 +918,15 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ],
             [
                
-                 {numberColor: BTC颜色,
+                //  {numberColor: BTC颜色,
+                //     layerList: [
+                //         layer(LineLayer, { data: d.期货.价格差_除以时间, color: BTC颜色 }),
+                //         layer(TextLayer, { text: '价格速度      ', color: 0xffff00 })
+                //     ]
+                // },
+                {numberColor: BTC颜色,
                     layerList: [
-                        layer(LineLayer, { data: d.期货.价格差_除以时间, color: BTC颜色 }),
+                        layer(LineLayer, { data: d.期货.动态价格_均线, color: BTC颜色 }),
                         layer(TextLayer, { text: '价格速度      ', color: 0xffff00 })
                     ]
                 },

@@ -206,7 +206,7 @@ export class RealDataBase {
         orderBook: BaseType.OrderBook[]
     }, 盘口算价格: boolean) {
 
-
+        盘口算价格 = false
 
         //0阶
         const 收盘价 = 指标.lazyMapCache(() => data.length, i => data[i].close)
@@ -442,7 +442,7 @@ export class RealDataBase {
             () => Math.min(价差走平多少根.length, 上涨_价差.length, 下跌_价差.length),
             i => 价差走平多少根[i] >= to范围({ min: 4, max: 20, value: ((上涨_下跌[i] === '上涨' ? 上涨_价差 : 下跌_价差)[i] / 6) }) * 2,
         )
-
+        const 动态价格_均线 = 指标.均线(价格, 10, RealDataBase.单位时间)
 
         const 上涨_累计成交量 = 累计成交量('上涨')
         const 上涨_价差 = 价差('上涨')
@@ -663,6 +663,7 @@ export class RealDataBase {
 
 
         return {
+            动态价格_均线,
             实时与标准成交量之差macd,
             实时与标准成交量之差,
             价格速度macd,
