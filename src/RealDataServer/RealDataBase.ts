@@ -343,7 +343,7 @@ export class RealDataBase {
 
             const 动态时间_y秒 = 指标.lazyMapCache(
                 () => Math.min(价差.length),
-                i => to范围({ min: 5, max: 20, value: 价差[i] / 12 }),
+                i => to范围({ min: 3, max: 20, value: 价差[i] / 12 }),
             )
 
             const 动态时间_y秒大 = 指标.lazyMapCache(
@@ -379,11 +379,11 @@ export class RealDataBase {
                     if (isNaN(y根)) return false
                     const 极值 = x秒内极值点价格[Math.max(0, i - y根 + 1)]
                     for (let k = i; k > Math.max(-1, i - y根); k--) {
-                        if (type === '上涨' && 价格[k] > 极值) {//继续创新高
+                        if (type === '上涨' && 价格[k] > (极值+(价差[i]>50?2:0))) {//继续创新高
                             return false
                         }
 
-                        if (type === '下跌' && 价格[k] < 极值) {//继续创新低
+                        if (type === '下跌' && 价格[k] < (极值-(价差[i]>50?2:0))) {//继续创新低
                             return false
                         }
                     }
@@ -431,11 +431,11 @@ export class RealDataBase {
                     if (isNaN(y根)) return false
                     const 极值 = x秒内极值点价格[Math.max(0, i - y根 + 1)]
                     for (let k = i; k > Math.max(-1, i - y根); k--) {
-                        if (type === '上涨' && 价格[k] > 极值) {//继续创新高
+                        if (type === '上涨' && 价格[k] > (极值+(价差[i]>50?2:0))) {//继续创新高
                             return false
                         }
 
-                        if (type === '下跌' && 价格[k] < 极值) {//继续创新低
+                        if (type === '下跌' && 价格[k] < (极值-(价差[i]>50?2:0))) {//继续创新低
                             return false
                         }
                     }
@@ -673,7 +673,7 @@ export class RealDataBase {
 
 
         //????????????????
-        const 累计成交量阈值 = 指标.lazyMapCache(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 65 * 10000 * 上涨.价差[i] + 300 * 10000 : 62 * 10000 * 下跌.价差[i] + 300 * 10000)
+        const 累计成交量阈值 = 指标.lazyMapCache(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 75 * 10000 * 上涨.价差[i] + 300 * 10000 : 62 * 10000 * 下跌.价差[i] + 300 * 10000)
         const 实时成交量 = 指标.lazyMapCache(() => Math.min(上涨.累计成交量.length, 下跌.累计成交量.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 上涨.累计成交量[i] : 下跌.累计成交量[i])
         const 实时与标准成交量之差 = 指标.lazyMapCache(() => Math.min(累计成交量阈值.length, 实时成交量.length), i => (实时成交量[i] - 累计成交量阈值[i]))
         const 实时与标准成交量之差macd = 指标.macd(实时与标准成交量之差, RealDataBase.单位时间)
@@ -745,7 +745,8 @@ export class RealDataBase {
                     // const 震荡指数小于2 =震荡指数[i] < 2
                     // const 震荡指数小于1点1 = 震荡指数[i] < 1.1
                     // const 震荡指数_macd判断 = 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i]
-                    const 震荡 = (震荡指数[i] < 2 && (震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i]))
+                    const 震荡指数_最高30 = type === '摸顶' ?上涨.震荡指数_最高30[i]:下跌.震荡指数_最高30[i]
+                    const 震荡 = 震荡指数_最高30>1.1&&(震荡指数[i] < 2 && (震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i]))
 
                     const 价差走平 = type === '摸顶' ? 上涨.价差走平[i] : 下跌.价差走平[i]
                     const 价差走平大 = type === '摸顶' ? 上涨.价差走平大[i] : 下跌.价差走平大[i]
@@ -798,10 +799,10 @@ export class RealDataBase {
                         { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 200 * 10000 },
                         { name: '折返程度', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
                         { name: '价格速度', value: 价格速度 },
-                        { name: '价差 >=8', value: 价差[i] >= 8 },
+                        { name: '价差 >=8', value: 价差[i] >= 6 },
                         { name: 'is趋势', value: bs.is趋势[i] },
                         //{ name: '波动率最大限制', value: 价格_波动率60[i] < 500 },
-                        { name: '波动率最大限制', value: 价格_波动率30[i] < 200 },
+                        { name: '波动率最大限制', value: 价格_波动率30[i] < 150 },
                     ]
                 }
             )
