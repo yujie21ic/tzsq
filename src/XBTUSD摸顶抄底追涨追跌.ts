@@ -188,6 +188,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             this.最后一次开仓折返率 = NaN
             this.摸顶抄底超时秒 = NaN
             this.第2次超时 = false
+            this.已经平了一半了 = false
             return this.自动开仓(self)
         } else {
             return this.自动止盈(self)
@@ -304,6 +305,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
     private 最后一次开仓折返率 = NaN
     private 摸顶抄底超时秒 = NaN
     private 第2次超时 = false
+    private 已经平了一半了 = false
 
     private async 自动止盈(self: PositionAndOrder) {
 
@@ -322,6 +324,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             this.最后一次开仓折返率 = lastNumber(self.realData.dataExt[symbol].期货.折返率)
             this.摸顶抄底超时秒 = to范围({ min: 15, max: 30, value: self.realData.get波动率(symbol) / 7 + 15 })
             this.第2次超时 = false
+            this.已经平了一半了 = false
         }
 
         if (活动委托.length <= 1) {
@@ -339,7 +342,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             //如果超时了 
             if (lastNumber(self.realData.dataExt[symbol].期货.时间) - this.最后一次开仓时间 >= this.摸顶抄底超时秒 * 1000 && this.第2次超时 === false) {
                 this.第2次超时 = true
-                if (lastNumber(self.realData.dataExt[symbol].期货.震荡指数_macd.DIF)<lastNumber(self.realData.dataExt[symbol].期货.震荡指数_macd.DEM)) { //dif>dem 
+                if (lastNumber(self.realData.dataExt[symbol].期货.震荡指数_macd.DIF) < lastNumber(self.realData.dataExt[symbol].期货.震荡指数_macd.DEM)) { //dif>dem 
                     this.摸顶抄底超时秒 = 15 * 1000
                 }
             }
@@ -399,30 +402,33 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             }
 
 
-            //
-            if (this.最后一次信号 === '摸顶' && self.realData.is摸顶_下跌平仓(symbol) && 活动委托.length === 0) {
-                return await self.maker({
-                    symbol,
-                    side: 平仓side,
-                    size: Math.round(this.最大仓位abs / 2),//一半
-                    price: toBuySellPriceFunc(平仓side, get位置1价格),
-                    reduceOnly: true,
-                    text: this.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 上涨做空下跌平仓一半',
-                }, self.realData.get信号XXXmsg(symbol))
+            //平一半
+            if (this.已经平了一半了 === false) {
+                if (this.最后一次信号 === '摸顶' && self.realData.is摸顶_下跌平仓(symbol) && 活动委托.length === 0) {
+                    this.已经平了一半了 = true
+                    return await self.maker({
+                        symbol,
+                        side: 平仓side,
+                        size: Math.round(this.最大仓位abs / 2),//一半
+                        price: toBuySellPriceFunc(平仓side, get位置1价格),
+                        reduceOnly: true,
+                        text: this.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 上涨做空下跌平仓一半',
+                    }, self.realData.get信号XXXmsg(symbol))
+                }
+
+
+                if (this.最后一次信号 === '抄底' && self.realData.is抄底_上涨平仓(symbol) && 活动委托.length === 0) {
+                    this.已经平了一半了 = true
+                    return await self.maker({
+                        symbol,
+                        side: 平仓side,
+                        size: Math.round(this.最大仓位abs / 2),//一半
+                        price: toBuySellPriceFunc(平仓side, get位置1价格),
+                        reduceOnly: true,
+                        text: this.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 下跌抄底上涨平仓一半',
+                    }, self.realData.get信号XXXmsg(symbol))
+                }
             }
-
-
-            if (this.最后一次信号 === '抄底' && self.realData.is抄底_上涨平仓(symbol) && 活动委托.length === 0) {
-                return await self.maker({
-                    symbol,
-                    side: 平仓side,
-                    size: Math.round(this.最大仓位abs / 2),//一半
-                    price: toBuySellPriceFunc(平仓side, get位置1价格),
-                    reduceOnly: true,
-                    text: this.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 下跌抄底上涨平仓一半',
-                }, self.realData.get信号XXXmsg(symbol))
-            }
-
 
 
             //触发了反向开仓信号 
@@ -433,7 +439,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 return await self.maker({
                     symbol,
                     side: 平仓side,
-                    size: Math.round(this.最大仓位abs / 2),//一半
+                    size: Math.abs(仓位数量),
                     price: toBuySellPriceFunc(平仓side, get位置1价格),
                     reduceOnly: true,
                     text: this.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 平一半',
