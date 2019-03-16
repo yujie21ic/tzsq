@@ -371,11 +371,11 @@ export class RealDataBase {
                     const y根 = 动态时间_y秒[i] * 2
 
                     for (let k = i; k > Math.max(-1, i - y根); k--) {
-                        if (type === '上涨' && 价格[k] - x秒内极值点价格[k] >= 0) {//继续创新高
+                        if (type === '上涨' && 价格[k] - x秒内极值点价格[k] > 0) {//继续创新高
                             return false
                         }
 
-                        if (type === '下跌' && 价格[k] - x秒内极值点价格[k] <= 0) {//继续创新低
+                        if (type === '下跌' && 价格[k] - x秒内极值点价格[k] < 0) {//继续创新低
                             return false
                         }
                     }
@@ -390,11 +390,11 @@ export class RealDataBase {
                     const y根 = 4 * 2
 
                     for (let k = i; k > Math.max(-1, i - y根); k--) {
-                        if (type === '上涨' && 价格[k] - x秒内极值点价格[k] >= 0) {//继续创新高
+                        if (type === '上涨' && 价格[k] - x秒内极值点价格[k] > 0) {//继续创新高
                             return false
                         }
 
-                        if (type === '下跌' && 价格[k] - x秒内极值点价格[k] <= 0) {//继续创新低
+                        if (type === '下跌' && 价格[k] - x秒内极值点价格[k] < 0) {//继续创新低
                             return false
                         }
                     }
