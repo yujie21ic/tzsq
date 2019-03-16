@@ -1,6 +1,6 @@
 import { JSONRPCServer } from '../lib/C/JSONRPC'
 import { funcList } from './funcList'
-import { BitmexPositionAndOrder } from '../统一接口/PositionAndOrder/BitmexPositionAndOrder'
+import { BitmexPositionAndOrder } from '../lib/____API____/PositionAndOrder/BitmexPositionAndOrder'
 import * as WebSocket from 'ws'
 import { config } from '../config'
 import { typeObjectParse } from '../lib/F/typeObjectParse'
@@ -8,8 +8,8 @@ import { safeJSONParse } from '../lib/F/safeJSONParse'
 import { kvs } from '../lib/F/kvs'
 import { to范围 } from '../lib/F/to范围'
 import { toBuySellPriceFunc } from '../lib/C/toBuySellPriceFunc'
-import { XBTUSD摸顶抄底追涨追跌 } from '../统一接口/task/XBTUSD摸顶抄底追涨追跌'
-import { PositionAndOrder } from '../统一接口/PositionAndOrder/PositionAndOrder'
+import { XBTUSD摸顶抄底追涨追跌 } from '../XBTUSD摸顶抄底追涨追跌'
+import { PositionAndOrder } from '../lib/____API____/PositionAndOrder/PositionAndOrder'
 
 
 

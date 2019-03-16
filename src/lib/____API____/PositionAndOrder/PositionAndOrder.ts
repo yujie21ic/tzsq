@@ -1,6 +1,6 @@
-import { BaseType } from '../../lib/BaseType'
-import { JSONSync } from '../../lib/C/JSONSync'
-import { RealDataBase } from '../../RealDataServer/RealDataBase'
+import { BaseType } from '../../BaseType'
+import { JSONSync } from '../../C/JSONSync'
+import { RealDataBase } from '../../../RealDataServer/RealDataBase'
 
 export interface PositionAndOrder {
 

@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import * as R from 'ramda'
-import { JSONRequest } from '../../lib/C/JSONRequest'
-import { config } from '../../config'
+import { JSONRequest } from '../../C/JSONRequest'
+import { config } from '../../../config'
 
 const BR = '\n'
 const BR2 = BR + BR

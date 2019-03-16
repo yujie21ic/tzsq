@@ -1,9 +1,9 @@
 import * as dgram from 'dgram'
-import { safeJSONParse } from '../../lib/F/safeJSONParse'
-import { fix浮点 } from '../../lib/F/fix浮点'
-import { BaseType } from '../../lib/BaseType'
+import { safeJSONParse } from '../../F/safeJSONParse'
+import { fix浮点 } from '../../F/fix浮点'
+import { BaseType } from '../../BaseType'
 import { TradeAndOrderBook } from './TradeAndOrderBook'
-import { get成交性质 } from '../../lib/F/get成交性质'
+import { get成交性质 } from '../../F/get成交性质'
 
 export class CTP extends TradeAndOrderBook<string>{
 

@@ -1,7 +1,7 @@
-import { WebSocketClient } from '../../lib/C/WebSocketClient'
+import { WebSocketClient } from '../../C/WebSocketClient'
 import { BitMEXMessage } from './BitMEXMessage'
-import { config } from '../../config'
-import { BaseType } from '../../lib/BaseType'
+import { config } from '../../../config'
+import { BaseType } from '../../BaseType'
 import { Subject } from 'rxjs'
 
 
