@@ -259,7 +259,7 @@ export class RealDataBase {
         const 价格_波动率60 = 指标.波动率(价格, 60, RealDataBase.单位时间)
         const 价格_波动率15 = 指标.波动率(价格, 15, RealDataBase.单位时间)
         const 价格_波动率300 = 指标.波动率(价格, 300, RealDataBase.单位时间)
-        const 折返率 = 指标.lazyMapCache(() => 价格_波动率30.length, i => 价格_波动率30[i] / 10 + 1)
+        const 折返率 = 指标.lazyMapCache(() => 价格_波动率30.length, i => to范围({ min: 3, max: 15, value: 价格_波动率30[i] / 10 }))
 
         //净成交量abs
         const 净成交量abs = 指标.lazyMapCache(() => Math.min(买.成交量.length, 卖.成交量.length), i => 买.成交量[i] - 卖.成交量[i])
@@ -343,7 +343,7 @@ export class RealDataBase {
 
             const 动态时间_y秒 = 指标.lazyMapCache(
                 () => Math.min(价差.length),
-                i => to范围({ min: 3, max: 20, value: 价差[i] / 12 }),
+                i => to范围({ min: 4, max: 20, value: 价差[i] / 12 }),
             )
 
             const 动态时间_y秒大 = 指标.lazyMapCache(

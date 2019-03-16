@@ -442,7 +442,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                     size: Math.abs(仓位数量),
                     price: toBuySellPriceFunc(平仓side, get位置1价格),
                     reduceOnly: true,
-                    text: this.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 平一半',
+                    text: this.最后一次信号 + '平仓' + ' 触发了反向开仓信号  ' + '自动止盈波段step 平一半',
                 }, 信号side + ' 信号msg:' + 信号msg)
 
             }
