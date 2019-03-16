@@ -332,10 +332,7 @@ export class RealDataBase {
                 () => Math.min(价差.length),
                 i => to范围({ min: 15, max: 20, value: 价差[i] / 10 }),
             )
-            const 动态时间_4秒 = 指标.lazyMapCache(
-                () => Math.min(价差.length),
-                i => to范围({ min: 4, max: 4, value: 价差[i] / 100 }),
-            )
+
 
             const 动态时间_y秒 = 指标.lazyMapCache(
                 () => Math.min(价差.length),
@@ -346,23 +343,23 @@ export class RealDataBase {
                 i => to范围({ min: 4, max: 25, value: 价差[i] / 6 }),
             )
 
-            // const x秒内极值点价格 = 指标.lazyMapCache(
-            //     () => Math.min(动态时间_x秒.length, 价格.length),
-            //     i => {
+            const x秒内极值点价格 = 指标.lazyMapCache(
+                () => Math.min(动态时间_x秒.length, 价格.length),
+                i => {
 
-            //         //1秒2根
-            //         const x根 = 动态时间_x秒[i] * 2
+                    //1秒2根
+                    const x根 = 动态时间_x秒[i] * 2
 
-            //         let 极值点 = 价格[i]
+                    let 极值点 = 价格[i]
 
-            //         for (let k = i; k > i - x根; k--) {
-            //             极值点 = (type === '上涨' ? Math.max : Math.min)(价格[k])
-            //         }
+                    for (let k = i; k > i - x根; k--) {
+                        极值点 = (type === '上涨' ? Math.max : Math.min)(价格[k])
+                    }
 
-            //         return 极值点
-            //     }
-            // )
-            const x秒内极值点价格 = type === '上涨' ?指标.最高(价格, lastNumber(动态时间_x秒), RealDataBase.单位时间):指标.最低(价格, lastNumber(动态时间_x秒), RealDataBase.单位时间)
+                    return 极值点
+                }
+            )
+            // const x秒内极值点价格 = type === '上涨' ?指标.最高(价格, lastNumber(动态时间_x秒), RealDataBase.单位时间):指标.最低(价格, lastNumber(动态时间_x秒), RealDataBase.单位时间)
 
 
             //y秒
@@ -374,11 +371,11 @@ export class RealDataBase {
                     const y根 = 动态时间_y秒[i] * 2
 
                     for (let k = i; k > i - y根; k--) {
-                        if (type === '上涨' && 价格[k] - x秒内极值点价格[k] >=0) {
+                        if (type === '上涨' && 价格[k] - x秒内极值点价格[k] >= 0) {
                             return false
                         }
 
-                        if (type === '下跌' && 价格[k] - x秒内极值点价格[k] <=0) {
+                        if (type === '下跌' && 价格[k] - x秒内极值点价格[k] <= 0) {
                             return false
                         }
                     }
@@ -386,18 +383,18 @@ export class RealDataBase {
                 }
             )
             const 价差走平4s = 指标.lazyMapCache(
-                () => Math.min(动态时间_4秒.length, 价格.length, x秒内极值点价格.length),
+                () => Math.min(价格.length, x秒内极值点价格.length),
                 i => {
 
                     //1秒2根
-                    const y根 = 动态时间_4秒[i]* 2
+                    const y根 = 4 * 2
 
                     for (let k = i; k > i - y根; k--) {
-                        if (type === '上涨' && 价格[k] - 价格_最高15[i]>0) {
+                        if (type === '上涨' && 价格[k] - 价格_最高15[i] > 0) {
                             return false
                         }
 
-                        if (type === '下跌' && 价格[k] - 价格_最低15[i] <0) {
+                        if (type === '下跌' && 价格[k] - 价格_最低15[i] < 0) {
                             return false
                         }
                     }
@@ -405,20 +402,20 @@ export class RealDataBase {
                 }
             )
             const 当前价格与极值关系 = 指标.lazyMapCache(
-                () => Math.min(价格.length, 价格_最高15.length,价格_最低15.length),
+                () => Math.min(价格.length, 价格_最高15.length, 价格_最低15.length),
                 i => {
-                        // if (type === '上涨' && 价格[i] - 价格_最高15[i]<=0) {
-                        //     return true
-                        // }else{
-                            // if (type === '下跌' && ) {
-                            //     return true
-                            // }
-                            return 价格[i] - 价格_最低15[i] >=0
-                        //}
+                    // if (type === '上涨' && 价格[i] - 价格_最高15[i]<=0) {
+                    //     return true
+                    // }else{
+                    // if (type === '下跌' && ) {
+                    //     return true
+                    // }
+                    return 价格[i] - 价格_最低15[i] >= 0
+                    //}
                     //return false
                 }
             )
-            
+
             const 价差走平大 = 指标.lazyMapCache(
                 () => Math.min(动态时间_大y秒.length, 价格.length, x秒内极值点价格.length),
                 i => {
@@ -709,9 +706,9 @@ export class RealDataBase {
                     // const 震荡指数_macd判断 = 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i]
                     const 震荡 = (震荡指数[i] < 2 && (震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i]))
 
-                    const 价差走平 = type === '摸顶' ?上涨.价差走平[i]:下跌.价差走平[i]
-                    const 价差走平大 = type === '摸顶' ?上涨.价差走平大[i]:下跌.价差走平大[i]
-                   
+                    const 价差走平 = type === '摸顶' ? 上涨.价差走平[i] : 下跌.价差走平[i]
+                    const 价差走平大 = type === '摸顶' ? 上涨.价差走平大[i] : 下跌.价差走平大[i]
+
                     let 大价差走平x秒 = 价差[i] > 价差大巨大分界 && 价差走平大
 
                     const 盘口XXX = bs.净盘口[i] < 0 || (价差[i] > 价差中大分界 && 大价差走平x秒)
@@ -753,7 +750,7 @@ export class RealDataBase {
                         { name: '价差走平', value: 价差走平 },
                         { name: '大价差走平x秒', value: 价差走平大 },
                         { name: '价差走平4s', value: 下跌.价差走平4s[i] },
-                        { name: '当前价格与极值关系', value: 下跌.当前价格与极值关系[i]},
+                        { name: '当前价格与极值关系', value: 下跌.当前价格与极值关系[i] },
 
                         // //过滤条件
                         { name: '净累计成交量[i]<y', value: 净累计成交量[i] < 累计成交量阈值[i] || 大价差走平x秒 },
