@@ -353,7 +353,7 @@ export class RealDataBase {
                     let 极值点 = 价格[i]
 
                     for (let k = i; k > Math.max(-1, i - x根); k--) {
-                        极值点 = (type === '上涨' ? Math.max : Math.min)(价格[k])
+                        极值点 = (type === '上涨' ? Math.max : Math.min)(极值点, 价格[k])
                     }
 
                     return 极值点
@@ -735,7 +735,6 @@ export class RealDataBase {
                     // }else{
                     //     标准成交量差值衰竭 = (实时与标准成交量之差macd.DIF[i]<实时与标准成交量之差macd.DEM[i])||(实时与标准成交量之差[i]<-100*10000)
                     // }
-
 
 
                     return [
