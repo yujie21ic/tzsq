@@ -352,7 +352,7 @@ export class RealDataBase {
 
                     let 极值点 = 价格[i]
 
-                    for (let k = i; k > i - x根; k--) {
+                    for (let k = i; k > Math.max(-1, i - x根); k--) {
                         极值点 = (type === '上涨' ? Math.max : Math.min)(价格[k])
                     }
 
@@ -370,12 +370,12 @@ export class RealDataBase {
                     //1秒2根
                     const y根 = 动态时间_y秒[i] * 2
 
-                    for (let k = i; k > i - y根; k--) {
-                        if (type === '上涨' && 价格[k] - x秒内极值点价格[k] >= 0) {
+                    for (let k = i; k > Math.max(-1, i - y根); k--) {
+                        if (type === '上涨' && 价格[k] - x秒内极值点价格[k] >= 0) {//继续创新高
                             return false
                         }
 
-                        if (type === '下跌' && 价格[k] - x秒内极值点价格[k] <= 0) {
+                        if (type === '下跌' && 价格[k] - x秒内极值点价格[k] <= 0) {//继续创新低
                             return false
                         }
                     }
@@ -389,12 +389,12 @@ export class RealDataBase {
                     //1秒2根
                     const y根 = 4 * 2
 
-                    for (let k = i; k > i - y根; k--) {
-                        if (type === '上涨' && 价格[k] - 价格_最高15[i] > 0) {
+                    for (let k = i; k > Math.max(-1, i - y根); k--) {
+                        if (type === '上涨' && 价格[k] - x秒内极值点价格[k] >= 0) {//继续创新高
                             return false
                         }
 
-                        if (type === '下跌' && 价格[k] - 价格_最低15[i] < 0) {
+                        if (type === '下跌' && 价格[k] - x秒内极值点价格[k] <= 0) {//继续创新低
                             return false
                         }
                     }
