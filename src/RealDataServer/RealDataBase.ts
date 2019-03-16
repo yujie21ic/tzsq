@@ -443,6 +443,34 @@ export class RealDataBase {
                 }
             )
 
+
+
+            const 震荡指数 = 指标.lazyMapCache(
+                () => Math.min(价差.length, 价格_波动率15.length),
+                i => 价差[i] > 2 ? to范围({ min: 0.01, max: 10, value: 价格_波动率15[i] / 价差[i] }) : NaN
+            )
+
+
+            const 震荡指数_最高30 = 指标.lazyMapCache(
+                () => Math.min(价差.length, 价格_波动率15.length),
+                i => {
+                    let 最高 = 震荡指数[i]
+
+                    for (let k = i; k > Math.max(-1, k - 30 * 2); k--) {
+                        const v = 震荡指数[k]
+                        if (isNaN(v)) {
+                            break
+                        } else {
+                            最高 = Math.max(最高, v)
+                        }
+                    }
+
+                    return 最高
+                }
+            )
+
+
+
             return {
                 累计成交量,
                 价差,
@@ -455,6 +483,9 @@ export class RealDataBase {
                 价差走平大,
                 价差走平4s,
                 // 当前价格与极值关系,
+
+                震荡指数,
+                震荡指数_最高30,
             }
         }
 
