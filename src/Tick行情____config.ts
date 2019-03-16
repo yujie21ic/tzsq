@@ -939,7 +939,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
     价格速度1: (d, d2) => ({
-        heightList: [0.6, 0.4],
+        heightList: [0.4,0.2, 0.4],
         items: [
             [
                 {
@@ -958,6 +958,16 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     ]
                 },
             ],
+            {
+                layerList: [
+                    layer(信号Layer, { data: d.期货.信号_抄底, color: 买颜色 }),
+                    layer(TextLayer, {
+                        text:
+                            `下跌抄底                    `,
+                        color: ETH颜色,
+                    })
+                ]
+            },
             [
                 {   numberColor: 波动率颜色,
                     layerList: [

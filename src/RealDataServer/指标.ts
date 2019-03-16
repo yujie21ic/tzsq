@@ -114,7 +114,7 @@ export namespace 指标 {
 
     export const 最高 = 指标(({ start, end, count, arr }) => {
         let ret = arr[start]
-        for (let i = start + 1; i <= end-8; i++) {
+        for (let i = start + 1; i <= end; i++) {
             ret = Math.max(ret, arr[i])
         }
         return ret
@@ -123,7 +123,7 @@ export namespace 指标 {
 
     export const 最低 = 指标(({ start, end, count, arr }) => {
         let ret = arr[start]
-        for (let i = start + 1; i <= end-8; i++) {
+        for (let i = start + 1; i <= end; i++) {
             ret = Math.min(ret, arr[i])
         }
         return ret
