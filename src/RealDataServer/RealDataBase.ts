@@ -212,7 +212,14 @@ export class RealDataBase {
             指标.lazyMapCache(() => orderBook.length, i =>
                 (orderBook[i].buy && orderBook[i].buy.length > 0 && orderBook[i].sell && orderBook[i].sell.length > 0) ?
                     ((orderBook[i].buy[0].price + orderBook[i].sell[0].price) / 2) : NaN) :
-            指标.lazyMapCache(() => data.length, i => data[i].close)
+            指标.lazyMapCache(() => data.length, i => {
+                const x = data[i]
+                if (x === undefined) {
+                    console.log('xxx', data.length, i)
+                    if (isNaN(i)) debugger
+                }
+                return x.close
+            })
 
 
         const KLine = 指标.lazyMapCache(() => data.length, i => ({
@@ -333,11 +340,11 @@ export class RealDataBase {
                 i => to范围({ min: 15, max: 20, value: 价差[i] / 10 }),
             )
 
-
             const 动态时间_y秒 = 指标.lazyMapCache(
                 () => Math.min(价差.length),
                 i => to范围({ min: 4, max: 20, value: 价差[i] / 12 }),
             )
+
             const 动态时间_大y秒 = 指标.lazyMapCache(
                 () => Math.min(价差.length),
                 i => to范围({ min: 4, max: 25, value: 价差[i] / 6 }),
@@ -366,16 +373,16 @@ export class RealDataBase {
             const 价差走平 = 指标.lazyMapCache(
                 () => Math.min(动态时间_y秒.length, 价格.length, x秒内极值点价格.length),
                 i => {
-
                     //1秒2根
                     const y根 = 动态时间_y秒[i] * 2
-
+                    if (isNaN(y根)) return false
+                    const 极值 = x秒内极值点价格[Math.max(0, i - y根 + 1)]
                     for (let k = i; k > Math.max(-1, i - y根); k--) {
-                        if (type === '上涨' && 价格[k] - x秒内极值点价格[k] > 0) {//继续创新高
+                        if (type === '上涨' && 价格[k] > 极值) {//继续创新高
                             return false
                         }
 
-                        if (type === '下跌' && 价格[k] - x秒内极值点价格[k] < 0) {//继续创新低
+                        if (type === '下跌' && 价格[k] < 极值) {//继续创新低
                             return false
                         }
                     }
@@ -385,16 +392,16 @@ export class RealDataBase {
             const 价差走平4s = 指标.lazyMapCache(
                 () => Math.min(价格.length, x秒内极值点价格.length),
                 i => {
-
                     //1秒2根
                     const y根 = 4 * 2
-
+                    if (isNaN(y根)) return false
+                    const 极值 = x秒内极值点价格[Math.max(0, i - y根 + 1)]
                     for (let k = i; k > Math.max(-1, i - y根); k--) {
-                        if (type === '上涨' && 价格[k] - x秒内极值点价格[k] > 0) {//继续创新高
+                        if (type === '上涨' && 价格[k] > 极值) {//继续创新高
                             return false
                         }
 
-                        if (type === '下跌' && 价格[k] - x秒内极值点价格[k] < 0) {//继续创新低
+                        if (type === '下跌' && 价格[k] < 极值) {//继续创新低
                             return false
                         }
                     }
