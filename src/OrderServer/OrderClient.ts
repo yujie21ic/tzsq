@@ -3,7 +3,7 @@ import { deepMapNullToNaN } from '../lib/F/deepMapNullToNaN'
 import { JSONRPCClient } from '../lib/C/JSONRPC'
 import { funcList } from './funcList'
 import { config } from '../config'
-import { createJSONSync } from '../统一接口/PositionAndOrder/BitmexPositionAndOrder'
+import { createJSONSync } from '../lib/____API____/PositionAndOrder/BitmexPositionAndOrder'
 
 export class OrderClient {
 

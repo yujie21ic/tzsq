@@ -1,8 +1,8 @@
 import { PositionAndOrder, PositionAndOrderTask } from './PositionAndOrder'
-import { DataClient } from '../../RealDataServer/DataClient'
+import { DataClient } from '../../../RealDataServer/DataClient'
 import { createJSONSync } from './BitmexPositionAndOrder'
-import { BaseType } from '../../lib/BaseType'
-import { lastNumber } from '../../lib/F/lastNumber'
+import { BaseType } from '../../BaseType'
+import { lastNumber } from '../../F/lastNumber'
 
 export class 回测PositionAndOrder implements PositionAndOrder {
 

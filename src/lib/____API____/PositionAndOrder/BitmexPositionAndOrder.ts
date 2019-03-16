@@ -1,15 +1,15 @@
-import { BaseType } from '../../lib/BaseType'
+import { BaseType } from '../../BaseType'
 import { BitMEXRESTAPI } from '../BitMEX/BitMEXRESTAPI'
-import { sleep } from '../../lib/C/sleep'
-import { JSONRequestError } from '../../lib/C/JSONRequest'
-import { logToFile } from '../../lib/C/logToFile'
+import { sleep } from '../../C/sleep'
+import { JSONRequestError } from '../../C/JSONRequest'
+import { logToFile } from '../../C/logToFile'
 import { keys } from 'ramda'
-import { JSONSync } from '../../lib/C/JSONSync'
+import { JSONSync } from '../../C/JSONSync'
 import { BitMEXWSAPI } from '../BitMEX/BitMEXWSAPI'
-import { RealData__Server } from '../../RealDataServer/RealData__Server'
-import { toCacheFunc } from '../../lib/C/toCacheFunc'
+import { RealData__Server } from '../../../RealDataServer/RealData__Server'
+import { toCacheFunc } from '../../C/toCacheFunc'
 import { PositionAndOrder, PositionAndOrderTask } from './PositionAndOrder'
-import { lastNumber } from '../../lib/F/lastNumber'
+import { lastNumber } from '../../F/lastNumber'
 
 const symbol = () => ({
     任务开关: {

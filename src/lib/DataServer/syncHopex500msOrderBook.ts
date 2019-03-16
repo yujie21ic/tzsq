@@ -2,7 +2,7 @@ import { Sampling } from '../C/Sampling'
 import { BaseType } from '../BaseType'
 import { DB } from './DB'
 import { timeID } from '../F/timeID'
-import { HopexTradeAndOrderBook } from '../../统一接口/TradeAndOrderBook/HopexTradeAndOrderBook'
+import { HopexTradeAndOrderBook } from '../____API____/TradeAndOrderBook/HopexTradeAndOrderBook'
 
 //重复
 
