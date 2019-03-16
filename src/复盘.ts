@@ -8,10 +8,10 @@ import { dialog } from './lib/UI/dialog'
 import { timeID } from './lib/F/timeID'
 import { theme } from './lib/Chart/theme'
 import { to范围 } from './lib/F/to范围'
-import { showWindowRemote, windowExt } from './windowExt'
-import { BitMEXRESTAPI } from './统一接口/BitMEX/BitMEXRESTAPI'
+import { showWindowRemote, windowExt } from './windowExt' 
 import { config } from './config'
 import { 信号Layer } from './lib/Chart/Layer/信号Layer'
+import { BitMEXRESTAPI } from './lib/____API____/BitMEX/BitMEXRESTAPI'
 
 theme.右边空白 = 0
 
