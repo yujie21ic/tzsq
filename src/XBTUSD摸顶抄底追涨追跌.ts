@@ -334,6 +334,8 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         if (活动委托.length <= 1) {
 
+            if (持仓时间ms < 5 * 1000) return false
+
             const 平仓side = 仓位数量 > 0 ? 'Sell' : 'Buy'
 
             const get位置1价格 = () => self.realData.getOrderPrice({
