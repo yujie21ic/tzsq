@@ -70,24 +70,24 @@ export interface PositionAndOrder {
         price: () => number;
         reduceOnly: boolean;
         text: string;
-    }, logText?: string) => Promise<boolean>
+    }, logText?: string) => boolean | Promise<boolean>
 
     stop: (p: {
         symbol: BaseType.BitmexSymbol;
         side: BaseType.Side;
         price: number;
         text: string;
-    }, logText?: string) => Promise<boolean>
+    }, logText?: string) => boolean | Promise<boolean>
 
     updateStop: (p: {
         orderID: string;
         price: number;
-    }, logText?: string) => Promise<boolean>
+    }, logText?: string) => boolean | Promise<boolean>
 
     updateMaker: (p: {
         orderID: string;
         price: () => number;
-    }, logText?: string) => Promise<boolean>
+    }, logText?: string) => boolean | Promise<boolean>
 
     limit: (p: {
         symbol: BaseType.BitmexSymbol;
@@ -95,32 +95,32 @@ export interface PositionAndOrder {
         size: number;
         price: () => number;
         text: string;
-    }, logText?: string) => Promise<boolean>
+    }, logText?: string) => boolean | Promise<boolean>
 
     taker: (p: {
         symbol: BaseType.BitmexSymbol;
         side: BaseType.Side;
         size: number;
         text: string;
-    }, logText?: string) => Promise<boolean>
+    }, logText?: string) => boolean | Promise<boolean>
 
     close: (p: {
         symbol: BaseType.BitmexSymbol;
         text: string;
-    }, logText?: string) => Promise<boolean>
+    }, logText?: string) => boolean | Promise<boolean>
 
     cancel: (p: {
         orderID: string[];
         text: string;
-    }, logText?: string) => Promise<boolean>
+    }, logText?: string) => boolean | Promise<boolean>
 
-    runTask(task: PositionAndOrderTask): Promise<void>
+    runTask(task: PositionAndOrderTask): void
 
     get浮盈点数(symbol: BaseType.BitmexSymbol): number
 
 }
 
 export interface PositionAndOrderTask {
-    onTick(self: PositionAndOrder): Promise<boolean>
+    onTick(self: PositionAndOrder): boolean | Promise<boolean>
     onFilled(p: { symbol: BaseType.BitmexSymbol, type: '限价' | '限价只减仓' | '止损' | '强平' }): void
 }

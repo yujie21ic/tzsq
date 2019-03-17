@@ -38,7 +38,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
     }
 
-    async 止损step(self: PositionAndOrder) {
+    止损step(self: PositionAndOrder) {
         const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
         const 止损委托 = self.jsonSync.rawData.symbol[symbol].活动委托.filter(v => v.type === '止损')
 
@@ -60,7 +60,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
 
                 this.最后一次止损状态 = '亏损止损'
-                return await self.stop({
+                return self.stop({
                     symbol,
                     side,
                     price: toGridPoint(symbol, 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点, side),
@@ -76,7 +76,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             //没有仓位 或者 止损方向错了
             if (仓位数量 === 0 || (仓位数量 > 0 && 止损委托[0].side !== 'Sell') || (仓位数量 < 0 && 止损委托[0].side !== 'Buy')) {
                 //ws返回有时间  直接给委托列表加一条记录??           
-                return await self.cancel({ orderID: 止损委托.map(v => v.id), text: '止损step 取消止损' })
+                return self.cancel({ orderID: 止损委托.map(v => v.id), text: '止损step 取消止损' })
             }
             else {
                 if (self.jsonSync.rawData.symbol[symbol].任务开关.自动推止损 === false) return false //自动推止损 任务没打开
@@ -97,7 +97,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                     (side === 'Sell' && 新的Price > price)
                 ) {
                     this.最后一次止损状态 = 推 === 0 ? '成本价止损' : '盈利止损'
-                    return await self.updateStop({
+                    return self.updateStop({
                         orderID: id,
                         price: 新的Price,
                     }, this.最后一次止损状态)
@@ -108,7 +108,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         else {
             //多个止损 全部清空
             //ws返回有时间  直接给委托列表加一条记录??       
-            return await self.cancel({ orderID: 止损委托.map(v => v.id), text: '止损step 取消多个止损' })
+            return self.cancel({ orderID: 止损委托.map(v => v.id), text: '止损step 取消多个止损' })
         }
     }
 
@@ -139,7 +139,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
     // 止盈 = false
     // 先写到 jsonSync 里面
 
-    async onTick(self: PositionAndOrder) {
+    onTick(self: PositionAndOrder) {
         const { 仓位数量 } = self.jsonSync.rawData.symbol[symbol]
 
         //委托检测
@@ -164,18 +164,18 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             ) {
                 //return false //<----------------------------------------------
             } else {
-                return await self.cancel({ orderID: 活动委托.map(v => v.id), text: '委托检测step 取消委托' }, 活动委托[0].type)
+                return self.cancel({ orderID: 活动委托.map(v => v.id), text: '委托检测step 取消委托' }, 活动委托[0].type)
             }
         }
         else {
             //多个委托  全部给取消  
-            return await self.cancel({ orderID: 活动委托.map(v => v.id), text: '委托检测step 取消多个委托' }, 活动委托.map(v => v.type).join(','))
+            return self.cancel({ orderID: 活动委托.map(v => v.id), text: '委托检测step 取消多个委托' }, 活动委托.map(v => v.type).join(','))
         }
 
 
 
         //止损
-        const x = await this.止损step(self)
+        const x = this.止损step(self)
         if (x) {
             return true
         }
@@ -201,7 +201,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
     private 最后一次上涨_下跌 = ''
     private 到什么时间不开仓 = 0
 
-    private async 自动开仓(self: PositionAndOrder) {
+    private 自动开仓(self: PositionAndOrder) {
 
         if (self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追涨 === false
             && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓追跌 === false
@@ -257,13 +257,13 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
             if (lastNumber(self.realData.dataExt[symbol].期货.时间) > this.到什么时间不开仓) {
                 return 市价 ?
-                    await self.taker({
+                    self.taker({
                         symbol,
                         side: 开仓side,
                         size: 交易数量 * (this.连续止损2 + 1),
                         text: 信号灯Type,
                     }, '自动开仓step 自动开仓 市价' + self.realData.get信号msg(symbol)) :
-                    await self.maker({ //limit 挂单
+                    self.maker({ //limit 挂单
                         symbol,
                         side: 开仓side,
                         size: 交易数量 * (this.连续止损2 + 1),
@@ -291,7 +291,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 const _15秒取消 = (lastNumber(self.realData.dataExt[symbol].期货.时间) > (timestamp + 15 * 1000))
                 const 出现反向信号时候取消 = (信号灯Type !== 'none' && 开仓side !== side)
                 if (_15秒取消 || 出现反向信号时候取消) {
-                    return await self.cancel({ orderID: [id], text: '自动开仓step 取消开仓' }, '自动开仓step 取消开仓 ' + _15秒取消 ? '_15秒取消' : ('出现反向信号时候取消' + self.realData.get信号msg(symbol)))
+                    return self.cancel({ orderID: [id], text: '自动开仓step 取消开仓' }, '自动开仓step 取消开仓 ' + _15秒取消 ? '_15秒取消' : ('出现反向信号时候取消' + self.realData.get信号msg(symbol)))
                 }
             }
         }
@@ -307,7 +307,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
     private 第2次超时 = false
     private 已经平了一半了 = false
 
-    private async 自动止盈(self: PositionAndOrder) {
+    private 自动止盈(self: PositionAndOrder) {
 
         if (self.jsonSync.rawData.symbol[symbol].任务开关.自动止盈波段 === false) {
             return true
@@ -395,7 +395,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 if (活动委托.length === 1) {
                     if (活动委托[0].type === '限价只减仓' && 活动委托[0].side === 平仓side) {
                         if (活动委托[0].price !== get位置1价格()) {
-                            return await self.updateMaker({
+                            return self.updateMaker({
                                 orderID: 活动委托[0].id,
                                 price: toBuySellPriceFunc(平仓side, get位置1价格),
                             }, this.最后一次信号 + '平仓' + '  ' + 亏损挂单平仓Text + '  重新挂' + 平仓side + '1')
@@ -404,7 +404,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         }
                     }
                 } else {
-                    return await self.maker({
+                    return self.maker({
                         symbol,
                         side: 平仓side,
                         size: this.最大仓位abs,
@@ -420,7 +420,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             if (this.已经平了一半了 === false) {
                 if (this.最后一次信号 === '摸顶' && self.realData.is摸顶_下跌平仓(symbol) && 活动委托.length === 0) {
                     this.已经平了一半了 = true
-                    return await self.maker({
+                    return self.maker({
                         symbol,
                         side: 平仓side,
                         size: Math.round(this.最大仓位abs / 2),//一半
@@ -433,7 +433,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
                 if (this.最后一次信号 === '抄底' && self.realData.is抄底_上涨平仓(symbol) && 活动委托.length === 0) {
                     this.已经平了一半了 = true
-                    return await self.maker({
+                    return self.maker({
                         symbol,
                         side: 平仓side,
                         size: Math.round(this.最大仓位abs / 2),//一半
@@ -450,7 +450,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
             if (信号side === 平仓side && 活动委托.length === 0) {
                 console.log()
-                return await self.maker({
+                return self.maker({
                     symbol,
                     side: 平仓side,
                     size: Math.abs(仓位数量),
