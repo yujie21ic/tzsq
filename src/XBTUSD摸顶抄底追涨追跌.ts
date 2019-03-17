@@ -348,7 +348,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             if (持仓时间ms >= this.摸顶抄底超时秒 * 1000 && this.第2次超时 === false) {
                 this.第2次超时 = true
                 if (!震荡指数衰竭) { //dif>dem 
-                    this.摸顶抄底超时秒 = 15 * 1000
+                    this.摸顶抄底超时秒 = 15
                 }
             }
 
