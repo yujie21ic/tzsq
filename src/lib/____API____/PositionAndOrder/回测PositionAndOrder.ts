@@ -3,7 +3,7 @@ import { DataClient } from '../../../RealDataServer/DataClient'
 import { createJSONSync } from './BitmexPositionAndOrder'
 import { BaseType } from '../../BaseType'
 import { lastNumber } from '../../F/lastNumber'
-import { setWindowTitle } from '../../C/setWindowTitle';
+import { setWindowTitle } from '../../C/setWindowTitle'
 
 export class 回测PositionAndOrder implements PositionAndOrder {
 
