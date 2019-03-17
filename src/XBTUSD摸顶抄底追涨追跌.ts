@@ -327,6 +327,11 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             this.已经平了一半了 = false
         }
 
+
+
+        const 持仓时间ms = lastNumber(self.realData.dataExt[symbol].期货.时间) - this.最后一次开仓时间
+
+
         if (活动委托.length <= 1) {
 
             const 平仓side = 仓位数量 > 0 ? 'Sell' : 'Buy'
@@ -340,7 +345,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
             const 震荡指数衰竭 = lastNumber(self.realData.dataExt[symbol].期货.震荡指数_macd.DIF) < lastNumber(self.realData.dataExt[symbol].期货.震荡指数_macd.DEM)
             //如果超时了 
-            if (lastNumber(self.realData.dataExt[symbol].期货.时间) - this.最后一次开仓时间 >= this.摸顶抄底超时秒 * 1000 && this.第2次超时 === false) {
+            if (持仓时间ms >= this.摸顶抄底超时秒 * 1000 && this.第2次超时 === false) {
                 this.第2次超时 = true
                 if (!震荡指数衰竭) { //dif>dem 
                     this.摸顶抄底超时秒 = 15 * 1000
@@ -354,10 +359,13 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             // console.log("最后一次开仓折返率"+this.最后一次开仓折返率)
             // console.log("--------------------------------------------")
             let 亏损挂单平仓Text = ''
+
+
             if (this.最后一次信号 === '摸顶' || this.最后一次信号 === '抄底') {
+                const 折返 = self.get浮盈点数(symbol) < this.最后一次开仓折返率
                 if (
-                    lastNumber(self.realData.dataExt[symbol].期货.时间) - this.最后一次开仓时间 >= this.摸顶抄底超时秒 * 1000 &&
-                    self.get浮盈点数(symbol) < this.最后一次开仓折返率&&震荡指数衰竭
+                    (折返 && 震荡指数衰竭 === true && 持仓时间ms >= this.摸顶抄底超时秒 * 1000) ||      // 折返函数&&震荡衰竭==true的超时时间是30s
+                    (折返 && 震荡指数衰竭 === false && 持仓时间ms >= this.摸顶抄底超时秒 * 120 * 1000)  // 折返函数&&震荡衰竭==false的超时时间是2分钟
                 ) {
                     亏损挂单平仓Text = '下单' + this.摸顶抄底超时秒 + ' 秒后，折返没有超过下单点的折返函数，并且震荡指数衰竭，挂单全平'
                 }
@@ -368,7 +376,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 if ((平仓side === 'Sell' && 净成交量均线60 < 0) || (平仓side === 'Buy' && 净成交量均线60 > 0)) {
                     亏损挂单平仓Text = '如果净成交量反向，那么立刻挂单平仓'
                 }
-                else if (lastNumber(self.realData.dataExt[symbol].期货.时间) - this.最后一次开仓时间 > 5 * 60 * 1000) {
+                else if (持仓时间ms > 5 * 60 * 1000) {
                     亏损挂单平仓Text = '如果净成交量没有反向，那么最多等待5分钟，然后挂单平仓'
                 } else {
                     //如果遇到极值点，平仓只需要两根信号
