@@ -3,6 +3,7 @@ import { DataClient } from '../../../RealDataServer/DataClient'
 import { createJSONSync } from './BitmexPositionAndOrder'
 import { BaseType } from '../../BaseType'
 import { lastNumber } from '../../F/lastNumber'
+import { setWindowTitle } from '../../C/setWindowTitle'
 
 export class 回测PositionAndOrder implements PositionAndOrder {
 
@@ -41,7 +42,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
     private order_id = 1234
 
-    async maker(p: {
+    maker(p: {
         symbol: BaseType.BitmexSymbol;
         side: BaseType.Side;
         size: number;
@@ -66,7 +67,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         return true
     }
 
-    async stop(p: {
+    stop(p: {
         symbol: BaseType.BitmexSymbol;
         side: BaseType.Side;
         price: number;
@@ -87,7 +88,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         return true
     }
 
-    async updateStop(p: {
+    updateStop(p: {
         orderID: string;
         price: number;
     }, logText?: string) {
@@ -103,7 +104,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         return true
     }
 
-    async updateMaker(p: {
+    updateMaker(p: {
         orderID: string;
         price: () => number;
     }, logText?: string) {
@@ -119,7 +120,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         return true
     }
 
-    async limit(p: {
+    limit(p: {
         symbol: BaseType.BitmexSymbol;
         side: BaseType.Side;
         size: number;
@@ -137,7 +138,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         })
     }
 
-    async taker(p: {
+    taker(p: {
         symbol: BaseType.BitmexSymbol;
         side: BaseType.Side;
         size: number;
@@ -157,7 +158,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         }, logText)
     }
 
-    async close(p: {
+    close(p: {
         symbol: BaseType.BitmexSymbol;
         text: string;
     }, logText?: string) {
@@ -170,7 +171,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         }, logText)
     }
 
-    async cancel(p: {
+    cancel(p: {
         orderID: string[];
         text: string;
     }, logText?: string) {
@@ -187,7 +188,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     单位maker = 0
     单位盈利 = 0
 
-    async 成交(p: {
+    成交(p: {
         timestamp: number
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
@@ -320,7 +321,8 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                 return true
             })
 
-            await task.onTick(this)
+            setWindowTitle(new Date(lastNumber(this.realData.dataExt.XBTUSD.期货.时间)).toLocaleString())
+            task.onTick(this)
         }
     }
 
