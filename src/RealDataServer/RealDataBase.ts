@@ -206,7 +206,7 @@ export class RealDataBase {
         orderBook: BaseType.OrderBook[]
     }, 盘口算价格: boolean) {
 
-        盘口算价格 = true
+        盘口算价格 = false
 
         const 价格 = 盘口算价格 ?
             指标.lazyMapCache(() => orderBook.length, i =>
