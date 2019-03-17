@@ -51,7 +51,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     }, logText?: string) {
         if (p.symbol !== 'XBTUSD') return false
 
-        console.log(p.text)
+        console.log(`${new Date(lastNumber(this.realData.dataExt[p.symbol].期货.时间)).toLocaleString()}      ${p.text}`)
 
         this.jsonSync.rawData.symbol.XBTUSD.活动委托.push({
             type: p.reduceOnly ? '限价只减仓' : '限价',
