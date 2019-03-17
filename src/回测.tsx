@@ -1,8 +1,10 @@
 import { 回测PositionAndOrder } from './lib/____API____/PositionAndOrder/回测PositionAndOrder'
 import { XBTUSD摸顶抄底追涨追跌 } from './XBTUSD摸顶抄底追涨追跌'
 
-const start = new Date('2019-03-01T03:00:00')
-const end = new Date('2019-03-02T03:00:00')
+//  const start = new Date('2019-03-16T08:40:00')
+//  const end =   new Date('2019-03-16T08:59:00')
+const start = new Date('2019-03-16T08:50:00')
+const end =   new Date('2019-03-16T10:25:00')
 
 const p = new 回测PositionAndOrder(start.getTime(), end.getTime())
 

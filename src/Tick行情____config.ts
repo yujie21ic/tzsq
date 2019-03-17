@@ -881,13 +881,13 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     ]
 
                 },
-                // {numberColor: 买颜色,
-                //     layerList: [
-                //         layer(ZeroLayer, { color: BTC颜色 }),
-                //         layer(LineLayer, { data: d.期货.震荡指数_macd.DIF, color: 买颜色1 }),
-                //         layer(LineLayer, { data: d.期货.震荡指数_macd.DEM, color: 买颜色 }),
-                //     ]
-                // },
+                {numberColor: 买颜色,
+                    layerList: [
+                        layer(ZeroLayer, { color: BTC颜色 }),
+                        layer(LineLayer, { data: d.期货.震荡指数_macd.DIF, color: 买颜色1 }),
+                        layer(LineLayer, { data: d.期货.震荡指数_macd.DEM, color: 买颜色 }),
+                    ]
+                },
                 // {numberColor: ETH颜色,
                 //     layerList: [
                 //         layer(LineLayer, { data: d.期货.震荡指数, color: ETH颜色 }),

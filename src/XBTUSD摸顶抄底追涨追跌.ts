@@ -52,7 +52,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 const 止损点 = to范围({
                     min: 4,
                     max: 18,
-                    value: 波动率 / 7 + 4,
+                    value: 波动率 / 10 + 4,
                 })
 
                 if (isNaN(止损点)) return false //波动率还没出来 不止损
@@ -338,24 +338,28 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 位置: 0,
             })
 
-
+            const 震荡指数衰竭 = lastNumber(self.realData.dataExt[symbol].期货.震荡指数_macd.DIF) < lastNumber(self.realData.dataExt[symbol].期货.震荡指数_macd.DEM)
             //如果超时了 
             if (lastNumber(self.realData.dataExt[symbol].期货.时间) - this.最后一次开仓时间 >= this.摸顶抄底超时秒 * 1000 && this.第2次超时 === false) {
                 this.第2次超时 = true
-                if (lastNumber(self.realData.dataExt[symbol].期货.震荡指数_macd.DIF) < lastNumber(self.realData.dataExt[symbol].期货.震荡指数_macd.DEM)) { //dif>dem 
+                if (!震荡指数衰竭) { //dif>dem 
                     this.摸顶抄底超时秒 = 15 * 1000
                 }
             }
 
 
-
+            // console.log("最后一次信号"+this.最后一次信号)
+            // console.log("最后一次信号"+this.摸顶抄底超时秒)
+            // console.log("get浮盈点数"+ self.get浮盈点数(symbol))
+            // console.log("最后一次开仓折返率"+this.最后一次开仓折返率)
+            // console.log("--------------------------------------------")
             let 亏损挂单平仓Text = ''
             if (this.最后一次信号 === '摸顶' || this.最后一次信号 === '抄底') {
                 if (
                     lastNumber(self.realData.dataExt[symbol].期货.时间) - this.最后一次开仓时间 >= this.摸顶抄底超时秒 * 1000 &&
-                    self.get浮盈点数(symbol) < this.最后一次开仓折返率
+                    self.get浮盈点数(symbol) < this.最后一次开仓折返率&&震荡指数衰竭
                 ) {
-                    亏损挂单平仓Text = '下单' + this.摸顶抄底超时秒 + ' 秒后，折返没有超过下单点的折返函数，挂单全平'
+                    亏损挂单平仓Text = '下单' + this.摸顶抄底超时秒 + ' 秒后，折返没有超过下单点的折返函数，并且震荡指数衰竭，挂单全平'
                 }
             }
             else if (this.最后一次信号 === '追涨' || this.最后一次信号 === '追跌') {
@@ -435,14 +439,14 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             const { 信号side, 信号msg } = self.realData.摸顶抄底信号灯side___2根(symbol)
 
             if (信号side === 平仓side && 活动委托.length === 0) {
-
+                console.log()
                 return await self.maker({
                     symbol,
                     side: 平仓side,
                     size: Math.abs(仓位数量),
                     price: toBuySellPriceFunc(平仓side, get位置1价格),
                     reduceOnly: true,
-                    text: this.最后一次信号 + '平仓' + ' 触发了反向开仓信号  ' + '自动止盈波段step 平一半',
+                    text: this.最后一次信号 + '平仓' + ' 触发了反向开仓信号  ' + '自动止盈波段step 全部止盈',
                 }, 信号side + ' 信号msg:' + 信号msg)
 
             }

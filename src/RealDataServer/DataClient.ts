@@ -36,7 +36,7 @@ export namespace DataClient {
 
     export class RealData__History extends RealDataBase {
 
-        private get_bitmex_orderBook = async (symbol: BaseType.BitmexSymbol | BaseType.HopexSymbol, startTime: number, endTime: number, 本地 = true) => {
+        private get_bitmex_orderBook = async (symbol: BaseType.BitmexSymbol | BaseType.HopexSymbol, startTime: number, endTime: number, 本地 = false) => {
 
             const { data, error, msg } = await (本地 ? PKServer.模拟客户端调用.getBitmex500msOrderBook : PKClient.func.getBitmex500msOrderBook)({
                 symbol,
@@ -67,7 +67,7 @@ export namespace DataClient {
             return ret
         }
 
-        async get500msKLine(symbol: BaseType.BitmexSymbol | BaseType.BinanceSymbol | BaseType.HopexSymbol, startTime: number, endTime: number, 本地 = true) {
+        async get500msKLine(symbol: BaseType.BitmexSymbol | BaseType.BinanceSymbol | BaseType.HopexSymbol, startTime: number, endTime: number, 本地 = false) {
             const { data, msg, error, } = await (本地 ? DBServer.模拟客户端调用.getKLine : DBClient.func.getKLine)({
                 type: '500ms',
                 symbol,
@@ -187,11 +187,11 @@ export namespace DataClient {
 
 
             console.log('加载盘口...')
-            this.回测ext__orderBook = await this.get_bitmex_orderBook('XBTUSD', startTime, endTime, true)
+            this.回测ext__orderBook = await this.get_bitmex_orderBook('XBTUSD', startTime, endTime, false)
             console.log('加载盘口', this.回测ext__orderBook.length)
 
             console.log('加载价格...')
-            this.回测ext__data = await this.get500msKLine('XBTUSD', startTime, endTime, true)
+            this.回测ext__data = await this.get500msKLine('XBTUSD', startTime, endTime, false)
             console.log('加载价格', this.回测ext__data.length)
 
 

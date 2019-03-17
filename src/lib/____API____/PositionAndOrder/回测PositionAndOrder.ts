@@ -229,7 +229,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
             this.jsonSync.rawData.symbol.XBTUSD.开仓均价 = 0
         }
 
-        console.log(`${new Date(p.timestamp).toLocaleString()}      ${p.text}       仓位数量 = ${this.jsonSync.rawData.symbol.XBTUSD.仓位数量}     单位taker = ${this.单位taker}       单位maker = ${this.单位maker}       单位盈利 = ${this.单位盈利}`)
+        console.log(`${new Date(p.timestamp).toLocaleString()}      ${p.text}   开仓 =  ${this.jsonSync.rawData.symbol.XBTUSD.开仓均价}  平仓 =   ${p.price}   仓位数量 = ${this.jsonSync.rawData.symbol.XBTUSD.仓位数量}     单位taker = ${this.单位taker}       单位maker = ${this.单位maker}       单位盈利 = ${this.单位盈利}`)
 
         if (this.jsonSync.rawData.symbol.XBTUSD.仓位数量 === 0) {
             console.log('____________________________________________________________________________________________________________________________________________________________________________________')
