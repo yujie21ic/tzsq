@@ -282,15 +282,17 @@ export class RealDataBase {
 
         //上涨_下跌
         //const 上涨_下跌 = 指标.lazyMapCache(() => Math.min(买.净成交量_累加60.length), i => 买.净成交量_累加60[i] >= 0 ? '上涨' : '下跌')
-        const 上涨_下跌 = 指标.lazyMapCache(() => Math.min(买.净成交量_累加60.length), i => {
-            if (买.净成交量_累加60[i] >= 100 * 10000) {
-                return '上涨'
-            } else if (买.净成交量_累加60[i] <= -100 * 10000) {
-                return '下跌'
-            }
-            return '上涨'
-        }
-        )
+        const 上涨_下跌_横盘 = 指标.lazyMapCache(
+            () => Math.min(买.净成交量_累加60.length),
+            i => {
+                if (买.净成交量_累加60[i] >= 100 * 10000) {
+                    return '上涨'
+                } else if (买.净成交量_累加60[i] <= -100 * 10000) {
+                    return '下跌'
+                } else {
+                    return '横盘'
+                }
+            })
 
         //
         const 价格_最高15 = 指标.最高(价格, 15, RealDataBase.单位时间)
@@ -305,9 +307,9 @@ export class RealDataBase {
         const 上涨_下跌_分开_的 = (type: '上涨' | '下跌') => {
 
             const 累计成交量 = 指标.lazyMapCache2({ 累计成交量: NaN }, (arr: number[], ext) => {
-                const length = Math.min(上涨_下跌.length, 买.成交量.length, 卖.成交量.length)
+                const length = Math.min(上涨_下跌_横盘.length, 买.成交量.length, 卖.成交量.length)
                 for (let i = Math.max(0, arr.length - 1); i < length; i++) {
-                    if (上涨_下跌[i] === type) {
+                    if (上涨_下跌_横盘[i] === type) {
                         if (isNaN(ext.累计成交量)) {
                             ext.累计成交量 = 0
                         }
@@ -322,9 +324,9 @@ export class RealDataBase {
             })
 
             const 价差 = 指标.lazyMapCache2({ 起点价格: NaN }, (arr: number[], ext) => {
-                const length = Math.min(上涨_下跌.length, 价格_最高15.length, 价格_最低15.length)
+                const length = Math.min(上涨_下跌_横盘.length, 价格_最高15.length, 价格_最低15.length)
                 for (let i = Math.max(0, arr.length - 1); i < length; i++) {//最高价10 最低价10 一样长
-                    if (上涨_下跌[i] === type) {
+                    if (上涨_下跌_横盘[i] === type) {
                         if (isNaN(ext.起点价格)) {
                             ext.起点价格 = 价格[i]    //最后一个重新计算   不用
                         }
@@ -512,7 +514,7 @@ export class RealDataBase {
         //起点  结束 点  要专门 封装起来！！！！！！！！！！！
         //________________________________________________FFFFFFFFFFFFFFFFFFFFFFF________________________________________________
         const 价格差_除以时间 = 指标.lazyMapCache2({ 起点index: NaN, 起点Type: 'none' as '上涨' | '下跌' }, (arr: number[], ext) => {
-            const length = Math.min(上涨_下跌.length, 上涨.价差.length, 下跌.价差.length)
+            const length = Math.min(上涨_下跌_横盘.length, 上涨.价差.length, 下跌.价差.length)
 
             let 上涨下跌价差 = (xx: '上涨' | '下跌') => xx === '上涨' ? 上涨.价差 : 下跌.价差 //每个地方都不同！！！！
 
@@ -520,14 +522,15 @@ export class RealDataBase {
             for (let i = Math.max(0, arr.length - 1); i < length; i++) {
                 //开始
                 if (isNaN(ext.起点index) || ext.起点index === length - 1) {   //最后一个重新计算  
-                    if (上涨下跌价差(上涨_下跌[i])[i] >= 2) { //<---------------------------------------------------
+                    const xxxxxxxxxxx = 上涨_下跌_横盘[i]
+                    if (xxxxxxxxxxx !== '横盘' && 上涨下跌价差(xxxxxxxxxxx)[i] >= 2) { //<---------------------------------------------------
                         ext.起点index = i
-                        ext.起点Type = 上涨_下跌[i]
+                        ext.起点Type = xxxxxxxxxxx
                     }
                 }
                 //结束
                 else {
-                    if (上涨下跌价差(ext.起点Type)[i] >= 200 || 上涨_下跌[i] !== ext.起点Type) { //<---------------------------------------------------
+                    if (上涨下跌价差(ext.起点Type)[i] >= 200 || 上涨_下跌_横盘[i] !== ext.起点Type) { //<---------------------------------------------------
                         ext.起点index = NaN
                     }
                 }
@@ -535,7 +538,7 @@ export class RealDataBase {
 
                 let a = i - ext.起点index
                 if (a === 0) a = NaN
-                if (a >= 120) a =120 
+                if (a >= 120) a = 120
                 arr[i] = isNaN(ext.起点index) === false && 上涨下跌价差(ext.起点Type)[i] >= 4 ? to范围({ min: 0.01, max: 10, value: 上涨下跌价差(ext.起点Type)[i] / a }) : NaN  //除以根数 
                 //<---------------------------------------------------
             }
@@ -548,8 +551,8 @@ export class RealDataBase {
 
         const 价格速度_macd = 指标.macd(价格差_除以时间, RealDataBase.单位时间)
 
-        const 震荡指数 = 指标.lazyMapCache(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌.length, 价格_波动率30.length), i => {
-            const 上涨下跌价差 = (上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i]
+        const 震荡指数 = 指标.lazyMapCache(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length, 价格_波动率30.length), i => {
+            const 上涨下跌价差 = (上涨_下跌_横盘[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i]
             return 上涨下跌价差 > 2 ? to范围({ min: 0.01, max: 10, value: 价格_波动率15[i] / 上涨下跌价差 }) : NaN
         })
 
@@ -640,7 +643,7 @@ export class RealDataBase {
         // )
         const 动态价格秒数 = 指标.lazyMapCache(
             () => Math.min(价格.length, 上涨.价差.length, 下跌.价差.length),
-            i => to范围({ min: 15, max: 25, value: ((上涨_下跌[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 5) }) ,
+            i => to范围({ min: 15, max: 25, value: ((上涨_下跌_横盘[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 5) }) ,
         )
         const 动态价格_均线 = 指标.均线(价格, 7, RealDataBase.单位时间)
         const 动态价格_均线方差 = 指标.lazyMapCache(() => Math.min(动态价格_均线.length, 价格.length), i => {
@@ -655,7 +658,7 @@ export class RealDataBase {
 
 
 
-        const 绝对价差 = 指标.lazyMapCache(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 上涨.价差[i] : 下跌.价差[i])
+        const 绝对价差 = 指标.lazyMapCache(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length), i => 上涨_下跌_横盘[i] === '上涨' ? 上涨.价差[i] : 下跌.价差[i])
         //_______________________________________________________________________________________________________________________________//
 
 
@@ -687,8 +690,8 @@ export class RealDataBase {
 
 
         //????????????????
-        const 累计成交量阈值 = 指标.lazyMapCache(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 75 * 10000 * 上涨.价差[i] + 300 * 10000 : 62 * 10000 * 下跌.价差[i] + 300 * 10000)
-        const 实时成交量 = 指标.lazyMapCache(() => Math.min(上涨.累计成交量.length, 下跌.累计成交量.length, 上涨_下跌.length), i => 上涨_下跌[i] === '上涨' ? 上涨.累计成交量[i] : 下跌.累计成交量[i])
+        const 累计成交量阈值 = 指标.lazyMapCache(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length), i => 上涨_下跌_横盘[i] === '上涨' ? 75 * 10000 * 上涨.价差[i] + 300 * 10000 : 62 * 10000 * 下跌.价差[i] + 300 * 10000)
+        const 实时成交量 = 指标.lazyMapCache(() => Math.min(上涨.累计成交量.length, 下跌.累计成交量.length, 上涨_下跌_横盘.length), i => 上涨_下跌_横盘[i] === '上涨' ? 上涨.累计成交量[i] : 下跌.累计成交量[i])
         const 实时与标准成交量之差 = 指标.lazyMapCache(() => Math.min(累计成交量阈值.length, 实时成交量.length), i => (实时成交量[i] - 累计成交量阈值[i]))
         const 实时与标准成交量之差macd = 指标.macd(实时与标准成交量之差, RealDataBase.单位时间)
         // const 经累计成交量阈值 = type === '摸顶' ?60*10000*价差[i]+300*10000:60*10000*价差[i]+300*10000
@@ -812,10 +815,10 @@ export class RealDataBase {
                         { name: '标准成交量', value: 标准成交量 || 价格_波动率30[i] < 250 },
                         { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 200 * 10000 },
                         { name: '折返程度', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
-                        { name: 'isXXX', value: type === '摸顶' ? 上涨_下跌[i] === '上涨' : 上涨_下跌[i] === '下跌' },
-                         { name: '价格速度', value: 价格速度 },
+                        { name: 'isXXX', value: type === '摸顶' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
+                        { name: '价格速度', value: 价格速度 },
                         { name: '价差 >=6', value: 价差[i] >= 6 },
-                         { name: 'is趋势', value: bs.is趋势[i] },
+                        { name: 'is趋势', value: bs.is趋势[i] },
                         //{ name: '波动率最大限制', value: 价格_波动率60[i] < 500 },
                         { name: '波动率最大限制', value: 价格_波动率30[i] < 150 },
                     ]
@@ -911,7 +914,7 @@ export class RealDataBase {
             信号_摸顶_下跌平仓,
             信号_抄底_上涨平仓,
             价格差_除以时间,
-            上涨_下跌,
+            上涨_下跌: 上涨_下跌_横盘,
             价格_均线300,
             净成交量abs_macd,
             上涨,
