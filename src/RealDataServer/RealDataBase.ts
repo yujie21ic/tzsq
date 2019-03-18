@@ -179,6 +179,7 @@ export class RealDataBase {
         const 净成交量 = 指标.lazyMapCache(() => Math.min(p.成交量.length, p.反向成交量.length), i => p.成交量[i] - p.反向成交量[i])
         const 净盘口 = 指标.lazyMapCache(() => Math.min(p.盘口.length, p.反向盘口.length), i => p.盘口[i] - p.反向盘口[i])
         const 净成交量_累加5 = 指标.累加(净成交量, 5, RealDataBase.单位时间)
+        const 净成交量_累加10 = 指标.累加(净成交量, 20, RealDataBase.单位时间)
         const 净成交量_累加7 = 指标.累加(净成交量, 7, RealDataBase.单位时间)
         const 净成交量_累加60 = 指标.累加(净成交量, 60, RealDataBase.单位时间)
         const 净成交量_累加500 = 指标.累加(净成交量, 500, RealDataBase.单位时间)
@@ -191,6 +192,7 @@ export class RealDataBase {
             净成交量,
             净成交量_累加5,
             净成交量_累加7,
+            净成交量_累加10,
             净成交量_累加60,
             净成交量_累加500,
             净盘口,
@@ -264,7 +266,7 @@ export class RealDataBase {
 
 
 
-        const 折返率 = 指标.lazyMapCache(() => 价格_波动率30.length, i => to范围({ min: 3, max: 15, value: 价格_波动率30[i] / 10 }))
+        const 折返率 = 指标.lazyMapCache(() => 价格_波动率30.length, i => to范围({ min: 4, max: 15, value: 价格_波动率30[i] / 10 }))
 
         //净成交量abs
         const 净成交量abs = 指标.lazyMapCache(() => Math.min(买.成交量.length, 卖.成交量.length), i => 买.成交量[i] - 卖.成交量[i])
@@ -285,9 +287,9 @@ export class RealDataBase {
         const 上涨_下跌_横盘 = 指标.lazyMapCache(
             () => Math.min(买.净成交量_累加60.length),
             i => {
-                if (买.净成交量_累加60[i] >= 100 * 10000) {
+                if (买.净成交量_累加60[i] >= 50 * 10000) {
                     return '上涨'
-                } else if (买.净成交量_累加60[i] <= -100 * 10000) {
+                } else if (买.净成交量_累加60[i] <= -50 * 10000) {
                     return '下跌'
                 } else {
                     return '横盘'
@@ -295,8 +297,8 @@ export class RealDataBase {
             })
 
         //
-        const 价格_最高15 = 指标.最高(价格, 15, RealDataBase.单位时间)
-        const 价格_最低15 = 指标.最低(价格, 15, RealDataBase.单位时间)
+        const 价格_最高15 = 指标.最高(价格, 60, RealDataBase.单位时间)
+        const 价格_最低15 = 指标.最低(价格, 60, RealDataBase.单位时间)
 
 
 
@@ -817,7 +819,7 @@ export class RealDataBase {
                         { name: '折返程度', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
                         // { name: 'isXXX', value: type === '摸顶' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
                         { name: '价格速度', value: 价格速度 },
-                        { name: '价差 >=6', value: 价差[i] >= 6 },
+                        { name: '价差 >=8', value: 价差[i] >= 8 },
                         { name: 'is趋势', value: type === '摸顶' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
                         //{ name: '波动率最大限制', value: 价格_波动率60[i] < 500 },
                         { name: '波动率最大限制', value: 价格_波动率30[i] < 150 },
@@ -858,7 +860,7 @@ export class RealDataBase {
                     { name: '净盘口 > 0', value: bs.净盘口_均线5[i] > 0 },
                     { name: '相对价差 ', value: type === '追涨' ? bitmex_hopex_上涨相对差价均线[i] > 0 : bitmex_hopex_下跌相对价差均线[i] < 0 },
                     { name: '5分钟波动率低量', value: 价格_波动率300[i] < 30 },
-                    { name: '大单', value: bs.净成交量_累加5[i] > 100 * 10000 },
+                    { name: '大单', value: bs.净成交量_累加10[i] > 100 * 10000 },
                     { name: '价差 < 4', value: 价差[i] <= 4 || (价格差_除以时间[i] <= 0.04 ? 价差[i] <= 8 : false) },
                     { name: '折返程度', value: type === '追涨' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
                     { name: 'is趋势', value: type === '追涨' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },

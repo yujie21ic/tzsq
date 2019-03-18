@@ -252,7 +252,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             this.最后一次信号时间 = lastNumber(self.realData.dataExt[symbol].期货.时间)
 
 
-            const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' || lastNumber(self.realData.dataExt.XBTUSD.期货.绝对价差) > 12
+            const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' || lastNumber(self.realData.dataExt.XBTUSD.期货.绝对价差) > 15
 
 
             if (lastNumber(self.realData.dataExt[symbol].期货.时间) > this.到什么时间不开仓) {
@@ -322,7 +322,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             this.最大仓位abs = Math.abs(仓位数量)
             this.最后一次开仓时间 = lastNumber(self.realData.dataExt[symbol].期货.时间)
             this.最后一次开仓折返率 = lastNumber(self.realData.dataExt[symbol].期货.折返率)
-            this.摸顶抄底超时秒 = to范围({ min: 15, max: 30, value: self.realData.get波动率(symbol) / 7 + 15 })
+            this.摸顶抄底超时秒 = to范围({ min: 15, max: 30, value: self.realData.get波动率(symbol) / 7 + 20 })
             this.第2次超时 = false
             this.已经平了一半了 = false
         }
