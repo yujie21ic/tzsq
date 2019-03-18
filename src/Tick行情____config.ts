@@ -1167,7 +1167,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
 
     原始数据: (d, d2) => ({
-        heightList: [0.4, 0.6],
+        heightList: [0.4, 0.4,0.2],
         items: [
             [
                 {
@@ -1187,7 +1187,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     numberX: 100,
                     layerList: [
                         layer(ZeroLayer, { color: 波动率颜色 }),
-                        layer(LineLayer, { data: d.期货.买.净成交量_累加60, color: 波动率颜色 }),
+                        layer(LineLayer, { data: d.期货.买.净成交量_累加temp, color: 波动率颜色 }),
                     ]
                 },
 
@@ -1198,10 +1198,10 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.期货.买.成交量, color: 买颜色 }),
-                    layer(LineLayer, { data: d.期货.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-                    //layer(LineLayer, { data: d.期货.买.净成交量_累加5, color: ETH颜色 }),
-                    layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
+                    // layer(LineLayer, { data: d.期货.买.成交量, color: 买颜色 }),
+                    // layer(LineLayer, { data: d.期货.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d.期货.买.净成交量_累加60, color: ETH颜色 }),
+                    //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
                     layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
                 ]
             },
@@ -1212,6 +1212,15 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
             //     ]
             // },
+            {
+                layerList: [
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
+                    layer(LineLayer, { data: d.期货.买.盘口, color: 买颜色 }),
+                    layer(LineLayer, { data: d.期货.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
+                    //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
+                    layer(LineLayer, { data: d.期货.买.净盘口_均线5, color: ETH颜色 }),
+                ]
+            },
         ]
     }),
 }
