@@ -27,7 +27,8 @@ export namespace 指标 {
 
     let 最后更新数据时间 = NaN  //实盘 一直更新 
 
-    export const 回测setTime = (n: number) => 最后更新数据时间 = n
+    let xxxxx = 0
+    export const 回测setTime = () => 最后更新数据时间 = xxxxx++
 
     export const lazyMapCache = <T>(
         getLength: () => number,
@@ -35,26 +36,31 @@ export namespace 指标 {
     ): ArrayLike<T> => {
 
         const cache = [] as (T | undefined)[] //任意索引缓存 不需要连续
+        let lastLength = 0
+        let lastTime = NaN
 
         const get = (_: any, key: any): any => {
             if (key === 'length') {
-                return getLength()
+                lastLength = getLength()
+                return lastLength
             } else {
                 //索引
                 const index = parseInt(String(key))
 
-                //返回缓存
+                //有缓存
                 if (cache[index] !== undefined) {
-                    return cache[index]
+                    if (index !== lastLength - 1) return cache[index]
+
+                    if (lastTime === 最后更新数据时间) return cache[index]
+
+                    lastTime = 最后更新数据时间
                 }
 
                 //计算
                 const ret = getValue(index)
 
-                //不是最后一个就缓存
-                if (index !== getLength() - 1) {
-                    cache[index] = ret
-                }
+                //缓存
+                cache[index] = ret
 
                 //返回
                 return ret
@@ -72,13 +78,28 @@ export namespace 指标 {
     ): ArrayLike<T> => {
 
         const cache = [] as T[]
+        let lastLength = 0
+        let lastTime = NaN
+
+        const getLength = () => {
+            f(cache, ext)
+            lastLength = cache.length
+            return lastLength
+        }
 
         const get = (_: any, key: any): any => {
             if (key === 'length') {
-                f(cache, ext)
-                return cache.length
+                return getLength()
             } else {
-                return cache[parseInt(String(key))]
+                //索引
+                const index = parseInt(String(key))
+
+                if (index === lastLength - 1 && lastTime !== 最后更新数据时间) {
+                    lastTime = 最后更新数据时间
+                    getLength()
+                }
+
+                return cache[index]
             }
         }
 

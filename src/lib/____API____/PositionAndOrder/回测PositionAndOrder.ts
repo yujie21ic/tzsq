@@ -4,6 +4,7 @@ import { createJSONSync } from './BitmexPositionAndOrder'
 import { BaseType } from '../../BaseType'
 import { lastNumber } from '../../F/lastNumber'
 import { setWindowTitle } from '../../C/setWindowTitle'
+import { 指标 } from '../../../RealDataServer/指标'
 
 export class 回测PositionAndOrder implements PositionAndOrder {
 
@@ -322,6 +323,8 @@ export class 回测PositionAndOrder implements PositionAndOrder {
             })
 
             setWindowTitle(new Date(lastNumber(this.realData.dataExt.XBTUSD.期货.时间)).toLocaleString())
+
+            指标.回测setTime()
             task.onTick(this)
         }
     }
