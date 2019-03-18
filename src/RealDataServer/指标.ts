@@ -15,13 +15,19 @@ export namespace 指标 {
         const DEM = EMA(DIF, 9, 单位时间)
         return { DIF, DEM }
     }
-    export const macd带参数 = (arr: ArrayLike<number>, 单位时间: number,快线:number,慢线:number) => {
+    export const macd带参数 = (arr: ArrayLike<number>, 单位时间: number, 快线: number, 慢线: number) => {
         const _12 = EMA(arr, 快线, 单位时间)
         const _26 = EMA(arr, 慢线, 单位时间)
         const DIF = lazyMapCache(() => Math.min(_12.length, _26.length), i => _12[i] - _26[i])
         const DEM = EMA(DIF, 9, 单位时间)
         return { DIF, DEM }
     }
+
+
+
+    let 最后更新数据时间 = NaN  //实盘 一直更新 
+
+    export const 回测setTime = (n: number) => 最后更新数据时间 = n
 
     export const lazyMapCache = <T>(
         getLength: () => number,
