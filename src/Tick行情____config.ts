@@ -898,7 +898,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
     价格速度: (d, d2) => ({
-        heightList: [0.6, 0.4],
+        heightList: [0.4,0.6],
         items: [
             [
                 {
@@ -916,32 +916,20 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
                     ]
                 },
-                {numberColor: 波动率颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d.期货.价格_波动率60, color: 波动率颜色 }),
-                    ]
-                },
-                {numberColor: ETH颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d.期货.价格_波动率30, color: ETH颜色 }),
-                    ]
-                },
             ],
             [
-                {   numberColor: 波动率颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d.期货.下跌.价差, color: 波动率颜色 }),
-                    ]
+                // {   numberColor: ETH颜色,
+                //     layerList: [
+                //         layer(LineLayer, { data: d.期货.价格差_除以时间, color: ETH颜色 }),
+                //     ]
 
-                },
-                {numberColor: BTC颜色,
+                // },
+                {numberColor: 波动率颜色,
                     layerList: [
-                        layer(LineLayer, { data: d.期货.动态价格_均线方差macd.DIF, color: 买颜色1 }),
-                        layer(LineLayer, { data: d.期货.动态价格_均线方差macd.DEM, color: 买颜色 }),
-                        layer(ZeroLayer, { color: 波动率颜色 }),
+                        layer(LineLayer, { data: d.期货.下跌.价差, color: 卖颜色 }),
+                        layer(LineLayer, { data: d.期货.上涨.价差, color: 买颜色 }),
                     ]
                 },
-                
             ],
         ]
     }),

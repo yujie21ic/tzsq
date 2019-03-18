@@ -530,7 +530,7 @@ export class RealDataBase {
 
                 let a = i - ext.起点index
                 if (a === 0) a = NaN
-                if (a >= 120) a = 120
+                if (a >= 120) a =120 
                 arr[i] = isNaN(ext.起点index) === false && 上涨下跌价差(ext.起点Type)[i] >= 4 ? to范围({ min: 0.01, max: 10, value: 上涨下跌价差(ext.起点Type)[i] / a }) : NaN  //除以根数 
                 //<---------------------------------------------------
             }
@@ -808,7 +808,7 @@ export class RealDataBase {
                         { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 200 * 10000 },
                         { name: '折返程度', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
                          { name: '价格速度', value: 价格速度 },
-                        { name: '价差 >=8', value: 价差[i] >= 6 },
+                        { name: '价差 >=6', value: 价差[i] >= 6 },
                          { name: 'is趋势', value: bs.is趋势[i] },
                         //{ name: '波动率最大限制', value: 价格_波动率60[i] < 500 },
                         { name: '波动率最大限制', value: 价格_波动率30[i] < 150 },
