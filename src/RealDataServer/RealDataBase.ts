@@ -195,7 +195,7 @@ export class RealDataBase {
             净成交量_累加500,
             净盘口,
             净盘口_均线5: 指标.均线(净盘口, 3, RealDataBase.单位时间),
-            is趋势: 指标.lazyMapCache(() => Math.min(净成交量_累加60.length), i => 净成交量_累加60[i] >= 0),//买是上涨  卖是下跌
+            //is趋势: 指标.lazyMapCache(() => Math.min(净成交量_累加60.length), i => 净成交量_累加60[i] >= 0),//买是上涨  卖是下跌
         }
     }
 
@@ -815,10 +815,10 @@ export class RealDataBase {
                         { name: '标准成交量', value: 标准成交量 || 价格_波动率30[i] < 250 },
                         { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 200 * 10000 },
                         { name: '折返程度', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
-                        { name: 'isXXX', value: type === '摸顶' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
+                        // { name: 'isXXX', value: type === '摸顶' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
                         { name: '价格速度', value: 价格速度 },
                         { name: '价差 >=6', value: 价差[i] >= 6 },
-                        { name: 'is趋势', value: bs.is趋势[i] },
+                        { name: 'is趋势', value: type === '摸顶' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
                         //{ name: '波动率最大限制', value: 价格_波动率60[i] < 500 },
                         { name: '波动率最大限制', value: 价格_波动率30[i] < 150 },
                     ]
@@ -861,7 +861,7 @@ export class RealDataBase {
                     { name: '大单', value: bs.净成交量_累加5[i] > 100 * 10000 },
                     { name: '价差 < 4', value: 价差[i] <= 4 || (价格差_除以时间[i] <= 0.04 ? 价差[i] <= 8 : false) },
                     { name: '折返程度', value: type === '追涨' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
-                    { name: 'is趋势', value: bs.is趋势[i] },
+                    { name: 'is趋势', value: type === '追涨' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
                 ]
             )
         }
