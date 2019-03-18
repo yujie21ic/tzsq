@@ -258,13 +258,9 @@ export class RealDataBase {
 
 
         const 价格_波动率15 = 指标.波动率(价格, 15, RealDataBase.单位时间)
-
-        // const 价格_波动率30 = 指标.波动率(价格, 30, RealDataBase.单位时间)
-        // const 价格_波动率60 = 指标.波动率(价格, 60, RealDataBase.单位时间)
-        // const 价格_波动率300 = 指标.波动率(价格, 300, RealDataBase.单位时间)
-        const 价格_波动率30 = 指标.波动率(价格_波动率15, 2, 1000)
-        const 价格_波动率60 = 指标.波动率(价格_波动率30, 2, 1000)
-        const 价格_波动率300 = 指标.波动率(价格_波动率60, 5, 1000)
+        const 价格_波动率30 = 指标.波动率(价格, 30, RealDataBase.单位时间)
+        const 价格_波动率60 = 指标.波动率(价格, 60, RealDataBase.单位时间)
+        const 价格_波动率300 = 指标.波动率(价格, 300, RealDataBase.单位时间)
 
 
 
