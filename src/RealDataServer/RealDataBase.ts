@@ -235,6 +235,8 @@ export class RealDataBase {
 
         //价格
         const 价格_均线300 = 指标.均线(价格, 300, RealDataBase.单位时间)
+        const 价格_均线60 = 指标.均线(价格, 120, RealDataBase.单位时间)
+        const 价格均线价差 = 指标.lazyMapCache(() => Math.min(价格_均线300.length,价格_均线60.length), i => 价格_均线60[i]-价格_均线300[i])
 
 
         const 价格_波动率15 = 指标.波动率(价格, 15, RealDataBase.单位时间)
@@ -754,7 +756,8 @@ export class RealDataBase {
                 i => [
                     { name: '净盘口 > 0', value: bs.净盘口_均线5[i] > 0 },
                     { name: '相对价差 ', value: type === '追涨' ? bitmex_hopex_上涨相对差价均线[i] > 0 : bitmex_hopex_下跌相对价差均线[i] < 0 },
-                    { name: '5分钟波动率低量', value: 价格_波动率300[i] < 500 },
+                    { name: '价格均线价差 ', value: type === '追涨' ? 价格均线价差[i]>0.5 : 价格均线价差[i]<-0.5 },
+                    { name: '5分钟波动率低量', value: 价格_波动率300[i] < 400 },
                     { name: '大单', value: bs.净成交量_累加10[i] > 150 * 10000 },
                     { name: '价差 < 4', value: 价差[i] <= 4 || (价格差_除以时间[i] <= 0.04 ? 价差[i] <= 8 : false) },
                     { name: '折返程度', value: type === '追涨' ? (价格_最高60[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低60[i]) < 折返率[i] },
@@ -770,6 +773,8 @@ export class RealDataBase {
         )
 
         return {
+            价格均线价差,
+            价格_均线120: 价格_均线60,
             价格_波动率60,
             动态价格_均线方差macd,
             动态价格_均线方差,
