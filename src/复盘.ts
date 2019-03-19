@@ -14,8 +14,8 @@ import { 信号Layer } from './lib/Chart/Layer/信号Layer'
 import { BitMEXRESTAPI } from './lib/____API____/BitMEX/BitMEXRESTAPI'
 import * as fs from 'fs'
 import { safeJSONParse } from './lib/F/safeJSONParse'
-import { LineLayer } from './lib/Chart/Layer/LineLayer';
-import { 指标 } from './指标/指标';
+import { LineLayer } from './lib/Chart/Layer/LineLayer'
+import { 指标 } from './指标/指标'
 
 theme.右边空白 = 0
 
@@ -47,6 +47,7 @@ let 止损1m_dic: { [key: number]: string } = Object.create(null)
 let 成交提示: { name: string, value: boolean }[][] = []
 let dif: ArrayLike<number> = []
 let dem: ArrayLike<number> = []
+let osc: ArrayLike<number> = []
 
 const load = async () => {
     S = {
