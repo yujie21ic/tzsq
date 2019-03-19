@@ -7,6 +7,8 @@ import { lastNumber } from '../lib/F/lastNumber'
 import { is连续几根全亮 } from '../lib/F/is连续几根全亮'
 import { timeID } from '../lib/F/timeID'
 import { 买卖 } from '../指标/买卖'
+import { safeJSONParse } from '../lib/F/safeJSONParse'
+import * as fs from 'fs'
 
 
 
@@ -882,7 +884,31 @@ export class RealDataBase {
         )
 
 
+
+        let arr = [] as BaseType.成交记录
+        const dic: { [key: number]: string } = Object.create(null)
+
+        try {
+            arr = safeJSONParse(fs.readFileSync('./db/成交记录.json').toString()) as BaseType.成交记录
+            arr.forEach(v => {
+                dic[timeID.timestampToOneMinuteID(v.timestamp)] = v.type
+            })
+        } catch (e) {
+
+        }
+
+        const 成交提示 = 指标.lazyMapCache(() => 期货.时间.length, i => [
+            { name: '挂单买', value: dic[期货.时间[i]] === '挂单买' },
+            { name: '挂单卖', value: dic[期货.时间[i]] === '挂单卖' },
+            { name: '挂单买成功', value: dic[期货.时间[i]] === '挂单买成功' },
+            { name: '挂单卖成功', value: dic[期货.时间[i]] === '挂单卖成功' },
+            { name: '市价买', value: dic[期货.时间[i]] === '市价买' },
+            { name: '市价卖', value: dic[期货.时间[i]] === '市价卖' },
+        ])
+
         return {
+            成交提示,
+
             // bitmex_hopex_相对价差,
             //bitmex_hopex_差价,
             bitmex_hopex_下跌差价,
