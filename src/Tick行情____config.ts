@@ -930,7 +930,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ],
         ]
     }),
-    价格速度1: (d, d2) => ({
+    成交提示: (d, d2) => ({
         heightList: [0.4,0.2, 0.4],
         items: [
             [
@@ -952,10 +952,10 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ],
             {
                 layerList: [
-                    layer(信号Layer, { data: d.期货.信号_抄底, color: 买颜色 }),
+                    layer(信号Layer, { data: d.成交提示, color: 买颜色 }),
                     layer(TextLayer, {
                         text:
-                            `下跌抄底                    `,
+                            `成交提示                    `,
                         color: ETH颜色,
                     })
                 ]
@@ -1163,39 +1163,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
         ]
     }),
-    价格速度2: (d, d2) => ({
-        heightList: [0.3, 0.3, 0.4],
-        items: [
-        {
-        layerList: [
-        layer(信号Layer, { data: d.期货.信号_追涨, color: 买颜色 }),
-        layer(TextLayer, {
-        text:
-        `信号_追涨 `,
-        color: ETH颜色,
-        })
-        ]
-        },
-        {
-        layerList: [
-        layer(信号Layer, { data: d.期货.信号_追跌, color: 卖颜色 }),
-        layer(TextLayer, {
-        text:
-        `信号_追跌 `,
-        color: ETH颜色,
-        })
-        ]
-        },
-        {
-        numberColor: 波动率颜色,
-        layerList: [
-        layer(LineLayer, { data: d.期货.下跌.价差, color: 卖颜色 }),
-        layer(LineLayer, { data: d.期货.上涨.价差, color: 买颜色 }),
-        ]
-        },
-        ]
-        }),
-
+  
 
 
     原始数据: (d, d2) => ({
