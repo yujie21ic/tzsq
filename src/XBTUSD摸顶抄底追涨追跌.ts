@@ -263,14 +263,14 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         size: 交易数量 * (this.连续止损2 + 1),
                         text: 信号灯Type,
                     }, '自动开仓step 自动开仓 市价' + self.realData.get信号msg(symbol)) :
-                    self.maker({ //limit 挂单
+                    self.maker({
                         symbol,
                         side: 开仓side,
                         size: 交易数量 * (this.连续止损2 + 1),
                         price: toBuySellPriceFunc(开仓side, () => self.realData.getOrderPrice({
                             symbol,
                             side: 开仓side,
-                            type: 'taker',
+                            type: 'maker',
                             位置: 0,
                         })),
                         reduceOnly: false,
@@ -449,15 +449,24 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             const { 信号side, 信号msg } = self.realData.摸顶抄底信号灯side___2根(symbol)
 
             if (信号side === 平仓side && 活动委托.length === 0) {
-                console.log()
-                return self.maker({
-                    symbol,
-                    side: 平仓side,
-                    size: Math.abs(仓位数量),
-                    price: toBuySellPriceFunc(平仓side, get位置1价格),
-                    reduceOnly: true,
-                    text: this.最后一次信号 + '平仓' + ' 触发了反向开仓信号  ' + '自动止盈波段step 全部止盈',
-                }, 信号side + ' 信号msg:' + 信号msg)
+
+                const 市价 = false
+
+                return 市价 ?
+                    self.taker({
+                        symbol,
+                        side: 平仓side,
+                        size: Math.abs(仓位数量),
+                        text: this.最后一次信号 + '平仓' + ' 触发了反向开仓信号  ' + '自动止盈波段step 全部止盈',
+                    }, 信号side + ' 信号msg:' + 信号msg) :
+                    self.maker({
+                        symbol,
+                        side: 平仓side,
+                        size: Math.abs(仓位数量),
+                        price: toBuySellPriceFunc(平仓side, get位置1价格),
+                        reduceOnly: true,
+                        text: this.最后一次信号 + '平仓' + ' 触发了反向开仓信号  ' + '自动止盈波段step 全部止盈',
+                    }, 信号side + ' 信号msg:' + 信号msg)
 
             }
         }
