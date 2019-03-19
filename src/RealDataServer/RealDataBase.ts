@@ -891,10 +891,10 @@ export class RealDataBase {
         try {
             arr = safeJSONParse(fs.readFileSync('./db/成交记录.json').toString()) as BaseType.成交记录
             arr.forEach(v => {
-                dic[timeID.timestampToOneMinuteID(v.timestamp)] = v.type
+                dic[timeID.timestampTo500msID(v.timestamp)] = v.type
             })
         } catch (e) {
-            console.log('e', e)
+            console.log('加载成交记录 错误', e)
         }
 
         const 成交提示 = 指标.lazyMapCache(() => 期货.时间.length, i => [
