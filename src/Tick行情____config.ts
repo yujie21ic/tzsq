@@ -1230,10 +1230,10 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    // layer(LineLayer, { data: d.期货.买.成交量, color: 买颜色 }),
-                    // layer(LineLayer, { data: d.期货.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-                    layer(LineLayer, { data: d.期货.买.净成交量_累加60, color: ETH颜色 }),
-                    //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
+                     layer(LineLayer, { data: d.期货.买.成交量, color: 买颜色 }),
+                     layer(LineLayer, { data: d.期货.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
+                    //layer(LineLayer, { data: d.期货.买.净成交量_累加60, color: ETH颜色 }),
+                    layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
                     layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
                 ]
             },

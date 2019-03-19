@@ -752,8 +752,8 @@ export class RealDataBase {
                 i => [
                     { name: '净盘口 > 0', value: bs.净盘口_均线5[i] > 0 },
                     { name: '相对价差 ', value: type === '追涨' ? bitmex_hopex_上涨相对差价均线[i] > 0 : bitmex_hopex_下跌相对价差均线[i] < 0 },
-                    { name: '5分钟波动率低量', value: 价格_波动率300[i] < 30 },
-                    { name: '大单', value: bs.净成交量_累加10[i] > 100 * 10000 },
+                    { name: '5分钟波动率低量', value: 价格_波动率300[i] < 500 },
+                    { name: '大单', value: bs.净成交量_累加10[i] > 150 * 10000 },
                     { name: '价差 < 4', value: 价差[i] <= 4 || (价格差_除以时间[i] <= 0.04 ? 价差[i] <= 8 : false) },
                     { name: '折返程度', value: type === '追涨' ? (价格_最高60[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低60[i]) < 折返率[i] },
                     { name: 'is趋势', value: type === '追涨' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
