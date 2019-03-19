@@ -897,14 +897,17 @@ export class RealDataBase {
             console.log('加载成交记录 错误', e)
         }
 
-        const 成交提示 = 指标.lazyMapCache(() => 期货.时间.length, i => [
-            { name: '挂单买', value: dic[期货.时间[i]] === '挂单买' },
-            { name: '挂单卖', value: dic[期货.时间[i]] === '挂单卖' },
-            { name: '挂单买成功', value: dic[期货.时间[i]] === '挂单买成功' },
-            { name: '挂单卖成功', value: dic[期货.时间[i]] === '挂单卖成功' },
-            { name: '市价买', value: dic[期货.时间[i]] === '市价买' },
-            { name: '市价卖', value: dic[期货.时间[i]] === '市价卖' },
-        ])
+        const 成交提示 = 指标.lazyMapCache(() => 期货.时间.length, i => {
+
+            const key = timeID.timestampTo500msID(期货.时间[i])
+            const str = dic[key]
+
+            return ['挂单买', '挂单卖', '挂单买成功', '挂单卖成功', '市价买', '市价卖'].map(v => ({
+                name: v, value:
+                    str === v
+            }))
+
+        })
 
         return {
             成交提示,
