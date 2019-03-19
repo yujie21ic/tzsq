@@ -737,10 +737,17 @@ export class RealDataBase {
             const 价差 = type === '追涨' ? 上涨.价差 : 下跌.价差
             return 指标.lazyMapCache(
                 () => Math.min(
-                    data.length,
-                    orderBook.length,
                     bitmex_hopex_上涨相对价差.length,//<----------------------------
                     bitmex_hopex_下跌相对价差.length,
+                    bs.净盘口_均线5.length,
+                    价格_波动率300.length,
+                    bs.净成交量_累加10.length,
+                    价差.length,
+                    价格_最高60.length,
+                    价格.length,
+                    折返率.length,
+                    价格_最低60.length,
+                    上涨_下跌_横盘.length
                 ),
                 i => [
                     { name: '净盘口 > 0', value: bs.净盘口_均线5[i] > 0 },
