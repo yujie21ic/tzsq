@@ -64,7 +64,8 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         this.成交arr.push({
             timestamp,
             type: p.side === 'Buy' ? '挂单买' : '挂单卖',
-            count: p.size,
+            size: p.size,
+            price: p.price(),
             仓位数量: this.jsonSync.rawData.symbol.XBTUSD.仓位数量,
             开仓均价: this.jsonSync.rawData.symbol.XBTUSD.开仓均价,
             text: p.text,
@@ -252,7 +253,8 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         this.成交arr.push({
             timestamp: p.timestamp,
             type: p.被动 ? (p.side === 'Buy' ? '挂单买成功' : '挂单卖成功') : (p.side === 'Buy' ? '市价买' : '市价卖'),
-            count: p.size,
+            size: p.size,
+            price: p.price,
             仓位数量: this.jsonSync.rawData.symbol.XBTUSD.仓位数量,
             开仓均价: this.jsonSync.rawData.symbol.XBTUSD.开仓均价,
             text: p.text,
