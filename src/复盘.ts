@@ -169,7 +169,7 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
         left: S.left,
         right: S.right,
         items: {
-            heightList: [0.6, 0.2, 0.2, 0.2],
+            heightList: [0.4, 0.2, 0.2, 0.2],
             items: [
                 {
                     layerList: [
