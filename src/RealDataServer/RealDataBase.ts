@@ -886,15 +886,17 @@ export class RealDataBase {
             信号hopex_下跌,
             信号hopex_上涨,
             现货减去: 0,
+
+
             //现货
             现货,
-            现货减去价格: 现货.价格,
-            现货减去价格均线: 现货.价格_均线300,
             现货30秒内成交量: () => this.get现货多少秒内成交量(binanceSymbol, 30),
 
             //期货
             期货,
             期货30秒内成交量: () => this.get期货多少秒内成交量__万为单位(symbol, 30),
+
+            
             //差价
             差价,
             差价均线,
@@ -919,14 +921,7 @@ export class RealDataBase {
     }
 
     set现货减去(n: number) {
-        // const arr = kvs(this.dataExt)
-        // arr.forEach(({ v }) => {
-        //     if (v.现货减去 !== n) {
-        //         v.现货减去 = n
-        //         v.现货减去价格 = 指标.lazyMapCache(() => v.现货.价格.length, i => v.现货.价格[i] - n)
-        //         v.现货减去价格均线 = 指标.lazyMapCache(() => v.现货.价格_均线300.length, i => v.现货.价格_均线300[i] - n)
-        //     }
-        // })
+        //
     }
 
 
