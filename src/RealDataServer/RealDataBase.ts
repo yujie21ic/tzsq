@@ -756,16 +756,9 @@ export class RealDataBase {
         const 信号_追涨 = __追涨_追跌('追涨')
         const 信号_追跌 = __追涨_追跌('追跌')
 
-        const 双开 = 指标.lazyMapCache(() => data.length, i => data[i].成交性质 === '双开' ? data[i].buySize + data[i].sellSize : 0)
-        const 双平 = 指标.lazyMapCache(() => data.length, i => data[i].成交性质 === '双平' ? data[i].buySize + data[i].sellSize : 0)
-        const 多换 = 指标.lazyMapCache(() => data.length, i => data[i].成交性质 === '多换' ? data[i].buySize + data[i].sellSize : 0)
-        const 空换 = 指标.lazyMapCache(() => data.length, i => data[i].成交性质 === '空换' ? data[i].buySize + data[i].sellSize : 0)
-        const 多平 = 指标.lazyMapCache(() => data.length, i => data[i].成交性质 === '多平' ? data[i].buySize + data[i].sellSize : 0)
-        const 空平 = 指标.lazyMapCache(() => data.length, i => data[i].成交性质 === '空平' ? data[i].buySize + data[i].sellSize : 0)
-        const 空开 = 指标.lazyMapCache(() => data.length, i => data[i].成交性质 === '空开' ? data[i].buySize + data[i].sellSize : 0)
-        const 多开 = 指标.lazyMapCache(() => data.length, i => data[i].成交性质 === '多开' ? data[i].buySize + data[i].sellSize : 0)
-
-
+        const [双开, 双平, 多换, 空换, 多平, 空平, 空开, 多开] = ['双开', '双平', '多换', '空换', '多平', '空平', '空开', '多开'].map(v =>
+            指标.lazyMapCache(() => data.length, i => data[i].成交性质 === v ? data[i].buySize + data[i].sellSize : 0)
+        )
 
         return {
             价格_波动率60,
@@ -806,7 +799,6 @@ export class RealDataBase {
             价格_均线300,
             净成交量abs_macd,
             上涨,
-            上涨_价差: 上涨.价差,//???????????????????
             下跌,
             价格,
             价格_波动率30,
