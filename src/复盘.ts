@@ -14,8 +14,8 @@ import { 信号Layer } from './lib/Chart/Layer/信号Layer'
 import { BitMEXRESTAPI } from './lib/____API____/BitMEX/BitMEXRESTAPI'
 import * as fs from 'fs'
 import { safeJSONParse } from './lib/F/safeJSONParse'
-import { LineLayer } from './lib/Chart/Layer/LineLayer'
 import { 指标 } from './指标/指标'
+import { LineLayer } from './lib/Chart/Layer/LineLayer'
 
 theme.右边空白 = 0
 
@@ -45,9 +45,9 @@ const { cookie } = account
 
 let 止损1m_dic: { [key: number]: string } = Object.create(null)
 let 成交提示: { name: string, value: boolean }[][] = []
+
 let dif: ArrayLike<number> = []
 let dem: ArrayLike<number> = []
-let osc: ArrayLike<number> = []
 
 const load = async () => {
     S = {
@@ -68,15 +68,15 @@ const load = async () => {
         return
     }
 
+    const macd = 指标.macd(data.map(v => v.close), 1000)
+    dif = macd.DIF
+    dem = macd.DEM
+
     S = {
         left: Math.max(0, data.length - 100),
         right: data.length,
         data: data
     }
-
-    const macd = 指标.macd(data.map(v => v.close), 1000)
-    dif = macd.DIF
-    dem = macd.DEM
 
 
     const res = await BitMEXRESTAPI.Execution.getTradeHistory(cookie, {
@@ -167,7 +167,7 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
         left: S.left,
         right: S.right,
         items: {
-            heightList: [0.4, 0.2, , 0.2, 0.2],
+            heightList: [0.6, 0.2, 0.2, 0.2],
             items: [
                 {
                     layerList: [
