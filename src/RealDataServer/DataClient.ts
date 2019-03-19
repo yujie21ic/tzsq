@@ -178,6 +178,9 @@ export namespace DataClient {
         //回测ext
         回测ext__orderBook: BaseType.OrderBook[] = []
         回测ext__data: BaseType.KLine[] = []
+
+        回测ext__hopex__orderBook: BaseType.OrderBook[] = []
+        回测ext__hopex__data: BaseType.KLine[] = []
         nowIndex = 0
 
         async 回测load(startTime: number, endTime: number) {
@@ -194,6 +197,10 @@ export namespace DataClient {
             this.回测ext__data = await this.get500msKLine('XBTUSD', startTime, endTime, false)
             console.log('加载价格', this.回测ext__data.length)
 
+            console.log('加载hopex...')
+            this.回测ext__hopex__orderBook = await this.get_bitmex_orderBook('BTCUSDT', startTime, endTime)
+            this.回测ext__hopex__data = await this.get500msKLine('BTCUSDT', startTime, endTime)
+            console.log('加载hopex...')
 
             this.nowIndex = 0
             this.重新初始化()
@@ -203,6 +210,8 @@ export namespace DataClient {
             if (this.nowIndex < this.回测ext__orderBook.length) {
                 this.data.bitmex.XBTUSD.orderBook.push(this.回测ext__orderBook[this.nowIndex])
                 this.data.bitmex.XBTUSD.data.push(this.回测ext__data[this.nowIndex])
+                this.data.hopex.BTCUSDT.orderBook.push(this.回测ext__hopex__orderBook[this.nowIndex])
+                this.data.hopex.BTCUSDT.data.push(this.回测ext__hopex__data[this.nowIndex])
                 this.nowIndex++
                 return true
             } else {
