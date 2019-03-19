@@ -13,7 +13,7 @@ import { config } from './config'
 import { 信号Layer } from './lib/Chart/Layer/信号Layer'
 import { BitMEXRESTAPI } from './lib/____API____/BitMEX/BitMEXRESTAPI'
 import * as fs from 'fs'
-import { safeJSONParse } from './lib/F/safeJSONParse';
+import { safeJSONParse } from './lib/F/safeJSONParse'
 
 theme.右边空白 = 0
 
