@@ -8,10 +8,12 @@ import { dialog } from './lib/UI/dialog'
 import { timeID } from './lib/F/timeID'
 import { theme } from './lib/Chart/theme'
 import { to范围 } from './lib/F/to范围'
-import { showWindowRemote, windowExt } from './windowExt' 
+import { showWindowRemote, windowExt } from './windowExt'
 import { config } from './config'
 import { 信号Layer } from './lib/Chart/Layer/信号Layer'
 import { BitMEXRESTAPI } from './lib/____API____/BitMEX/BitMEXRESTAPI'
+import * as fs from 'fs'
+import { safeJSONParse } from './lib/F/safeJSONParse';
 
 theme.右边空白 = 0
 
@@ -40,7 +42,7 @@ const account = config.account![windowExt.accountName]
 const { cookie } = account
 
 let 止损1m_dic: { [key: number]: string } = Object.create(null)
-let 止损提示: { name: string, value: boolean }[][] = []
+let 成交提示: { name: string, value: boolean }[][] = []
 
 const load = async () => {
     S = {
@@ -84,9 +86,22 @@ const load = async () => {
     }
 
 
-    止损提示 = data.map(v => [
-        { name: '止损', value: 止损1m_dic[v.id] === 'Stop' },
-        { name: '强平', value: 止损1m_dic[v.id] === 'StopLimit' },
+    const arr = safeJSONParse(fs.readFileSync('./db/成交记录.json').toString()) as BaseType.成交记录
+    const dic: { [key: number]: string } = Object.create(null)
+    arr.forEach(v => {
+        dic[timeID.timestampToOneMinuteID(v.timestamp)] = v.type
+    })
+
+    成交提示 = data.map(v => [
+        // '挂单买' | '挂单卖' | '挂单买成功' | '挂单卖成功' | '市价买' | '市价卖'
+        { name: '挂单买', value: dic[v.id] === '挂单买' },
+        { name: '挂单卖', value: dic[v.id] === '挂单卖' },
+        { name: '挂单买成功', value: dic[v.id] === '挂单买成功' },
+        { name: '挂单卖成功', value: dic[v.id] === '挂单卖成功' },
+        { name: '市价买', value: dic[v.id] === '市价买' },
+        { name: '市价卖', value: dic[v.id] === '市价卖' },
+        { name: '实盘止损', value: 止损1m_dic[v.id] === 'Stop' },
+        { name: '实盘强平', value: 止损1m_dic[v.id] === 'StopLimit' },
     ])
 
 }
@@ -155,7 +170,7 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
                 },
                 {
                     layerList: [
-                        layer(信号Layer, { data: 止损提示, color: 0xe56546 }),
+                        layer(信号Layer, { data: 成交提示, color: 0xe56546 }),
                     ]
                 },
                 {
