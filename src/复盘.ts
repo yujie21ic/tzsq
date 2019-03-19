@@ -170,7 +170,7 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
                 },
                 {
                     layerList: [
-                        layer(信号Layer, { data: 成交提示, color: 0xe56546 }),
+                        layer(信号Layer, { data: 成交提示, color: 0xffff00 }),
                     ]
                 },
                 {
