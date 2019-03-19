@@ -450,7 +450,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
             if (信号side === 平仓side && 活动委托.length === 0) {
 
-                const 市价 = false
+                const 市价 = lastNumber(self.realData.dataExt.XBTUSD.期货.绝对价差) > 15
 
                 return 市价 ?
                     self.taker({
