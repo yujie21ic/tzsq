@@ -894,7 +894,7 @@ export class RealDataBase {
                 dic[timeID.timestampToOneMinuteID(v.timestamp)] = v.type
             })
         } catch (e) {
-
+            console.log('e', e)
         }
 
         const 成交提示 = 指标.lazyMapCache(() => 期货.时间.length, i => [
