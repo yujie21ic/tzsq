@@ -4,7 +4,7 @@ import { createJSONSync } from './BitmexPositionAndOrder'
 import { BaseType } from '../../BaseType'
 import { lastNumber } from '../../F/lastNumber'
 import { setWindowTitle } from '../../C/setWindowTitle'
-import { 指标 } from '../../../RealDataServer/指标'
+import { 指标 } from '../../../指标/指标'
 
 export class 回测PositionAndOrder implements PositionAndOrder {
 

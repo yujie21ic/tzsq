@@ -1,7 +1,7 @@
 import { JSONSync } from '../lib/C/JSONSync'
 import { BaseType } from '../lib/BaseType'
 import { sum } from 'ramda'
-import { 指标 } from './指标'
+import { 指标 } from '../指标/指标'
 import { to范围 } from '../lib/F/to范围'
 import { lastNumber } from '../lib/F/lastNumber'
 import { is连续几根全亮 } from '../lib/F/is连续几根全亮'
@@ -896,7 +896,7 @@ export class RealDataBase {
             期货,
             期货30秒内成交量: () => this.get期货多少秒内成交量__万为单位(symbol, 30),
 
-            
+
             //差价
             差价,
             差价均线,

@@ -1,4 +1,4 @@
-import { 指标 } from '../RealDataServer/指标'
+import { 指标 } from './指标'
 import { RealDataBase } from '../RealDataServer/RealDataBase'
 
 export const 买卖 = (p: { 成交量: ArrayLike<number>, 盘口: ArrayLike<number>, 反向成交量: ArrayLike<number>, 反向盘口: ArrayLike<number> }) => {
