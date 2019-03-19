@@ -273,8 +273,8 @@ export class RealDataBase {
             })
 
         //
-        const 价格_最高15 = 指标.最高(价格, 60, RealDataBase.单位时间)
-        const 价格_最低15 = 指标.最低(价格, 60, RealDataBase.单位时间)
+        const 价格_最高60 = 指标.最高(价格, 60, RealDataBase.单位时间)
+        const 价格_最低60 = 指标.最低(价格, 60, RealDataBase.单位时间)
 
 
 
@@ -302,7 +302,7 @@ export class RealDataBase {
             })
 
             const 价差 = 指标.lazyMapCache2({ 起点价格: NaN }, (arr: number[], ext) => {
-                const length = Math.min(上涨_下跌_横盘.length, 价格_最高15.length, 价格_最低15.length)
+                const length = Math.min(上涨_下跌_横盘.length, 价格_最高60.length, 价格_最低60.length)
                 for (let i = Math.max(0, arr.length - 1); i < length; i++) {//最高价10 最低价10 一样长
                     if (上涨_下跌_横盘[i] === type) {
                         if (isNaN(ext.起点价格)) {
@@ -316,10 +316,10 @@ export class RealDataBase {
                         arr[i] = NaN
                     }
                     else if (type === '上涨') {
-                        arr[i] = 价格_最高15[i] - ext.起点价格
+                        arr[i] = 价格_最高60[i] - ext.起点价格
                     }
                     else if (type === '下跌') {
-                        arr[i] = ext.起点价格 - 价格_最低15[i]
+                        arr[i] = ext.起点价格 - 价格_最低60[i]
                     }
                 }
             })
@@ -704,7 +704,7 @@ export class RealDataBase {
                         // //过滤条件
                         { name: '标准成交量', value: 标准成交量 || 价格_波动率30[i] < 250 },
                         { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 200 * 10000 },
-                        { name: '折返程度', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
+                        { name: '折返程度', value: type === '摸顶' ? (价格_最高60[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低60[i]) < 折返率[i] },
                         { name: '价格速度', value: 价格速度 },
                         { name: '价差 >=8', value: 价差[i] >= 8 },
                         { name: 'is趋势', value: type === '摸顶' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
@@ -725,7 +725,7 @@ export class RealDataBase {
             i => [
                 { name: '震荡指数_macd DIF < DEM', value: 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i] },
                 { name: '成交量 DIF < DEM', value: 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] },
-                { name: '折返程度', value: type === '摸顶' ? (价格_最高15[i] - 价格[i]) > 折返率[i] : (价格[i] - 价格_最低15[i]) > 折返率[i] },
+                { name: '折返程度', value: type === '摸顶' ? (价格_最高60[i] - 价格[i]) > 折返率[i] : (价格[i] - 价格_最低60[i]) > 折返率[i] },
             ]
         )
         const 信号_摸顶_下跌平仓 = __摸顶抄底_平仓('摸顶')
@@ -748,7 +748,7 @@ export class RealDataBase {
                     { name: '5分钟波动率低量', value: 价格_波动率300[i] < 30 },
                     { name: '大单', value: bs.净成交量_累加10[i] > 100 * 10000 },
                     { name: '价差 < 4', value: 价差[i] <= 4 || (价格差_除以时间[i] <= 0.04 ? 价差[i] <= 8 : false) },
-                    { name: '折返程度', value: type === '追涨' ? (价格_最高15[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低15[i]) < 折返率[i] },
+                    { name: '折返程度', value: type === '追涨' ? (价格_最高60[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低60[i]) < 折返率[i] },
                     { name: 'is趋势', value: type === '追涨' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
                 ]
             )
@@ -810,8 +810,8 @@ export class RealDataBase {
             信号_追涨,
             信号_抄底,
             信号_追跌,
-            价格_最高15,
-            价格_最低15,
+            价格_最高15: 价格_最高60,
+            价格_最低15: 价格_最低60,
         }
     }
 
