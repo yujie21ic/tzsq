@@ -48,6 +48,7 @@ let 成交提示: { name: string, value: boolean }[][] = []
 
 let dif: ArrayLike<number> = []
 let dem: ArrayLike<number> = []
+let osc: ArrayLike<number> = []
 
 const load = async () => {
     S = {
@@ -71,6 +72,7 @@ const load = async () => {
     const macd = 指标.macd(data.map(v => v.close), 1000)
     dif = macd.DIF
     dem = macd.DEM
+    osc = macd.OSC
 
     S = {
         left: Math.max(0, data.length - 100),
@@ -186,6 +188,7 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
                     layerList: [
                         layer(LineLayer, { data: dif, color: 0xffff00 }),
                         layer(LineLayer, { data: dem, color: 0xaaaa00 }),
+                        layer(BarLayer, { data: osc, color: 0xeeeeee }),
                     ]
                 },
                 {
