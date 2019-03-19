@@ -5,6 +5,7 @@ import { BaseType } from '../../BaseType'
 import { lastNumber } from '../../F/lastNumber'
 import { setWindowTitle } from '../../C/setWindowTitle'
 import { 指标 } from '../../../指标/指标'
+import * as fs from 'fs'
 
 export class 回测PositionAndOrder implements PositionAndOrder {
 
@@ -41,6 +42,9 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     }
 
 
+    private 成交arr: BaseType.成交记录 = []
+
+
     private order_id = 1234
 
     maker(p: {
@@ -53,7 +57,18 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     }, logText?: string) {
         if (p.symbol !== 'XBTUSD') return false
 
-        console.log(`${new Date(lastNumber(this.realData.dataExt[p.symbol].期货.时间)).toLocaleString()}      ${p.text}`)
+        const timestamp = lastNumber(this.realData.dataExt[p.symbol].期货.时间)
+
+        console.log(`${new Date(timestamp).toLocaleString()}      ${p.text}`)
+
+        this.成交arr.push({
+            timestamp,
+            type: p.side === 'Buy' ? '挂单买' : '挂单卖',
+            count: p.size,
+            仓位数量: this.jsonSync.rawData.symbol.XBTUSD.仓位数量,
+            开仓均价: this.jsonSync.rawData.symbol.XBTUSD.开仓均价,
+            text: p.text,
+        })
 
         this.jsonSync.rawData.symbol.XBTUSD.活动委托.push({
             type: p.reduceOnly ? '限价只减仓' : '限价',
@@ -233,6 +248,17 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
         console.log(`${new Date(p.timestamp).toLocaleString()}      ${p.text}   开仓 =  ${this.jsonSync.rawData.symbol.XBTUSD.开仓均价}  平仓 =   ${p.price}   仓位数量 = ${this.jsonSync.rawData.symbol.XBTUSD.仓位数量}     单位taker = ${this.单位taker}       单位maker = ${this.单位maker}       单位盈利 = ${this.单位盈利}`)
 
+
+        this.成交arr.push({
+            timestamp: p.timestamp,
+            type: p.被动 ? (p.side === 'Buy' ? '挂单买成功' : '挂单卖成功') : (p.side === 'Buy' ? '市价买' : '市价卖'),
+            count: p.size,
+            仓位数量: this.jsonSync.rawData.symbol.XBTUSD.仓位数量,
+            开仓均价: this.jsonSync.rawData.symbol.XBTUSD.开仓均价,
+            text: p.text,
+        })
+
+
         if (this.jsonSync.rawData.symbol.XBTUSD.仓位数量 === 0) {
             console.log('____________________________________________________________________________________________________________________________________________________________________________________')
         }
@@ -249,6 +275,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
         while (true) {
             if (this.realData.回测step() === false) {
+                fs.writeFileSync('./db/成交记录.json', JSON.stringify(this.成交arr, undefined, 4))
                 console.log('_________________________回测结束_________________________')
                 return
             }

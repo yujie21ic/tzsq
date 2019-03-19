@@ -89,10 +89,10 @@ export namespace BaseType {
 
     export type 成交记录 = {
         timestamp: number
-        type: '挂单买' | '挂单卖' | '挂单买成功' | '挂单卖成功' | '市价买' | '市价卖' | '市价买止损' | '市价卖止损'
+        type: '挂单买' | '挂单卖' | '挂单买成功' | '挂单卖成功' | '市价买' | '市价卖'
         count: number
         仓位数量: number
         开仓均价: number
         text: string
-    }
+    }[]
 } 
