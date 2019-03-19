@@ -7,7 +7,7 @@ import { ZeroLayer } from './lib/Chart/Layer/ZeroLayer'
 import { 信号Layer } from './lib/Chart/Layer/信号Layer'
 import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
 import { 笔Layer } from './lib/Chart/Layer/笔Layer'
-import { get笔Index, get线段, 合并后的K线 } from './RealDataServer/缠中说禅'
+import { get笔Index, get线段, 合并后的K线 } from './指标/缠中说禅'
 import { 线段Layer } from './lib/Chart/Layer/线段Layer'
 import { 合并后的Layer } from './lib/Chart/Layer/合并后的Layer'
 
