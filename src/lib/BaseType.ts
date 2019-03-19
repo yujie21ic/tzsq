@@ -1,11 +1,12 @@
 export namespace BaseType {
 
+    export type Omit<T, K extends string> = Pick<T, Exclude<keyof T, K>>
+
+
 
     export type BitmexSymbol = 'ETHUSD' | 'XBTUSD'
     export type BinanceSymbol = 'btcusdt' | 'ethusdt' //ws小写  http大写  卧槽
     export type HopexSymbol = 'BTCUSDT' | 'ETHUSDT'
-
-
     export type MarketAndSymbol = {
         market: 'bitmex'
         symbol: BitmexSymbol
@@ -22,9 +23,9 @@ export namespace BaseType {
     }
 
 
-    export type Side = 'Buy' | 'Sell'
 
-    export type 成交性质Type = '双开' | '双平' | '多换' | '空换' | '多平' | '空平' | '空开' | '多开' | '不知道'
+
+    export type Side = 'Buy' | 'Sell'
 
 
     export type OrderBook = { //订单薄
@@ -83,5 +84,15 @@ export namespace BaseType {
         成交性质?: 成交性质Type
     }
 
-    export type Omit<T, K extends string> = Pick<T, Exclude<keyof T, K>>
+
+    export type 成交性质Type = '双开' | '双平' | '多换' | '空换' | '多平' | '空平' | '空开' | '多开' | '不知道'
+
+    export type 成交记录 = {
+        timestamp: number
+        type: '挂单买' | '挂单卖' | '挂单买成功' | '挂单卖成功' | '市价买' | '市价卖' | '市价买止损' | '市价卖止损'
+        count: number
+        仓位数量: number
+        开仓均价: number
+        text: string
+    }
 } 
