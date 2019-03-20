@@ -14,6 +14,8 @@ export class BitmexTradeAndOrderBook extends TradeAndOrderBook<BaseType.BitmexSy
         { theme: 'trade', filter: 'ETHUSD' },
         { theme: 'orderBook10', filter: 'XBTUSD' },
         { theme: 'orderBook10', filter: 'ETHUSD' },
+        { theme: 'tradeBin1m', filter: 'XBTUSD' },
+        { theme: 'tradeBin1m', filter: 'ETHUSD' },
     ])
 
     constructor() {
@@ -24,6 +26,11 @@ export class BitmexTradeAndOrderBook extends TradeAndOrderBook<BaseType.BitmexSy
         }
 
         this.ws.onmessage = frame => {
+
+            if (frame.table === 'tradeBin1m') {
+                // console.log(JSON.stringify(frame, undefined, 4))
+                // load 1m ?
+            }
 
             //trade 只会插入新数据  不会更新
             if (frame.table === 'trade' && (frame.action === 'partial' || frame.action === 'insert')) {
