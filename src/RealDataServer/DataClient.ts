@@ -8,6 +8,7 @@ import { timeID } from '../lib/F/timeID'
 import { PKClient } from '../lib/DataServer/PKClient'
 import { DBServer } from '../lib/DataServer/DBServer'
 import { PKServer } from '../lib/DataServer/PKServer'
+import { BitMEXRESTAPI } from '../lib/____API____/BitMEX/BitMEXRESTAPI'
 
 export namespace DataClient {
 
@@ -119,6 +120,20 @@ export namespace DataClient {
 
             this.data.startTick = Math.floor(startTime / RealDataBase.单位时间)
 
+            const res = await BitMEXRESTAPI.Trade.getBucketed('', {
+                symbol: 'XBTUSD',
+                reverse: true,
+                count: 26,
+                endTime: new Date(startTime).toISOString(),
+            })
+
+            if (res.data) {
+                this.jsonSync.rawData.oneMinPrice26 = res.data.reverse().map(v => v.close)
+            } else {
+                console.log('getBucketed error', res.error, res.msg)
+            }
+
+
             this.data.bitmex.XBTUSD.data = []
             this.data.bitmex.ETHUSD.data = []
             this.data.bitmex.XBTUSD.orderBook = []
@@ -187,6 +202,19 @@ export namespace DataClient {
             this.data.startTick = Math.floor(startTime / RealDataBase.单位时间)
             this.data.bitmex.XBTUSD.data = []
             this.data.bitmex.XBTUSD.orderBook = []
+
+            const res = await BitMEXRESTAPI.Trade.getBucketed('', {
+                symbol: 'XBTUSD',
+                reverse: true,
+                count: 26,
+                endTime: new Date(startTime).toISOString(),
+            })
+
+            if (res.data) {
+                this.jsonSync.rawData.oneMinPrice26 = res.data.reverse().map(v => v.close)
+            } else {
+                console.log('getBucketed error', res.error, res.msg)
+            }
 
 
             console.log('加载盘口...')
