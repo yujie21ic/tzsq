@@ -40,10 +40,10 @@ export class RealDataBase {
             this.jsonSync.rawData.binance.ethusdt.orderBook.length,
         )
 
-        //>5000 删除2000
-        if (length > 5000) {
 
-            const deleteCount = 2000
+        if (length > 120 * 60) {
+
+            const deleteCount = 120 * 30
             this.jsonSync.rawData.startTick += deleteCount
 
             //hopex
@@ -67,7 +67,7 @@ export class RealDataBase {
             this.jsonSync.rawData.binance.ethusdt.data.splice(0, deleteCount)
             this.jsonSync.rawData.binance.ethusdt.orderBook.splice(0, deleteCount)
 
-            this.重新初始化()
+            this.重新初始化() //卡死？
         }
 
 
@@ -81,6 +81,7 @@ export class RealDataBase {
     jsonSync = new JSONSync(
         {
             startTick: 0,
+            oneMinPrice26: [] as number[],
             ctp: {
                 rb1905: {
                     data: [] as BaseType.KLine[],

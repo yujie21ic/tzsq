@@ -6,6 +6,7 @@ import { BitmexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/Bi
 import { HopexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
 import { CTP } from '../lib/____API____/TradeAndOrderBook/CTP'
+import { BitMEXRESTAPI } from '../lib/____API____/BitMEX/BitMEXRESTAPI';
 
 export class RealData__Server extends RealDataBase {
 
@@ -141,6 +142,19 @@ export class RealData__Server extends RealDataBase {
         if (server) {
             this.wss = new WebSocket.Server({ port: 6666 })
         }
+
+        BitMEXRESTAPI.Trade.getBucketed('', {
+            symbol: 'XBTUSD',
+            reverse: true,
+            count: 26
+        }).then(res => {
+            if (res.data) {
+                this.jsonSync.data.oneMinPrice26.____set(res.data.reverse().map(v => v.close))
+            } else {
+                console.log('getBucketed error', res.error, res.msg)
+            }
+        })
+
 
         this.bitmex.statusObservable.subscribe(v => {
             this._bitmex = v.isConnected
