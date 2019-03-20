@@ -10,6 +10,7 @@ import { 笔Layer } from './lib/Chart/Layer/笔Layer'
 import { get笔Index, get线段, 合并后的K线 } from './指标/缠中说禅'
 import { 线段Layer } from './lib/Chart/Layer/线段Layer'
 import { 合并后的Layer } from './lib/Chart/Layer/合并后的Layer'
+import { BarLayer } from './lib/Chart/Layer/BarLayer'
 
 
 
@@ -1181,6 +1182,31 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
         ]
     }),
+
+
+    
+    '波动_测试': (d, d2) => ({
+        heightList: [0.4, 0.4, 0.2],
+        items: [
+            {
+                numberColor: BTC颜色,
+                layerList: [
+                    layer(LineLayer, { data: 波动_测试.波动 ,color:0xffffff}),
+                ]
+            },
+            {
+                layerList: [
+                    layer(BarLayer, { data: 波动_测试.时间 ,color:0xffffff}),
+                ]
+            },
+            {
+                layerList: [
+                    layer(LineLayer, { data: 波动_测试.累计买, color: 买颜色 }),
+                    layer(LineLayer, { data: 波动_测试.累计卖, color: 卖颜色 }), 
+                ]
+            },
+        ]
+    }),
   
 
 
@@ -1241,4 +1267,20 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
         ]
     }),
+}
+
+
+
+
+
+
+
+
+
+
+const 波动_测试 = {
+    波动:[],
+    时间:[],
+    累计买:[],
+    累计卖:[],
 }
