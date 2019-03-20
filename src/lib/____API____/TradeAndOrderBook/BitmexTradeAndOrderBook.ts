@@ -14,8 +14,8 @@ export class BitmexTradeAndOrderBook extends TradeAndOrderBook<BaseType.BitmexSy
         { theme: 'trade', filter: 'ETHUSD' },
         { theme: 'orderBook10', filter: 'XBTUSD' },
         { theme: 'orderBook10', filter: 'ETHUSD' },
-        { theme: 'tradeBin1m', filter: 'XBTUSD' },
-        { theme: 'tradeBin1m', filter: 'ETHUSD' },
+        // { theme: 'tradeBin1m', filter: 'XBTUSD' },
+        // { theme: 'tradeBin1m', filter: 'ETHUSD' },
     ])
 
     constructor() {
