@@ -81,7 +81,6 @@ export class RealDataBase {
     jsonSync = new JSONSync(
         {
             startTick: 0,
-            oneMinPrice26: [] as number[],
             ctp: {
                 rb1905: {
                     data: [] as BaseType.KLine[],

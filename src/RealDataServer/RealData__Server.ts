@@ -5,8 +5,7 @@ import { BinanceTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/B
 import { BitmexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/BitmexTradeAndOrderBook'
 import { HopexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
-import { CTP } from '../lib/____API____/TradeAndOrderBook/CTP'
-import { BitMEXRESTAPI } from '../lib/____API____/BitMEX/BitMEXRESTAPI'
+import { CTP } from '../lib/____API____/TradeAndOrderBook/CTP' 
 
 export class RealData__Server extends RealDataBase {
 
@@ -138,20 +137,7 @@ export class RealData__Server extends RealDataBase {
     constructor(server = true) {
         super()
 
-        this.重新初始化()//<-----------fix
-
-        BitMEXRESTAPI.Trade.getBucketed('', {
-            symbol: 'XBTUSD',
-            reverse: true,
-            count: 26,
-        }).then(res => {
-            if (res.data) {
-                this.jsonSync.data.oneMinPrice26.____set(res.data.reverse().map(v => v.close))
-            } else {
-                console.log('getBucketed error', res.error, res.msg)
-                return
-            }
-        })
+        this.重新初始化()//<-----------fix 
 
 
         if (server) {
