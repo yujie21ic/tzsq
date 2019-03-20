@@ -203,33 +203,33 @@ export class RealDataBase {
         //
         const 波动_测试 = 指标.lazyMapCache2({ index: 0, lastPrice: NaN }, (arr: {
             价格: number
-            持续毫秒: number
+            持续秒: number
             累计买: number
             累计卖: number
         }[], ext) => {
-            while (ext.index < 盘口价格.length - 1) {//延迟一个显示  先
+            while (ext.index < Math.min(盘口价格.length - 1, 买.成交量.length - 1)) {//延迟一个显示  先
 
                 if (ext.lastPrice !== 盘口价格[ext.index]) {
                     ext.lastPrice = 盘口价格[ext.index]
                     arr.push({
                         价格: 盘口价格[ext.index],
-                        持续毫秒: 500,
-                        累计买: 买.盘口[ext.index],
-                        累计卖: 卖.盘口[ext.index],
+                        持续秒: 0.5,
+                        累计买: 买.成交量[ext.index],
+                        累计卖: 卖.成交量[ext.index],
                     })
                 } else {
                     arr[arr.length - 1] = ({
                         价格: arr[arr.length - 1].价格,
-                        持续毫秒: arr[arr.length - 1].持续毫秒 + 500,
-                        累计买: arr[arr.length - 1].累计买 + 买.盘口[ext.index],
-                        累计卖: arr[arr.length - 1].累计卖 + 卖.盘口[ext.index],
+                        持续秒: arr[arr.length - 1].持续秒 + 0.5,
+                        累计买: arr[arr.length - 1].累计买 + 买.成交量[ext.index],
+                        累计卖: arr[arr.length - 1].累计卖 + 卖.成交量[ext.index],
                     })
                 }
                 ext.index++
             }
         })
         const 波动_测试_价格 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].价格)
-        const 波动_测试_持续毫秒 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].持续毫秒)
+        const 波动_测试_持续秒 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].持续秒)
         const 波动_测试_累计买 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].累计买)
         const 波动_测试_累计卖 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].累计卖)
 
@@ -808,7 +808,7 @@ export class RealDataBase {
 
         return {
             波动_测试_价格,
-            波动_测试_持续毫秒,
+            波动_测试_持续秒,
             波动_测试_累计买,
             波动_测试_累计卖,
 

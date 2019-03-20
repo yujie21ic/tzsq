@@ -1206,7 +1206,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(BarLayer, { data: d.期货.波动_测试_持续毫秒, color: 0xffffff }),
+                    layer(BarLayer, { data: d.期货.波动_测试_持续秒, color: 0xffffff }),
                 ]
             },
             {

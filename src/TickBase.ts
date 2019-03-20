@@ -91,7 +91,10 @@ export class TickBase {
     title = ''
     getLeftRight() {
         const d = this.real.dataExt[this.nowTickSymbol]
+
         const right = Math.max(d.现货.价格.length, d.hopex.价格.length, d.期货.价格.length, d.期货.买.盘口.length, d.期货.卖.盘口.length) - 1
+        //const right = Math.max(d.期货.波动_测试_累计买.length) - 1
+
         const left = Math.max(0, right - this.showCount)
         return { left, right }
     }
