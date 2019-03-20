@@ -139,9 +139,6 @@ export class RealData__Server extends RealDataBase {
         super()
 
         this.重新初始化()//<-----------fix
-        if (server) {
-            this.wss = new WebSocket.Server({ port: 6666 })
-        }
 
         BitMEXRESTAPI.Trade.getBucketed('', {
             symbol: 'XBTUSD',
@@ -152,8 +149,15 @@ export class RealData__Server extends RealDataBase {
                 this.jsonSync.data.oneMinPrice26.____set(res.data.reverse().map(v => v.close))
             } else {
                 console.log('getBucketed error', res.error, res.msg)
+                return
             }
         })
+
+
+        if (server) {
+            this.wss = new WebSocket.Server({ port: 6666 })
+        }
+
 
 
         this.bitmex.statusObservable.subscribe(v => {
