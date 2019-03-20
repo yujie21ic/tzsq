@@ -130,7 +130,8 @@ export namespace DataClient {
             if (res.data) {
                 this.jsonSync.rawData.oneMinPrice26 = res.data.reverse().map(v => v.close)
             } else {
-                console.log('getBucketed error', res.error, res.msg)
+                alert('getBucketed error' + res.error + res.msg)
+                return
             }
 
 
@@ -213,7 +214,8 @@ export namespace DataClient {
             if (res.data) {
                 this.jsonSync.rawData.oneMinPrice26 = res.data.reverse().map(v => v.close)
             } else {
-                console.log('getBucketed error', res.error, res.msg)
+                alert('getBucketed error' + res.error + res.msg)
+                return
             }
 
 
