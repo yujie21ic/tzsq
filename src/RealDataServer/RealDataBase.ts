@@ -188,18 +188,52 @@ export class RealDataBase {
 
         盘口算价格 = false
 
-        const 价格 = 盘口算价格 ?
-            指标.lazyMapCache(() => orderBook.length, i =>
-                (orderBook[i].buy && orderBook[i].buy.length > 0 && orderBook[i].sell && orderBook[i].sell.length > 0) ?
-                    ((orderBook[i].buy[0].price + orderBook[i].sell[0].price) / 2) : NaN) :
-            指标.lazyMapCache(() => data.length, i => {
-                const x = data[i]
-                if (x === undefined) {
-                    console.log('xxx', data.length, i)
-                    if (isNaN(i)) debugger
+
+        const 盘口价格 = 指标.lazyMapCache(() => orderBook.length, i =>
+            (orderBook[i].buy && orderBook[i].buy.length > 0 && orderBook[i].sell && orderBook[i].sell.length > 0) ?
+                ((orderBook[i].buy[0].price + orderBook[i].sell[0].price) / 2) : NaN)
+
+        const 收盘价 = 指标.lazyMapCache(() => data.length, i => data[i].close)
+
+        const 价格 = 盘口算价格 ? 盘口价格 : 收盘价
+
+
+
+
+        //
+        const 波动_测试 = 指标.lazyMapCache2({ index: 0, lastPrice: NaN }, (arr: {
+            价格: number
+            持续毫秒: number
+            累计买: number
+            累计卖: number
+        }[], ext) => {
+            while (ext.index < 盘口价格.length - 1) {//延迟一个显示  先
+
+                if (ext.lastPrice !== 盘口价格[ext.index]) {
+                    ext.lastPrice = 盘口价格[ext.index]
+                    arr.push({
+                        价格: 盘口价格[ext.index],
+                        持续毫秒: 500,
+                        累计买: 买.盘口[ext.index],
+                        累计卖: 卖.盘口[ext.index],
+                    })
+                } else {
+                    arr[arr.length - 1] = ({
+                        价格: arr[arr.length - 1].价格,
+                        持续毫秒: arr[arr.length - 1].持续毫秒 + 500,
+                        累计买: arr[arr.length - 1].累计买 + 买.盘口[ext.index],
+                        累计卖: arr[arr.length - 1].累计卖 + 卖.盘口[ext.index],
+                    })
                 }
-                return x.close
-            })
+                ext.index++
+            }
+        })
+        const 波动_测试_价格 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].价格)
+        const 波动_测试_持续毫秒 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].持续毫秒)
+        const 波动_测试_累计买 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].累计买)
+        const 波动_测试_累计卖 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].累计卖)
+
+
 
 
         const KLine = 指标.lazyMapCache(() => data.length, i => ({
@@ -210,7 +244,7 @@ export class RealDataBase {
         }))
 
 
-        const 收盘价 = 指标.lazyMapCache(() => data.length, i => data[i].close)
+
 
         const 时间 = 指标.lazyMapCache(() => data.length, i => timeID._500msIDToTimestamp(data[i].id))
         const __成交量买 = 指标.lazyMapCache(() => data.length, i => data[i].buySize)
@@ -236,7 +270,7 @@ export class RealDataBase {
         //价格
         const 价格_均线300 = 指标.均线(价格, 300, RealDataBase.单位时间)
         const 价格_均线60 = 指标.均线(价格, 120, RealDataBase.单位时间)
-        const 价格均线价差 = 指标.lazyMapCache(() => Math.min(价格_均线300.length,价格_均线60.length), i => 价格_均线60[i]-价格_均线300[i])
+        const 价格均线价差 = 指标.lazyMapCache(() => Math.min(价格_均线300.length, 价格_均线60.length), i => 价格_均线60[i] - 价格_均线300[i])
 
 
         const 价格_波动率15 = 指标.波动率(价格, 15, RealDataBase.单位时间)
@@ -756,7 +790,7 @@ export class RealDataBase {
                 i => [
                     { name: '净盘口 > 0', value: bs.净盘口_均线5[i] > 0 },
                     { name: '相对价差 ', value: type === '追涨' ? bitmex_hopex_上涨相对差价均线[i] > 0 : bitmex_hopex_下跌相对价差均线[i] < 0 },
-                    { name: '价格均线价差 ', value: type === '追涨' ? 价格均线价差[i]>0.5 : 价格均线价差[i]<-0.5 },
+                    { name: '价格均线价差 ', value: type === '追涨' ? 价格均线价差[i] > 0.5 : 价格均线价差[i] < -0.5 },
                     { name: '5分钟波动率低量', value: 价格_波动率300[i] < 400 },
                     { name: '大单', value: bs.净成交量_累加10[i] > 150 * 10000 },
                     { name: '价差 < 4', value: 价差[i] <= 4 || (价格差_除以时间[i] <= 0.04 ? 价差[i] <= 8 : false) },
@@ -773,6 +807,13 @@ export class RealDataBase {
         )
 
         return {
+            波动_测试_价格,
+            波动_测试_持续毫秒,
+            波动_测试_累计买,
+            波动_测试_累计卖,
+
+
+
             价格均线价差,
             价格_均线120: 价格_均线60,
             价格_波动率60,
