@@ -13,3 +13,12 @@
 
 
 d 把信号整理到 外面  全放指标文件夹
+
+
+
+
+source .nvm/nvm.sh
+
+screen -S a
+
+screen -r a
