@@ -231,7 +231,7 @@ export class RealDataBase {
         const 波动_测试_价格 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].价格)
         const 波动_测试_持续秒 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].持续秒)
         const 波动_测试_累计买 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].累计买)
-        const 波动_测试_累计卖 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].累计卖)
+        const 波动_测试_累计卖 = 指标.lazyMapCache(() => 波动_测试.length, i => -波动_测试[i].累计卖)//!!!!!!!!!!临时负数
 
 
 
