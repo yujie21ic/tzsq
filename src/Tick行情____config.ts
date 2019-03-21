@@ -1207,24 +1207,34 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
 
     '波动_测试': (d, d2) => ({
-        heightList: [0.4, 0.4, 0.2],
+        heightList: [0.6, 0.4],
         items: [
-            {
-                numberColor: BTC颜色,
-                layerList: [
-                    layer(LineLayer, { data: d.期货.波动_测试_价格, color: 0xffffff }),
-                ]
-            },
+            [
+                {
+                    layerList: [
+                        layer(ZeroLayer, { color: 波动率颜色 }),
+                        layer(LineLayer, { data: d.期货.波动_测试_净成交量_累加10, color: 波动率颜色 }),
+                    ]
+                },
+                {
+                    numberColor: BTC颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d.期货.波动_测试_价格, color: BTC颜色 }),
+                    ]
+                },
+            ],
+           
             {
                 layerList: [
                     layer(BarLayer, { data: d.期货.波动_测试_持续秒, color: 0xffffff }),
                 ]
             },
-            {
-                layerList: [
-                    layer(LineLayer, { data: d.期货.波动_测试_净成交量_累加10, color: 0xffff00 }),
-                ]
-            },
+            // {
+            //     layerList: [
+            //         layer(ZeroLayer, { color: 波动率颜色 }),
+            //         layer(LineLayer, { data: d.期货.波动_测试_净成交量_累加10, color: 0xffff00 }),
+            //     ]
+            // },
         ]
     }),
 
