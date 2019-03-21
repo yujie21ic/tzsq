@@ -14,6 +14,8 @@ import { 信号Layer } from './lib/Chart/Layer/信号Layer'
 import { BitMEXRESTAPI } from './lib/____API____/BitMEX/BitMEXRESTAPI'
 import * as fs from 'fs'
 import { safeJSONParse } from './lib/F/safeJSONParse'
+import { 指标 } from './指标/指标'
+import { LineLayer } from './lib/Chart/Layer/LineLayer'
 
 theme.右边空白 = 0
 
@@ -44,6 +46,10 @@ const { cookie } = account
 let 止损1m_dic: { [key: number]: string } = Object.create(null)
 let 成交提示: { name: string, value: boolean }[][] = []
 
+let dif: ArrayLike<number> = []
+let dem: ArrayLike<number> = []
+let osc: ArrayLike<number> = []
+
 const load = async () => {
     S = {
         left: 0,
@@ -62,6 +68,11 @@ const load = async () => {
         console.log('load error', error, msg)
         return
     }
+
+    const macd = 指标.macd(data.map(v => v.close), 1000)
+    dif = macd.DIF
+    dem = macd.DEM
+    osc = macd.OSC
 
     S = {
         left: Math.max(0, data.length - 100),
@@ -158,7 +169,7 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
         left: S.left,
         right: S.right,
         items: {
-            heightList: [0.6, 0.2, 0.2],
+            heightList: [0.4, 0.2, 0.2, 0.2],
             items: [
                 {
                     layerList: [
@@ -171,6 +182,13 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
                 {
                     layerList: [
                         layer(信号Layer, { data: 成交提示, color: 0xffff00 }),
+                    ]
+                },
+                {
+                    layerList: [
+                        layer(LineLayer, { data: dif, color: 0xffff00 }),
+                        layer(LineLayer, { data: dem, color: 0xaaaa00 }),
+                        layer(BarLayer, { data: osc, color: 0xeeeeee }),
                     ]
                 },
                 {

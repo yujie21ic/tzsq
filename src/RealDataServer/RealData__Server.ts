@@ -5,7 +5,7 @@ import { BinanceTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/B
 import { BitmexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/BitmexTradeAndOrderBook'
 import { HopexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
-import { CTP } from '../lib/____API____/TradeAndOrderBook/CTP'
+import { CTP } from '../lib/____API____/TradeAndOrderBook/CTP' 
 
 export class RealData__Server extends RealDataBase {
 
@@ -137,10 +137,14 @@ export class RealData__Server extends RealDataBase {
     constructor(server = true) {
         super()
 
-        this.重新初始化()//<-----------fix
+        this.重新初始化()//<-----------fix 
+
+
         if (server) {
             this.wss = new WebSocket.Server({ port: 6666 })
         }
+
+
 
         this.bitmex.statusObservable.subscribe(v => {
             this._bitmex = v.isConnected

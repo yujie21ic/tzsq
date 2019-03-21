@@ -5,10 +5,11 @@ import { lastNumber } from './lib/F/lastNumber'
 import { to范围 } from './lib/F/to范围'
 import { toGridPoint } from './lib/F/toGridPoint'
 import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/PositionAndOrder'
+import { config } from './config'
 
 
 const symbol = 'XBTUSD'
-const 交易数量 = 2
+const 交易数量 = config.量化数量 || 2
 
 
 export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
