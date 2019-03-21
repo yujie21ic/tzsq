@@ -339,12 +339,12 @@ export class RealDataBase {
 
             const 动态时间_y秒 = 指标.lazyMapCache(
                 () => Math.min(价差.length),
-                i => to范围({ min: 4, max: 20, value: 价差[i] / 12 }),
+                i => to范围({ min: 4, max: 10, value: 价差[i] / 12 }),
             )
 
             const 动态时间_y秒大 = 指标.lazyMapCache(
                 () => Math.min(价差.length),
-                i => to范围({ min: 7, max: 25, value: 价差[i] / 6 }),
+                i => to范围({ min: 6, max: 15, value: 价差[i] / 8 }),
             )
 
             const x秒内极值点价格 = 指标.lazyMapCache(
@@ -375,11 +375,11 @@ export class RealDataBase {
                     if (isNaN(y根)) return false
                     const 极值 = x秒内极值点价格[Math.max(0, i - y根 + 1)]
                     for (let k = i; k > Math.max(-1, i - y根); k--) {
-                        if (type === '上涨' && 价格[k] > (极值 + (价差[i] > 50 ? 2 : 0))) {//继续创新高
+                        if (type === '上涨' && 价格[k] > (极值 + (价差[i] > 50 ? 1 : 0))) {//继续创新高
                             return false
                         }
 
-                        if (type === '下跌' && 价格[k] < (极值 - (价差[i] > 50 ? 2 : 0))) {//继续创新低
+                        if (type === '下跌' && 价格[k] < (极值 - (价差[i] > 50 ? 1 : 0))) {//继续创新低
                             return false
                         }
                     }
@@ -427,11 +427,11 @@ export class RealDataBase {
                     if (isNaN(y根)) return false
                     const 极值 = x秒内极值点价格[Math.max(0, i - y根 + 1)]
                     for (let k = i; k > Math.max(-1, i - y根); k--) {
-                        if (type === '上涨' && 价格[k] > (极值 + (价差[i] > 50 ? 2 : 0))) {//继续创新高
+                        if (type === '上涨' && 价格[k] > (极值 + (价差[i] > 50 ? 1 : 0))) {//继续创新高
                             return false
                         }
 
-                        if (type === '下跌' && 价格[k] < (极值 - (价差[i] > 50 ? 2 : 0))) {//继续创新低
+                        if (type === '下跌' && 价格[k] < (极值 - (价差[i] > 50 ? 1 : 0))) {//继续创新低
                             return false
                         }
                     }
@@ -533,7 +533,7 @@ export class RealDataBase {
 
         const 震荡指数 = 指标.lazyMapCache(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length, 价格_波动率30.length), i => {
             const 上涨下跌价差 = (上涨_下跌_横盘[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i]
-            return 上涨下跌价差 > 2 ? to范围({ min: 0.01, max: 10, value: 价格_波动率15[i] / 上涨下跌价差 }) : NaN
+            return 上涨下跌价差 > 2 ? to范围({ min: 0.01, max: 10, value: 价格_波动率30[i] / 上涨下跌价差 }) : NaN
         })
 
         const 震荡指数_macd = 指标.macd(震荡指数, RealDataBase.单位时间)
@@ -655,13 +655,13 @@ export class RealDataBase {
                         (大 && v__0 && v__1)
 
                     const 震荡指数_最高30 = type === '摸顶' ? 上涨.震荡指数_最高30[i] : 下跌.震荡指数_最高30[i]
-                    const 震荡 = 震荡指数_最高30 > 1.1 && (震荡指数[i] < 2 && (震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i]))
+                    const 震荡 = 震荡指数_最高30 > 2 && (震荡指数[i] < 2.5 && (震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i]))
 
                     const 价差走平 = type === '摸顶' ? 上涨.价差走平[i] : 下跌.价差走平[i]
                     const 价差走平大 = type === '摸顶' ? 上涨.价差走平大[i] : 下跌.价差走平大[i]
 
                     let 大价差走平x秒 = 价差[i] > 价差大巨大分界 && 价差走平大
-                    let 标准成交量差值衰竭 = false
+                    //let 标准成交量差值衰竭 = false
                     let 盘口 = false
                     let 成交量 = false
                     let 形态 = false
@@ -671,21 +671,21 @@ export class RealDataBase {
                         形态 = 震荡 || 价差走平
                         成交量 = 成交量衰竭 || 净成交量5反向
                         盘口 = 盘口通用
-                        标准成交量差值衰竭 = (实时与标准成交量之差macd.DIF[i] < 实时与标准成交量之差macd.DEM[i])
+                        //标准成交量差值衰竭 = true
                         标准成交量 = 净累计成交量[i] < 累计成交量阈值[i]
-                        价格速度 = 价格差_除以时间[i] >= 0.1
+                        价格速度 = 价格差_除以时间[i] >= 0.15
                     } else if (价差[i] > 价差中大分界 && 价差[i] < 价差大巨大分界) {
                         形态 = 震荡 || 价差走平
                         成交量 = 成交量衰竭 || 净成交量5反向
                         盘口 = 盘口通用
-                        标准成交量差值衰竭 = (实时与标准成交量之差macd.DIF[i] < 实时与标准成交量之差macd.DEM[i]) || (实时与标准成交量之差[i] < -200 * 10000)
+                        //标准成交量差值衰竭 = (实时与标准成交量之差macd.DIF[i] < 实时与标准成交量之差macd.DEM[i]) || (实时与标准成交量之差[i] < -200 * 10000)
                         标准成交量 = 净累计成交量[i] < 累计成交量阈值[i]
-                        价格速度 = 价格差_除以时间[i] >= 0.1
+                        价格速度 = 价格差_除以时间[i] >= 0.15
                     } else if (价差[i] > 价差大巨大分界) {
-                        形态 = 价差走平
+                        形态 =  震荡 || 价差走平
                         成交量 = 成交量衰竭 || 净成交量5反向 || 大价差走平x秒
                         盘口 = bs.净盘口_均线5[i] < 0 || 大价差走平x秒
-                        标准成交量差值衰竭 = (实时与标准成交量之差macd.DIF[i] < 实时与标准成交量之差macd.DEM[i]) || (实时与标准成交量之差[i] < -200 * 10000) || 大价差走平x秒
+                        //标准成交量差值衰竭 = (实时与标准成交量之差macd.DIF[i] < 实时与标准成交量之差macd.DEM[i]) || (实时与标准成交量之差[i] < -200 * 10000) || 大价差走平x秒
                         标准成交量 = 净累计成交量[i] < 累计成交量阈值[i] || 大价差走平x秒
                         价格速度 = true
                     }
@@ -696,7 +696,7 @@ export class RealDataBase {
                         { name: '盘口', value: 盘口 },
                         //范围信号  
                         { name: '形态', value: 形态 },
-                        { name: '标准成交量差值衰竭', value: 标准成交量差值衰竭 || 价格_波动率30[i] < 250 },
+                        //{ name: '标准成交量差值衰竭', value: 标准成交量差值衰竭 },
                         //{ name: '实时与标准成交量之差', value: },
                         // { name: '价差走平', value: 价差走平 },
                         //{ name: '大价差走平x秒', value: 价差走平大 },
@@ -704,7 +704,7 @@ export class RealDataBase {
                         //{ name: '当前价格与极值关系', value: 下跌.当前价格与极值关系[i] },
 
                         // //过滤条件
-                        { name: '标准成交量', value: 标准成交量 || 价格_波动率30[i] < 250 },
+                        { name: '标准成交量', value: 标准成交量  },
                         { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 200 * 10000 },
                         { name: '折返程度', value: type === '摸顶' ? (价格_最高60[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低60[i]) < 折返率[i] },
                         { name: '价格速度', value: 价格速度 },
@@ -754,8 +754,8 @@ export class RealDataBase {
                 i => [
                     { name: '净盘口 > 0', value: bs.净盘口_均线5[i] > 0 },
                     { name: '相对价差 ', value: type === '追涨' ? bitmex_hopex_上涨相对差价均线[i] > 0 : bitmex_hopex_下跌相对价差均线[i] < 0 },
-                    { name: '5分钟波动率低量', value: 价格_波动率300[i] < 500 },
-                    { name: '大单', value: bs.净成交量_累加10[i] > 150 * 10000 },
+                    { name: '5分钟波动率低量', value: 价格_波动率300[i] < 40 },
+                    { name: '大单', value: bs.净成交量_累加10[i] > 200 * 10000 },
                     { name: '价差 < 4', value: 价差[i] <= 4 || (价格差_除以时间[i] <= 0.04 ? 价差[i] <= 8 : false) },
                     { name: '折返程度', value: type === '追涨' ? (价格_最高60[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低60[i]) < 折返率[i] },
                     { name: 'is趋势', value: type === '追涨' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
@@ -770,6 +770,7 @@ export class RealDataBase {
         )
 
         return {
+            
             价格_波动率60,
             动态价格_均线方差macd,
             动态价格_均线方差,
