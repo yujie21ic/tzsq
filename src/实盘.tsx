@@ -355,17 +355,16 @@ export class 交易 extends React.Component {
 
 const hopex市价开仓和止损BTC = async (cookie: string, p: { size: number, stopPrice: number, side: BaseType.Side }) => {
     JSONRequest({
-        url: 'https://www.hopex.com/api/v1/gateway/User/Order',
+        url: 'https://web.hopex.com/api/v1/gateway/User/Order?culture=zh-CN',
         method: 'POST',
         body: {
             'param': {
                 'side': p.side === 'Sell' ? '1' : '2',
-                'orderQuantity': p.size,
-                'source': '浏览器，我是市价测试单,用户id：undefined,邮箱：undefined',
+                'orderQuantity': String(p.size),
                 'market': 'BTCUSDT',
                 'marketCode': 'BTCUSDT',
                 'contractCode': 'BTCUSDT',
-                'lang': 'cn'
+                'lang': 'zh-CN',
             }
         },
         ss: config.ss,
@@ -378,24 +377,23 @@ const hopex市价开仓和止损BTC = async (cookie: string, p: { size: number, 
             Cookie: cookie,
         }
     })
-    //console.log(p.stopPrice)
     const 止损side = p.side === 'Sell' ? 'Buy' : 'Sell'
 
     JSONRequest({
-        url: 'https://www.hopex.com/api/v1/gateway/User/ConditionOrder',
+        url: 'https://web.hopex.com/api/v1/gateway/User/ConditionOrder?culture=zh-CN',
         method: 'POST',
         body: {
             'param': {
-                'expectedQuantity': String(p.size),
-                'marketCode': 'BTCUSDT',
-                'trigPrice': String(止损side === 'Sell' ? String(p.stopPrice) : String(p.stopPrice)),
-                'lang': 'cn',
-                'expectedPrice': String(止损side === 'Sell' ? String(p.stopPrice - 100) : String(p.stopPrice + 100)),
-                'trigType': 'market_price',
-                'side': 止损side === 'Sell' ? 1 : 2,
-                'type': 'LimitLoss',
-                'market': 'BTCUSDT',
-                'contractCode': 'BTCUSDT'
+                contractCode: 'BTCUSDT',
+                expectedPrice: String(止损side === 'Sell' ? String(p.stopPrice - 100) : String(p.stopPrice + 100)),
+                expectedQuantity: String(p.size),
+                lang: 'zh-CN',
+                market: 'BTCUSDT',
+                marketCode: 'BTCUSDT',
+                side: 止损side === 'Sell' ? 1 : 2,
+                trigPrice: String(止损side === 'Sell' ? String(p.stopPrice) : String(p.stopPrice)),
+                trigType: 'market_price',
+                type: 'LimitLoss',
             }
         },
         ss: config.ss,
