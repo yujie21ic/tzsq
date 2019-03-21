@@ -1211,6 +1211,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         items: [
             [
                 {
+                    numberX:100,
                     layerList: [
                         layer(ZeroLayer, { color: 波动率颜色 }),
                         layer(LineLayer, { data: d.期货.波动_测试_净成交量_累加10, color: 波动率颜色 }),
