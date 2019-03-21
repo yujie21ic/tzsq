@@ -629,6 +629,93 @@ export class RealDataBase {
 
         const 价差中大分界 = 20
         const 价差大巨大分界 = 50
+        const __摸顶抄底hopex专用 = (type: '摸顶' | '抄底') => {
+            const bs = type === '摸顶' ? 买 : 卖
+            const 价差 = type === '摸顶' ? 上涨.价差 : 下跌.价差
+            const 真空信号 = type === '摸顶' ? 真空信号涨 : 真空信号跌
+            return 指标.lazyMapCache(
+                () => Math.min(
+                    data.length,
+                    orderBook.length,
+                    //_____________________fix______________________________________
+                    价格差_除以时间.length,//!!!
+                    上涨.累计成交量.length,
+                    下跌.累计成交量.length,
+                    累计成交量阈值.length,
+                ),
+                i => {
+                    //
+                    const 小 = 价差[i] < 价差中大分界
+                    const 大 = 价差[i] >= 价差中大分界
+
+                    //盘口!! 
+                    const v = bs.盘口[i] / 10000
+                    const 盘口_0_50万 = v < 50
+                    const 盘口_0_100万 = v < 100
+                    const 盘口_0_200万 = v < 200
+                    const 盘口_50_100万 = v >= 50 && v < 100
+                    const 盘口_100_150万 = v >= 100 && v < 150
+                    // const A = bs.净盘口[i] <= bs.净盘口_均线5[i] + 50 * 10000 && bs.净盘口[i] < 5 * 100000
+                    // const B = bs.净盘口[i] <= bs.净盘口_均线5[i] && bs.净盘口[i] < 0
+                    const A = bs.净盘口[i] < 5 * 100000
+                    const B = bs.净盘口[i] < 0
+                    let 盘口通用 =
+                        (小 && 盘口_0_100万 && A) ||
+                        (小 && 盘口_100_150万 && B) ||
+                        (大 && 盘口_0_200万 && 真空信号[i]) ||
+                        (大 && 盘口_0_50万 && A) ||
+                        (大 && 盘口_50_100万 && B)
+
+
+
+                    //成交量衰竭
+                    //const v__0 = 净成交量abs_macd.DIF[i] < 0
+                    const v__0 = true
+                    const v__1 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i]
+                    const v__1_1 = 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] * 1.1
+                    //const 净累计成交量阈值 = type === '摸顶' ?65*10000*价差[i]+200*10000:60*10000*价差[i]+300*10000
+
+                    const 净成交量5反向 = type === '摸顶' ? 净成交量abs_累加5[i] < 0 : 净成交量abs_累加5[i] > 0
+                    const 成交量衰竭 =
+                        (v__1_1 && bs.净成交量_累加5[i] < 50 * 10000) ||
+                        (小 && v__1) ||
+                        (大 && v__0 && v__1)
+                    const 价差走平大 = type === '摸顶' ? 上涨.价差走平大[i] : 下跌.价差走平大[i]
+
+                    let 大价差走平x秒 = 价差[i] > 价差大巨大分界 && 价差走平大
+                    //let 标准成交量差值衰竭 = false
+                    let 盘口 = false
+                    let 成交量 = false
+                    let 价格速度 = false
+                    if (价差[i] < 价差中大分界) {
+                        成交量 = 成交量衰竭 || 净成交量5反向
+                        盘口 = 盘口通用
+                        价格速度 = 价格差_除以时间[i] >= 0.15
+                    } else if (价差[i] > 价差中大分界 && 价差[i] < 价差大巨大分界) {
+                        成交量 = 成交量衰竭 || 净成交量5反向
+                        盘口 = 盘口通用
+                        价格速度 = 价格差_除以时间[i] >= 0.15
+                    } else if (价差[i] > 价差大巨大分界) {
+                        成交量 = 成交量衰竭 || 净成交量5反向 || 大价差走平x秒
+                        盘口 = bs.净盘口_均线3[i] < 0 || 大价差走平x秒
+                        价格速度 = true
+                    }
+
+                    return [
+                        { name: '成交量', value: 成交量 },
+                        { name: '盘口', value: 盘口 },
+                        { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 200 * 10000 },
+                        { name: '折返程度', value: type === '摸顶' ? (价格_最高60[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低60[i]) < 折返率[i] },
+                        { name: '价格速度', value: 价格速度 },
+                        { name: '价差 >=6', value: 价差[i] >= 6 },
+                        { name: 'is趋势', value: type === '摸顶' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
+                        { name: '波动率最大限制', value: 价格_波动率30[i] < 150},
+                    ]
+                }
+            )
+        }
+        const 信号_摸顶hopex专用 = __摸顶抄底hopex专用('摸顶')
+        const 信号_抄底hopex专用 = __摸顶抄底hopex专用('抄底')
 
         const __摸顶抄底 = (type: '摸顶' | '抄底') => {
             const bs = type === '摸顶' ? 买 : 卖
@@ -806,6 +893,8 @@ export class RealDataBase {
         )
 
         return {
+            信号_摸顶hopex专用,
+            信号_抄底hopex专用,
             波动_测试_价格,
             波动_测试_持续秒,
             波动_测试_累计买,
@@ -894,7 +983,7 @@ export class RealDataBase {
 
         // bm信号---> （ 5秒内 bm价格折返 > XXX ） ---> （当前时间 hopex价格折返 < XXX/2）   --->下单
 
-        const _5秒内有全亮 = (arr: ArrayLike<{
+        const _X秒内有全亮 = (arr: ArrayLike<{
             name: string
             value: boolean
         }[]>, index: number) => {
@@ -913,8 +1002,7 @@ export class RealDataBase {
         const 信号hopex_下跌 = 指标.lazyMapCache(
             () => Math.min(期货.信号_抄底.length, 期货.价格.length, 期货.价格_波动率30.length, hopex.价格.length),
             i => [
-                { name: '5秒内信号', value: _5秒内有全亮(期货.信号_抄底, i) },
-                { name: '期货.绝对价差[i] > ', value: 期货.绝对价差[i] > 15 },
+                { name: '5秒内信号', value: _X秒内有全亮(期货.信号_抄底hopex专用, i) },
                 { name: 'bm折返 >', value: 期货.价格[i] - 期货.价格_最低15[i] > 期货.折返率[i] },
                 { name: 'hp折返 <', value: hopex.价格[i] - hopex.价格_最低15[i] < 期货.折返率[i] / 2 },
             ]
@@ -923,8 +1011,7 @@ export class RealDataBase {
         const 信号hopex_上涨 = 指标.lazyMapCache(
             () => Math.min(期货.信号_摸顶.length, 期货.价格.length, 期货.价格_波动率30.length, hopex.价格.length),
             i => [
-                { name: '5秒内信号', value: _5秒内有全亮(期货.信号_摸顶, i) },
-                { name: '期货.绝对价差[i] > ', value: 期货.绝对价差[i] > 15 },
+                { name: '5秒内信号', value: _X秒内有全亮(期货.信号_摸顶hopex专用, i) },
                 { name: 'bm折返 >', value: 期货.价格_最高15[i] - 期货.价格[i] > 期货.折返率[i] },
                 { name: 'hp折返 <', value: hopex.价格_最高15[i] - hopex.价格[i] < 期货.折返率[i] / 2 },
             ]
