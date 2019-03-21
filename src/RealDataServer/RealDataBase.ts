@@ -746,7 +746,7 @@ export class RealDataBase {
                         { name: '价格速度', value: 价格速度 },
                         { name: '价差 >=8', value: 价差[i] >= 8 },
                         { name: 'is趋势', value: type === '摸顶' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
-                        //{ name: '波动率最大限制', value: 价格_波动率30[i] < 150},
+                        { name: '波动率最大限制', value: 价格_波动率30[i] < 150},
                     ]
                 }
             )
