@@ -231,10 +231,9 @@ export class RealDataBase {
         const 波动_测试_价格 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].价格)
         const 波动_测试_持续秒 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].持续秒)
         const 波动_测试_累计买 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].累计买)
-        const 波动_测试_累计卖 = 指标.lazyMapCache(() => 波动_测试.length, i => -波动_测试[i].累计卖)//!!!!!!!!!!临时负数
-
-
-
+        const 波动_测试_累计卖 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].累计卖)
+        const 波动_测试_净成交量 = 指标.lazyMapCache(() => Math.min(波动_测试_累计买.length, 波动_测试_累计卖.length), i => 波动_测试_累计买[i] - 波动_测试_累计卖[i])
+        const 波动_测试_净成交量_累加10 =  指标.累加(波动_测试_净成交量, 10,1000)//
 
         const KLine = 指标.lazyMapCache(() => data.length, i => ({
             open: data[i].open,
@@ -811,6 +810,8 @@ export class RealDataBase {
             波动_测试_持续秒,
             波动_测试_累计买,
             波动_测试_累计卖,
+            波动_测试_净成交量,
+            波动_测试_净成交量_累加10,
 
 
 
