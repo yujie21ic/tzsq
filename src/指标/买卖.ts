@@ -1,7 +1,12 @@
 import { 指标 } from './指标'
 import { RealDataBase } from '../RealDataServer/RealDataBase'
 
-export const 买卖 = (p: { 成交量: ArrayLike<number>, 盘口: ArrayLike<number>, 反向成交量: ArrayLike<number>, 反向盘口: ArrayLike<number> }) => {
+export const 买卖 = (p: {
+    成交量: ArrayLike<number>
+    盘口: ArrayLike<number>
+    反向成交量: ArrayLike<number>
+    反向盘口: ArrayLike<number>
+}) => {
 
     const 净成交量 = 指标.lazyMapCache(() => Math.min(p.成交量.length, p.反向成交量.length), i => p.成交量[i] - p.反向成交量[i])
     const 净盘口 = 指标.lazyMapCache(() => Math.min(p.盘口.length, p.反向盘口.length), i => p.盘口[i] - p.反向盘口[i])
