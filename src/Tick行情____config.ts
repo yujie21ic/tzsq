@@ -834,12 +834,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ],
             [
                 //累计成交量阈值
-<<<<<<< HEAD
-                {   numberColor: 卖颜色,
-=======
-                {
-                    numberColor: 买颜色,
->>>>>>> c7bca3757a85e010c5e162b7594db4833f3adb45
+                {   numberColor: 卖颜色, 
                     layerList: [
                         layer(LineLayer, { data: d.期货.累计成交量阈值, color: ETH颜色 }),
                         layer(LineLayer, { data: d.期货.下跌.累计成交量, color: 卖颜色 }),
