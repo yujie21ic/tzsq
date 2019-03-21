@@ -913,7 +913,7 @@ export class RealDataBase {
             () => Math.min(期货.信号_抄底.length, 期货.价格.length, 期货.价格_波动率30.length, hopex.价格.length),
             i => [
                 { name: '5秒内信号', value: _5秒内有全亮(期货.信号_抄底, i) },
-                { name: '期货.波动率[i] >10 ', value: 期货.价格_波动率30[i] > 10 },
+                { name: '期货.绝对价差[i] > ', value: 期货.绝对价差[i] > 15 },
                 { name: 'bm折返 >', value: 期货.价格[i] - 期货.价格_最低15[i] > 期货.折返率[i] },
                 { name: 'hp折返 <', value: hopex.价格[i] - hopex.价格_最低15[i] < 期货.折返率[i] / 2 },
             ]
@@ -923,7 +923,7 @@ export class RealDataBase {
             () => Math.min(期货.信号_摸顶.length, 期货.价格.length, 期货.价格_波动率30.length, hopex.价格.length),
             i => [
                 { name: '5秒内信号', value: _5秒内有全亮(期货.信号_摸顶, i) },
-                { name: '期货.波动率[i] >10 ', value: 期货.价格_波动率30[i] > 10 },
+                { name: '期货.绝对价差[i] > ', value: 期货.绝对价差[i] > 15 },
                 { name: 'bm折返 >', value: 期货.价格_最高15[i] - 期货.价格[i] > 期货.折返率[i] },
                 { name: 'hp折返 <', value: hopex.价格_最高15[i] - hopex.价格[i] < 期货.折返率[i] / 2 },
             ]
