@@ -899,7 +899,7 @@ export class RealDataBase {
             value: boolean
         }[]>, index: number) => {
             let 连续几根 = 0
-            for (let i = index; i >= Math.max(0, index - 5 * (1000 / RealDataBase.单位时间)); i--) {
+            for (let i = index; i >= Math.max(0, index - 20 * (1000 / RealDataBase.单位时间)); i--) {
                 if (arr[i].every(v => v.value)) {
                     连续几根++
                     if (连续几根 === 3) return true
