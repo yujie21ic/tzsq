@@ -720,7 +720,7 @@ export class RealDataBase {
                     } else if (价差[i] > 价差大巨大分界) {
                         形态 =  震荡 || 价差走平
                         成交量 = 成交量衰竭 || 净成交量5反向 || 大价差走平x秒
-                        盘口 = bs.净盘口_均线5[i] < 0 || 大价差走平x秒
+                        盘口 = bs.净盘口_均线3[i] < 0 || 大价差走平x秒
                         //标准成交量差值衰竭 = (实时与标准成交量之差macd.DIF[i] < 实时与标准成交量之差macd.DEM[i]) || (实时与标准成交量之差[i] < -200 * 10000) || 大价差走平x秒
                         标准成交量 = 净累计成交量[i] < 累计成交量阈值[i] || 大价差走平x秒
                         价格速度 = true
@@ -746,7 +746,7 @@ export class RealDataBase {
                         { name: '价格速度', value: 价格速度 },
                         { name: '价差 >=8', value: 价差[i] >= 8 },
                         { name: 'is趋势', value: type === '摸顶' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
-                        { name: '波动率最大限制', value: 价格_波动率30[i] < 150 },
+                        //{ name: '波动率最大限制', value: 价格_波动率30[i] < 150},
                     ]
                 }
             )
@@ -777,7 +777,7 @@ export class RealDataBase {
                 () => Math.min(
                     bitmex_hopex_上涨相对价差.length,//<----------------------------
                     bitmex_hopex_下跌相对价差.length,
-                    bs.净盘口_均线5.length,
+                    bs.净盘口_均线3.length,
                     价格_波动率300.length,
                     bs.净成交量_累加10.length,
                     价差.length,
@@ -788,11 +788,11 @@ export class RealDataBase {
                     上涨_下跌_横盘.length
                 ),
                 i => [
-                    { name: '净盘口 > 0', value: bs.净盘口_均线5[i] > 0 },
+                    { name: '净盘口 > 0', value: bs.净盘口_均线3[i] > 0 },
                     { name: '相对价差 ', value: type === '追涨' ? bitmex_hopex_上涨相对差价均线[i] > 0 : bitmex_hopex_下跌相对价差均线[i] < 0 },
                     { name: '5分钟波动率低量', value: 价格_波动率300[i] < 40 },
                     { name: '大单', value: bs.净成交量_累加10[i] > 200 * 10000 },
-                    //{ name: '价格均线价差 ', value: type === '追涨' ? 价格均线价差[i] > 0.5 : 价格均线价差[i] < -0.5 },
+                    { name: '价格均线价差 ', value: type === '追涨' ? 价格均线价差[i] > 0.5 : 价格均线价差[i] < -0.5 },
                     { name: '价差 < 4', value: 价差[i] <= 4 || (价格差_除以时间[i] <= 0.04 ? 价差[i] <= 8 : false) },
                     { name: '折返程度', value: type === '追涨' ? (价格_最高60[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低60[i]) < 折返率[i] },
                     { name: 'is趋势', value: type === '追涨' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
