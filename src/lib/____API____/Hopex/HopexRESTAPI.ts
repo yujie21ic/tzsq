@@ -59,4 +59,24 @@ export const HopexRESTAPI = {
             }
         }),
 
+    cancel: async (cookie: string, p: { orderID: number }) =>
+        JSONRequest({
+            url: 'https://web.hopex.com/api/v1/gateway/User/CancelConditionOrder?culture=zh-CN',
+            method: 'POST',
+            body: {
+                'param': {
+                    contractCode: 'BTCUSDT',
+                    taskId: p.orderID,
+                }
+            },
+            ss: config.ss,
+            headers: {
+                Origin: 'https://www.hopex.com',
+                Referer: 'https://www.hopex.com/trade?marketCode=BTCUSDT',
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
+                conversionCurrency: 'USD',
+                Authorization: cookie.split('=')[1],
+                Cookie: cookie,
+            }
+        }),
 }
