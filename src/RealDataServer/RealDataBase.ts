@@ -186,7 +186,7 @@ export class RealDataBase {
         orderBook: BaseType.OrderBook[]
     }, 盘口算价格: boolean) {
 
-        盘口算价格 = false
+        盘口算价格 = true
 
 
         const 盘口价格 = 指标.lazyMapCache(() => orderBook.length, i =>
@@ -777,7 +777,7 @@ export class RealDataBase {
                         (大 && v__0 && v__1)
 
                     const 震荡指数_最高30 = type === '摸顶' ? 上涨.震荡指数_最高30[i] : 下跌.震荡指数_最高30[i]
-                    const 震荡 = 震荡指数_最高30 > 2 && (震荡指数[i] < 2.5 && (震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i]))
+                    const 震荡 = 震荡指数_最高30 > 1.2 && (震荡指数[i] < 2 && (震荡指数[i] < 1.1 || 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i]))
 
                     const 价差走平 = type === '摸顶' ? 上涨.价差走平[i] : 下跌.价差走平[i]
                     const 价差走平大 = type === '摸顶' ? 上涨.价差走平大[i] : 下跌.价差走平大[i]
