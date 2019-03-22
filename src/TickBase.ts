@@ -1,5 +1,4 @@
 import { chartInit } from './lib/Chart'
-import { lastNumber } from './lib/F/lastNumber'
 import { RealDataBase } from './RealDataServer/RealDataBase'
 import { formatDate } from './lib/F/formatDate'
 import { dialog } from './lib/UI/dialog'
