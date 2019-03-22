@@ -6,7 +6,11 @@ import { sleep } from '../C/sleep'
 import { BitMEXRESTAPI } from '../____API____/BitMEX/BitMEXRESTAPI'
 
 
-const get10sData = async (startTime: number, symbol: BaseType.BitmexSymbol) => {
+const getData = async (p: {
+    多少秒: number
+    startTime: number
+    symbol: BaseType.BitmexSymbol
+}) => {
 
     const retArr: BaseType.KLine[] = []
 
@@ -14,16 +18,19 @@ const get10sData = async (startTime: number, symbol: BaseType.BitmexSymbol) => {
 
     while (true) {
         await sleep(1000 * 0.1) //休息0.1s
+
         const { data } = (await BitMEXRESTAPI.Trade.get('', {
             start,
-            symbol,
+            symbol: p.symbol,
             count: 500,
-            startTime: new Date(startTime).toISOString(),
-            endTime: new Date(startTime + 1000 * 10).toISOString()
+            startTime: new Date(p.startTime).toISOString(),
+            endTime: new Date(p.startTime + 1000 * p.多少秒).toISOString()
         }))
+
         if (data === undefined) {
             return undefined
         }
+
         else if (data.length > 0) {
             start += data.length
             data.forEach(v => {
@@ -39,6 +46,7 @@ const get10sData = async (startTime: number, symbol: BaseType.BitmexSymbol) => {
                     sellCount: v.side === 'Sell' ? 1 : 0,
                 })
             })
+            if (data.length < 500) return retArr
         }
         else {
             return retArr
@@ -66,7 +74,11 @@ export const syncBitmex500msKLine = (symbol: BaseType.BitmexSymbol) =>
             }
 
             //采集10秒
-            const data = await get10sData(start, symbol)
+            const data = await getData({
+                多少秒: 10,
+                startTime: start,
+                symbol,
+            })
             if (data === undefined) {
                 await sleep(1000 * 0.2) //休息0.2s
                 return { tickArr: [], newStart: start }
