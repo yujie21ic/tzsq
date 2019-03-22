@@ -8,7 +8,7 @@ import { keys } from 'ramda'
 import { BaseType } from './lib/BaseType'
 
 
-const 显示秒 = [250, 50, 150, 500, 1000, 2000,3600, 20000]
+const 显示秒 = [250, 50, 150, 500, 1000, 2000, 3600, 20000]
 
 export class TickBase {
 
@@ -68,6 +68,8 @@ export class TickBase {
                 title: this.title + ' ' + this.nowTickSymbol + '  ' + ((right - left) / (1000 / RealDataBase.单位时间)) + '秒',
                 startTime: this.real.data.startTick * RealDataBase.单位时间,
                 显示y: v => {
+                    if (this.nowChart === '波动_测试') return undefined
+
                     const time = (this.real.data.startTick + v) * RealDataBase.单位时间
                     const date = new Date(time)
 
@@ -88,7 +90,7 @@ export class TickBase {
             }
         })
     }
-    
+
     title = ''
 
     getLeftRight() {
