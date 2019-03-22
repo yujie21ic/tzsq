@@ -9,6 +9,7 @@ import { timeID } from '../lib/F/timeID'
 import { 买卖 } from '../指标/买卖'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
 import * as fs from 'fs'
+import { formatDate } from '../lib/F/formatDate'
 
 
 
@@ -197,12 +198,15 @@ export class RealDataBase {
 
         const 价格 = 盘口算价格 ? 盘口价格 : 收盘价
 
+        const 时间 = 指标.lazyMapCache(() => data.length, i => timeID._500msIDToTimestamp(data[i].id))
 
+        const 时间str = 指标.lazyMapCache(() => 时间.length, i => formatDate(new Date(时间[i]), v => `${v.hh}:${v.mm}:${v.ss}:${v.msmsms}`))
 
-
+ 
         //
         const 波动_测试 = 指标.lazyMapCache2({ index: 0, lastPrice: NaN }, (arr: {
             价格: number
+            时间str: string
             持续秒: number
             累计买: number
             累计卖: number
@@ -213,6 +217,7 @@ export class RealDataBase {
                     ext.lastPrice = 盘口价格[ext.index]
                     arr.push({
                         价格: 盘口价格[ext.index],
+                        时间str: new Date(时间[ext.index]).toLocaleString(),
                         持续秒: 0.5,
                         累计买: 买.成交量[ext.index],
                         累计卖: 卖.成交量[ext.index],
@@ -220,6 +225,7 @@ export class RealDataBase {
                 } else {
                     arr[arr.length - 1] = ({
                         价格: arr[arr.length - 1].价格,
+                        时间str: arr[arr.length - 1].时间str,
                         持续秒: arr[arr.length - 1].持续秒 + 0.5,
                         累计买: arr[arr.length - 1].累计买 + 买.成交量[ext.index],
                         累计卖: arr[arr.length - 1].累计卖 + 卖.成交量[ext.index],
@@ -229,11 +235,12 @@ export class RealDataBase {
             }
         })
         const 波动_测试_价格 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].价格)
+        const 波动_测试_时间str = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].时间str)
         const 波动_测试_持续秒 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].持续秒)
         const 波动_测试_累计买 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].累计买)
         const 波动_测试_累计卖 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].累计卖)
         const 波动_测试_净成交量 = 指标.lazyMapCache(() => Math.min(波动_测试_累计买.length, 波动_测试_累计卖.length), i => 波动_测试_累计买[i] - 波动_测试_累计卖[i])
-        const 波动_测试_净成交量_累加10 =  指标.累加(波动_测试_净成交量, 10,1000)//
+        const 波动_测试_净成交量_累加10 = 指标.累加(波动_测试_净成交量, 10, 1000)//
 
         const KLine = 指标.lazyMapCache(() => data.length, i => ({
             open: data[i].open,
@@ -245,7 +252,7 @@ export class RealDataBase {
 
 
 
-        const 时间 = 指标.lazyMapCache(() => data.length, i => timeID._500msIDToTimestamp(data[i].id))
+
         const __成交量买 = 指标.lazyMapCache(() => data.length, i => data[i].buySize)
         const __成交量卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellSize)
         const __盘口买 = 指标.lazyMapCache(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
@@ -709,7 +716,7 @@ export class RealDataBase {
                         { name: '价格速度', value: 价格速度 },
                         { name: '价差 >=6', value: 价差[i] >= 6 },
                         { name: 'is趋势', value: type === '摸顶' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
-                        { name: '波动率最大限制', value: 价格_波动率30[i] < 150},
+                        { name: '波动率最大限制', value: 价格_波动率30[i] < 150 },
                     ]
                 }
             )
@@ -804,7 +811,7 @@ export class RealDataBase {
                         标准成交量 = 净累计成交量[i] < 累计成交量阈值[i]
                         价格速度 = 价格差_除以时间[i] >= 0.15
                     } else if (价差[i] > 价差大巨大分界) {
-                        形态 =  震荡 || 价差走平
+                        形态 = 震荡 || 价差走平
                         成交量 = 成交量衰竭 || 净成交量5反向 || 大价差走平x秒
                         盘口 = bs.净盘口_均线3[i] < 0 || 大价差走平x秒
                         //标准成交量差值衰竭 = (实时与标准成交量之差macd.DIF[i] < 实时与标准成交量之差macd.DEM[i]) || (实时与标准成交量之差[i] < -200 * 10000) || 大价差走平x秒
@@ -826,13 +833,13 @@ export class RealDataBase {
                         //{ name: '当前价格与极值关系', value: 下跌.当前价格与极值关系[i] },
 
                         // //过滤条件
-                        { name: '标准成交量', value: 标准成交量  },
+                        { name: '标准成交量', value: 标准成交量 },
                         { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 200 * 10000 },
                         { name: '折返程度', value: type === '摸顶' ? (价格_最高60[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低60[i]) < 折返率[i] },
                         { name: '价格速度', value: 价格速度 },
                         { name: '价差 >=8', value: 价差[i] >= 8 },
                         { name: 'is趋势', value: type === '摸顶' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
-                        { name: '波动率最大限制', value: 价格_波动率30[i] < 150},
+                        { name: '波动率最大限制', value: 价格_波动率30[i] < 150 },
                     ]
                 }
             )
@@ -895,7 +902,11 @@ export class RealDataBase {
         return {
             信号_摸顶hopex专用,
             信号_抄底hopex专用,
+
+            时间str,
+
             波动_测试_价格,
+            波动_测试_时间str,
             波动_测试_持续秒,
             波动_测试_累计买,
             波动_测试_累计卖,

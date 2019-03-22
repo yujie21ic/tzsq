@@ -4,7 +4,6 @@ import { Coordinate } from './Coordinate'
 import { theme } from './theme'
 import { Crosshairs } from './Crosshairs'
 import { Viewport, To } from './type'
-import { formatDate } from '../F/formatDate'
 import { setWindowTitle } from '../C/setWindowTitle'
 
 const 坐标刻度 = new Coordinate()
@@ -34,9 +33,11 @@ type Item = {
 
 let dataSourceFunc: () => {
     title: string
-    startTime: number
+
     显示y: (v: number) => string | undefined
-    每一根是: number
+    xStrArr: ArrayLike<string>
+
+
     left: number
     right: number
     items: {
@@ -142,7 +143,7 @@ const pushLayer = (layer: Layer<any>) => {
 const chartRender = () => {
     if (dataSourceFunc === undefined) return
 
-    let { title, startTime, 每一根是, 显示y, left, right, items } = dataSourceFunc()
+    let { title, xStrArr, 显示y, left, right, items } = dataSourceFunc()
 
     if (lastTitle !== title) {
         lastTitle = title
@@ -269,7 +270,7 @@ const chartRender = () => {
         y: mouseY,
         width,
         height,
-        xStr: formatDate(new Date(startTime + indexX * 每一根是), v => `${v.hh}:${v.mm}:${v.ss}:${v.msmsms}`),
+        xStr: xStrArr[indexX],
         yStr: price.toFixed(2)
     })
 

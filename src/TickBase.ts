@@ -66,7 +66,7 @@ export class TickBase {
 
             return {
                 title: this.title + ' ' + this.nowTickSymbol + '  ' + ((right - left) / (1000 / RealDataBase.单位时间)) + '秒',
-                startTime: this.real.data.startTick * RealDataBase.单位时间,
+                xStrArr: this.nowChart === '波动_测试' ? d.期货.波动_测试_时间str : d.期货.时间str,
                 显示y: v => {
                     if (this.nowChart === '波动_测试') return undefined
 
@@ -83,7 +83,6 @@ export class TickBase {
                         return undefined
                     }
                 },
-                每一根是: RealDataBase.单位时间,
                 left,
                 right,
                 items: Tick行情____config[this.nowChart](d, this.real.dataExt)

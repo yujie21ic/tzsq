@@ -49,6 +49,7 @@ let 成交提示: { name: string, value: boolean }[][] = []
 let dif: ArrayLike<number> = []
 let dem: ArrayLike<number> = []
 let osc: ArrayLike<number> = []
+let 时间str: ArrayLike<string> = []
 
 const load = async () => {
     S = {
@@ -68,6 +69,8 @@ const load = async () => {
         console.log('load error', error, msg)
         return
     }
+
+    时间str = 指标.lazyMapCache(() => data.length, i => new Date(timeID.oneMinuteIDToTimestamp(data[i].id)).toLocaleString())
 
     const macd = 指标.macd(data.map(v => v.close), 1000)
     dif = macd.DIF
@@ -156,7 +159,7 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
 
     return {
         title: nowSymbol,
-        startTime: arr[0] ? timeID.oneMinuteIDToTimestamp(arr[0].id) : 0,//<---------------
+        xStrArr: 时间str,
         显示y: v => {
             const time = (arr[0] ? timeID.oneMinuteIDToTimestamp(arr[0].id) : 0) + v * 1000 * 60
             if (time % (3600000 * 24) === 0) {
@@ -165,7 +168,6 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
                 return undefined
             }
         },
-        每一根是: 1000 * 60,
         left: S.left,
         right: S.right,
         items: {
