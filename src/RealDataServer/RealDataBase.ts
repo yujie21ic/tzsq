@@ -1,12 +1,11 @@
 import { JSONSync } from '../lib/C/JSONSync'
 import { BaseType } from '../lib/BaseType'
-import { sum } from 'ramda'
 import { 指标 } from '../指标/指标'
 import { to范围 } from '../lib/F/to范围'
 import { lastNumber } from '../lib/F/lastNumber'
 import { is连续几根全亮 } from '../lib/F/is连续几根全亮'
 import { timeID } from '../lib/F/timeID'
-import { 买卖 } from '../指标/买卖'
+import { get买卖 } from '../指标/买卖'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
 import * as fs from 'fs'
 import { formatDate } from '../lib/F/formatDate'
@@ -227,7 +226,6 @@ export class RealDataBase {
             净成交量_累加10: 波动_测试_净成交量_累加10,
         }
 
-
         const KLine = 指标.map(() => data.length, i => ({
             open: data[i].open,
             high: data[i].high,
@@ -235,26 +233,7 @@ export class RealDataBase {
             close: data[i].close,
         }))
 
-
-        const __成交量买 = 指标.map(() => data.length, i => data[i].buySize)
-        const __成交量卖 = 指标.map(() => data.length, i => data[i].sellSize)
-        const __盘口买 = 指标.map(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
-        const __盘口卖 = 指标.map(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
-
-        const 买 = 买卖({
-            成交量: __成交量买,
-            盘口: __盘口买,
-            反向成交量: __成交量卖,
-            反向盘口: __盘口卖,
-        })
-
-        const 卖 = 买卖({
-            成交量: __成交量卖,
-            盘口: __盘口卖,
-            反向成交量: __成交量买,
-            反向盘口: __盘口买,
-        })
-
+        const { 买, 卖 } = get买卖({ data, orderBook })
 
         //价格
         const 价格_均线300 = 指标.均线(价格, 300, RealDataBase.单位时间)
@@ -547,7 +526,7 @@ export class RealDataBase {
                 //<---------------------------------------------------
             }
         })
-        
+
         const 价格速度_macd = 指标.macd(价格差_除以时间, RealDataBase.单位时间)
 
         const 震荡指数 = 指标.map(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length, 价格_波动率30.length), i => {
@@ -1059,7 +1038,7 @@ export class RealDataBase {
             return NaN
         }
     }
-    
+
     get信号msg = (symbol: BaseType.BitmexSymbol) => {
         const realData = this
         const 摸顶 = realData.dataExt[symbol].bitmex.信号_摸顶

@@ -1,7 +1,9 @@
 import { 指标 } from './指标'
 import { RealDataBase } from '../RealDataServer/RealDataBase'
+import { BaseType } from '../lib/BaseType'
+import { sum } from 'ramda'
 
-export const 买卖 = (p: {
+const 买卖 = (p: {
     成交量: ArrayLike<number>
     盘口: ArrayLike<number>
     反向成交量: ArrayLike<number>
@@ -32,4 +34,30 @@ export const 买卖 = (p: {
         净盘口,
         净盘口_均线3: 指标.均线(净盘口, 3, RealDataBase.单位时间),
     }
+}
+
+export const get买卖 = ({ data, orderBook }: {
+    data: BaseType.KLine[]
+    orderBook: BaseType.OrderBook[]
+}) => {
+    const __成交量买 = 指标.map(() => data.length, i => data[i].buySize)
+    const __成交量卖 = 指标.map(() => data.length, i => data[i].sellSize)
+    const __盘口买 = 指标.map(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
+    const __盘口卖 = 指标.map(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
+
+    const 买 = 买卖({
+        成交量: __成交量买,
+        盘口: __盘口买,
+        反向成交量: __成交量卖,
+        反向盘口: __盘口卖,
+    })
+
+    const 卖 = 买卖({
+        成交量: __成交量卖,
+        盘口: __盘口卖,
+        反向成交量: __成交量买,
+        反向盘口: __盘口买,
+    })
+
+    return { 买, 卖 }
 }
