@@ -14,7 +14,7 @@ import { Button } from './lib/UI/Button'
 import { Switch } from '@material-ui/core'
 import { to范围 } from './lib/F/to范围'
 import { 指标 } from './指标/指标'
-import { toGridPoint } from './lib/F/toGridPoint' 
+import { toGridPoint } from './lib/F/toGridPoint'
 import { HopexRESTAPI } from './lib/____API____/Hopex/HopexRESTAPI'
 
 
@@ -23,7 +23,6 @@ const hopex市价开仓和止损BTC = async (cookie: string, p: { size: number, 
     HopexRESTAPI.taker(cookie, p)
 
     HopexRESTAPI.stop(cookie, {
-        size: p.size,
         stopPrice: p.stopPrice,
         side: p.side === 'Sell' ? 'Buy' : 'Sell',
     })
