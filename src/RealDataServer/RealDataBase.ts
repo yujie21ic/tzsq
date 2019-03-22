@@ -256,8 +256,8 @@ export class RealDataBase {
 
         //价格
         const 价格_均线300 = 指标.均线(价格, 300, RealDataBase.单位时间)
-        const 价格_均线60 = 指标.均线(价格, 120, RealDataBase.单位时间)
-        const 价格均线价差 = 指标.lazyMapCache(() => Math.min(价格_均线300.length, 价格_均线60.length), i => 价格_均线60[i] - 价格_均线300[i])
+        const 价格_均线120 = 指标.均线(价格, 120, RealDataBase.单位时间)
+        const 价格均线价差 = 指标.lazyMapCache(() => Math.min(价格_均线300.length, 价格_均线120.length), i => 价格_均线120[i] - 价格_均线300[i])
 
 
         const 价格_波动率15 = 指标.波动率(价格, 15, RealDataBase.单位时间)
@@ -842,18 +842,18 @@ export class RealDataBase {
 
 
             价格均线价差,
-            价格_均线120: 价格_均线60,
+            价格_均线120,
             价格_波动率60,
             动态价格_均线方差macd,
             动态价格_均线方差,
             动态价格_均线,
             实时与标准成交量之差macd,
             实时与标准成交量之差,
-            价格速度macd: 价格速度_macd,
+            价格速度_macd,
             累计成交量阈值,
             双开, 双平, 多换, 空换, 多平, 空平, 空开, 多开,
             KLine,
-            净成交量均线10: 净成交量abs_累加5,
+            净成交量abs_累加5,
             绝对价差,
             买,
             卖,
@@ -867,7 +867,7 @@ export class RealDataBase {
             信号_摸顶_下跌平仓,
             信号_抄底_上涨平仓,
             价格差_除以时间,
-            上涨_下跌: 上涨_下跌_横盘,
+            上涨_下跌_横盘,
             价格_均线300,
             净成交量abs_macd,
             上涨,
@@ -880,11 +880,10 @@ export class RealDataBase {
             真空信号跌,
             信号_摸顶,
             信号_抄底,
-            价格_最高15: 价格_最高60,
-            价格_最低15: 价格_最低60,
 
             价格_最高60,
             价格_最低60,
+
             上涨_下跌_横盘,
         }
     }
@@ -903,8 +902,8 @@ export class RealDataBase {
         const 差价均线 = 指标.均线(差价, 300, RealDataBase.单位时间)
 
 
-        const bitmex_hopex_上涨差价 = 指标.lazyMapCache(() => Math.min(bitmex.价格_最高15.length, hopex.价格.length), i => Math.abs(bitmex.价格_最高15[i] - hopex.价格[i]))
-        const bitmex_hopex_下跌差价 = 指标.lazyMapCache(() => Math.min(bitmex.价格_最低15.length, hopex.价格.length), i => Math.abs(bitmex.价格_最低15[i] - hopex.价格[i]))
+        const bitmex_hopex_上涨差价 = 指标.lazyMapCache(() => Math.min(bitmex.价格_最高60.length, hopex.价格.length), i => Math.abs(bitmex.价格_最高60[i] - hopex.价格[i]))
+        const bitmex_hopex_下跌差价 = 指标.lazyMapCache(() => Math.min(bitmex.价格_最低60.length, hopex.价格.length), i => Math.abs(bitmex.价格_最低60[i] - hopex.价格[i]))
 
         const bitmex_hopex_上涨差价均线 = 指标.均线(bitmex_hopex_上涨差价, 180, RealDataBase.单位时间)
         const bitmex_hopex_下跌差价均线 = 指标.均线(bitmex_hopex_下跌差价, 180, RealDataBase.单位时间)
@@ -916,7 +915,7 @@ export class RealDataBase {
         const bitmex_hopex_下跌相对价差均线 = 指标.均线(bitmex_hopex_下跌相对价差, 10, RealDataBase.单位时间)
 
         const bitmex_hopex_上涨相对差价macd = 指标.macd(bitmex_hopex_上涨相对价差, RealDataBase.单位时间)
-        const bitmex_hopex_下跌相对差价macd = 指标.macd(bitmex_hopex_下跌相对价差, RealDataBase.单位时间) 
+        const bitmex_hopex_下跌相对差价macd = 指标.macd(bitmex_hopex_下跌相对价差, RealDataBase.单位时间)
 
 
         const bitmex_追涨_追跌 = (type: '追涨' | '追跌') => {
@@ -979,8 +978,8 @@ export class RealDataBase {
             () => Math.min(bitmex.信号_抄底.length, bitmex.价格.length, bitmex.价格_波动率30.length, hopex.价格.length),
             i => [
                 { name: '5秒内信号', value: _X秒内有全亮(bitmex.信号_抄底hopex专用, i) },
-                { name: 'bm折返 >', value: bitmex.价格[i] - bitmex.价格_最低15[i] > bitmex.折返率[i] },
-                { name: 'hp折返 <', value: hopex.价格[i] - hopex.价格_最低15[i] < bitmex.折返率[i] / 2 },
+                { name: 'bm折返 >', value: bitmex.价格[i] - bitmex.价格_最低60[i] > bitmex.折返率[i] },
+                { name: 'hp折返 <', value: hopex.价格[i] - hopex.价格_最低60[i] < bitmex.折返率[i] / 2 },
             ]
         )
 
@@ -988,8 +987,8 @@ export class RealDataBase {
             () => Math.min(bitmex.信号_摸顶.length, bitmex.价格.length, bitmex.价格_波动率30.length, hopex.价格.length),
             i => [
                 { name: '5秒内信号', value: _X秒内有全亮(bitmex.信号_摸顶hopex专用, i) },
-                { name: 'bm折返 >', value: bitmex.价格_最高15[i] - bitmex.价格[i] > bitmex.折返率[i] },
-                { name: 'hp折返 <', value: hopex.价格_最高15[i] - hopex.价格[i] < bitmex.折返率[i] / 2 },
+                { name: 'bm折返 >', value: bitmex.价格_最高60[i] - bitmex.价格[i] > bitmex.折返率[i] },
+                { name: 'hp折返 <', value: hopex.价格_最高60[i] - hopex.价格[i] < bitmex.折返率[i] / 2 },
             ]
         )
 

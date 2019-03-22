@@ -1020,7 +1020,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layerList: [
                         layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
                         layer(LineLayer, { data: d2.XBTUSD.bitmex.下跌.x秒内极值点价格, color: 0xffffff }),
-                        layer(LineLayer, { data: d.bitmex.价格_最低15, color: 波动率颜色 }),
+                        layer(LineLayer, { data: d.bitmex.价格_最低60, color: 波动率颜色 }),
                         layer(TextLayer, {
                             text:
                                 `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +

@@ -219,7 +219,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         const 开仓side = { '追涨': 'Buy', '追跌': 'Sell', '抄底': 'Buy', '摸顶': 'Sell', 'none': '_____' }[信号灯Type] as BaseType.Side
 
         //上涨 下跌 切换 止损次数 清零
-        const x = self.realData.dataExt[symbol].bitmex.上涨_下跌
+        const x = self.realData.dataExt[symbol].bitmex.上涨_下跌_横盘
         if (x.length > 0 && this.最后一次上涨_下跌 !== x[x.length - 1]) {
             this.最后一次上涨_下跌 = x[x.length - 1]
             this.连续止损2 = 0
