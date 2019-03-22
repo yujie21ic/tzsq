@@ -547,12 +547,7 @@ export class RealDataBase {
                 //<---------------------------------------------------
             }
         })
-
-
-
-
-
-
+        
         const 价格速度_macd = 指标.macd(价格差_除以时间, RealDataBase.单位时间)
 
         const 震荡指数 = 指标.map(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length, 价格_波动率30.length), i => {
@@ -577,12 +572,8 @@ export class RealDataBase {
         })
         const 动态价格_均线方差macd = 指标.macd(动态价格_均线方差, RealDataBase.单位时间)
 
-
-
         const 绝对价差 = 指标.map(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length), i => 上涨_下跌_横盘[i] === '上涨' ? 上涨.价差[i] : 下跌.价差[i])
         //_______________________________________________________________________________________________________________________________//
-
-
 
 
         //????????????????
@@ -668,10 +659,10 @@ export class RealDataBase {
                     return [
                         { name: '成交量', value: 成交量 },
                         { name: '盘口', value: 盘口 },
-                        { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 200 * 10000 },
+                        { name: '60秒净买成交量', value: bs.净成交量_累加60[i] >= 200 * 10000 },
                         { name: '折返程度', value: type === '摸顶' ? (价格_最高60[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低60[i]) < 折返率[i] },
                         { name: '价格速度', value: 价格速度 },
-                        { name: '价差 >=6', value: 价差[i] >= 6 },
+                        { name: '价差', value: 价差[i] >= 6 },
                         { name: 'is趋势', value: type === '摸顶' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
                         { name: '波动率最大限制', value: 价格_波动率30[i] < 150 },
                     ]
@@ -791,10 +782,10 @@ export class RealDataBase {
 
                         // //过滤条件
                         { name: '标准成交量', value: 标准成交量 },
-                        { name: '60秒净买成交量 >= 150万', value: bs.净成交量_累加60[i] >= 200 * 10000 },
+                        { name: '60秒净买成交量', value: bs.净成交量_累加60[i] >= 200 * 10000 },
                         { name: '折返程度', value: type === '摸顶' ? (价格_最高60[i] - 价格[i]) < 折返率[i] : (价格[i] - 价格_最低60[i]) < 折返率[i] },
                         { name: '价格速度', value: 价格速度 },
-                        { name: '价差 >=8', value: 价差[i] >= 8 },
+                        { name: '价差', value: 价差[i] >= 8 },
                         { name: 'is趋势', value: type === '摸顶' ? 上涨_下跌_横盘[i] === '上涨' : 上涨_下跌_横盘[i] === '下跌' },
                         { name: '波动率最大限制', value: 价格_波动率30[i] < 150 },
                     ]
@@ -933,7 +924,7 @@ export class RealDataBase {
                     { name: '5分钟波动率低量', value: bitmex.价格_波动率300[i] < 40 },
                     { name: '大单', value: bs.净成交量_累加10[i] > 200 * 10000 },
                     { name: '价格均线价差 ', value: type === '追涨' ? bitmex.价格均线价差[i] > 0.5 : bitmex.价格均线价差[i] < -0.5 },
-                    { name: '价差 < 4', value: 价差[i] <= 4 || (bitmex.价格差_除以时间[i] <= 0.04 ? 价差[i] <= 8 : false) },
+                    { name: '价差', value: 价差[i] <= 4 || (bitmex.价格差_除以时间[i] <= 0.04 ? 价差[i] <= 8 : false) },
                     { name: '折返程度', value: type === '追涨' ? (bitmex.价格_最高60[i] - bitmex.价格[i]) < bitmex.折返率[i] : (bitmex.价格[i] - bitmex.价格_最低60[i]) < bitmex.折返率[i] },
                     { name: 'is趋势', value: type === '追涨' ? bitmex.上涨_下跌_横盘[i] === '上涨' : bitmex.上涨_下跌_横盘[i] === '下跌' },
                 ]
@@ -1068,10 +1059,7 @@ export class RealDataBase {
             return NaN
         }
     }
-
-
-
-    //
+    
     get信号msg = (symbol: BaseType.BitmexSymbol) => {
         const realData = this
         const 摸顶 = realData.dataExt[symbol].bitmex.信号_摸顶
@@ -1088,9 +1076,6 @@ export class RealDataBase {
         })
     }
 
-
-
-
     摸顶抄底信号灯side___2根 = (symbol: BaseType.BitmexSymbol) => {
         const realData = this
         const up = realData.dataExt[symbol].bitmex.信号_摸顶
@@ -1106,9 +1091,6 @@ export class RealDataBase {
             return { 信号side: 'none' as 'none', 信号msg: '' }
         }
     }
-
-
-
 
     get信号灯Type = (symbol: BaseType.BitmexSymbol) => {
         const realData = this
@@ -1127,8 +1109,6 @@ export class RealDataBase {
             return 'none'
         }
     }
-
-
 
     get信号XXXmsg = (symbol: BaseType.BitmexSymbol) => {
         const 上涨做空下跌平仓 = this.dataExt[symbol].bitmex.信号_摸顶_下跌平仓
