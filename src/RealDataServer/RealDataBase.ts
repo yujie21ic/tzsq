@@ -148,21 +148,6 @@ export class RealDataBase {
         return { high, low }
     }
 
-    get现货多少秒内成交量(symbol: BaseType.BinanceSymbol, second: number) {
-        second = second * (1000 / RealDataBase.单位时间)
-        let volume = 0
-        const data = this.data.binance[symbol].data
-        if (data.length >= second) {
-            for (let i = data.length - 1; i >= data.length - second; i--) {
-                volume += data[i].buySize + data[i].sellSize
-            }
-            return volume
-        } else {
-            return NaN
-        }
-    }
-
-
     get期货多少秒内成交量__万为单位(symbol: BaseType.BitmexSymbol, second: number) {
         second = second * (1000 / RealDataBase.单位时间)
         let volume = 0
@@ -176,10 +161,6 @@ export class RealDataBase {
             return NaN
         }
     }
-
-
-
-
 
 
     private item2({ data, orderBook }: {
@@ -1056,33 +1037,15 @@ export class RealDataBase {
 
         return {
             成交提示,
-
-            // bitmex_hopex_相对价差,
-            //bitmex_hopex_差价,
             bitmex_hopex_下跌差价,
             bitmex_hopex_上涨差价,
-            //bitmex_hopex_差价均线,
-            //bitmex_hopex_差价macd,
-
             信号hopex_下跌,
             信号hopex_上涨,
-            现货减去: 0,
-
-
-            //现货
             现货,
-            现货30秒内成交量: () => this.get现货多少秒内成交量(binanceSymbol, 30),
-
-            //期货
             期货,
             期货30秒内成交量: () => this.get期货多少秒内成交量__万为单位(symbol, 30),
-
-
-            //差价
             差价,
             差价均线,
-
-            //hopex,
             hopex,
         }
     }
@@ -1123,23 +1086,6 @@ export class RealDataBase {
             return NaN
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1199,14 +1145,6 @@ export class RealDataBase {
             return 'none'
         }
     }
-
-
-
-
-
-
-
-
 
 
 
