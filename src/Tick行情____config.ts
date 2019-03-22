@@ -200,7 +200,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.bitmex.信号_追涨, color: 买颜色 }),
+                    layer(信号Layer, { data: d.bitmex_信号_追涨, color: 买颜色 }),
                     layer(TextLayer, {
                         text:
                             `信号_追涨                    `,
@@ -210,7 +210,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.bitmex.信号_追跌, color: 卖颜色 }),
+                    layer(信号Layer, { data: d.bitmex_信号_追跌, color: 卖颜色 }),
                     layer(TextLayer, {
                         text:
                             `信号_追跌                    `,
@@ -356,7 +356,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.bitmex.信号_追涨, color: 买颜色 }),
+                    layer(信号Layer, { data: d.bitmex_信号_追涨, color: 买颜色 }),
                     layer(TextLayer, {
                         text:
                             `上涨追涨                    `,
@@ -377,7 +377,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.bitmex.信号_追跌, color: 卖颜色 }),
+                    layer(信号Layer, { data: d.bitmex_信号_追跌, color: 卖颜色 }),
                     layer(TextLayer, {
                         text:
                             `下跌追跌                    `,
@@ -714,8 +714,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.bitmex.bitmex_hopex_上涨相对差价均线, color: 买颜色 }),
-                    layer(LineLayer, { data: d.bitmex.bitmex_hopex_上涨相对价差, color: 买颜色1 }),
+                    layer(LineLayer, { data: d.bitmex_hopex_上涨相对差价均线, color: 买颜色 }),
+                    layer(LineLayer, { data: d.bitmex_hopex_上涨相对价差, color: 买颜色1 }),
                 ]
             },
             // {
@@ -761,8 +761,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.bitmex.bitmex_hopex_下跌相对价差均线, color: 卖颜色 }),
-                    layer(LineLayer, { data: d.bitmex.bitmex_hopex_下跌相对价差, color: 卖颜色1 }),
+                    layer(LineLayer, { data: d.bitmex_hopex_下跌相对价差均线, color: 卖颜色 }),
+                    layer(LineLayer, { data: d.bitmex_hopex_下跌相对价差, color: 卖颜色1 }),
                 ]
             },
         ]
@@ -834,7 +834,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ],
             [
                 //累计成交量阈值
-                {   numberColor: 卖颜色, 
+                {
+                    numberColor: 卖颜色,
                     layerList: [
                         layer(LineLayer, { data: d.bitmex.累计成交量阈值, color: ETH颜色 }),
                         layer(LineLayer, { data: d.bitmex.下跌.累计成交量, color: 卖颜色 }),
@@ -892,7 +893,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 },
             ],
             [
-               
+
                 // {   numberColor: 波动率颜色,
                 //     layerList: [
                 //         layer(LineLayer, { data: d.期货.下跌.震荡指数_最高30, color: 波动率颜色 }),
@@ -915,12 +916,13 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d.bitmex.震荡指数_macd.DEM, color: 买颜色 }),
                     ]
                 },
-                {numberColor: ETH颜色,
+                {
+                    numberColor: ETH颜色,
                     layerList: [
                         layer(LineLayer, { data: d.bitmex.震荡指数, color: ETH颜色 }),
                     ]
                 },
-                
+
                 // {numberColor: ETH颜色,
                 //     layerList: [
                 //         layer(LineLayer, { data: d.期货.震荡指数, color: ETH颜色 }),
@@ -951,7 +953,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 },
             ],
             [
-                {   numberColor: ETH颜色,
+                {
+                    numberColor: ETH颜色,
                     layerList: [
                         layer(LineLayer, { data: d.bitmex.价格差_除以时间, color: ETH颜色 }),
                     ]
@@ -1211,7 +1214,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         items: [
             [
                 {
-                    numberX:100,
+                    numberX: 100,
                     layerList: [
                         layer(ZeroLayer, { color: 波动率颜色 }),
                         layer(LineLayer, { data: d.bitmex.波动_测试_净成交量_累加10, color: 波动率颜色 }),
@@ -1224,7 +1227,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     ]
                 },
             ],
-           
+
             {
                 layerList: [
                     layer(BarLayer, { data: d.bitmex.波动_测试_持续秒, color: 0xffffff }),
@@ -1271,9 +1274,9 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
 
-                     layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
-                     layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-                   // layer(LineLayer, { data: d.期货.买.净成交量_累加60, color: ETH颜色 }),
+                    layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
+                    layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
+                    // layer(LineLayer, { data: d.期货.买.净成交量_累加60, color: ETH颜色 }),
                     //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
                     layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
                 ]
