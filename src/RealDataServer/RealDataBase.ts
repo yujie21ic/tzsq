@@ -185,7 +185,7 @@ export class RealDataBase {
 
 
         //
-        const 波动_测试 = 指标.lazyMapCache2({ index: 0, lastPrice: NaN }, (arr: {
+        const __波动_测试 = 指标.lazyMapCache2({ index: 0, lastPrice: NaN }, (arr: {
             价格: number
             时间str: string
             持续秒: number
@@ -215,13 +215,27 @@ export class RealDataBase {
                 ext.index++
             }
         })
-        const 波动_测试_价格 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].价格)
-        const 波动_测试_时间str = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].时间str)
-        const 波动_测试_持续秒 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].持续秒)
-        const 波动_测试_累计买 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].累计买)
-        const 波动_测试_累计卖 = 指标.lazyMapCache(() => 波动_测试.length, i => 波动_测试[i].累计卖)
+        const 波动_测试_价格 = 指标.lazyMapCache(() => __波动_测试.length, i => __波动_测试[i].价格)
+        const 波动_测试_时间str = 指标.lazyMapCache(() => __波动_测试.length, i => __波动_测试[i].时间str)
+        const 波动_测试_持续秒 = 指标.lazyMapCache(() => __波动_测试.length, i => __波动_测试[i].持续秒)
+        const 波动_测试_累计买 = 指标.lazyMapCache(() => __波动_测试.length, i => __波动_测试[i].累计买)
+        const 波动_测试_累计卖 = 指标.lazyMapCache(() => __波动_测试.length, i => __波动_测试[i].累计卖)
         const 波动_测试_净成交量 = 指标.lazyMapCache(() => Math.min(波动_测试_累计买.length, 波动_测试_累计卖.length), i => 波动_测试_累计买[i] - 波动_测试_累计卖[i])
         const 波动_测试_净成交量_累加10 = 指标.累加(波动_测试_净成交量, 10, 1000)//
+
+        const 波动_测试 = {
+            价格: 波动_测试_价格,
+            时间str: 波动_测试_时间str,
+            持续秒: 波动_测试_持续秒,
+            累计买: 波动_测试_累计买,
+            累计卖: 波动_测试_累计卖,
+            净成交量: 波动_测试_净成交量,
+            净成交量_累加10: 波动_测试_净成交量_累加10,
+        }
+
+
+
+
 
         const KLine = 指标.lazyMapCache(() => data.length, i => ({
             open: data[i].open,
@@ -832,14 +846,7 @@ export class RealDataBase {
             信号_抄底hopex专用,
 
             时间str,
-
-            波动_测试_价格,
-            波动_测试_时间str,
-            波动_测试_持续秒,
-            波动_测试_累计买,
-            波动_测试_累计卖,
-            波动_测试_净成交量,
-            波动_测试_净成交量_累加10,
+            波动_测试,
 
 
 
@@ -933,7 +940,7 @@ export class RealDataBase {
                     bitmex.价格.length,
                     bitmex.折返率.length,
                     bitmex.价格_最低60.length,
-                    bitmex.上涨_下跌_横盘.length
+                    bitmex.上涨_下跌_横盘.length,
                 ),
                 i => [
                     { name: '净盘口 > 0', value: bs.净盘口_均线3[i] > 0 },

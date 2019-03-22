@@ -1217,20 +1217,20 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     numberX: 100,
                     layerList: [
                         layer(ZeroLayer, { color: 波动率颜色 }),
-                        layer(LineLayer, { data: d.bitmex.波动_测试_净成交量_累加10, color: 波动率颜色 }),
+                        layer(LineLayer, { data: d.bitmex.波动_测试.净成交量_累加10, color: 波动率颜色 }),
                     ]
                 },
                 {
                     numberColor: BTC颜色,
                     layerList: [
-                        layer(LineLayer, { data: d.bitmex.波动_测试_价格, color: BTC颜色 }),
+                        layer(LineLayer, { data: d.bitmex.波动_测试.价格, color: BTC颜色 }),
                     ]
                 },
             ],
 
             {
                 layerList: [
-                    layer(BarLayer, { data: d.bitmex.波动_测试_持续秒, color: 0xffffff }),
+                    layer(BarLayer, { data: d.bitmex.波动_测试.持续秒, color: 0xffffff }),
                 ]
             },
             // {

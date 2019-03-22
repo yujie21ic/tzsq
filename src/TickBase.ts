@@ -57,7 +57,7 @@ export class TickBase {
 
             return {
                 title: this.title + ' ' + this.nowTickSymbol + '  ' + ((right - left) / (1000 / RealDataBase.单位时间)) + '秒',
-                xStrArr: this.nowChart === '波动_测试' ? d.bitmex.波动_测试_时间str : d.bitmex.时间str,
+                xStrArr: this.nowChart === '波动_测试' ? d.bitmex.波动_测试.时间str : d.bitmex.时间str,
                 显示y: v => {
                     if (this.nowChart === '波动_测试') return undefined
 
@@ -87,7 +87,7 @@ export class TickBase {
         const d = this.real.dataExt[this.nowTickSymbol]
 
         const right = this.nowChart === '波动_测试' ?
-            Math.max(d.bitmex.波动_测试_累计买.length) - 1 :
+            Math.max(d.bitmex.波动_测试.累计买.length) - 1 :
             Math.max(d.binance.价格.length, d.hopex.价格.length, d.bitmex.价格.length, d.bitmex.买.盘口.length, d.bitmex.卖.盘口.length) - 1
 
         const left = Math.max(0, right - this.showCount)
