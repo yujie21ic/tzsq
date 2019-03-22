@@ -1,12 +1,12 @@
 import { BaseType } from '../BaseType'
 import { SyncKLine } from './SyncKLine'
-import { DB } from './DB' 
+import { DB } from './DB'
 import { timeID } from '../F/timeID'
 import { sleep } from '../C/sleep'
 import { BitMEXRESTAPI } from '../____API____/BitMEX/BitMEXRESTAPI'
 
 
-const get500sData = async (startTime: number, symbol: BaseType.BitmexSymbol) => {
+const get10sData = async (startTime: number, symbol: BaseType.BitmexSymbol) => {
 
     const retArr: BaseType.KLine[] = []
 
@@ -19,7 +19,7 @@ const get500sData = async (startTime: number, symbol: BaseType.BitmexSymbol) => 
             symbol,
             count: 500,
             startTime: new Date(startTime).toISOString(),
-            endTime: new Date(startTime + 1000 * 500).toISOString()
+            endTime: new Date(startTime + 1000 * 10).toISOString()
         }))
         if (data === undefined) {
             return undefined
@@ -59,18 +59,20 @@ export const syncBitmex500msKLine = (symbol: BaseType.BitmexSymbol) =>
             }
         },
         getData: async (start: number) => {
-            //只采集 1000秒 前的数据
-            if (start + 1000 * 1000 > Date.now()) {
-                await sleep(1000 * 60) //休息 60s 
+            //只采集 30秒 前的数据
+            if (start + 1000 * 30 > Date.now()) {
+                await sleep(1000 * 0.2) //休息0.2s
                 return { tickArr: [], newStart: start }
             }
-            const data = await get500sData(start, symbol)
+
+            //采集10秒
+            const data = await get10sData(start, symbol)
             if (data === undefined) {
-                await sleep(1000 * 60) //网络错误 休息 60s
+                await sleep(1000 * 0.2) //休息0.2s
                 return { tickArr: [], newStart: start }
             } else {
-                await sleep(1000 * 1) //休息1s
-                return { tickArr: data, newStart: start + 1000 * 500 }//采集了500秒
+                await sleep(1000 * 0.2) //休息0.2s
+                return { tickArr: data, newStart: start + 1000 * 10 } //采集了10秒
             }
         }
     })
