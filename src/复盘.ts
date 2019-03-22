@@ -70,7 +70,7 @@ const load = async () => {
         return
     }
 
-    时间str = 指标.map1(() => data.length, i => new Date(timeID.oneMinuteIDToTimestamp(data[i].id)).toLocaleString())
+    时间str = 指标.map(() => data.length, i => new Date(timeID.oneMinuteIDToTimestamp(data[i].id)).toLocaleString())
 
     const macd = 指标.macd(data.map(v => v.close), 1000)
     dif = macd.DIF

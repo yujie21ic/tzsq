@@ -8,8 +8,8 @@ export const 买卖 = (p: {
     反向盘口: ArrayLike<number>
 }) => {
 
-    const 净成交量 = 指标.map1(() => Math.min(p.成交量.length, p.反向成交量.length), i => p.成交量[i] - p.反向成交量[i])
-    const 净盘口 = 指标.map1(() => Math.min(p.盘口.length, p.反向盘口.length), i => p.盘口[i] - p.反向盘口[i])
+    const 净成交量 = 指标.map(() => Math.min(p.成交量.length, p.反向成交量.length), i => p.成交量[i] - p.反向成交量[i])
+    const 净盘口 = 指标.map(() => Math.min(p.盘口.length, p.反向盘口.length), i => p.盘口[i] - p.反向盘口[i])
 
     return {
         //成交量

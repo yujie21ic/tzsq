@@ -169,17 +169,17 @@ export class RealDataBase {
         盘口算价格 = true
 
 
-        const 盘口价格 = 指标.map1(() => orderBook.length, i =>
+        const 盘口价格 = 指标.map(() => orderBook.length, i =>
             (orderBook[i].buy && orderBook[i].buy.length > 0 && orderBook[i].sell && orderBook[i].sell.length > 0) ?
                 ((orderBook[i].buy[0].price + orderBook[i].sell[0].price) / 2) : NaN)
 
-        const 收盘价 = 指标.map1(() => data.length, i => data[i].close)
+        const 收盘价 = 指标.map(() => data.length, i => data[i].close)
 
         const 价格 = 盘口算价格 ? 盘口价格 : 收盘价
 
-        const 时间 = 指标.map1(() => data.length, i => timeID._500msIDToTimestamp(data[i].id))
+        const 时间 = 指标.map(() => data.length, i => timeID._500msIDToTimestamp(data[i].id))
 
-        const 时间str = 指标.map1(() => 时间.length, i => formatDate(new Date(时间[i]), v => `${v.hh}:${v.mm}:${v.ss}:${v.msmsms}`))
+        const 时间str = 指标.map(() => 时间.length, i => formatDate(new Date(时间[i]), v => `${v.hh}:${v.mm}:${v.ss}:${v.msmsms}`))
 
 
         //
@@ -214,21 +214,21 @@ export class RealDataBase {
             }
         })
 
-        const 波动_测试_净成交量 = 指标.map1(() => __波动_测试.length, i => __波动_测试[i].累计买 - __波动_测试[i].累计卖)
+        const 波动_测试_净成交量 = 指标.map(() => __波动_测试.length, i => __波动_测试[i].累计买 - __波动_测试[i].累计卖)
         const 波动_测试_净成交量_累加10 = 指标.累加(波动_测试_净成交量, 10, 1000)
 
         const 波动_测试 = {
-            价格: 指标.map1(() => __波动_测试.length, i => __波动_测试[i].价格),
-            时间str: 指标.map1(() => __波动_测试.length, i => __波动_测试[i].时间str),
-            持续秒: 指标.map1(() => __波动_测试.length, i => __波动_测试[i].持续秒),
-            累计买: 指标.map1(() => __波动_测试.length, i => __波动_测试[i].累计买),
-            累计卖: 指标.map1(() => __波动_测试.length, i => __波动_测试[i].累计卖),
+            价格: 指标.map(() => __波动_测试.length, i => __波动_测试[i].价格),
+            时间str: 指标.map(() => __波动_测试.length, i => __波动_测试[i].时间str),
+            持续秒: 指标.map(() => __波动_测试.length, i => __波动_测试[i].持续秒),
+            累计买: 指标.map(() => __波动_测试.length, i => __波动_测试[i].累计买),
+            累计卖: 指标.map(() => __波动_测试.length, i => __波动_测试[i].累计卖),
             净成交量: 波动_测试_净成交量,
             净成交量_累加10: 波动_测试_净成交量_累加10,
         }
 
 
-        const KLine = 指标.map1(() => data.length, i => ({
+        const KLine = 指标.map(() => data.length, i => ({
             open: data[i].open,
             high: data[i].high,
             low: data[i].low,
@@ -236,10 +236,10 @@ export class RealDataBase {
         }))
 
 
-        const __成交量买 = 指标.map1(() => data.length, i => data[i].buySize)
-        const __成交量卖 = 指标.map1(() => data.length, i => data[i].sellSize)
-        const __盘口买 = 指标.map1(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
-        const __盘口卖 = 指标.map1(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
+        const __成交量买 = 指标.map(() => data.length, i => data[i].buySize)
+        const __成交量卖 = 指标.map(() => data.length, i => data[i].sellSize)
+        const __盘口买 = 指标.map(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
+        const __盘口卖 = 指标.map(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
 
         const 买 = 买卖({
             成交量: __成交量买,
@@ -259,7 +259,7 @@ export class RealDataBase {
         //价格
         const 价格_均线300 = 指标.均线(价格, 300, RealDataBase.单位时间)
         const 价格_均线120 = 指标.均线(价格, 120, RealDataBase.单位时间)
-        const 价格均线价差 = 指标.map1(() => Math.min(价格_均线300.length, 价格_均线120.length), i => 价格_均线120[i] - 价格_均线300[i])
+        const 价格均线价差 = 指标.map(() => Math.min(价格_均线300.length, 价格_均线120.length), i => 价格_均线120[i] - 价格_均线300[i])
 
 
         const 价格_波动率15 = 指标.波动率(价格, 15, RealDataBase.单位时间)
@@ -268,25 +268,25 @@ export class RealDataBase {
         const 价格_波动率300 = 指标.波动率(价格, 300, RealDataBase.单位时间)
 
 
-        const 折返率 = 指标.map1(() => 价格_波动率30.length, i => to范围({ min: 4, max: 15, value: 价格_波动率30[i] / 10 }))
+        const 折返率 = 指标.map(() => 价格_波动率30.length, i => to范围({ min: 4, max: 15, value: 价格_波动率30[i] / 10 }))
 
         //净成交量abs
-        const 净成交量abs = 指标.map1(() => Math.min(买.成交量.length, 卖.成交量.length), i => 买.成交量[i] - 卖.成交量[i])
-        const 净成交量abs原始 = 指标.map1(() => Math.min(买.成交量.length, 卖.成交量.length), i => Math.abs(买.成交量[i] - 卖.成交量[i]))
+        const 净成交量abs = 指标.map(() => Math.min(买.成交量.length, 卖.成交量.length), i => 买.成交量[i] - 卖.成交量[i])
+        const 净成交量abs原始 = 指标.map(() => Math.min(买.成交量.length, 卖.成交量.length), i => Math.abs(买.成交量[i] - 卖.成交量[i]))
 
         const 净成交量abs_累加5 = 指标.累加(净成交量abs, 5, RealDataBase.单位时间)
         const 净成交量abs_macd = 指标.macd(净成交量abs原始, RealDataBase.单位时间)
 
         //阻力3
         const __阻力3 = 指标.阻力3({ price: 价格, volumeBuy: 买.成交量, volumeSell: 卖.成交量, })
-        const 阻力3涨 = 指标.map1(() => __阻力3.length, i => Math.max(0, __阻力3[i].阻力))
-        const 阻力3跌 = 指标.map1(() => __阻力3.length, i => Math.min(0, __阻力3[i].阻力))
-        const 真空信号涨 = 指标.map1(() => 价格.length, i => (__阻力3[i].阻力 < 150000) && __阻力3[i].阻力 > 0 && __阻力3[i].价钱增量 >= to范围({ min: 4, max: 12, value: 价格_波动率30[i] / 10 }))
-        const 真空信号跌 = 指标.map1(() => 价格.length, i => (__阻力3[i].阻力 > -150000) && __阻力3[i].阻力 < 0 && __阻力3[i].价钱增量 >= to范围({ min: 4, max: 12, value: 价格_波动率30[i] / 10 }))
+        const 阻力3涨 = 指标.map(() => __阻力3.length, i => Math.max(0, __阻力3[i].阻力))
+        const 阻力3跌 = 指标.map(() => __阻力3.length, i => Math.min(0, __阻力3[i].阻力))
+        const 真空信号涨 = 指标.map(() => 价格.length, i => (__阻力3[i].阻力 < 150000) && __阻力3[i].阻力 > 0 && __阻力3[i].价钱增量 >= to范围({ min: 4, max: 12, value: 价格_波动率30[i] / 10 }))
+        const 真空信号跌 = 指标.map(() => 价格.length, i => (__阻力3[i].阻力 > -150000) && __阻力3[i].阻力 < 0 && __阻力3[i].价钱增量 >= to范围({ min: 4, max: 12, value: 价格_波动率30[i] / 10 }))
 
         //上涨_下跌
         //const 上涨_下跌 = 指标.lazyMapCache(() => Math.min(买.净成交量_累加60.length), i => 买.净成交量_累加60[i] >= 0 ? '上涨' : '下跌')
-        const 上涨_下跌_横盘 = 指标.map1(
+        const 上涨_下跌_横盘 = 指标.map(
             () => Math.min(买.净成交量_累加60.length),
             i => {
                 if (买.净成交量_累加60[i] >= 50 * 10000) {
@@ -350,28 +350,28 @@ export class RealDataBase {
                 }
             })
 
-            const 动力 = 指标.map1(
+            const 动力 = 指标.map(
                 () => Math.min(累计成交量.length, 价差.length),
                 i => to范围({ min: 30 * 10000, max: 130 * 10000, value: 累计成交量[i] / Math.max(1, 价差[i]) }) //最小除以1
             )
 
 
-            const 动态时间_x秒 = 指标.map1(
+            const 动态时间_x秒 = 指标.map(
                 () => Math.min(价差.length),
                 i => to范围({ min: 15, max: 20, value: 价差[i] / 10 }),
             )
 
-            const 动态时间_y秒 = 指标.map1(
+            const 动态时间_y秒 = 指标.map(
                 () => Math.min(价差.length),
                 i => to范围({ min: 4, max: 10, value: 价差[i] / 12 }),
             )
 
-            const 动态时间_y秒大 = 指标.map1(
+            const 动态时间_y秒大 = 指标.map(
                 () => Math.min(价差.length),
                 i => to范围({ min: 6, max: 15, value: 价差[i] / 8 }),
             )
 
-            const x秒内极值点价格 = 指标.map1(
+            const x秒内极值点价格 = 指标.map(
                 () => Math.min(动态时间_x秒.length, 价格.length),
                 i => {
 
@@ -391,7 +391,7 @@ export class RealDataBase {
 
 
             //y秒
-            const 价差走平 = 指标.map1(
+            const 价差走平 = 指标.map(
                 () => Math.min(动态时间_y秒.length, 价格.length, x秒内极值点价格.length),
                 i => {
                     //1秒2根
@@ -410,7 +410,7 @@ export class RealDataBase {
                     return true
                 }
             )
-            const 价差走平4s = 指标.map1(
+            const 价差走平4s = 指标.map(
                 () => Math.min(价格.length, x秒内极值点价格.length),
                 i => {
                     //1秒2根
@@ -443,7 +443,7 @@ export class RealDataBase {
             //         //return false
             //     }
             // )
-            const 价差走平大 = 指标.map1(
+            const 价差走平大 = 指标.map(
                 () => Math.min(动态时间_y秒大.length, 价格.length, x秒内极值点价格.length),
                 i => {
                     //1秒2根
@@ -465,13 +465,13 @@ export class RealDataBase {
 
 
 
-            const 震荡指数 = 指标.map1(
+            const 震荡指数 = 指标.map(
                 () => Math.min(价差.length, 价格_波动率15.length),
                 i => 价差[i] > 2 ? to范围({ min: 0.01, max: 10, value: 价格_波动率15[i] / 价差[i] }) : NaN
             )
 
 
-            const 震荡指数_最高30 = 指标.map1(
+            const 震荡指数_最高30 = 指标.map(
                 () => Math.min(价差.length, 价格_波动率15.length),
                 i => {
                     let 最高 = 震荡指数[i]
@@ -555,19 +555,19 @@ export class RealDataBase {
 
         const 价格速度_macd = 指标.macd(价格差_除以时间, RealDataBase.单位时间)
 
-        const 震荡指数 = 指标.map1(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length, 价格_波动率30.length), i => {
+        const 震荡指数 = 指标.map(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length, 价格_波动率30.length), i => {
             const 上涨下跌价差 = (上涨_下跌_横盘[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i]
             return 上涨下跌价差 > 2 ? to范围({ min: 0.01, max: 10, value: 价格_波动率30[i] / 上涨下跌价差 }) : NaN
         })
 
         const 震荡指数_macd = 指标.macd(震荡指数, RealDataBase.单位时间)
 
-        const 动态价格秒数 = 指标.map1(
+        const 动态价格秒数 = 指标.map(
             () => Math.min(价格.length, 上涨.价差.length, 下跌.价差.length),
             i => to范围({ min: 15, max: 25, value: ((上涨_下跌_横盘[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 5) }) ,
         )
         const 动态价格_均线 = 指标.均线(价格, 7, RealDataBase.单位时间)
-        const 动态价格_均线方差 = 指标.map1(() => Math.min(动态价格_均线.length, 价格.length), i => {
+        const 动态价格_均线方差 = 指标.map(() => Math.min(动态价格_均线.length, 价格.length), i => {
             let sum = 0
             for (let n = (价格.length - 动态价格秒数[i] * 2); n < 价格.length; n++) {
                 sum = sum + Math.pow((价格[n] - 动态价格_均线[i]), 2)
@@ -579,16 +579,16 @@ export class RealDataBase {
 
 
 
-        const 绝对价差 = 指标.map1(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length), i => 上涨_下跌_横盘[i] === '上涨' ? 上涨.价差[i] : 下跌.价差[i])
+        const 绝对价差 = 指标.map(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length), i => 上涨_下跌_横盘[i] === '上涨' ? 上涨.价差[i] : 下跌.价差[i])
         //_______________________________________________________________________________________________________________________________//
 
 
 
 
         //????????????????
-        const 累计成交量阈值 = 指标.map1(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length), i => 上涨_下跌_横盘[i] === '上涨' ? 120 * 10000 * 上涨.价差[i] + 300 * 10000 : 100 * 10000 * 下跌.价差[i] + 300 * 10000)
-        const 实时成交量 = 指标.map1(() => Math.min(上涨.累计成交量.length, 下跌.累计成交量.length, 上涨_下跌_横盘.length), i => 上涨_下跌_横盘[i] === '上涨' ? 上涨.累计成交量[i] : 下跌.累计成交量[i])
-        const 实时与标准成交量之差 = 指标.map1(() => Math.min(累计成交量阈值.length, 实时成交量.length), i => (实时成交量[i] - 累计成交量阈值[i]))
+        const 累计成交量阈值 = 指标.map(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length), i => 上涨_下跌_横盘[i] === '上涨' ? 120 * 10000 * 上涨.价差[i] + 300 * 10000 : 100 * 10000 * 下跌.价差[i] + 300 * 10000)
+        const 实时成交量 = 指标.map(() => Math.min(上涨.累计成交量.length, 下跌.累计成交量.length, 上涨_下跌_横盘.length), i => 上涨_下跌_横盘[i] === '上涨' ? 上涨.累计成交量[i] : 下跌.累计成交量[i])
+        const 实时与标准成交量之差 = 指标.map(() => Math.min(累计成交量阈值.length, 实时成交量.length), i => (实时成交量[i] - 累计成交量阈值[i]))
         const 实时与标准成交量之差macd = 指标.macd(实时与标准成交量之差, RealDataBase.单位时间)
 
         const 价差中大分界 = 20
@@ -597,7 +597,7 @@ export class RealDataBase {
             const bs = type === '摸顶' ? 买 : 卖
             const 价差 = type === '摸顶' ? 上涨.价差 : 下跌.价差
             const 真空信号 = type === '摸顶' ? 真空信号涨 : 真空信号跌
-            return 指标.map1(
+            return 指标.map(
                 () => Math.min(
                     data.length,
                     orderBook.length,
@@ -688,7 +688,7 @@ export class RealDataBase {
             const 净累计成交量 = type === '摸顶' ? 上涨.累计成交量 : 下跌.累计成交量
 
 
-            return 指标.map1(
+            return 指标.map(
                 () => Math.min(
                     data.length,
                     orderBook.length,
@@ -805,7 +805,7 @@ export class RealDataBase {
         const 信号_抄底 = __摸顶抄底('抄底')
 
 
-        const __摸顶抄底_平仓 = (type: '摸顶' | '抄底') => 指标.map1(
+        const __摸顶抄底_平仓 = (type: '摸顶' | '抄底') => 指标.map(
             () => Math.min(
                 data.length,
                 orderBook.length,
@@ -823,7 +823,7 @@ export class RealDataBase {
 
 
         const [双开, 双平, 多换, 空换, 多平, 空平, 空开, 多开] = ['双开', '双平', '多换', '空换', '多平', '空平', '空开', '多开'].map(v =>
-            指标.map1(() => data.length, i => data[i].成交性质 === v ? data[i].buySize + data[i].sellSize : 0)
+            指标.map(() => data.length, i => data[i].成交性质 === v ? data[i].buySize + data[i].sellSize : 0)
         )
         const 成交性质 = { 双开, 双平, 多换, 空换, 多平, 空平, 空开, 多开 }
 
@@ -894,14 +894,14 @@ export class RealDataBase {
         // const binance_bitmex_差价 = 指标.lazyMapCache(() => Math.min(binance.价格.length, bitmex.价格.length), i => binance.价格[i] - bitmex.价格[i])
         // const binance_bitmex_差价均线 = 指标.均线(binance_bitmex_差价, 300, RealDataBase.单位时间)
 
-        const bitmex_hopex_上涨差价 = 指标.map1(() => Math.min(bitmex.价格_最高60.length, hopex.价格.length), i => Math.abs(bitmex.价格_最高60[i] - hopex.价格[i]))
-        const bitmex_hopex_下跌差价 = 指标.map1(() => Math.min(bitmex.价格_最低60.length, hopex.价格.length), i => Math.abs(bitmex.价格_最低60[i] - hopex.价格[i]))
+        const bitmex_hopex_上涨差价 = 指标.map(() => Math.min(bitmex.价格_最高60.length, hopex.价格.length), i => Math.abs(bitmex.价格_最高60[i] - hopex.价格[i]))
+        const bitmex_hopex_下跌差价 = 指标.map(() => Math.min(bitmex.价格_最低60.length, hopex.价格.length), i => Math.abs(bitmex.价格_最低60[i] - hopex.价格[i]))
 
         const bitmex_hopex_上涨差价均线 = 指标.均线(bitmex_hopex_上涨差价, 180, RealDataBase.单位时间)
         const bitmex_hopex_下跌差价均线 = 指标.均线(bitmex_hopex_下跌差价, 180, RealDataBase.单位时间)
 
-        const bitmex_hopex_上涨相对价差 = 指标.map1(() => Math.min(bitmex_hopex_上涨差价.length, bitmex_hopex_上涨差价均线.length), i => bitmex_hopex_上涨差价[i] - bitmex_hopex_上涨差价均线[i])
-        const bitmex_hopex_下跌相对价差 = 指标.map1(() => Math.min(bitmex_hopex_下跌差价.length, bitmex_hopex_下跌差价均线.length), i => bitmex_hopex_下跌差价[i] - bitmex_hopex_下跌差价均线[i])
+        const bitmex_hopex_上涨相对价差 = 指标.map(() => Math.min(bitmex_hopex_上涨差价.length, bitmex_hopex_上涨差价均线.length), i => bitmex_hopex_上涨差价[i] - bitmex_hopex_上涨差价均线[i])
+        const bitmex_hopex_下跌相对价差 = 指标.map(() => Math.min(bitmex_hopex_下跌差价.length, bitmex_hopex_下跌差价均线.length), i => bitmex_hopex_下跌差价[i] - bitmex_hopex_下跌差价均线[i])
 
         const bitmex_hopex_上涨相对差价均线 = 指标.均线(bitmex_hopex_上涨相对价差, 10, RealDataBase.单位时间)
         const bitmex_hopex_下跌相对价差均线 = 指标.均线(bitmex_hopex_下跌相对价差, 10, RealDataBase.单位时间)
@@ -913,7 +913,7 @@ export class RealDataBase {
         const bitmex_追涨_追跌 = (type: '追涨' | '追跌') => {
             const bs = type === '追涨' ? bitmex.买 : bitmex.卖
             const 价差 = type === '追涨' ? bitmex.上涨.价差 : bitmex.下跌.价差
-            return 指标.map1(
+            return 指标.map(
                 () => Math.min(
                     bitmex_hopex_上涨相对价差.length,//<----------------------------
                     bitmex_hopex_下跌相对价差.length,
@@ -958,7 +958,7 @@ export class RealDataBase {
             return false
         }
 
-        const hopex_信号_抄底 = 指标.map1(
+        const hopex_信号_抄底 = 指标.map(
             () => Math.min(bitmex.信号_抄底.length, bitmex.价格.length, bitmex.价格_波动率30.length, hopex.价格.length),
             i => [
                 { name: '5秒内信号', value: _X秒内有全亮(bitmex.信号_抄底hopex专用, i) },
@@ -967,7 +967,7 @@ export class RealDataBase {
             ]
         )
 
-        const hopex_信号_摸顶 = 指标.map1(
+        const hopex_信号_摸顶 = 指标.map(
             () => Math.min(bitmex.信号_摸顶.length, bitmex.价格.length, bitmex.价格_波动率30.length, hopex.价格.length),
             i => [
                 { name: '5秒内信号', value: _X秒内有全亮(bitmex.信号_摸顶hopex专用, i) },
@@ -988,7 +988,7 @@ export class RealDataBase {
             console.log('加载成交记录 错误', e)
         }
 
-        const 成交提示 = 指标.map1(() => bitmex.时间.length, i => {
+        const 成交提示 = 指标.map(() => bitmex.时间.length, i => {
 
             const key = timeID.timestampTo500msID(bitmex.时间[i])
             const str = dic[key]
