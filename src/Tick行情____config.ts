@@ -1121,16 +1121,16 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d2.ctp.双开, color: BTC颜色 }),
-                    layer(LineLayer, { data: d2.ctp.双平, color: ETH颜色 }),
+                    layer(LineLayer, { data: d2.ctp.成交性质.双开, color: BTC颜色 }),
+                    layer(LineLayer, { data: d2.ctp.成交性质.双平, color: ETH颜色 }),
                     layer(TextLayer, { text: '双开 双平      ', color: 0xffff00 })
                 ]
             },
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d2.ctp.多换, color: BTC颜色 }),
-                    layer(LineLayer, { data: d2.ctp.空换, color: ETH颜色 }),
+                    layer(LineLayer, { data: d2.ctp.成交性质.多换, color: BTC颜色 }),
+                    layer(LineLayer, { data: d2.ctp.成交性质.空换, color: ETH颜色 }),
                     layer(TextLayer, { text: '多换 空换      ', color: 0xffff00 })
                 ]
             },
@@ -1159,16 +1159,16 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d2.ctp.多平, color: BTC颜色 }),
-                    layer(LineLayer, { data: d2.ctp.空平, color: ETH颜色 }),
+                    layer(LineLayer, { data: d2.ctp.成交性质.多平, color: BTC颜色 }),
+                    layer(LineLayer, { data: d2.ctp.成交性质.空平, color: ETH颜色 }),
                     layer(TextLayer, { text: '多平 空平      ', color: 0xffff00 })
                 ]
             },
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d2.ctp.空开, color: BTC颜色 }),
-                    layer(LineLayer, { data: d2.ctp.多开, color: ETH颜色 }),
+                    layer(LineLayer, { data: d2.ctp.成交性质.空开, color: BTC颜色 }),
+                    layer(LineLayer, { data: d2.ctp.成交性质.多开, color: ETH颜色 }),
                     layer(TextLayer, { text: '空开 多开      ', color: 0xffff00 })
                 ]
             },

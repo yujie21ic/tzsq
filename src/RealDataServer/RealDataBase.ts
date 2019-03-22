@@ -824,6 +824,8 @@ export class RealDataBase {
         const [双开, 双平, 多换, 空换, 多平, 空平, 空开, 多开] = ['双开', '双平', '多换', '空换', '多平', '空平', '空开', '多开'].map(v =>
             指标.lazyMapCache(() => data.length, i => data[i].成交性质 === v ? data[i].buySize + data[i].sellSize : 0)
         )
+        const 成交性质 = { 双开, 双平, 多换, 空换, 多平, 空平, 空开, 多开 }
+
 
         return {
             信号_摸顶hopex专用,
@@ -851,7 +853,7 @@ export class RealDataBase {
             实时与标准成交量之差,
             价格速度_macd,
             累计成交量阈值,
-            双开, 双平, 多换, 空换, 多平, 空平, 空开, 多开,
+            成交性质,
             KLine,
             净成交量abs_累加5,
             绝对价差,
