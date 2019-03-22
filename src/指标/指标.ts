@@ -11,9 +11,9 @@ export namespace 指标 {
     export const macd = (arr: ArrayLike<number>, 单位时间: number) => {
         const _12 = EMA(arr, 12, 单位时间)
         const _26 = EMA(arr, 26, 单位时间)
-        const DIF = lazyMapCache(() => Math.min(_12.length, _26.length), i => _12[i] - _26[i])
+        const DIF = map1(() => Math.min(_12.length, _26.length), i => _12[i] - _26[i])
         const DEM = EMA(DIF, 9, 单位时间)
-        const OSC = lazyMapCache(() => Math.min(DIF.length, DEM.length), i => DIF[i] - DEM[i])
+        const OSC = map1(() => Math.min(DIF.length, DEM.length), i => DIF[i] - DEM[i])
         return { DIF, DEM, OSC }
     }
     
@@ -22,7 +22,7 @@ export namespace 指标 {
     let xxxxx = 0
     export const 回测setTime = () => 最后更新数据时间 = xxxxx++
 
-    export const lazyMapCache = <T>(
+    export const map1 = <T>(
         getLength: () => number,
         getValue: (i: number) => T,
     ): ArrayLike<T> => {
@@ -64,7 +64,7 @@ export namespace 指标 {
 
 
     //批量计算
-    export const lazyMapCache2 = <T, EXT>(
+    export const map2 = <T, EXT>(
         ext: EXT,
         f: (arr: T[], ext: EXT) => void
     ): ArrayLike<T> => {
@@ -107,7 +107,7 @@ export namespace 指标 {
         arr: ArrayLike<number>
     }) => number) =>
         (arr: ArrayLike<number>, 多少秒: number, 单位时间: number) =>
-            lazyMapCache(
+            map1(
                 () => arr.length,
                 i => {
                     const end = i
