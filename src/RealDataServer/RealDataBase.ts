@@ -955,19 +955,19 @@ export class RealDataBase {
 
     private item = (symbol: BaseType.BitmexSymbol, binanceSymbol: BaseType.BinanceSymbol, hopexSymbol: BaseType.HopexSymbol) => {
 
-        const 现货 = this.item2(this.data.binance[binanceSymbol], false)
+        const binance = this.item2(this.data.binance[binanceSymbol], false)
 
-        const 期货 = this.item2(this.data.bitmex[symbol], true)
+        const bitmex = this.item2(this.data.bitmex[symbol], true)
 
         const hopex = this.item2(this.data.hopex[hopexSymbol], false)
 
         //差价
-        const 差价 = 指标.lazyMapCache(() => Math.min(现货.价格.length, 期货.价格.length), i => 现货.价格[i] - 期货.价格[i])
+        const 差价 = 指标.lazyMapCache(() => Math.min(binance.价格.length, bitmex.价格.length), i => binance.价格[i] - bitmex.价格[i])
         const 差价均线 = 指标.均线(差价, 300, RealDataBase.单位时间)
 
 
-        const bitmex_hopex_上涨差价 = 指标.lazyMapCache(() => Math.min(期货.价格_最高15.length, hopex.价格.length), i => Math.abs(期货.价格_最高15[i] - hopex.价格[i]))
-        const bitmex_hopex_下跌差价 = 指标.lazyMapCache(() => Math.min(期货.价格_最低15.length, hopex.价格.length), i => Math.abs(期货.价格_最低15[i] - hopex.价格[i]))
+        const bitmex_hopex_上涨差价 = 指标.lazyMapCache(() => Math.min(bitmex.价格_最高15.length, hopex.价格.length), i => Math.abs(bitmex.价格_最高15[i] - hopex.价格[i]))
+        const bitmex_hopex_下跌差价 = 指标.lazyMapCache(() => Math.min(bitmex.价格_最低15.length, hopex.价格.length), i => Math.abs(bitmex.价格_最低15[i] - hopex.价格[i]))
 
         // XXX = 波动率[i] / 5 + 2
 
@@ -992,20 +992,20 @@ export class RealDataBase {
         }
 
         const 信号hopex_下跌 = 指标.lazyMapCache(
-            () => Math.min(期货.信号_抄底.length, 期货.价格.length, 期货.价格_波动率30.length, hopex.价格.length),
+            () => Math.min(bitmex.信号_抄底.length, bitmex.价格.length, bitmex.价格_波动率30.length, hopex.价格.length),
             i => [
-                { name: '5秒内信号', value: _X秒内有全亮(期货.信号_抄底hopex专用, i) },
-                { name: 'bm折返 >', value: 期货.价格[i] - 期货.价格_最低15[i] > 期货.折返率[i] },
-                { name: 'hp折返 <', value: hopex.价格[i] - hopex.价格_最低15[i] < 期货.折返率[i] / 2 },
+                { name: '5秒内信号', value: _X秒内有全亮(bitmex.信号_抄底hopex专用, i) },
+                { name: 'bm折返 >', value: bitmex.价格[i] - bitmex.价格_最低15[i] > bitmex.折返率[i] },
+                { name: 'hp折返 <', value: hopex.价格[i] - hopex.价格_最低15[i] < bitmex.折返率[i] / 2 },
             ]
         )
 
         const 信号hopex_上涨 = 指标.lazyMapCache(
-            () => Math.min(期货.信号_摸顶.length, 期货.价格.length, 期货.价格_波动率30.length, hopex.价格.length),
+            () => Math.min(bitmex.信号_摸顶.length, bitmex.价格.length, bitmex.价格_波动率30.length, hopex.价格.length),
             i => [
-                { name: '5秒内信号', value: _X秒内有全亮(期货.信号_摸顶hopex专用, i) },
-                { name: 'bm折返 >', value: 期货.价格_最高15[i] - 期货.价格[i] > 期货.折返率[i] },
-                { name: 'hp折返 <', value: hopex.价格_最高15[i] - hopex.价格[i] < 期货.折返率[i] / 2 },
+                { name: '5秒内信号', value: _X秒内有全亮(bitmex.信号_摸顶hopex专用, i) },
+                { name: 'bm折返 >', value: bitmex.价格_最高15[i] - bitmex.价格[i] > bitmex.折返率[i] },
+                { name: 'hp折返 <', value: hopex.价格_最高15[i] - hopex.价格[i] < bitmex.折返率[i] / 2 },
             ]
         )
 
@@ -1023,9 +1023,9 @@ export class RealDataBase {
             console.log('加载成交记录 错误', e)
         }
 
-        const 成交提示 = 指标.lazyMapCache(() => 期货.时间.length, i => {
+        const 成交提示 = 指标.lazyMapCache(() => bitmex.时间.length, i => {
 
-            const key = timeID.timestampTo500msID(期货.时间[i])
+            const key = timeID.timestampTo500msID(bitmex.时间[i])
             const str = dic[key]
 
             return ['挂单买', '挂单卖', '挂单买成功', '挂单卖成功', '市价买', '市价卖'].map(v => ({
@@ -1041,11 +1041,11 @@ export class RealDataBase {
             bitmex_hopex_上涨差价,
             信号hopex_下跌,
             信号hopex_上涨,
-            现货,
-            期货,
             期货30秒内成交量: () => this.get期货多少秒内成交量__万为单位(symbol, 30),
             差价,
             差价均线,
+            binance,
+            bitmex,
             hopex,
         }
     }
@@ -1065,7 +1065,7 @@ export class RealDataBase {
     }
 
     getOrderPrice = ({ symbol, side, type, 位置 }: { symbol: BaseType.BitmexSymbol, side: BaseType.Side, type: 'taker' | 'maker', 位置: number }) => {
-        const pk = this.dataExt[symbol].期货.盘口
+        const pk = this.dataExt[symbol].bitmex.盘口
 
         if (pk.length < 1) return NaN
         const p = pk[pk.length - 1]
@@ -1092,17 +1092,17 @@ export class RealDataBase {
     //
     get信号msg = (symbol: BaseType.BitmexSymbol) => {
         const realData = this
-        const 摸顶 = realData.dataExt[symbol].期货.信号_摸顶
-        const 抄底 = realData.dataExt[symbol].期货.信号_抄底
-        const 追涨 = realData.dataExt[symbol].期货.信号_追涨
-        const 追跌 = realData.dataExt[symbol].期货.信号_追跌
+        const 摸顶 = realData.dataExt[symbol].bitmex.信号_摸顶
+        const 抄底 = realData.dataExt[symbol].bitmex.信号_抄底
+        const 追涨 = realData.dataExt[symbol].bitmex.信号_追涨
+        const 追跌 = realData.dataExt[symbol].bitmex.信号_追跌
 
         return JSON.stringify({
             上涨: 摸顶.length > 3 ? [摸顶[摸顶.length - 3], 摸顶[摸顶.length - 2], 摸顶[摸顶.length - 1]] : '',
             下跌: 抄底.length > 3 ? [抄底[抄底.length - 3], 抄底[抄底.length - 2], 抄底[抄底.length - 1]] : '',
             追涨: 追涨.length > 3 ? [追涨[追涨.length - 3], 追涨[追涨.length - 2], 追涨[追涨.length - 1]] : '',
             追跌: 追跌.length > 3 ? [追跌[追跌.length - 3], 追跌[追跌.length - 2], 追跌[追跌.length - 1]] : '',
-            波动率: lastNumber(realData.dataExt[symbol].期货.价格_波动率30),
+            波动率: lastNumber(realData.dataExt[symbol].bitmex.价格_波动率30),
         })
     }
 
@@ -1111,8 +1111,8 @@ export class RealDataBase {
 
     摸顶抄底信号灯side___2根 = (symbol: BaseType.BitmexSymbol) => {
         const realData = this
-        const up = realData.dataExt[symbol].期货.信号_摸顶
-        const down = realData.dataExt[symbol].期货.信号_抄底
+        const up = realData.dataExt[symbol].bitmex.信号_摸顶
+        const down = realData.dataExt[symbol].bitmex.信号_抄底
 
         if (up.length > 2 && up[up.length - 1].every(v => v.value) && up[up.length - 2].every(v => v.value)) {
             return { 信号side: 'Sell' as 'Sell', 信号msg: realData.get信号msg(symbol) }
@@ -1130,16 +1130,16 @@ export class RealDataBase {
 
     get信号灯Type = (symbol: BaseType.BitmexSymbol) => {
         const realData = this
-        if (is连续几根全亮(3, realData.dataExt[symbol].期货.信号_摸顶)) {
+        if (is连续几根全亮(3, realData.dataExt[symbol].bitmex.信号_摸顶)) {
             return '摸顶'
         }
-        else if (is连续几根全亮(3, realData.dataExt[symbol].期货.信号_抄底)) {
+        else if (is连续几根全亮(3, realData.dataExt[symbol].bitmex.信号_抄底)) {
             return '抄底'
         }
-        else if (is连续几根全亮(1, realData.dataExt[symbol].期货.信号_追涨)) {
+        else if (is连续几根全亮(1, realData.dataExt[symbol].bitmex.信号_追涨)) {
             return '追涨'
         }
-        else if (is连续几根全亮(1, realData.dataExt[symbol].期货.信号_追跌)) {
+        else if (is连续几根全亮(1, realData.dataExt[symbol].bitmex.信号_追跌)) {
             return '追跌'
         } else {
             return 'none'
@@ -1149,8 +1149,8 @@ export class RealDataBase {
 
 
     get信号XXXmsg = (symbol: BaseType.BitmexSymbol) => {
-        const 上涨做空下跌平仓 = this.dataExt[symbol].期货.信号_摸顶_下跌平仓
-        const 下跌抄底上涨平仓 = this.dataExt[symbol].期货.信号_抄底_上涨平仓
+        const 上涨做空下跌平仓 = this.dataExt[symbol].bitmex.信号_摸顶_下跌平仓
+        const 下跌抄底上涨平仓 = this.dataExt[symbol].bitmex.信号_抄底_上涨平仓
 
         return JSON.stringify({
             上涨做空下跌平仓: 上涨做空下跌平仓.length > 3 ? [上涨做空下跌平仓[上涨做空下跌平仓.length - 3], 上涨做空下跌平仓[上涨做空下跌平仓.length - 2], 上涨做空下跌平仓[上涨做空下跌平仓.length - 1]] : '',
@@ -1160,14 +1160,14 @@ export class RealDataBase {
 
 
     is摸顶_下跌平仓 = (symbol: BaseType.BitmexSymbol) =>
-        is连续几根全亮(2, this.dataExt[symbol].期货.信号_摸顶_下跌平仓)
+        is连续几根全亮(2, this.dataExt[symbol].bitmex.信号_摸顶_下跌平仓)
 
     is抄底_上涨平仓 = (symbol: BaseType.BitmexSymbol) =>
-        is连续几根全亮(2, this.dataExt[symbol].期货.信号_抄底_上涨平仓)
+        is连续几根全亮(2, this.dataExt[symbol].bitmex.信号_抄底_上涨平仓)
 
 
     get波动率 = (symbol: BaseType.BitmexSymbol) =>
-        lastNumber(this.dataExt[symbol].期货.价格_波动率30)
+        lastNumber(this.dataExt[symbol].bitmex.价格_波动率30)
 
 
 

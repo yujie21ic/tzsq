@@ -293,7 +293,7 @@ export class 交易 extends React.Component {
                     lastNumber(realTickClient.dataExt.XBTUSD.hopex.价格) - to范围({
                         min: 3,
                         max: 18,
-                        value: lastNumber(realTickClient.dataExt.XBTUSD.期货.价格_波动率30) / 4,
+                        value: lastNumber(realTickClient.dataExt.XBTUSD.bitmex.价格_波动率30) / 4,
                     }), 'Sell')
             ,
             side: 'Buy',
@@ -308,7 +308,7 @@ export class 交易 extends React.Component {
                     lastNumber(realTickClient.dataExt.XBTUSD.hopex.价格) + to范围({
                         min: 3,
                         max: 18,
-                        value: lastNumber(realTickClient.dataExt.XBTUSD.期货.价格_波动率30) / 4,
+                        value: lastNumber(realTickClient.dataExt.XBTUSD.bitmex.价格_波动率30) / 4,
                     }), 'Buy')
             ,
             side: 'Sell',
@@ -401,7 +401,7 @@ export class 提醒 extends React.Component {
         //const XBTUSD现货 = realTickClient.dataExt.XBTUSD.现货
 
         const volum = realTickClient.get期货多少秒内成交量__万为单位('XBTUSD', 15)
-        const 波动率 = 指标.波动率(realTickClient.dataExt.XBTUSD.期货.价格, 30, 500)
+        const 波动率 = 指标.波动率(realTickClient.dataExt.XBTUSD.bitmex.价格, 30, 500)
         if (volum > 200 && lastNumber(波动率) >= 5) {
             this.setAndSpeak(
                 '比 特 币 成交量',

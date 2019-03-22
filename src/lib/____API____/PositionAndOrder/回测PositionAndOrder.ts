@@ -19,7 +19,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
     //重复
     get浮盈点数(symbol: BaseType.BitmexSymbol) {
-        const 最新价 = lastNumber(this.realData.dataExt[symbol].期货.收盘价)
+        const 最新价 = lastNumber(this.realData.dataExt[symbol].bitmex.收盘价)
         if (最新价 === undefined) return NaN
         const { 仓位数量, 开仓均价 } = this.jsonSync.rawData.symbol[symbol]
         if (仓位数量 === 0) return NaN
@@ -57,7 +57,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     }, logText?: string) {
         if (p.symbol !== 'XBTUSD') return false
 
-        const timestamp = lastNumber(this.realData.dataExt[p.symbol].期货.时间)
+        const timestamp = lastNumber(this.realData.dataExt[p.symbol].bitmex.时间)
 
         console.log(`${new Date(timestamp).toLocaleString()}      ${p.text}`)
 
@@ -73,7 +73,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
         this.jsonSync.rawData.symbol.XBTUSD.活动委托.push({
             type: p.reduceOnly ? '限价只减仓' : '限价',
-            timestamp: lastNumber(this.realData.dataExt[p.symbol].期货.时间),
+            timestamp: lastNumber(this.realData.dataExt[p.symbol].bitmex.时间),
             id: String(this.order_id++),
             side: p.side,
             cumQty: 0,
@@ -94,7 +94,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
         this.jsonSync.rawData.symbol.XBTUSD.活动委托.push({
             type: '止损',
-            timestamp: lastNumber(this.realData.dataExt[p.symbol].期货.时间),
+            timestamp: lastNumber(this.realData.dataExt[p.symbol].bitmex.时间),
             id: String(this.order_id++),
             side: p.side,
             cumQty: 0,
@@ -145,7 +145,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         text: string;
     }, logText?: string) {
         return this.成交({
-            timestamp: lastNumber(this.realData.dataExt[p.symbol].期货.时间),
+            timestamp: lastNumber(this.realData.dataExt[p.symbol].bitmex.时间),
             symbol: p.symbol,
             side: p.side,
             size: p.size,
@@ -319,7 +319,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                         }
 
                         this.成交({
-                            timestamp: lastNumber(this.realData.dataExt.XBTUSD.期货.时间),
+                            timestamp: lastNumber(this.realData.dataExt.XBTUSD.bitmex.时间),
                             symbol: 'XBTUSD',
                             side: v.side,
                             size,
@@ -336,7 +336,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                         (v.side === 'Sell' && 买1 <= v.price)
                     ) {
                         this.成交({
-                            timestamp: lastNumber(this.realData.dataExt.XBTUSD.期货.时间),
+                            timestamp: lastNumber(this.realData.dataExt.XBTUSD.bitmex.时间),
                             symbol: 'XBTUSD',
                             side: v.side,
                             size: Math.abs(this.jsonSync.rawData.symbol.XBTUSD.仓位数量),//________________
@@ -351,7 +351,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                 return true
             })
 
-            setWindowTitle(new Date(lastNumber(this.realData.dataExt.XBTUSD.期货.时间)).toLocaleString())
+            setWindowTitle(new Date(lastNumber(this.realData.dataExt.XBTUSD.bitmex.时间)).toLocaleString())
 
             指标.回测setTime()
             task.onTick(this)

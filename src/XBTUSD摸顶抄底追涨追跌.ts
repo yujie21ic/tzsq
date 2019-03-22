@@ -219,14 +219,14 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         const 开仓side = { '追涨': 'Buy', '追跌': 'Sell', '抄底': 'Buy', '摸顶': 'Sell', 'none': '_____' }[信号灯Type] as BaseType.Side
 
         //上涨 下跌 切换 止损次数 清零
-        const x = self.realData.dataExt[symbol].期货.上涨_下跌
+        const x = self.realData.dataExt[symbol].bitmex.上涨_下跌
         if (x.length > 0 && this.最后一次上涨_下跌 !== x[x.length - 1]) {
             this.最后一次上涨_下跌 = x[x.length - 1]
             this.连续止损2 = 0
         }
 
         if (this.连续止损2 >= 4) {
-            this.到什么时间不开仓 = lastNumber(self.realData.dataExt[symbol].期货.时间) + 1000 * 60 * 10
+            this.到什么时间不开仓 = lastNumber(self.realData.dataExt[symbol].bitmex.时间) + 1000 * 60 * 10
             this.连续止损2 = 0
         }
 
@@ -238,7 +238,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             if (信号灯Type === '抄底' && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓抄底 === false) return false
             if (信号灯Type === '摸顶' && self.jsonSync.rawData.symbol[symbol].任务开关.自动开仓摸顶 === false) return false
             if (
-                (lastNumber(self.realData.dataExt[symbol].期货.时间) - this.最后一次信号时间 < 20 * 1000) && //没有超时
+                (lastNumber(self.realData.dataExt[symbol].bitmex.时间) - this.最后一次信号时间 < 20 * 1000) && //没有超时
                 (                                             //抵消
                     (this.最后一次信号 === '追涨' && 信号灯Type === '摸顶') ||
                     (this.最后一次信号 === '追跌' && 信号灯Type === '抄底') ||
@@ -250,13 +250,13 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             }
 
             this.最后一次信号 = 信号灯Type
-            this.最后一次信号时间 = lastNumber(self.realData.dataExt[symbol].期货.时间)
+            this.最后一次信号时间 = lastNumber(self.realData.dataExt[symbol].bitmex.时间)
 
 
-            const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' || lastNumber(self.realData.dataExt.XBTUSD.期货.绝对价差) > 15
+            const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' || lastNumber(self.realData.dataExt.XBTUSD.bitmex.绝对价差) > 15
 
 
-            if (lastNumber(self.realData.dataExt[symbol].期货.时间) > this.到什么时间不开仓) {
+            if (lastNumber(self.realData.dataExt[symbol].bitmex.时间) > this.到什么时间不开仓) {
                 return 市价 ?
                     self.taker({
                         symbol,
@@ -289,7 +289,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         if (活动委托.length === 1) {
             const { type, timestamp, id, side } = 活动委托[0]
             if (type === '限价') {
-                const _15秒取消 = (lastNumber(self.realData.dataExt[symbol].期货.时间) > (timestamp + 15 * 1000))
+                const _15秒取消 = (lastNumber(self.realData.dataExt[symbol].bitmex.时间) > (timestamp + 15 * 1000))
                 const 出现反向信号时候取消 = (信号灯Type !== 'none' && 开仓side !== side)
                 if (_15秒取消 || 出现反向信号时候取消) {
                     return self.cancel({ orderID: [id], text: '自动开仓step 取消开仓' }, '自动开仓step 取消开仓 ' + _15秒取消 ? '_15秒取消' : ('出现反向信号时候取消' + self.realData.get信号msg(symbol)))
@@ -321,8 +321,8 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         if (isNaN(this.最大仓位abs) || this.最大仓位abs < Math.abs(仓位数量)) {
             this.最大仓位abs = Math.abs(仓位数量)
-            this.最后一次开仓时间 = lastNumber(self.realData.dataExt[symbol].期货.时间)
-            this.最后一次开仓折返率 = lastNumber(self.realData.dataExt[symbol].期货.折返率)
+            this.最后一次开仓时间 = lastNumber(self.realData.dataExt[symbol].bitmex.时间)
+            this.最后一次开仓折返率 = lastNumber(self.realData.dataExt[symbol].bitmex.折返率)
             this.摸顶抄底超时秒 = to范围({ min: 15, max: 30, value: self.realData.get波动率(symbol) / 7 + 20 })
             this.第2次超时 = false
             this.已经平了一半了 = false
@@ -330,7 +330,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
 
 
-        const 持仓时间ms = lastNumber(self.realData.dataExt[symbol].期货.时间) - this.最后一次开仓时间
+        const 持仓时间ms = lastNumber(self.realData.dataExt[symbol].bitmex.时间) - this.最后一次开仓时间
 
 
         if (活动委托.length <= 1) {
@@ -346,7 +346,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 位置: 0,
             })
 
-            const 震荡指数衰竭 = lastNumber(self.realData.dataExt[symbol].期货.震荡指数_macd.DIF) < lastNumber(self.realData.dataExt[symbol].期货.震荡指数_macd.DEM)
+            const 震荡指数衰竭 = lastNumber(self.realData.dataExt[symbol].bitmex.震荡指数_macd.DIF) < lastNumber(self.realData.dataExt[symbol].bitmex.震荡指数_macd.DEM)
             //如果超时了 
             if (持仓时间ms >= this.摸顶抄底超时秒 * 1000 && this.第2次超时 === false) {
                 this.第2次超时 = true
@@ -374,7 +374,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 }
             }
             else if (this.最后一次信号 === '追涨' || this.最后一次信号 === '追跌') {
-                const 净成交量均线60 = lastNumber(self.realData.dataExt[symbol].期货.买.净成交量_累加60)
+                const 净成交量均线60 = lastNumber(self.realData.dataExt[symbol].bitmex.买.净成交量_累加60)
 
                 if ((平仓side === 'Sell' && 净成交量均线60 < 0) || (平仓side === 'Buy' && 净成交量均线60 > 0)) {
                     亏损挂单平仓Text = '如果净成交量反向，那么立刻挂单平仓'
@@ -451,7 +451,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
             if (信号side === 平仓side && 活动委托.length === 0) {
 
-                const 市价 = lastNumber(self.realData.dataExt.XBTUSD.期货.绝对价差) > 15
+                const 市价 = lastNumber(self.realData.dataExt.XBTUSD.bitmex.绝对价差) > 15
 
                 return 市价 ?
                     self.taker({

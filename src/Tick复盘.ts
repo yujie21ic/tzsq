@@ -48,7 +48,7 @@ class Tick复盘 extends TickBase {
 
             ; (window as any)['d'] = d
 
-        const right2 = Math.max(d.现货.价格.length, d.期货.价格.length, d.期货.买.盘口.length, d.期货.卖.盘口.length) - 1
+        const right2 = Math.max(d.binance.价格.length, d.bitmex.价格.length, d.bitmex.买.盘口.length, d.bitmex.卖.盘口.length) - 1
         if (right2 === 0) {
             this.c = 0
         } else {
