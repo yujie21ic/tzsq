@@ -4,6 +4,7 @@ import { DB } from './DB'
 import { timeID } from '../F/timeID'
 import { sleep } from '../C/sleep'
 import { BitMEXRESTAPI } from '../____API____/BitMEX/BitMEXRESTAPI'
+import { to范围 } from '../F/to范围';
 
 
 const getData = async (p: {
@@ -17,8 +18,6 @@ const getData = async (p: {
     let start = 0
 
     while (true) {
-        await sleep(1000 * 0.1) //休息0.1s
-
         const { data } = (await BitMEXRESTAPI.Trade.get('', {
             start,
             symbol: p.symbol,
@@ -46,7 +45,11 @@ const getData = async (p: {
                     sellCount: v.side === 'Sell' ? 1 : 0,
                 })
             })
-            if (data.length < 500) return retArr
+            if (data.length < 500) {
+                return retArr
+            } else {
+                await sleep(1000 * 1) //休息1s
+            }
         }
         else {
             return retArr
@@ -67,24 +70,34 @@ export const syncBitmex500msKLine = (symbol: BaseType.BitmexSymbol) =>
             }
         },
         getData: async (start: number) => {
+
+            const _30秒前 = Date.now() - 1000 * 30
+
             //只采集 30秒 前的数据
-            if (start + 1000 * 30 > Date.now()) {
-                await sleep(1000 * 0.2) //休息0.2s
+            if (start > _30秒前) {
+                await sleep(1000 * 1) //休息1s
                 return { tickArr: [], newStart: start }
             }
 
-            //采集10秒
+
+            const 采集多少秒 = to范围({
+                min: 20,
+                max: 1000,
+                value: (_30秒前 - start) / 1000,
+            })
+
             const data = await getData({
-                多少秒: 10,
+                多少秒: 采集多少秒,
                 startTime: start,
                 symbol,
             })
+
             if (data === undefined) {
-                await sleep(1000 * 0.2) //休息0.2s
+                await sleep(1000 * 1) //休息1s
                 return { tickArr: [], newStart: start }
             } else {
-                await sleep(1000 * 0.2) //休息0.2s
-                return { tickArr: data, newStart: start + 1000 * 10 } //采集了10秒
+                await sleep(1000 * 1) //休息1s
+                return { tickArr: data, newStart: start + 1000 * 采集多少秒 }
             }
         }
     })
