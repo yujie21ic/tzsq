@@ -4,7 +4,7 @@ import { DB } from './DB'
 import { timeID } from '../F/timeID'
 import { sleep } from '../C/sleep'
 import { BitMEXRESTAPI } from '../____API____/BitMEX/BitMEXRESTAPI'
-import { to范围 } from '../F/to范围';
+import { to范围 } from '../F/to范围'
 
 
 const getData = async (p: {
