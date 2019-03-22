@@ -883,8 +883,6 @@ export class RealDataBase {
 
             价格_最高60,
             价格_最低60,
-
-            上涨_下跌_横盘,
         }
     }
 
