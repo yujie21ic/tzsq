@@ -11,8 +11,6 @@ import { safeJSONParse } from '../lib/F/safeJSONParse'
 import * as fs from 'fs'
 import { formatDate } from '../lib/F/formatDate'
 
-
-
 export class RealDataBase {
     static 单位时间 = 500
 
@@ -215,26 +213,19 @@ export class RealDataBase {
                 ext.index++
             }
         })
-        const 波动_测试_价格 = 指标.lazyMapCache(() => __波动_测试.length, i => __波动_测试[i].价格)
-        const 波动_测试_时间str = 指标.lazyMapCache(() => __波动_测试.length, i => __波动_测试[i].时间str)
-        const 波动_测试_持续秒 = 指标.lazyMapCache(() => __波动_测试.length, i => __波动_测试[i].持续秒)
-        const 波动_测试_累计买 = 指标.lazyMapCache(() => __波动_测试.length, i => __波动_测试[i].累计买)
-        const 波动_测试_累计卖 = 指标.lazyMapCache(() => __波动_测试.length, i => __波动_测试[i].累计卖)
-        const 波动_测试_净成交量 = 指标.lazyMapCache(() => Math.min(波动_测试_累计买.length, 波动_测试_累计卖.length), i => 波动_测试_累计买[i] - 波动_测试_累计卖[i])
-        const 波动_测试_净成交量_累加10 = 指标.累加(波动_测试_净成交量, 10, 1000)//
+
+        const 波动_测试_净成交量 = 指标.lazyMapCache(() => __波动_测试.length, i => __波动_测试[i].累计买 - __波动_测试[i].累计卖)
+        const 波动_测试_净成交量_累加10 = 指标.累加(波动_测试_净成交量, 10, 1000)
 
         const 波动_测试 = {
-            价格: 波动_测试_价格,
-            时间str: 波动_测试_时间str,
-            持续秒: 波动_测试_持续秒,
-            累计买: 波动_测试_累计买,
-            累计卖: 波动_测试_累计卖,
+            价格: 指标.lazyMapCache(() => __波动_测试.length, i => __波动_测试[i].价格),
+            时间str: 指标.lazyMapCache(() => __波动_测试.length, i => __波动_测试[i].时间str),
+            持续秒: 指标.lazyMapCache(() => __波动_测试.length, i => __波动_测试[i].持续秒),
+            累计买: 指标.lazyMapCache(() => __波动_测试.length, i => __波动_测试[i].累计买),
+            累计卖: 指标.lazyMapCache(() => __波动_测试.length, i => __波动_测试[i].累计卖),
             净成交量: 波动_测试_净成交量,
             净成交量_累加10: 波动_测试_净成交量_累加10,
         }
-
-
-
 
 
         const KLine = 指标.lazyMapCache(() => data.length, i => ({
@@ -243,10 +234,7 @@ export class RealDataBase {
             low: data[i].low,
             close: data[i].close,
         }))
-
-
-
-
+ 
 
         const __成交量买 = 指标.lazyMapCache(() => data.length, i => data[i].buySize)
         const __成交量卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellSize)
@@ -277,8 +265,7 @@ export class RealDataBase {
         const 价格_波动率15 = 指标.波动率(价格, 15, RealDataBase.单位时间)
         const 价格_波动率30 = 指标.波动率(价格, 30, RealDataBase.单位时间)
         const 价格_波动率60 = 指标.波动率(价格, 60, RealDataBase.单位时间)
-        const 价格_波动率300 = 指标.波动率(价格, 300, RealDataBase.单位时间)
-
+        const 价格_波动率300 = 指标.波动率(价格, 300, RealDataBase.单位时间) 
 
 
         const 折返率 = 指标.lazyMapCache(() => 价格_波动率30.length, i => to范围({ min: 4, max: 15, value: 价格_波动率30[i] / 10 }))
@@ -1176,9 +1163,5 @@ export class RealDataBase {
 
     get波动率 = (symbol: BaseType.BitmexSymbol) =>
         lastNumber(this.dataExt[symbol].bitmex.价格_波动率30)
-
-
-
-
 
 }
