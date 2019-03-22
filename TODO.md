@@ -12,6 +12,8 @@ CTP复盘
 
 hopexAPI
 
+交易类  ws连接成功 返回了数据 才开始 onTick
+
 
 
 
