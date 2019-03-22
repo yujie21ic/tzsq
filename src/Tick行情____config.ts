@@ -443,7 +443,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.信号hopex_上涨, color: 买颜色 }),
+                    layer(信号Layer, { data: d2.XBTUSD.hopex_信号_摸顶, color: 买颜色 }),
                     layer(TextLayer, {
                         text:
                             `信号hopex_上涨                    `,
@@ -453,7 +453,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.信号hopex_下跌, color: 卖颜色 }),
+                    layer(信号Layer, { data: d2.XBTUSD.hopex_信号_抄底, color: 卖颜色 }),
                     layer(TextLayer, {
                         text:
                             `信号hopex_下跌                    `,

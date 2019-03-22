@@ -981,7 +981,7 @@ export class RealDataBase {
             return false
         }
 
-        const 信号hopex_下跌 = 指标.lazyMapCache(
+        const hopex_信号_抄底 = 指标.lazyMapCache(
             () => Math.min(bitmex.信号_抄底.length, bitmex.价格.length, bitmex.价格_波动率30.length, hopex.价格.length),
             i => [
                 { name: '5秒内信号', value: _X秒内有全亮(bitmex.信号_抄底hopex专用, i) },
@@ -990,7 +990,7 @@ export class RealDataBase {
             ]
         )
 
-        const 信号hopex_上涨 = 指标.lazyMapCache(
+        const hopex_信号_摸顶 = 指标.lazyMapCache(
             () => Math.min(bitmex.信号_摸顶.length, bitmex.价格.length, bitmex.价格_波动率30.length, hopex.价格.length),
             i => [
                 { name: '5秒内信号', value: _X秒内有全亮(bitmex.信号_摸顶hopex专用, i) },
@@ -1046,8 +1046,9 @@ export class RealDataBase {
 
             成交提示,
 
-            信号hopex_下跌,
-            信号hopex_上涨,
+            hopex_信号_抄底,
+            hopex_信号_摸顶,
+
             期货30秒内成交量: () => this.get期货多少秒内成交量__万为单位(symbol, 30),
             差价,
             差价均线,

@@ -249,8 +249,8 @@ export class 交易 extends React.Component {
             requestAnimationFrame(f)
 
             if (hopex自动开仓一次) {
-                const up = realTickClient.dataExt.XBTUSD.信号hopex_上涨
-                const down = realTickClient.dataExt.XBTUSD.信号hopex_下跌
+                const up = realTickClient.dataExt.XBTUSD.hopex_信号_摸顶
+                const down = realTickClient.dataExt.XBTUSD.hopex_信号_抄底
 
                 if (up.length > 0 && up[up.length - 1].every(v => v.value)) {
                     speechSynthesis.speak(new SpeechSynthesisUtterance('自动卖一次'))
