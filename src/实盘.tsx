@@ -14,8 +14,23 @@ import { Button } from './lib/UI/Button'
 import { Switch } from '@material-ui/core'
 import { to范围 } from './lib/F/to范围'
 import { 指标 } from './指标/指标'
-import { toGridPoint } from './lib/F/toGridPoint'
-import { hopex市价开仓和止损BTC } from './lib/____API____/Hopex/HopexRESTAPI'
+import { toGridPoint } from './lib/F/toGridPoint' 
+import { HopexRESTAPI } from './lib/____API____/Hopex/HopexRESTAPI'
+
+
+const hopex市价开仓和止损BTC = async (cookie: string, p: { size: number, stopPrice: number, side: BaseType.Side }) => {
+
+    HopexRESTAPI.taker(cookie, p)
+
+    HopexRESTAPI.stop(cookie, {
+        size: p.size,
+        stopPrice: p.stopPrice,
+        side: p.side === 'Sell' ? 'Buy' : 'Sell',
+    })
+
+    return { data: true }
+}
+
 
 const realTickClient = new DataClient.RealData__Client()
 let hopex自动开仓一次 = false
