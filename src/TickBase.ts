@@ -21,8 +21,6 @@ export class TickBase {
 
         window.addEventListener('mousedown', e => {
             if (e.button === 0) {
-                const d = this.real.dataExt[this.nowTickSymbol]
-                this.real.set现货减去(lastNumber(d.现货.价格) - lastNumber(d.期货.价格))
             }
             else if (e.button === 2) {
                 dialog.popupMenu([
@@ -30,8 +28,7 @@ export class TickBase {
                         label: v,
                         checked: v === this.nowTickSymbol,
                         onClick: () => {
-                            // this.nowTickSymbol = v
-                            // this.real.set现货减去(0)
+
                         }
                     })),
                     undefined,
@@ -56,11 +53,6 @@ export class TickBase {
 
         chartInit(element, () => {
             const d = this.real.dataExt[this.nowTickSymbol]
-
-            const xxx = lastNumber(d.现货.价格_均线300) - lastNumber(d.期货.价格_均线300) //<------------
-            if (isNaN(xxx) === false) {
-                this.real.set现货减去(xxx)
-            }
 
             const { left, right } = this.getLeftRight()
 

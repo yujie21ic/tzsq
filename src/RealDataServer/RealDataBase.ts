@@ -202,7 +202,7 @@ export class RealDataBase {
 
         const 时间str = 指标.lazyMapCache(() => 时间.length, i => formatDate(new Date(时间[i]), v => `${v.hh}:${v.mm}:${v.ss}:${v.msmsms}`))
 
- 
+
         //
         const 波动_测试 = 指标.lazyMapCache2({ index: 0, lastPrice: NaN }, (arr: {
             价格: number
@@ -1100,12 +1100,6 @@ export class RealDataBase {
             ctp: this.item2(this.data.ctp.rb1905, true),
         }
     }
-
-    set现货减去(n: number) {
-        //
-    }
-
-
 
     getOrderPrice = ({ symbol, side, type, 位置 }: { symbol: BaseType.BitmexSymbol, side: BaseType.Side, type: 'taker' | 'maker', 位置: number }) => {
         const pk = this.dataExt[symbol].期货.盘口
