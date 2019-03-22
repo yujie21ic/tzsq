@@ -234,7 +234,7 @@ export class RealDataBase {
             low: data[i].low,
             close: data[i].close,
         }))
- 
+
 
         const __成交量买 = 指标.lazyMapCache(() => data.length, i => data[i].buySize)
         const __成交量卖 = 指标.lazyMapCache(() => data.length, i => data[i].sellSize)
@@ -265,7 +265,7 @@ export class RealDataBase {
         const 价格_波动率15 = 指标.波动率(价格, 15, RealDataBase.单位时间)
         const 价格_波动率30 = 指标.波动率(价格, 30, RealDataBase.单位时间)
         const 价格_波动率60 = 指标.波动率(价格, 60, RealDataBase.单位时间)
-        const 价格_波动率300 = 指标.波动率(价格, 300, RealDataBase.单位时间) 
+        const 价格_波动率300 = 指标.波动率(价格, 300, RealDataBase.单位时间)
 
 
         const 折返率 = 指标.lazyMapCache(() => 价格_波动率30.length, i => to范围({ min: 4, max: 15, value: 价格_波动率30[i] / 10 }))
@@ -891,10 +891,8 @@ export class RealDataBase {
 
         const hopex = this.item2(this.data.hopex[hopexSymbol], false)
 
-        //差价
-        const 差价 = 指标.lazyMapCache(() => Math.min(binance.价格.length, bitmex.价格.length), i => binance.价格[i] - bitmex.价格[i])
-        const 差价均线 = 指标.均线(差价, 300, RealDataBase.单位时间)
-
+        // const binance_bitmex_差价 = 指标.lazyMapCache(() => Math.min(binance.价格.length, bitmex.价格.length), i => binance.价格[i] - bitmex.价格[i])
+        // const binance_bitmex_差价均线 = 指标.均线(binance_bitmex_差价, 300, RealDataBase.单位时间)
 
         const bitmex_hopex_上涨差价 = 指标.lazyMapCache(() => Math.min(bitmex.价格_最高60.length, hopex.价格.length), i => Math.abs(bitmex.价格_最高60[i] - hopex.价格[i]))
         const bitmex_hopex_下跌差价 = 指标.lazyMapCache(() => Math.min(bitmex.价格_最低60.length, hopex.价格.length), i => Math.abs(bitmex.价格_最低60[i] - hopex.价格[i]))
@@ -944,14 +942,6 @@ export class RealDataBase {
         const bitmex_信号_追涨 = bitmex_追涨_追跌('追涨')
         const bitmex_信号_追跌 = bitmex_追涨_追跌('追跌')
 
-
-
-
-
-
-
-
-
         const _X秒内有全亮 = (arr: ArrayLike<{
             name: string
             value: boolean
@@ -985,8 +975,6 @@ export class RealDataBase {
                 { name: 'hp折返 <', value: hopex.价格_最高60[i] - hopex.价格[i] < bitmex.折返率[i] / 2 },
             ]
         )
-
-
 
         let arr = [] as BaseType.成交记录
         const dic: { [key: number]: string } = Object.create(null)
@@ -1037,8 +1025,7 @@ export class RealDataBase {
             hopex_信号_摸顶,
 
             期货30秒内成交量: () => this.get期货多少秒内成交量__万为单位(symbol, 30),
-            差价,
-            差价均线,
+
             binance,
             bitmex,
             hopex,
