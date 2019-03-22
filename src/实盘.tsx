@@ -11,11 +11,11 @@ import { config } from './config'
 import { BaseType } from './lib/BaseType'
 import { windowExt } from './windowExt'
 import { Button } from './lib/UI/Button'
-import { JSONRequest } from './lib/C/JSONRequest'
 import { Switch } from '@material-ui/core'
 import { to范围 } from './lib/F/to范围'
 import { 指标 } from './指标/指标'
 import { toGridPoint } from './lib/F/toGridPoint'
+import { hopex市价开仓和止损BTC } from './lib/____API____/Hopex/HopexRESTAPI'
 
 const realTickClient = new DataClient.RealData__Client()
 let hopex自动开仓一次 = false
@@ -353,62 +353,6 @@ export class 交易 extends React.Component {
 }
 
 
-const hopex市价开仓和止损BTC = async (cookie: string, p: { size: number, stopPrice: number, side: BaseType.Side }) => {
-    JSONRequest({
-        url: 'https://web.hopex.com/api/v1/gateway/User/Order?culture=zh-CN',
-        method: 'POST',
-        body: {
-            'param': {
-                'side': p.side === 'Sell' ? '1' : '2',
-                'orderQuantity': String(p.size),
-                'market': 'BTCUSDT',
-                'marketCode': 'BTCUSDT',
-                'contractCode': 'BTCUSDT',
-                'lang': 'zh-CN',
-            }
-        },
-        ss: config.ss,
-        headers: {
-            Origin: 'https://www.hopex.com',
-            Referer: 'https://www.hopex.com/trade?marketCode=BTCUSDT',
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
-            conversionCurrency: 'USD',
-            Authorization: cookie.split('=')[1],
-            Cookie: cookie,
-        }
-    })
-    const 止损side = p.side === 'Sell' ? 'Buy' : 'Sell'
-
-    JSONRequest({
-        url: 'https://web.hopex.com/api/v1/gateway/User/ConditionOrder?culture=zh-CN',
-        method: 'POST',
-        body: {
-            'param': {
-                contractCode: 'BTCUSDT',
-                expectedPrice: String(止损side === 'Sell' ? String(p.stopPrice - 100) : String(p.stopPrice + 100)),
-                expectedQuantity: String(p.size),
-                lang: 'zh-CN',
-                market: 'BTCUSDT',
-                marketCode: 'BTCUSDT',
-                side: 止损side === 'Sell' ? 1 : 2,
-                trigPrice: String(止损side === 'Sell' ? String(p.stopPrice) : String(p.stopPrice)),
-                trigType: 'market_price',
-                type: 'LimitLoss',
-            }
-        },
-        ss: config.ss,
-        headers: {
-            Origin: 'https://www.hopex.com',
-            Referer: 'https://www.hopex.com/trade?marketCode=BTCUSDT',
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
-            conversionCurrency: 'USD',
-            Authorization: cookie.split('=')[1],
-            Cookie: cookie,
-        }
-    })
-
-    return { data: true }
-}
 
 
 
