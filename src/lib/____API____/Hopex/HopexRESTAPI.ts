@@ -1,10 +1,11 @@
 import { BaseType } from '../../BaseType'
 import { JSONRequest } from '../../C/JSONRequest'
 import { config } from '../../../config'
- 
+
 
 export const HopexRESTAPI = {
-    taker: async (cookie: string, p: { size: number, side: BaseType.Side }) => {
+
+    taker: async (cookie: string, p: { size: number, side: BaseType.Side }) =>
         JSONRequest({
             url: 'https://web.hopex.com/api/v1/gateway/User/Order?culture=zh-CN',
             method: 'POST',
@@ -27,9 +28,9 @@ export const HopexRESTAPI = {
                 Authorization: cookie.split('=')[1],
                 Cookie: cookie,
             }
-        })
-    },
-    stop: async (cookie: string, p: { size: number, side: BaseType.Side, stopPrice: number }) => {
+        }),
+
+    stop: async (cookie: string, p: { side: BaseType.Side, stopPrice: number }) =>
         JSONRequest({
             url: 'https://web.hopex.com/api/v1/gateway/User/ConditionOrder?culture=zh-CN',
             method: 'POST',
@@ -56,6 +57,6 @@ export const HopexRESTAPI = {
                 Authorization: cookie.split('=')[1],
                 Cookie: cookie,
             }
-        })
-    }
+        }),
+
 }
