@@ -9,7 +9,6 @@ import { BitMEXWSAPI } from '../BitMEX/BitMEXWSAPI'
 import { RealData__Server } from '../../../RealDataServer/RealData__Server'
 import { toCacheFunc } from '../../C/toCacheFunc'
 import { PositionAndOrder, PositionAndOrderTask } from './PositionAndOrder'
-import { lastNumber } from '../../F/lastNumber'
 import { HopexRESTAPI } from '../Hopex/HopexRESTAPI'
 
 const symbol = () => ({
@@ -471,19 +470,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         this.task2(task)
     }
 
-    get浮盈点数(symbol: BaseType.BitmexSymbol) {
-        const 最新价 = lastNumber(this.realData.dataExt[symbol].bitmex.收盘价)
-        if (最新价 === undefined) return NaN
-        const { 仓位数量, 开仓均价 } = this.jsonSync.rawData.symbol[symbol]
-        if (仓位数量 === 0) return NaN
-        if (仓位数量 > 0) {
-            return 最新价 - 开仓均价
-        } else if (仓位数量 < 0) {
-            return 开仓均价 - 最新价
-        } else {
-            return 0
-        }
-    }
+    
 }
 
 const __realData__ = toCacheFunc(() => new RealData__Server(false))

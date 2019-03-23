@@ -17,22 +17,6 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         return this.jsonSync.rawData.symbol[symbol].仓位数量
     }
 
-    //重复
-    get浮盈点数(symbol: BaseType.BitmexSymbol) {
-        const 最新价 = lastNumber(this.realData.dataExt[symbol].bitmex.收盘价)
-        if (最新价 === undefined) return NaN
-        const { 仓位数量, 开仓均价 } = this.jsonSync.rawData.symbol[symbol]
-        if (仓位数量 === 0) return NaN
-        if (仓位数量 > 0) {
-            return 最新价 - 开仓均价
-        } else if (仓位数量 < 0) {
-            return 开仓均价 - 最新价
-        } else {
-            return 0
-        }
-    }
-
-
 
     hopex_taker = (p: { size: number, side: BaseType.Side }) => {
         let ret = false

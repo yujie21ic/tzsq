@@ -143,8 +143,6 @@ export interface PositionAndOrder {
 
     runTask(task: PositionAndOrderTask): void
 
-    get浮盈点数(symbol: BaseType.BitmexSymbol): number
-
 }
 
 export interface PositionAndOrderTask {

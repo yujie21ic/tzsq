@@ -55,6 +55,20 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         }
     }
 
+    private get浮盈点数(symbol: BaseType.BitmexSymbol, self: PositionAndOrder) {
+        const 最新价 = lastNumber(self.realData.dataExt[symbol].bitmex.收盘价)
+        if (最新价 === undefined) return NaN
+        const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
+        if (仓位数量 === 0) return NaN
+        if (仓位数量 > 0) {
+            return 最新价 - 开仓均价
+        } else if (仓位数量 < 0) {
+            return 开仓均价 - 最新价
+        } else {
+            return 0
+        }
+    }
+
     onFilled(p: { symbol: BaseType.BitmexSymbol, type: '限价' | '限价只减仓' | '止损' | '强平' }) {
         if (p.symbol === 'XBTUSD') {
             if (p.type === '限价只减仓') {
@@ -177,7 +191,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
                 //修改止损  只能改小  不能改大
                 const { price, side, id } = 止损委托[0]
-                const 浮盈点数 = self.get浮盈点数('XBTUSD')
+                const 浮盈点数 = this.get浮盈点数('XBTUSD', self)
 
                 const 推 = 推止损({
                     波动率: self.realData.get波动率('XBTUSD'),
@@ -367,7 +381,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
 
             if (this.state.最后一次信号 === '摸顶' || this.state.最后一次信号 === '抄底') {
-                const 折返 = self.get浮盈点数('XBTUSD') < this.state.开仓状态.最后一次开仓折返率
+                const 折返 = this.get浮盈点数('XBTUSD', self) < this.state.开仓状态.最后一次开仓折返率
                 if (
                     (折返 && 震荡指数衰竭 === true && 持仓时间ms >= this.state.开仓状态.摸顶抄底超时秒 * 1000) ||      // 折返函数&&震荡衰竭==true的超时时间是30s
                     (折返 && 震荡指数衰竭 === false && 持仓时间ms >= this.state.开仓状态.摸顶抄底超时秒 * 120 * 1000)  // 折返函数&&震荡衰竭==false的超时时间是2分钟
