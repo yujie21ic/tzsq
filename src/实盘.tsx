@@ -18,12 +18,12 @@ import { toGridPoint } from './lib/F/toGridPoint'
 import { HopexRESTAPI } from './lib/____API____/Hopex/HopexRESTAPI'
 
 
-const hopex市价开仓和止损BTC = async (cookie: string, p: { size: number, stopPrice: number, side: BaseType.Side }) => {
+const hopex市价开仓和止损BTC = async (cookie: string, p: { size: number, price: number, side: BaseType.Side }) => {
 
     HopexRESTAPI.taker(cookie, p)
 
     HopexRESTAPI.stop(cookie, {
-        stopPrice: p.stopPrice,
+        price: p.price,
         side: p.side === 'Sell' ? 'Buy' : 'Sell',
     })
 
@@ -289,7 +289,7 @@ export class 交易 extends React.Component {
     hopex_buy = () =>
         hopex市价开仓和止损BTC(hopexCookie, {
             size: hopex数量 * this.倍数,
-            stopPrice:
+            price:
                 toGridPoint('XBTUSD',
                     lastNumber(realTickClient.dataExt.XBTUSD.hopex.价格) - to范围({
                         min: 3,
@@ -303,8 +303,7 @@ export class 交易 extends React.Component {
     hopex_sell = () =>
         hopex市价开仓和止损BTC(hopexCookie, {
             size: hopex数量 * this.倍数,
-            stopPrice:
-
+            price:
                 toGridPoint('XBTUSD',
                     lastNumber(realTickClient.dataExt.XBTUSD.hopex.价格) + to范围({
                         min: 3,
