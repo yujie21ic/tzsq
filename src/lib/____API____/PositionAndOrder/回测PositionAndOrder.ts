@@ -53,7 +53,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         return true
     }
 
-    hopex_stop = (p: { side: BaseType.Side, stopPrice: number }) => {
+    hopex_stop = (p: { side: BaseType.Side, price: number }) => {
         this.jsonSync.rawData.symbol.Hopex_BTC.活动委托.push({
             type: '止损',
             timestamp: lastNumber(this.realData.dataExt.XBTUSD.bitmex.时间),
@@ -61,7 +61,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
             side: p.side,
             cumQty: 0,
             orderQty: 100000,
-            price: p.stopPrice,
+            price: p.price,
         })
         return true
     }
@@ -143,7 +143,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         })
 
         return true
-    } 
+    }
 
     updateMaker(p: {
         orderID: string;

@@ -85,7 +85,7 @@ export interface PositionAndOrder {
 
     hopex_taker: (p: { size: number, side: BaseType.Side }) => boolean | Promise<boolean>
 
-    hopex_stop: (p: { side: BaseType.Side, stopPrice: number }) => boolean | Promise<boolean>
+    hopex_stop: (p: { side: BaseType.Side, price: number }) => boolean | Promise<boolean>
 
     hopex_cancel: (p: { orderID: number }) => boolean | Promise<boolean>
 

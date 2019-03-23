@@ -268,7 +268,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         return b
     }
 
-    hopex_stop = async (p: { side: BaseType.Side, stopPrice: number }) => {
+    hopex_stop = async (p: { side: BaseType.Side, price: number }) => {
         const b = (await HopexRESTAPI.stop(this.hopexCookie, p)).error === undefined
         if (b) {
             this.hopex_初始化.委托 = false
