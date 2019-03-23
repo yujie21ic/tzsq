@@ -34,11 +34,31 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
 
 
-    hopex_taker = (p: { size: number, side: BaseType.Side }) => false
+    hopex_taker = (p: { size: number, side: BaseType.Side }) => {
+        let ret = false
+        //hopex 成交
+        return ret
+    }
 
-    hopex_stop = (p: { side: BaseType.Side, stopPrice: number }) => false
+    hopex_stop = (p: { side: BaseType.Side, stopPrice: number }) => {
+        this.jsonSync.rawData.symbol.Hopex_BTC.活动委托.push({
+            type: '止损',
+            timestamp: lastNumber(this.realData.dataExt.XBTUSD.bitmex.时间),
+            id: String(this.order_id++),
+            side: p.side,
+            cumQty: 0,
+            orderQty: 100000,
+            price: p.stopPrice,
+        })
+        return true
+    }
 
-    hopex_cancel = (p: { orderID: number }) => false 
+    hopex_cancel = (p: { orderID: number }) => {
+        this.jsonSync.rawData.symbol.Hopex_BTC.活动委托 = this.jsonSync.rawData.symbol.Hopex_BTC.活动委托.filter(v =>
+            v.id !== String(p.orderID)
+        )
+        return true
+    }
 
     private startTime: number
     private endTime: number
@@ -207,6 +227,9 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         return true
     }
 
+
+    hopex_单位taker = 0
+    hopex_单位盈利 = 0
 
     单位taker = 0
     单位maker = 0
