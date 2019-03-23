@@ -19,20 +19,18 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
 
     hopex_taker = (p: { size: number, side: BaseType.Side }) => {
-        let ret = false
 
         const hopex_卖出价 = this.realData.getHopexOrderPrice({
             side: 'Buy',
             type: 'maker',
             位置: 0,
         })
+
         const hopex_买入价 = this.realData.getHopexOrderPrice({
             side: 'Sell',
             type: 'maker',
             位置: 0,
         })
-
-        const is平仓 = this.jsonSync.rawData.symbol.Hopex_BTC.仓位数量 !== 0 //没有加仓情况
 
         const 开仓均价 = this.jsonSync.rawData.symbol.Hopex_BTC.开仓均价
 
@@ -42,7 +40,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         let 平仓str = ''
 
         this.hopex_单位taker += p.size
-        if (is平仓) {
+        if (this.jsonSync.rawData.symbol.Hopex_BTC.仓位数量 !== 0) {
             this.hopex_单位盈利 += p.side === 'Sell' ? hopex_卖出价 - 开仓均价 : 开仓均价 - hopex_买入价
             平仓str = String(p.side === 'Sell' ? hopex_卖出价 : hopex_买入价)
         } else {
@@ -52,9 +50,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
         console.log(`${new Date(lastNumber(this.realData.dataExt.XBTUSD.hopex.时间)).toLocaleString()}   开仓 =  ${开仓str}  平仓 =  ${平仓str}   仓位数量 = ${this.jsonSync.rawData.symbol.Hopex_BTC.仓位数量}     hopex_单位taker = ${this.hopex_单位taker}     hopex_单位盈利 = ${this.hopex_单位盈利}`)
 
-
-
-        return ret
+        return true
     }
 
     hopex_stop = (p: { side: BaseType.Side, stopPrice: number }) => {
