@@ -318,7 +318,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         const 开仓side = { '追涨': 'Buy', '追跌': 'Sell', '抄底': 'Buy', '摸顶': 'Sell', 'none': '_____' }[信号灯Type] as BaseType.Side
 
         //上涨 下跌 切换 止损次数 清零
-        const x = self.realData.dataExt.XBTUSD[market].上涨_下跌_横盘
+        const x = d.上涨_下跌_横盘
         if (x.length > 0 && state.最后一次上涨_下跌 !== x[x.length - 1]) {
             state.最后一次上涨_下跌 = x[x.length - 1]
             state.连续止损次数 = 0
@@ -424,10 +424,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             state.开仓状态.已经平了一半了 = false
         }
 
-
-
         const 持仓时间ms = lastNumber(d.时间) - state.开仓状态.最后一次开仓时间
-
 
         if (活动委托.length <= 1) {
 
