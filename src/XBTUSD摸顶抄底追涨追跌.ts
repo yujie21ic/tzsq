@@ -384,7 +384,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         if (活动委托.length === 1) {
             const { type, timestamp, id, side } = 活动委托[0]
             if (type === '限价') {
-                const _15秒取消 = (lastNumber(self.realData.dataExt.XBTUSD.bitmex.时间) > (timestamp + 15 * 1000))
+                const _15秒取消 = (lastNumber(d.时间) > (timestamp + 15 * 1000))
                 const 出现反向信号时候取消 = (信号灯Type !== 'none' && 开仓side !== side)
                 if (_15秒取消 || 出现反向信号时候取消) {
                     return self.cancel({ orderID: [id], text: '自动开仓step 取消开仓' }, '自动开仓step 取消开仓 ' + _15秒取消 ? '_15秒取消' : ('出现反向信号时候取消' + self.realData.get信号msg('XBTUSD')))
@@ -402,7 +402,9 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         const item = self.jsonSync.rawData.symbol[symbol]
 
-        const { 任务开关 } = item
+        const d = self.realData.dataExt.XBTUSD[market]
+
+        const { 任务开关, 仓位数量, 活动委托 } = item
 
         const state = market === 'bitmex' ? this.bitmex_state : this.hopex_state
 
@@ -410,23 +412,19 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             return true
         }
 
-        const { 仓位数量 } = self.jsonSync.rawData.symbol.XBTUSD
-        const 活动委托 = self.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => v.type !== '止损')
-
-
 
         if (isNaN(state.开仓状态.最大仓位abs) || state.开仓状态.最大仓位abs < Math.abs(仓位数量)) {
             state.开仓状态.最大仓位abs = Math.abs(仓位数量)
-            state.开仓状态.最后一次开仓时间 = lastNumber(self.realData.dataExt.XBTUSD.bitmex.时间)
-            state.开仓状态.最后一次开仓折返率 = lastNumber(self.realData.dataExt.XBTUSD.bitmex.折返率)
-            state.开仓状态.摸顶抄底超时秒 = to范围({ min: 15, max: 30, value: lastNumber(self.realData.dataExt.XBTUSD.bitmex.价格_波动率30) / 7 + 20 })
+            state.开仓状态.最后一次开仓时间 = lastNumber(d.时间)
+            state.开仓状态.最后一次开仓折返率 = lastNumber(d.折返率)
+            state.开仓状态.摸顶抄底超时秒 = to范围({ min: 15, max: 30, value: lastNumber(d.价格_波动率30) / 7 + 20 })
             state.开仓状态.第2次超时 = false
             state.开仓状态.已经平了一半了 = false
         }
 
 
 
-        const 持仓时间ms = lastNumber(self.realData.dataExt.XBTUSD.bitmex.时间) - state.开仓状态.最后一次开仓时间
+        const 持仓时间ms = lastNumber(d.时间) - state.开仓状态.最后一次开仓时间
 
 
         if (活动委托.length <= 1) {
@@ -442,7 +440,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 位置: 0,
             })
 
-            const 震荡指数衰竭 = lastNumber(self.realData.dataExt.XBTUSD.bitmex.震荡指数_macd.DIF) < lastNumber(self.realData.dataExt.XBTUSD.bitmex.震荡指数_macd.DEM)
+            const 震荡指数衰竭 = lastNumber(d.震荡指数_macd.DIF) < lastNumber(d.震荡指数_macd.DEM)
             //如果超时了 
             if (持仓时间ms >= state.开仓状态.摸顶抄底超时秒 * 1000 && state.开仓状态.第2次超时 === false) {
                 state.开仓状态.第2次超时 = true
@@ -463,7 +461,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 }
             }
             else if (state.最后一次信号 === '追涨' || state.最后一次信号 === '追跌') {
-                const 净成交量均线60 = lastNumber(self.realData.dataExt.XBTUSD.bitmex.买.净成交量_累加60)
+                const 净成交量均线60 = lastNumber(d.买.净成交量_累加60)
 
                 if ((平仓side === 'Sell' && 净成交量均线60 < 0) || (平仓side === 'Buy' && 净成交量均线60 > 0)) {
                     亏损挂单平仓Text = '如果净成交量反向，那么立刻挂单平仓'
@@ -537,7 +535,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
             if (信号side === 平仓side && 活动委托.length === 0) {
 
-                const 市价 = lastNumber(self.realData.dataExt.XBTUSD.bitmex.绝对价差) > 15
+                const 市价 = lastNumber(d.绝对价差) > 15
 
                 return 市价 ?
                     self.taker({
