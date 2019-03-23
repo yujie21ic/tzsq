@@ -7,37 +7,35 @@ import { toGridPoint } from './lib/F/toGridPoint'
 import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/PositionAndOrder'
 import { config } from './config'
 
-
 const symbol = 'XBTUSD'
 const 交易数量 = config.量化数量 || 2
 
+const 推止损 = (p: { 波动率: number, 盈利点: number, type: '摸顶' | '抄底' | '追涨' | '追跌' | 'none' }) => {
+    if (p.type === '追涨' || p.type === '追跌') {
+        if (p.盈利点 >= 10) {
+            return 5
+        }
+        else if (p.盈利点 >= 3) {
+            return 0
+        }
+        else {
+            return NaN
+        }
+    } else {
+        if (p.盈利点 >= to范围({ min: 5, max: 30, value: p.波动率 / 5 + 15 })) {
+            return 5
+        }
+        else if (p.盈利点 >= to范围({ min: 5, max: 15, value: p.波动率 / 8 + 6 })) {
+            return 0
+        }
+        else {
+            return NaN
+        }
+    }
+}
+
 
 export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
-
-
-    推止损(波动率: number, 盈利点: number, type: string) {
-        if (type === '追涨' || type === '追跌') {
-            if (盈利点 >= 10) {
-                return 5
-            }
-            else if (盈利点 >= 3) {
-                return 0
-            } else {
-                return NaN
-            }
-
-        } else {
-            if (盈利点 >= to范围({ min: 5, max: 30, value: 波动率 / 5 + 15 })) {
-                return 5
-            }
-            else if (盈利点 >= to范围({ min: 5, max: 15, value: 波动率 / 8 + 6 })) {
-                return 0
-            } else {
-                return NaN
-            }
-        }
-
-    }
 
     止损step(self: PositionAndOrder) {
         const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[symbol]
@@ -86,7 +84,12 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 const { price, side, id } = 止损委托[0]
                 const 浮盈点数 = self.get浮盈点数(symbol)
 
-                const 推 = this.推止损(self.realData.get波动率(symbol), 浮盈点数, this.最后一次信号)
+                const 推 = 推止损({
+                    波动率: self.realData.get波动率(symbol),
+                    盈利点: 浮盈点数,
+                    type: this.最后一次信号
+                })
+
                 if (isNaN(推)) {
                     return false
                 }
