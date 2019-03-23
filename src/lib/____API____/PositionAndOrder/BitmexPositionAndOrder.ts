@@ -68,6 +68,11 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     jsonSync = createJSONSync()
 
 
+    private 初始化 = {
+        仓位: false,
+        委托: false,
+    }
+
     constructor(p: { accountName: string, cookie: string }) {
         this.cookie = p.cookie
 
@@ -76,6 +81,13 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
             { theme: 'position' },
             { theme: 'order' },
         ])
+
+        this.ws.onStatusChange = () => {
+            this.初始化 = {
+                仓位: false,
+                委托: false,
+            }
+        }
 
         this.log = logToFile(p.accountName + '.txt')
         this.ws.log = logToFile(p.accountName + '.txt')
@@ -86,9 +98,11 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                 this.updateMargin()
             }
             if (frame.table === 'position') {
+                this.初始化.仓位 = true
                 this.updatePosition()
             }
             else if (frame.table === 'order') {
+                this.初始化.委托 = true
                 this.updateOrder()
             }
         }
@@ -351,8 +365,10 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     async runTask(task: PositionAndOrderTask) {
         this.ws.filledObservable.subscribe(v => task.onFilled(v))
         while (true) {
-            if (await task.onTick(this)) {
-                await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
+            if (this.初始化.仓位 && this.初始化.委托) {
+                if (await task.onTick(this)) {
+                    await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
+                }
             }
             await sleep(100)
         }
