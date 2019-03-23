@@ -190,7 +190,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         const symbol = market === 'bitmex' ? 'XBTUSD' : 'Hopex_BTC'
 
-        const state = market === 'bitmex' ? 'bitmex_state' : 'hopex_state'
+        const state = market === 'bitmex' ? this.bitmex_state : this.hopex_state
 
         const item = self.jsonSync.rawData.symbol[symbol]
 
@@ -204,12 +204,18 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         const stop = (market === 'bitmex' ? self.stop : self.hopex_stop).bind(self)
 
+        const cancel = (arr: string[]) =>
+            market === 'bitmex' ?
+                self.cancel({ orderID: arr, text: '' }) :
+                self.hopex_cancel({ orderID: Number(arr[0]) })
+
+
 
         //没有止损 
         if (止损委托.length === 0) {
+
             //有仓位 初始化止损
             if (仓位数量 !== 0) {
-
                 const 止损点 = to范围({
                     min: 4,
                     max: 18,
@@ -220,7 +226,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
                 const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
 
-                this[state].最后一次止损状态 = '亏损止损'
+                state.最后一次止损状态 = '亏损止损'
 
                 return stop({
                     side,
@@ -235,10 +241,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         else if (止损委托.length === 1) {
             //没有仓位 或者 止损方向错了
             if (仓位数量 === 0 || (仓位数量 > 0 && 止损委托[0].side !== 'Sell') || (仓位数量 < 0 && 止损委托[0].side !== 'Buy')) {
-                //ws返回有时间  直接给委托列表加一条记录??           
-                return market === 'bitmex' ?
-                    self.cancel({ orderID: 止损委托.map(v => v.id), text: '止损step 取消止损' }) :
-                    self.hopex_cancel({ orderID: Number(止损委托[0].id) })
+                return cancel(止损委托.map(v => v.id))
             }
             else {
                 if (item.任务开关.自动推止损 === false) return false //自动推止损 任务没打开
@@ -250,7 +253,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 const 推 = 推止损({
                     波动率: lastNumber(d.价格_波动率30),
                     盈利点: 浮盈点数,
-                    type: this[state].最后一次信号
+                    type: state.最后一次信号
                 })
 
                 if (isNaN(推)) {
@@ -263,7 +266,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                     (side === 'Buy' && 新的Price < price) ||
                     (side === 'Sell' && 新的Price > price)
                 ) {
-                    this[state].最后一次止损状态 = 推 === 0 ? '成本价止损' : '盈利止损'
+                    state.最后一次止损状态 = 推 === 0 ? '成本价止损' : '盈利止损'
                     return stop({
                         side,
                         price: 新的Price,
@@ -274,19 +277,13 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         }
         else if (止损委托.length === 2 && 止损委托[0].side === 止损委托[1].side) {
             if (止损委托[0].side === 'Buy') {
-                return market === 'bitmex' ?
-                    self.cancel({ orderID: [止损委托[0].price < 止损委托[1].price ? 止损委托[0].id : 止损委托[1].id], text: '' }) :
-                    self.hopex_cancel({ orderID: Number(止损委托[0].price < 止损委托[1].price ? 止损委托[0].id : 止损委托[1].id) })
+                return cancel([止损委托[0].price < 止损委托[1].price ? 止损委托[0].id : 止损委托[1].id])
             } else {
-                return market === 'bitmex' ?
-                    self.cancel({ orderID: [止损委托[0].price > 止损委托[1].price ? 止损委托[0].id : 止损委托[1].id], text: '' }) :
-                    self.hopex_cancel({ orderID: Number(止损委托[0].price > 止损委托[1].price ? 止损委托[0].id : 止损委托[1].id) })
+                return cancel([止损委托[0].price > 止损委托[1].price ? 止损委托[0].id : 止损委托[1].id])
             }
         }
         else {
-            return market === 'bitmex' ?
-                self.cancel({ orderID: 止损委托.map(v => v.id), text: '止损step 取消多个止损' }) :
-                self.hopex_cancel({ orderID: Number(止损委托[0].id) })
+            return cancel(止损委托.map(v => v.id))
         }
     }
 
