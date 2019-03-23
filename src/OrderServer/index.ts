@@ -173,7 +173,7 @@ server.func.下单 = async req => {
 server.func.任务_开关 = async req => {
     const account = accountDic.get(req.cookie)
     if (account === undefined) throw 'cookie不存在'
-    if (req.symbol !== 'XBTUSD') throw 'symbol不存在'
+    if (req.symbol !== 'XBTUSD' && req.symbol !== 'Hopex_BTC') throw 'symbol不存在'
 
     const { 任务开关 } = account.jsonSync.data.symbol[req.symbol]
     if (Object.keys(任务开关).some(v => v === req.任务名字) === false) throw '任务不存在'
