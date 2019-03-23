@@ -110,7 +110,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
 
     onHopexTick(self: PositionAndOrder) {
-        const bbb = this.止损_step(self, 'hopex') //<--------------------------------- hopex_
+        const bbb = this.止损_step(self, 'hopex')
         if (bbb) return bbb
 
         const { 仓位数量 } = self.jsonSync.rawData.symbol.Hopex_BTC
@@ -123,9 +123,9 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 第2次超时: false,
                 已经平了一半了: false,
             }
-            return this.开仓_step(self, 'hopex') //<--------------------------------- hopex_
+            return this.开仓_step(self, 'hopex')
         } else {
-            return this.平仓_step(self, 'hopex') //<--------------------------------- hopex_
+            return this.平仓_step(self, 'hopex')
         }
     }
 
