@@ -1039,6 +1039,30 @@ export class RealDataBase {
         }
     }
 
+
+    getHopexOrderPrice = ({ side, type, 位置 }: { side: BaseType.Side, type: 'taker' | 'maker', 位置: number }) => {
+        const pk = this.dataExt.XBTUSD.hopex.盘口
+
+        if (pk.length < 1) return NaN
+        const p = pk[pk.length - 1]
+
+        if (side === 'Buy') {
+            if (type === 'taker') {
+                return p.sell[位置] ? p.sell[位置].price : NaN
+            } else {
+                return p.buy[位置] ? p.buy[位置].price : NaN
+            }
+        } else if (side === 'Sell') {
+            if (type === 'taker') {
+                return p.buy[位置] ? p.buy[位置].price : NaN
+            } else {
+                return p.sell[位置] ? p.sell[位置].price : NaN
+            }
+        } else {
+            return NaN
+        }
+    }
+
     get信号msg = (symbol: BaseType.BitmexSymbol) => {
         const realData = this
         const 摸顶 = realData.dataExt[symbol].bitmex.信号_摸顶

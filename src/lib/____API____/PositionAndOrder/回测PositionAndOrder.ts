@@ -20,7 +20,40 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
     hopex_taker = (p: { size: number, side: BaseType.Side }) => {
         let ret = false
-        //hopex 成交
+
+        const hopex_卖出价 = this.realData.getHopexOrderPrice({
+            side: 'Buy',
+            type: 'maker',
+            位置: 0,
+        })
+        const hopex_买入价 = this.realData.getHopexOrderPrice({
+            side: 'Sell',
+            type: 'maker',
+            位置: 0,
+        })
+
+        const is平仓 = this.jsonSync.rawData.symbol.Hopex_BTC.仓位数量 !== 0 //没有加仓情况
+
+        const 开仓均价 = this.jsonSync.rawData.symbol.Hopex_BTC.开仓均价
+
+        this.jsonSync.rawData.symbol.Hopex_BTC.仓位数量 += p.size
+
+        let 开仓str = ''
+        let 平仓str = ''
+
+        this.hopex_单位taker += p.size
+        if (is平仓) {
+            this.hopex_单位盈利 += p.side === 'Sell' ? hopex_卖出价 - 开仓均价 : 开仓均价 - hopex_买入价
+            平仓str = String(p.side === 'Sell' ? hopex_卖出价 : hopex_买入价)
+        } else {
+            开仓str = String(p.side === 'Sell' ? hopex_卖出价 : hopex_买入价)
+        }
+
+
+        console.log(`${new Date(lastNumber(this.realData.dataExt.XBTUSD.hopex.时间)).toLocaleString()}   开仓 =  ${开仓str}  平仓 =  ${平仓str}   仓位数量 = ${this.jsonSync.rawData.symbol.Hopex_BTC.仓位数量}     hopex_单位taker = ${this.hopex_单位taker}     hopex_单位盈利 = ${this.hopex_单位盈利}`)
+
+
+
         return ret
     }
 
@@ -364,6 +397,37 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                 }
                 return true
             })
+
+
+
+
+            const hopex_买1 = this.realData.getHopexOrderPrice({
+                side: 'Buy',
+                type: 'maker',
+                位置: 0,
+            })
+            const hopex_卖1 = this.realData.getHopexOrderPrice({
+                side: 'Sell',
+                type: 'maker',
+                位置: 0,
+            })
+
+            this.jsonSync.rawData.symbol.Hopex_BTC.活动委托 = this.jsonSync.rawData.symbol.Hopex_BTC.活动委托.filter(v => {
+                if (v.type === '止损') {
+                    if ((v.side === 'Buy' && hopex_卖1 >= v.price) ||
+                        (v.side === 'Sell' && hopex_买1 <= v.price)
+                    ) {
+                        this.hopex_taker({
+                            side: v.side,
+                            size: Math.abs(this.jsonSync.rawData.symbol.Hopex_BTC.仓位数量),
+                        })
+                        return false
+                    }
+                }
+                return true
+            })
+
+
 
             setWindowTitle(new Date(lastNumber(this.realData.dataExt.XBTUSD.bitmex.时间)).toLocaleString())
 
