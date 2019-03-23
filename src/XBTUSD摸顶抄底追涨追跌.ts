@@ -436,7 +436,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             let 亏损挂单平仓Text = ''
 
             if (this.bitmex_state.最后一次信号 === '摸顶' || this.bitmex_state.最后一次信号 === '抄底') {
-                const 折返 = this.get浮盈点数('XBTUSD', self) < this.bitmex_state.开仓状态.最后一次开仓折返率
+                const 折返 = this.get浮盈点数('bitmex', self) < this.bitmex_state.开仓状态.最后一次开仓折返率
                 if (
                     (折返 && 震荡指数衰竭 === true && 持仓时间ms >= this.bitmex_state.开仓状态.摸顶抄底超时秒 * 1000) ||      // 折返函数&&震荡衰竭==true的超时时间是30s
                     (折返 && 震荡指数衰竭 === false && 持仓时间ms >= this.bitmex_state.开仓状态.摸顶抄底超时秒 * 120 * 1000)  // 折返函数&&震荡衰竭==false的超时时间是2分钟
