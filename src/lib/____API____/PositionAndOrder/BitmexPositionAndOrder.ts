@@ -81,18 +81,37 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         委托: false,
     }
 
+    hopex_仓位数量 = 0
+    hopex_止损side = 'none' as BaseType.Side | 'none'
+    hopex_止损price = 0
+
 
     async hopex_轮询() {
         const a = await HopexRESTAPI.getPositions(this.hopexCookie)
         this.hopex_初始化.仓位 = false
         if (a.data !== undefined) {
             this.hopex_初始化.仓位 = true
+            this.hopex_仓位数量 = 0
+            a.data.data.forEach(v => {
+                if (v.contractCode === 'BTCUSDT') {
+                    this.hopex_仓位数量 = Number(v.positionQuantity)
+                }
+            })
         }
 
         const b = await HopexRESTAPI.getConditionOrders(this.hopexCookie)
         this.hopex_初始化.委托 = false
         if (b.data !== undefined) {
             this.hopex_初始化.委托 = true
+
+            this.hopex_止损side = 'none'
+            this.hopex_止损price = 0
+            b.data.data.result.forEach(v => {
+                if (v.contractCode === 'BTCUSDT') {
+                    this.hopex_止损side = v.taskTypeD === '买入止损' ? 'Buy' : 'Sell'
+                    this.hopex_止损price = Number(v.trigPrice)
+                }
+            })
         }
     }
 

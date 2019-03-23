@@ -80,6 +80,10 @@ export interface PositionAndOrder {
         };
     }>
 
+    hopex_仓位数量: number
+    hopex_止损side: BaseType.Side | 'none'
+    hopex_止损price: number
+
     //
     get本地维护仓位数量(symbol: BaseType.BitmexSymbol): number
 
