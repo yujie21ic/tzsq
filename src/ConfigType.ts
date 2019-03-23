@@ -6,11 +6,11 @@ export type ConfigType = {
         [name: string]: string //cookie
     }
     量化数量?: number
-    hopex数量?: number
     account?: {
         [name: string]: {
             cookie: string
             hopexCookie?: string
+            hopex数量?: number
             交易: {
                 XBTUSD: {
                     数量: number

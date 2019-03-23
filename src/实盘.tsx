@@ -36,7 +36,8 @@ let hopex自动开仓一次 = false
 
 const account = config.account![windowExt.accountName]
 const { cookie } = account
-const hopexCookie = account.hopexCookie||''
+const hopexCookie = account.hopexCookie || ''
+const hopex数量 = account.hopex数量 || 1
 const orderClient = new OrderClient(account.cookie)
 const rpc = OrderClient.rpc.func
 
@@ -239,7 +240,7 @@ export class 交易 extends React.Component {
 
     //state
     位置 = 0
-    倍数 = 1 
+    倍数 = 1
 
 
     componentWillMount() {
@@ -287,7 +288,7 @@ export class 交易 extends React.Component {
 
     hopex_buy = () =>
         hopex市价开仓和止损BTC(hopexCookie, {
-            size: (config.hopex数量 || 0) * this.倍数,
+            size: hopex数量 * this.倍数,
             stopPrice:
                 toGridPoint('XBTUSD',
                     lastNumber(realTickClient.dataExt.XBTUSD.hopex.价格) - to范围({
@@ -301,7 +302,7 @@ export class 交易 extends React.Component {
 
     hopex_sell = () =>
         hopex市价开仓和止损BTC(hopexCookie, {
-            size: (config.hopex数量 || 0) * this.倍数,
+            size: hopex数量 * this.倍数,
             stopPrice:
 
                 toGridPoint('XBTUSD',
@@ -343,7 +344,7 @@ export class 交易 extends React.Component {
                                 style={{ width: '50%' }}>
                                 <Button
                                     bgColor={GREEN}
-                                    text={(config.hopex数量 || 0) * this.倍数 + ''}
+                                    text={hopex数量 * this.倍数 + ''}
                                     left={this.hopex_buy}
                                 />
                             </div>
@@ -353,7 +354,7 @@ export class 交易 extends React.Component {
                                 }}>
                                 <Button
                                     bgColor={RED}
-                                    text={-(config.hopex数量 || 0) * this.倍数 + ''}
+                                    text={-hopex数量 * this.倍数 + ''}
                                     left={this.hopex_sell}
                                 />
                             </div>
