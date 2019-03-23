@@ -81,6 +81,8 @@ export const HopexRESTAPI = {
             data: {
                 result: {
                     contractCode: 'BTCUSDT'
+                    failureReason: '未触发'
+                    timestamp: number
                     taskId: number
                     trigPrice: string
                     taskTypeD: '买入止损' | '卖出止损'
