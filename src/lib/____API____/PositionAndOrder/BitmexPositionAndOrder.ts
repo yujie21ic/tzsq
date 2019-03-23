@@ -83,7 +83,6 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     async hopex_轮询() {
         const a = await HopexRESTAPI.getPositions(this.hopexCookie)
-        this.hopex_初始化.仓位 = false
         if (a.data !== undefined) {
             this.hopex_初始化.仓位 = true
 
@@ -95,13 +94,14 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                     开仓均价 = v.entryPriceD
                 }
             })
-
             this.jsonSync.data.symbol.Hopex_BTC.仓位数量.____set(仓位数量)
             this.jsonSync.data.symbol.Hopex_BTC.开仓均价.____set(开仓均价)
+
+        } else {
+            this.hopex_初始化.仓位 = false
         }
 
         const b = await HopexRESTAPI.getConditionOrders(this.hopexCookie)
-        this.hopex_初始化.委托 = false
         if (b.data !== undefined) {
             this.hopex_初始化.委托 = true
 
@@ -119,8 +119,10 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                     }]
                 }
             })
-
             this.jsonSync.data.symbol.Hopex_BTC.活动委托.____set(orderArr)
+
+        } else {
+            this.hopex_初始化.委托 = false
         }
     }
 
