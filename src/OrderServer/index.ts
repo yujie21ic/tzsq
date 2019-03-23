@@ -18,9 +18,13 @@ import { PositionAndOrder } from '../lib/____API____/PositionAndOrder/PositionAn
 const accountDic = new Map<string, PositionAndOrder>()
 if (config.orderServer !== undefined) {
     kvs(config.orderServer).forEach(({ k, v }) => {
-        const account = new BitmexPositionAndOrder({ accountName: k, cookie: v })
+        const account = new BitmexPositionAndOrder({
+            accountName: k,
+            cookie: v.cookie,
+            hopexCookie: v.hopexCookie || ''
+        })
         account.runTask(new XBTUSD摸顶抄底追涨追跌())
-        accountDic.set(v, account)
+        accountDic.set(v.cookie, account) //key is cookie 
     })
 } else {
     console.log('运行的账户 没有设置')

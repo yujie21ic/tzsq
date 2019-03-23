@@ -3,7 +3,10 @@ export type ConfigType = {
     orderServerIP?: string
     tick历史加载多少秒?: number
     orderServer?: {
-        [name: string]: string //cookie
+        [name: string]: {
+            cookie: string
+            hopexCookie?: string
+        }
     }
     量化数量?: number
     account?: {

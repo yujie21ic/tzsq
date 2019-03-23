@@ -58,6 +58,7 @@ const 重试休息多少毫秒 = 10
 export class BitmexPositionAndOrder implements PositionAndOrder {
 
     private cookie: string
+    private hopexCookie: string
     private log = (text: string) => { }
     private ws: BitMEXWSAPI
 
@@ -74,8 +75,9 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         委托: false,
     }
 
-    constructor(p: { accountName: string, cookie: string }) {
+    constructor(p: { accountName: string, cookie: string, hopexCookie: string }) {
         this.cookie = p.cookie
+        this.hopexCookie = p.hopexCookie
 
         this.ws = new BitMEXWSAPI(p.cookie, [
             { theme: 'margin' },
