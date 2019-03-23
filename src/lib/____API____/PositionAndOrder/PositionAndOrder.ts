@@ -35,6 +35,27 @@ export interface PositionAndOrder {
                 仓位数量: number;
                 开仓均价: number;
             };
+            Hopex_BTC: {
+                任务开关: {
+                    自动开仓摸顶: boolean;
+                    自动开仓抄底: boolean;
+                    自动开仓追涨: boolean;
+                    自动开仓追跌: boolean;
+                    自动止盈波段: boolean;
+                    自动推止损: boolean;
+                };
+                活动委托: {
+                    type: '限价' | '限价只减仓' | '止损'
+                    timestamp: number
+                    id: string
+                    side: BaseType.Side
+                    cumQty: number      //成交数量
+                    orderQty: number    //委托数量
+                    price: number
+                }[];
+                仓位数量: number;
+                开仓均价: number;
+            };
             ETHUSD: {
                 任务开关: {
                     自动开仓摸顶: boolean;

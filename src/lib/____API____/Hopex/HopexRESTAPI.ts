@@ -68,6 +68,7 @@ export const HopexRESTAPI = {
         HopexRESTAPI__http<{
             data: {
                 positionQuantity: string // "+2"  "-2"
+                entryPriceD: number
             }[]
         }>({
             cookie,

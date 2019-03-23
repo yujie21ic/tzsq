@@ -34,6 +34,7 @@ export const createJSONSync = () =>
         symbol: {
             XBTUSD: symbol(),
             ETHUSD: symbol(),
+            Hopex_BTC: symbol(),
         }
     })
 
@@ -123,7 +124,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
 
     private updatePosition() {
-        keys(this.jsonSync.rawData.symbol).forEach(symbol => {
+        ['XBTUSD' as 'XBTUSD', 'ETHUSD' as 'ETHUSD'].forEach(symbol => {
             this.ws.data.position.forEach(item => {
                 if (item.symbol === symbol) {
                     const { 仓位数量, 开仓均价 } = this.jsonSync.data.symbol[symbol]
