@@ -296,6 +296,8 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         const item = self.jsonSync.rawData.symbol[symbol]
 
+        const d = self.realData.dataExt.XBTUSD[market]
+
         const { 任务开关 } = item
 
         const state = market === 'bitmex' ? this.bitmex_state : this.hopex_state
@@ -323,7 +325,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         }
 
         if (state.连续止损次数 >= 4) {
-            state.到什么时间不开仓 = lastNumber(self.realData.dataExt.XBTUSD[market].时间) + 1000 * 60 * 10
+            state.到什么时间不开仓 = lastNumber(d.时间) + 1000 * 60 * 10
             state.连续止损次数 = 0
         }
 
@@ -335,7 +337,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             if (信号灯Type === '抄底' && 任务开关.自动开仓抄底 === false) return false
             if (信号灯Type === '摸顶' && 任务开关.自动开仓摸顶 === false) return false
             if (
-                (lastNumber(self.realData.dataExt.XBTUSD[market].时间) - state.最后一次信号时间 < 20 * 1000) && //没有超时
+                (lastNumber(d.时间) - state.最后一次信号时间 < 20 * 1000) && //没有超时
                 (                                             //抵消
                     (state.最后一次信号 === '追涨' && 信号灯Type === '摸顶') ||
                     (state.最后一次信号 === '追跌' && 信号灯Type === '抄底') ||
@@ -347,13 +349,13 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             }
 
             state.最后一次信号 = 信号灯Type
-            state.最后一次信号时间 = lastNumber(self.realData.dataExt.XBTUSD[market].时间)
+            state.最后一次信号时间 = lastNumber(d.时间)
 
 
-            const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' || lastNumber(self.realData.dataExt.XBTUSD[market].绝对价差) > 15
+            const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' || lastNumber(d.绝对价差) > 15
 
 
-            if (lastNumber(self.realData.dataExt.XBTUSD[market].时间) > state.到什么时间不开仓) {
+            if (lastNumber(d.时间) > state.到什么时间不开仓) {
                 return 市价 ?
                     self.taker({
                         symbol: 'XBTUSD',
