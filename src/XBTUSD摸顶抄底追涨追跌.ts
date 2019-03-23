@@ -287,9 +287,6 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         }
     }
 
-
-
-    //TODO
     private 开仓_step(self: PositionAndOrder, market: 'bitmex' | 'hopex') {
 
         const symbol = market === 'bitmex' ? 'XBTUSD' : 'Hopex_BTC'
@@ -386,10 +383,6 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             }
         }
 
-
-
-
-
         //取消开仓
         if (market === 'bitmex' && 活动委托.length === 1) {
             const { type, timestamp, id, side } = 活动委托[0]
@@ -405,7 +398,6 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
     }
 
 
-    //TODO
     private 平仓_step(self: PositionAndOrder, market: 'bitmex' | 'hopex') {
 
         const symbol = market === 'bitmex' ? 'XBTUSD' : 'Hopex_BTC'
