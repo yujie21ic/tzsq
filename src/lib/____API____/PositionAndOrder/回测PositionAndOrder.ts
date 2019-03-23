@@ -41,6 +41,11 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     hopex_cancel = (p: { orderID: number }) => false
 
 
+    hopex_仓位数量 = 0
+    hopex_止损side = 'none' as BaseType.Side | 'none'
+    hopex_止损price = 0
+
+
 
 
     private startTime: number
