@@ -71,6 +71,10 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         }
     }
 
+    onHopexTick(self: PositionAndOrder) {
+        return false
+    }
+
     onTick(self: PositionAndOrder) {
         const aaa = this.bitmex_活动委托检测(self)
         if (aaa) return aaa
