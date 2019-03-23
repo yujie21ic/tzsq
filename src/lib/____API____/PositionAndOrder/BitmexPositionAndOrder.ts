@@ -76,9 +76,32 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         委托: false,
     }
 
+    private hopex_初始化 = {
+        仓位: false,
+        委托: false,
+    }
+
+
+    async hopex_轮询() {
+        const a = await HopexRESTAPI.getPositions(this.hopexCookie)
+        this.hopex_初始化.仓位 = false
+        if (a.data !== undefined) {
+            this.hopex_初始化.仓位 = true
+        }
+
+        const b = await HopexRESTAPI.getConditionOrders(this.hopexCookie)
+        this.hopex_初始化.委托 = false
+        if (b.data !== undefined) {
+            this.hopex_初始化.委托 = true
+        }
+    }
+
+
     constructor(p: { accountName: string, cookie: string, hopexCookie: string }) {
         this.cookie = p.cookie
         this.hopexCookie = p.hopexCookie
+
+        this.hopex_轮询()
 
         this.ws = new BitMEXWSAPI(p.cookie, [
             { theme: 'margin' },
@@ -389,7 +412,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     private async task2(task: PositionAndOrderTask) {
         while (true) {
-            if (this.bitmex_初始化.仓位 && this.bitmex_初始化.委托) {
+            if (this.hopex_初始化.仓位 && this.hopex_初始化.委托) {
                 if (await task.onHopexTick(this)) {
                     await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
                 }

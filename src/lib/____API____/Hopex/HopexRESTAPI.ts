@@ -67,6 +67,7 @@ export const HopexRESTAPI = {
     getPositions: async (cookie: string) =>
         HopexRESTAPI__http<{
             data: {
+                contractCode: 'BTCUSDT'
                 positionQuantity: string // "+2"  "-2"
                 entryPriceD: number
             }[]
@@ -79,6 +80,7 @@ export const HopexRESTAPI = {
         HopexRESTAPI__http<{
             data: {
                 result: {
+                    contractCode: 'BTCUSDT'
                     taskId: number
                     trigPrice: string
                     taskTypeD: '买入止损' | '卖出止损'
