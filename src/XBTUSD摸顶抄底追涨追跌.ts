@@ -504,7 +504,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
             //平一半
             if (state.开仓状态.已经平了一半了 === false) {
-                if (state.最后一次信号 === '摸顶' && self.realData.is摸顶_下跌平仓('XBTUSD') && 活动委托.length === 0) {
+                if (state.最后一次信号 === '摸顶' && self.realData.is摸顶_下跌平仓(market) && 活动委托.length === 0) {
                     state.开仓状态.已经平了一半了 = true
                     return self.maker({
                         symbol: 'XBTUSD',
@@ -517,7 +517,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 }
 
 
-                if (state.最后一次信号 === '抄底' && self.realData.is抄底_上涨平仓('XBTUSD') && 活动委托.length === 0) {
+                if (state.最后一次信号 === '抄底' && self.realData.is抄底_上涨平仓(market) && 活动委托.length === 0) {
                     state.开仓状态.已经平了一半了 = true
                     return self.maker({
                         symbol: 'XBTUSD',

@@ -1099,10 +1099,10 @@ export class RealDataBase {
     }
 
 
-    is摸顶_下跌平仓 = (symbol: BaseType.BitmexSymbol) =>
-        is连续几根全亮(2, this.dataExt[symbol].bitmex.信号_摸顶_下跌平仓)
+    is摸顶_下跌平仓 = (market: 'bitmex' | 'hopex') =>
+        is连续几根全亮(2, this.dataExt.XBTUSD[market].信号_摸顶_下跌平仓)
 
-    is抄底_上涨平仓 = (symbol: BaseType.BitmexSymbol) =>
-        is连续几根全亮(2, this.dataExt[symbol].bitmex.信号_抄底_上涨平仓)
+    is抄底_上涨平仓 = (market: 'bitmex' | 'hopex') =>
+        is连续几根全亮(2, this.dataExt.XBTUSD[market].信号_抄底_上涨平仓)
 
 }
