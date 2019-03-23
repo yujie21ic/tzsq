@@ -71,7 +71,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     jsonSync = createJSONSync()
 
 
-    private 初始化 = {
+    private bitmex_初始化 = {
         仓位: false,
         委托: false,
     }
@@ -87,7 +87,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         ])
 
         this.ws.onStatusChange = () => {
-            this.初始化 = {
+            this.bitmex_初始化 = {
                 仓位: false,
                 委托: false,
             }
@@ -102,11 +102,11 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                 this.updateMargin()
             }
             if (frame.table === 'position') {
-                this.初始化.仓位 = true
+                this.bitmex_初始化.仓位 = true
                 this.updatePosition()
             }
             else if (frame.table === 'order') {
-                this.初始化.委托 = true
+                this.bitmex_初始化.委托 = true
                 this.updateOrder()
             }
         }
@@ -376,16 +376,32 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     realData = __realData__()
 
-    async runTask(task: PositionAndOrderTask) {
-        this.ws.filledObservable.subscribe(v => task.onFilled(v))
+    private async task1(task: PositionAndOrderTask) {
         while (true) {
-            if (this.初始化.仓位 && this.初始化.委托) {
+            if (this.bitmex_初始化.仓位 && this.bitmex_初始化.委托) {
                 if (await task.onTick(this)) {
                     await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
                 }
             }
             await sleep(100)
         }
+    }
+
+    private async task2(task: PositionAndOrderTask) {
+        while (true) {
+            if (this.bitmex_初始化.仓位 && this.bitmex_初始化.委托) {
+                if (await task.onHopexTick(this)) {
+                    await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
+                }
+            }
+            await sleep(100)
+        }
+    }
+
+    runTask(task: PositionAndOrderTask) {
+        this.ws.filledObservable.subscribe(v => task.onFilled(v))
+        this.task1(task)
+        this.task2(task)
     }
 
     get浮盈点数(symbol: BaseType.BitmexSymbol) {
