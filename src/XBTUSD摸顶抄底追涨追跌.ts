@@ -229,7 +229,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 if (self.jsonSync.rawData.symbol.XBTUSD.任务开关.自动推止损 === false) return false //自动推止损 任务没打开
 
                 //修改止损  只能改小  不能改大
-                const { price, side, id } = 止损委托[0]
+                const { price, side } = 止损委托[0]
                 const 浮盈点数 = this.get浮盈点数('XBTUSD', self)
 
                 const 推 = 推止损({
@@ -249,12 +249,21 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                     (side === 'Sell' && 新的Price > price)
                 ) {
                     this.bitmex_state.最后一次止损状态 = 推 === 0 ? '成本价止损' : '盈利止损'
-                    return self.updateStop({
-                        orderID: id,
+                    return self.stop({
+                        symbol: 'XBTUSD',
+                        side,
                         price: 新的Price,
+                        text: '',
                     }, this.bitmex_state.最后一次止损状态)
                 }
                 return false
+            }
+        }
+        else if (止损委托.length === 2 && 止损委托[0].side === 止损委托[1].side) {
+            if (止损委托[0].side === 'Buy') {
+                return self.cancel({ orderID: [止损委托[0].price < 止损委托[1].price ? 止损委托[0].id : 止损委托[1].id], text: '' })
+            } else {
+                return self.cancel({ orderID: [止损委托[0].price > 止损委托[1].price ? 止损委托[0].id : 止损委托[1].id], text: '' })
             }
         }
         else {
@@ -405,7 +414,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 }
             }
 
-            let 亏损挂单平仓Text = '' 
+            let 亏损挂单平仓Text = ''
 
             if (this.bitmex_state.最后一次信号 === '摸顶' || this.bitmex_state.最后一次信号 === '抄底') {
                 const 折返 = this.get浮盈点数('XBTUSD', self) < this.bitmex_state.开仓状态.最后一次开仓折返率
@@ -429,7 +438,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 }
 
             }
- 
+
 
             if (亏损挂单平仓Text !== '') {
 

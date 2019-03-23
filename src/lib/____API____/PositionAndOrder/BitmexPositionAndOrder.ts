@@ -366,17 +366,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
             execInst: 'Close,LastPrice',
             text: p.text,
         })
-    )
-
-    updateStop = this.DDOS调用<{
-        orderID: string
-        price: number
-    }>(
-        (cookie, p) => BitMEXRESTAPI.Order.amend(cookie, {
-            orderID: p.orderID,
-            stopPx: p.price,
-        })
-    )
+    ) 
 
     updateMaker = this.DDOS调用<{
         orderID: string

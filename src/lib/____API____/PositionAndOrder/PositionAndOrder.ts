@@ -106,11 +106,6 @@ export interface PositionAndOrder {
         text: string;
     }, logText?: string) => boolean | Promise<boolean>
 
-    updateStop: (p: {
-        orderID: string;
-        price: number;
-    }, logText?: string) => boolean | Promise<boolean>
-
     updateMaker: (p: {
         orderID: string;
         price: () => number;
