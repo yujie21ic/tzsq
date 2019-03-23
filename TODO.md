@@ -6,13 +6,7 @@
 
 d 把信号整理到 外面  全放指标文件夹 
 
-CTP复盘
-
-hopexAPI
-
-交易类  ws连接成功 返回了数据 才开始 onTick 
-
-
+CTP复盘 
 
 
 source .nvm/nvm.sh
