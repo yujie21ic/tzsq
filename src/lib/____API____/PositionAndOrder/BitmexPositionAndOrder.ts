@@ -10,7 +10,7 @@ import { RealData__Server } from '../../../RealDataServer/RealData__Server'
 import { toCacheFunc } from '../../C/toCacheFunc'
 import { PositionAndOrder, PositionAndOrderTask } from './PositionAndOrder'
 import { lastNumber } from '../../F/lastNumber'
-import { HopexRESTAPI } from '../Hopex/HopexRESTAPI';
+import { HopexRESTAPI } from '../Hopex/HopexRESTAPI'
 
 const symbol = () => ({
     任务开关: {
