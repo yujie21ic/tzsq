@@ -36,19 +36,19 @@ export const HopexRESTAPI = {
             },
         }),
 
-    stop: async (cookie: string, p: { side: BaseType.Side, stopPrice: number }) =>
+    stop: async (cookie: string, p: { side: BaseType.Side, price: number }) =>
         HopexRESTAPI__http({
             cookie,
             url: 'https://web.hopex.com/api/v1/gateway/User/ConditionOrder?culture=zh-CN',
             param: {
                 contractCode: 'BTCUSDT',
-                expectedPrice: String(p.side === 'Sell' ? String(p.stopPrice - 100) : String(p.stopPrice + 100)),
+                expectedPrice: String(p.side === 'Sell' ? String(p.price - 100) : String(p.price + 100)),
                 expectedQuantity: String(100000),
                 lang: 'zh-CN',
                 market: 'BTCUSDT',
                 marketCode: 'BTCUSDT',
                 side: p.side === 'Sell' ? 1 : 2,
-                trigPrice: String(p.side === 'Sell' ? String(p.stopPrice) : String(p.stopPrice)),
+                trigPrice: String(p.side === 'Sell' ? String(p.price) : String(p.price)),
                 trigType: 'market_price',
                 type: 'LimitLoss',
             },
