@@ -44,12 +44,15 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         最后一次上涨_下跌: '',
         到什么时间不开仓: 0,
 
-        最大仓位abs: NaN,
-        最后一次开仓时间: NaN,
-        最后一次开仓折返率: NaN,
-        摸顶抄底超时秒: NaN,
-        第2次超时: false,
-        已经平了一半了: false,
+
+        开仓状态: {
+            最大仓位abs: NaN,
+            最后一次开仓时间: NaN,
+            最后一次开仓折返率: NaN,
+            摸顶抄底超时秒: NaN,
+            第2次超时: false,
+            已经平了一半了: false,
+        }
     }
 
     onFilled(p: { symbol: BaseType.BitmexSymbol, type: '限价' | '限价只减仓' | '止损' | '强平' }) {
@@ -77,12 +80,14 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         const { 仓位数量 } = self.jsonSync.rawData.symbol['XBTUSD']
         if (仓位数量 === 0) {
-            this.state.最大仓位abs = NaN
-            this.state.最后一次开仓时间 = NaN
-            this.state.最后一次开仓折返率 = NaN
-            this.state.摸顶抄底超时秒 = NaN
-            this.state.第2次超时 = false
-            this.state.已经平了一半了 = false
+            this.state.开仓状态 = {
+                最大仓位abs: NaN,
+                最后一次开仓时间: NaN,
+                最后一次开仓折返率: NaN,
+                摸顶抄底超时秒: NaN,
+                第2次超时: false,
+                已经平了一半了: false,
+            }
             return this.bitmex_开仓(self)
         } else {
             return this.bitmex_平仓(self)
@@ -312,18 +317,18 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
 
 
-        if (isNaN(this.state.最大仓位abs) || this.state.最大仓位abs < Math.abs(仓位数量)) {
-            this.state.最大仓位abs = Math.abs(仓位数量)
-            this.state.最后一次开仓时间 = lastNumber(self.realData.dataExt['XBTUSD'].bitmex.时间)
-            this.state.最后一次开仓折返率 = lastNumber(self.realData.dataExt['XBTUSD'].bitmex.折返率)
-            this.state.摸顶抄底超时秒 = to范围({ min: 15, max: 30, value: self.realData.get波动率('XBTUSD') / 7 + 20 })
-            this.state.第2次超时 = false
-            this.state.已经平了一半了 = false
+        if (isNaN(this.state.开仓状态.最大仓位abs) || this.state.开仓状态.最大仓位abs < Math.abs(仓位数量)) {
+            this.state.开仓状态.最大仓位abs = Math.abs(仓位数量)
+            this.state.开仓状态.最后一次开仓时间 = lastNumber(self.realData.dataExt['XBTUSD'].bitmex.时间)
+            this.state.开仓状态.最后一次开仓折返率 = lastNumber(self.realData.dataExt['XBTUSD'].bitmex.折返率)
+            this.state.开仓状态.摸顶抄底超时秒 = to范围({ min: 15, max: 30, value: self.realData.get波动率('XBTUSD') / 7 + 20 })
+            this.state.开仓状态.第2次超时 = false
+            this.state.开仓状态.已经平了一半了 = false
         }
 
 
 
-        const 持仓时间ms = lastNumber(self.realData.dataExt['XBTUSD'].bitmex.时间) - this.state.最后一次开仓时间
+        const 持仓时间ms = lastNumber(self.realData.dataExt['XBTUSD'].bitmex.时间) - this.state.开仓状态.最后一次开仓时间
 
 
         if (活动委托.length <= 1) {
@@ -341,10 +346,10 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
             const 震荡指数衰竭 = lastNumber(self.realData.dataExt['XBTUSD'].bitmex.震荡指数_macd.DIF) < lastNumber(self.realData.dataExt['XBTUSD'].bitmex.震荡指数_macd.DEM)
             //如果超时了 
-            if (持仓时间ms >= this.state.摸顶抄底超时秒 * 1000 && this.state.第2次超时 === false) {
-                this.state.第2次超时 = true
+            if (持仓时间ms >= this.state.开仓状态.摸顶抄底超时秒 * 1000 && this.state.开仓状态.第2次超时 === false) {
+                this.state.开仓状态.第2次超时 = true
                 if (!震荡指数衰竭) { //dif>dem 
-                    this.state.摸顶抄底超时秒 = 15
+                    this.state.开仓状态.摸顶抄底超时秒 = 15
                 }
             }
 
@@ -358,12 +363,12 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
 
             if (this.state.最后一次信号 === '摸顶' || this.state.最后一次信号 === '抄底') {
-                const 折返 = self.get浮盈点数('XBTUSD') < this.state.最后一次开仓折返率
+                const 折返 = self.get浮盈点数('XBTUSD') < this.state.开仓状态.最后一次开仓折返率
                 if (
-                    (折返 && 震荡指数衰竭 === true && 持仓时间ms >= this.state.摸顶抄底超时秒 * 1000) ||      // 折返函数&&震荡衰竭==true的超时时间是30s
-                    (折返 && 震荡指数衰竭 === false && 持仓时间ms >= this.state.摸顶抄底超时秒 * 120 * 1000)  // 折返函数&&震荡衰竭==false的超时时间是2分钟
+                    (折返 && 震荡指数衰竭 === true && 持仓时间ms >= this.state.开仓状态.摸顶抄底超时秒 * 1000) ||      // 折返函数&&震荡衰竭==true的超时时间是30s
+                    (折返 && 震荡指数衰竭 === false && 持仓时间ms >= this.state.开仓状态.摸顶抄底超时秒 * 120 * 1000)  // 折返函数&&震荡衰竭==false的超时时间是2分钟
                 ) {
-                    亏损挂单平仓Text = '下单' + this.state.摸顶抄底超时秒 + ' 秒后，折返没有超过下单点的折返函数，并且震荡指数衰竭，挂单全平'
+                    亏损挂单平仓Text = '下单' + this.state.开仓状态.摸顶抄底超时秒 + ' 秒后，折返没有超过下单点的折返函数，并且震荡指数衰竭，挂单全平'
                 }
             }
             else if (this.state.最后一次信号 === '追涨' || this.state.最后一次信号 === '追跌') {
@@ -401,7 +406,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                     return self.maker({
                         symbol: 'XBTUSD',
                         side: 平仓side,
-                        size: this.state.最大仓位abs,
+                        size: this.state.开仓状态.最大仓位abs,
                         price: toBuySellPriceFunc(平仓side, get位置1价格),
                         reduceOnly: true,
                         text: this.state.最后一次信号 + '平仓' + '  ' + 亏损挂单平仓Text,
@@ -411,13 +416,13 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
 
             //平一半
-            if (this.state.已经平了一半了 === false) {
+            if (this.state.开仓状态.已经平了一半了 === false) {
                 if (this.state.最后一次信号 === '摸顶' && self.realData.is摸顶_下跌平仓('XBTUSD') && 活动委托.length === 0) {
-                    this.state.已经平了一半了 = true
+                    this.state.开仓状态.已经平了一半了 = true
                     return self.maker({
                         symbol: 'XBTUSD',
                         side: 平仓side,
-                        size: Math.round(this.state.最大仓位abs / 2),//一半
+                        size: Math.round(this.state.开仓状态.最大仓位abs / 2),//一半
                         price: toBuySellPriceFunc(平仓side, get位置1价格),
                         reduceOnly: true,
                         text: this.state.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 上涨做空下跌平仓一半',
@@ -426,11 +431,11 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
 
                 if (this.state.最后一次信号 === '抄底' && self.realData.is抄底_上涨平仓('XBTUSD') && 活动委托.length === 0) {
-                    this.state.已经平了一半了 = true
+                    this.state.开仓状态.已经平了一半了 = true
                     return self.maker({
                         symbol: 'XBTUSD',
                         side: 平仓side,
-                        size: Math.round(this.state.最大仓位abs / 2),//一半
+                        size: Math.round(this.state.开仓状态.最大仓位abs / 2),//一半
                         price: toBuySellPriceFunc(平仓side, get位置1价格),
                         reduceOnly: true,
                         text: this.state.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 下跌抄底上涨平仓一半',
