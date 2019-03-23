@@ -273,8 +273,6 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         const { 仓位数量 } = self.jsonSync.rawData.symbol.XBTUSD
 
-        const 本地维护仓位数量 = self.get本地维护仓位数量('XBTUSD')
-
         const 活动委托 = self.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => v.type !== '止损')
 
         const 信号灯Type = self.realData.get信号灯Type('XBTUSD')
@@ -293,7 +291,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         }
 
         //开仓
-        if (本地维护仓位数量 === 0 && 仓位数量 === 0 && 活动委托.length === 0 && 信号灯Type !== 'none') {
+        if (self.get本地维护仓位数量('XBTUSD') === 0 && 仓位数量 === 0 && 活动委托.length === 0 && 信号灯Type !== 'none') {
 
             if (信号灯Type === '追涨' && self.jsonSync.rawData.symbol.XBTUSD.任务开关.自动开仓追涨 === false) return false
             if (信号灯Type === '追跌' && self.jsonSync.rawData.symbol.XBTUSD.任务开关.自动开仓追跌 === false) return false
@@ -342,9 +340,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             } else {
                 return true
             }
-
         }
-
 
 
         //取消开仓
@@ -358,10 +354,9 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 }
             }
         }
-
-
         return false
     }
+
 
     private bitmex_平仓(self: PositionAndOrder) {
 
@@ -410,14 +405,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 }
             }
 
-
-            // console.log("最后一次信号"+this.最后一次信号)
-            // console.log("最后一次信号"+this.摸顶抄底超时秒)
-            // console.log("get浮盈点数"+ self.get浮盈点数(symbol))
-            // console.log("最后一次开仓折返率"+this.最后一次开仓折返率)
-            // console.log("--------------------------------------------")
-            let 亏损挂单平仓Text = ''
-
+            let 亏损挂单平仓Text = '' 
 
             if (this.bitmex_state.最后一次信号 === '摸顶' || this.bitmex_state.最后一次信号 === '抄底') {
                 const 折返 = this.get浮盈点数('XBTUSD', self) < this.bitmex_state.开仓状态.最后一次开仓折返率
@@ -441,10 +429,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 }
 
             }
-
-
-
-
+ 
 
             if (亏损挂单平仓Text !== '') {
 
