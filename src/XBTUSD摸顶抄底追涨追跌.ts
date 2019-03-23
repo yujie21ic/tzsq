@@ -189,7 +189,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol.XBTUSD
         const 止损委托 = self.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => v.type === '止损')
 
-        const 波动率 = self.realData.get波动率('XBTUSD')
+        const 波动率 = lastNumber(self.realData.dataExt.XBTUSD.bitmex.价格_波动率30)
 
         //没有止损 
         if (止损委托.length === 0) {
@@ -233,7 +233,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 const 浮盈点数 = this.get浮盈点数('XBTUSD', self)
 
                 const 推 = 推止损({
-                    波动率: self.realData.get波动率('XBTUSD'),
+                    波动率: lastNumber(self.realData.dataExt.XBTUSD.bitmex.价格_波动率30),
                     盈利点: 浮盈点数,
                     type: this.bitmex_state.最后一次信号
                 })
@@ -378,7 +378,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             this.bitmex_state.开仓状态.最大仓位abs = Math.abs(仓位数量)
             this.bitmex_state.开仓状态.最后一次开仓时间 = lastNumber(self.realData.dataExt.XBTUSD.bitmex.时间)
             this.bitmex_state.开仓状态.最后一次开仓折返率 = lastNumber(self.realData.dataExt.XBTUSD.bitmex.折返率)
-            this.bitmex_state.开仓状态.摸顶抄底超时秒 = to范围({ min: 15, max: 30, value: self.realData.get波动率('XBTUSD') / 7 + 20 })
+            this.bitmex_state.开仓状态.摸顶抄底超时秒 = to范围({ min: 15, max: 30, value: lastNumber(self.realData.dataExt.XBTUSD.bitmex.价格_波动率30) / 7 + 20 })
             this.bitmex_state.开仓状态.第2次超时 = false
             this.bitmex_state.开仓状态.已经平了一半了 = false
         }

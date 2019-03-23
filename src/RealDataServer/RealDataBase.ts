@@ -1128,10 +1128,6 @@ export class RealDataBase {
         is连续几根全亮(2, this.dataExt[symbol].bitmex.信号_摸顶_下跌平仓)
 
     is抄底_上涨平仓 = (symbol: BaseType.BitmexSymbol) =>
-        is连续几根全亮(2, this.dataExt[symbol].bitmex.信号_抄底_上涨平仓)
-
-
-    get波动率 = (symbol: BaseType.BitmexSymbol) =>
-        lastNumber(this.dataExt[symbol].bitmex.价格_波动率30)
+        is连续几根全亮(2, this.dataExt[symbol].bitmex.信号_抄底_上涨平仓) 
 
 }
