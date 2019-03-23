@@ -208,11 +208,9 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
                 this.bitmex_state.最后一次止损状态 = '亏损止损'
                 return self.stop({
-                    symbol: 'XBTUSD',
                     side,
                     price: toGridPoint('XBTUSD', 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点, side),
-                    text: '亏损止损',
-                }, '')
+                })
             }
             else {
                 return false
@@ -250,11 +248,9 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 ) {
                     this.bitmex_state.最后一次止损状态 = 推 === 0 ? '成本价止损' : '盈利止损'
                     return self.stop({
-                        symbol: 'XBTUSD',
                         side,
                         price: 新的Price,
-                        text: '',
-                    }, this.bitmex_state.最后一次止损状态)
+                    })
                 }
                 return false
             }

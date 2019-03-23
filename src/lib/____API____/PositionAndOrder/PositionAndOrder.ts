@@ -99,12 +99,10 @@ export interface PositionAndOrder {
         text: string;
     }, logText?: string) => boolean | Promise<boolean>
 
-    stop: (p: {
-        symbol: BaseType.BitmexSymbol;
+    stop: (p: { 
         side: BaseType.Side;
-        price: number;
-        text: string;
-    }, logText?: string) => boolean | Promise<boolean>
+        price: number; 
+    }) => boolean | Promise<boolean>
 
     updateMaker: (p: {
         orderID: string;

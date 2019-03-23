@@ -351,20 +351,17 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         })
     )
 
-    stop = this.DDOS调用<{
-        symbol: BaseType.BitmexSymbol
+    stop = this.DDOS调用<{ 
         side: BaseType.Side
-        price: number
-        text: string
+        price: number 
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
-            symbol: p.symbol,
+            symbol: 'XBTUSD', //<-----------------------
             ordType: 'Stop',
             stopPx: p.price,
             orderQty: 100000,
             side: p.side,
             execInst: 'Close,LastPrice',
-            text: p.text,
         })
     ) 
 

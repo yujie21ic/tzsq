@@ -125,16 +125,13 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     }
 
     stop(p: {
-        symbol: BaseType.BitmexSymbol;
         side: BaseType.Side;
         price: number;
-        text: string;
-    }, logText?: string) {
-        if (p.symbol !== 'XBTUSD') return false
+    }) {
 
         this.jsonSync.rawData.symbol.XBTUSD.活动委托.push({
             type: '止损',
-            timestamp: lastNumber(this.realData.dataExt[p.symbol].bitmex.时间),
+            timestamp: lastNumber(this.realData.dataExt.XBTUSD.bitmex.时间),
             id: String(this.order_id++),
             side: p.side,
             cumQty: 0,
