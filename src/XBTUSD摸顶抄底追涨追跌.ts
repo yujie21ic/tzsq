@@ -300,6 +300,10 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         const { 任务开关 } = item
 
+        const 活动委托 = item.活动委托.filter(v => v.type !== '止损')
+
+        const 仓位数量 = market === 'bitmex' ? self.get本地维护仓位数量('XBTUSD') : item.仓位数量
+
         const state = market === 'bitmex' ? this.bitmex_state : this.hopex_state
 
         if (
@@ -309,11 +313,6 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             任务开关.自动开仓摸顶 === false
         ) return false
 
-        const 活动委托 = item.活动委托.filter(v => v.type !== '止损')
-
-        //
-
-        const 仓位数量 = self.get本地维护仓位数量('XBTUSD')
         const 信号灯Type = self.realData.get信号灯Type('XBTUSD')
         const 开仓side = { '追涨': 'Buy', '追跌': 'Sell', '抄底': 'Buy', '摸顶': 'Sell', 'none': '_____' }[信号灯Type] as BaseType.Side
 
@@ -382,8 +381,11 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         }
 
 
+
+
+
         //取消开仓
-        if (活动委托.length === 1) {
+        if (market === 'bitmex' && 活动委托.length === 1) {
             const { type, timestamp, id, side } = 活动委托[0]
             if (type === '限价') {
                 const _15秒取消 = (lastNumber(d.时间) > (timestamp + 15 * 1000))
