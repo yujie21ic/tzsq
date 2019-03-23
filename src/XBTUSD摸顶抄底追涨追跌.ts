@@ -69,6 +69,27 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
     }
 
     onTick(self: PositionAndOrder) {
+        const aaa = this.活动委托检测step(self)
+        if (aaa) return aaa
+
+        const bbb = this.止损step(self)
+        if (bbb) return bbb
+
+        const { 仓位数量 } = self.jsonSync.rawData.symbol['XBTUSD']
+        if (仓位数量 === 0) {
+            this.state.最大仓位abs = NaN
+            this.state.最后一次开仓时间 = NaN
+            this.state.最后一次开仓折返率 = NaN
+            this.state.摸顶抄底超时秒 = NaN
+            this.state.第2次超时 = false
+            this.state.已经平了一半了 = false
+            return this.自动开仓(self)
+        } else {
+            return this.自动止盈(self)
+        }
+    }
+
+    private 活动委托检测step(self: PositionAndOrder) {
         const { 仓位数量 } = self.jsonSync.rawData.symbol['XBTUSD']
 
         //委托检测
@@ -76,7 +97,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         //没有委托
         if (活动委托.length === 0) {
-            //return false //<----------------------------------------------
+            return false //<----------------------------------------------
         }
         else if (活动委托.length === 1) {
             if (
@@ -91,7 +112,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 //或者 限价只减仓委托
                 活动委托[0].type === '限价只减仓'
             ) {
-                //return false //<----------------------------------------------
+                return false //<----------------------------------------------
             } else {
                 return self.cancel({ orderID: 活动委托.map(v => v.id), text: '委托检测step 取消委托' }, 活动委托[0].type)
             }
@@ -99,28 +120,6 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         else {
             //多个委托  全部给取消  
             return self.cancel({ orderID: 活动委托.map(v => v.id), text: '委托检测step 取消多个委托' }, 活动委托.map(v => v.type).join(','))
-        }
-
-
-
-        //止损
-        const x = this.止损step(self)
-        if (x) {
-            return x
-        }
-
-
-
-        if (仓位数量 === 0) {
-            this.state.最大仓位abs = NaN
-            this.state.最后一次开仓时间 = NaN
-            this.state.最后一次开仓折返率 = NaN
-            this.state.摸顶抄底超时秒 = NaN
-            this.state.第2次超时 = false
-            this.state.已经平了一半了 = false
-            return this.自动开仓(self)
-        } else {
-            return this.自动止盈(self)
         }
     }
 
