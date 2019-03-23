@@ -106,7 +106,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         //止损
         const x = this.止损step(self)
         if (x) {
-            return true
+            return x
         }
 
 
