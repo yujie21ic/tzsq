@@ -4,9 +4,6 @@ import { RealDataBase } from '../../../RealDataServer/RealDataBase'
 
 export interface PositionAndOrder {
 
-    //添加 market 做 联动 用
-    //不用 每个  market 写一个 PositionAndOrder 了
-
     //先写成这样  需要改  
     jsonSync: JSONSync<{
         wallet: {
@@ -78,13 +75,13 @@ export interface PositionAndOrder {
                 开仓均价: number;
             };
         };
-    }> 
+    }>
 
-    //
     get本地维护仓位数量(symbol: BaseType.BitmexSymbol): number
 
     realData: RealDataBase
 
+    //hopex_API
 
     hopex_taker: (p: { size: number, side: BaseType.Side }) => boolean | Promise<boolean>
 

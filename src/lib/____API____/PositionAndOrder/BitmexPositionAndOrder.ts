@@ -261,15 +261,29 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         })
     }
 
-    hopex_taker = async (p: { size: number, side: BaseType.Side }) =>
-        (await HopexRESTAPI.taker(this.hopexCookie, p)).error === undefined
+    hopex_taker = async (p: { size: number, side: BaseType.Side }) => {
+        const b = (await HopexRESTAPI.taker(this.hopexCookie, p)).error === undefined
+        if (b) {
+            this.hopex_初始化.仓位 = false
+        }
+        return b
+    }
 
-    hopex_stop = async (p: { side: BaseType.Side, stopPrice: number }) =>
-        (await HopexRESTAPI.stop(this.hopexCookie, p)).error === undefined
+    hopex_stop = async (p: { side: BaseType.Side, stopPrice: number }) => {
+        const b = (await HopexRESTAPI.stop(this.hopexCookie, p)).error === undefined
+        if (b) {
+            this.hopex_初始化.委托 = false
+        }
+        return b
+    }
 
-    hopex_cancel = async (p: { orderID: number }) =>
-        (await HopexRESTAPI.cancel(this.hopexCookie, p)).error === undefined
-
+    hopex_cancel = async (p: { orderID: number }) => {
+        const b = (await HopexRESTAPI.cancel(this.hopexCookie, p)).error === undefined
+        if (b) {
+            this.hopex_初始化.委托 = false
+        }
+        return b
+    }
 
     private DDOS调用 = <P extends any>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
         async (p: P, logText = '') => {
