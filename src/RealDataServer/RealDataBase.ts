@@ -1064,10 +1064,10 @@ export class RealDataBase {
 
 
 
-    摸顶抄底信号灯side___2根 = (symbol: BaseType.BitmexSymbol) => {
+    平仓摸顶抄底 = (market: 'bitmex' | 'hopex') => {
         const realData = this
-        const up = realData.dataExt[symbol].bitmex.信号_摸顶
-        const down = realData.dataExt[symbol].bitmex.信号_抄底
+        const up = realData.dataExt.XBTUSD[market].信号_摸顶
+        const down = realData.dataExt.XBTUSD[market].信号_抄底
 
         if (up.length > 2 && up[up.length - 1].every(v => v.value) && up[up.length - 2].every(v => v.value)) {
             return { 信号side: 'Sell' as 'Sell' }
@@ -1080,32 +1080,22 @@ export class RealDataBase {
         }
     }
 
-    get信号灯Type = (symbol: BaseType.BitmexSymbol) => {
+    get信号灯Type = (market: 'bitmex' | 'hopex') => {
         const realData = this
-        if (is连续几根全亮(3, realData.dataExt[symbol].bitmex.信号_摸顶)) {
+        if (is连续几根全亮(3, realData.dataExt.XBTUSD[market].信号_摸顶)) {
             return '摸顶'
         }
-        else if (is连续几根全亮(3, realData.dataExt[symbol].bitmex.信号_抄底)) {
+        else if (is连续几根全亮(3, realData.dataExt.XBTUSD[market].信号_抄底)) {
             return '抄底'
         }
-        else if (is连续几根全亮(1, realData.dataExt[symbol].bitmex_信号_追涨)) {
+        else if (market === 'bitmex' && is连续几根全亮(1, realData.dataExt.XBTUSD.bitmex_信号_追涨)) {
             return '追涨'
         }
-        else if (is连续几根全亮(1, realData.dataExt[symbol].bitmex_信号_追跌)) {
+        else if (market === 'bitmex' && is连续几根全亮(1, realData.dataExt.XBTUSD.bitmex_信号_追跌)) {
             return '追跌'
         } else {
             return 'none'
         }
-    }
-
-    get信号XXXmsg = (symbol: BaseType.BitmexSymbol) => {
-        const 上涨做空下跌平仓 = this.dataExt[symbol].bitmex.信号_摸顶_下跌平仓
-        const 下跌抄底上涨平仓 = this.dataExt[symbol].bitmex.信号_抄底_上涨平仓
-
-        return JSON.stringify({
-            上涨做空下跌平仓: 上涨做空下跌平仓.length > 3 ? [上涨做空下跌平仓[上涨做空下跌平仓.length - 3], 上涨做空下跌平仓[上涨做空下跌平仓.length - 2], 上涨做空下跌平仓[上涨做空下跌平仓.length - 1]] : '',
-            下跌抄底上涨平仓: 下跌抄底上涨平仓.length > 3 ? [下跌抄底上涨平仓[下跌抄底上涨平仓.length - 3], 下跌抄底上涨平仓[下跌抄底上涨平仓.length - 2], 下跌抄底上涨平仓[下跌抄底上涨平仓.length - 1]] : '',
-        })
     }
 
 

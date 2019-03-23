@@ -313,7 +313,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             任务开关.自动开仓摸顶 === false
         ) return false
 
-        const 信号灯Type = self.realData.get信号灯Type('XBTUSD')
+        const 信号灯Type = self.realData.get信号灯Type(market)
         const 开仓side = { '追涨': 'Buy', '追跌': 'Sell', '抄底': 'Buy', '摸顶': 'Sell', 'none': '_____' }[信号灯Type] as BaseType.Side
 
         //上涨 下跌 切换 止损次数 清零
@@ -513,7 +513,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         price: toBuySellPriceFunc(平仓side, get位置1价格),
                         reduceOnly: true,
                         text: state.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 上涨做空下跌平仓一半',
-                    }, self.realData.get信号XXXmsg('XBTUSD'))
+                    }, '')
                 }
 
 
@@ -526,13 +526,13 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         price: toBuySellPriceFunc(平仓side, get位置1价格),
                         reduceOnly: true,
                         text: state.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 下跌抄底上涨平仓一半',
-                    }, self.realData.get信号XXXmsg('XBTUSD'))
+                    }, '')
                 }
             }
 
 
             //触发了反向开仓信号 
-            const { 信号side } = self.realData.摸顶抄底信号灯side___2根('XBTUSD')
+            const { 信号side } = self.realData.平仓摸顶抄底(market)
 
             if (信号side === 平仓side && 活动委托.length === 0) {
 
