@@ -105,6 +105,6 @@ export class CTP extends TradeAndOrderBook<string>{
 
         })
 
-        this.udpServer.bind(8888, '127.0.0.1')
+        //this.udpServer.bind(8888, '127.0.0.1')
     }
 }

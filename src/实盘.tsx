@@ -12,41 +12,19 @@ import { BaseType } from './lib/BaseType'
 import { windowExt } from './windowExt'
 import { Button } from './lib/UI/Button'
 import { Switch } from '@material-ui/core'
-import { to范围 } from './lib/F/to范围'
 import { 指标 } from './指标/指标'
-import { toGridPoint } from './lib/F/toGridPoint'
-import { HopexRESTAPI } from './lib/____API____/Hopex/HopexRESTAPI'
-
-
-const hopex市价开仓和止损BTC = async (cookie: string, p: { size: number, price: number, side: BaseType.Side }) => {
-
-    HopexRESTAPI.taker(cookie, p)
-
-    HopexRESTAPI.stop(cookie, {
-        price: p.price,
-        side: p.side === 'Sell' ? 'Buy' : 'Sell',
-    })
-
-    return { data: true }
-}
-
 
 const realTickClient = new DataClient.RealData__Client()
-let hopex自动开仓一次 = false
 
 const account = config.account![windowExt.accountName]
 const { cookie } = account
-const hopexCookie = account.hopexCookie || ''
-const hopex数量 = account.hopex数量 || 1
 const orderClient = new OrderClient(account.cookie)
 const rpc = OrderClient.rpc.func
 
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
 
-class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: number, 倍数: number }> {
-
-
+class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC', 位置: number, 倍数: number }> {
 
     get仓位() {
         const { 仓位数量, 开仓均价 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
@@ -59,7 +37,7 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
 
     render() {
         const { 仓位数量, 任务开关 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
-        const 下单数量 = account.交易[this.props.symbol].数量 * this.props.倍数
+        const 下单数量 = account.交易.XBTUSD.数量 * this.props.倍数
 
 
         // 
@@ -115,6 +93,8 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
             }
         }
 
+        const { symbol } = this.props
+
 
         return <div>
             <div style={{
@@ -122,113 +102,121 @@ class Item extends React.Component<{ symbol: BaseType.BitmexSymbol, 位置: numb
                 flexDirection: 'column',
                 justifyContent: 'left',
             }}>
-                <h3>全部时间都放交易上面</h3>
-                <p style={{ color: this.props.symbol === 'XBTUSD' ? '#cc66ff' : '#aaaa00' }}>{this.props.symbol} {仓位数量 !== 0 ? <a
+                <p style={{ color: this.props.symbol === 'XBTUSD' ? '#cc66ff' : '#aaaa00' }}>{this.props.symbol} {仓位数量 !== 0 && symbol !== 'Hopex_BTC' ? <a
                     href='#'
                     style={{ color: RED }}
-                    onClick={() => rpc.市价平仓({ cookie, symbol: this.props.symbol })}
+                    onClick={() => rpc.市价平仓({ cookie, symbol })}
                 >市价平仓</a> : undefined} </p>
                 <p>仓位:{this.get仓位()}</p>
                 <p>止损:{get止损()}</p>
                 <p>委托:{get委托()}</p>
-                <p>自动开仓摸顶:<Switch checked={任务开关.自动开仓摸顶} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓摸顶', value: v }) }} /> </p>
-                <p>自动开仓抄底:<Switch checked={任务开关.自动开仓抄底} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓抄底', value: v }) }} /> </p>
-                <p>自动开仓追涨:<Switch checked={任务开关.自动开仓追涨} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓追涨', value: v }) }} /> </p>
-                <p>自动开仓追跌:<Switch checked={任务开关.自动开仓追跌} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓追跌', value: v }) }} /> </p>
-                <p>自动止盈波段:<Switch checked={任务开关.自动止盈波段} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动止盈波段', value: v }) }} /></p>
-                <p>自动推止损:<Switch checked={任务开关.自动推止损} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动推止损', value: v }) }} /></p>
-
+                <p>
+                    摸顶:<Switch checked={任务开关.自动开仓摸顶} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓摸顶', value: v }) }} />
+                    抄底:<Switch checked={任务开关.自动开仓抄底} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓抄底', value: v }) }} />
+                </p>
+                <p>
+                    追涨:<Switch checked={任务开关.自动开仓追涨} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓追涨', value: v }) }} />
+                    追跌:<Switch checked={任务开关.自动开仓追跌} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓追跌', value: v }) }} />
+                </p>
+                <p>
+                    止盈波段:<Switch checked={任务开关.自动止盈波段} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动止盈波段', value: v }) }} />
+                    推止损:<Switch checked={任务开关.自动推止损} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动推止损', value: v }) }} />
+                </p>
             </div>
-            <div style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center'
-            }}>
-                <div
-                    style={{ width: '50%' }}>
-                    <Button
-                        bgColor={GREEN}
-                        text={下单数量 + ' 买' + (this.props.位置 + 1)}
-                        left={() => rpc.下单({
-                            cookie,
-                            symbol: this.props.symbol,
-                            type: 'maker',
-                            side: 'Buy',
-                            size: 下单数量,
-                            位置: this.props.位置,
-                            最低_最高: false,
-                        })}
-                        right={() => rpc.下单({
-                            cookie,
-                            symbol: this.props.symbol,
-                            type: 'taker',
-                            side: 'Buy',
-                            size: 下单数量,
-                            位置: this.props.位置,
-                            最低_最高: false,
-                        })}
-                    />
 
-                    <br />
+            {symbol === 'Hopex_BTC' ? null :
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center'
+                }}>
+                    <div
+                        style={{ width: '50%' }}>
+                        <Button
+                            bgColor={GREEN}
+                            text={下单数量 + ' 买' + (this.props.位置 + 1)}
+                            left={() => rpc.下单({
+                                cookie,
+                                symbol,
+                                type: 'maker',
+                                side: 'Buy',
+                                size: 下单数量,
+                                位置: this.props.位置,
+                                最低_最高: false,
+                            })}
+                            right={() => rpc.下单({
+                                cookie,
+                                symbol,
+                                type: 'taker',
+                                side: 'Buy',
+                                size: 下单数量,
+                                位置: this.props.位置,
+                                最低_最高: false,
+                            })}
+                        />
 
-                    <Button
-                        bgColor={GREEN}
-                        text={'5秒最低 买' + (this.props.位置 + 1)}
-                        left={() => rpc.下单({
-                            cookie,
-                            symbol: this.props.symbol,
-                            type: 'maker',
-                            side: 'Buy',
-                            size: 下单数量,
-                            位置: this.props.位置,
-                            最低_最高: true,
-                        })}
-                    />
-                    <br />
+                        <br />
+
+                        <Button
+                            bgColor={GREEN}
+                            text={'5秒最低 买' + (this.props.位置 + 1)}
+                            left={() => rpc.下单({
+                                cookie,
+                                symbol,
+                                type: 'maker',
+                                side: 'Buy',
+                                size: 下单数量,
+                                位置: this.props.位置,
+                                最低_最高: true,
+                            })}
+                        />
+                        <br />
+                    </div>
+
+                    <div
+                        style={{
+                            width: '50%'
+                        }}>
+                        <Button
+                            bgColor={RED}
+                            text={-下单数量 + ' 卖' + (this.props.位置 + 1)}
+                            left={() => rpc.下单({
+                                cookie,
+                                symbol,
+                                type: 'maker',
+                                side: 'Sell',
+                                size: 下单数量,
+                                位置: this.props.位置,
+                                最低_最高: false,
+                            })}
+                            right={() => rpc.下单({
+                                cookie,
+                                symbol,
+                                type: 'taker',
+                                side: 'Sell',
+                                size: 下单数量,
+                                位置: this.props.位置,
+                                最低_最高: false,
+                            })}
+                        />
+                        <br />
+                        <Button
+                            bgColor={RED}
+                            text={'5秒最高 卖' + (this.props.位置 + 1)}
+                            left={() => rpc.下单({
+                                cookie,
+                                symbol,
+                                type: 'maker',
+                                side: 'Sell',
+                                size: 下单数量,
+                                位置: this.props.位置,
+                                最低_最高: true,
+                            })}
+                        />
+                        <br />
+                    </div>
                 </div>
-                <div
-                    style={{
-                        width: '50%'
-                    }}>
-                    <Button
-                        bgColor={RED}
-                        text={-下单数量 + ' 卖' + (this.props.位置 + 1)}
-                        left={() => rpc.下单({
-                            cookie,
-                            symbol: this.props.symbol,
-                            type: 'maker',
-                            side: 'Sell',
-                            size: 下单数量,
-                            位置: this.props.位置,
-                            最低_最高: false,
-                        })}
-                        right={() => rpc.下单({
-                            cookie,
-                            symbol: this.props.symbol,
-                            type: 'taker',
-                            side: 'Sell',
-                            size: 下单数量,
-                            位置: this.props.位置,
-                            最低_最高: false,
-                        })}
-                    />
-                    <br />
-                    <Button
-                        bgColor={RED}
-                        text={'5秒最高 卖' + (this.props.位置 + 1)}
-                        left={() => rpc.下单({
-                            cookie,
-                            symbol: this.props.symbol,
-                            type: 'maker',
-                            side: 'Sell',
-                            size: 下单数量,
-                            位置: this.props.位置,
-                            最低_最高: true,
-                        })}
-                    />
-                    <br />
-                </div>
-            </div>
+            }
         </div >
     }
 }
@@ -248,23 +236,6 @@ export class 交易 extends React.Component {
 
         const f = () => {
             requestAnimationFrame(f)
-
-            if (hopex自动开仓一次) {
-                const up = realTickClient.dataExt.XBTUSD.hopex_信号_摸顶
-                const down = realTickClient.dataExt.XBTUSD.hopex_信号_抄底
-
-                if (up.length > 0 && up[up.length - 1].every(v => v.value)) {
-                    speechSynthesis.speak(new SpeechSynthesisUtterance('自动卖一次'))
-                    this.hopex_sell()
-                    hopex自动开仓一次 = false
-                }
-                else if (down.length > 0 && down[down.length - 1].every(v => v.value)) {
-                    speechSynthesis.speak(new SpeechSynthesisUtterance('自动买一次'))
-                    this.hopex_buy()
-                    hopex自动开仓一次 = false
-                }
-            }
-
             this.forceUpdate()
         }
         f()
@@ -286,34 +257,6 @@ export class 交易 extends React.Component {
     }
 
 
-    hopex_buy = () =>
-        hopex市价开仓和止损BTC(hopexCookie, {
-            size: hopex数量 * this.倍数,
-            price:
-                toGridPoint('XBTUSD',
-                    lastNumber(realTickClient.dataExt.XBTUSD.hopex.价格) - to范围({
-                        min: 3,
-                        max: 18,
-                        value: lastNumber(realTickClient.dataExt.XBTUSD.bitmex.价格_波动率30) / 4,
-                    }), 'Sell')
-            ,
-            side: 'Buy',
-        })
-
-    hopex_sell = () =>
-        hopex市价开仓和止损BTC(hopexCookie, {
-            size: hopex数量 * this.倍数,
-            price:
-                toGridPoint('XBTUSD',
-                    lastNumber(realTickClient.dataExt.XBTUSD.hopex.价格) + to范围({
-                        min: 3,
-                        max: 18,
-                        value: lastNumber(realTickClient.dataExt.XBTUSD.bitmex.价格_波动率30) / 4,
-                    }), 'Buy')
-            ,
-            side: 'Sell',
-        })
-
 
     render() {
         return orderClient.isConnected === false ?
@@ -330,37 +273,7 @@ export class 交易 extends React.Component {
                 cursor: 'default'
             }}>
                 <Item symbol='XBTUSD' 位置={this.位置} 倍数={this.倍数} />
-                {hopexCookie !== '' ?
-                    <div>
-                        <p>自动点击一次:<Switch checked={hopex自动开仓一次} onChange={(e, v) => hopex自动开仓一次 = v} /> </p>
-                        <br />
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'center'
-                        }}>
-                            <div
-                                style={{ width: '50%' }}>
-                                <Button
-                                    bgColor={GREEN}
-                                    text={hopex数量 * this.倍数 + ''}
-                                    left={this.hopex_buy}
-                                />
-                            </div>
-                            <div
-                                style={{
-                                    width: '50%'
-                                }}>
-                                <Button
-                                    bgColor={RED}
-                                    text={-hopex数量 * this.倍数 + ''}
-                                    left={this.hopex_sell}
-                                />
-                            </div>
-                        </div>
-                    </div > : '需要设置cookie'}
-
-
+                <Item symbol='Hopex_BTC' 位置={this.位置} 倍数={this.倍数} />
             </div>
     }
 
