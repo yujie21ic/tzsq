@@ -361,7 +361,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         side: 开仓side,
                         size: 交易数量 * (state.连续止损次数 + 1),
                         text: 信号灯Type,
-                    }, '自动开仓step 自动开仓 市价' + self.realData.get信号msg('XBTUSD')) :
+                    }, '自动开仓step 自动开仓 市价') :
                     self.maker({
                         symbol: 'XBTUSD',
                         side: 开仓side,
@@ -374,7 +374,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         })),
                         reduceOnly: false,
                         text: 信号灯Type,
-                    }, '自动开仓step 自动开仓 挂单' + self.realData.get信号msg('XBTUSD'))
+                    }, '自动开仓step 自动开仓 挂单')
             } else {
                 return true
             }
@@ -391,7 +391,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 const _15秒取消 = (lastNumber(d.时间) > (timestamp + 15 * 1000))
                 const 出现反向信号时候取消 = (信号灯Type !== 'none' && 开仓side !== side)
                 if (_15秒取消 || 出现反向信号时候取消) {
-                    return self.cancel({ orderID: [id], text: '自动开仓step 取消开仓' }, '自动开仓step 取消开仓 ' + _15秒取消 ? '_15秒取消' : ('出现反向信号时候取消' + self.realData.get信号msg('XBTUSD')))
+                    return self.cancel({ orderID: [id], text: '自动开仓step 取消开仓' }, '自动开仓step 取消开仓 ' + _15秒取消 ? '_15秒取消' : '出现反向信号时候取消')
                 }
             }
         }
@@ -532,7 +532,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
 
             //触发了反向开仓信号 
-            const { 信号side, 信号msg } = self.realData.摸顶抄底信号灯side___2根('XBTUSD')
+            const { 信号side } = self.realData.摸顶抄底信号灯side___2根('XBTUSD')
 
             if (信号side === 平仓side && 活动委托.length === 0) {
 
@@ -544,7 +544,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         side: 平仓side,
                         size: Math.abs(仓位数量),
                         text: state.最后一次信号 + '平仓' + ' 触发了反向开仓信号  ' + '自动止盈波段step 全部止盈',
-                    }, 信号side + ' 信号msg:' + 信号msg) :
+                    }, 信号side) :
                     self.maker({
                         symbol: 'XBTUSD',
                         side: 平仓side,
@@ -552,7 +552,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         price: toBuySellPriceFunc(平仓side, get位置1价格),
                         reduceOnly: true,
                         text: state.最后一次信号 + '平仓' + ' 触发了反向开仓信号  ' + '自动止盈波段step 全部止盈',
-                    }, 信号side + ' 信号msg:' + 信号msg)
+                    }, 信号side)
 
             }
         }

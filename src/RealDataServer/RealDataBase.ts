@@ -1063,21 +1063,7 @@ export class RealDataBase {
         }
     }
 
-    get信号msg = (symbol: BaseType.BitmexSymbol) => {
-        const realData = this
-        const 摸顶 = realData.dataExt[symbol].bitmex.信号_摸顶
-        const 抄底 = realData.dataExt[symbol].bitmex.信号_抄底
-        const 追涨 = realData.dataExt[symbol].bitmex_信号_追涨
-        const 追跌 = realData.dataExt[symbol].bitmex_信号_追跌
 
-        return JSON.stringify({
-            上涨: 摸顶.length > 3 ? [摸顶[摸顶.length - 3], 摸顶[摸顶.length - 2], 摸顶[摸顶.length - 1]] : '',
-            下跌: 抄底.length > 3 ? [抄底[抄底.length - 3], 抄底[抄底.length - 2], 抄底[抄底.length - 1]] : '',
-            追涨: 追涨.length > 3 ? [追涨[追涨.length - 3], 追涨[追涨.length - 2], 追涨[追涨.length - 1]] : '',
-            追跌: 追跌.length > 3 ? [追跌[追跌.length - 3], 追跌[追跌.length - 2], 追跌[追跌.length - 1]] : '',
-            波动率: lastNumber(realData.dataExt[symbol].bitmex.价格_波动率30),
-        })
-    }
 
     摸顶抄底信号灯side___2根 = (symbol: BaseType.BitmexSymbol) => {
         const realData = this
@@ -1085,13 +1071,13 @@ export class RealDataBase {
         const down = realData.dataExt[symbol].bitmex.信号_抄底
 
         if (up.length > 2 && up[up.length - 1].every(v => v.value) && up[up.length - 2].every(v => v.value)) {
-            return { 信号side: 'Sell' as 'Sell', 信号msg: realData.get信号msg(symbol) }
+            return { 信号side: 'Sell' as 'Sell' }
         }
         else if (down.length > 2 && down[down.length - 1].every(v => v.value) && down[down.length - 2].every(v => v.value)) {
-            return { 信号side: 'Buy' as 'Buy', 信号msg: realData.get信号msg(symbol) }
+            return { 信号side: 'Buy' as 'Buy' }
         }
         else {
-            return { 信号side: 'none' as 'none', 信号msg: '' }
+            return { 信号side: 'none' as 'none' }
         }
     }
 
@@ -1128,6 +1114,6 @@ export class RealDataBase {
         is连续几根全亮(2, this.dataExt[symbol].bitmex.信号_摸顶_下跌平仓)
 
     is抄底_上涨平仓 = (symbol: BaseType.BitmexSymbol) =>
-        is连续几根全亮(2, this.dataExt[symbol].bitmex.信号_抄底_上涨平仓) 
+        is连续几根全亮(2, this.dataExt[symbol].bitmex.信号_抄底_上涨平仓)
 
 }
