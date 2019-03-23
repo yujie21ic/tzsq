@@ -33,6 +33,16 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     }
 
 
+
+    hopex_taker = (p: { size: number, side: BaseType.Side }) => false
+
+    hopex_stop = (p: { side: BaseType.Side, stopPrice: number }) => false
+
+    hopex_cancel = (p: { orderID: number }) => false
+
+
+
+
     private startTime: number
     private endTime: number
     constructor(startTime: number, endTime: number) {

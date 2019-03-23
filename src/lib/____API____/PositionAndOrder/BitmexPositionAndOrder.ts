@@ -10,6 +10,7 @@ import { RealData__Server } from '../../../RealDataServer/RealData__Server'
 import { toCacheFunc } from '../../C/toCacheFunc'
 import { PositionAndOrder, PositionAndOrderTask } from './PositionAndOrder'
 import { lastNumber } from '../../F/lastNumber'
+import { HopexRESTAPI } from '../Hopex/HopexRESTAPI';
 
 const symbol = () => ({
     任务开关: {
@@ -206,6 +207,16 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
             this.jsonSync.data.symbol[symbol].活动委托.____set(arr)
         })
     }
+
+    hopex_taker = async (p: { size: number, side: BaseType.Side }) =>
+        (await HopexRESTAPI.taker(this.hopexCookie, p)).error === undefined
+
+    hopex_stop = async (p: { side: BaseType.Side, stopPrice: number }) =>
+        (await HopexRESTAPI.stop(this.hopexCookie, p)).error === undefined
+
+    hopex_cancel = async (p: { orderID: number }) =>
+        (await HopexRESTAPI.cancel(this.hopexCookie, p)).error === undefined
+
 
     private DDOS调用 = <P extends any>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
         async (p: P, logText = '') => {

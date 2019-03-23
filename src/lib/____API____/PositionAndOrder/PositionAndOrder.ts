@@ -86,6 +86,17 @@ export interface PositionAndOrder {
     realData: RealDataBase
 
 
+
+
+
+
+    hopex_taker: (p: { size: number, side: BaseType.Side }) => boolean | Promise<boolean>
+
+    hopex_stop: (p: { side: BaseType.Side, stopPrice: number }) => boolean | Promise<boolean>
+
+    hopex_cancel: (p: { orderID: number }) => boolean | Promise<boolean>
+
+
     //API
     maker: (p: {
         symbol: BaseType.BitmexSymbol;
