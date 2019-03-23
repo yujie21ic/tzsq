@@ -36,7 +36,7 @@ const 推止损 = (p: { 波动率: number, 盈利点: number, type: '摸顶' | '
 export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
     private state = {
-        连续止损2: 0,
+        连续止损次数: 0,
         最后一次止损状态: '',
 
         最后一次信号: 'none' as 'none' | '追涨' | '追跌' | '摸顶' | '抄底',
@@ -55,15 +55,15 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
     onFilled(p: { symbol: BaseType.BitmexSymbol, type: '限价' | '限价只减仓' | '止损' | '强平' }) {
         if (p.symbol === 'XBTUSD') {
             if (p.type === '限价只减仓') {
-                this.state.连续止损2 = 0 //不考虑 亏损挂单
+                this.state.连续止损次数 = 0 //不考虑 亏损挂单
             }
             else if (p.type === '止损') {
                 if (this.state.最后一次止损状态 === '亏损止损') {
-                    this.state.连续止损2 += 1
+                    this.state.连续止损次数 += 1
                 }
             }
             else if (p.type === '强平') {
-                this.state.连续止损2 += 1
+                this.state.连续止损次数 += 1
             }
         }
     }
@@ -222,12 +222,12 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         const x = self.realData.dataExt['XBTUSD'].bitmex.上涨_下跌_横盘
         if (x.length > 0 && this.state.最后一次上涨_下跌 !== x[x.length - 1]) {
             this.state.最后一次上涨_下跌 = x[x.length - 1]
-            this.state.连续止损2 = 0
+            this.state.连续止损次数 = 0
         }
 
-        if (this.state.连续止损2 >= 4) {
+        if (this.state.连续止损次数 >= 4) {
             this.state.到什么时间不开仓 = lastNumber(self.realData.dataExt['XBTUSD'].bitmex.时间) + 1000 * 60 * 10
-            this.state.连续止损2 = 0
+            this.state.连续止损次数 = 0
         }
 
         //开仓
@@ -261,13 +261,13 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                     self.taker({
                         symbol: 'XBTUSD',
                         side: 开仓side,
-                        size: 交易数量 * (this.state.连续止损2 + 1),
+                        size: 交易数量 * (this.state.连续止损次数 + 1),
                         text: 信号灯Type,
                     }, '自动开仓step 自动开仓 市价' + self.realData.get信号msg('XBTUSD')) :
                     self.maker({
                         symbol: 'XBTUSD',
                         side: 开仓side,
-                        size: 交易数量 * (this.state.连续止损2 + 1),
+                        size: 交易数量 * (this.state.连续止损次数 + 1),
                         price: toBuySellPriceFunc(开仓side, () => self.realData.getOrderPrice({
                             symbol: 'XBTUSD',
                             side: 开仓side,
