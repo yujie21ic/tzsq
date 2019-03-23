@@ -270,7 +270,7 @@ const chartRender = () => {
         y: mouseY,
         width,
         height,
-        xStr: xStrArr[indexX],
+        xStr: indexX > xStrArr.length - 1 || indexX < 0 ? '' : xStrArr[indexX],
         yStr: price.toFixed(2)
     })
 
