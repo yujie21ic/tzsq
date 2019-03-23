@@ -36,6 +36,7 @@ let hopex自动开仓一次 = false
 
 const account = config.account![windowExt.accountName]
 const { cookie } = account
+const hopexCookie = account.hopexCookie||''
 const orderClient = new OrderClient(account.cookie)
 const rpc = OrderClient.rpc.func
 
@@ -238,8 +239,7 @@ export class 交易 extends React.Component {
 
     //state
     位置 = 0
-    倍数 = 1
-    hopexCookie = (config.hopexCookie || '')
+    倍数 = 1 
 
 
     componentWillMount() {
@@ -286,7 +286,7 @@ export class 交易 extends React.Component {
 
 
     hopex_buy = () =>
-        hopex市价开仓和止损BTC(this.hopexCookie, {
+        hopex市价开仓和止损BTC(hopexCookie, {
             size: (config.hopex数量 || 0) * this.倍数,
             stopPrice:
                 toGridPoint('XBTUSD',
@@ -300,7 +300,7 @@ export class 交易 extends React.Component {
         })
 
     hopex_sell = () =>
-        hopex市价开仓和止损BTC(this.hopexCookie, {
+        hopex市价开仓和止损BTC(hopexCookie, {
             size: (config.hopex数量 || 0) * this.倍数,
             stopPrice:
 
@@ -330,7 +330,7 @@ export class 交易 extends React.Component {
                 cursor: 'default'
             }}>
                 <Item symbol='XBTUSD' 位置={this.位置} 倍数={this.倍数} />
-                {this.hopexCookie !== '' ?
+                {hopexCookie !== '' ?
                     <div>
                         <p>自动点击一次:<Switch checked={hopex自动开仓一次} onChange={(e, v) => hopex自动开仓一次 = v} /> </p>
                         <br />
