@@ -223,26 +223,26 @@ export class RealDataBase {
             累计卖: 指标.map(() => __波动_测试.length, i => __波动_测试[i].累计卖),
             净成交量: 波动_测试_净成交量,
             净成交量_累加10: 波动_测试_净成交量_累加10,
-            买均价_10: 指标.map(() => Math.min(__波动_测试.length, 买.盘口.length), i => {
+            买均价_10: 指标.map(() => Math.min(__波动_测试.length, 卖.盘口.length), i => {
                 if (i >= 9) {
                     let sum = 0
                     let vol = 0
                     for (let k = i - 8; k <= i; k++) {
                         vol += __波动_测试[k].累计买
-                        sum += __波动_测试[k].累计买 * 买.盘口[k]
+                        sum += __波动_测试[k].累计买 * 卖.盘口[k]
                     }
                     return sum / vol
                 } else {
                     return NaN
                 }
             }),
-            卖均价_10: 指标.map(() => Math.min(__波动_测试.length, 卖.盘口.length), i => {
+            卖均价_10: 指标.map(() => Math.min(__波动_测试.length, 买.盘口.length), i => {
                 if (i >= 9) {
                     let sum = 0
                     let vol = 0
                     for (let k = i - 8; k <= i; k++) {
                         vol += __波动_测试[k].累计卖
-                        sum += __波动_测试[k].累计卖 * 卖.盘口[k]
+                        sum += __波动_测试[k].累计卖 * 买.盘口[k]
                     }
                     return sum / vol
                 } else {
