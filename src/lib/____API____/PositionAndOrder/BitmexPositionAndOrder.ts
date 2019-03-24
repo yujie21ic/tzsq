@@ -84,6 +84,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     }
 
     async hopex_login() {
+        this.log('hopex_login')
         return await HopexRESTAPI.login(this.hopexCookie, {
             userName: this.hopexUserName,
             password: this.hopexPassword
@@ -103,8 +104,16 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                     开仓均价 = v.entryPriceD
                 }
             })
-            this.jsonSync.data.symbol.Hopex_BTC.仓位数量.____set(仓位数量)
-            this.jsonSync.data.symbol.Hopex_BTC.开仓均价.____set(开仓均价)
+
+            if (this.jsonSync.rawData.symbol.Hopex_BTC.仓位数量 !== 仓位数量) {
+                this.jsonSync.data.symbol.Hopex_BTC.仓位数量.____set(仓位数量)
+                this.log('hopex 仓位数量:' + 仓位数量)
+            }
+
+            if (this.jsonSync.rawData.symbol.Hopex_BTC.开仓均价 !== 开仓均价) {
+                this.jsonSync.data.symbol.Hopex_BTC.开仓均价.____set(开仓均价)
+                this.log('hopex 开仓均价:' + 开仓均价)
+            }
 
         } else {
             this.hopex_初始化.仓位 = false
@@ -129,7 +138,11 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                     }]
                 }
             })
-            this.jsonSync.data.symbol.Hopex_BTC.活动委托.____set(orderArr)
+
+            if (this.jsonSync.rawData.symbol.Hopex_BTC.活动委托.length !== orderArr.length) {
+                this.jsonSync.data.symbol.Hopex_BTC.活动委托.____set(orderArr)
+                this.log('hopex 止损:' + (orderArr.length > 0 ? orderArr[0].price : '无'))
+            }
 
         } else {
             this.hopex_初始化.委托 = false
@@ -275,7 +288,9 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     }
 
     hopex_taker = async (p: { size: number, side: BaseType.Side }) => {
+        this.log(`hopex_taker ${p.side} ${p.size}`)
         const b = (await HopexRESTAPI.taker(this.hopexCookie, p)).error === undefined
+        this.log(`hopex_taker ${b ? '成功' : '失败'}`)
         if (b) {
             this.hopex_初始化.仓位 = false
         }
@@ -283,7 +298,9 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     }
 
     hopex_stop = async (p: { side: BaseType.Side, price: number }) => {
+        this.log(`hopex_stop ${p.side} ${p.price}`)
         const b = (await HopexRESTAPI.stop(this.hopexCookie, p)).error === undefined
+        this.log(`hopex_stop ${b ? '成功' : '失败'}`)
         if (b) {
             this.hopex_初始化.委托 = false
         }
@@ -291,7 +308,9 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     }
 
     hopex_cancel = async (p: { orderID: number }) => {
+        this.log(`hopex_cancel ${p.orderID}`)
         const b = (await HopexRESTAPI.cancel(this.hopexCookie, p)).error === undefined
+        this.log(`hopex_cancel ${b ? '成功' : '失败'}`)
         if (b) {
             this.hopex_初始化.委托 = false
         }
