@@ -237,7 +237,7 @@ export class RealDataBase {
                 if (i >= 9) {
                     let sum = 0
                     let vol = 0
-                    for (let k = i - 8; k <= i; k++) {
+                    for (let k = i - 9; k <= i; k++) {
                         vol += __波动_测试[k].累计买
                         sum += __波动_测试[k].累计买 * __波动_测试[k].卖1价
                     }
@@ -250,7 +250,7 @@ export class RealDataBase {
                 if (i >= 9) {
                     let sum = 0
                     let vol = 0
-                    for (let k = i - 8; k <= i; k++) {
+                    for (let k = i - 9; k <= i; k++) {
                         vol += __波动_测试[k].累计卖
                         sum += __波动_测试[k].累计卖 * __波动_测试[k].买1价
                     }
