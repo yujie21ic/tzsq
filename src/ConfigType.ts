@@ -5,7 +5,9 @@ export type ConfigType = {
     orderServer?: {
         [name: string]: {
             cookie: string
-            hopexCookie?: string
+            hopexCookie?: string            
+            hopexUserName?: string
+            hopexPassword?: string 
         }
     }
     量化数量?: number
@@ -13,7 +15,6 @@ export type ConfigType = {
         [name: string]: {
             cookie: string
             hopexCookie?: string
-            hopex数量?: number
             交易: {
                 XBTUSD: {
                     数量: number
