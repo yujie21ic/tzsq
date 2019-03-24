@@ -1082,10 +1082,10 @@ export class RealDataBase {
 
     get信号灯Type = (market: 'bitmex' | 'hopex') => {
         const realData = this
-        if (is连续几根全亮(3, realData.dataExt.XBTUSD[market].信号_摸顶)) {
+        if (is连续几根全亮(3, market === 'bitmex' ? realData.dataExt.XBTUSD.bitmex.信号_摸顶 : realData.dataExt.XBTUSD.hopex_信号_摸顶)) {
             return '摸顶'
         }
-        else if (is连续几根全亮(3, realData.dataExt.XBTUSD[market].信号_抄底)) {
+        else if (is连续几根全亮(3, market === 'bitmex' ? realData.dataExt.XBTUSD.bitmex.信号_摸顶 : realData.dataExt.XBTUSD.hopex_信号_抄底)) {
             return '抄底'
         }
         else if (market === 'bitmex' && is连续几根全亮(1, realData.dataExt.XBTUSD.bitmex_信号_追涨)) {
