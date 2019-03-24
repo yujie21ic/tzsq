@@ -410,6 +410,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
 
             指标.回测setTime()
             task.onTick(this)
+            task.onHopexTick(this)
         }
     }
 
