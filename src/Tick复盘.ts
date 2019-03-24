@@ -5,6 +5,9 @@ import { windowExt } from './windowExt'
 import { RealDataBase } from './RealDataServer/RealDataBase'
 import { theme } from './lib/Chart/theme'
 
+import * as csv_parse from 'csv-parse'
+import * as fs from 'fs'
+
 theme.右边空白 = 0
 
 class Tick复盘 extends TickBase {
@@ -14,6 +17,27 @@ class Tick复盘 extends TickBase {
 
     constructor(element: HTMLElement) {
         super(element)
+
+
+
+
+
+
+        document.body.ondrop = e => {
+            e.stopPropagation()
+            e.preventDefault()
+            const path = e.dataTransfer!.files[0].path
+            const str = fs.readFileSync(path, { encoding: 'utf-8' }).toString()
+            csv_parse(str, {}, (err, records) => {
+                console.log(err, records)
+            })
+        }
+
+
+
+
+
+
 
         this.nowTickSymbol = windowExt.symbol
 
