@@ -135,10 +135,9 @@ class Tick复盘 extends TickBase {
                     })
                 })
 
-
+                this.real.ctpLoad(data,orderBook)
+                
             })
-
-            this.real.ctpLoad(data,orderBook)
         }
 
 
