@@ -360,12 +360,9 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.hopex_信号_抄底, color: 卖颜色 }),
-                    layer(TextLayer, {
-                        text:
-                            `hopex_信号_抄底                    `,
-                        color: ETH颜色,
-                    })
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
+                    layer(LineLayer, { data: d.bitmex.净成交量abs_macd.DIF, color: 卖颜色1 }),
+                    layer(LineLayer, { data: d.bitmex.净成交量abs_macd.DEM, color: 卖颜色 }),
                 ]
             },
             {
@@ -445,9 +442,12 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.bitmex.净成交量abs_macd.DIF, color: 卖颜色1 }),
-                    layer(LineLayer, { data: d.bitmex.净成交量abs_macd.DEM, color: 卖颜色 }),
+                    layer(信号Layer, { data: d2.XBTUSD.hopex_信号_抄底, color: 买颜色 }),
+                    layer(TextLayer, {
+                        text:
+                            `信号_抄底hopex专用                    `,
+                        color: ETH颜色,
+                    })
                 ]
             },
             {
@@ -1449,7 +1449,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
                     layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
                     layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-                    // layer(LineLayer, { data: d.期货.买.净成交量_累加60, color: ETH颜色 }),
+                    layer(LineLayer, { data: d.bitmex.卖.净成交量_累加10, color: ETH颜色 }),
+                    layer(LineLayer, { data: d.bitmex.买.净成交量_累加10, color: BTC颜色 }),
                     //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
                     layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
                 ]

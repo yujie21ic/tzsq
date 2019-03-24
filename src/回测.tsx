@@ -3,8 +3,8 @@ import { XBTUSD摸顶抄底追涨追跌 } from './XBTUSD摸顶抄底追涨追跌
 
 //  const start = new Date('2019-03-16T08:40:00')
 //  const end =   new Date('2019-03-16T08:59:00')
-const start = new Date('2019-03-16T08:50:00')
-const end =   new Date('2019-03-16T08:58:00')
+const start = new Date('2019-03-16T09:50:00')
+const end =   new Date('2019-03-16T09:59:00')
 
 const p = new 回测PositionAndOrder(start.getTime(), end.getTime())
 p.jsonSync.rawData.symbol.Hopex_BTC.任务开关.自动开仓抄底 = true
