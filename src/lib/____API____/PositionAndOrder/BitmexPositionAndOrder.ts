@@ -59,6 +59,9 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     private cookie: string
     private hopexCookie: string
+    private hopexUserName: string
+    private hopexPassword: string
+
     private log = (text: string) => { }
     private ws: BitMEXWSAPI
 
@@ -80,6 +83,13 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         委托: false,
     }
 
+    async hopex_login() {
+        return await HopexRESTAPI.login(this.hopexCookie, {
+            userName: this.hopexUserName,
+            password: this.hopexPassword
+        })
+    }
+
     async hopex_轮询() {
         const a = await HopexRESTAPI.getPositions(this.hopexCookie)
         if (a.data !== undefined) {
@@ -98,6 +108,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
         } else {
             this.hopex_初始化.仓位 = false
+            await this.hopex_login()
         }
 
         const b = await HopexRESTAPI.getConditionOrders(this.hopexCookie)
@@ -122,13 +133,16 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
         } else {
             this.hopex_初始化.委托 = false
+            await this.hopex_login()
         }
     }
 
 
-    constructor(p: { accountName: string, cookie: string, hopexCookie: string }) {
+    constructor(p: { accountName: string, cookie: string, hopexCookie: string, hopexUserName: string, hopexPassword: string }) {
         this.cookie = p.cookie
         this.hopexCookie = p.hopexCookie
+        this.hopexUserName = p.hopexUserName
+        this.hopexPassword = p.hopexPassword
 
         this.hopex_轮询()
 
@@ -351,9 +365,9 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         })
     )
 
-    stop = this.DDOS调用<{ 
+    stop = this.DDOS调用<{
         side: BaseType.Side
-        price: number 
+        price: number
     }>(
         (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
             symbol: 'XBTUSD', //<-----------------------
@@ -363,7 +377,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
             side: p.side,
             execInst: 'Close,LastPrice',
         })
-    ) 
+    )
 
     updateMaker = this.DDOS调用<{
         orderID: string
@@ -457,7 +471,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         this.task2(task)
     }
 
-    
+
 }
 
 const __realData__ = toCacheFunc(() => new RealData__Server(false))
