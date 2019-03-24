@@ -8,6 +8,7 @@ CTP复盘
 
 
 chart 删除 startTick  换成 timeArr
+chart 删除 右键合约
 
 
 source .nvm/nvm.sh
