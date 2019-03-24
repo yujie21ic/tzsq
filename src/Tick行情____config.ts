@@ -1224,6 +1224,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     numberColor: BTC颜色,
                     layerList: [
                         layer(LineLayer, { data: d.bitmex.波动_测试.价格, color: BTC颜色 }),
+                        layer(LineLayer, { data: d.bitmex.波动_测试.买均价_10, color: 买颜色 }),
+                        layer(LineLayer, { data: d.bitmex.波动_测试.卖均价_10, color: 卖颜色 }),
                     ]
                 },
             ],
