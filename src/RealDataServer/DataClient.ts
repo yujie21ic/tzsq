@@ -7,7 +7,7 @@ import { DBClient } from '../lib/DataServer/DBClient'
 import { timeID } from '../lib/F/timeID'
 import { PKClient } from '../lib/DataServer/PKClient'
 import { DBServer } from '../lib/DataServer/DBServer'
-import { PKServer } from '../lib/DataServer/PKServer' 
+import { PKServer } from '../lib/DataServer/PKServer'
 
 export namespace DataClient {
 
@@ -117,7 +117,7 @@ export namespace DataClient {
 
         async load2(startTime: number, endTime: number) {
 
-            this.data.startTick = Math.floor(startTime / RealDataBase.单位时间) 
+            this.data.startTick = Math.floor(startTime / RealDataBase.单位时间)
             this.data.bitmex.XBTUSD.data = []
             this.data.bitmex.ETHUSD.data = []
             this.data.bitmex.XBTUSD.orderBook = []
@@ -185,7 +185,7 @@ export namespace DataClient {
         async 回测load(startTime: number, endTime: number) {
             this.data.startTick = Math.floor(startTime / RealDataBase.单位时间)
             this.data.bitmex.XBTUSD.data = []
-            this.data.bitmex.XBTUSD.orderBook = [] 
+            this.data.bitmex.XBTUSD.orderBook = []
 
             console.log('加载盘口...')
             this.回测ext__orderBook = await this.get_bitmex_orderBook('XBTUSD', startTime, endTime, false)
@@ -215,6 +215,14 @@ export namespace DataClient {
             } else {
                 return false
             }
+        }
+
+
+        ctpLoad(data: BaseType.KLine[], orderBook: BaseType.OrderBook[]) {
+            this.data.startTick = data[0].id
+            this.data.ctp.rb1905.data = data
+            this.data.ctp.rb1905.orderBook = orderBook
+            this.重新初始化()
         }
 
     }

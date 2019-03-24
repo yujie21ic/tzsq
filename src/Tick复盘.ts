@@ -7,6 +7,10 @@ import { theme } from './lib/Chart/theme'
 
 import * as csv_parse from 'csv-parse'
 import * as fs from 'fs'
+import { fix浮点 } from './lib/F/fix浮点'
+import { BaseType } from './lib/BaseType'
+import { timeID } from './lib/F/timeID'
+import { get成交性质 } from './lib/F/get成交性质'
 
 theme.右边空白 = 0
 
@@ -18,19 +22,123 @@ class Tick复盘 extends TickBase {
     constructor(element: HTMLElement) {
         super(element)
 
-
-
-
-
-
         document.body.ondrop = e => {
             e.stopPropagation()
             e.preventDefault()
             const path = e.dataTransfer!.files[0].path
             const str = fs.readFileSync(path, { encoding: 'utf-8' }).toString()
-            csv_parse(str, {}, (err, records) => {
+
+            let last: {
+                side: BaseType.Side
+                price: number
+                累计成交量: number
+                持仓量: number
+            } | undefined
+
+
+            const data: BaseType.KLine[] = []
+            const orderBook: BaseType.OrderBook[] = []
+
+            csv_parse(str, {}, (err, records: any[]) => {
                 console.log(err, records)
+
+                records.forEach(arr => {
+                    const obj = {
+                        合约代码: String(arr[1]),
+                        时间: String(arr[4]),
+                        毫秒: fix浮点(Number(arr[5])),
+                        最新价: fix浮点(Number(arr[6])),
+                        累计成交量: fix浮点(Number(arr[7])),//???????????
+                        盘口买价: fix浮点(Number(arr[15])),
+                        盘口买量: fix浮点(Number(arr[16])),
+                        盘口卖价: fix浮点(Number(arr[13])),
+                        盘口卖量: fix浮点(Number(arr[14])),
+                        持仓量: fix浮点(Number(arr[19])),//???????????????
+                    }
+
+                    //last 初始化
+                    if (last === undefined) {
+                        last = {
+                            side: obj.最新价 >= obj.盘口卖价 ? 'Sell' : 'Buy',
+                            price: obj.最新价,
+                            累计成交量: obj.累计成交量,
+                            持仓量: obj.持仓量,
+                        }
+                        return
+                    }
+
+                    //last
+                    if (last.price !== obj.最新价) {
+                        last.side = obj.最新价 > last.price ? 'Buy' : 'Sell'
+                        last.price = obj.最新价
+                    }
+
+                    const size = obj.累计成交量 - last.累计成交量
+                    const side = last.side
+                    const 持仓量新增 = obj.持仓量 - last.持仓量
+
+                    last.累计成交量 = obj.累计成交量
+                    last.持仓量 = obj.持仓量
+
+                    const date = new Date()
+                    const [h, m, s] = obj.时间.split(':').map(Number)
+                    date.setHours(h)
+                    date.setMinutes(m)
+                    date.setSeconds(s)
+                    date.setMilliseconds(obj.毫秒)
+
+                    const timestamp = date.getTime()
+
+                    if (size !== 0) {
+                        data.push({
+                            id: timeID.timestampTo500msID(timestamp),
+                            open: obj.最新价,
+                            high: obj.最新价,
+                            low: obj.最新价,
+                            close: obj.最新价,
+                            buySize: side === 'Buy' ? size : 0,
+                            sellSize: side === 'Sell' ? size : 0,
+                            buyCount: side === 'Buy' ? 1 : 0,
+                            sellCount: side === 'Sell' ? 1 : 0,
+                            成交性质: get成交性质({
+                                side,
+                                size,
+                                持仓量新增,
+                            }),
+                        })
+                    }
+                    else {
+                        data.push({
+                            id: timeID.timestampTo500msID(timestamp),
+                            open: obj.最新价,
+                            high: obj.最新价,
+                            low: obj.最新价,
+                            close: obj.最新价,
+                            buySize: 0,
+                            sellSize: 0,
+                            buyCount: 0,
+                            sellCount: 0,
+                            成交性质: '不知道',
+                        })
+                    }
+
+                    orderBook.push({
+                        id: timeID.timestampTo500msID(timestamp),
+                        buy: [{
+                            price: obj.盘口买价,
+                            size: obj.盘口买量,
+                        }],
+                        sell: [{
+                            price: obj.盘口卖价,
+                            size: obj.盘口卖量,
+                        }],
+                    })
+                })
+
+
             })
+
+            this.real.ctpLoad(data,orderBook)
         }
 
 
