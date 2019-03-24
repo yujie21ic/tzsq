@@ -6,6 +6,7 @@ d 把信号整理到 外面  全放指标文件夹
 
 CTP复盘 
 
+3D指标 上涨下跌横盘  
 
 chart 删除 startTick  换成 timeArr
 chart 删除 右键合约
@@ -13,12 +14,4 @@ chart 删除 右键合约
 
 source .nvm/nvm.sh
 screen -S a
-screen -r a
-
-
-
- 
-
-盘口价格
-3D指标 上涨下跌横盘  
-波动图  波动买入均价  波动卖出均价
+screen -r a 
