@@ -4,8 +4,6 @@
 
 d 把信号整理到 外面  全放指标文件夹 
 
-CTP复盘 
-
 3D指标 上涨下跌横盘  
 
 chart 删除 startTick  换成 timeArr
