@@ -1,4 +1,4 @@
-import { JSONSync } from '../lib/C/JSONSync'
+import { JSONSync } from '../lib/F/JSONSync'
 import { BaseType } from '../lib/BaseType'
 import { 指标 } from '../指标/指标'
 import { to范围 } from '../lib/F/to范围'

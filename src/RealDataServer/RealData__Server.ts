@@ -1,6 +1,6 @@
 import * as WebSocket from 'ws'
 import { BaseType } from '../lib/BaseType'
-import { Sampling } from '../lib/C/Sampling'
+import { Sampling } from '../lib/F/Sampling'
 import { BinanceTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/BinanceTradeAndOrderBook'
 import { BitmexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/BitmexTradeAndOrderBook'
 import { HopexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/HopexTradeAndOrderBook'

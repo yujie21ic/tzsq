@@ -1,4 +1,4 @@
-import { Sampling } from '../C/Sampling'
+import { Sampling } from '../F/Sampling'
 import { BaseType } from '../BaseType'
 import { DB } from './DB'
 import { timeID } from '../F/timeID'

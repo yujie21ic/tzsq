@@ -1,5 +1,5 @@
 import * as Sequelize from 'sequelize'
-import { JSONRPCServer } from '../C/JSONRPC'
+import { JSONRPCServer } from '../F/JSONRPC'
 import { BaseType } from '../BaseType'
 import { DBServer__funcList } from './DBServer__funcList'
 import { DB } from './DB'

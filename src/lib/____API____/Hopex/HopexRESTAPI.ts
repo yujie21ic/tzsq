@@ -1,5 +1,5 @@
 import { BaseType } from '../../BaseType'
-import { JSONRequest } from '../../C/JSONRequest'
+import { JSONRequest } from '../../F/JSONRequest'
 import { config } from '../../../config'
 
 

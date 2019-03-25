@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { style } from 'typestyle'
-import { JSONRequestError } from '../C/JSONRequest'
+import { JSONRequestError } from '../F/JSONRequest'
 
 const buttonStyle = style({
     // display:'inline',
