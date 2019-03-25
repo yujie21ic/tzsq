@@ -61,7 +61,7 @@ const load = async () => {
     const { data, error, msg } = await DBClient.func.getKLine({
         type: '1m',
         symbol: nowSymbol,
-        startTime: Date.now() - 24 * 60 * 60 * 1000 * 20,
+        startTime: Date.now() - 24 * 60 * 60 * 1000 * 40,
         endTime: Date.now(),
     })
 

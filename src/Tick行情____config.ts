@@ -1127,16 +1127,17 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 {
                     numberColor: ETH颜色,
                     layerList: [
+                        layer(ZeroLayer, { color: ETH颜色 }),
                         layer(LineLayer, { data: d.bitmex.价格差_除以时间, color: ETH颜色 }),
                     ]
                 },
-                {
-                    numberColor: 波动率颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d.bitmex.下跌.价差, color: 卖颜色 }),
-                        layer(LineLayer, { data: d.bitmex.上涨.价差, color: 买颜色 }),
-                    ]
-                },
+                // {
+                //     numberColor: 波动率颜色,
+                //     layerList: [
+                //         layer(LineLayer, { data: d.bitmex.下跌.价差, color: 卖颜色 }),
+                //         layer(LineLayer, { data: d.bitmex.上涨.价差, color: 买颜色 }),
+                //     ]
+                // },
             ],
         ]
     }),
@@ -1384,13 +1385,13 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         heightList: [0.6, 0.4],
         items: [
             [
-                {
-                    numberX: 100,
-                    layerList: [
-                        layer(ZeroLayer, { color: 波动率颜色 }),
-                        layer(LineLayer, { data: d.bitmex.波动_测试.净成交量_累加10, color: 波动率颜色 }),
-                    ]
-                },
+                // {
+                //     numberX: 100,
+                //     layerList: [
+                //         layer(ZeroLayer, { color: 波动率颜色 }),
+                //         layer(LineLayer, { data: d.bitmex.波动_测试.净成交量_累加10, color: 波动率颜色 }),
+                //     ]
+                // },
                 {
                     numberColor: BTC颜色,
                     layerList: [
