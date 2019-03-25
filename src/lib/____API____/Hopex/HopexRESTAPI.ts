@@ -94,7 +94,7 @@ export const HopexRESTAPI = {
             data: {
                 result: {
                     contractCode: 'BTCUSDT'
-                    failureReason: '未触发'
+                    taskStatusD: '未触发'
                     timestamp: number
                     taskId: number
                     trigPrice: string

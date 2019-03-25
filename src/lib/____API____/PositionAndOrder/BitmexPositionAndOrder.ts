@@ -127,8 +127,8 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
                 let orderArr: Order[] = []
                 b.data.data.result.forEach(v => {
-                    if (v.contractCode === 'BTCUSDT' && v.failureReason === '未触发') {
-                        orderArr = [{
+                    if (v.contractCode === 'BTCUSDT' && v.taskStatusD === '未触发') {
+                        orderArr.push({
                             type: '止损',
                             timestamp: v.timestamp,
                             id: String(v.taskId),
@@ -136,11 +136,14 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                             cumQty: 0,
                             orderQty: 100000,
                             price: Number(v.trigPrice),
-                        }]
+                        })
                     }
                 })
 
-                if (this.jsonSync.rawData.symbol.Hopex_BTC.活动委托.length !== orderArr.length) {
+                const id1Arr = orderArr.map(v => v.id).sort().join(',')
+                const id2Arr = this.jsonSync.rawData.symbol.Hopex_BTC.活动委托.map(v => v.id).sort().join(',')
+
+                if (id1Arr !== id2Arr) {
                     this.jsonSync.data.symbol.Hopex_BTC.活动委托.____set(orderArr)
                     this.log('hopex 止损:' + (orderArr.length > 0 ? orderArr[0].price : '无'))
                 }
