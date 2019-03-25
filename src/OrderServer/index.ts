@@ -21,7 +21,9 @@ if (config.orderServer !== undefined) {
         const account = new BitmexPositionAndOrder({
             accountName: k,
             cookie: v.cookie,
-            hopexCookie: v.hopexCookie || ''
+            hopexCookie: v.hopexCookie || '',
+            hopexUserName: v.hopexUserName || '',
+            hopexPassword: v.hopexPassword || '',
         })
         account.runTask(new XBTUSD摸顶抄底追涨追跌())
         accountDic.set(v.cookie, account) //key is cookie 
