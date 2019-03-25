@@ -91,7 +91,7 @@ export const HopexRESTAPI = {
 
     getConditionOrders: async (cookie: string) =>
         HopexRESTAPI__http<{
-            data: {
+            data?: {
                 result: {
                     contractCode: 'BTCUSDT'
                     taskStatusD: '未触发'

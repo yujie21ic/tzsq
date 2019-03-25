@@ -126,19 +126,21 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                 this.hopex_初始化.委托 = true
 
                 let orderArr: Order[] = []
-                b.data.data.result.forEach(v => {
-                    if (v.contractCode === 'BTCUSDT' && v.taskStatusD === '未触发') {
-                        orderArr.push({
-                            type: '止损',
-                            timestamp: v.timestamp,
-                            id: String(v.taskId),
-                            side: v.taskTypeD === '买入止损' ? 'Buy' : 'Sell',
-                            cumQty: 0,
-                            orderQty: 100000,
-                            price: Number(v.trigPrice),
-                        })
-                    }
-                })
+                if (b.data.data !== undefined) {
+                    b.data.data.result.forEach(v => {
+                        if (v.contractCode === 'BTCUSDT' && v.taskStatusD === '未触发') {
+                            orderArr.push({
+                                type: '止损',
+                                timestamp: v.timestamp,
+                                id: String(v.taskId),
+                                side: v.taskTypeD === '买入止损' ? 'Buy' : 'Sell',
+                                cumQty: 0,
+                                orderQty: 100000,
+                                price: Number(v.trigPrice),
+                            })
+                        }
+                    })
+                }
 
                 const id1Arr = orderArr.map(v => v.id).sort().join(',')
                 const id2Arr = this.jsonSync.rawData.symbol.Hopex_BTC.活动委托.map(v => v.id).sort().join(',')
@@ -167,8 +169,8 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
         this.ws = new BitMEXWSAPI(p.cookie, [
             { theme: 'margin' },
-            { theme: 'position' },
-            { theme: 'order' },
+            { theme: 'position', filter: 'XBTUSD' },
+            { theme: 'order', filter: 'XBTUSD' },
         ])
 
         this.ws.onStatusChange = () => {
