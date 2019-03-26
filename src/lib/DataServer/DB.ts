@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize'
 import { BaseType } from '../BaseType'
-import { toCacheFunc } from '../C/toCacheFunc'
+import { toCacheFunc } from '../F/toCacheFunc'
 
 export namespace DB {
 

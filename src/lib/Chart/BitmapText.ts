@@ -1,5 +1,5 @@
 import { Container, Text, TextStyle, Sprite } from 'pixi.js'
-import { toCacheFunc } from '../C/toCacheFunc'
+import { toCacheFunc } from '../F/toCacheFunc'
 
 const getTexture = toCacheFunc((fontSize: number, fill: number, char: string) =>
     ((window as any)['pixiApplication']).renderer.generateTexture(

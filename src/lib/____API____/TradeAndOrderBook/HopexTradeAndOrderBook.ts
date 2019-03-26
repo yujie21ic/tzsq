@@ -1,7 +1,7 @@
 import { TradeAndOrderBook } from './TradeAndOrderBook'
 import { BaseType } from '../../BaseType'
 import { config } from '../../../config'
-import { WebSocketClient } from '../../C/WebSocketClient'
+import { WebSocketClient } from '../../F/WebSocketClient'
 
 type Frame = {
     method: 'orderbook.update'

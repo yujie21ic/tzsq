@@ -1,4 +1,4 @@
-import { JSONRPCClient } from '../../lib/C/JSONRPC'
+import { JSONRPCClient } from '../F/JSONRPC'
 import { DBServer__funcList } from './DBServer__funcList'
 
 export const DBClient = new JSONRPCClient({

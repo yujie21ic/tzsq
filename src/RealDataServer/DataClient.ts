@@ -1,5 +1,5 @@
 import { RealDataBase } from './RealDataBase'
-import { WebSocketClient } from '../lib/C/WebSocketClient'
+import { WebSocketClient } from '../lib/F/WebSocketClient'
 import { deepMapNullToNaN } from '../lib/F/deepMapNullToNaN'
 import { config } from '../config'
 import { BaseType } from '../lib/BaseType'

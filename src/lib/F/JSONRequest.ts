@@ -1,5 +1,5 @@
 import * as request from 'request'
-import { safeJSONParse } from '../F/safeJSONParse'
+import { safeJSONParse } from './safeJSONParse'
 const Agent = require('socks5-https-client/lib/Agent')
 
 export type JSONRequestError = '网络错误' | '服务器返回错误'

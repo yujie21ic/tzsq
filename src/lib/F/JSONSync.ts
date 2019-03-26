@@ -1,4 +1,4 @@
-import { mapObjIndexed } from '../F/mapObjIndexed'
+import { mapObjIndexed } from './mapObjIndexed'
 import { Subject } from 'rxjs'
 
 type PATH = (string | number)[]

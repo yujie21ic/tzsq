@@ -1,4 +1,4 @@
-import { WebSocketClient } from '../../C/WebSocketClient'
+import { WebSocketClient } from '../../F/WebSocketClient'
 import { BitMEXMessage } from './BitMEXMessage'
 import { config } from '../../../config'
 import { BaseType } from '../../BaseType'

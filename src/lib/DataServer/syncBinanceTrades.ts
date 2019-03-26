@@ -1,7 +1,7 @@
 import { BaseType } from '../BaseType'
 import { DB } from './DB'
-import { JSONRequest } from '../C/JSONRequest'
-import { sleep } from '../C/sleep'
+import { JSONRequest } from '../F/JSONRequest'
+import { sleep } from '../F/sleep'
 import { config } from '../../config'
 import { queryStringStringify } from '../F/queryStringStringify'
 

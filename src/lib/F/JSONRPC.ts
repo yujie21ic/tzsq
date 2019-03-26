@@ -1,8 +1,8 @@
 import * as http from 'http'
 import { JSONRequest, JSONRequestError } from './JSONRequest'
-import { typeObjectParse } from '../F/typeObjectParse'
-import { mapObjIndexed } from '../F/mapObjIndexed'
-import { safeJSONParse } from '../F/safeJSONParse'
+import { typeObjectParse } from './typeObjectParse'
+import { mapObjIndexed } from './mapObjIndexed'
+import { safeJSONParse } from './safeJSONParse'
 
 type FuncList = {
     [funcName: string]: {

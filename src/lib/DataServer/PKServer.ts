@@ -1,5 +1,5 @@
 import * as Sequelize from 'sequelize'
-import { JSONRPCServer } from '../C/JSONRPC'
+import { JSONRPCServer } from '../F/JSONRPC'
 import { PKServer__funcList } from './PKServer__funcList'
 import { DB } from './DB'
 import { timeID } from '../F/timeID'

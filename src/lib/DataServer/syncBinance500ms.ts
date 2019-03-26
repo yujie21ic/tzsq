@@ -3,7 +3,7 @@ import { BaseType } from '../BaseType'
 import { SyncKLine } from './SyncKLine'
 import { DB } from './DB'
 import { timeID } from '../F/timeID'
-import { sleep } from '../C/sleep'
+import { sleep } from '../F/sleep'
 
 
 export const syncBinance500ms = (symbol: BaseType.BinanceSymbol) =>

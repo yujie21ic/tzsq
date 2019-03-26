@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
 import { BaseType } from '../BaseType'
-import { Sampling } from '../C/Sampling'
-import { sleep } from '../C/sleep'
+import { Sampling } from '../F/Sampling'
+import { sleep } from '../F/sleep'
 
 
 type SyncKLineFunc = {

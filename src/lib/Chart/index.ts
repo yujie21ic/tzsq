@@ -4,7 +4,7 @@ import { Coordinate } from './Coordinate'
 import { theme } from './theme'
 import { Crosshairs } from './Crosshairs'
 import { Viewport, To } from './type'
-import { setWindowTitle } from '../C/setWindowTitle'
+import { setWindowTitle } from '../F/setWindowTitle'
 
 const 坐标刻度 = new Coordinate()
 const layerContainer = new Container()
