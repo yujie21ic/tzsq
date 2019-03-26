@@ -79,7 +79,7 @@ export const HopexRESTAPI = {
 
     getPositions: async (cookie: string) =>
         HopexRESTAPI__http<{
-            data: {
+            data?: {
                 contractCode: 'BTCUSDT'
                 positionQuantity: string // "+2"  "-2"
                 entryPriceD: number
@@ -92,7 +92,7 @@ export const HopexRESTAPI = {
     getConditionOrders: async (cookie: string) =>
         HopexRESTAPI__http<{
             data?: {
-                result: {
+                result?: {
                     contractCode: 'BTCUSDT'
                     taskStatusD: '未触发'
                     timestamp: number
