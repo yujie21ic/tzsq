@@ -142,6 +142,23 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         return true
     }
 
+    updateStop(p: {
+        orderID: string;
+        price: number;
+    }) {
+
+        this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.map(v => {
+            if (v.id === p.orderID) {
+                return { ...v, price: p.price }
+            } else {
+                return v
+            }
+        })
+
+        return true
+    }
+
+
     updateMaker(p: {
         orderID: string;
         price: () => number;

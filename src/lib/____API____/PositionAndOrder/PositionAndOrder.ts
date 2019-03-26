@@ -99,9 +99,14 @@ export interface PositionAndOrder {
         text: string;
     }, logText?: string) => boolean | Promise<boolean>
 
-    stop: (p: { 
+    stop: (p: {
         side: BaseType.Side;
-        price: number; 
+        price: number;
+    }) => boolean | Promise<boolean>
+
+    updateStop: (p: {
+        orderID: string;
+        price: number;
     }) => boolean | Promise<boolean>
 
     updateMaker: (p: {
