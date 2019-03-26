@@ -931,9 +931,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ],
             {
                 layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.bitmex_hopex_下跌相对价差均线, color: 卖颜色 }),
-                    layer(LineLayer, { data: d.bitmex_hopex_下跌相对价差, color: 卖颜色1 }),
+                    layer(信号Layer, { data: d.bitmex.盘口复盘专用, color: 卖颜色 }),
                 ]
             },
         ]
@@ -1131,13 +1129,13 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d.bitmex.价格差_除以时间, color: ETH颜色 }),
                     ]
                 },
-                // {
-                //     numberColor: 波动率颜色,
-                //     layerList: [
-                //         layer(LineLayer, { data: d.bitmex.下跌.价差, color: 卖颜色 }),
-                //         layer(LineLayer, { data: d.bitmex.上涨.价差, color: 买颜色 }),
-                //     ]
-                // },
+                {
+                    numberColor: 波动率颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d.bitmex.下跌.价差, color: 卖颜色 }),
+                        layer(LineLayer, { data: d.bitmex.上涨.价差, color: 买颜色 }),
+                    ]
+                },
             ],
         ]
     }),
@@ -1385,13 +1383,12 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         heightList: [0.6, 0.4],
         items: [
             [
-                // {
-                //     numberX: 100,
-                //     layerList: [
-                //         layer(ZeroLayer, { color: 波动率颜色 }),
-                //         layer(LineLayer, { data: d.bitmex.波动_测试.净成交量_累加10, color: 波动率颜色 }),
-                //     ]
-                // },
+                {
+                    layerList: [
+                        layer(ZeroLayer, { color: 波动率颜色 }),
+                        layer(LineLayer, { data: d.bitmex.波动_测试.净成交量_累加10, color: 0xffff00 }),
+                    ]
+                },
                 {
                     numberColor: BTC颜色,
                     layerList: [
@@ -1407,12 +1404,12 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layer(BarLayer, { data: d.bitmex.波动_测试.持续秒, color: 0xffffff }),
                 ]
             },
-            // {
-            //     layerList: [
-            //         layer(ZeroLayer, { color: 波动率颜色 }),
-            //         layer(LineLayer, { data: d.期货.波动_测试_净成交量_累加10, color: 0xffff00 }),
-            //     ]
-            // },
+            {
+                layerList: [
+                    layer(ZeroLayer, { color: 波动率颜色 }),
+                    layer(LineLayer, { data: d.bitmex.波动_测试.净成交量_累加10, color: 0xffff00 }),
+                ]
+            },
         ]
     }),
 

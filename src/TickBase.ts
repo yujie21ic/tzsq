@@ -7,7 +7,7 @@ import { keys } from 'ramda'
 import { BaseType } from './lib/BaseType'
 
 
-const 显示秒 = [250, 50, 150, 500, 1000, 2000, 3600, 20000]
+const 显示秒 = [250, 50, 150, 500, 1000, 2000, 3600, 7200,20000]
 
 export class TickBase {
 
