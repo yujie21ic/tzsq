@@ -897,7 +897,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
     测试盘口下跌: (d, d2) => ({
-        heightList: [0.7, 0.3],
+        heightList: [0.4,0.3, 0.3],
         items: [
             [
                 {
@@ -931,7 +931,12 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ],
             {
                 layerList: [
-                    layer(信号Layer, { data: d.bitmex.信号_摸顶盘口复盘专用, color: 卖颜色 }),
+                    layer(信号Layer, { data: d.bitmex.信号_抄底盘口复盘专用, color: 卖颜色 }),
+                ]
+            },
+            {
+                layerList: [
+                    layer(信号Layer, { data: d.bitmex.信号_抄底hopex专用, color: 卖颜色 }),
                 ]
             },
         ]
