@@ -424,7 +424,7 @@ export class RealDataBase {
                     }
                     return true
                 }
-            )    
+            )
 
             //y秒
             const 价差走平 = 指标.map(
@@ -658,14 +658,14 @@ export class RealDataBase {
                         (大 && 盘口_0_300万 && 真空信号[i]) ||
                         (大 && 盘口_0_50万 && A) ||
                         (大 && 盘口_50_100万 && B)
-                    
+
                     return [
-                        { name: '盘口通用', value: 盘口通用   },
-                        { name: '小 && 盘口_0_100万 && A', value:  (小 && 盘口_0_100万 && A)   },
+                        { name: '盘口通用', value: 盘口通用 },
+                        { name: '小 && 盘口_0_100万 && A', value: (小 && 盘口_0_100万 && A) },
                         { name: '(小 && 盘口_100_150万 && B)', value: (小 && 盘口_100_150万 && B) },
-                        { name: '(大 && 盘口_0_300万 && 真空信号[i]) ', value: (大 && 盘口_0_300万 && 真空信号[i])  },
-                        { name: '盘口_50_100万', value:(大 && 盘口_0_50万 && A)  },
-                        { name: '(大 && 盘口_50_100万 && B)', value:(大 && 盘口_50_100万 && B) },
+                        { name: '(大 && 盘口_0_300万 && 真空信号[i]) ', value: (大 && 盘口_0_300万 && 真空信号[i]) },
+                        { name: '盘口_50_100万', value: (大 && 盘口_0_50万 && A) },
+                        { name: '(大 && 盘口_50_100万 && B)', value: (大 && 盘口_50_100万 && B) },
                     ]
                 }
             )
@@ -736,17 +736,17 @@ export class RealDataBase {
                     let 形态 = false
                     if (价差[i] < 价差中大分界) {
                         形态 = 震荡 || 价差走平
-                        成交量 = (Math.abs(bs.净成交量_累加5[i])<600*10000)&&成交量衰竭 || 净成交量5反向
+                        成交量 = (Math.abs(bs.净成交量_累加5[i]) < 600 * 10000) && 成交量衰竭 || 净成交量5反向
                         盘口 = 盘口通用
                         价格速度 = 价格差_除以时间[i] >= 0.12
                     } else if (价差[i] > 价差中大分界 && 价差[i] < 价差大巨大分界) {
                         形态 = 震荡 || 价差走平
-                        成交量 = (Math.abs(bs.净成交量_累加7[i])<400*10000)&&(成交量衰竭 || 净成交量5反向|| 大价差走平x秒)
+                        成交量 = (Math.abs(bs.净成交量_累加7[i]) < 400 * 10000) && (成交量衰竭 || 净成交量5反向 || 大价差走平x秒)
                         盘口 = 盘口通用
                         价格速度 = 价格差_除以时间[i] >= 0.12
                     } else if (价差[i] > 价差大巨大分界) {
                         形态 = 震荡 || 价差走平
-                        成交量 = (Math.abs(bs.净成交量_累加10[i])<200*10000)&&(成交量衰竭 || 净成交量5反向 || 大价差走平x秒)
+                        成交量 = (Math.abs(bs.净成交量_累加10[i]) < 200 * 10000) && (成交量衰竭 || 净成交量5反向 || 大价差走平x秒)
                         盘口 = bs.净盘口_均线3[i] < 0 || 大价差走平x秒
                         价格速度 = true
                     }
@@ -842,21 +842,21 @@ export class RealDataBase {
                     let 价格速度 = false
                     if (价差[i] < 价差中大分界) {
                         形态 = 震荡 || 价差走平
-                        成交量 = (Math.abs(bs.净成交量_累加5[i])<400*10000)&&(成交量衰竭 || 净成交量5反向)
+                        成交量 = (Math.abs(bs.净成交量_累加5[i]) < 400 * 10000) && (成交量衰竭 || 净成交量5反向)
                         盘口 = 盘口通用
                         //标准成交量差值衰竭 = true
                         标准成交量 = 净累计成交量[i] < 累计成交量阈值[i]
                         价格速度 = 价格差_除以时间[i] >= 0.12
                     } else if (价差[i] > 价差中大分界 && 价差[i] < 价差大巨大分界) {
                         形态 = 震荡 || 价差走平
-                        成交量 = (Math.abs(bs.净成交量_累加7[i])<400*10000)&&(成交量衰竭 || 净成交量5反向|| 大价差走平x秒)
+                        成交量 = (Math.abs(bs.净成交量_累加7[i]) < 400 * 10000) && (成交量衰竭 || 净成交量5反向 || 大价差走平x秒)
                         盘口 = 盘口通用
                         //标准成交量差值衰竭 = (实时与标准成交量之差macd.DIF[i] < 实时与标准成交量之差macd.DEM[i]) || (实时与标准成交量之差[i] < -200 * 10000)
                         标准成交量 = 净累计成交量[i] < 累计成交量阈值[i]
                         价格速度 = 价格差_除以时间[i] >= 0.12
                     } else if (价差[i] > 价差大巨大分界) {
                         形态 = 震荡 || 价差走平
-                        成交量 = (Math.abs(bs.净成交量_累加10[i])<200*10000)&&(成交量衰竭 || 净成交量5反向 || 大价差走平x秒)
+                        成交量 = (Math.abs(bs.净成交量_累加10[i]) < 200 * 10000) && (成交量衰竭 || 净成交量5反向 || 大价差走平x秒)
                         盘口 = bs.净盘口_均线3[i] < 0 || 大价差走平x秒
                         //标准成交量差值衰竭 = (实时与标准成交量之差macd.DIF[i] < 实时与标准成交量之差macd.DEM[i]) || (实时与标准成交量之差[i] < -200 * 10000) || 大价差走平x秒
                         标准成交量 = 净累计成交量[i] < 累计成交量阈值[i] || 大价差走平x秒
@@ -865,7 +865,7 @@ export class RealDataBase {
 
                     return [
                         //局部精确信号
-                       //{ name: '净成交量_累加10', value: (Math.abs(bs.净成交量_累加10[i])<20*10000) },
+                        //{ name: '净成交量_累加10', value: (Math.abs(bs.净成交量_累加10[i])<20*10000) },
                         { name: '成交量', value: 成交量 },
                         { name: '盘口', value: 盘口 },
                         //范围信号  
@@ -1052,8 +1052,8 @@ export class RealDataBase {
             () => Math.min(bitmex.信号_抄底.length, bitmex.价格.length, bitmex.价格_波动率30.length, hopex.价格.length),
             i => [
                 { name: '5秒内信号', value: _X秒内有全亮(bitmex.信号_抄底hopex专用, i) },
-                { name: 'bm折返 >', value: (bitmex.价格[i] - bitmex.价格_最低60[i]) > (bitmex.折返率[i]-1) },
-                { name: 'hp折返 <', value: (hopex.价格[i] - hopex.价格_最低60[i]) < (bitmex.折返率[i] *0.5)  },
+                { name: 'bm折返 >', value: (bitmex.价格[i] - bitmex.价格_最低60[i]) > (bitmex.折返率[i] - 1) },
+                { name: 'hp折返 <', value: (hopex.价格[i] - hopex.价格_最低60[i]) < (bitmex.折返率[i] * 0.5) },
             ]
         )
 
@@ -1061,8 +1061,8 @@ export class RealDataBase {
             () => Math.min(bitmex.信号_摸顶.length, bitmex.价格.length, bitmex.价格_波动率30.length, hopex.价格.length),
             i => [
                 { name: '5秒内信号', value: _X秒内有全亮(bitmex.信号_摸顶hopex专用, i) },
-                { name: 'bm折返 >', value: bitmex.价格_最高60[i] - bitmex.价格[i] >(bitmex.折返率[i]-1) },
-                { name: 'hp折返 <', value: hopex.价格_最高60[i] - hopex.价格[i] < (bitmex.折返率[i] *0.5) },
+                { name: 'bm折返 >', value: bitmex.价格_最高60[i] - bitmex.价格[i] > (bitmex.折返率[i] - 1) },
+                { name: 'hp折返 <', value: hopex.价格_最高60[i] - hopex.价格[i] < (bitmex.折返率[i] * 0.5) },
             ]
         )
 
@@ -1221,9 +1221,9 @@ export class RealDataBase {
 
 
     is摸顶_下跌平仓 = (market: 'bitmex' | 'hopex') =>
-        is连续几根全亮(2, this.dataExt.XBTUSD[market].信号_摸顶_下跌平仓)
+        is连续几根全亮(2, this.dataExt.XBTUSD.bitmex.信号_摸顶_下跌平仓) //写死bitmex
 
     is抄底_上涨平仓 = (market: 'bitmex' | 'hopex') =>
-        is连续几根全亮(2, this.dataExt.XBTUSD[market].信号_抄底_上涨平仓)
+        is连续几根全亮(2, this.dataExt.XBTUSD.bitmex.信号_抄底_上涨平仓) //写死bitmex
 
 }
