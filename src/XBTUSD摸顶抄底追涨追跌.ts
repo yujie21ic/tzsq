@@ -276,7 +276,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             }
         }
         else if (止损委托.length === 2 && 止损委托[0].side === 止损委托[1].side) {
-            if (止损委托[0].side === 'Buy') {
+            if (止损委托[0].side === 'Sell') {
                 return cancel([止损委托[0].price < 止损委托[1].price ? 止损委托[0].id : 止损委托[1].id])
             } else {
                 return cancel([止损委托[0].price > 止损委托[1].price ? 止损委托[0].id : 止损委托[1].id])
