@@ -670,6 +670,8 @@ export class RealDataBase {
                 }
             )
         }
+        const 信号_摸顶盘口复盘专用 = 盘口复盘专用('摸顶')
+        const 信号_抄底盘口复盘专用 = 盘口复盘专用('抄底')
         const __摸顶抄底hopex专用 = (type: '摸顶' | '抄底') => {
             const bs = type === '摸顶' ? 买 : 卖
             const 价差 = type === '摸顶' ? 上涨.价差 : 下跌.价差
@@ -915,7 +917,8 @@ export class RealDataBase {
 
 
         return {
-            盘口复盘专用,
+            信号_摸顶盘口复盘专用,
+            信号_抄底盘口复盘专用,
             信号_摸顶hopex专用,
             信号_抄底hopex专用,
 

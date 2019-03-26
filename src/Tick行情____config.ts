@@ -931,7 +931,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ],
             {
                 layerList: [
-                    layer(信号Layer, { data: d.bitmex.盘口复盘专用, color: 卖颜色 }),
+                    layer(信号Layer, { data: d.bitmex.信号_摸顶盘口复盘专用, color: 卖颜色 }),
                 ]
             },
         ]
