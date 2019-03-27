@@ -77,6 +77,8 @@ export interface PositionAndOrder {
         };
     }>
 
+    log(text: string): void
+    
     get本地维护仓位数量(symbol: BaseType.BitmexSymbol): number
 
     realData: RealDataBase
@@ -97,17 +99,22 @@ export interface PositionAndOrder {
         price: () => number;
         reduceOnly: boolean;
         text: string;
-    }, logText?: string) => boolean | Promise<boolean>
+    }) => boolean | Promise<boolean>
 
-    stop: (p: { 
+    stop: (p: {
         side: BaseType.Side;
-        price: number; 
+        price: number;
+    }) => boolean | Promise<boolean>
+
+    updateStop: (p: {
+        orderID: string;
+        price: number;
     }) => boolean | Promise<boolean>
 
     updateMaker: (p: {
         orderID: string;
         price: () => number;
-    }, logText?: string) => boolean | Promise<boolean>
+    }) => boolean | Promise<boolean>
 
     limit: (p: {
         symbol: BaseType.BitmexSymbol;
@@ -115,24 +122,23 @@ export interface PositionAndOrder {
         size: number;
         price: () => number;
         text: string;
-    }, logText?: string) => boolean | Promise<boolean>
+    }) => boolean | Promise<boolean>
 
     taker: (p: {
         symbol: BaseType.BitmexSymbol;
         side: BaseType.Side;
         size: number;
         text: string;
-    }, logText?: string) => boolean | Promise<boolean>
+    }) => boolean | Promise<boolean>
 
     close: (p: {
         symbol: BaseType.BitmexSymbol;
         text: string;
-    }, logText?: string) => boolean | Promise<boolean>
+    }) => boolean | Promise<boolean>
 
     cancel: (p: {
         orderID: string[];
-        text: string;
-    }, logText?: string) => boolean | Promise<boolean>
+    }) => boolean | Promise<boolean>
 
     runTask(task: PositionAndOrderTask): void
 

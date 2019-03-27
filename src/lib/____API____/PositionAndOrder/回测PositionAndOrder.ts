@@ -9,6 +9,10 @@ import * as fs from 'fs'
 
 export class 回测PositionAndOrder implements PositionAndOrder {
 
+    log(text: string) {
+
+    }
+
     realData: DataClient.RealData__History
 
     jsonSync = createJSONSync() //不支持 subject.subscribe
@@ -94,7 +98,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         price: () => number;
         reduceOnly: boolean;
         text: string;
-    }, logText?: string) {
+    }) {
         if (p.symbol !== 'XBTUSD') return false
 
         const timestamp = lastNumber(this.realData.dataExt[p.symbol].bitmex.时间)
@@ -142,10 +146,27 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         return true
     }
 
+    updateStop(p: {
+        orderID: string;
+        price: number;
+    }) {
+
+        this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.map(v => {
+            if (v.id === p.orderID) {
+                return { ...v, price: p.price }
+            } else {
+                return v
+            }
+        })
+
+        return true
+    }
+
+
     updateMaker(p: {
         orderID: string;
         price: () => number;
-    }, logText?: string) {
+    }) {
 
         this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.map(v => {
             if (v.id === p.orderID) {
@@ -164,7 +185,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         size: number;
         price: () => number;
         text: string;
-    }, logText?: string) {
+    }) {
         return this.成交({
             timestamp: lastNumber(this.realData.dataExt[p.symbol].bitmex.时间),
             symbol: p.symbol,
@@ -181,7 +202,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         side: BaseType.Side;
         size: number;
         text: string;
-    }, logText?: string) {
+    }) {
         return this.limit({
             symbol: p.symbol,
             side: p.side,
@@ -193,26 +214,25 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                 位置: 0,
             }),
             text: p.text,
-        }, logText)
+        })
     }
 
     close(p: {
         symbol: BaseType.BitmexSymbol;
         text: string;
-    }, logText?: string) {
+    }) {
         const countAbs = this.get本地维护仓位数量(p.symbol)
         return this.taker({
             symbol: p.symbol,
             side: countAbs > 0 ? 'Sell' : 'Buy',
             size: Math.abs(countAbs),
             text: p.text
-        }, logText)
+        })
     }
 
     cancel(p: {
         orderID: string[];
-        text: string;
-    }, logText?: string) {
+    }) {
 
         this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v =>
             p.orderID.every(__id__ => v.id !== __id__)

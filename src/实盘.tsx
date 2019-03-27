@@ -13,11 +13,13 @@ import { windowExt } from './windowExt'
 import { Button } from './lib/UI/Button'
 import { Switch } from '@material-ui/core'
 import { 指标 } from './指标/指标'
+import { HopexRESTAPI } from './lib/____API____/Hopex/HopexRESTAPI'
 
 const realTickClient = new DataClient.RealData__Client()
 
 const account = config.account![windowExt.accountName]
 const { cookie } = account
+const hopexCookie = account.hopexCookie || ''
 const orderClient = new OrderClient(account.cookie)
 const rpc = OrderClient.rpc.func
 
@@ -124,7 +126,37 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC', 位置: num
                 </p>
             </div>
 
-            {symbol === 'Hopex_BTC' ? null :
+            {symbol === 'Hopex_BTC' ?
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center'
+                }}>
+                    <div
+                        style={{ width: '50%' }}>
+                        <Button
+                            bgColor={GREEN}
+                            text={下单数量 + ' 买' + (this.props.位置 + 1)}
+                            left={() => HopexRESTAPI.taker(hopexCookie, {
+                                side: 'Buy',
+                                size: 下单数量,
+                            })}
+                        />
+                    </div>
+                    <div
+                        style={{ width: '50%' }}>
+                        <Button
+                            bgColor={GREEN}
+                            text={下单数量 + '卖' + (this.props.位置 + 1)}
+                            left={() => HopexRESTAPI.taker(hopexCookie, {
+                                side: 'Sell',
+                                size: 下单数量,
+                            })}
+                        />
+                    </div>
+                </div>
+
+                :
                 <div style={{
                     display: 'flex',
                     flexDirection: 'row',
