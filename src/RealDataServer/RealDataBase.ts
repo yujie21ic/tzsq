@@ -1185,7 +1185,7 @@ export class RealDataBase {
 
 
 
-    平仓摸顶抄底 = (market: 'bitmex' | 'hopex') => {
+    摸顶抄底_反向信号_平仓 = (market: 'bitmex' | 'hopex') => {
         const realData = this
         const up = market === 'bitmex' ? realData.dataExt.XBTUSD.bitmex.信号_摸顶 : realData.dataExt.XBTUSD.hopex_信号_摸顶
         const down = market === 'bitmex' ? realData.dataExt.XBTUSD.bitmex.信号_摸顶 : realData.dataExt.XBTUSD.hopex_信号_抄底

@@ -518,7 +518,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
 
             //触发了反向开仓信号 
-            const { 信号side } = self.realData.平仓摸顶抄底(market)
+            const { 信号side } = self.realData.摸顶抄底_反向信号_平仓(market)
 
             if (信号side === 平仓side && 活动委托.length === 0) {
 
