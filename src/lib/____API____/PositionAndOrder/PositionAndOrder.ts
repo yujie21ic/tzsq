@@ -99,7 +99,7 @@ export interface PositionAndOrder {
         price: () => number;
         reduceOnly: boolean;
         text: string;
-    }, logText?: string) => boolean | Promise<boolean>
+    }) => boolean | Promise<boolean>
 
     stop: (p: {
         side: BaseType.Side;
@@ -114,7 +114,7 @@ export interface PositionAndOrder {
     updateMaker: (p: {
         orderID: string;
         price: () => number;
-    }, logText?: string) => boolean | Promise<boolean>
+    }) => boolean | Promise<boolean>
 
     limit: (p: {
         symbol: BaseType.BitmexSymbol;
@@ -122,24 +122,23 @@ export interface PositionAndOrder {
         size: number;
         price: () => number;
         text: string;
-    }, logText?: string) => boolean | Promise<boolean>
+    }) => boolean | Promise<boolean>
 
     taker: (p: {
         symbol: BaseType.BitmexSymbol;
         side: BaseType.Side;
         size: number;
         text: string;
-    }, logText?: string) => boolean | Promise<boolean>
+    }) => boolean | Promise<boolean>
 
     close: (p: {
         symbol: BaseType.BitmexSymbol;
         text: string;
-    }, logText?: string) => boolean | Promise<boolean>
+    }) => boolean | Promise<boolean>
 
     cancel: (p: {
         orderID: string[];
-        text: string;
-    }, logText?: string) => boolean | Promise<boolean>
+    }) => boolean | Promise<boolean>
 
     runTask(task: PositionAndOrderTask): void
 

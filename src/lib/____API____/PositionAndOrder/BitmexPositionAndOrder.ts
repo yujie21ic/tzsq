@@ -328,14 +328,14 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     }
 
     private DDOS调用 = <P extends any>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
-        async (p: P, logText = '') => {
+        async (p: P) => {
             const startTime = Date.now()
             let success = false
             let i = 1
             let errMsg = ''
             const __id__ = callID++
 
-            this.log(`__${__id__}__` + (p['text'] || '') + '  ' + logText + '\nsend:' + JSON.stringify(p))
+            this.log(`__${__id__}__` + (p['text'] || '') + '  \nsend:' + JSON.stringify(p))
 
             for (i = 1; i <= 重试几次; i++) {
                 const ret = await f(this.cookie, p)
@@ -475,9 +475,8 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     cancel = this.DDOS调用<{
         orderID: string[]
-        text: string
     }>(
-        (cookie, p) => BitMEXRESTAPI.Order.cancel(cookie, { orderID: JSON.stringify(p.orderID), text: p.text })
+        (cookie, p) => BitMEXRESTAPI.Order.cancel(cookie, { orderID: JSON.stringify(p.orderID) })
     )
 
 
