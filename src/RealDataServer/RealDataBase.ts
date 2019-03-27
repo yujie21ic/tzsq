@@ -1020,12 +1020,12 @@ export class RealDataBase {
                 i => [
                     { name: '净盘口 > 0', value: bs.净盘口_均线3[i] > 0 },
                     { name: '相对价差 ', value: type === '追涨' ? bitmex_hopex_上涨相对差价均线[i] > 0 : bitmex_hopex_下跌相对价差均线[i] < 0 },
-                    { name: '5分钟波动率低量', value: bitmex.价格_波动率300[i] < 40 },
-                    { name: '大单', value: bs.净成交量_累加10[i] > 200 * 10000 },
-                    { name: '价格均线价差 ', value: type === '追涨' ? bitmex.价格均线价差[i] > 0.5 : bitmex.价格均线价差[i] < -0.5 },
-                    { name: '价差', value: 价差[i] <= 4 || (bitmex.价格差_除以时间[i] <= 0.04 ? 价差[i] <= 8 : false) },
-                    { name: '折返程度', value: type === '追涨' ? (bitmex.价格_最高60[i] - bitmex.价格[i]) < bitmex.折返率[i] : (bitmex.价格[i] - bitmex.价格_最低60[i]) < bitmex.折返率[i] },
-                    { name: 'is趋势', value: type === '追涨' ? bitmex.上涨_下跌_横盘[i] === '上涨' : bitmex.上涨_下跌_横盘[i] === '下跌' },
+                    //{ name: '5分钟波动率低量', value: bitmex.价格_波动率300[i] < 40 },
+                    //{ name: '大单', value: bs.净成交量_累加10[i] > 200 * 10000 },
+                    //{ name: '价格均线价差 ', value: type === '追涨' ? bitmex.价格均线价差[i] > 0.5 : bitmex.价格均线价差[i] < -0.5 },
+                    //{ name: '价差', value: 价差[i] <= 4 || (bitmex.价格差_除以时间[i] <= 0.04 ? 价差[i] <= 8 : false) },
+                    //{ name: '折返程度', value: type === '追涨' ? (bitmex.价格_最高60[i] - bitmex.价格[i]) < bitmex.折返率[i] : (bitmex.价格[i] - bitmex.价格_最低60[i]) < bitmex.折返率[i] },
+                    //{ name: 'is趋势', value: type === '追涨' ? bitmex.上涨_下跌_横盘[i] === '上涨' : bitmex.上涨_下跌_横盘[i] === '下跌' },
                 ]
             )
         }
@@ -1037,7 +1037,7 @@ export class RealDataBase {
             value: boolean
         }[]>, index: number) => {
             let 连续几根 = 0
-            for (let i = index; i >= Math.max(0, index - 10 * (1000 / RealDataBase.单位时间)); i--) {
+            for (let i = index; i >= Math.max(0, index - 15 * (1000 / RealDataBase.单位时间)); i--) {
                 if (arr[i].every(v => v.value)) {
                     连续几根++
                     if (连续几根 === 3) return true
