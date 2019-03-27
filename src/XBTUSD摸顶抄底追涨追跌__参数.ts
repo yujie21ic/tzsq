@@ -6,6 +6,12 @@ export namespace XBTUSD摸顶抄底追涨追跌__参数 {
 
     export const 交易数量 = config.量化数量 || 2
 
+    export const 初始止损 = (p: { 波动率: number }) => to范围({
+        min: 4,
+        max: 18,
+        value: p.波动率 / 10 + 4,
+    })
+
     export const 推止损 = (p: { 波动率: number, 盈利点: number, type: '摸顶' | '抄底' | '追涨' | '追跌' | 'none' }) => {
         if (p.type === '追涨' || p.type === '追跌') {
             if (p.盈利点 >= 10) {

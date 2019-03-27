@@ -4,7 +4,7 @@ import { toBuySellPriceFunc } from './lib/F/toBuySellPriceFunc'
 import { lastNumber } from './lib/F/lastNumber'
 import { to范围 } from './lib/F/to范围'
 import { toGridPoint } from './lib/F/toGridPoint'
-import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/PositionAndOrder' 
+import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/PositionAndOrder'
 import { XBTUSD摸顶抄底追涨追跌__参数 } from './XBTUSD摸顶抄底追涨追跌__参数'
 
 
@@ -191,11 +191,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
             //有仓位 初始化止损
             if (仓位数量 !== 0) {
-                const 止损点 = to范围({
-                    min: 4,
-                    max: 18,
-                    value: 波动率 / 10 + 4,
-                })
+                const 止损点 = XBTUSD摸顶抄底追涨追跌__参数.初始止损({ 波动率 })
 
                 if (isNaN(止损点)) return false //波动率还没出来 不止损
 
