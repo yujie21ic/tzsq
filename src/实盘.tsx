@@ -13,7 +13,7 @@ import { windowExt } from './windowExt'
 import { Button } from './lib/UI/Button'
 import { Switch } from '@material-ui/core'
 import { 指标 } from './指标/指标'
-import { HopexRESTAPI } from './lib/____API____/Hopex/HopexRESTAPI';
+import { HopexRESTAPI } from './lib/____API____/Hopex/HopexRESTAPI'
 
 const realTickClient = new DataClient.RealData__Client()
 
