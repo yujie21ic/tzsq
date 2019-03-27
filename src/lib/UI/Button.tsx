@@ -23,12 +23,12 @@ export class Button extends React.Component<{
     text: string
     left: () => Promise<{
         error?: JSONRequestError
-        data?: boolean
+        data?: any
         msg?: string
     }>
     right?: () => Promise<{
         error?: JSONRequestError
-        data?: boolean
+        data?: any
         msg?: string
     }>
 }, { loading: boolean, 上一次失败信息: string }> {
@@ -42,7 +42,7 @@ export class Button extends React.Component<{
 
     callFunc(f: () => Promise<{
         error?: JSONRequestError
-        data?: boolean
+        data?: any
         msg?: string
     }>) {
         this.setState({
