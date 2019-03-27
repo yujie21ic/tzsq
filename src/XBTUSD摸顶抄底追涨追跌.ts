@@ -6,6 +6,7 @@ import { to范围 } from './lib/F/to范围'
 import { toGridPoint } from './lib/F/toGridPoint'
 import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/PositionAndOrder'
 import { XBTUSD摸顶抄底追涨追跌__参数 } from './XBTUSD摸顶抄底追涨追跌__参数'
+import { RealDataBase } from './RealDataServer/RealDataBase';
 
 const newState = () => ({
     连续止损次数: 0,
@@ -27,17 +28,25 @@ const newState = () => ({
     }
 })
 
+
+type XXX = {
+    market: 'bitmex' | 'hopex'
+    d: RealDataBase['dataExt']['XBTUSD']['bitmex']
+    state: XBTUSD摸顶抄底追涨追跌['bitmex_state']
+    item: PositionAndOrder['jsonSync']['rawData']['symbol']['XBTUSD']
+}
+
 export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
     private bitmex_state = newState()
     private hopex_state = newState()
 
 
-    private get浮盈点数(market: 'bitmex' | 'hopex', self: PositionAndOrder) {
-        const 最新价 = lastNumber(self.realData.dataExt.XBTUSD[market].收盘价)
+    private get浮盈点数(x: XXX) {
+        const 最新价 = lastNumber(x.d.收盘价)
         if (最新价 === undefined) return NaN
 
-        const { 仓位数量, 开仓均价 } = market === 'bitmex' ? self.jsonSync.rawData.symbol.XBTUSD : self.jsonSync.rawData.symbol.Hopex_BTC
+        const { 仓位数量, 开仓均价 } = x.item
 
         if (仓位数量 > 0) {
             return 最新价 - 开仓均价
@@ -65,9 +74,16 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
     }
 
 
-
     onHopexTick(self: PositionAndOrder) {
-        const bbb = this.止损_step(self, 'hopex')
+
+        const x: XXX = {
+            market: 'hopex',
+            d: self.realData.dataExt.XBTUSD.hopex,
+            state: this.hopex_state,
+            item: self.jsonSync.rawData.symbol.Hopex_BTC,
+        }
+
+        const bbb = this.止损_step(self, x)
         if (bbb) return bbb
 
         const { 仓位数量 } = self.jsonSync.rawData.symbol.Hopex_BTC
@@ -80,17 +96,25 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 第2次超时: false,
                 已经平了一半了: false,
             }
-            return this.开仓_step(self, 'hopex')
+            return this.开仓_step(self, x)
         } else {
-            return this.平仓_step(self, 'hopex')
+            return this.平仓_step(self, x)
         }
     }
 
     onTick(self: PositionAndOrder) {
+
+        const x: XXX = {
+            market: 'bitmex',
+            d: self.realData.dataExt.XBTUSD.bitmex,
+            state: this.bitmex_state,
+            item: self.jsonSync.rawData.symbol.XBTUSD,
+        }
+
         const aaa = this.bitmex_活动委托检测(self)
         if (aaa) return aaa
 
-        const bbb = this.止损_step(self, 'bitmex')
+        const bbb = this.止损_step(self, x)
         if (bbb) return bbb
 
         const { 仓位数量 } = self.jsonSync.rawData.symbol.XBTUSD
@@ -103,9 +127,9 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 第2次超时: false,
                 已经平了一半了: false,
             }
-            return this.开仓_step(self, 'bitmex')
+            return this.开仓_step(self, x)
         } else {
-            return this.平仓_step(self, 'bitmex')
+            return this.平仓_step(self, x)
         }
     }
 
@@ -143,19 +167,13 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         }
     }
 
-    private 止损_step(self: PositionAndOrder, market: 'bitmex' | 'hopex') {
+    private 止损_step(self: PositionAndOrder, x: XXX) {
 
-        const symbol = market === 'bitmex' ? 'XBTUSD' : 'Hopex_BTC'
-
-        const state = market === 'bitmex' ? this.bitmex_state : this.hopex_state
-
-        const item = self.jsonSync.rawData.symbol[symbol]
+        const { market, state, d, item } = x
 
         const { 仓位数量, 开仓均价, 活动委托 } = item
 
         const 止损委托 = 活动委托.filter(v => v.type === '止损')
-
-        const d = self.realData.dataExt.XBTUSD[market]
 
         const 波动率 = lastNumber(d.价格_波动率30)
 
@@ -201,7 +219,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
                 //修改止损  只能改小  不能改大
                 const { price, side } = 止损委托[0]
-                const 浮盈点数 = this.get浮盈点数(market, self)
+                const 浮盈点数 = this.get浮盈点数(x)
 
                 const 推 = XBTUSD摸顶抄底追涨追跌__参数.推止损({
                     波动率: lastNumber(d.价格_波动率30),
@@ -240,21 +258,15 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         }
     }
 
-    private 开仓_step(self: PositionAndOrder, market: 'bitmex' | 'hopex') {
+    private 开仓_step(self: PositionAndOrder, x: XXX) {
 
-        const symbol = market === 'bitmex' ? 'XBTUSD' : 'Hopex_BTC'
-
-        const item = self.jsonSync.rawData.symbol[symbol]
-
-        const d = self.realData.dataExt.XBTUSD[market]
+        const { market, item, d, state } = x
 
         const { 任务开关 } = item
 
         const 活动委托 = item.活动委托.filter(v => v.type !== '止损')
 
         const 仓位数量 = market === 'bitmex' ? self.get本地维护仓位数量('XBTUSD') : item.仓位数量
-
-        const state = market === 'bitmex' ? this.bitmex_state : this.hopex_state
 
         if (
             任务开关.自动开仓追涨 === false &&
@@ -267,9 +279,9 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         const 开仓side = { '追涨': 'Buy', '追跌': 'Sell', '抄底': 'Buy', '摸顶': 'Sell', 'none': '_____' }[信号灯Type] as BaseType.Side
 
         //上涨 下跌 切换 止损次数 清零
-        const x = d.上涨_下跌_横盘
-        if (x.length > 0 && state.最后一次上涨_下跌 !== x[x.length - 1]) {
-            state.最后一次上涨_下跌 = x[x.length - 1]
+        const xx = d.上涨_下跌_横盘
+        if (xx.length > 0 && state.最后一次上涨_下跌 !== xx[xx.length - 1]) {
+            state.最后一次上涨_下跌 = xx[xx.length - 1]
             state.连续止损次数 = 0
         }
 
@@ -351,17 +363,11 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
     }
 
 
-    private 平仓_step(self: PositionAndOrder, market: 'bitmex' | 'hopex') {
+    private 平仓_step(self: PositionAndOrder, x: XXX) {
 
-        const symbol = market === 'bitmex' ? 'XBTUSD' : 'Hopex_BTC'
-
-        const item = self.jsonSync.rawData.symbol[symbol]
-
-        const d = self.realData.dataExt.XBTUSD[market]
+        const { market, item, d, state } = x
 
         const { 任务开关, 仓位数量, 活动委托 } = item
-
-        const state = market === 'bitmex' ? this.bitmex_state : this.hopex_state
 
         if (任务开关.自动止盈波段 === false) {
             return true
@@ -404,7 +410,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             let 亏损挂单平仓Text = ''
 
             if (state.最后一次信号 === '摸顶' || state.最后一次信号 === '抄底') {
-                const 折返 = this.get浮盈点数('bitmex', self) < state.开仓状态.最后一次开仓折返率
+                const 折返 = this.get浮盈点数(x) < state.开仓状态.最后一次开仓折返率
                 if (
                     (折返 && 震荡指数衰竭 === true && 持仓时间ms >= state.开仓状态.摸顶抄底超时秒 * 1000) ||      // 折返函数&&震荡衰竭==true的超时时间是30s
                     (折返 && 震荡指数衰竭 === false && 持仓时间ms >= state.开仓状态.摸顶抄底超时秒 * 120 * 1000)  // 折返函数&&震荡衰竭==false的超时时间是2分钟
