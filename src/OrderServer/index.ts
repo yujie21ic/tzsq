@@ -77,7 +77,7 @@ server.run()
 server.func.取消委托 = async req => {
     const account = accountDic.get(req.cookie)
     if (account === undefined) throw 'cookie不存在'
-    return await account.cancel({ orderID: req.orderID, text: '手动取消委托' })
+    return await account.cancel({ orderID: req.orderID })
 }
 
 
