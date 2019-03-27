@@ -6,7 +6,7 @@ import { to范围 } from './lib/F/to范围'
 import { toGridPoint } from './lib/F/toGridPoint'
 import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/PositionAndOrder'
 import { XBTUSD摸顶抄底追涨追跌__参数 } from './XBTUSD摸顶抄底追涨追跌__参数'
-import { RealDataBase } from './RealDataServer/RealDataBase';
+import { RealDataBase } from './RealDataServer/RealDataBase'
 
 const newState = () => ({
     连续止损次数: 0,
@@ -28,7 +28,6 @@ const newState = () => ({
     }
 })
 
-
 type XXX = {
     market: 'bitmex' | 'hopex'
     d: RealDataBase['dataExt']['XBTUSD']['bitmex']
@@ -36,26 +35,25 @@ type XXX = {
     item: PositionAndOrder['jsonSync']['rawData']['symbol']['XBTUSD']
 }
 
+const get浮盈点数 = (x: XXX) => {
+    const 最新价 = lastNumber(x.d.收盘价)
+    if (最新价 === undefined) return NaN
+
+    const { 仓位数量, 开仓均价 } = x.item
+
+    if (仓位数量 > 0) {
+        return 最新价 - 开仓均价
+    } else if (仓位数量 < 0) {
+        return 开仓均价 - 最新价
+    } else {
+        return NaN
+    }
+}
+
 export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
     private bitmex_state = newState()
     private hopex_state = newState()
-
-
-    private get浮盈点数(x: XXX) {
-        const 最新价 = lastNumber(x.d.收盘价)
-        if (最新价 === undefined) return NaN
-
-        const { 仓位数量, 开仓均价 } = x.item
-
-        if (仓位数量 > 0) {
-            return 最新价 - 开仓均价
-        } else if (仓位数量 < 0) {
-            return 开仓均价 - 最新价
-        } else {
-            return NaN
-        }
-    }
 
     onFilled(p: { symbol: BaseType.BitmexSymbol, type: '限价' | '限价只减仓' | '止损' | '强平' }) {
         if (p.symbol === 'XBTUSD') {
@@ -72,7 +70,6 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             }
         }
     }
-
 
     onHopexTick(self: PositionAndOrder) {
 
@@ -111,7 +108,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             item: self.jsonSync.rawData.symbol.XBTUSD,
         }
 
-        const aaa = this.bitmex_活动委托检测(self)
+        const aaa = this.bitmex_活动委托检测(self, x)
         if (aaa) return aaa
 
         const bbb = this.止损_step(self, x)
@@ -133,17 +130,18 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         }
     }
 
-    private bitmex_活动委托检测(self: PositionAndOrder) {
-        const { 仓位数量 } = self.jsonSync.rawData.symbol.XBTUSD
+    private bitmex_活动委托检测(self: PositionAndOrder, x: XXX) {
+        const { item } = x
+        const { 仓位数量, 活动委托 } = item
 
         //委托检测
-        const 活动委托 = self.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => v.type !== '止损')
+        const 委托 = 活动委托.filter(v => v.type !== '止损')
 
         //没有委托
-        if (活动委托.length === 0) {
+        if (委托.length === 0) {
             return false //<----------------------------------------------
         }
-        else if (活动委托.length === 1) {
+        else if (委托.length === 1) {
             if (
                 //没有仓位随便
                 仓位数量 === 0 ||
@@ -151,19 +149,19 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 //有仓位 有委托 只能是 
                 //部分成交的委托 
                 //依赖ws先返回 委托更新 再返回仓位更新      //<---------------------------------------------
-                (活动委托[0].type === '限价' && 活动委托[0].cumQty !== 0) ||
+                (委托[0].type === '限价' && 委托[0].cumQty !== 0) ||
 
                 //或者 限价只减仓委托
-                活动委托[0].type === '限价只减仓'
+                委托[0].type === '限价只减仓'
             ) {
                 return false //<----------------------------------------------
             } else {
-                return self.cancel({ orderID: 活动委托.map(v => v.id), text: '委托检测step 取消委托' }, 活动委托[0].type)
+                return self.cancel({ orderID: 委托.map(v => v.id), text: '委托检测step 取消委托' }, 委托[0].type)
             }
         }
         else {
             //多个委托  全部给取消  
-            return self.cancel({ orderID: 活动委托.map(v => v.id), text: '委托检测step 取消多个委托' }, 活动委托.map(v => v.type).join(','))
+            return self.cancel({ orderID: 委托.map(v => v.id), text: '委托检测step 取消多个委托' }, 委托.map(v => v.type).join(','))
         }
     }
 
@@ -201,7 +199,11 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
                 return stop({
                     side,
-                    price: toGridPoint('XBTUSD', 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点, side),
+                    price: toGridPoint({
+                        grid: 0.5,
+                        value: 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点,
+                        side,
+                    }),
                 })
             }
             else {
@@ -219,7 +221,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
                 //修改止损  只能改小  不能改大
                 const { price, side } = 止损委托[0]
-                const 浮盈点数 = this.get浮盈点数(x)
+                const 浮盈点数 = get浮盈点数(x)
 
                 const 推 = XBTUSD摸顶抄底追涨追跌__参数.推止损({
                     波动率: lastNumber(d.价格_波动率30),
@@ -231,7 +233,11 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                     return false
                 }
 
-                const 新的Price = toGridPoint('XBTUSD', 开仓均价 + (side === 'Buy' ? - 推 : 推), side)
+                const 新的Price = toGridPoint({
+                    grid: 0.5,
+                    value: 开仓均价 + (side === 'Buy' ? - 推 : 推),
+                    side,
+                })
 
                 if (
                     (side === 'Buy' && 新的Price < price) ||
@@ -410,7 +416,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             let 亏损挂单平仓Text = ''
 
             if (state.最后一次信号 === '摸顶' || state.最后一次信号 === '抄底') {
-                const 折返 = this.get浮盈点数(x) < state.开仓状态.最后一次开仓折返率
+                const 折返 = get浮盈点数(x) < state.开仓状态.最后一次开仓折返率
                 if (
                     (折返 && 震荡指数衰竭 === true && 持仓时间ms >= state.开仓状态.摸顶抄底超时秒 * 1000) ||      // 折返函数&&震荡衰竭==true的超时时间是30s
                     (折返 && 震荡指数衰竭 === false && 持仓时间ms >= state.开仓状态.摸顶抄底超时秒 * 120 * 1000)  // 折返函数&&震荡衰竭==false的超时时间是2分钟
