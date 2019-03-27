@@ -29,7 +29,7 @@ export const HopexRESTAPI = {
             param: {
                 loginType: 'pcweb',
                 password: p.password,
-                registType: 'Email',
+                registType: p.userName.indexOf('@') !== -1 ? 'Email' : 'Phone',
                 userName: p.userName,
             },
         }),
