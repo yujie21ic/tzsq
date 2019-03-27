@@ -9,6 +9,10 @@ import * as fs from 'fs'
 
 export class 回测PositionAndOrder implements PositionAndOrder {
 
+    log(text: string) {
+
+    }
+
     realData: DataClient.RealData__History
 
     jsonSync = createJSONSync() //不支持 subject.subscribe

@@ -77,6 +77,8 @@ export interface PositionAndOrder {
         };
     }>
 
+    log(text: string): void
+    
     get本地维护仓位数量(symbol: BaseType.BitmexSymbol): number
 
     realData: RealDataBase

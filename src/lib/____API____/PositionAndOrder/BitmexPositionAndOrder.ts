@@ -62,7 +62,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     private hopexUserName: string
     private hopexPassword: string
 
-    private log = (text: string) => { }
+    log: (text: string) => void
     private ws: BitMEXWSAPI
 
 
