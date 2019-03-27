@@ -7,62 +7,44 @@ import { toGridPoint } from './lib/F/toGridPoint'
 import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/PositionAndOrder'
 import { XBTUSD摸顶抄底追涨追跌__参数 } from './XBTUSD摸顶抄底追涨追跌__参数'
 
+const newState = () => ({
+    连续止损次数: 0,
+    最后一次止损状态: '',
+
+    最后一次信号: 'none' as 'none' | '追涨' | '追跌' | '摸顶' | '抄底',
+    最后一次信号时间: 0,
+    最后一次上涨_下跌: '',
+    到什么时间不开仓: 0,
+
+
+    开仓状态: {
+        最大仓位abs: NaN,
+        最后一次开仓时间: NaN,
+        最后一次开仓折返率: NaN,
+        摸顶抄底超时秒: NaN,
+        第2次超时: false,
+        已经平了一半了: false,
+    }
+})
 
 export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
-    private bitmex_state = {
-        连续止损次数: 0,
-        最后一次止损状态: '',
+    private bitmex_state = newState()
+    private hopex_state = newState()
 
-        最后一次信号: 'none' as 'none' | '追涨' | '追跌' | '摸顶' | '抄底',
-        最后一次信号时间: 0,
-        最后一次上涨_下跌: '',
-        到什么时间不开仓: 0,
-
-
-        开仓状态: {
-            最大仓位abs: NaN,
-            最后一次开仓时间: NaN,
-            最后一次开仓折返率: NaN,
-            摸顶抄底超时秒: NaN,
-            第2次超时: false,
-            已经平了一半了: false,
-        }
-    }
-
-
-    private hopex_state = {
-        连续止损次数: 0,
-        最后一次止损状态: '',
-
-        最后一次信号: 'none' as 'none' | '追涨' | '追跌' | '摸顶' | '抄底',
-        最后一次信号时间: 0,
-        最后一次上涨_下跌: '',
-        到什么时间不开仓: 0,
-
-
-        开仓状态: {
-            最大仓位abs: NaN,
-            最后一次开仓时间: NaN,
-            最后一次开仓折返率: NaN,
-            摸顶抄底超时秒: NaN,
-            第2次超时: false,
-            已经平了一半了: false,
-        }
-    }
 
     private get浮盈点数(market: 'bitmex' | 'hopex', self: PositionAndOrder) {
-
         const 最新价 = lastNumber(self.realData.dataExt.XBTUSD[market].收盘价)
         if (最新价 === undefined) return NaN
-        const { 仓位数量, 开仓均价 } = self.jsonSync.rawData.symbol[market === 'bitmex' ? 'XBTUSD' : 'Hopex_BTC']
-        if (仓位数量 === 0) return NaN
+
+        const { 仓位数量, 开仓均价 } = market === 'bitmex' ? self.jsonSync.rawData.symbol.XBTUSD : self.jsonSync.rawData.symbol.Hopex_BTC
+
         if (仓位数量 > 0) {
             return 最新价 - 开仓均价
         } else if (仓位数量 < 0) {
             return 开仓均价 - 最新价
         } else {
-            return 0
+            return NaN
         }
     }
 
