@@ -331,12 +331,23 @@ export class 提醒 extends React.Component {
 
     step = () => {
 
-        const 上轨_大于_收盘价 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟_.布林带.上轨) - lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟_.收盘价)
+        const 上轨 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟_.布林带.上轨)
+        const 下轨 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟_.布林带.下轨)
+        const 收盘价 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟_.收盘价)
+
         this.setAndSpeak(
-            '上轨 大于 收盘价',
-            上轨_大于_收盘价,
-            v => 上轨_大于_收盘价 > 0
+            '收盘价 大于 上轨 ',
+            收盘价 - 上轨,
+            v => 收盘价 > 上轨
         )
+
+        this.setAndSpeak(
+            '收盘价 小于 下轨 ',
+            下轨 - 收盘价,
+            v => 收盘价 < 下轨
+        )
+
+
 
         const xxx = realTickClient.get信号灯Type('bitmex')
         this.setAndSpeak(
