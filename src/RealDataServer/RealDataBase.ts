@@ -80,43 +80,36 @@ export class RealDataBase {
             startTick: 0,
             ctp: {
                 rb1905: {
-                    data1M: [] as number[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 }
             },
             hopex: {
                 BTCUSDT: {
-                    data1M: [] as number[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 },
                 ETHUSDT: {
-                    data1M: [] as number[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 },
             },
             bitmex: {
                 XBTUSD: {
-                    data1M: [] as number[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 },
                 ETHUSD: {
-                    data1M: [] as number[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 }
             },
             binance: {
                 btcusdt: {
-                    data1M: [] as number[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 },
                 ethusdt: {
-                    data1M: [] as number[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 },
