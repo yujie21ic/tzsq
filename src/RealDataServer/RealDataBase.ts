@@ -174,11 +174,11 @@ export class RealDataBase {
 
 
 
-        const _1分钟收盘价 = 指标.map(() => data1M.length, i => data1M[i].close)
+        const _1分钟_收盘价 = 指标.map(() => data1M.length, i => data1M[i].close)
 
-        const _1分钟 = {
-            收盘价: _1分钟收盘价,
-            布林带: 指标.布林带(_1分钟收盘价, 1000),
+        const _1分钟_ = {
+            收盘价: _1分钟_收盘价,
+            布林带: 指标.布林带(_1分钟_收盘价, 1000),
         }
 
         盘口算价格 = true
@@ -935,7 +935,7 @@ export class RealDataBase {
 
         return {
 
-            _1分钟,
+            _1分钟_,
 
             信号_摸顶盘口复盘专用,
             信号_抄底盘口复盘专用,

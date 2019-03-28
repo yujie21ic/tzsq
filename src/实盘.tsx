@@ -333,7 +333,7 @@ export class 提醒 extends React.Component {
 
 
         //布林带提醒
-        const 布林带提醒 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟.布林带.上轨) > lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟.收盘价)
+        const 布林带提醒 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟_.布林带.上轨) > lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟_.收盘价)
         if (布林带提醒) {
             this.setAndSpeak(
                 '布林带提醒',
