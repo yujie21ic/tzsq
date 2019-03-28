@@ -2,7 +2,7 @@ import { PositionAndOrder } from './lib/____API____/PositionAndOrder/PositionAnd
 import { BaseType } from './lib/BaseType'
 import { toBuySellPriceFunc } from './lib/F/toBuySellPriceFunc'
 import { lastNumber } from './lib/F/lastNumber'
-import { to范围 } from './lib/F/to范围'
+import { toRange } from './lib/F/toRange'
 import { toGridPoint } from './lib/F/toGridPoint'
 import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/PositionAndOrder'
 import { XBTUSD摸顶抄底追涨追跌__参数 } from './XBTUSD摸顶抄底追涨追跌__参数'
@@ -388,7 +388,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             state.开仓状态.最大仓位abs = Math.abs(仓位数量)
             state.开仓状态.最后一次开仓时间 = lastNumber(d.时间)
             state.开仓状态.最后一次开仓折返率 = lastNumber(d.折返率)
-            state.开仓状态.摸顶抄底超时秒 = to范围({ min: 15, max: 30, value: lastNumber(d.价格_波动率30) / 7 + 20 })
+            state.开仓状态.摸顶抄底超时秒 = toRange({ min: 15, max: 30, value: lastNumber(d.价格_波动率30) / 7 + 20 })
             state.开仓状态.第2次超时 = false
             state.开仓状态.已经平了一半了 = false
         }

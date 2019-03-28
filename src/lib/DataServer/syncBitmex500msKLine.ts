@@ -4,7 +4,7 @@ import { DB } from './DB'
 import { timeID } from '../F/timeID'
 import { sleep } from '../F/sleep'
 import { BitMEXRESTAPI } from '../____API____/BitMEX/BitMEXRESTAPI'
-import { to范围 } from '../F/to范围'
+import { toRange } from '../F/toRange'
 
 
 const getData = async (p: {
@@ -80,7 +80,7 @@ export const syncBitmex500msKLine = (symbol: BaseType.BitmexSymbol) =>
             }
 
 
-            const 采集多少秒 = to范围({
+            const 采集多少秒 = toRange({
                 min: 20,
                 max: 1000,
                 value: (_30秒前 - start) / 1000,

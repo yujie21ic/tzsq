@@ -1,4 +1,4 @@
-export const to范围 = ({ min, max, value }: { min: number, max: number, value: number }) => {
+export const toRange = ({ min, max, value }: { min: number, max: number, value: number }) => {
     if (value < min) {
         return min
     }

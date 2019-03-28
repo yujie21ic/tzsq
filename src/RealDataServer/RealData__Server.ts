@@ -5,7 +5,8 @@ import { BinanceTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/B
 import { BitmexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/BitmexTradeAndOrderBook'
 import { HopexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
-import { CTP } from '../lib/____API____/TradeAndOrderBook/CTP' 
+import { CTP } from '../lib/____API____/TradeAndOrderBook/CTP'
+import { timeID } from '../lib/F/timeID'
 
 export class RealData__Server extends RealDataBase {
 
@@ -26,8 +27,9 @@ export class RealData__Server extends RealDataBase {
     }) => { }
 
 
-
-
+    private on着笔_1m_Dic = Object.create(null) as {
+        [symbol: string]: Sampling<{ id: number, close: number }>
+    }
 
     private on着笔Dic = Object.create(null) as {
         [symbol: string]: Sampling<BaseType.KLine>
@@ -36,8 +38,16 @@ export class RealData__Server extends RealDataBase {
     private on着笔(p: {
         symbol: string
         xxxxxxxx: {
-            ____push: (v: BaseType.KLine) => void;
-            ____updateLast: (v: BaseType.KLine) => void;
+            data: {
+                ____push: (v: BaseType.KLine) => void
+                ____updateLast: (v: BaseType.KLine) => void
+            },
+            data1M: {
+                ____set: (arr: { id: number, close: number }[]) => void
+                ____push: (v: { id: number, close: number }) => void
+                ____updateLast: (v: { id: number, close: number }) => void
+            },
+
         }
         timestamp: number
         side: BaseType.Side
@@ -53,6 +63,8 @@ export class RealData__Server extends RealDataBase {
             this.jsonSync.data.startTick.____set(tick)
         }
 
+
+        //tick
         if (this.on着笔Dic[p.symbol] === undefined) {
             this.on着笔Dic[p.symbol] = new Sampling<BaseType.KLine>({
                 open: '开',
@@ -65,8 +77,8 @@ export class RealData__Server extends RealDataBase {
                 sellCount: '累加',
                 成交性质: '收',
             })
-            this.on着笔Dic[p.symbol].onNew2 = item => p.xxxxxxxx.____push(item)
-            this.on着笔Dic[p.symbol].onUpdate2 = item => p.xxxxxxxx.____updateLast(item)
+            this.on着笔Dic[p.symbol].onNew2 = item => p.xxxxxxxx.data.____push(item)
+            this.on着笔Dic[p.symbol].onUpdate2 = item => p.xxxxxxxx.data.____updateLast(item)
             this.on着笔Dic[p.symbol].in2({
                 id: this.data.startTick,
                 open: NaN,
@@ -92,6 +104,26 @@ export class RealData__Server extends RealDataBase {
             sellSize: p.side === 'Sell' ? p.size : 0,
             sellCount: p.side === 'Sell' ? 1 : 0,
             成交性质: p.成交性质,
+        })
+
+
+        //1m
+        const _1m_id = timeID.timestampToOneMinuteID(p.timestamp)
+        if (this.on着笔_1m_Dic[p.symbol] === undefined) {
+            this.on着笔_1m_Dic[p.symbol] = new Sampling({
+                close: '收',
+            })
+            this.on着笔_1m_Dic[p.symbol].onNew2 = item => p.xxxxxxxx.data1M.____push(item)
+            this.on着笔_1m_Dic[p.symbol].onUpdate2 = item => p.xxxxxxxx.data1M.____updateLast(item)
+            this.on着笔_1m_Dic[p.symbol].in2({
+                id: _1m_id,
+                close: NaN,
+            })
+        }
+
+        this.on着笔_1m_Dic[p.symbol].in2({
+            id: _1m_id,
+            close: p.price,
         })
     }
 
@@ -209,7 +241,7 @@ export class RealData__Server extends RealDataBase {
             if (symbol === 'rb1905')
                 this.on着笔({
                     symbol,
-                    xxxxxxxx: this.jsonSync.data.ctp[symbol].data,
+                    xxxxxxxx: this.jsonSync.data.ctp[symbol],
                     timestamp,
                     side: side as BaseType.Side,
                     size,
@@ -237,7 +269,7 @@ export class RealData__Server extends RealDataBase {
         this.bitmex.tradeObservable.subscribe(({ symbol, timestamp, side, size, price }) => {
             this.on着笔({
                 symbol,
-                xxxxxxxx: this.jsonSync.data.bitmex[symbol].data,
+                xxxxxxxx: this.jsonSync.data.bitmex[symbol],
                 timestamp,
                 side: side as BaseType.Side,
                 size,
@@ -261,7 +293,7 @@ export class RealData__Server extends RealDataBase {
         this.binance.tradeObservable.subscribe(({ symbol, timestamp, price, side, size }) => {
             this.on着笔({
                 symbol,
-                xxxxxxxx: this.jsonSync.data.binance[symbol].data,
+                xxxxxxxx: this.jsonSync.data.binance[symbol],
                 timestamp,
                 price,
                 side,
@@ -289,7 +321,7 @@ export class RealData__Server extends RealDataBase {
         this.hopex.tradeObservable.subscribe(({ symbol, timestamp, price, side, size }) => {
             this.on着笔({
                 symbol,
-                xxxxxxxx: this.jsonSync.data.hopex[symbol].data,
+                xxxxxxxx: this.jsonSync.data.hopex[symbol],
                 timestamp,
                 price,
                 side,
