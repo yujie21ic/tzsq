@@ -291,7 +291,7 @@ export class RealDataBase {
         const 价格_均线300 = 指标.SMA(价格, 300, RealDataBase.单位时间)
         const 价格_均线120 = 指标.SMA(价格, 120, RealDataBase.单位时间)
         const 价格均线价差 = 指标.map(() => Math.min(价格_均线300.length, 价格_均线120.length), i => 价格_均线120[i] - 价格_均线300[i])
-
+        const bitmex_价格_macd = 指标.macd(价格,RealDataBase.单位时间*2)
 
         const 价格_波动率15 = 指标.波动率(价格, 15, RealDataBase.单位时间)
         const 价格_波动率30 = 指标.波动率(价格, 30, RealDataBase.单位时间)
@@ -945,7 +945,7 @@ export class RealDataBase {
 
 
         return {
-
+            bitmex_价格_macd,
             _1分钟_,
 
             信号_摸顶盘口复盘专用,
@@ -1030,7 +1030,7 @@ export class RealDataBase {
 
         const bitmex_hopex_上涨相对差价macd = 指标.macd(bitmex_hopex_上涨相对价差, RealDataBase.单位时间)
         const bitmex_hopex_下跌相对差价macd = 指标.macd(bitmex_hopex_下跌相对价差, RealDataBase.单位时间)
-
+       
 
         const bitmex_追涨_追跌 = (type: '追涨' | '追跌') => {
             const bs = type === '追涨' ? bitmex.买 : bitmex.卖
