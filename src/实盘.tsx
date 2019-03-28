@@ -385,7 +385,7 @@ export class 提醒 extends React.Component {
 
     render() {
         return <div style={{ width: '100%', height: '100%', backgroundColor: 'black' }}>
-            <pre style={{ fontSize: 28, color: 'white' }}>
+            <pre style={{ fontSize: 20, color: 'white' }}>
                 {JSON.stringify(mapObjIndexed(v => v.toFixed(2), this.dic), undefined, 4)}
             </pre>
         </div>
