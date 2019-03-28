@@ -7,23 +7,23 @@ export namespace timeID {
         Math.floor(timestamp / 500)
 
 
-    export const oneMinuteIDToTimestamp = (ID: number) =>
-        ID * 1000 * 60
+    export const oneMinuteIDToTimestamp = (id: number) =>
+        id * 1000 * 60
 
-    export const _500msIDToTimestamp = (ID: number) =>
-        ID * 500
+    export const _500msIDToTimestamp = (id: number) =>
+        id * 500
 
 
 
     //ID对应的时间段
-    export const oneMinuteIDToTimestampRange = (ID: number) => ({
-        大于等于: oneMinuteIDToTimestamp(ID),
-        小于: oneMinuteIDToTimestamp(ID + 1),
+    export const oneMinuteIDToTimestampRange = (id: number) => ({
+        大于等于: oneMinuteIDToTimestamp(id),
+        小于: oneMinuteIDToTimestamp(id + 1),
     })
 
-    export const _500msIDToTimestampRange = (ID: number) => ({
-        大于等于: _500msIDToTimestamp(ID),
-        小于: _500msIDToTimestamp(ID + 1),
+    export const _500msIDToTimestampRange = (id: number) => ({
+        大于等于: _500msIDToTimestamp(id),
+        小于: _500msIDToTimestamp(id + 1),
     })
 
 }
