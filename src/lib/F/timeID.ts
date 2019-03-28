@@ -15,7 +15,7 @@ export namespace timeID {
 
 
 
-    //ID对应的时间段
+    //id对应的时间段
     export const oneMinuteIDToTimestampRange = (id: number) => ({
         大于等于: oneMinuteIDToTimestamp(id),
         小于: oneMinuteIDToTimestamp(id + 1),
