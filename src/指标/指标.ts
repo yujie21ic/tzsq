@@ -16,7 +16,7 @@ export namespace 指标 {
         const OSC = map(() => Math.min(DIF.length, DEM.length), i => DIF[i] - DEM[i])
         return { DIF, DEM, OSC }
     }
-    
+
 
     let 最后更新数据时间 = NaN  //实盘 一直更新 
     let xxxxx = 0
@@ -121,6 +121,14 @@ export namespace 指标 {
                 })
 
 
+    export const SMA = 指标(({ start, end, count, arr }) => {
+        let sum = 0
+        for (let i = start; i <= end; i++) {
+            sum += arr[i]
+        }
+        return sum / count
+    })
+
     export const EMA = 指标(({ start, end, count, arr }) => {
         const α = 2 / (count + 1)
 
@@ -174,15 +182,6 @@ export namespace 指标 {
         return retIndex
     })
 
-
-    export const 均线 = 指标(({ start, end, count, arr }) => {
-        let sum = 0
-        for (let i = start; i <= end; i++) {
-            sum += arr[i]
-        }
-        return sum / count
-    })
-
     export const 累加 = 指标(({ start, end, arr }) => {
         let sum = 0
         for (let i = start; i <= end; i++) {
@@ -199,7 +198,7 @@ export namespace 指标 {
         return n
     })
 
-    
+
     export const 阻力3 = (p: {
         price: ArrayLike<number>
         volumeBuy: ArrayLike<number>

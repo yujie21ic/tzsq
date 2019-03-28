@@ -271,8 +271,8 @@ export class RealDataBase {
         const { 买, 卖 } = get买卖({ data, orderBook })
 
         //价格
-        const 价格_均线300 = 指标.均线(价格, 300, RealDataBase.单位时间)
-        const 价格_均线120 = 指标.均线(价格, 120, RealDataBase.单位时间)
+        const 价格_均线300 = 指标.SMA(价格, 300, RealDataBase.单位时间)
+        const 价格_均线120 = 指标.SMA(价格, 120, RealDataBase.单位时间)
         const 价格均线价差 = 指标.map(() => Math.min(价格_均线300.length, 价格_均线120.length), i => 价格_均线120[i] - 价格_均线300[i])
 
 
@@ -599,7 +599,7 @@ export class RealDataBase {
             () => Math.min(价格.length, 上涨.价差.length, 下跌.价差.length),
             i => toRange({ min: 15, max: 25, value: ((上涨_下跌_横盘[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 5) }) ,
         )
-        const 动态价格_均线 = 指标.均线(价格, 7, RealDataBase.单位时间)
+        const 动态价格_均线 = 指标.SMA(价格, 7, RealDataBase.单位时间)
         const 动态价格_均线方差 = 指标.map(() => Math.min(动态价格_均线.length, 价格.length), i => {
             let sum = 0
             for (let n = (价格.length - 动态价格秒数[i] * 2); n < 价格.length; n++) {
@@ -987,14 +987,14 @@ export class RealDataBase {
         const bitmex_hopex_上涨差价 = 指标.map(() => Math.min(bitmex.价格_最高60.length, hopex.价格.length), i => Math.abs(bitmex.价格_最高60[i] - hopex.价格[i]))
         const bitmex_hopex_下跌差价 = 指标.map(() => Math.min(bitmex.价格_最低60.length, hopex.价格.length), i => Math.abs(bitmex.价格_最低60[i] - hopex.价格[i]))
 
-        const bitmex_hopex_上涨差价均线 = 指标.均线(bitmex_hopex_上涨差价, 180, RealDataBase.单位时间)
-        const bitmex_hopex_下跌差价均线 = 指标.均线(bitmex_hopex_下跌差价, 180, RealDataBase.单位时间)
+        const bitmex_hopex_上涨差价均线 = 指标.SMA(bitmex_hopex_上涨差价, 180, RealDataBase.单位时间)
+        const bitmex_hopex_下跌差价均线 = 指标.SMA(bitmex_hopex_下跌差价, 180, RealDataBase.单位时间)
 
         const bitmex_hopex_上涨相对价差 = 指标.map(() => Math.min(bitmex_hopex_上涨差价.length, bitmex_hopex_上涨差价均线.length), i => bitmex_hopex_上涨差价[i] - bitmex_hopex_上涨差价均线[i])
         const bitmex_hopex_下跌相对价差 = 指标.map(() => Math.min(bitmex_hopex_下跌差价.length, bitmex_hopex_下跌差价均线.length), i => bitmex_hopex_下跌差价[i] - bitmex_hopex_下跌差价均线[i])
 
-        const bitmex_hopex_上涨相对差价均线 = 指标.均线(bitmex_hopex_上涨相对价差, 10, RealDataBase.单位时间)
-        const bitmex_hopex_下跌相对价差均线 = 指标.均线(bitmex_hopex_下跌相对价差, 10, RealDataBase.单位时间)
+        const bitmex_hopex_上涨相对差价均线 = 指标.SMA(bitmex_hopex_上涨相对价差, 10, RealDataBase.单位时间)
+        const bitmex_hopex_下跌相对价差均线 = 指标.SMA(bitmex_hopex_下跌相对价差, 10, RealDataBase.单位时间)
 
         const bitmex_hopex_上涨相对差价macd = 指标.macd(bitmex_hopex_上涨相对价差, RealDataBase.单位时间)
         const bitmex_hopex_下跌相对差价macd = 指标.macd(bitmex_hopex_下跌相对价差, RealDataBase.单位时间)
