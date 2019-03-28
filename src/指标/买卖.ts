@@ -6,14 +6,18 @@ import { sum } from 'ramda'
 const 买卖 = (p: {
     成交量: ArrayLike<number>
     盘口: ArrayLike<number>
+    盘口1: ArrayLike<number>
     反向成交量: ArrayLike<number>
     反向盘口: ArrayLike<number>
+    反向盘口1: ArrayLike<number>
 }) => {
 
     const 净成交量 = 指标.map(() => Math.min(p.成交量.length, p.反向成交量.length), i => p.成交量[i] - p.反向成交量[i])
-    const 净成交量乘以10 = 指标.map(() => Math.min(p.成交量.length, p.反向成交量.length), i => (p.成交量[i] - p.反向成交量[i])*10)
+    const 净成交量乘以10 = 指标.map(() => Math.min(p.成交量.length, p.反向成交量.length), i => (p.成交量[i] - p.反向成交量[i]) * 10)
     const 净盘口 = 指标.map(() => Math.min(p.盘口.length, p.反向盘口.length), i => p.盘口[i] - p.反向盘口[i])
     const 成交量 = 指标.map(() => Math.min(p.成交量.length), i => p.成交量[i])
+
+
     return {
         //成交量
         成交量: p.成交量,
@@ -21,7 +25,9 @@ const 买卖 = (p: {
 
         //盘口
         盘口: p.盘口,
+        盘口1: p.盘口1,
         成交量_累加60: 指标.累加(成交量, 60, RealDataBase.单位时间),
+
         //净成交量
         净成交量,
         净成交量_累加5: 指标.累加(净成交量, 5, RealDataBase.单位时间),
@@ -44,21 +50,30 @@ export const get买卖 = ({ data, orderBook }: {
 }) => {
     const __成交量买 = 指标.map(() => data.length, i => data[i].buySize)
     const __成交量卖 = 指标.map(() => data.length, i => data[i].sellSize)
+
     const __盘口买 = 指标.map(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
     const __盘口卖 = 指标.map(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
+
+
+    const __盘口买1 = 指标.map(() => orderBook.length, i => orderBook[i].buy.length > 0 ? orderBook[i].buy[0].size : NaN)
+    const __盘口卖1 = 指标.map(() => orderBook.length, i => orderBook[i].sell.length > 0 ? orderBook[i].sell[0].size : NaN)
 
     const 买 = 买卖({
         成交量: __成交量买,
         盘口: __盘口买,
+        盘口1: __盘口买1,
         反向成交量: __成交量卖,
         反向盘口: __盘口卖,
+        反向盘口1: __盘口卖1,
     })
 
     const 卖 = 买卖({
         成交量: __成交量卖,
         盘口: __盘口卖,
+        盘口1: __盘口卖1,
         反向成交量: __成交量买,
         反向盘口: __盘口买,
+        反向盘口1: __盘口买1,
     })
 
     return { 买, 卖 }
