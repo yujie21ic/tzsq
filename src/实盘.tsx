@@ -331,16 +331,13 @@ export class 提醒 extends React.Component {
 
     step = () => {
 
+        const 上轨_大于_收盘价 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟_.布林带.上轨) - lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟_.收盘价)
 
-        //布林带提醒
-        const 布林带提醒 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟_.布林带.上轨) > lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟_.收盘价)
-        if (布林带提醒) {
-            this.setAndSpeak(
-                '布林带提醒',
-                0,
-                v => true
-            )
-        }
+        this.setAndSpeak(
+            '上轨 大于 收盘价',
+            上轨_大于_收盘价,
+            v => 上轨_大于_收盘价 > 0
+        )
 
 
 
