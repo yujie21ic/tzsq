@@ -330,6 +330,22 @@ export class 提醒 extends React.Component {
     }
 
     step = () => {
+
+
+        //布林带提醒
+        const 布林带提醒 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟.布林带.上轨) > lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟.收盘价)
+        if (布林带提醒) {
+            this.setAndSpeak(
+                '布林带提醒',
+                0,
+                v => true
+            )
+        }
+
+
+
+
+
         // this.setAndSpeak('比 特 币 盘口买', realTickClient.get现货5档盘口总和('btcusdt', 'Buy'), v => v > 100)
         // this.setAndSpeak('比 特 币 盘口卖', realTickClient.get现货5档盘口总和('btcusdt', 'Sell'), v => v > 100)
         // this.setAndSpeak('以 太 坊 盘口买', realTickClient.get现货5档盘口总和('ethusdt', 'Buy'), v => v > 800)

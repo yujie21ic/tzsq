@@ -545,7 +545,6 @@ export class RealDataBase {
 
 
             return {
-                _1分钟,
                 累计成交量,
                 价差,
                 动力,
@@ -935,6 +934,9 @@ export class RealDataBase {
 
 
         return {
+
+            _1分钟,
+
             信号_摸顶盘口复盘专用,
             信号_抄底盘口复盘专用,
             信号_摸顶hopex专用,
