@@ -6,6 +6,7 @@ import { BitmexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/Bi
 import { HopexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
 import { CTP } from '../lib/____API____/TradeAndOrderBook/CTP'
+import { timeID } from '../lib/F/timeID'
 
 export class RealData__Server extends RealDataBase {
 
@@ -26,6 +27,9 @@ export class RealData__Server extends RealDataBase {
     }) => { }
 
 
+    private on着笔_1m_Dic = Object.create(null) as {
+        [symbol: string]: Sampling<{ id: number, close: number }>
+    }
 
     private on着笔Dic = Object.create(null) as {
         [symbol: string]: Sampling<BaseType.KLine>
@@ -39,9 +43,9 @@ export class RealData__Server extends RealDataBase {
                 ____updateLast: (v: BaseType.KLine) => void
             },
             data1M: {
-                ____set: (arr: number[]) => void
-                ____push: (v: number) => void
-                ____updateLast: (v: number) => void
+                ____set: (arr: { id: number, close: number }[]) => void
+                ____push: (v: { id: number, close: number }) => void
+                ____updateLast: (v: { id: number, close: number }) => void
             },
 
         }
@@ -59,6 +63,8 @@ export class RealData__Server extends RealDataBase {
             this.jsonSync.data.startTick.____set(tick)
         }
 
+
+        //tick
         if (this.on着笔Dic[p.symbol] === undefined) {
             this.on着笔Dic[p.symbol] = new Sampling<BaseType.KLine>({
                 open: '开',
@@ -98,6 +104,26 @@ export class RealData__Server extends RealDataBase {
             sellSize: p.side === 'Sell' ? p.size : 0,
             sellCount: p.side === 'Sell' ? 1 : 0,
             成交性质: p.成交性质,
+        })
+
+
+        //1m
+        const _1m_id = timeID.timestampToOneMinuteID(p.timestamp)
+        if (this.on着笔_1m_Dic[p.symbol] === undefined) {
+            this.on着笔_1m_Dic[p.symbol] = new Sampling({
+                close: '收',
+            })
+            this.on着笔_1m_Dic[p.symbol].onNew2 = item => p.xxxxxxxx.data1M.____push(item)
+            this.on着笔_1m_Dic[p.symbol].onUpdate2 = item => p.xxxxxxxx.data1M.____updateLast(item)
+            this.on着笔_1m_Dic[p.symbol].in2({
+                id: _1m_id,
+                close: NaN,
+            })
+        }
+
+        this.on着笔_1m_Dic[p.symbol].in2({
+            id: _1m_id,
+            close: p.price,
         })
     }
 

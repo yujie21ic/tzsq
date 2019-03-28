@@ -77,46 +77,46 @@ export class RealDataBase {
 
     jsonSync = new JSONSync(
         {
-            startTick: 0,
+            startTick: 0,//tick的  1m的开始 没有对齐
             ctp: {
                 rb1905: {
-                    data1M: [] as number[],
+                    data1M: [] as { id: number, close: number }[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 }
             },
             hopex: {
                 BTCUSDT: {
-                    data1M: [] as number[],
+                    data1M: [] as { id: number, close: number }[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 },
                 ETHUSDT: {
-                    data1M: [] as number[],
+                    data1M: [] as { id: number, close: number }[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 },
             },
             bitmex: {
                 XBTUSD: {
-                    data1M: [] as number[],
+                    data1M: [] as { id: number, close: number }[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 },
                 ETHUSD: {
-                    data1M: [] as number[],
+                    data1M: [] as { id: number, close: number }[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 }
             },
             binance: {
                 btcusdt: {
-                    data1M: [] as number[],
+                    data1M: [] as { id: number, close: number }[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 },
                 ethusdt: {
-                    data1M: [] as number[],
+                    data1M: [] as { id: number, close: number }[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 },
