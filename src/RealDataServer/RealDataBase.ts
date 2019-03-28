@@ -166,10 +166,19 @@ export class RealDataBase {
     }
 
 
-    private item2({ data, orderBook }: {
+    private item2({ data1M, data, orderBook }: {
+        data1M: { id: number, close: number }[]
         data: BaseType.KLine[]
         orderBook: BaseType.OrderBook[]
     }, 盘口算价格: boolean) {
+
+
+
+        const _1分钟收盘价 = 指标.map(() => data1M.length, i => data1M[i].close),
+        const _1分钟 = {
+            收盘价: _1分钟收盘价,
+            布林带: 指标.布林带(_1分钟收盘价, 1000),
+        }
 
         盘口算价格 = true
 
@@ -535,6 +544,7 @@ export class RealDataBase {
 
 
             return {
+                _1分钟,
                 累计成交量,
                 价差,
                 动力,
