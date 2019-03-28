@@ -85,10 +85,11 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     async hopex_login() {
         this.log('hopex_login')
-        return await HopexRESTAPI.login(this.hopexCookie, {
+        const ret = await HopexRESTAPI.login({
             userName: this.hopexUserName,
             password: this.hopexPassword
         })
+        this.log('hopex_login:' + JSON.stringify(ret))
     }
 
     async hopex_轮询() {
