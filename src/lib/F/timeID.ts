@@ -13,4 +13,14 @@ export namespace timeID {
     export const _500msIDToTimestamp = (index: number) =>
         index * 500
 
+    export const oneMinuteIDToTimestampRange = (index: number) => ({
+        start: oneMinuteIDToTimestamp(index),
+        end: oneMinuteIDToTimestamp(index + 1),
+    })
+
+    export const _500msIDToTimestampRange = (index: number) => ({
+        start: _500msIDToTimestamp(index),
+        end: _500msIDToTimestamp(index + 1),
+    })
+
 }

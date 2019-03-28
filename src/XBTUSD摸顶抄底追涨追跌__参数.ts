@@ -1,5 +1,5 @@
 
-import { to范围 } from './lib/F/to范围'
+import { toRange } from './lib/F/toRange'
 import { config } from './config'
 
 export namespace XBTUSD摸顶抄底追涨追跌__参数 {
@@ -8,7 +8,7 @@ export namespace XBTUSD摸顶抄底追涨追跌__参数 {
 
     export const 初始止损 = (p: {
         波动率: number
-    }) => to范围({
+    }) => toRange({
         min: 4,
         max: 18,
         value: p.波动率 / 10 + 4,
@@ -30,10 +30,10 @@ export namespace XBTUSD摸顶抄底追涨追跌__参数 {
                 return NaN
             }
         } else {
-            if (p.盈利点 >= to范围({ min: 5, max: 30, value: p.波动率 / 5 + 15 })) {
+            if (p.盈利点 >= toRange({ min: 5, max: 30, value: p.波动率 / 5 + 15 })) {
                 return 5
             }
-            else if (p.盈利点 >= to范围({ min: 5, max: 15, value: p.波动率 / 8 + 6 })) {
+            else if (p.盈利点 >= toRange({ min: 5, max: 15, value: p.波动率 / 8 + 6 })) {
                 return 0
             }
             else {

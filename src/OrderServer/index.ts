@@ -6,7 +6,7 @@ import { config } from '../config'
 import { typeObjectParse } from '../lib/F/typeObjectParse'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
 import { kvs } from '../lib/F/kvs'
-import { to范围 } from '../lib/F/to范围'
+import { toRange } from '../lib/F/toRange'
 import { toBuySellPriceFunc } from '../lib/F/toBuySellPriceFunc'
 import { XBTUSD摸顶抄底追涨追跌 } from '../XBTUSD摸顶抄底追涨追跌'
 import { PositionAndOrder } from '../lib/____API____/PositionAndOrder/PositionAndOrder'
@@ -100,7 +100,7 @@ server.func.下单 = async req => {
             symbol: req.symbol,
             side: req.side,
             type: req.type,
-            位置: Math.floor(to范围({ min: 0, max: 4, value: req.位置 }))
+            位置: Math.floor(toRange({ min: 0, max: 4, value: req.位置 }))
         })
 
     const getPrice = req.最低_最高 ?

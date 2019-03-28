@@ -7,7 +7,7 @@ import { DBClient } from './lib/DataServer/DBClient'
 import { dialog } from './lib/UI/dialog'
 import { timeID } from './lib/F/timeID'
 import { theme } from './lib/Chart/theme'
-import { to范围 } from './lib/F/to范围'
+import { toRange } from './lib/F/toRange'
 import { showWindowRemote, windowExt } from './windowExt'
 import { config } from './config'
 import { 信号Layer } from './lib/Chart/Layer/信号Layer'
@@ -209,13 +209,13 @@ chartInit(document.querySelector('#root') as HTMLElement, () => {
 const xx = () => {
     const 多出 = 12
 
-    S.left = to范围({ min: -多出, max: S.data.length - 多出, value: S.left })
+    S.left = toRange({ min: -多出, max: S.data.length - 多出, value: S.left })
 
     if (S.right <= S.left + 多出) {
         S.right = S.left + 多出
     }
 
-    S.right = to范围({ min: 多出, max: S.data.length + 多出, value: S.right })
+    S.right = toRange({ min: 多出, max: S.data.length + 多出, value: S.right })
 }
 
 window.onmousewheel = (e: any) => {

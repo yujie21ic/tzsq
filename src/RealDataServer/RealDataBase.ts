@@ -1,7 +1,7 @@
 import { JSONSync } from '../lib/F/JSONSync'
 import { BaseType } from '../lib/BaseType'
 import { 指标 } from '../指标/指标'
-import { to范围 } from '../lib/F/to范围'
+import { toRange } from '../lib/F/toRange'
 import { is连续几根全亮 } from '../lib/F/is连续几根全亮'
 import { timeID } from '../lib/F/timeID'
 import { get买卖 } from '../指标/买卖'
@@ -282,7 +282,7 @@ export class RealDataBase {
         const 价格_波动率300 = 指标.波动率(价格, 300, RealDataBase.单位时间)
 
 
-        const 折返率 = 指标.map(() => 价格_波动率30.length, i => to范围({ min: 4, max: 15, value: 价格_波动率30[i] / 10 }))
+        const 折返率 = 指标.map(() => 价格_波动率30.length, i => toRange({ min: 4, max: 15, value: 价格_波动率30[i] / 10 }))
 
         //净成交量abs
         const 净成交量abs = 指标.map(() => Math.min(买.成交量.length, 卖.成交量.length), i => 买.成交量[i] - 卖.成交量[i])
@@ -295,8 +295,8 @@ export class RealDataBase {
         const __阻力3 = 指标.阻力3({ price: 价格, volumeBuy: 买.成交量, volumeSell: 卖.成交量, })
         const 阻力3涨 = 指标.map(() => __阻力3.length, i => Math.max(0, __阻力3[i].阻力))
         const 阻力3跌 = 指标.map(() => __阻力3.length, i => Math.min(0, __阻力3[i].阻力))
-        const 真空信号涨 = 指标.map(() => 价格.length, i => (__阻力3[i].阻力 < 150000) && __阻力3[i].阻力 > 0 && __阻力3[i].价钱增量 >= to范围({ min: 4, max: 12, value: 价格_波动率30[i] / 10 }))
-        const 真空信号跌 = 指标.map(() => 价格.length, i => (__阻力3[i].阻力 > -150000) && __阻力3[i].阻力 < 0 && __阻力3[i].价钱增量 >= to范围({ min: 4, max: 12, value: 价格_波动率30[i] / 10 }))
+        const 真空信号涨 = 指标.map(() => 价格.length, i => (__阻力3[i].阻力 < 150000) && __阻力3[i].阻力 > 0 && __阻力3[i].价钱增量 >= toRange({ min: 4, max: 12, value: 价格_波动率30[i] / 10 }))
+        const 真空信号跌 = 指标.map(() => 价格.length, i => (__阻力3[i].阻力 > -150000) && __阻力3[i].阻力 < 0 && __阻力3[i].价钱增量 >= toRange({ min: 4, max: 12, value: 价格_波动率30[i] / 10 }))
 
         //上涨_下跌
         //const 上涨_下跌 = 指标.lazyMapCache(() => Math.min(买.净成交量_累加60.length), i => 买.净成交量_累加60[i] >= 0 ? '上涨' : '下跌')
@@ -366,27 +366,27 @@ export class RealDataBase {
 
             const 动力 = 指标.map(
                 () => Math.min(累计成交量.length, 价差.length),
-                i => to范围({ min: 30 * 10000, max: 130 * 10000, value: 累计成交量[i] / Math.max(1, 价差[i]) }) //最小除以1
+                i => toRange({ min: 30 * 10000, max: 130 * 10000, value: 累计成交量[i] / Math.max(1, 价差[i]) }) //最小除以1
             )
 
 
             const 动态时间_x秒 = 指标.map(
                 () => Math.min(价差.length),
-                i => to范围({ min: 15, max: 20, value: 价差[i] / 10 }),
+                i => toRange({ min: 15, max: 20, value: 价差[i] / 10 }),
             )
             const 动态时间_小y秒 = 指标.map(
                 () => Math.min(价差.length),
-                i => to范围({ min: 3, max: 10, value: 价差[i] / 14 }),
+                i => toRange({ min: 3, max: 10, value: 价差[i] / 14 }),
             )
 
             const 动态时间_y秒 = 指标.map(
                 () => Math.min(价差.length),
-                i => to范围({ min: 4, max: 10, value: 价差[i] / 12 }),
+                i => toRange({ min: 4, max: 10, value: 价差[i] / 12 }),
             )
 
             const 动态时间_y秒大 = 指标.map(
                 () => Math.min(价差.length),
-                i => to范围({ min: 6, max: 15, value: 价差[i] / 6 }),
+                i => toRange({ min: 6, max: 15, value: 价差[i] / 6 }),
             )
 
             const x秒内极值点价格 = 指标.map(
@@ -503,7 +503,7 @@ export class RealDataBase {
 
             const 震荡指数 = 指标.map(
                 () => Math.min(价差.length, 价格_波动率15.length),
-                i => 价差[i] > 2 ? to范围({ min: 0.01, max: 10, value: 价格_波动率15[i] / 价差[i] }) : NaN
+                i => 价差[i] > 2 ? toRange({ min: 0.01, max: 10, value: 价格_波动率15[i] / 价差[i] }) : NaN
             )
 
 
@@ -581,7 +581,7 @@ export class RealDataBase {
                 let a = i - ext.起点index
                 if (a === 0) a = NaN
                 if (a >= 120) a = 120
-                arr[i] = isNaN(ext.起点index) === false && 上涨下跌价差(ext.起点Type)[i] >= 4 ? to范围({ min: 0.01, max: 10, value: 上涨下跌价差(ext.起点Type)[i] / a }) : NaN  //除以根数 
+                arr[i] = isNaN(ext.起点index) === false && 上涨下跌价差(ext.起点Type)[i] >= 4 ? toRange({ min: 0.01, max: 10, value: 上涨下跌价差(ext.起点Type)[i] / a }) : NaN  //除以根数 
                 //<---------------------------------------------------
             }
         })
@@ -590,14 +590,14 @@ export class RealDataBase {
 
         const 震荡指数 = 指标.map(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length, 价格_波动率30.length), i => {
             const 上涨下跌价差 = (上涨_下跌_横盘[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i]
-            return 上涨下跌价差 > 2 ? to范围({ min: 0.01, max: 10, value: 价格_波动率30[i] / 上涨下跌价差 }) : NaN
+            return 上涨下跌价差 > 2 ? toRange({ min: 0.01, max: 10, value: 价格_波动率30[i] / 上涨下跌价差 }) : NaN
         })
 
         const 震荡指数_macd = 指标.macd(震荡指数, RealDataBase.单位时间)
 
         const 动态价格秒数 = 指标.map(
             () => Math.min(价格.length, 上涨.价差.length, 下跌.价差.length),
-            i => to范围({ min: 15, max: 25, value: ((上涨_下跌_横盘[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 5) }) ,
+            i => toRange({ min: 15, max: 25, value: ((上涨_下跌_横盘[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 5) }) ,
         )
         const 动态价格_均线 = 指标.均线(价格, 7, RealDataBase.单位时间)
         const 动态价格_均线方差 = 指标.map(() => Math.min(动态价格_均线.length, 价格.length), i => {
