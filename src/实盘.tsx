@@ -332,78 +332,33 @@ export class 提醒 extends React.Component {
     step = () => {
 
         const 上轨_大于_收盘价 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟_.布林带.上轨) - lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟_.收盘价)
-
         this.setAndSpeak(
             '上轨 大于 收盘价',
             上轨_大于_收盘价,
             v => 上轨_大于_收盘价 > 0
         )
 
+        const xxx = realTickClient.get信号灯Type('bitmex')
+        this.setAndSpeak(
+            'bitmex ' + xxx,
+            0,
+            v => xxx !== 'none'
+        )
 
-
-
-
-        // this.setAndSpeak('比 特 币 盘口买', realTickClient.get现货5档盘口总和('btcusdt', 'Buy'), v => v > 100)
-        // this.setAndSpeak('比 特 币 盘口卖', realTickClient.get现货5档盘口总和('btcusdt', 'Sell'), v => v > 100)
-        // this.setAndSpeak('以 太 坊 盘口买', realTickClient.get现货5档盘口总和('ethusdt', 'Buy'), v => v > 800)
-        // this.setAndSpeak('以 太 坊 盘口卖', realTickClient.get现货5档盘口总和('ethusdt', 'Sell'), v => v > 800)
-        // this.setAndSpeak('比 特 币 成交量', realTickClient.get现货多少秒内成交量('btcusdt', 30), v => v > 100)
-        // this.setAndSpeak('以 太 坊 成交量', realTickClient.get现货多少秒内成交量('ethusdt', 30), v => v > 500)
-
-
-        //首先需要现货有大的波动，然后期货在跟随现货的过程中，超过了现货
-        //期货比现货涨的多，跌的多才提醒
-
-
-        //BTC
-        //const XBTUSD现货 = realTickClient.dataExt.XBTUSD.现货
+        const yyy = realTickClient.get信号灯Type('hopex')
+        this.setAndSpeak(
+            'hopex ' + yyy,
+            0,
+            v => yyy !== 'none'
+        )
 
         const volum = realTickClient.get期货多少秒内成交量__万为单位('XBTUSD', 15)
         const 波动率 = 指标.波动率(realTickClient.dataExt.XBTUSD.bitmex.价格, 30, 500)
-        if (volum > 200 && lastNumber(波动率) >= 0.1) {
-            this.setAndSpeak(
-                '比 特 币 成交量',
-                volum,
-                v => true
-            )
-        }
-        // if (XBTUSD现货.价格.length >= 30) {
-        //     const 价钱增量 = XBTUSD现货.价格[XBTUSD现货.价格.length - 1] - XBTUSD现货.价格[XBTUSD现货.价格.length - 30]
-        //     const 差价均线距离 =
-        //         lastNumber(realTickClient.dataExt.XBTUSD.差价) -
-        //         lastNumber(realTickClient.dataExt.XBTUSD.差价均线)
-
-        //     if (
-        //         (价钱增量 >= 4 && 差价均线距离 <= -3) || //上涨
-        //         (价钱增量 <= -4 && 差价均线距离 >= 3)    //下跌
-        //     ) {
-        //         this.setAndSpeak(
-        //             '比 特 币 差价',
-        //             差价均线距离,
-        //             v => true
-        //         )
-        //     }
-        // }
-
-        // //ETH
-        // const ETHUSD现货 = realTickClient.dataExt.ETHUSD.现货
-        // if (ETHUSD现货.价格.length >= 30) {
-        //     const 价钱增量 = ETHUSD现货.价格[ETHUSD现货.价格.length - 1] - ETHUSD现货.价格[ETHUSD现货.价格.length - 30]
-        //     const 差价均线距离 =
-        //         lastNumber(realTickClient.dataExt.ETHUSD.差价) -
-        //         lastNumber(realTickClient.dataExt.ETHUSD.差价均线)
-
-        //     if (
-        //         (价钱增量 >= 8 && 差价均线距离 <= -0.3) || //上涨
-        //         (价钱增量 <= -8 && 差价均线距离 >= 0.3)    //下跌
-        //     ) {
-        //         this.setAndSpeak(
-        //             '以 太 坊 差价',
-        //             差价均线距离,
-        //             v => true
-        //         )
-        //     }
-        // }
+        this.setAndSpeak(
+            '比 特 币 成交量',
+            volum,
+            v => volum > 200 && lastNumber(波动率) >= 0.1
+        )
 
 
         this.forceUpdate()
