@@ -18,10 +18,22 @@ export namespace 指标 {
     }
 
     export const 布林带 = (arr: ArrayLike<number>, 单位时间: number) => {
+
+        const _20时间段的标准差 = 标准差(arr, 20, 单位时间)
+
         const 中轨 = SMA(arr, 20, 单位时间)
-        // const 上轨 = 中轨 + 2 × 20时间段的标准差
-        // const 下轨 = 中轨 − 2 × 20时间段的标准差
-        return { 中轨 }
+
+        const 上轨 = map(
+            () => Math.min(中轨.length, _20时间段的标准差.length),
+            i => 中轨[i] + 2 * _20时间段的标准差[i]
+        )
+
+        const 下轨 = map(
+            () => Math.min(中轨.length, _20时间段的标准差.length),
+            i => 中轨[i] - 2 * _20时间段的标准差[i]
+        )
+
+        return { 上轨, 中轨, 下轨 }
     }
 
 
@@ -135,6 +147,27 @@ export namespace 指标 {
         }
         return sum / count
     })
+
+
+
+    export const 标准差 = 指标(({ start, end, count, arr }) => {
+
+        let sum = 0
+        for (let i = start; i <= end; i++) {
+            sum += arr[i]
+        }
+        const u = sum / count //平均值
+
+
+        //
+        let xxxx = 0
+        for (let i = start; i <= end; i++) {
+            xxxx += Math.pow(arr[i] - u, 2)
+        }
+
+        return Math.sqrt(xxxx / count)
+    })
+
 
     export const EMA = 指标(({ start, end, count, arr }) => {
         const α = 2 / (count + 1)
