@@ -17,6 +17,13 @@ export namespace 指标 {
         return { DIF, DEM, OSC }
     }
 
+    export const 布林带 = (arr: ArrayLike<number>, 单位时间: number) => {
+        const 中轨 = SMA(arr, 20, 单位时间)
+        // const 上轨 = 中轨 + 2 × 20时间段的标准差
+        // const 下轨 = 中轨 − 2 × 20时间段的标准差
+        return { 中轨 }
+    }
+
 
     let 最后更新数据时间 = NaN  //实盘 一直更新 
     let xxxxx = 0
