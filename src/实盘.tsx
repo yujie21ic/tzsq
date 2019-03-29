@@ -136,7 +136,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC', 位置: num
                         style={{ width: '50%' }}>
                         <Button
                             bgColor={GREEN}
-                            text={下单数量}
+                            text={下单数量 + ''}
                             left={() => HopexRESTAPI.taker(hopexCookie, {
                                 side: 'Buy',
                                 size: 下单数量,
@@ -147,7 +147,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC', 位置: num
                         style={{ width: '50%' }}>
                         <Button
                             bgColor={RED}
-                            text={下单数量}
+                            text={下单数量 + ''}
                             left={() => HopexRESTAPI.taker(hopexCookie, {
                                 side: 'Sell',
                                 size: 下单数量,
