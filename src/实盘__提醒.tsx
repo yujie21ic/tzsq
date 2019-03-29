@@ -54,19 +54,7 @@ export class 提醒 extends React.Component {
 
 
         //________________________________________________________________________
-        const xxx = realTickClient.get信号灯Type('bitmex')
-        this.setAndSpeak(
-            'bitmex ' + xxx,
-            0,
-            v => xxx !== 'none'
-        )
 
-        const yyy = realTickClient.get信号灯Type('hopex')
-        this.setAndSpeak(
-            'hopex ' + yyy,
-            0,
-            v => yyy !== 'none'
-        )
 
         const volum = realTickClient.get期货多少秒内成交量__万为单位('XBTUSD', 15)
         const 波动率 = 指标.波动率(realTickClient.dataExt.XBTUSD.bitmex.价格, 30, 500)
