@@ -23,19 +23,24 @@ export class TickBase {
             }
             else if (e.button === 2) {
                 dialog.popupMenu([
-                    ...显示秒.map(v => ({
-                        label: v + '秒',
-                        type:'checkbox' as 'checkbox',
-                        checked: v === this.showCount / (1000 / RealDataBase.单位时间),
-                        click: () => this.showCount = v * (1000 / RealDataBase.单位时间)
-                    })),
-                    { type: 'separator' },
-                    ...keys(Tick行情____config).map(v => ({
-                        label: v,
-                        type:'checkbox' as 'checkbox',
-                        checked: v === this.nowChart,
-                        click: () => this.nowChart = v
-                    })),
+                    {
+                        label: '显示秒',
+                        submenu: 显示秒.map(v => ({
+                            label: v + '秒',
+                            type: 'checkbox' as 'checkbox',
+                            checked: v === this.showCount / (1000 / RealDataBase.单位时间),
+                            click: () => this.showCount = v * (1000 / RealDataBase.单位时间)
+                        }))
+                    },
+                    {
+                        label: '显示图',
+                        submenu: keys(Tick行情____config).map(v => ({
+                            label: v,
+                            type: 'checkbox' as 'checkbox',
+                            checked: v === this.nowChart,
+                            click: () => this.nowChart = v
+                        }))
+                    },
                 ])
             }
         })
