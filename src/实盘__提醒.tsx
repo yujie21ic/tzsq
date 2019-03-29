@@ -40,18 +40,16 @@ export class 提醒 extends React.Component {
 
         //________________________________________________________________________
 
-        this.setAndSpeak(
-            '追涨提醒',
-            0,
-            v => lastNumber(realTickClient.dataExt.XBTUSD.bitmex_追涨_提醒) === 1
-        )
-
-        this.setAndSpeak(
-            '追跌提醒',
-            0,
-            v => lastNumber(realTickClient.dataExt.XBTUSD.bitmex_追跌_提醒) === 1
-        )
-
+        if (realTickClient.dataExt.XBTUSD.提醒.length > 0) {
+            const arr = realTickClient.dataExt.XBTUSD.提醒[realTickClient.dataExt.XBTUSD.提醒.length - 1]
+            arr.forEach(v => {
+                this.setAndSpeak(
+                    v.name,
+                    0,
+                    xxx => v.value,
+                )
+            })
+        }
 
         //________________________________________________________________________
 
