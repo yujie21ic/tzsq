@@ -291,8 +291,8 @@ export class RealDataBase {
         const 价格_均线300 = 指标.SMA(价格, 300, RealDataBase.单位时间)
         const 价格_均线120 = 指标.SMA(价格, 120, RealDataBase.单位时间)
         const 价格均线价差 = 指标.map(() => Math.min(价格_均线300.length, 价格_均线120.length), i => 价格_均线120[i] - 价格_均线300[i])
-        
-        const bitmex_价格_macd = 指标.macd带参数(价格,36,78,27,RealDataBase.单位时间)
+
+        const bitmex_价格_macd = 指标.macd带参数(价格, 36, 78, 27, RealDataBase.单位时间)
 
         const 价格_波动率15 = 指标.波动率(价格, 15, RealDataBase.单位时间)
         const 价格_波动率30 = 指标.波动率(价格, 30, RealDataBase.单位时间)
@@ -330,16 +330,16 @@ export class RealDataBase {
                 }
             })
         const 上涨_下跌_横盘追涨追跌专用 = 指标.map(
-                () => Math.min(买.净成交量_累加60.length),
-                i => {
-                    if (买.净成交量_累加60[i] >= -10 * 10000) {
-                        return '上涨'
-                    } else if (买.净成交量_累加60[i] <= 10 * 10000) {
-                        return '下跌'
-                    } else {
-                        return '横盘'
-                    }
-                })
+            () => Math.min(买.净成交量_累加60.length),
+            i => {
+                if (买.净成交量_累加60[i] >= -10 * 10000) {
+                    return '上涨'
+                } else if (买.净成交量_累加60[i] <= 10 * 10000) {
+                    return '下跌'
+                } else {
+                    return '横盘'
+                }
+            })
 
         //
         const 价格_最高60 = 指标.最高(价格, 60, RealDataBase.单位时间)
@@ -1031,7 +1031,7 @@ export class RealDataBase {
 
         const bitmex_hopex_上涨相对差价macd = 指标.macd(bitmex_hopex_上涨相对价差, RealDataBase.单位时间)
         const bitmex_hopex_下跌相对差价macd = 指标.macd(bitmex_hopex_下跌相对价差, RealDataBase.单位时间)
-        const hopex_价格_macd  = 指标.macd(hopex.价格, RealDataBase.单位时间)
+        const hopex_价格_macd = 指标.macd(hopex.价格, RealDataBase.单位时间)
 
         const bitmex_追涨_追跌 = (type: '追涨' | '追跌') => {
             const bs = type === '追涨' ? bitmex.买 : bitmex.卖
@@ -1053,10 +1053,10 @@ export class RealDataBase {
                 i => [
                     //{ name: '价格macd', value:bitmex.bitmex_价格_macd.DIF[i]<bitmex.bitmex_价格_macd.DEM[i]},
                     //{ name: '价格macd', value:hopex_价格_macd.DIF[i]<hopex_价格_macd.DEM[i]},
-                    { name: 'bitmex价格macd ', value: type === '追涨' ?  bitmex.bitmex_价格_macd.DIF[i]>=bitmex.bitmex_价格_macd.DEM[i]:bitmex.bitmex_价格_macd.DIF[i]<=bitmex.bitmex_价格_macd.DEM[i] },
-                    { name: 'hopex价格macd ', value: type === '追涨' ?  hopex_价格_macd.DIF[i]>hopex_价格_macd.DEM[i]:hopex_价格_macd.DIF[i]<hopex_价格_macd.DEM[i] },
+                    { name: 'bitmex价格macd ', value: type === '追涨' ? bitmex.bitmex_价格_macd.DIF[i] >= bitmex.bitmex_价格_macd.DEM[i] : bitmex.bitmex_价格_macd.DIF[i] <= bitmex.bitmex_价格_macd.DEM[i] },
+                    { name: 'hopex价格macd ', value: type === '追涨' ? hopex_价格_macd.DIF[i] > hopex_价格_macd.DEM[i] : hopex_价格_macd.DIF[i] < hopex_价格_macd.DEM[i] },
                     //{ name: '净盘口 > 0', value: bs.净盘口_均线3[i] > 0 },
-                    { name: '相对价差 ', value: type === '追涨' ?  bitmex_hopex_下跌相对价差均线[i] > 1.1:bitmex_hopex_上涨相对差价均线[i] < -1.1 },
+                    { name: '相对价差 ', value: type === '追涨' ? bitmex_hopex_下跌相对价差均线[i] > 1.1 : bitmex_hopex_上涨相对差价均线[i] < -1.1 },
                     //{ name: '5分钟波动率低量', value: bitmex.价格_波动率300[i] < 40 },
                     //{ name: '大单', value: bs.净成交量_累加10[i] > 200 * 10000 },
                     //{ name: '价格均线价差 ', value: type === '追涨' ? bitmex.价格均线价差[i] > 0.5 : bitmex.价格均线价差[i] < -0.5 },
@@ -1069,12 +1069,12 @@ export class RealDataBase {
         const bitmex_信号_追涨 = bitmex_追涨_追跌('追涨')
         const bitmex_信号_追跌 = bitmex_追涨_追跌('追跌')
 
-        const _X秒内有全亮 = (arr: ArrayLike<{
+        const _X秒内有全亮连续3根 = (X: number, arr: ArrayLike<{
             name: string
             value: boolean
         }[]>, index: number) => {
             let 连续几根 = 0
-            for (let i = index; i >= Math.max(0, index - 15 * (1000 / RealDataBase.单位时间)); i--) {
+            for (let i = index; i >= Math.max(0, index - X * (1000 / RealDataBase.单位时间)); i--) {
                 if (arr[i].every(v => v.value)) {
                     连续几根++
                     if (连续几根 === 3) return true
@@ -1085,10 +1085,20 @@ export class RealDataBase {
             return false
         }
 
+        const bitmex_追涨_提醒 = 指标.map(
+            () => Math.min(bitmex_信号_追涨.length, bitmex.卖.盘口1.length),
+            i => _X秒内有全亮连续3根(30, bitmex_信号_追涨, i) && bitmex.卖.盘口1[i] < 100 * 10000
+        )
+
+        const bitmex_追跌_提醒 = 指标.map(
+            () => Math.min(bitmex_信号_追跌.length, bitmex.买.盘口1.length),
+            i => _X秒内有全亮连续3根(30, bitmex_信号_追跌, i) && bitmex.买.盘口1[i] < 100 * 10000
+        )
+
         const hopex_信号_抄底 = 指标.map(
             () => Math.min(bitmex.信号_抄底.length, bitmex.价格.length, bitmex.价格_波动率30.length, hopex.价格.length),
             i => [
-                { name: '5秒内信号', value: _X秒内有全亮(bitmex.信号_抄底hopex专用, i) },
+                { name: '15秒内信号', value: _X秒内有全亮连续3根(15, bitmex.信号_抄底hopex专用, i) },
                 { name: 'bm折返 >', value: (bitmex.价格[i] - bitmex.价格_最低60[i]) > (bitmex.折返率[i] - 1) },
                 { name: 'hp折返 <', value: (hopex.价格[i] - hopex.价格_最低60[i]) < (bitmex.折返率[i] * 0.5) },
             ]
@@ -1097,7 +1107,7 @@ export class RealDataBase {
         const hopex_信号_摸顶 = 指标.map(
             () => Math.min(bitmex.信号_摸顶.length, bitmex.价格.length, bitmex.价格_波动率30.length, hopex.价格.length),
             i => [
-                { name: '5秒内信号', value: _X秒内有全亮(bitmex.信号_摸顶hopex专用, i) },
+                { name: '15秒内信号', value: _X秒内有全亮连续3根(15, bitmex.信号_摸顶hopex专用, i) },
                 { name: 'bm折返 >', value: bitmex.价格_最高60[i] - bitmex.价格[i] > (bitmex.折返率[i] - 1) },
                 { name: 'hp折返 <', value: hopex.价格_最高60[i] - hopex.价格[i] < (bitmex.折返率[i] * 0.5) },
             ]
@@ -1128,6 +1138,9 @@ export class RealDataBase {
         })
 
         return {
+            bitmex_追涨_提醒,
+            bitmex_追跌_提醒,
+            
             hopex_价格_macd,
             bitmex_hopex_上涨差价,
             bitmex_hopex_下跌差价,
