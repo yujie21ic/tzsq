@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { remote } from 'electron'
+import { remote, MenuItemConstructorOptions } from 'electron'
 import { DialogContent, DialogContentText, Dialog, DialogTitle, DialogActions, Button, TextField } from '@material-ui/core'
 
 
@@ -24,7 +24,7 @@ export namespace dialog {
     const clear = () => show(<div />)
 
 
-    class XXX extends React.Component<{ 
+    class XXX extends React.Component<{
         title: string
         value: string
         onOK: (str: string) => void
@@ -62,7 +62,7 @@ export namespace dialog {
     }
 
 
-    export const showInput = (p: { 
+    export const showInput = (p: {
         title: string
         value: string
         onOK: (str: string) => void
@@ -90,35 +90,9 @@ export namespace dialog {
     )
 
 
-
-    export const popupMenu = (items: (
-        {
-            label: string
-            checked?: boolean
-            onClick: () => void
-        } | undefined
-    )[]) => {
-
-        const menu = new remote.Menu()
-
-        items.forEach(v =>
-
-            menu.append(
-                v !== undefined ?
-                    new remote.MenuItem({
-                        type: 'checkbox',
-                        label: v.label,
-                        checked: v.checked,
-                        click: v.onClick,
-                    }) :
-                    new remote.MenuItem({
-                        type: 'separator'
-                    })
-            )
-        )
-
-        menu.popup({
+    export const popupMenu = (template: MenuItemConstructorOptions[]) =>
+        remote.Menu.buildFromTemplate(template).popup({
             window: remote.getCurrentWindow()
         })
-    }
+
 }
