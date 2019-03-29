@@ -9,7 +9,7 @@ import { BaseType } from './lib/BaseType'
 
 const 显示秒 = [250, 50, 150, 500, 1000, 2000, 3600, 7200, 20000]
 
-export class TickBase {
+export class _________________TickBase {
 
     real = new RealDataBase()
     showCount = 显示秒[0] * (1000 / RealDataBase.单位时间)

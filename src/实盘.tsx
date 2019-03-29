@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { TickBase } from './TickBase'
+import { _________________TickBase } from './_________________TickBase'
 import { theme } from './lib/Chart/theme'
 import { OrderClient } from './OrderServer/OrderClient'
 import { config } from './config'
@@ -315,7 +315,7 @@ export class 交易 extends React.Component {
 
 
 
-class Tick行情 extends TickBase {
+class Tick行情 extends _________________TickBase {
     title = '实时'
     real = realTickClient
 

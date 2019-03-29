@@ -1,5 +1,5 @@
 import { DataClient } from './RealDataServer/DataClient'
-import { TickBase } from './TickBase'
+import { _________________TickBase } from './_________________TickBase'
 import { registerCommand } from './lib/UI/registerCommand'
 import { windowExt } from './windowExt'
 import { RealDataBase } from './RealDataServer/RealDataBase'
@@ -14,7 +14,7 @@ import { get成交性质 } from './lib/F/get成交性质'
 
 theme.右边空白 = 0
 
-class Tick复盘 extends TickBase {
+class Tick复盘 extends _________________TickBase {
 
     title = new Date(windowExt.startTime).toLocaleString()
     real = new DataClient.RealData__History()
