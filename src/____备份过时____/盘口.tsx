@@ -180,8 +180,9 @@ class APP extends React.Component {
                     ['期货 XBTUSD', '期货 ETHUSD', '现货 btcusdt', '现货 ethusdt'].map(v =>
                         ({
                             label: v,
+                            type: 'checkbox' as 'checkbox',
                             checked: v === this.nowType,
-                            onClick: () => {
+                            click: () => {
                                 this.nowType = v as any
                                 setWindowTitle(this.nowType + ' 盘口')
                             }

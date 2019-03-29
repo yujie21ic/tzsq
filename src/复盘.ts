@@ -126,19 +126,20 @@ window.addEventListener('mousedown', e => {
             [
                 {
                     label: '打开tick图',
-                    onClick: () =>
+                    click: () =>
                         showWindowRemote('Tick复盘', {
                             accountName: '',
                             symbol: nowSymbol,
                             startTime: timeID.oneMinuteIDToTimestamp(S.data[getIndex()].id),
                         }, true),
                 },
-                undefined,
+                { type: 'separator' },
                 ...['XBTUSD', 'ETHUSD'].map(v =>
                     ({
                         label: v,
+                        type: 'checkbox' as 'checkbox',
                         checked: nowSymbol === v,
-                        onClick: () => {
+                        click: () => {
                             nowSymbol = v as BaseType.BitmexSymbol
                             load()
                         }
