@@ -80,6 +80,8 @@ export class _________________TickBase {
 
     title = ''
 
+
+    //getLeftRight______________删掉 ————————————————————DataClient 直接模拟
     getLeftRight() {
         const d = this.real.dataExt[this.nowTickSymbol]
 
