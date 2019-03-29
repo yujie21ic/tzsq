@@ -8,7 +8,7 @@ import { dialog } from './lib/UI/dialog'
 import { timeID } from './lib/F/timeID'
 import { theme } from './lib/Chart/theme'
 import { toRange } from './lib/F/toRange'
-import { showWindowRemote, windowExt } from './windowExt'
+import { showWindow, windowExt } from './windowExt'
 import { config } from './config'
 import { 信号Layer } from './lib/Chart/Layer/信号Layer'
 import { BitMEXRESTAPI } from './lib/____API____/BitMEX/BitMEXRESTAPI'
@@ -127,7 +127,7 @@ window.addEventListener('mousedown', e => {
                 {
                     label: '打开tick图',
                     click: () =>
-                        showWindowRemote('Tick复盘', {
+                        showWindow('Tick复盘', {
                             accountName: '',
                             symbol: nowSymbol,
                             startTime: timeID.oneMinuteIDToTimestamp(S.data[getIndex()].id),

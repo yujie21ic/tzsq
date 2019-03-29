@@ -40,23 +40,11 @@ document.body.ondragenter = document.body.ondragover = document.body.ondrop = e 
 }
 require(${html转义(JSON.stringify(jsPath))})
 </script>
-</html>`)}`
-
-
-//重复
-export const showWindowRemote = (name: string, props: Partial<typeof windowExt>, maximize = false) => {
-  const win = new remote.BrowserWindow({
-    width: 550,
-    height: 400,
-    title: name + (props.accountName !== undefined ? ' ' + props.accountName : ''),
-  })
-  win.loadURL(base64URL(path.join(__dirname, `../build/${name}.js`), props))
-  if (maximize) win.maximize()
-}
-
+</html>`)}` 
 
 export const showWindow = (name: string, props: Partial<typeof windowExt>, maximize = false) => {
-  const win = new BrowserWindow({
+  const CLASS = typeof window === 'undefined' ? BrowserWindow : remote.BrowserWindow
+  const win = new CLASS({
     width: 550,
     height: 400,
     title: name + (props.accountName !== undefined ? ' ' + props.accountName : ''),
