@@ -2,7 +2,6 @@ import * as React from 'react'
 import { DataClient } from './RealDataServer/DataClient'
 import { speak } from './lib/F/speak'
 import { lastNumber } from './lib/F/lastNumber'
-import { 指标 } from './指标/指标'
 import { mapObjIndexed } from './lib/F/mapObjIndexed'
 
 export const realTickClient = new DataClient.RealData__Client()
