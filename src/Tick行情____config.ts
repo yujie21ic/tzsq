@@ -242,34 +242,23 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
                     ]
                 },
-
             ],
 
-            // {
-            //     layerList: [
-            //         layer(ZeroLayer, { color: 0xaaaaaa }),
-            //         layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
-            //         layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
-            //         layer(LineLayer, { data: d.bitmex.买.净盘口, color: BTC颜色 }),
-            //         layer(LineLayer, { data: d.bitmex.买.净盘口_均线3, color: ETH颜色 }),
-            //     ]
-            // },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.bitmex_信号_追涨, color: 买颜色 }),
-                    layer(TextLayer, {
-                        text:
-                            `信号_追涨                   `,
-                        color: ETH颜色,
-                    })
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
+                    layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
+                    layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d.bitmex.买.净盘口, color: BTC颜色 }),
+                    layer(LineLayer, { data: d.bitmex.买.净盘口_均线3, color: ETH颜色 }),
                 ]
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.bitmex_信号_追涨, color: 买颜色 }),
+                    layer(信号Layer, { data: d.提醒, color: 买颜色 }),
                     layer(TextLayer, {
                         text:
-                            `信号_追涨                   `,
+                            `提醒                   `,
                         color: ETH颜色,
                     })
                 ]
