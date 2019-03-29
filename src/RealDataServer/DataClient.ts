@@ -186,6 +186,8 @@ export namespace DataClient {
             this.data.startTick = Math.floor(startTime / RealDataBase.单位时间)
             this.data.bitmex.XBTUSD.data = []
             this.data.bitmex.XBTUSD.orderBook = []
+            this.data.hopex.BTCUSDT.data = []
+            this.data.hopex.BTCUSDT.orderBook = []
 
             console.log('加载盘口...')
             this.回测ext__orderBook = await this.get_bitmex_orderBook('XBTUSD', startTime, endTime, false)
@@ -219,9 +221,27 @@ export namespace DataClient {
 
 
         ctpLoad(data: BaseType.KLine[], orderBook: BaseType.OrderBook[]) {
+
+            this.data.bitmex.XBTUSD.data = []
+            this.data.bitmex.ETHUSD.data = []
+            this.data.bitmex.XBTUSD.orderBook = []
+            this.data.bitmex.ETHUSD.orderBook = []
+
+            this.data.binance.btcusdt.data = []
+            this.data.binance.ethusdt.data = []
+            this.data.binance.btcusdt.orderBook = []
+            this.data.binance.ethusdt.orderBook = []
+
+            this.data.hopex.BTCUSDT.data = []
+            this.data.hopex.ETHUSDT.data = []
+            this.data.hopex.BTCUSDT.orderBook = []
+            this.data.hopex.ETHUSDT.orderBook = []
+
+
             this.data.startTick = data[0].id
             this.data.ctp.rb1905.data = data
             this.data.ctp.rb1905.orderBook = orderBook
+            console.log('rb1905', data, orderBook)
             this.重新初始化()
         }
 
