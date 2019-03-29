@@ -1031,7 +1031,7 @@ export class RealDataBase {
 
         const bitmex_hopex_上涨相对差价macd = 指标.macd(bitmex_hopex_上涨相对价差, RealDataBase.单位时间)
         const bitmex_hopex_下跌相对差价macd = 指标.macd(bitmex_hopex_下跌相对价差, RealDataBase.单位时间)
-        const hopex_价格_macd  = 指标.macd带参数(hopex.价格, 55,120,40,RealDataBase.单位时间)
+        const hopex_价格_macd  = 指标.macd(hopex.价格, RealDataBase.单位时间)
 
         const bitmex_追涨_追跌 = (type: '追涨' | '追跌') => {
             const bs = type === '追涨' ? bitmex.买 : bitmex.卖
@@ -1053,6 +1053,7 @@ export class RealDataBase {
                 i => [
                     //{ name: '价格macd', value:bitmex.bitmex_价格_macd.DIF[i]<bitmex.bitmex_价格_macd.DEM[i]},
                     //{ name: '价格macd', value:hopex_价格_macd.DIF[i]<hopex_价格_macd.DEM[i]},
+                    { name: 'bitmex价格macd ', value: type === '追涨' ?  bitmex.bitmex_价格_macd.DIF[i]>=bitmex.bitmex_价格_macd.DEM[i]:bitmex.bitmex_价格_macd.DIF[i]<=bitmex.bitmex_价格_macd.DEM[i] },
                     { name: 'hopex价格macd ', value: type === '追涨' ?  hopex_价格_macd.DIF[i]>hopex_价格_macd.DEM[i]:hopex_价格_macd.DIF[i]<hopex_价格_macd.DEM[i] },
                     //{ name: '净盘口 > 0', value: bs.净盘口_均线3[i] > 0 },
                     { name: '相对价差 ', value: type === '追涨' ?  bitmex_hopex_下跌相对价差均线[i] > 1.1:bitmex_hopex_上涨相对差价均线[i] < -1.1 },
