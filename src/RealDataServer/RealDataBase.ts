@@ -1087,12 +1087,12 @@ export class RealDataBase {
 
         const bitmex_追涨_提醒 = 指标.map(
             () => Math.min(bitmex_信号_追涨.length, bitmex.卖.盘口1.length),
-            i => _X秒内有全亮连续3根(30, bitmex_信号_追涨, i) && bitmex.卖.盘口1[i] < 100 * 10000
+            i => (_X秒内有全亮连续3根(30, bitmex_信号_追涨, i) && bitmex.卖.盘口1[i] < 100 * 10000) ? 1 : 0
         )
 
         const bitmex_追跌_提醒 = 指标.map(
             () => Math.min(bitmex_信号_追跌.length, bitmex.买.盘口1.length),
-            i => _X秒内有全亮连续3根(30, bitmex_信号_追跌, i) && bitmex.买.盘口1[i] < 100 * 10000
+            i => (_X秒内有全亮连续3根(30, bitmex_信号_追跌, i) && bitmex.买.盘口1[i] < 100 * 10000) ? 1 : 0
         )
 
         const hopex_信号_抄底 = 指标.map(
@@ -1140,7 +1140,7 @@ export class RealDataBase {
         return {
             bitmex_追涨_提醒,
             bitmex_追跌_提醒,
-            
+
             hopex_价格_macd,
             bitmex_hopex_上涨差价,
             bitmex_hopex_下跌差价,

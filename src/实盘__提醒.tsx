@@ -20,6 +20,8 @@ export class 提醒 extends React.Component {
 
     step = () => {
 
+
+        //_______________________________布林带提醒_______________________________
         const 上轨 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟_.布林带.上轨)
         const 下轨 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟_.布林带.下轨)
         const 收盘价 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._1分钟_.收盘价)
@@ -36,8 +38,22 @@ export class 提醒 extends React.Component {
             v => 收盘价 < 下轨
         )
 
+        //________________________________________________________________________
+
+        this.setAndSpeak(
+            '追涨提醒',
+            0,
+            v => lastNumber(realTickClient.dataExt.XBTUSD.bitmex_追涨_提醒) === 1
+        )
+
+        this.setAndSpeak(
+            '追跌提醒',
+            0,
+            v => lastNumber(realTickClient.dataExt.XBTUSD.bitmex_追跌_提醒) === 1
+        )
 
 
+        //________________________________________________________________________
         const xxx = realTickClient.get信号灯Type('bitmex')
         this.setAndSpeak(
             'bitmex ' + xxx,
