@@ -146,7 +146,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC', 位置: num
                     <div
                         style={{ width: '50%' }}>
                         <Button
-                            bgColor={GREEN}
+                            bgColor={RED}
                             text={下单数量 + '卖' + (this.props.位置 + 1)}
                             left={() => HopexRESTAPI.taker(hopexCookie, {
                                 side: 'Sell',
