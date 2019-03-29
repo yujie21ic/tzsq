@@ -83,9 +83,14 @@ export class TickBase {
     getLeftRight() {
         const d = this.real.dataExt[this.nowTickSymbol]
 
-        const right = this.nowChart === '波动_测试' ?
+        let right = this.nowChart === '波动_测试' ?
             Math.max(d.bitmex.波动_测试.累计买.length) - 1 :
             Math.max(d.binance.价格.length, d.hopex.价格.length, d.bitmex.价格.length, d.bitmex.买.盘口.length, d.bitmex.卖.盘口.length) - 1
+
+        if (this.nowChart.indexOf('螺纹') !== -1) {
+            right = Math.max(this.real.dataExt.ctp.价格.length, this.real.dataExt.ctp.盘口.length)
+            console.log('right', right)
+        }
 
         const left = Math.max(0, right - this.showCount)
         return { left, right }
