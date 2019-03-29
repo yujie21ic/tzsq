@@ -1,13 +1,13 @@
 import * as React from 'react'
-import * as ReactDOM from 'react-dom' 
+import * as ReactDOM from 'react-dom'
 import { TickBase } from './TickBase'
-import { theme } from './lib/Chart/theme' 
+import { theme } from './lib/Chart/theme'
 import { OrderClient } from './OrderServer/OrderClient'
 import { config } from './config'
 import { BaseType } from './lib/BaseType'
 import { windowExt } from './windowExt'
 import { Button } from './lib/UI/Button'
-import { Switch } from '@material-ui/core' 
+import { Switch } from '@material-ui/core'
 import { HopexRESTAPI } from './lib/____API____/Hopex/HopexRESTAPI'
 import { realTickClient, 提醒 } from './实盘__提醒'
 
@@ -320,7 +320,7 @@ class Tick行情 extends TickBase {
     real = realTickClient
 
     constructor(element: HTMLElement) {
-        super(element)
+        super(element, 20)
     }
 }
 

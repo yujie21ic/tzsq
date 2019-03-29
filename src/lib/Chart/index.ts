@@ -51,7 +51,7 @@ import PixiFps from 'pixi-fps'
 
 
 
-export const chartInit = (element: HTMLElement, func: typeof dataSourceFunc) => {
+export const chartInit = (FPS: number, element: HTMLElement, func: typeof dataSourceFunc) => {
 
     const pixiApplication = new Application({
         width: 800,
@@ -84,9 +84,6 @@ export const chartInit = (element: HTMLElement, func: typeof dataSourceFunc) => 
     setTimeout(onResize, 0) //pixi.js 一闪一闪的 bug   
 
     dataSourceFunc = func
-
-
-    const FPS = 20
 
     if (FPS >= 60) {
         pixiApplication.ticker.add(chartRender)

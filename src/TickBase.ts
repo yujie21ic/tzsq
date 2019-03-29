@@ -16,7 +16,7 @@ export class TickBase {
     nowTickSymbol: BaseType.BitmexSymbol = 'XBTUSD'
     nowChart = keys(Tick行情____config)[0]
 
-    constructor(element: HTMLElement) {
+    constructor(element: HTMLElement, FPS: number) {
 
         window.addEventListener('mousedown', e => {
             if (e.button === 0) {
@@ -47,7 +47,7 @@ export class TickBase {
 
 
 
-        chartInit(element, () => {
+        chartInit(FPS, element, () => {
             const d = this.real.dataExt[this.nowTickSymbol]
 
             const { left, right } = this.getLeftRight()

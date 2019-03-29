@@ -20,7 +20,7 @@ class Tick复盘 extends TickBase {
     real = new DataClient.RealData__History()
 
     constructor(element: HTMLElement) {
-        super(element)
+        super(element, 60)
 
         document.body.ondrop = e => {
             e.stopPropagation()
