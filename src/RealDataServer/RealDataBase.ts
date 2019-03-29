@@ -1091,7 +1091,7 @@ export class RealDataBase {
         )
         const bitmex_追涨_提醒信号 = 指标.map(
             () => Math.min(bitmex_追涨_提醒.length),
-            i => bitmex_追涨_提醒[i]===1
+            i => ({ name: '追涨', value: bitmex_追涨_提醒[i] === 1 })
         )
 
 
@@ -1101,7 +1101,7 @@ export class RealDataBase {
         )
         const bitmex_追跌_提醒信号 = 指标.map(
             () => Math.min(bitmex_追跌_提醒.length),
-            i => bitmex_追跌_提醒[i]===1
+            i => ({ name: '追跌', value: bitmex_追跌_提醒[i] === 1 })
         )
 
         const hopex_信号_抄底 = 指标.map(
