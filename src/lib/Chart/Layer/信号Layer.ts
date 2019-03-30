@@ -67,4 +67,8 @@ export class 信号Layer extends Layer<{ data: ArrayLike<{ name: string, value: 
             }
         }
     }
+
+    getRight() {
+        return this.props.data.length - 1
+    }
 } 
