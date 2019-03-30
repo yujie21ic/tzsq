@@ -320,7 +320,7 @@ class Tick行情 extends TickBase {
     real = realTickClient
 
     constructor(element: HTMLElement) {
-        super(element, 20)
+        super(element, 4)
     }
 }
 

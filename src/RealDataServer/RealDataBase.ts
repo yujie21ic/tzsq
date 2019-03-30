@@ -933,9 +933,23 @@ export class RealDataBase {
                 { name: '折返程度', value: type === '摸顶' ? (价格_最高60[i] - 价格[i]) > 折返率[i] : (价格[i] - 价格_最低60[i]) > 折返率[i] },
             ]
         )
+
         const 信号_摸顶_下跌平仓 = __摸顶抄底_平仓('摸顶')
         const 信号_抄底_上涨平仓 = __摸顶抄底_平仓('抄底')
 
+        const __摸顶抄底_平仓hopex = (type: '摸顶' | '抄底') => 指标.map(
+            () => Math.min(
+                data.length,
+                orderBook.length,
+            ),
+            i => [
+                { name: '震荡指数_macd DIF < DEM', value: 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i] },
+                { name: '成交量 DIF < DEM', value: 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] },
+                { name: '折返程度', value: type === '摸顶' ? (价格_最高60[i] - 价格[i]) > 折返率[i] : (价格[i] - 价格_最低60[i]) > 折返率[i] },
+            ]
+        )
+        const 信号_摸顶_下跌平仓hopex = __摸顶抄底_平仓hopex('摸顶')
+        const 信号_抄底_上涨平仓hopex = __摸顶抄底_平仓hopex('抄底')
 
 
 
