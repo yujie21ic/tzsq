@@ -91,7 +91,6 @@ export class _________________TickBase {
 
         if (this.nowChart.indexOf('螺纹') !== -1) {
             right = Math.max(this.real.dataExt.ctp.价格.length, this.real.dataExt.ctp.盘口.length)
-            console.log('right', right)
         }
 
         const left = Math.max(0, right - this.showCount)
