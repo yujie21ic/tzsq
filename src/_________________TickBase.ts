@@ -52,13 +52,16 @@ export class _________________TickBase {
 
             const { left, right } = this.getLeftRight()
 
+            const xArr = this.nowChart.indexOf('螺纹') !== -1 ? this.real.dataExt.ctp.时间 : (this.nowChart === '波动_测试' ? d.bitmex.波动_测试.时间 : d.bitmex.时间)
+            const xStrArr = this.nowChart.indexOf('螺纹') !== -1 ? this.real.dataExt.ctp.时间str : (this.nowChart === '波动_测试' ? d.bitmex.波动_测试.时间str : d.bitmex.时间str)
+
             return {
                 title: this.title + ' ' + this.nowTickSymbol + '  ' + ((right - left) / (1000 / RealDataBase.单位时间)) + '秒',
-                xStrArr: this.nowChart === '波动_测试' ? d.bitmex.波动_测试.时间str : d.bitmex.时间str,
+                xStrArr,
                 显示y: v => {
                     if (this.nowChart === '波动_测试') return undefined
 
-                    const time = (this.real.data.startTick + v) * RealDataBase.单位时间
+                    const time = xArr[v]
                     const date = new Date(time)
 
                     if (date.getSeconds() >= 30 && v === right) {
