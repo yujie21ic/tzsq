@@ -11,6 +11,7 @@ const layerContainer = new Container()
 const 十字光标 = new Crosshairs()
 
 let indexX = 0
+let __right__ = 0
 let mouseX = 0
 let mouseY = 0
 
@@ -21,6 +22,8 @@ type LayerClass<P> = {
 export type LayerItem = [LayerClass<any>, any, '__用layer函数创建__']
 
 export const getIndex = () => indexX
+
+export const getRight = () => __right__
 
 export const layer = <P extends any>(a: LayerClass<P>, b: P): LayerItem => [a, b] as any
 
@@ -189,7 +192,11 @@ const chartRender = () => {
             top: -Number.MAX_VALUE,
             bottom: Number.MAX_VALUE
         }
-        layerList.forEach(layer => tb = layer.updateTopAndBottom(viewport, tb))
+
+        layerList.forEach(layer => {
+            tb = layer.updateTopAndBottom(viewport, tb)
+            __right__ = Math.max(__right__, layer.getRight())
+        })
 
         //1 1
         if (tb.top === tb.bottom) {
@@ -249,6 +256,8 @@ const chartRender = () => {
         })
     }
 
+
+    __right__ = 0
     items.items.forEach((v, i) => {
 
         if (v instanceof Array) {
