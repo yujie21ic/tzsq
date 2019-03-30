@@ -187,13 +187,14 @@ class Tick复盘 extends _________________TickBase {
 
             ; (window as any)['d'] = d
 
+        const d2 = this.real.dataExt
+
+        let right2 = this.nowChart === '波动_测试' ? Math.max(d.bitmex.波动_测试.累计买.length) - 1 :
+            this.nowChart === 'ctp波动_测试' ? Math.max(d2.ctp.波动_测试.累计买.length) - 1 :
+                this.nowChart.indexOf('螺纹') !== -1 ? Math.max(this.real.dataExt.ctp.价格.length, this.real.dataExt.ctp.盘口.length) - 1 :
+                    Math.max(d.binance.价格.length, d.hopex.价格.length, d.bitmex.价格.length, d.bitmex.买.盘口.length, d.bitmex.卖.盘口.length) - 1
 
 
-        let right2 = Math.max(d.binance.价格.length, d.bitmex.价格.length, d.bitmex.买.盘口.length, d.bitmex.卖.盘口.length) - 1
-
-        if (this.nowChart.indexOf('螺纹') !== -1) {
-            right2 = Math.max(this.real.dataExt.ctp.价格.length, this.real.dataExt.ctp.盘口.length) - 1
-        }
 
 
 
