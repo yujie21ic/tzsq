@@ -934,8 +934,8 @@ export class RealDataBase {
             ]
         )
 
-        const 信号_摸顶_下跌平仓 = __摸顶抄底_平仓('摸顶')
-        const 信号_抄底_上涨平仓 = __摸顶抄底_平仓('抄底')
+        const bitmex_信号_摸顶_下跌平仓 = __摸顶抄底_平仓('摸顶')
+        const bitmex_信号_抄底_上涨平仓 = __摸顶抄底_平仓('抄底')
 
         const __摸顶抄底_平仓hopex = (type: '摸顶' | '抄底') => 指标.map(
             () => Math.min(
@@ -948,8 +948,8 @@ export class RealDataBase {
                 { name: '折返程度', value: type === '摸顶' ? (价格_最高60[i] - 价格[i]) > 折返率[i] : (价格[i] - 价格_最低60[i]) > 折返率[i] },
             ]
         )
-        const 信号_摸顶_下跌平仓hopex = __摸顶抄底_平仓hopex('摸顶')
-        const 信号_抄底_上涨平仓hopex = __摸顶抄底_平仓hopex('抄底')
+        const hopex_信号_摸顶_下跌平仓 = __摸顶抄底_平仓hopex('摸顶')
+        const hopex_信号_抄底_上涨平仓 = __摸顶抄底_平仓hopex('抄底')
 
 
 
@@ -959,9 +959,13 @@ export class RealDataBase {
         const 成交性质 = { 双开, 双平, 多换, 空换, 多平, 空平, 空开, 多开 }
 
 
+
         return {
-            信号_摸顶_下跌平仓hopex,
-            信号_抄底_上涨平仓hopex,
+            bitmex_信号_摸顶_下跌平仓,
+            bitmex_信号_抄底_上涨平仓,
+            hopex_信号_摸顶_下跌平仓,
+            hopex_信号_抄底_上涨平仓,
+
             bitmex_价格_macd,
             _1分钟_,
 
@@ -998,8 +1002,7 @@ export class RealDataBase {
             时间,
             价格_波动率300,
             折返率,
-            信号_摸顶_下跌平仓,
-            信号_抄底_上涨平仓,
+
             价格差_除以时间,
             上涨_下跌_横盘,
             上涨_下跌_横盘追涨追跌专用,
@@ -1286,14 +1289,14 @@ export class RealDataBase {
 
     is摸顶_下跌平仓 = (market: 'bitmex' | 'hopex') =>
         is连续几根全亮(2, market === 'bitmex' ?
-            this.dataExt.XBTUSD.bitmex.信号_摸顶_下跌平仓 :
-            this.dataExt.XBTUSD.bitmex.信号_摸顶_下跌平仓hopex
+            this.dataExt.XBTUSD.bitmex.bitmex_信号_摸顶_下跌平仓 :
+            this.dataExt.XBTUSD.bitmex.hopex_信号_摸顶_下跌平仓
         )
 
     is抄底_上涨平仓 = (market: 'bitmex' | 'hopex') =>
         is连续几根全亮(2, market === 'bitmex' ?
-            this.dataExt.XBTUSD.bitmex.信号_抄底_上涨平仓 :
-            this.dataExt.XBTUSD.bitmex.信号_抄底_上涨平仓hopex
+            this.dataExt.XBTUSD.bitmex.bitmex_信号_抄底_上涨平仓 :
+            this.dataExt.XBTUSD.bitmex.hopex_信号_抄底_上涨平仓
         )
 
 }

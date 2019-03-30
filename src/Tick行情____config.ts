@@ -119,7 +119,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.bitmex.信号_摸顶_下跌平仓, color: 卖颜色 }),
+                    layer(信号Layer, { data: d.bitmex.bitmex_信号_摸顶_下跌平仓, color: 卖颜色 }),
                     layer(TextLayer, {
                         text:
                             `信号_摸顶_下跌平仓新                    `,
@@ -205,7 +205,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.bitmex.信号_摸顶_下跌平仓, color: 卖颜色 }),
+                    layer(信号Layer, { data: d.bitmex.bitmex_信号_摸顶_下跌平仓, color: 卖颜色 }),
                     layer(TextLayer, {
                         text:
                             `信号_摸顶_下跌平仓新                    `,
@@ -494,7 +494,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.bitmex.信号_抄底_上涨平仓, color: 买颜色 }),
+                    layer(信号Layer, { data: d.bitmex.bitmex_信号_抄底_上涨平仓, color: 买颜色 }),
                     layer(TextLayer, {
                         text:
                             `信号_抄底_上涨平仓新                    `,
@@ -581,7 +581,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.bitmex.信号_抄底_上涨平仓, color: 买颜色 }),
+                    layer(信号Layer, { data: d.bitmex.bitmex_信号_抄底_上涨平仓, color: 买颜色 }),
                     layer(TextLayer, {
                         text:
                             `信号_抄底_上涨平仓新                    `,
