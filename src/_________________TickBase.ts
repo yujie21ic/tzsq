@@ -67,6 +67,8 @@ export class _________________TickBase {
                 显示y: v => {
                     if (this.nowChart === '波动_测试') return undefined
 
+                    if (v > xArr.length - 1 || v < 0) return undefined
+
                     const time = xArr[v]
                     const date = new Date(time)
 

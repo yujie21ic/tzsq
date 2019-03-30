@@ -18,7 +18,11 @@ export class Layer<P> extends Container {
 
     render(viewport: Viewport, to: To, tb: TopBottom) {
 
-    } 
+    }
+
+    getRight() {
+        return 0
+    }
 
     updateTopAndBottom = (viewport: Viewport, tb: TopBottom) => tb
 }

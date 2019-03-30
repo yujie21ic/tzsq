@@ -15,14 +15,14 @@ export class BarLayer extends Layer<{ data: ArrayLike<number>, color: number }> 
     render(viewport: Viewport, to: To) {
         const { g } = this
         g.clear()
-        
+
         const { left, right } = viewport
 
         const { data, color } = this.props
 
         if (data.length === 0) return
 
-       
+
         g.lineStyle(0)
         g.beginFill(color)
 
@@ -37,6 +37,10 @@ export class BarLayer extends Layer<{ data: ArrayLike<number>, color: number }> 
             g.drawRect(x1, y0, Math.max(1, x2 - x1), y1 - y0)
         }
         g.endFill()
+    }
+
+    getRight() {
+        return this.props.data.length - 1
     }
 
     updateTopAndBottom = (viewport: Viewport, tb: TopBottom) =>

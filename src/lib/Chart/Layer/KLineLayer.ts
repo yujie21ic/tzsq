@@ -49,6 +49,10 @@ export class KLineLayer extends Layer<{ data: ArrayLike<{ open: number, close: n
         }
     }
 
+    getRight() {
+        return this.props.data.length - 1
+    }
+
     updateTopAndBottom = (viewport: Viewport, tb: TopBottom) =>
         combineTopAndBottom(
             tb, getTopAndBottomK(this.props.data)(viewport)

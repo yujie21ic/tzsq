@@ -53,6 +53,10 @@ export class LineLayer extends Layer<{ data: ArrayLike<number>, color: number, �
         }
     }
 
+    getRight() {
+        return this.props.data.length - 1
+    }
+
     updateTopAndBottom = (viewport: Viewport, tb: TopBottom) => {
         const xx = getTopAndBottom(this.props.data)(viewport)
         if (this.props.临时参数 === '变成负数') {

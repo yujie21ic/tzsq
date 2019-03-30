@@ -32,4 +32,8 @@ export class 竖线Layer extends Layer<{ data: ArrayLike<boolean>, color: number
             }
         }
     }
+
+    getRight() {
+        return this.props.data.length - 1
+    }
 } 
