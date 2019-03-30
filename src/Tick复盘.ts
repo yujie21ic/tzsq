@@ -1,5 +1,5 @@
 import { DataClient } from './RealDataServer/DataClient'
-import { TickBase } from './TickBase'
+import { _________________TickBase } from './_________________TickBase'
 import { registerCommand } from './lib/UI/registerCommand'
 import { windowExt } from './windowExt'
 import { RealDataBase } from './RealDataServer/RealDataBase'
@@ -14,7 +14,7 @@ import { get成交性质 } from './lib/F/get成交性质'
 
 theme.右边空白 = 0
 
-class Tick复盘 extends TickBase {
+class Tick复盘 extends _________________TickBase {
 
     title = new Date(windowExt.startTime).toLocaleString()
     real = new DataClient.RealData__History()
@@ -168,10 +168,18 @@ class Tick复盘 extends TickBase {
             if (e.keyCode === 32) {
                 this.加速 = false
             }
+            if (e.keyCode === 37) {
+                this.快退 = true
+            }
+            if (e.keyCode === 39) {
+                this.快进 = true
+            }
         }
     }
 
     加速 = false
+    快退 = false
+    快进 = false
 
     c = 0
     getLeftRight() {
@@ -192,7 +200,18 @@ class Tick复盘 extends TickBase {
         if (right2 === 0) {
             this.c = 0
         } else {
-            this.c += (this.加速 ? 500 : 1) / 60 * (1000 / RealDataBase.单位时间)
+            let 速度 = 1
+            if (this.加速) 速度 = 500
+            if (this.快进) {
+                this.快进 = false
+                速度 = 30 * 60 * 2 * 60
+            }
+            if (this.快退) {
+                this.快退 = false
+                速度 = -30 * 60 * 2 * 60
+            }
+
+            this.c += 速度 / 60 * (1000 / RealDataBase.单位时间)
         }
         //2分钟前的直接显示
         const right = Math.min(120 * (1000 / RealDataBase.单位时间) + Math.floor(this.c), right2)
