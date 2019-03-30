@@ -922,37 +922,6 @@ export class RealDataBase {
         const 信号_抄底 = __摸顶抄底('抄底')
 
 
-        const __摸顶抄底_平仓 = (type: '摸顶' | '抄底') => 指标.map(
-            () => Math.min(
-                data.length,
-                orderBook.length,
-            ),
-            i => [
-                { name: '震荡指数_macd DIF < DEM', value: 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i] },
-                { name: '成交量 DIF < DEM', value: 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] },
-                { name: '折返程度', value: type === '摸顶' ? (价格_最高60[i] - 价格[i]) > 折返率[i] : (价格[i] - 价格_最低60[i]) > 折返率[i] },
-            ]
-        )
-
-        const bitmex_信号_摸顶_下跌平仓 = __摸顶抄底_平仓('摸顶')
-        const bitmex_信号_抄底_上涨平仓 = __摸顶抄底_平仓('抄底')
-
-        const __摸顶抄底_平仓hopex = (type: '摸顶' | '抄底') => 指标.map(
-            () => Math.min(
-                data.length,
-                orderBook.length,
-            ),
-            i => [
-                { name: '震荡指数_macd DIF < DEM', value: 震荡指数_macd.DIF[i] < 震荡指数_macd.DEM[i] },
-                { name: '成交量 DIF < DEM', value: 净成交量abs_macd.DIF[i] < 净成交量abs_macd.DEM[i] },
-                { name: '折返程度', value: type === '摸顶' ? (价格_最高60[i] - 价格[i]) > 折返率[i] : (价格[i] - 价格_最低60[i]) > 折返率[i] },
-            ]
-        )
-        const hopex_信号_摸顶_下跌平仓 = __摸顶抄底_平仓hopex('摸顶')
-        const hopex_信号_抄底_上涨平仓 = __摸顶抄底_平仓hopex('抄底')
-
-
-
         const [双开, 双平, 多换, 空换, 多平, 空平, 空开, 多开] = ['双开', '双平', '多换', '空换', '多平', '空平', '空开', '多开'].map(v =>
             指标.map(() => data.length, i => data[i].成交性质 === v ? data[i].buySize + data[i].sellSize : 0)
         )
@@ -961,11 +930,6 @@ export class RealDataBase {
 
 
         return {
-            bitmex_信号_摸顶_下跌平仓,
-            bitmex_信号_抄底_上涨平仓,
-            hopex_信号_摸顶_下跌平仓,
-            hopex_信号_抄底_上涨平仓,
-
             bitmex_价格_macd,
             _1分钟_,
 
@@ -1154,7 +1118,54 @@ export class RealDataBase {
 
         })
 
+
+
+
+
+
+
+
+
+
+        const bitmex__摸顶抄底_平仓 = (type: '摸顶' | '抄底') => 指标.map(
+            () => Math.min(bitmex.价格.length),
+            i => [
+                { name: '震荡指数_macd DIF < DEM', value: bitmex.震荡指数_macd.DIF[i] < bitmex.震荡指数_macd.DEM[i] },
+                { name: '成交量 DIF < DEM', value: bitmex.净成交量abs_macd.DIF[i] < bitmex.净成交量abs_macd.DEM[i] },
+                { name: '折返程度', value: type === '摸顶' ? (bitmex.价格_最高60[i] - bitmex.价格[i]) > bitmex.折返率[i] : (bitmex.价格[i] - bitmex.价格_最低60[i]) > bitmex.折返率[i] },
+            ]
+        )
+
+        const bitmex_信号_摸顶_下跌平仓 = bitmex__摸顶抄底_平仓('摸顶')
+        const bitmex_信号_抄底_上涨平仓 = bitmex__摸顶抄底_平仓('抄底')
+
+        const hopex__摸顶抄底_平仓 = (type: '摸顶' | '抄底') => 指标.map(
+            () => Math.min(bitmex.价格.length),
+            i => [
+                { name: '震荡指数_macd DIF < DEM', value: bitmex.震荡指数_macd.DIF[i] < bitmex.震荡指数_macd.DEM[i] },
+                { name: '成交量 DIF < DEM', value: bitmex.净成交量abs_macd.DIF[i] < bitmex.净成交量abs_macd.DEM[i] },
+                { name: '折返程度', value: type === '摸顶' ? (bitmex.价格_最高60[i] - bitmex.价格[i]) > bitmex.折返率[i] : (bitmex.价格[i] - bitmex.价格_最低60[i]) > bitmex.折返率[i] },
+            ]
+        )
+        const hopex_信号_摸顶_下跌平仓 = hopex__摸顶抄底_平仓('摸顶')
+        const hopex_信号_抄底_上涨平仓 = hopex__摸顶抄底_平仓('抄底')
+
+
+
+
+
+
+
+
+
+
+
         return {
+            bitmex_信号_摸顶_下跌平仓,
+            bitmex_信号_抄底_上涨平仓,
+            hopex_信号_摸顶_下跌平仓,
+            hopex_信号_抄底_上涨平仓,
+
             提醒,
 
             hopex_价格_macd,
@@ -1289,14 +1300,14 @@ export class RealDataBase {
 
     is摸顶_下跌平仓 = (market: 'bitmex' | 'hopex') =>
         is连续几根全亮(2, market === 'bitmex' ?
-            this.dataExt.XBTUSD.bitmex.bitmex_信号_摸顶_下跌平仓 :
-            this.dataExt.XBTUSD.bitmex.hopex_信号_摸顶_下跌平仓
+            this.dataExt.XBTUSD.bitmex_信号_摸顶_下跌平仓 :
+            this.dataExt.XBTUSD.hopex_信号_摸顶_下跌平仓
         )
 
     is抄底_上涨平仓 = (market: 'bitmex' | 'hopex') =>
         is连续几根全亮(2, market === 'bitmex' ?
-            this.dataExt.XBTUSD.bitmex.bitmex_信号_抄底_上涨平仓 :
-            this.dataExt.XBTUSD.bitmex.hopex_信号_抄底_上涨平仓
+            this.dataExt.XBTUSD.bitmex_信号_抄底_上涨平仓 :
+            this.dataExt.XBTUSD.hopex_信号_抄底_上涨平仓
         )
 
 }
