@@ -960,6 +960,8 @@ export class RealDataBase {
 
 
         return {
+            信号_摸顶_下跌平仓hopex,
+            信号_抄底_上涨平仓hopex,
             bitmex_价格_macd,
             _1分钟_,
 
@@ -1250,7 +1252,7 @@ export class RealDataBase {
     摸顶抄底_反向信号_平仓 = (market: 'bitmex' | 'hopex') => {
         const realData = this
         const up = market === 'bitmex' ? realData.dataExt.XBTUSD.bitmex.信号_摸顶 : realData.dataExt.XBTUSD.hopex_信号_摸顶
-        const down = market === 'bitmex' ? realData.dataExt.XBTUSD.bitmex.信号_摸顶 : realData.dataExt.XBTUSD.hopex_信号_抄底
+        const down = market === 'bitmex' ? realData.dataExt.XBTUSD.bitmex.信号_抄底 : realData.dataExt.XBTUSD.hopex_信号_抄底
 
         if (up.length > 2 && up[up.length - 1].every(v => v.value) && up[up.length - 2].every(v => v.value)) {
             return { 信号side: 'Sell' as 'Sell' }
@@ -1283,9 +1285,15 @@ export class RealDataBase {
 
 
     is摸顶_下跌平仓 = (market: 'bitmex' | 'hopex') =>
-        is连续几根全亮(2, this.dataExt.XBTUSD.bitmex.信号_摸顶_下跌平仓) //写死bitmex
+        is连续几根全亮(2, market === 'bitmex' ?
+            this.dataExt.XBTUSD.bitmex.信号_摸顶_下跌平仓 :
+            this.dataExt.XBTUSD.bitmex.信号_摸顶_下跌平仓hopex
+        )
 
     is抄底_上涨平仓 = (market: 'bitmex' | 'hopex') =>
-        is连续几根全亮(2, this.dataExt.XBTUSD.bitmex.信号_抄底_上涨平仓) //写死bitmex
+        is连续几根全亮(2, market === 'bitmex' ?
+            this.dataExt.XBTUSD.bitmex.信号_抄底_上涨平仓 :
+            this.dataExt.XBTUSD.bitmex.信号_抄底_上涨平仓hopex
+        )
 
 }
