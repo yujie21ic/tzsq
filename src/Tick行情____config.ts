@@ -133,11 +133,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         heightList: [0.4, 0.15, 0.15, 0.2, 0.1],
         items: [
             [
-                {
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
-                    ]
-                },
+               
                 // {
 
                 {
@@ -170,6 +166,11 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                                 `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
                             color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
                         })
+                    ]
+                },
+                {
+                    layerList: [
+                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
                     ]
                 },
             ],
@@ -509,11 +510,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         heightList: [0.4, 0.15, 0.15, 0.2, 0.1],
         items: [
             [
-                {
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
-                    ]
-                },
+              
                 {
                     numberColor: 波动率颜色,
                     numberX: 100,
@@ -546,6 +543,11 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         })
                     ]
                 },
+                {
+                    layerList: [
+                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+                    ]
+                },
             ],
 
 
@@ -564,7 +566,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layer(信号Layer, { data: d2.XBTUSD.hopex_信号_抄底, color: 买颜色 }),
                     layer(TextLayer, {
                         text:
-                            `信号_抄底hopex专用                    `,
+                            `hopex_信号_抄底                    `,
                         color: ETH颜色,
                     })
                 ]
@@ -574,17 +576,17 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layer(信号Layer, { data: d.bitmex.信号_抄底hopex专用, color: 买颜色 }),
                     layer(TextLayer, {
                         text:
-                            `下跌抄底                    `,
+                            `信号_抄底hopex专用                    `,
                         color: ETH颜色,
                     })
                 ]
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.bitmex_信号_抄底_上涨平仓, color: 买颜色 }),
+                    layer(信号Layer, { data: d.hopex_信号_摸顶_下跌平仓, color: 买颜色 }),
                     layer(TextLayer, {
                         text:
-                            `信号_抄底_上涨平仓新                    `,
+                            `hopex_信号_摸顶_下跌平仓                    `,
                         color: ETH颜色,
                     })
                 ]
