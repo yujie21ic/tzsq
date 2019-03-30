@@ -1071,7 +1071,7 @@ export class RealDataBase {
         const 提醒 = 指标.map(
             () => Math.min(bitmex_信号_追涨.length, bitmex.卖.盘口1.length, bitmex_信号_追跌.length, bitmex.买.盘口1.length),
             i => [
-                { name: '追涨', value: _X秒内有全亮连续3根(30, bitmex_信号_追跌, i) && bitmex.买.盘口1[i] < 100 * 10000 },
+                { name: '追涨', value: _X秒内有全亮连续3根(30, bitmex_信号_追涨, i) && bitmex.买.盘口1[i] < 100 * 10000 },
                 { name: '追跌', value: _X秒内有全亮连续3根(30, bitmex_信号_追跌, i) && bitmex.买.盘口1[i] < 100 * 10000 },
             ]
         )
