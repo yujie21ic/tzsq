@@ -1140,11 +1140,11 @@ export class RealDataBase {
         const bitmex_信号_抄底_上涨平仓 = bitmex__摸顶抄底_平仓('抄底')
 
         const hopex__摸顶抄底_平仓 = (type: '摸顶' | '抄底') => 指标.map(
-            () => Math.min(bitmex.价格.length),
+            () => Math.min(hopex.价格.length),
             i => [
                 { name: '震荡指数_macd DIF < DEM', value: bitmex.震荡指数_macd.DIF[i] < bitmex.震荡指数_macd.DEM[i] },
                 { name: '成交量 DIF < DEM', value: bitmex.净成交量abs_macd.DIF[i] < bitmex.净成交量abs_macd.DEM[i] },
-                { name: '折返程度', value: type === '摸顶' ? (bitmex.价格_最高60[i] - bitmex.价格[i]) > bitmex.折返率[i] : (bitmex.价格[i] - bitmex.价格_最低60[i]) > bitmex.折返率[i] },
+                { name: '折返程度', value: type === '摸顶' ? (hopex.价格_最高60[i] - hopex.价格[i]) > bitmex.折返率[i] : (hopex.价格[i] - hopex.价格_最低60[i]) > bitmex.折返率[i] },
             ]
         )
         const hopex_信号_摸顶_下跌平仓 = hopex__摸顶抄底_平仓('摸顶')
