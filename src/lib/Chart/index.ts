@@ -173,6 +173,36 @@ const chartRender = () => {
         pushLayer(layerContainer.removeChildAt(0) as Layer<any>)
     }
 
+
+
+    __right__ = 100
+    items.items.forEach((v, i) => {
+        if (v instanceof Array) {
+            v.forEach(v => {
+                const layerList = v.layerList.map(([C, P]) => popLayer(C, P))
+                layerList.forEach(layer => {
+                    __right__ = Math.max(__right__, layer.getRight())
+                })
+            })
+        } else {
+            const layerList = v.layerList.map(([C, P]) => popLayer(C, P))
+            layerList.forEach(layer => {
+                __right__ = Math.max(__right__, layer.getRight())
+            })
+        }
+    })
+
+
+
+
+
+
+
+
+
+
+
+
     let price = NaN
     let startY = 0
 
@@ -195,7 +225,6 @@ const chartRender = () => {
 
         layerList.forEach(layer => {
             tb = layer.updateTopAndBottom(viewport, tb)
-            __right__ = Math.max(__right__, layer.getRight())
         })
 
         //1 1
@@ -257,7 +286,6 @@ const chartRender = () => {
     }
 
 
-    __right__ = 0
     items.items.forEach((v, i) => {
 
         if (v instanceof Array) {

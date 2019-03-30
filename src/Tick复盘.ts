@@ -11,6 +11,7 @@ import { fix浮点 } from './lib/F/fix浮点'
 import { BaseType } from './lib/BaseType'
 import { timeID } from './lib/F/timeID'
 import { get成交性质 } from './lib/F/get成交性质'
+import { getRight } from './lib/Chart'
 
 theme.右边空白 = 0
 
@@ -187,13 +188,12 @@ class Tick复盘 extends _________________TickBase {
 
             ; (window as any)['d'] = d
 
-        const d2 = this.real.dataExt
-
-        let right2 = this.nowChart === '波动_测试' ? Math.max(d.bitmex.波动_测试.累计买.length) - 1 :
-            this.nowChart === 'ctp波动_测试' ? Math.max(d2.ctp.波动_测试.累计买.length) - 1 :
-                this.nowChart.indexOf('螺纹') !== -1 ? Math.max(this.real.dataExt.ctp.价格.length, this.real.dataExt.ctp.盘口.length) - 1 :
-                    Math.max(d.binance.价格.length, d.hopex.价格.length, d.bitmex.价格.length, d.bitmex.买.盘口.length, d.bitmex.卖.盘口.length) - 1
-
+        // const d2 = this.real.dataExt
+        // let right2 = this.nowChart === '波动_测试' ? Math.max(d.bitmex.波动_测试.累计买.length) - 1 :
+        //     this.nowChart === 'ctp波动_测试' ? Math.max(d2.ctp.波动_测试.累计买.length) - 1 :
+        //         this.nowChart.indexOf('螺纹') !== -1 ? Math.max(this.real.dataExt.ctp.价格.length, this.real.dataExt.ctp.盘口.length) - 1 :
+        //             Math.max(d.binance.价格.length, d.hopex.价格.length, d.bitmex.价格.length, d.bitmex.买.盘口.length, d.bitmex.卖.盘口.length) - 1
+        let right2 = getRight()
 
 
 
