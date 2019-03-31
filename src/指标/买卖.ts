@@ -48,32 +48,31 @@ export const get买卖 = ({ data, orderBook }: {
     data: BaseType.KLine[]
     orderBook: BaseType.OrderBook[]
 }) => {
-    const __成交量买 = 指标.map(() => data.length, i => data[i].buySize)
-    const __成交量卖 = 指标.map(() => data.length, i => data[i].sellSize)
+    const 成交量买 = 指标.map(() => data.length, i => data[i].buySize)
+    const 成交量卖 = 指标.map(() => data.length, i => data[i].sellSize)
 
-    const __盘口买 = 指标.map(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
-    const __盘口卖 = 指标.map(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
+    const 盘口买 = 指标.map(() => orderBook.length, i => sum(orderBook[i].buy.map(v => v.size)))
+    const 盘口卖 = 指标.map(() => orderBook.length, i => sum(orderBook[i].sell.map(v => v.size)))
 
-
-    const __盘口买1 = 指标.map(() => orderBook.length, i => orderBook[i].buy.length > 0 ? orderBook[i].buy[0].size : NaN)
-    const __盘口卖1 = 指标.map(() => orderBook.length, i => orderBook[i].sell.length > 0 ? orderBook[i].sell[0].size : NaN)
+    const 盘口买1 = 指标.map(() => orderBook.length, i => orderBook[i].buy.length > 0 ? orderBook[i].buy[0].size : NaN)
+    const 盘口卖1 = 指标.map(() => orderBook.length, i => orderBook[i].sell.length > 0 ? orderBook[i].sell[0].size : NaN)
 
     const 买 = 买卖({
-        成交量: __成交量买,
-        盘口: __盘口买,
-        盘口1: __盘口买1,
-        反向成交量: __成交量卖,
-        反向盘口: __盘口卖,
-        反向盘口1: __盘口卖1,
+        成交量: 成交量买,
+        盘口: 盘口买,
+        盘口1: 盘口买1,
+        反向成交量: 成交量卖,
+        反向盘口: 盘口卖,
+        反向盘口1: 盘口卖1,
     })
 
     const 卖 = 买卖({
-        成交量: __成交量卖,
-        盘口: __盘口卖,
-        盘口1: __盘口卖1,
-        反向成交量: __成交量买,
-        反向盘口: __盘口买,
-        反向盘口1: __盘口买1,
+        成交量: 成交量卖,
+        盘口: 盘口卖,
+        盘口1: 盘口卖1,
+        反向成交量: 成交量买,
+        反向盘口: 盘口买,
+        反向盘口1: 盘口买1,
     })
 
     return { 买, 卖 }
