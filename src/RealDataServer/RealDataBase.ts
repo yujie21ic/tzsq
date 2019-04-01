@@ -181,7 +181,7 @@ export class RealDataBase {
             布林带: 指标.布林带(_1分钟_收盘价, 1000),
         }
 
-        盘口算价格 = true
+        盘口算价格 = false
 
 
         const 盘口价格 = 指标.map(() => orderBook.length, i =>

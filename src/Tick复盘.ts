@@ -205,11 +205,11 @@ class Tick复盘 extends _________________TickBase {
             if (this.加速) 速度 = 500
             if (this.快进) {
                 this.快进 = false
-                速度 = 30 * 60 * 2 * 60
+                速度 = 10 * 60 * 2 * 60
             }
             if (this.快退) {
                 this.快退 = false
-                速度 = -30 * 60 * 2 * 60
+                速度 = -10 * 60 * 2 * 60
             }
 
             this.c += 速度 / 60 * (1000 / RealDataBase.单位时间)
