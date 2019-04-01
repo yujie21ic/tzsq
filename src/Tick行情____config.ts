@@ -206,7 +206,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.bitmex_信号_摸顶_下跌平仓, color: 卖颜色 }),
+                    layer(信号Layer, { data: d.hopex_信号_摸顶_下跌平仓, color: 卖颜色 }),
                     layer(TextLayer, {
                         text:
                             `信号_摸顶_下跌平仓新                    `,
@@ -218,12 +218,20 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     }),
 
     复盘追涨追跌: (d, d2) => ({
-        heightList: [0.7, 0.2, 0.1],
+        heightList: [0.5,0.2,0.2, 0.1],
         items: [
             [
                 {
                     layerList: [
                         layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+                    ]
+                },
+                {
+                    numberColor: 'ETH颜色',
+                    layerList: [
+                        layer(ZeroLayer, { color: ETH颜色 }),
+                        layer(LineLayer, { data:  d.bitmex.阻力3涨, color: 买颜色 }),
+                        layer(LineLayer, { data:  d.bitmex.阻力3跌, color: 卖颜色 }),
                     ]
                 },
                 {
@@ -244,6 +252,18 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     ]
                 },
             ],
+            {
+                layerList: [
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
+
+                    layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
+                    layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d.bitmex.卖.净成交量_累加10, color: ETH颜色 }),
+                    //layer(LineLayer, { data: d.bitmex.买.净成交量_累加10, color: BTC颜色 }),
+                    //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
+                    layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
+                ]
+            },
 
             {
                 layerList: [
@@ -583,7 +603,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
             {
                 layerList: [
-                    layer(信号Layer, { data: d.hopex_信号_摸顶_下跌平仓, color: 买颜色 }),
+                    layer(信号Layer, { data: d.hopex_信号_抄底_上涨平仓, color: 买颜色 }),
                     layer(TextLayer, {
                         text:
                             `hopex_信号_摸顶_下跌平仓                    `,

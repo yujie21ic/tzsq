@@ -1007,8 +1007,8 @@ export class RealDataBase {
         const bitmex_hopex_上涨差价 = 指标.map(() => Math.min(bitmex.价格_最高60.length, hopex.价格.length), i => Math.abs(bitmex.价格_最高60[i] - hopex.价格[i]))
         const bitmex_hopex_下跌差价 = 指标.map(() => Math.min(bitmex.价格_最低60.length, hopex.价格.length), i => Math.abs(bitmex.价格_最低60[i] - hopex.价格[i]))
 
-        const bitmex_hopex_上涨差价均线 = 指标.SMA(bitmex_hopex_上涨差价, 180, RealDataBase.单位时间)
-        const bitmex_hopex_下跌差价均线 = 指标.SMA(bitmex_hopex_下跌差价, 180, RealDataBase.单位时间)
+        const bitmex_hopex_上涨差价均线 = 指标.SMA(bitmex_hopex_上涨差价, 360, RealDataBase.单位时间)
+        const bitmex_hopex_下跌差价均线 = 指标.SMA(bitmex_hopex_下跌差价, 360, RealDataBase.单位时间)
 
         const bitmex_hopex_上涨相对价差 = 指标.map(() => Math.min(bitmex_hopex_上涨差价.length, bitmex_hopex_上涨差价均线.length), i => bitmex_hopex_上涨差价[i] - bitmex_hopex_上涨差价均线[i])
         const bitmex_hopex_下跌相对价差 = 指标.map(() => Math.min(bitmex_hopex_下跌差价.length, bitmex_hopex_下跌差价均线.length), i => bitmex_hopex_下跌差价[i] - bitmex_hopex_下跌差价均线[i])
@@ -1040,7 +1040,7 @@ export class RealDataBase {
                 i => [
                     //{ name: '价格macd', value:bitmex.bitmex_价格_macd.DIF[i]<bitmex.bitmex_价格_macd.DEM[i]},
                     //{ name: '价格macd', value:hopex_价格_macd.DIF[i]<hopex_价格_macd.DEM[i]},
-                    { name: 'bitmex价格macd ', value: type === '追涨' ? bitmex.bitmex_价格_macd.DIF[i] >= bitmex.bitmex_价格_macd.DEM[i] : bitmex.bitmex_价格_macd.DIF[i] <= bitmex.bitmex_价格_macd.DEM[i] },
+                    { name: 'bitmex价格macd ', value: type === '追涨' ? (bitmex.bitmex_价格_macd.DIF[i] >= bitmex.bitmex_价格_macd.DEM[i]*1.1||Math.abs(bitmex.bitmex_价格_macd.DIF[i])<0.1) : (bitmex.bitmex_价格_macd.DIF[i] <= bitmex.bitmex_价格_macd.DEM[i]*1.1||Math.abs(bitmex.bitmex_价格_macd.DIF[i])<0.1) },
                     { name: 'hopex价格macd ', value: type === '追涨' ? hopex_价格_macd.DIF[i] > hopex_价格_macd.DEM[i] : hopex_价格_macd.DIF[i] < hopex_价格_macd.DEM[i] },
                     //{ name: '净盘口 > 0', value: bs.净盘口_均线3[i] > 0 },
                     { name: '相对价差 ', value: type === '追涨' ? bitmex_hopex_下跌相对价差均线[i] > 1.1 : bitmex_hopex_上涨相对差价均线[i] < -1.1 },
