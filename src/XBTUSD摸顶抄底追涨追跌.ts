@@ -108,7 +108,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             item: self.jsonSync.rawData.symbol.XBTUSD,
         }
 
-        const aaa = this.bitmex_活动委托检测(self, x)
+        const aaa = this.bitmex_委托检测(self, x)
         if (aaa) return aaa
 
         const bbb = this.止损_step(self, x)
@@ -130,18 +130,18 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         }
     }
 
-    private bitmex_活动委托检测(self: PositionAndOrder, x: XXX) {
+    private bitmex_委托检测(self: PositionAndOrder, x: XXX) {
         const { item } = x
-        const { 仓位数量, 活动委托 } = item
+        const { 仓位数量 } = item
 
         //委托检测
-        const 委托 = 活动委托.filter(v => v.type !== '止损')
+        const 活动委托 = item.活动委托.filter(v => v.type !== '止损')
 
         //没有委托
-        if (委托.length === 0) {
+        if (活动委托.length === 0) {
             return false //<----------------------------------------------
         }
-        else if (委托.length === 1) {
+        else if (活动委托.length === 1) {
             if (
                 //没有仓位随便
                 仓位数量 === 0 ||
@@ -149,21 +149,21 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 //有仓位 有委托 只能是 
                 //部分成交的委托 
                 //依赖ws先返回 委托更新 再返回仓位更新      //<---------------------------------------------
-                (委托[0].type === '限价' && 委托[0].cumQty !== 0) ||
+                (活动委托[0].type === '限价' && 活动委托[0].cumQty !== 0) ||
 
                 //或者 限价只减仓委托
-                委托[0].type === '限价只减仓'
+                活动委托[0].type === '限价只减仓'
             ) {
                 return false //<----------------------------------------------
             } else {
-                self.log('bitmex 委托检测step 取消委托 ' + 委托[0].type)
-                return self.cancel({ orderID: 委托.map(v => v.id) })
+                self.log('bitmex 委托检测step 取消委托 ' + 活动委托[0].type)
+                return self.cancel({ orderID: 活动委托.map(v => v.id) })
             }
         }
         else {
             //多个委托  全部给取消  
-            self.log('bitmex 委托检测step 委托检测step 取消多个委托 ' + 委托.map(v => v.type).join(','))
-            return self.cancel({ orderID: 委托.map(v => v.id) })
+            self.log('bitmex 委托检测step 委托检测step 取消多个委托 ' + 活动委托.map(v => v.type).join(','))
+            return self.cancel({ orderID: 活动委托.map(v => v.id) })
         }
     }
 
@@ -171,9 +171,9 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         const { market, state, d, item } = x
 
-        const { 仓位数量, 开仓均价, 活动委托 } = item
+        const { 仓位数量, 开仓均价 } = item
 
-        const 止损委托 = 活动委托.filter(v => v.type === '止损')
+        const 止损委托 = item.活动委托.filter(v => v.type === '止损')
 
         const 波动率 = lastNumber(d.价格_波动率30)
 
