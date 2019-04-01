@@ -38,6 +38,9 @@ export class RealData__Server extends RealDataBase {
     private on着笔(p: {
         symbol: string
         xxxxxxxx: {
+            着笔: {
+                ____push: (v: { side: BaseType.Side, size: number, price: number }) => void
+            },
             data: {
                 ____push: (v: BaseType.KLine) => void
                 ____updateLast: (v: BaseType.KLine) => void
@@ -62,6 +65,12 @@ export class RealData__Server extends RealDataBase {
         if (this.data.startTick === 0) {
             this.jsonSync.data.startTick.____set(tick)
         }
+
+        p.xxxxxxxx.着笔.____push({
+            side: p.side,
+            size: p.size,
+            price: p.price,
+        })
 
 
         //tick
