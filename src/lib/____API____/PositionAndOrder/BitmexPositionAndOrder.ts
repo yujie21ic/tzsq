@@ -58,7 +58,7 @@ const 重试休息多少毫秒 = 10
 export class BitmexPositionAndOrder implements PositionAndOrder {
 
     private cookie: string
-    private hopexCookie: string 
+    private hopexCookie: string
 
     log: (text: string) => void
     private ws: BitMEXWSAPI
@@ -79,7 +79,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     private hopex_初始化 = {
         仓位: false,
         委托: false,
-    } 
+    }
 
     async hopex_轮询() {
         while (true) {
@@ -495,6 +495,9 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     }
 
     runTask(task: PositionAndOrderTask) {
+        this.realData.onTitle = obj => {
+            this.log(JSON.stringify(obj))
+        }
         this.ws.filledObservable.subscribe(v => task.onFilled(v))
         this.task1(task)
         this.task2(task)
