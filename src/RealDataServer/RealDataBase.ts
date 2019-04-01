@@ -173,12 +173,20 @@ export class RealDataBase {
     }
 
 
-    private item2({ data1M, data, orderBook }: {
+    private item2(xxx: {
+        着笔: { side: BaseType.Side, size: number, price: number }[],
         data1M: { id: number, close: number }[]
         data: BaseType.KLine[]
         orderBook: BaseType.OrderBook[]
     }, 盘口算价格: boolean) {
 
+        const { data1M, data, orderBook } = xxx
+
+        const 着笔 = {
+            price: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].price),
+            side: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].side),
+            size: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].size),
+        }
 
 
         const _1分钟_收盘价 = 指标.map(() => data1M.length, i => data1M[i].close)
@@ -568,6 +576,7 @@ export class RealDataBase {
 
 
             return {
+                着笔,
                 累计成交量,
                 价差,
                 动力,
