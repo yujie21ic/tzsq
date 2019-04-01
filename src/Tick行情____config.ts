@@ -1605,7 +1605,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
 
     hopex: (d, d2) => ({
-        heightList: [0.6, 0.2, 0.2],
+        heightList: [0.2, 0.2, 0.2, 0.2, 0.2],
         items: [
             [
                 {
@@ -1618,12 +1618,20 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 layerList: [
                     layer(信号Layer, { data: d2.XBTUSD.hopex_信号_抄底_上涨平仓, color: 卖颜色 }),
+                ]
+            },
+            {
+                layerList: [
                     layer(信号Layer, { data: d2.XBTUSD.hopex_信号_摸顶_下跌平仓, color: 买颜色 }),
                 ]
             },
             {
                 layerList: [
                     layer(信号Layer, { data: d2.XBTUSD.hopex_信号_摸顶, color: 卖颜色 }),
+                ]
+            },
+            {
+                layerList: [
                     layer(信号Layer, { data: d2.XBTUSD.hopex_信号_抄底, color: 买颜色 }),
                 ]
             },
