@@ -5,9 +5,7 @@ export type ConfigType = {
     orderServer?: {
         [name: string]: {
             cookie: string
-            hopexCookie?: string            
-            hopexUserName?: string
-            hopexPassword?: string 
+            hopexCookie?: string
         }
     }
     量化数量?: number

@@ -27,16 +27,16 @@ const HopexRESTAPI__http = <T>(p: { cookie?: string, url: string, param?: any })
 
 export const HopexRESTAPI = {
 
-    login: async (p: { userName: string, password: string }) =>
-        HopexRESTAPI__http({
-            url: 'https://web.hopex.com/api/v1/User/Login?culture=zh-CN',
-            param: {
-                loginType: 'pcweb',
-                password: p.password,
-                registType: p.userName.indexOf('@') !== -1 ? 'Email' : 'Phone',
-                userName: p.userName,
-            },
-        }),
+    // login: async (p: { userName: string, password: string }) =>
+    //     HopexRESTAPI__http({
+    //         url: 'https://web.hopex.com/api/v1/User/Login?culture=zh-CN',
+    //         param: {
+    //             loginType: 'pcweb',
+    //             password: p.password,
+    //             registType: p.userName.indexOf('@') !== -1 ? 'Email' : 'Phone',
+    //             userName: p.userName,
+    //         },
+    //     }),
 
 
     taker: async (cookie: string, p: { size: number, side: BaseType.Side }) =>

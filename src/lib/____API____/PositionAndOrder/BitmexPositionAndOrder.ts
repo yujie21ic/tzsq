@@ -58,9 +58,7 @@ const 重试休息多少毫秒 = 10
 export class BitmexPositionAndOrder implements PositionAndOrder {
 
     private cookie: string
-    private hopexCookie: string
-    private hopexUserName: string
-    private hopexPassword: string
+    private hopexCookie: string 
 
     log: (text: string) => void
     private ws: BitMEXWSAPI
@@ -81,18 +79,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     private hopex_初始化 = {
         仓位: false,
         委托: false,
-    }
-
-    async hopex_login() {
-        if (1 + 1 === 3) {
-            this.log('hopex_login')
-            const ret = await HopexRESTAPI.login({
-                userName: this.hopexUserName,
-                password: this.hopexPassword
-            })
-            this.log('hopex_login:' + JSON.stringify(ret))
-        }
-    }
+    } 
 
     async hopex_轮询() {
         while (true) {
@@ -122,7 +109,8 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
             } else {
                 this.hopex_初始化.仓位 = false
-                await this.hopex_login()
+                this.log('hopex_初始化.仓位 = false')
+                // await this.hopex_login()
             }
 
             const b = await HopexRESTAPI.getConditionOrders(this.hopexCookie)
@@ -157,18 +145,17 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
             } else {
                 this.hopex_初始化.委托 = false
-                await this.hopex_login()
+                this.log('hopex_初始化.委托 = false')
+                // await this.hopex_login()
             }
             await sleep(2000)
         }
     }
 
 
-    constructor(p: { accountName: string, cookie: string, hopexCookie: string, hopexUserName: string, hopexPassword: string }) {
+    constructor(p: { accountName: string, cookie: string, hopexCookie: string }) {
         this.cookie = p.cookie
         this.hopexCookie = p.hopexCookie
-        this.hopexUserName = p.hopexUserName
-        this.hopexPassword = p.hopexPassword
 
         this.hopex_轮询()
 
