@@ -1747,7 +1747,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
 
     原始数据: (d, d2) => ({
-        heightList: [0.4, 0.4, 0.2],
+        heightList: [0.6, 0.2, 0.2],
         items: [
             [
                 {
@@ -1826,7 +1826,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     }),
 
     原始数据成交量: (d, d2) => ({
-        heightList: [0.5, 0.3, 0.2],
+        heightList: [0.6, 0.2, 0.2],
         items: [
             [
                 {
