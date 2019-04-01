@@ -97,10 +97,11 @@ export class _________________TickBase {
         const d = this.real.dataExt[this.nowTickSymbol]
         const d2 = this.real.dataExt
 
-        let right = this.nowChart === '波动_测试' ? Math.max(d.bitmex.波动_测试.累计买.length) - 1 :
-            this.nowChart === 'ctp波动_测试' ? Math.max(d2.ctp.波动_测试.累计买.length) - 1 :
-                this.nowChart.indexOf('螺纹') !== -1 ? Math.max(this.real.dataExt.ctp.价格.length, this.real.dataExt.ctp.盘口.length) - 1 :
-                    Math.max(d.binance.价格.length, d.hopex.价格.length, d.bitmex.价格.length, d.bitmex.买.盘口.length, d.bitmex.卖.盘口.length) - 1
+        let right = this.nowChart === '着笔' ? Math.max(d.bitmex.着笔.price.length) - 1 :
+            this.nowChart === '波动_测试' ? Math.max(d.bitmex.波动_测试.累计买.length) - 1 :
+                this.nowChart === 'ctp波动_测试' ? Math.max(d2.ctp.波动_测试.累计买.length) - 1 :
+                    this.nowChart.indexOf('螺纹') !== -1 ? Math.max(this.real.dataExt.ctp.价格.length, this.real.dataExt.ctp.盘口.length) - 1 :
+                        Math.max(d.binance.价格.length, d.hopex.价格.length, d.bitmex.价格.length, d.bitmex.买.盘口.length, d.bitmex.卖.盘口.length) - 1
 
 
         const left = Math.max(0, right - this.showCount)
