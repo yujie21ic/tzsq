@@ -1040,7 +1040,7 @@ export class RealDataBase {
                 i => [
                     //{ name: '价格macd', value:bitmex.bitmex_价格_macd.DIF[i]<bitmex.bitmex_价格_macd.DEM[i]},
                     //{ name: '价格macd', value:hopex_价格_macd.DIF[i]<hopex_价格_macd.DEM[i]},
-                    { name: 'bitmex价格macd ', value: type === '追涨' ? (bitmex.bitmex_价格_macd.DIF[i] >= bitmex.bitmex_价格_macd.DEM[i]*1.1||Math.abs(bitmex.bitmex_价格_macd.DIF[i])<0.1) : (bitmex.bitmex_价格_macd.DIF[i] <= bitmex.bitmex_价格_macd.DEM[i]*1.1||Math.abs(bitmex.bitmex_价格_macd.DIF[i])<0.1) },
+                    { name: 'bitmex价格macd ', value: type === '追涨' ? (bitmex.bitmex_价格_macd.DIF[i] >= bitmex.bitmex_价格_macd.DEM[i] * 1.1 || Math.abs(bitmex.bitmex_价格_macd.DIF[i]) < 0.1) : (bitmex.bitmex_价格_macd.DIF[i] <= bitmex.bitmex_价格_macd.DEM[i] * 1.1 || Math.abs(bitmex.bitmex_价格_macd.DIF[i]) < 0.1) },
                     { name: 'hopex价格macd ', value: type === '追涨' ? hopex_价格_macd.DIF[i] > hopex_价格_macd.DEM[i] : hopex_价格_macd.DIF[i] < hopex_价格_macd.DEM[i] },
                     //{ name: '净盘口 > 0', value: bs.净盘口_均线3[i] > 0 },
                     { name: '相对价差 ', value: type === '追涨' ? bitmex_hopex_下跌相对价差均线[i] > 1.1 : bitmex_hopex_上涨相对差价均线[i] < -1.1 },
@@ -1306,7 +1306,7 @@ export class RealDataBase {
         if (is连续几根全亮(3, market === 'bitmex' ? realData.dataExt.XBTUSD.bitmex.信号_摸顶 : realData.dataExt.XBTUSD.hopex_信号_摸顶)) {
             return '摸顶'
         }
-        else if (is连续几根全亮(3, market === 'bitmex' ? realData.dataExt.XBTUSD.bitmex.信号_摸顶 : realData.dataExt.XBTUSD.hopex_信号_抄底)) {
+        else if (is连续几根全亮(3, market === 'bitmex' ? realData.dataExt.XBTUSD.bitmex.信号_抄底 : realData.dataExt.XBTUSD.hopex_信号_抄底)) {
             return '抄底'
         }
         else if (market === 'bitmex' && is连续几根全亮(1, realData.dataExt.XBTUSD.bitmex_信号_追涨)) {
