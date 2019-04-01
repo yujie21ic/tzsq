@@ -376,178 +376,187 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
     private 平仓_step(self: PositionAndOrder, x: XXX) {
 
         const { market, item, d, state } = x
-
         const { 任务开关, 仓位数量, 活动委托 } = item
 
-        if (任务开关.自动止盈波段 === false) {
-            return true
-        }
 
+        //开关没打开
+        if (任务开关.自动止盈波段 === false) return false
 
+        //仓位变大了 更新开仓状态
         if (isNaN(state.开仓状态.最大仓位abs) || state.开仓状态.最大仓位abs < Math.abs(仓位数量)) {
-            state.开仓状态.最大仓位abs = Math.abs(仓位数量)
-            state.开仓状态.最后一次开仓时间 = lastNumber(d.时间)
-            state.开仓状态.最后一次开仓折返率 = lastNumber(d.折返率)
-            state.开仓状态.摸顶抄底超时秒 = toRange({ min: 15, max: 30, value: lastNumber(d.价格_波动率30) / 7 + 20 })
-            state.开仓状态.第2次超时 = false
-            state.开仓状态.已经平了一半了 = false
+            state.开仓状态 = {
+                最大仓位abs: Math.abs(仓位数量),
+                最后一次开仓时间: lastNumber(d.时间),
+                最后一次开仓折返率: lastNumber(d.折返率),
+                摸顶抄底超时秒: toRange({ min: 15, max: 30, value: lastNumber(d.价格_波动率30) / 7 + 20 }),
+                第2次超时: false,
+                已经平了一半了: false,
+            }
         }
 
         const 持仓时间ms = lastNumber(d.时间) - state.开仓状态.最后一次开仓时间
 
-        if (活动委托.length <= 1) {
+        //持仓时间没有10秒        
+        if (持仓时间ms < 10 * 1000) return false
 
-            if (持仓时间ms < 10 * 1000) return false
-
-            const 平仓side = 仓位数量 > 0 ? 'Sell' : 'Buy'
-
-            const get位置1价格 = () => self.realData.getOrderPrice({
-                symbol: 'XBTUSD',
-                side: 平仓side,
-                type: 'maker',
-                位置: 0,
-            })
-
-            const 震荡指数衰竭 = lastNumber(d.震荡指数_macd.DIF) < lastNumber(d.震荡指数_macd.DEM)
-            //如果超时了 
-            if (持仓时间ms >= state.开仓状态.摸顶抄底超时秒 * 1000 && state.开仓状态.第2次超时 === false) {
-                state.开仓状态.第2次超时 = true
-                if (!震荡指数衰竭) { //dif>dem 
-                    state.开仓状态.摸顶抄底超时秒 = 15
-                }
-            }
-
-            let 亏损挂单平仓Text = ''
-
-            if (state.最后一次信号 === '摸顶' || state.最后一次信号 === '抄底') {
-                const 折返 = get浮盈点数(x) < state.开仓状态.最后一次开仓折返率
-                if (
-                    (折返 && 震荡指数衰竭 === true && 持仓时间ms >= state.开仓状态.摸顶抄底超时秒 * 1000) ||      // 折返函数&&震荡衰竭==true的超时时间是30s
-                    (折返 && 震荡指数衰竭 === false && 持仓时间ms >= state.开仓状态.摸顶抄底超时秒 * 120 * 1000)  // 折返函数&&震荡衰竭==false的超时时间是2分钟
-                ) {
-                    亏损挂单平仓Text = '下单' + state.开仓状态.摸顶抄底超时秒 + ' 秒后，折返没有超过下单点的折返函数，并且震荡指数衰竭，挂单全平'
-                }
-            }
-            else if (state.最后一次信号 === '追涨' || state.最后一次信号 === '追跌') {
-                const 净成交量均线60 = lastNumber(d.买.净成交量_累加60)
-
-                if ((平仓side === 'Sell' && 净成交量均线60 < 0) || (平仓side === 'Buy' && 净成交量均线60 > 0)) {
-                    亏损挂单平仓Text = '如果净成交量反向，那么立刻挂单平仓'
-                }
-                else if (持仓时间ms > 5 * 60 * 1000) {
-                    亏损挂单平仓Text = '如果净成交量没有反向，那么最多等待5分钟，然后挂单平仓'
-                } else {
-                    //如果遇到极值点，平仓只需要两根信号
-                }
-
-            }
+        //有多个委托了
+        if (活动委托.length > 1) return false
 
 
-            if (亏损挂单平仓Text !== '') {
-
-                if (活动委托.length === 1) {
-                    if (活动委托[0].type === '限价只减仓' && 活动委托[0].side === 平仓side) {
-                        if (活动委托[0].price !== get位置1价格()) {
-                            self.log('bitmex update maker ' + state.最后一次信号 + '平仓' + '  ' + 亏损挂单平仓Text + '  重新挂' + 平仓side + '1')
-                            return self.updateMaker({
-                                orderID: 活动委托[0].id,
-                                price: toBuySellPriceFunc(平仓side, get位置1价格),
-                            })
-                        } else {
-                            return false
-                        }
-                    }
-                } else {
-                    self.log(market + ' ' + state.最后一次信号 + '平仓' + '  ' + 亏损挂单平仓Text)
-                    return market === 'bitmex' ?
-                        self.maker({
-                            symbol: 'XBTUSD',
-                            side: 平仓side,
-                            size: state.开仓状态.最大仓位abs,
-                            price: toBuySellPriceFunc(平仓side, get位置1价格),
-                            reduceOnly: true,
-                            text: state.最后一次信号 + '平仓' + '  ' + 亏损挂单平仓Text,
-                        }) :
-                        self.hopex_taker({
-                            side: 平仓side,
-                            size: state.开仓状态.最大仓位abs,
-                        })
-                }
-            }
+        const 平仓side = 仓位数量 > 0 ? 'Sell' : 'Buy'
+        const get_bitmex_位置1价格 = () => self.realData.getOrderPrice({
+            symbol: 'XBTUSD',
+            side: 平仓side,
+            type: 'maker',
+            位置: 0,
+        })
+        const 震荡指数衰竭 = lastNumber(d.震荡指数_macd.DIF) < lastNumber(d.震荡指数_macd.DEM)
 
 
-            //平一半
-            if (state.开仓状态.已经平了一半了 === false) {
-                if (state.最后一次信号 === '摸顶' && self.realData.is摸顶_下跌平仓(market) && 活动委托.length === 0) {
-                    state.开仓状态.已经平了一半了 = true
-                    self.log(market + '  ' + state.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 上涨做空下跌平仓一半')
-                    return market === 'bitmex' ?
-                        self.maker({
-                            symbol: 'XBTUSD',
-                            side: 平仓side,
-                            size: Math.round(state.开仓状态.最大仓位abs / 2),//一半
-                            price: toBuySellPriceFunc(平仓side, get位置1价格),
-                            reduceOnly: true,
-                            text: state.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 上涨做空下跌平仓一半',
-                        }) :
-                        self.hopex_taker({
-                            side: 平仓side,
-                            size: Math.round(state.开仓状态.最大仓位abs / 2),//一半
-                        })
-                }
 
 
-                if (state.最后一次信号 === '抄底' && self.realData.is抄底_上涨平仓(market) && 活动委托.length === 0) {
-                    state.开仓状态.已经平了一半了 = true
-                    self.log(market + '  ' + state.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 下跌抄底上涨平仓一半')
-                    return market === 'bitmex' ?
-                        self.maker({
-                            symbol: 'XBTUSD',
-                            side: 平仓side,
-                            size: Math.round(state.开仓状态.最大仓位abs / 2),//一半
-                            price: toBuySellPriceFunc(平仓side, get位置1价格),
-                            reduceOnly: true,
-                            text: state.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 下跌抄底上涨平仓一半',
-                        }) :
-                        self.hopex_taker({
-                            side: 平仓side,
-                            size: Math.round(state.开仓状态.最大仓位abs / 2),//一半
-                        })
-                }
-            }
+        //______________________________________亏损挂单平仓______________________________________//
 
-
-            //触发了反向开仓信号 
-            const { 信号side } = self.realData.摸顶抄底_反向信号_平仓(market)
-
-            if (信号side === 平仓side && 活动委托.length === 0) {
-
-                const 市价 = lastNumber(d.绝对价差) > 15
-                self.log(`${market} 信号side=${信号side} ` + state.最后一次信号 + '平仓' + ' 触发了反向开仓信号  ' + '自动止盈波段step 全部止盈')
-
-                return market === 'bitmex' ?
-                    市价 ?
-                        self.taker({
-                            symbol: 'XBTUSD',
-                            side: 平仓side,
-                            size: Math.abs(仓位数量),
-                            text: state.最后一次信号 + '平仓' + ' 触发了反向开仓信号  ' + '自动止盈波段step 全部止盈',
-                        }) :
-                        self.maker({
-                            symbol: 'XBTUSD',
-                            side: 平仓side,
-                            size: Math.abs(仓位数量),
-                            price: toBuySellPriceFunc(平仓side, get位置1价格),
-                            reduceOnly: true,
-                            text: state.最后一次信号 + '平仓' + ' 触发了反向开仓信号  ' + '自动止盈波段step 全部止盈',
-                        }) :
-                    self.hopex_taker({
-                        side: 平仓side,
-                        size: Math.abs(仓位数量),
-                    })
-
+        //如果超时了 
+        if (持仓时间ms >= state.开仓状态.摸顶抄底超时秒 * 1000 && state.开仓状态.第2次超时 === false) {
+            state.开仓状态.第2次超时 = true
+            if (!震荡指数衰竭) { //dif>dem 
+                state.开仓状态.摸顶抄底超时秒 = 15
             }
         }
+
+        let 亏损挂单平仓Text = ''
+
+        if (state.最后一次信号 === '摸顶' || state.最后一次信号 === '抄底') {
+            const 折返 = get浮盈点数(x) < state.开仓状态.最后一次开仓折返率
+            if (
+                (折返 && 震荡指数衰竭 === true && 持仓时间ms >= state.开仓状态.摸顶抄底超时秒 * 1000) ||      // 折返函数&&震荡衰竭==true的超时时间是30s
+                (折返 && 震荡指数衰竭 === false && 持仓时间ms >= state.开仓状态.摸顶抄底超时秒 * 120 * 1000)  // 折返函数&&震荡衰竭==false的超时时间是2分钟
+            ) {
+                亏损挂单平仓Text = '下单' + state.开仓状态.摸顶抄底超时秒 + ' 秒后，折返没有超过下单点的折返函数，并且震荡指数衰竭，挂单全平'
+            }
+        }
+        else if (state.最后一次信号 === '追涨' || state.最后一次信号 === '追跌') {
+            const 净成交量均线60 = lastNumber(d.买.净成交量_累加60)
+
+            if ((平仓side === 'Sell' && 净成交量均线60 < 0) || (平仓side === 'Buy' && 净成交量均线60 > 0)) {
+                亏损挂单平仓Text = '如果净成交量反向，那么立刻挂单平仓'
+            }
+            else if (持仓时间ms > 5 * 60 * 1000) {
+                亏损挂单平仓Text = '如果净成交量没有反向，那么最多等待5分钟，然后挂单平仓'
+            } else {
+                //如果遇到极值点，平仓只需要两根信号
+            }
+
+        }
+
+
+        if (亏损挂单平仓Text !== '') {
+
+            if (活动委托.length === 1) {
+                if (活动委托[0].type === '限价只减仓' && 活动委托[0].side === 平仓side) {
+                    if (活动委托[0].price !== get_bitmex_位置1价格()) {
+                        self.log('bitmex update maker ' + state.最后一次信号 + '平仓' + '  ' + 亏损挂单平仓Text + '  重新挂' + 平仓side + '1')
+                        return self.updateMaker({
+                            orderID: 活动委托[0].id,
+                            price: toBuySellPriceFunc(平仓side, get_bitmex_位置1价格),
+                        })
+                    } else {
+                        return false
+                    }
+                }
+            } else {
+                self.log(market + ' ' + state.最后一次信号 + '平仓' + '  ' + 亏损挂单平仓Text)
+                return market === 'bitmex' ?
+                    self.maker({
+                        symbol: 'XBTUSD',
+                        side: 平仓side,
+                        size: state.开仓状态.最大仓位abs,
+                        price: toBuySellPriceFunc(平仓side, get_bitmex_位置1价格),
+                        reduceOnly: true,
+                        text: state.最后一次信号 + '平仓' + '  ' + 亏损挂单平仓Text,
+                    }) :
+                    self.hopex_taker({
+                        side: 平仓side,
+                        size: state.开仓状态.最大仓位abs,
+                    })
+            }
+        }
+
+
+
+        //______________________________________  摸顶_下跌平仓    抄底_上涨平仓    一半  ______________________________________ 
+        if (state.开仓状态.已经平了一半了 === false) {
+            if (state.最后一次信号 === '摸顶' && self.realData.is摸顶_下跌平仓(market) && 活动委托.length === 0) {
+                state.开仓状态.已经平了一半了 = true
+                self.log(market + '  ' + state.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 上涨做空下跌平仓一半')
+                return market === 'bitmex' ?
+                    self.maker({
+                        symbol: 'XBTUSD',
+                        side: 平仓side,
+                        size: Math.round(state.开仓状态.最大仓位abs / 2),//一半
+                        price: toBuySellPriceFunc(平仓side, get_bitmex_位置1价格),
+                        reduceOnly: true,
+                        text: state.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 上涨做空下跌平仓一半',
+                    }) :
+                    self.hopex_taker({
+                        side: 平仓side,
+                        size: Math.round(state.开仓状态.最大仓位abs / 2),//一半
+                    })
+            }
+
+
+            if (state.最后一次信号 === '抄底' && self.realData.is抄底_上涨平仓(market) && 活动委托.length === 0) {
+                state.开仓状态.已经平了一半了 = true
+                self.log(market + '  ' + state.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 下跌抄底上涨平仓一半')
+                return market === 'bitmex' ?
+                    self.maker({
+                        symbol: 'XBTUSD',
+                        side: 平仓side,
+                        size: Math.round(state.开仓状态.最大仓位abs / 2),//一半
+                        price: toBuySellPriceFunc(平仓side, get_bitmex_位置1价格),
+                        reduceOnly: true,
+                        text: state.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 下跌抄底上涨平仓一半',
+                    }) :
+                    self.hopex_taker({
+                        side: 平仓side,
+                        size: Math.round(state.开仓状态.最大仓位abs / 2),//一半
+                    })
+            }
+        }
+
+
+        //______________________________________ 触发了反向开仓信号 全平______________________________________ 
+        const { 信号side } = self.realData.摸顶抄底_反向信号_平仓(market)
+
+        if (信号side === 平仓side && 活动委托.length === 0) {
+
+            const 市价 = lastNumber(d.绝对价差) > 15
+            self.log(`${market} 信号side=${信号side} ` + state.最后一次信号 + '平仓' + ' 触发了反向开仓信号  ' + '自动止盈波段step 全部止盈')
+
+            return market === 'bitmex' ?
+                市价 ?
+                    self.taker({
+                        symbol: 'XBTUSD',
+                        side: 平仓side,
+                        size: Math.abs(仓位数量),
+                        text: state.最后一次信号 + '平仓' + ' 触发了反向开仓信号  ' + '自动止盈波段step 全部止盈',
+                    }) :
+                    self.maker({
+                        symbol: 'XBTUSD',
+                        side: 平仓side,
+                        size: Math.abs(仓位数量),
+                        price: toBuySellPriceFunc(平仓side, get_bitmex_位置1价格),
+                        reduceOnly: true,
+                        text: state.最后一次信号 + '平仓' + ' 触发了反向开仓信号  ' + '自动止盈波段step 全部止盈',
+                    }) :
+                self.hopex_taker({
+                    side: 平仓side,
+                    size: Math.abs(仓位数量),
+                })
+
+        }
+
 
 
         return false
