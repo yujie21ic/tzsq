@@ -11,5 +11,7 @@ chart 删除 右键合约
 
 
 source .nvm/nvm.sh
+screen -R a
+
 screen -S a
 screen -r a 
