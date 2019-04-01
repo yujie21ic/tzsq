@@ -395,14 +395,6 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         }
 
         const 持仓时间ms = lastNumber(d.时间) - state.开仓状态.最后一次开仓时间
-
-        //持仓时间没有10秒        
-        if (持仓时间ms < 10 * 1000) return false
-
-        //有多个委托了
-        if (活动委托.length > 1) return false
-
-
         const 平仓side = 仓位数量 > 0 ? 'Sell' : 'Buy'
         const get_bitmex_位置1价格 = () => self.realData.getOrderPrice({
             symbol: 'XBTUSD',
@@ -412,11 +404,13 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         })
         const 震荡指数衰竭 = lastNumber(d.震荡指数_macd.DIF) < lastNumber(d.震荡指数_macd.DEM)
 
+        //持仓时间没有10秒        
+        if (持仓时间ms < 10 * 1000) return false
 
-
+        //有多个委托了
+        if (活动委托.length > 1) return false
 
         //______________________________________亏损挂单平仓______________________________________//
-
         //如果超时了 
         if (持仓时间ms >= state.开仓状态.摸顶抄底超时秒 * 1000 && state.开仓状态.第2次超时 === false) {
             state.开仓状态.第2次超时 = true
@@ -424,9 +418,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 state.开仓状态.摸顶抄底超时秒 = 15
             }
         }
-
         let 亏损挂单平仓Text = ''
-
         if (state.最后一次信号 === '摸顶' || state.最后一次信号 === '抄底') {
             const 折返 = get浮盈点数(x) < state.开仓状态.最后一次开仓折返率
             if (
@@ -449,8 +441,6 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             }
 
         }
-
-
         if (亏损挂单平仓Text !== '') {
 
             if (活动委托.length === 1) {
@@ -483,8 +473,6 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             }
         }
 
-
-
         //______________________________________  摸顶_下跌平仓    抄底_上涨平仓    一半  ______________________________________ 
         if (state.开仓状态.已经平了一半了 === false) {
             if (state.最后一次信号 === '摸顶' && self.realData.is摸顶_下跌平仓(market) && 活动委托.length === 0) {
@@ -504,8 +492,6 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         size: Math.round(state.开仓状态.最大仓位abs / 2),//一半
                     })
             }
-
-
             if (state.最后一次信号 === '抄底' && self.realData.is抄底_上涨平仓(market) && 活动委托.length === 0) {
                 state.开仓状态.已经平了一半了 = true
                 self.log(market + '  ' + state.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 下跌抄底上涨平仓一半')
@@ -525,10 +511,8 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             }
         }
 
-
         //______________________________________ 触发了反向开仓信号 全平______________________________________ 
         const { 信号side } = self.realData.摸顶抄底_反向信号_平仓(market)
-
         if (信号side === 平仓side && 活动委托.length === 0) {
 
             const 市价 = lastNumber(d.绝对价差) > 15
@@ -556,10 +540,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 })
 
         }
-
-
-
         return false
-    }
 
+    }
 }
