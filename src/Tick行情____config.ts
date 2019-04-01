@@ -218,7 +218,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     }),
 
     复盘追涨追跌: (d, d2) => ({
-        heightList: [0.5,0.2,0.2, 0.1],
+        heightList: [0.5, 0.2, 0.2, 0.1],
         items: [
             [
                 {
@@ -230,8 +230,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     numberColor: 'ETH颜色',
                     layerList: [
                         layer(ZeroLayer, { color: ETH颜色 }),
-                        layer(LineLayer, { data:  d.bitmex.阻力3涨, color: 买颜色 }),
-                        layer(LineLayer, { data:  d.bitmex.阻力3跌, color: 卖颜色 }),
+                        layer(LineLayer, { data: d.bitmex.阻力3涨, color: 买颜色 }),
+                        layer(LineLayer, { data: d.bitmex.阻力3跌, color: 卖颜色 }),
                     ]
                 },
                 {
@@ -1561,6 +1561,23 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 ]
             },
 
+        ]
+    }),
+
+    着笔: (d, d2) => ({
+        heightList: [0.5, 0.5],
+        items: [
+            {
+                numberColor: BTC颜色,
+                layerList: [
+                    layer(LineLayer, { data: d2.XBTUSD.bitmex.着笔.price, color: BTC颜色 }),
+                ]
+            },
+            {
+                layerList: [
+                    layer(LineLayer, { data: d2.XBTUSD.bitmex.着笔.size, color: 0xffffff }),
+                ]
+            },
         ]
     }),
 

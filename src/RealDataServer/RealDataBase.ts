@@ -576,7 +576,6 @@ export class RealDataBase {
 
 
             return {
-                着笔,
                 累计成交量,
                 价差,
                 动力,
@@ -950,6 +949,8 @@ export class RealDataBase {
 
 
         return {
+            
+            着笔,
             bitmex_价格_macd,
             _1分钟_,
 
