@@ -66,12 +66,15 @@ export class RealData__Server extends RealDataBase {
             this.jsonSync.data.startTick.____set(tick)
         }
 
-        p.xxxxxxxx.着笔.____push({
-            side: p.side,
-            size: p.size,
-            price: p.price,
-        })
 
+        //本地 ws 服务 才要
+        if (this.wsServer) {
+            p.xxxxxxxx.着笔.____push({
+                side: p.side,
+                size: p.size,
+                price: p.price,
+            })
+        }
 
         //tick
         if (this.on着笔Dic[p.symbol] === undefined) {
@@ -175,13 +178,17 @@ export class RealData__Server extends RealDataBase {
 
     private ctp = new CTP()
 
-    constructor(server = true) {
+    private wsServer: boolean
+
+    constructor(wsServer = true) {
         super()
+
+        this.wsServer = wsServer
 
         this.重新初始化()//<-----------fix 
 
 
-        if (server) {
+        if (wsServer) {
             this.wss = new WebSocket.Server({ port: 6666 })
         }
 
