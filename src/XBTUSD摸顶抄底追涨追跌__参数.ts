@@ -29,7 +29,8 @@ export namespace XBTUSD摸顶抄底追涨追跌__参数 {
             else {
                 return NaN
             }
-        } else {
+        }
+        else if (p.type === '摸顶' || p.type === '抄底') {
             if (p.盈利点 >= toRange({ min: 5, max: 30, value: p.波动率 / 5 + 15 })) {
                 return 5
             }
@@ -40,5 +41,9 @@ export namespace XBTUSD摸顶抄底追涨追跌__参数 {
                 return NaN
             }
         }
+        else {
+            return NaN
+        }
     }
+
 }
