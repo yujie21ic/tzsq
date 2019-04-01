@@ -20,7 +20,7 @@ const symbol = () => ({
         自动止盈波段: false,
         自动推止损: true,
     },
-    活动委托: [] as Order[],
+    委托列表: [] as Order[],
     仓位数量: 0,
     开仓均价: 0,
 })
@@ -136,10 +136,10 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                 }
 
                 const id1Arr = orderArr.map(v => v.id).sort().join(',')
-                const id2Arr = this.jsonSync.rawData.symbol.Hopex_BTC.活动委托.map(v => v.id).sort().join(',')
+                const id2Arr = this.jsonSync.rawData.symbol.Hopex_BTC.委托列表.map(v => v.id).sort().join(',')
 
                 if (id1Arr !== id2Arr) {
-                    this.jsonSync.data.symbol.Hopex_BTC.活动委托.____set(orderArr)
+                    this.jsonSync.data.symbol.Hopex_BTC.委托列表.____set(orderArr)
                     this.log('hopex 止损:' + (orderArr.length > 0 ? orderArr[0].price : '无'))
                 }
 
@@ -283,7 +283,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
             })
 
 
-            this.jsonSync.data.symbol[symbol].活动委托.____set(arr)
+            this.jsonSync.data.symbol[symbol].委托列表.____set(arr)
         })
     }
 

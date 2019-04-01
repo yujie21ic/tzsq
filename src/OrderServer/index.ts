@@ -119,7 +119,7 @@ server.func.下单 = async req => {
 
     const { 仓位数量 } = account.jsonSync.rawData.symbol[req.symbol]
 
-    const 活动委托 = account.jsonSync.rawData.symbol[req.symbol].活动委托.filter(v => v.type !== '止损')
+    const 活动委托 = account.jsonSync.rawData.symbol[req.symbol].委托列表.filter(v => v.type !== '止损')
 
     if (活动委托.length > 1) {
         throw '已经有委托了'

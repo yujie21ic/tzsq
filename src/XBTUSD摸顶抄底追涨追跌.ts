@@ -135,7 +135,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         const { 仓位数量 } = item
 
         //委托检测
-        const 活动委托 = item.活动委托.filter(v => v.type !== '止损')
+        const 活动委托 = item.委托列表.filter(v => v.type !== '止损')
 
         //没有委托
         if (活动委托.length === 0) {
@@ -173,7 +173,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         const { 仓位数量, 开仓均价 } = item
 
-        const 止损委托 = item.活动委托.filter(v => v.type === '止损')
+        const 止损委托 = item.委托列表.filter(v => v.type === '止损')
 
         const 波动率 = lastNumber(d.价格_波动率30)
 
@@ -272,7 +272,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         const { 任务开关 } = item
 
-        const 活动委托 = item.活动委托.filter(v => v.type !== '止损')
+        const 活动委托 = item.委托列表.filter(v => v.type !== '止损')
 
         const 仓位数量 = market === 'bitmex' ? self.get本地维护仓位数量('XBTUSD') : item.仓位数量
 
@@ -377,7 +377,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         const { market, item, d, state } = x
         const { 任务开关, 仓位数量 } = item
-        const 活动委托 = item.活动委托.filter(v => v.type !== '止损')
+        const 活动委托 = item.委托列表.filter(v => v.type !== '止损')
 
 
         //开关没打开
