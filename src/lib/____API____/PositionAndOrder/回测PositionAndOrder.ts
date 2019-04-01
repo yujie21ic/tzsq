@@ -58,7 +58,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     }
 
     hopex_stop = (p: { side: BaseType.Side, price: number }) => {
-        this.jsonSync.rawData.symbol.Hopex_BTC.活动委托.push({
+        this.jsonSync.rawData.symbol.Hopex_BTC.委托列表.push({
             type: '止损',
             timestamp: lastNumber(this.realData.dataExt.XBTUSD.bitmex.时间),
             id: String(this.order_id++),
@@ -71,7 +71,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     }
 
     hopex_cancel = (p: { orderID: number }) => {
-        this.jsonSync.rawData.symbol.Hopex_BTC.活动委托 = this.jsonSync.rawData.symbol.Hopex_BTC.活动委托.filter(v =>
+        this.jsonSync.rawData.symbol.Hopex_BTC.委托列表 = this.jsonSync.rawData.symbol.Hopex_BTC.委托列表.filter(v =>
             v.id !== String(p.orderID)
         )
         return true
@@ -115,7 +115,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
             text: p.text,
         })
 
-        this.jsonSync.rawData.symbol.XBTUSD.活动委托.push({
+        this.jsonSync.rawData.symbol.XBTUSD.委托列表.push({
             type: p.reduceOnly ? '限价只减仓' : '限价',
             timestamp: lastNumber(this.realData.dataExt[p.symbol].bitmex.时间),
             id: String(this.order_id++),
@@ -133,7 +133,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         price: number;
     }) {
 
-        this.jsonSync.rawData.symbol.XBTUSD.活动委托.push({
+        this.jsonSync.rawData.symbol.XBTUSD.委托列表.push({
             type: '止损',
             timestamp: lastNumber(this.realData.dataExt.XBTUSD.bitmex.时间),
             id: String(this.order_id++),
@@ -151,7 +151,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         price: number;
     }) {
 
-        this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.map(v => {
+        this.jsonSync.rawData.symbol.XBTUSD.委托列表 = this.jsonSync.rawData.symbol.XBTUSD.委托列表.map(v => {
             if (v.id === p.orderID) {
                 return { ...v, price: p.price }
             } else {
@@ -168,7 +168,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         price: () => number;
     }) {
 
-        this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.map(v => {
+        this.jsonSync.rawData.symbol.XBTUSD.委托列表 = this.jsonSync.rawData.symbol.XBTUSD.委托列表.map(v => {
             if (v.id === p.orderID) {
                 return { ...v, price: p.price() }
             } else {
@@ -234,7 +234,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         orderID: string[];
     }) {
 
-        this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v =>
+        this.jsonSync.rawData.symbol.XBTUSD.委托列表 = this.jsonSync.rawData.symbol.XBTUSD.委托列表.filter(v =>
             p.orderID.every(__id__ => v.id !== __id__)
         )
 
@@ -339,7 +339,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                 位置: 0,
             })
 
-            this.jsonSync.rawData.symbol.XBTUSD.活动委托 = this.jsonSync.rawData.symbol.XBTUSD.活动委托.filter(v => {
+            this.jsonSync.rawData.symbol.XBTUSD.委托列表 = this.jsonSync.rawData.symbol.XBTUSD.委托列表.filter(v => {
                 if (v.type === '限价' || v.type === '限价只减仓') {
                     if ((v.side === 'Buy' && 买1 < v.price) ||
                         (v.side === 'Sell' && 卖1 > v.price)
@@ -409,7 +409,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
                 位置: 0,
             })
 
-            this.jsonSync.rawData.symbol.Hopex_BTC.活动委托 = this.jsonSync.rawData.symbol.Hopex_BTC.活动委托.filter(v => {
+            this.jsonSync.rawData.symbol.Hopex_BTC.委托列表 = this.jsonSync.rawData.symbol.Hopex_BTC.委托列表.filter(v => {
                 if (v.type === '止损') {
                     if ((v.side === 'Buy' && hopex_卖1 >= v.price) ||
                         (v.side === 'Sell' && hopex_买1 <= v.price)

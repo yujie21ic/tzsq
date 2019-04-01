@@ -20,7 +20,7 @@ export interface PositionAndOrder {
                     自动止盈波段: boolean;
                     自动推止损: boolean;
                 };
-                活动委托: {
+                委托列表: {
                     type: '限价' | '限价只减仓' | '止损'
                     timestamp: number
                     id: string
@@ -41,7 +41,7 @@ export interface PositionAndOrder {
                     自动止盈波段: boolean;
                     自动推止损: boolean;
                 };
-                活动委托: {
+                委托列表: {
                     type: '限价' | '限价只减仓' | '止损'
                     timestamp: number
                     id: string
@@ -62,7 +62,7 @@ export interface PositionAndOrder {
                     自动止盈波段: boolean;
                     自动推止损: boolean;
                 };
-                活动委托: {
+                委托列表: {
                     type: '限价' | '限价只减仓' | '止损'
                     timestamp: number
                     id: string

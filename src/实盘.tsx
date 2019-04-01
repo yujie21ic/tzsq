@@ -38,7 +38,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC', 位置: num
 
 
         // 
-        const arr = orderClient.jsonSync.rawData.symbol[this.props.symbol].活动委托
+        const arr = orderClient.jsonSync.rawData.symbol[this.props.symbol].委托列表
         const 委托 = {
             id: '',
             side: '' as BaseType.Side,
