@@ -80,6 +80,7 @@ export class RealDataBase {
             startTick: 0,//tick的  1m的开始 没有对齐
             ctp: {
                 rb1905: {
+                    着笔: [] as { side: BaseType.Side, size: number, price: number }[],
                     data1M: [] as { id: number, close: number }[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
@@ -87,11 +88,13 @@ export class RealDataBase {
             },
             hopex: {
                 BTCUSDT: {
+                    着笔: [] as { side: BaseType.Side, size: number, price: number }[],
                     data1M: [] as { id: number, close: number }[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 },
                 ETHUSDT: {
+                    着笔: [] as { side: BaseType.Side, size: number, price: number }[],
                     data1M: [] as { id: number, close: number }[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
@@ -99,11 +102,13 @@ export class RealDataBase {
             },
             bitmex: {
                 XBTUSD: {
+                    着笔: [] as { side: BaseType.Side, size: number, price: number }[],
                     data1M: [] as { id: number, close: number }[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 },
                 ETHUSD: {
+                    着笔: [] as { side: BaseType.Side, size: number, price: number }[],
                     data1M: [] as { id: number, close: number }[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
@@ -111,11 +116,13 @@ export class RealDataBase {
             },
             binance: {
                 btcusdt: {
+                    着笔: [] as { side: BaseType.Side, size: number, price: number }[],
                     data1M: [] as { id: number, close: number }[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 },
                 ethusdt: {
+                    着笔: [] as { side: BaseType.Side, size: number, price: number }[],
                     data1M: [] as { id: number, close: number }[],
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
