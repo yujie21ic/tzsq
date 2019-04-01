@@ -376,7 +376,8 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
     private 平仓_step(self: PositionAndOrder, x: XXX) {
 
         const { market, item, d, state } = x
-        const { 任务开关, 仓位数量, 活动委托 } = item
+        const { 任务开关, 仓位数量 } = item
+        const 活动委托 = item.活动委托.filter(v => v.type !== '止损')
 
 
         //开关没打开
@@ -402,7 +403,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             type: 'maker',
             位置: 0,
         })
-        const 震荡指数衰竭 = lastNumber(d.震荡指数_macd.DIF) < lastNumber(d.震荡指数_macd.DEM)        
+        const 震荡指数衰竭 = lastNumber(d.震荡指数_macd.DIF) < lastNumber(d.震荡指数_macd.DEM)
 
         //有多个委托了
         if (活动委托.length > 1) return false
