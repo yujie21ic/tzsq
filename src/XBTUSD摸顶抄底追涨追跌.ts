@@ -402,13 +402,13 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             type: 'maker',
             位置: 0,
         })
-        const 震荡指数衰竭 = lastNumber(d.震荡指数_macd.DIF) < lastNumber(d.震荡指数_macd.DEM)
-
-        //持仓时间没有10秒        
-        if (持仓时间ms < 10 * 1000) return false
+        const 震荡指数衰竭 = lastNumber(d.震荡指数_macd.DIF) < lastNumber(d.震荡指数_macd.DEM)        
 
         //有多个委托了
         if (活动委托.length > 1) return false
+
+        //持仓时间没有10秒        
+        if (持仓时间ms < 10 * 1000) return false
 
         //______________________________________亏损挂单平仓______________________________________//
         //如果超时了 
