@@ -174,7 +174,7 @@ export class RealDataBase {
 
 
     private item2(xxx: {
-        着笔: { side: BaseType.Side, size: number, price: number }[],
+        着笔: { side: BaseType.Side, size: number, price: number, buy1: number, sell1: number }[],
         data1M: { id: number, close: number }[]
         data: BaseType.KLine[]
         orderBook: BaseType.OrderBook[]
@@ -191,7 +191,23 @@ export class RealDataBase {
             price: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].price),
             side: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].side),
             size: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].size),
-            涨跌: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].size),
+            涨跌: 指标.map(() => xxx.着笔.length, i => {
+                let c = 0
+
+                for (let k = i; k >= Math.max(0, i - 50); i--) {
+                    if (xxx.着笔[i].price === xxx.着笔[i].buy1) {
+                        c += (i - k)
+                    }
+                    else if (xxx.着笔[i].price === xxx.着笔[i].sell1) {
+                        c -= (i - k)
+                    }
+                    else {
+                        break
+                    }
+                }
+
+                return c > 0 ? 1 : -1
+            }),
         }
 
 
