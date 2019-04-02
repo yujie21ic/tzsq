@@ -171,7 +171,9 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         const { market, state, d, item } = x
 
-        const { 仓位数量, 开仓均价 } = item
+        const { 仓位数量, 开仓均价, 任务开关 } = item
+
+        if (任务开关.自动止损 === false) return false
 
         const 止损委托 = item.委托列表.filter(v => v.type === '止损')
 
