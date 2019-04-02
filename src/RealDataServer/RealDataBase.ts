@@ -196,7 +196,7 @@ export class RealDataBase {
             布林带: 指标.布林带(_1分钟_收盘价, 1000),
         }
 
-        盘口算价格 = false
+        盘口算价格 = true
 
 
         const 盘口价格 = 指标.map(() => orderBook.length, i =>
@@ -363,6 +363,7 @@ export class RealDataBase {
         //
         const 价格_最高60 = 指标.最高(价格, 60, RealDataBase.单位时间)
         const 价格_最低60 = 指标.最低(价格, 60, RealDataBase.单位时间)
+        const 价格_最高60_价差 =  指标.map(() => Math.min(买.成交量.length, 卖.成交量.length), i => 价格_最高60[i] - 价格[i])
 
 
 
@@ -1006,6 +1007,7 @@ export class RealDataBase {
 
             价格_最高60,
             价格_最低60,
+            价格_最高60_价差
         }
     }
 
