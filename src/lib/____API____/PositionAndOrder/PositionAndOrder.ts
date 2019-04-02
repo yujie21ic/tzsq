@@ -62,6 +62,7 @@ export interface PositionAndOrder {
                     自动开仓追涨: boolean;
                     自动开仓追跌: boolean;
                     自动止盈波段: boolean;
+                    自动止损: boolean;
                     自动推止损: boolean;
                 };
                 委托列表: {
