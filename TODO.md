@@ -13,6 +13,8 @@ chart 删除 右键合约
 
 实盘 波动图 预先加载几个小时的数据 
 
+着笔图  时间
+
 
 source .nvm/nvm.sh
 screen -R a

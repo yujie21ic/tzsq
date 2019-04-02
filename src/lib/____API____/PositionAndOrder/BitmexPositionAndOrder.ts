@@ -18,7 +18,8 @@ const symbol = () => ({
         自动开仓追涨: false,
         自动开仓追跌: false,
         自动止盈波段: false,
-        自动推止损: true,
+        自动止损: false,
+        自动推止损: false,
     },
     委托列表: [] as Order[],
     仓位数量: 0,
@@ -157,7 +158,9 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         this.cookie = p.cookie
         this.hopexCookie = p.hopexCookie
 
-        this.hopex_轮询()
+        if (this.hopexCookie !== '') {
+            this.hopex_轮询()
+        }
 
         this.ws = new BitMEXWSAPI(p.cookie, [
             { theme: 'margin' },

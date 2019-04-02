@@ -171,7 +171,9 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         const { market, state, d, item } = x
 
-        const { 仓位数量, 开仓均价 } = item
+        const { 仓位数量, 开仓均价, 任务开关 } = item
+
+        if (任务开关.自动止损 === false) return false
 
         const 止损委托 = item.委托列表.filter(v => v.type === '止损')
 
@@ -319,6 +321,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
             state.最后一次信号 = 信号灯Type
             state.最后一次信号时间 = lastNumber(d.时间)
+            self.log(market + ' state.最后一次信号 = ' + state.最后一次信号)
 
 
             const 市价 = 信号灯Type === '追涨' || 信号灯Type === '追跌' || lastNumber(d.绝对价差) > 15
@@ -421,12 +424,12 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         }
         let 亏损挂单平仓Text = ''
         if (state.最后一次信号 === '摸顶' || state.最后一次信号 === '抄底') {
-            const 折返 = get浮盈点数(x) < state.开仓状态.最后一次开仓折返率
+            const 没有折返 = get浮盈点数(x) < state.开仓状态.最后一次开仓折返率
             if (
-                (折返 && 震荡指数衰竭 === true && 持仓时间ms >= state.开仓状态.摸顶抄底超时秒 * 1000) ||      // 折返函数&&震荡衰竭==true的超时时间是30s
-                (折返 && 震荡指数衰竭 === false && 持仓时间ms >= state.开仓状态.摸顶抄底超时秒 * 120 * 1000)  // 折返函数&&震荡衰竭==false的超时时间是2分钟
+                (没有折返 && 震荡指数衰竭 === true && 持仓时间ms >= state.开仓状态.摸顶抄底超时秒 * 1000) ||      // 折返函数&&震荡衰竭==true的超时时间是30s
+                (没有折返 && 震荡指数衰竭 === false && 持仓时间ms >= 120 * 1000)  // 折返函数&&震荡衰竭==false的超时时间是2分钟
             ) {
-                亏损挂单平仓Text = '下单' + state.开仓状态.摸顶抄底超时秒 + ' 秒后，折返没有超过下单点的折返函数，并且震荡指数衰竭，挂单全平'
+                亏损挂单平仓Text = '下单' + 持仓时间ms + ' ms秒后，折返没有超过下单点的折返函数，并且震荡指数衰竭，挂单全平  震荡指数衰竭=' + 震荡指数衰竭
             }
         }
         else if (state.最后一次信号 === '追涨' || state.最后一次信号 === '追跌') {
