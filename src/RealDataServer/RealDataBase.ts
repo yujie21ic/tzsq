@@ -182,10 +182,16 @@ export class RealDataBase {
 
         const { data1M, data, orderBook } = xxx
 
+
+        // （当前时间-这个价位开始的时间）*1（上涨）
+        // （当前时间-这个价位开始的时间）*-1（下跌）
+        // 然后相加这个价位笔的加权计算，最终是正数，就是上涨，负数就是下跌
+
         const 着笔 = {
             price: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].price),
             side: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].side),
             size: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].size),
+            涨跌: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].size),
         }
 
 
@@ -363,7 +369,7 @@ export class RealDataBase {
         //
         const 价格_最高60 = 指标.最高(价格, 60, RealDataBase.单位时间)
         const 价格_最低60 = 指标.最低(价格, 60, RealDataBase.单位时间)
-        const 价格_最高60_价差 =  指标.map(() => Math.min(买.成交量.length, 卖.成交量.length), i => 价格_最高60[i] - 价格[i])
+        const 价格_最高60_价差 = 指标.map(() => Math.min(买.成交量.length, 卖.成交量.length), i => 价格_最高60[i] - 价格[i])
 
 
 
@@ -950,7 +956,7 @@ export class RealDataBase {
 
 
         return {
-            
+
             着笔,
             bitmex_价格_macd,
             _1分钟_,
