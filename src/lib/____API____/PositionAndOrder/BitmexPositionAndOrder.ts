@@ -157,7 +157,9 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         this.cookie = p.cookie
         this.hopexCookie = p.hopexCookie
 
-        this.hopex_轮询()
+        if (this.hopexCookie !== '') {
+            this.hopex_轮询()
+        }
 
         this.ws = new BitMEXWSAPI(p.cookie, [
             { theme: 'margin' },
