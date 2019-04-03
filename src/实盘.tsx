@@ -21,7 +21,7 @@ const rpc = OrderClient.rpc.func
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
 
-class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC', 位置: number, 倍数: number }> {
+class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH', 位置: number, 倍数: number }> {
 
     get仓位() {
         const { 仓位数量, 开仓均价 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
@@ -99,7 +99,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC', 位置: num
                 flexDirection: 'column',
                 justifyContent: 'left',
             }}>
-                <p style={{ color: this.props.symbol === 'XBTUSD' ? '#cc66ff' : '#aaaa00' }}>{this.props.symbol} {仓位数量 !== 0 && symbol !== 'Hopex_BTC' ? <a
+                <p style={{ color: this.props.symbol === 'XBTUSD' ? '#cc66ff' : '#aaaa00' }}>{this.props.symbol} {仓位数量 !== 0 && symbol !== 'Hopex_BTC' && symbol !== 'Hopex_ETH' ? <a
                     href='#'
                     style={{ color: RED }}
                     onClick={() => rpc.市价平仓({ cookie, symbol })}
@@ -124,7 +124,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC', 位置: num
                 </p>
             </div>
 
-            {symbol === 'Hopex_BTC' ?
+            {symbol === 'Hopex_BTC' || symbol === 'Hopex_ETH' ?
                 <div style={{
                     display: 'flex',
                     flexDirection: 'row',
@@ -303,7 +303,8 @@ export class 交易 extends React.Component {
                 cursor: 'default'
             }}>
                 <Item symbol='XBTUSD' 位置={this.位置} 倍数={this.倍数} />
-                <Item symbol='Hopex_BTC' 位置={this.位置} 倍数={this.倍数} />
+                {/* <Item symbol='Hopex_BTC' 位置={this.位置} 倍数={this.倍数} /> */}
+                <Item symbol='Hopex_ETH' 位置={this.位置} 倍数={this.倍数} />
             </div>
     }
 
