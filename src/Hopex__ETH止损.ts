@@ -46,7 +46,7 @@ export class Hopex__ETH止损 implements PositionAndOrderTask {
                     symbol: 'ETHUSDT',
                     side,
                     price: toGridPoint({
-                        grid: 0.5,
+                        grid: 0.05,
                         value: 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点,
                         side,
                     }),
