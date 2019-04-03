@@ -38,17 +38,9 @@ export class Hopex__ETH止损 implements PositionAndOrderTask {
             if (仓位数量 !== 0) {
                 const 止损点 = 初始止损({ 波动率 })
 
-                console.log('止损点', 止损点)
-
                 if (isNaN(止损点)) return false //波动率还没出来 不止损
 
                 const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
-
-                console.log('hopex_stop', toGridPoint({
-                    grid: 0.05,
-                    value: 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点,
-                    side,
-                }))
 
                 return self.hopex_stop({
                     symbol: 'ETHUSDT',
