@@ -8,9 +8,9 @@ import { toRange } from './lib/F/toRange'
 const 初始止损 = (p: {
     波动率: number
 }) => toRange({
-    min: 0.2,
-    max: 0.5,
-    value: p.波动率 / 10 + 0.1,
+    min: 0.5,
+    max: 1,
+    value: p.波动率 / 10,
 })
 
 export class Hopex__ETH止损 implements PositionAndOrderTask {
