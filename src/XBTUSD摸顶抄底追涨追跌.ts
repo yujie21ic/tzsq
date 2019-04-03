@@ -202,6 +202,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 state.最后一次止损状态 = '亏损止损'
 
                 return stop({
+                    symbol: 'BTCUSDT',
                     side,
                     price: toGridPoint({
                         grid: 0.5,
@@ -249,6 +250,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 ) {
                     state.最后一次止损状态 = 推 === 0 ? '成本价止损' : '盈利止损'
                     return stop({
+                        symbol: 'BTCUSDT',
                         side,
                         price: 新的Price,
                     })
@@ -352,6 +354,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         })
                     :
                     self.hopex_taker({
+                        symbol: 'BTCUSDT',
                         side: 开仓side,
                         size: XBTUSD摸顶抄底追涨追跌__参数.交易数量 * (state.连续止损次数 + 1),
                     })
@@ -471,6 +474,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         text: state.最后一次信号 + '平仓' + '  ' + 亏损挂单平仓Text,
                     }) :
                     self.hopex_taker({
+                        symbol: 'BTCUSDT',
                         side: 平仓side,
                         size: state.开仓状态.最大仓位abs,
                     })
@@ -492,6 +496,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         text: state.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 上涨做空下跌平仓一半',
                     }) :
                     self.hopex_taker({
+                        symbol: 'BTCUSDT',
                         side: 平仓side,
                         size: Math.round(state.开仓状态.最大仓位abs / 2),//一半
                     })
@@ -509,6 +514,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         text: state.最后一次信号 + '平仓' + '  ' + '自动止盈波段step 下跌抄底上涨平仓一半',
                     }) :
                     self.hopex_taker({
+                        symbol: 'BTCUSDT',
                         side: 平仓side,
                         size: Math.round(state.开仓状态.最大仓位abs / 2),//一半
                     })
@@ -539,6 +545,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         text: state.最后一次信号 + '平仓' + ' 触发了反向开仓信号  ' + '自动止盈波段step 全部止盈',
                     }) :
                 self.hopex_taker({
+                    symbol: 'BTCUSDT',
                     side: 平仓side,
                     size: Math.abs(仓位数量),
                 })
