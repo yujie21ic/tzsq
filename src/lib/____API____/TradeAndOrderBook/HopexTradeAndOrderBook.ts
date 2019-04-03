@@ -78,7 +78,12 @@ const deals_subscribe_data = (symbol: BaseType.HopexSymbol) => ({
 
 export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymbol> {
 
-    private ws = new WebSocketClient({
+    private ws_btc = new WebSocketClient({
+        ss: config.ss,
+        url: 'wss://api.hopex.com/ws'
+    })
+
+    private ws_eth = new WebSocketClient({
         ss: config.ss,
         url: 'wss://api.hopex.com/ws'
     })
@@ -86,21 +91,32 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
     constructor(type: 'all' | 'trade' | 'order_book' = 'all') {
         super()
 
-        this.ws.onStatusChange = () => {
-            if (this.ws.isConnected) {
+        this.ws_btc.onStatusChange = () => {
+            if (this.ws_btc.isConnected) {
                 if (type === 'order_book' || type === 'all') {
-                    this.ws.sendJSON(orderbook_subscribe_data('BTCUSDT'))
-                    // this.ws.sendJSON(orderbook_subscribe_data('ETHUSDT'))  
+                    this.ws_btc.sendJSON(orderbook_subscribe_data('BTCUSDT'))
                 }
                 if (type === 'trade' || type === 'all') {
-                    this.ws.sendJSON(deals_subscribe_data('BTCUSDT'))
-                    // this.ws.sendJSON(deals_subscribe_data('ETHUSDT'))
+                    this.ws_btc.sendJSON(deals_subscribe_data('BTCUSDT'))
                 }
             }
-            this.statusObservable.next({ isConnected: this.ws.isConnected })
+            this.statusObservable.next({ isConnected: this.ws_btc.isConnected && this.ws_eth.isConnected })
         }
 
-        this.ws.onData = (d: Frame) => {
+
+        this.ws_eth.onStatusChange = () => {
+            if (this.ws_btc.isConnected) {
+                if (type === 'order_book' || type === 'all') {
+                    this.ws_eth.sendJSON(orderbook_subscribe_data('ETHUSDT'))
+                }
+                if (type === 'trade' || type === 'all') {
+                    this.ws_eth.sendJSON(deals_subscribe_data('ETHUSDT'))
+                }
+            }
+            this.statusObservable.next({ isConnected: this.ws_btc.isConnected && this.ws_eth.isConnected })
+        }
+
+        this.ws_btc.onData = this.ws_eth.onData = (d: Frame) => {
 
             //着笔
             if (d.method === 'deals.update') {
