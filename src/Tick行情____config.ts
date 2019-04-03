@@ -1864,8 +1864,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     numberColor: 石青,
                     numberX: 100,
                     layerList: [
-                        layer(ZeroLayer, { color: 石青 }),
-                        layer(LineLayer, { data: d.bitmex, color: 石青 }),
+                        //layer(ZeroLayer, { color: 石青 }),
+                        layer(LineLayer, { data: d.bitmex.着笔.涨跌, color: 石青 }),
                     ]
                 },
 
