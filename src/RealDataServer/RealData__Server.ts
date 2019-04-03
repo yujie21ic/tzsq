@@ -39,7 +39,7 @@ export class RealData__Server extends RealDataBase {
         symbol: string
         xxxxxxxx: {
             着笔: {
-                ____push: (v: { side: BaseType.Side, size: number, price: number }) => void
+                ____push: (v: { side: BaseType.Side, size: number, price: number, buy1: number, sell1: number }) => void
             },
             data: {
                 ____push: (v: BaseType.KLine) => void
@@ -68,12 +68,17 @@ export class RealData__Server extends RealDataBase {
 
 
         //本地 ws 服务 才要
-        if (this.wsServer) {
-            p.xxxxxxxx.着笔.____push({
-                side: p.side,
-                size: p.size,
-                price: p.price,
-            })
+        if (this.wsServer && p.symbol === 'XBTUSD') {
+            const { orderBook } = this.jsonSync.rawData.bitmex.XBTUSD
+            if (orderBook.length > 0) {
+                p.xxxxxxxx.着笔.____push({
+                    side: p.side,
+                    size: p.size,
+                    price: p.price,
+                    buy1: orderBook[0].buy.length > 0 ? orderBook[0].buy[0].price : NaN,
+                    sell1: orderBook[0].sell.length > 0 ? orderBook[0].sell[0].price : NaN,
+                })
+            }
         }
 
         //tick

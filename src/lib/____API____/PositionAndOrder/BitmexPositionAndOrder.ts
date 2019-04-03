@@ -93,7 +93,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                 const arr = a.data.data || []
                 arr.forEach(v => {
                     if (v.contractCode === 'BTCUSDT') {
-                        仓位数量 = Number(v.positionQuantity)
+                        仓位数量 = Number(v.positionQuantity.split(',').join(''))
                         开仓均价 = v.entryPriceD
                     }
                 })
@@ -130,7 +130,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                                 side: v.taskTypeD === '买入止损' ? 'Buy' : 'Sell',
                                 cumQty: 0,
                                 orderQty: 100000,
-                                price: Number(v.trigPrice),
+                                price: Number(v.trigPrice.split(',').join('')),
                             })
                         }
                     })
