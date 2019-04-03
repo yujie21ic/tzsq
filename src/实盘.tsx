@@ -107,7 +107,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                 <p>仓位:{this.get仓位()}</p>
                 <p>止损:{get止损()}</p>
                 <p>委托:{get委托()}</p>
-                <p>
+                {/* <p>
                     摸顶:<Switch checked={任务开关.自动开仓摸顶} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓摸顶', value: v }) }} />
                     抄底:<Switch checked={任务开关.自动开仓抄底} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓抄底', value: v }) }} />
                 </p>
@@ -116,11 +116,11 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                     追跌:<Switch checked={任务开关.自动开仓追跌} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓追跌', value: v }) }} />
                 </p>
                 <p>
-                    止损:<Switch checked={任务开关.自动止损} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动止损', value: v }) }} />
-                    推止损:<Switch checked={任务开关.自动推止损} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动推止损', value: v }) }} />
-                </p>
-                <p>
                     止盈波段:<Switch checked={任务开关.自动止盈波段} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动止盈波段', value: v }) }} />
+                    推止损:<Switch checked={任务开关.自动推止损} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动推止损', value: v }) }} />
+                </p> */}
+                <p>
+                    止损:<Switch checked={任务开关.自动止损} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动止损', value: v }) }} />
                 </p>
             </div>
 
@@ -304,8 +304,8 @@ export class 交易 extends React.Component {
                 userSelect: 'none',
                 cursor: 'default'
             }}>
-                <Item symbol='XBTUSD' 位置={this.位置} 倍数={this.倍数} />
-                {/* <Item symbol='Hopex_BTC' 位置={this.位置} 倍数={this.倍数} /> */}
+                {/* <Item symbol='XBTUSD' 位置={this.位置} 倍数={this.倍数} /> */}
+                <Item symbol='Hopex_BTC' 位置={this.位置} 倍数={this.倍数} />
                 <Item symbol='Hopex_ETH' 位置={this.位置} 倍数={this.倍数} />
             </div>
     }
