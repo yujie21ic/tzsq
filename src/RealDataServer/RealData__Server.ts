@@ -75,8 +75,8 @@ export class RealData__Server extends RealDataBase {
                     side: p.side,
                     size: p.size,
                     price: p.price,
-                    buy1: orderBook[0].buy[0].price,
-                    sell1: orderBook[0].sell[0].price,
+                    buy1: orderBook[0].buy.length > 0 ? orderBook[0].buy[0].price : NaN,
+                    sell1: orderBook[0].sell.length > 0 ? orderBook[0].sell[0].price : NaN,
                 })
             }
         }
