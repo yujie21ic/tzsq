@@ -1574,10 +1574,18 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 ]
             },
             {
+                numberColor: 石青,
+                numberX: 100,
                 layerList: [
-                    layer(LineLayer, { data: d2.XBTUSD.bitmex.着笔.size, color: 0xffffff }),
+                    //layer(ZeroLayer, { color: 石青 }),
+                    layer(LineLayer, { data: d.bitmex.着笔.涨跌, color: 石青 }),
                 ]
             },
+            // {
+            //     layerList: [
+            //         layer(LineLayer, { data: d2.XBTUSD.bitmex.着笔.size, color: 0xffffff }),
+            //     ]
+            // },
         ]
     }),
 
@@ -1860,14 +1868,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 波动率颜色 }),
                     ]
                 },
-                {
-                    numberColor: 石青,
-                    numberX: 100,
-                    layerList: [
-                        //layer(ZeroLayer, { color: 石青 }),
-                        layer(LineLayer, { data: d.bitmex.着笔.涨跌, color: 石青 }),
-                    ]
-                },
+                // {
+                //     numberColor: 石青,
+                //     numberX: 100,
+                //     layerList: [
+                //         //layer(ZeroLayer, { color: 石青 }),
+                //         layer(LineLayer, { data: d.bitmex.着笔.涨跌, color: 石青 }),
+                //     ]
+                // },
 
                 {
                     numberColor: BTC颜色,
