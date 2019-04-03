@@ -8,7 +8,7 @@ import { safeJSONParse } from '../lib/F/safeJSONParse'
 import { kvs } from '../lib/F/kvs'
 import { toRange } from '../lib/F/toRange'
 import { toBuySellPriceFunc } from '../lib/F/toBuySellPriceFunc'
-import { XBTUSD摸顶抄底追涨追跌 } from '../XBTUSD摸顶抄底追涨追跌'
+// import { XBTUSD摸顶抄底追涨追跌 } from '../XBTUSD摸顶抄底追涨追跌'
 import { PositionAndOrder } from '../lib/____API____/PositionAndOrder/PositionAndOrder'
 import { Hopex__ETH止损 } from '../Hopex__ETH止损'
 
@@ -24,7 +24,7 @@ if (config.orderServer !== undefined) {
             cookie: v.cookie,
             hopexCookie: v.hopexCookie || '',
         })
-        account.runTask(new XBTUSD摸顶抄底追涨追跌())
+        // account.runTask(new XBTUSD摸顶抄底追涨追跌())
         account.runTask(new Hopex__ETH止损())
         accountDic.set(v.cookie, account) //key is cookie 
     })
