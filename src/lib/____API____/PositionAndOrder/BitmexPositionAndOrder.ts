@@ -138,7 +138,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                 Hopex_ETH: [] as Order[],
             }
             const { data } = await HopexRESTAPI.getConditionOrders(this.hopexCookie)
-            
+
             if (data !== undefined) {
                 this.hopex_初始化.委托 = true
 
@@ -322,7 +322,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         })
     }
 
-    hopex_taker = async (p: { size: number, side: BaseType.Side }) => {
+    hopex_taker = async (p: { symbol: 'BTCUSDT' | 'ETHUSDT', size: number, side: BaseType.Side }) => {
         this.log(`hopex_taker ${p.side} ${p.size}`)
         const b = (await HopexRESTAPI.taker(this.hopexCookie, p)).error === undefined
         this.log(`hopex_taker ${b ? '成功' : '失败'}`)
@@ -332,7 +332,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         return b
     }
 
-    hopex_stop = async (p: { side: BaseType.Side, price: number }) => {
+    hopex_stop = async (p: { symbol: 'BTCUSDT' | 'ETHUSDT', side: BaseType.Side, price: number }) => {
         this.log(`hopex_stop ${p.side} ${p.price}`)
         const b = (await HopexRESTAPI.stop(this.hopexCookie, p)).error === undefined
         this.log(`hopex_stop ${b ? '成功' : '失败'}`)

@@ -1304,8 +1304,8 @@ export class RealDataBase {
     }
 
 
-    getHopexOrderPrice = ({ side, type, 位置 }: { side: BaseType.Side, type: 'taker' | 'maker', 位置: number }) => {
-        const pk = this.dataExt.XBTUSD.hopex.盘口
+    getHopexOrderPrice = ({ symbol, side, type, 位置 }: { symbol: 'XBTUSD' | 'ETHUSD', side: BaseType.Side, type: 'taker' | 'maker', 位置: number }) => {
+        const pk = this.dataExt[symbol].hopex.盘口
 
         if (pk.length < 1) return NaN
         const p = pk[pk.length - 1]

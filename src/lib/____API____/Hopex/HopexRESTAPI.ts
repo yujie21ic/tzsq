@@ -39,31 +39,31 @@ export const HopexRESTAPI = {
     //     }),
 
 
-    taker: async (cookie: string, p: { size: number, side: BaseType.Side }) =>
+    taker: async (cookie: string, p: { symbol: 'BTCUSDT' | 'ETHUSDT', size: number, side: BaseType.Side }) =>
         HopexRESTAPI__http({
             cookie,
             url: 'https://web.hopex.com/api/v1/gateway/User/Order?culture=zh-CN',
             param: {
                 'side': p.side === 'Sell' ? '1' : '2',
                 'orderQuantity': String(p.size),
-                'market': 'BTCUSDT',
-                'marketCode': 'BTCUSDT',
-                'contractCode': 'BTCUSDT',
+                'market': p.symbol,
+                'marketCode': p.symbol,
+                'contractCode': p.symbol,
                 'lang': 'zh-CN',
             },
         }),
 
-    stop: async (cookie: string, p: { side: BaseType.Side, price: number }) =>
+    stop: async (cookie: string, p: { symbol: 'BTCUSDT' | 'ETHUSDT', side: BaseType.Side, price: number }) =>
         HopexRESTAPI__http({
             cookie,
             url: 'https://web.hopex.com/api/v1/gateway/User/ConditionOrder?culture=zh-CN',
             param: {
-                contractCode: 'BTCUSDT',
                 expectedPrice: String(p.side === 'Sell' ? String(p.price - 100) : String(p.price + 100)),
                 expectedQuantity: String(100000),
                 lang: 'zh-CN',
-                market: 'BTCUSDT',
-                marketCode: 'BTCUSDT',
+                market: p.symbol,
+                marketCode: p.symbol,
+                contractCode: p.symbol,
                 side: p.side === 'Sell' ? 1 : 2,
                 trigPrice: String(p.side === 'Sell' ? String(p.price) : String(p.price)),
                 trigType: 'market_price',

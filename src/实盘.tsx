@@ -136,6 +136,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                             bgColor={GREEN}
                             text={下单数量 + ''}
                             left={() => HopexRESTAPI.taker(hopexCookie, {
+                                symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
                                 side: 'Buy',
                                 size: 下单数量,
                             })}
@@ -147,6 +148,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                             bgColor={RED}
                             text={-下单数量 + ''}
                             left={() => HopexRESTAPI.taker(hopexCookie, {
+                                symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
                                 side: 'Sell',
                                 size: 下单数量,
                             })}
