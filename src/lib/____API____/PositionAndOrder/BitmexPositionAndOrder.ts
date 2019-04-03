@@ -36,6 +36,7 @@ export const createJSONSync = () =>
             XBTUSD: symbol(),
             ETHUSD: symbol(),
             Hopex_BTC: symbol(),
+            Hopex_ETH: symbol(),
         }
     })
 

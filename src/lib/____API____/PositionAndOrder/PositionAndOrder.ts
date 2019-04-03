@@ -2,6 +2,29 @@ import { BaseType } from '../../BaseType'
 import { JSONSync } from '../../F/JSONSync'
 import { RealDataBase } from '../../../RealDataServer/RealDataBase'
 
+type ITEM = {
+    任务开关: {
+        自动开仓摸顶: boolean
+        自动开仓抄底: boolean
+        自动开仓追涨: boolean
+        自动开仓追跌: boolean
+        自动止盈波段: boolean
+        自动止损: boolean
+        自动推止损: boolean
+    }
+    委托列表: {
+        type: '限价' | '限价只减仓' | '止损'
+        timestamp: number
+        id: string
+        side: BaseType.Side
+        cumQty: number      //成交数量
+        orderQty: number    //委托数量
+        price: number
+    }[]
+    仓位数量: number
+    开仓均价: number
+}
+
 export interface PositionAndOrder {
 
     //先写成这样  需要改  
@@ -11,73 +34,11 @@ export interface PositionAndOrder {
             total: number
         }[]
         symbol: {
-            XBTUSD: {
-                任务开关: {
-                    自动开仓摸顶: boolean;
-                    自动开仓抄底: boolean;
-                    自动开仓追涨: boolean;
-                    自动开仓追跌: boolean;
-                    自动止盈波段: boolean;
-                    自动止损: boolean;
-                    自动推止损: boolean;
-                };
-                委托列表: {
-                    type: '限价' | '限价只减仓' | '止损'
-                    timestamp: number
-                    id: string
-                    side: BaseType.Side
-                    cumQty: number      //成交数量
-                    orderQty: number    //委托数量
-                    price: number
-                }[];
-                仓位数量: number;
-                开仓均价: number;
-            };
-            Hopex_BTC: {
-                任务开关: {
-                    自动开仓摸顶: boolean;
-                    自动开仓抄底: boolean;
-                    自动开仓追涨: boolean;
-                    自动开仓追跌: boolean;
-                    自动止盈波段: boolean;
-                    自动止损: boolean;
-                    自动推止损: boolean;
-                };
-                委托列表: {
-                    type: '限价' | '限价只减仓' | '止损'
-                    timestamp: number
-                    id: string
-                    side: BaseType.Side
-                    cumQty: number      //成交数量
-                    orderQty: number    //委托数量
-                    price: number
-                }[];
-                仓位数量: number;
-                开仓均价: number;
-            };
-            ETHUSD: {
-                任务开关: {
-                    自动开仓摸顶: boolean;
-                    自动开仓抄底: boolean;
-                    自动开仓追涨: boolean;
-                    自动开仓追跌: boolean;
-                    自动止盈波段: boolean;
-                    自动止损: boolean;
-                    自动推止损: boolean;
-                };
-                委托列表: {
-                    type: '限价' | '限价只减仓' | '止损'
-                    timestamp: number
-                    id: string
-                    side: BaseType.Side
-                    cumQty: number      //成交数量
-                    orderQty: number    //委托数量
-                    price: number
-                }[];
-                仓位数量: number;
-                开仓均价: number;
-            };
-        };
+            XBTUSD: ITEM
+            ETHUSD: ITEM
+            Hopex_BTC: ITEM
+            Hopex_ETH: ITEM
+        }
     }>
 
     log(text: string): void
@@ -96,51 +57,51 @@ export interface PositionAndOrder {
 
     //API
     maker: (p: {
-        symbol: BaseType.BitmexSymbol;
-        side: BaseType.Side;
-        size: number;
-        price: () => number;
-        reduceOnly: boolean;
-        text: string;
+        symbol: BaseType.BitmexSymbol
+        side: BaseType.Side
+        size: number
+        price: () => number
+        reduceOnly: boolean
+        text: string
     }) => boolean | Promise<boolean>
 
     stop: (p: {
-        side: BaseType.Side;
-        price: number;
+        side: BaseType.Side
+        price: number
     }) => boolean | Promise<boolean>
 
     updateStop: (p: {
-        orderID: string;
-        price: number;
+        orderID: string
+        price: number
     }) => boolean | Promise<boolean>
 
     updateMaker: (p: {
-        orderID: string;
-        price: () => number;
+        orderID: string
+        price: () => number
     }) => boolean | Promise<boolean>
 
     limit: (p: {
-        symbol: BaseType.BitmexSymbol;
-        side: BaseType.Side;
-        size: number;
-        price: () => number;
-        text: string;
+        symbol: BaseType.BitmexSymbol
+        side: BaseType.Side
+        size: number
+        price: () => number
+        text: string
     }) => boolean | Promise<boolean>
 
     taker: (p: {
-        symbol: BaseType.BitmexSymbol;
-        side: BaseType.Side;
-        size: number;
-        text: string;
+        symbol: BaseType.BitmexSymbol
+        side: BaseType.Side
+        size: number
+        text: string
     }) => boolean | Promise<boolean>
 
     close: (p: {
-        symbol: BaseType.BitmexSymbol;
-        text: string;
+        symbol: BaseType.BitmexSymbol
+        text: string
     }) => boolean | Promise<boolean>
 
     cancel: (p: {
-        orderID: string[];
+        orderID: string[]
     }) => boolean | Promise<boolean>
 
     runTask(task: PositionAndOrderTask): void
