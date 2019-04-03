@@ -13,11 +13,13 @@ chart 删除 右键合约
 
 实盘 波动图 预先加载几个小时的数据 
 
-着笔图  时间
+着笔图  时间 
+
+ 
+1 逐笔信号 做成细的横条
+2 eth的手动下单
+3 eth的量化  
 
 
 source .nvm/nvm.sh
 screen -R a
-
-screen -S a
-screen -r a 
