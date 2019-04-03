@@ -107,8 +107,8 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                         __obj__.Hopex_BTC.开仓均价 = v.entryPriceD
                     }
                     else if (v.contractCode === 'ETHUSDT') {
-                        __obj__.Hopex_BTC.仓位数量 = Number(v.positionQuantity.split(',').join(''))
-                        __obj__.Hopex_BTC.开仓均价 = v.entryPriceD
+                        __obj__.Hopex_ETH.仓位数量 = Number(v.positionQuantity.split(',').join(''))
+                        __obj__.Hopex_ETH.开仓均价 = v.entryPriceD
                     }
                 })
 
