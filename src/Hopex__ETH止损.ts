@@ -43,7 +43,7 @@ export class Hopex__ETH止损 implements PositionAndOrderTask {
                 const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
 
                 return self.hopex_stop({
-                    symbol: 'BTCUSDT',
+                    symbol: 'ETHUSDT',
                     side,
                     price: toGridPoint({
                         grid: 0.5,
