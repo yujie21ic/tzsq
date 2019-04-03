@@ -84,27 +84,23 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         委托: false,
     }
 
-    async hopex_轮询() {
+    private async hoex_仓位_轮询() {
         while (true) {
-
             const __obj__ = {
                 Hopex_BTC: {
                     仓位数量: 0,
                     开仓均价: 0,
-                    orderArr: [] as Order[],
                 },
                 Hopex_ETH: {
                     仓位数量: 0,
                     开仓均价: 0,
-                    orderArr: [] as Order[],
                 },
             }
-
-
-            const a = await HopexRESTAPI.getPositions(this.hopexCookie)
-            if (a.data !== undefined) {
+            const { data } = await HopexRESTAPI.getPositions(this.hopexCookie)
+            if (data !== undefined) {
                 this.hopex_初始化.仓位 = true
-                const arr = a.data.data || []
+
+                const arr = data.data || []
                 arr.forEach(v => {
                     if (v.contractCode === 'BTCUSDT') {
                         __obj__.Hopex_BTC.仓位数量 = Number(v.positionQuantity.split(',').join(''))
@@ -131,19 +127,29 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                 this.hopex_初始化.仓位 = false
                 this.log('hopex_初始化.仓位 = false')
             }
+            await sleep(1000)
+        }
+    }
 
-            const b = await HopexRESTAPI.getConditionOrders(this.hopexCookie)
-            if (b.data !== undefined) {
+    private async hoex_委托_轮询() {
+        while (true) {
+            const __obj__ = {
+                Hopex_BTC: [] as Order[],
+                Hopex_ETH: [] as Order[],
+            }
+            const { data } = await HopexRESTAPI.getConditionOrders(this.hopexCookie)
+            
+            if (data !== undefined) {
                 this.hopex_初始化.委托 = true
 
-                if (b.data.data !== undefined) {
-                    const result = b.data.data ? b.data.data.result || [] : []
+                if (data.data !== undefined) {
+                    const result = data.data ? data.data.result || [] : []
                     result.forEach(v => {
                         let k = '' as 'Hopex_BTC' | 'Hopex_ETH' | ''
                         if (v.contractCode === 'BTCUSDT' && v.taskStatusD === '未触发') { k = 'Hopex_BTC' }
                         if (v.contractCode === 'ETHUSDT' && v.taskStatusD === '未触发') { k = 'Hopex_ETH' }
                         if (k !== '') {
-                            __obj__[k].orderArr.push({
+                            __obj__[k].push({
                                 type: '止损',
                                 timestamp: v.timestamp,
                                 id: String(v.taskId),
@@ -155,14 +161,13 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                         }
                     })
                 }
-
                 hopexSymbolArr.forEach(symbol => {
-                    const id1Arr = __obj__[symbol].orderArr.map(v => v.id).sort().join(',')
+                    const id1Arr = __obj__[symbol].map(v => v.id).sort().join(',')
                     const id2Arr = this.jsonSync.rawData.symbol[symbol].委托列表.map(v => v.id).sort().join(',')
 
                     if (id1Arr !== id2Arr) {
-                        this.jsonSync.data.symbol[symbol].委托列表.____set(__obj__[symbol].orderArr)
-                        this.log('hopex 止损:' + (__obj__[symbol].orderArr.length > 0 ? __obj__[symbol].orderArr[0].price : '无'))
+                        this.jsonSync.data.symbol[symbol].委托列表.____set(__obj__[symbol])
+                        this.log('hopex ' + symbol + '止损:' + (__obj__[symbol].length > 0 ? __obj__[symbol][0].price : '无'))
                     }
                 })
 
@@ -170,8 +175,14 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                 this.hopex_初始化.委托 = false
                 this.log('hopex_初始化.委托 = false')
             }
-            await sleep(2000)
+            await sleep(1000)
         }
+    }
+
+
+    private async hopex_轮询() {
+        this.hoex_仓位_轮询()
+        this.hoex_委托_轮询()
     }
 
 
