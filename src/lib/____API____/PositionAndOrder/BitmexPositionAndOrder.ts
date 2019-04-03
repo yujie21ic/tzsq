@@ -55,6 +55,7 @@ let callID = 0
 const 重试几次 = 10
 const 重试休息多少毫秒 = 10
 
+const hopexSymbolArr = ['Hopex_BTC' as 'Hopex_BTC', 'Hopex_ETH' as 'Hopex_ETH']
 
 
 export class BitmexPositionAndOrder implements PositionAndOrder {
@@ -85,46 +86,64 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     async hopex_轮询() {
         while (true) {
+
+            const __obj__ = {
+                Hopex_BTC: {
+                    仓位数量: 0,
+                    开仓均价: 0,
+                    orderArr: [] as Order[],
+                },
+                Hopex_ETH: {
+                    仓位数量: 0,
+                    开仓均价: 0,
+                    orderArr: [] as Order[],
+                },
+            }
+
+
             const a = await HopexRESTAPI.getPositions(this.hopexCookie)
             if (a.data !== undefined) {
                 this.hopex_初始化.仓位 = true
-
-                let 仓位数量 = 0
-                let 开仓均价 = 0
                 const arr = a.data.data || []
                 arr.forEach(v => {
                     if (v.contractCode === 'BTCUSDT') {
-                        仓位数量 = Number(v.positionQuantity.split(',').join(''))
-                        开仓均价 = v.entryPriceD
+                        __obj__.Hopex_BTC.仓位数量 = Number(v.positionQuantity.split(',').join(''))
+                        __obj__.Hopex_BTC.开仓均价 = v.entryPriceD
+                    }
+                    else if (v.contractCode === 'ETHUSDT') {
+                        __obj__.Hopex_BTC.仓位数量 = Number(v.positionQuantity.split(',').join(''))
+                        __obj__.Hopex_BTC.开仓均价 = v.entryPriceD
                     }
                 })
 
-                if (this.jsonSync.rawData.symbol.Hopex_BTC.仓位数量 !== 仓位数量) {
-                    this.jsonSync.data.symbol.Hopex_BTC.仓位数量.____set(仓位数量)
-                    this.log('hopex 仓位数量:' + 仓位数量)
-                }
-
-                if (this.jsonSync.rawData.symbol.Hopex_BTC.开仓均价 !== 开仓均价) {
-                    this.jsonSync.data.symbol.Hopex_BTC.开仓均价.____set(开仓均价)
-                    this.log('hopex 开仓均价:' + 开仓均价)
-                }
+                hopexSymbolArr.forEach(symbol => {
+                    if (this.jsonSync.rawData.symbol[symbol].仓位数量 !== __obj__[symbol].仓位数量) {
+                        this.jsonSync.data.symbol[symbol].仓位数量.____set(__obj__[symbol].仓位数量)
+                        this.log(`hopex ${symbol} 仓位数量: + ${__obj__[symbol].仓位数量}`)
+                    }
+                    if (this.jsonSync.rawData.symbol[symbol].开仓均价 !== __obj__[symbol].开仓均价) {
+                        this.jsonSync.data.symbol[symbol].开仓均价.____set(__obj__[symbol].开仓均价)
+                        this.log(`hopex ${symbol} 开仓均价: + ${__obj__[symbol].开仓均价}`)
+                    }
+                })
 
             } else {
                 this.hopex_初始化.仓位 = false
                 this.log('hopex_初始化.仓位 = false')
-                // await this.hopex_login()
             }
 
             const b = await HopexRESTAPI.getConditionOrders(this.hopexCookie)
             if (b.data !== undefined) {
                 this.hopex_初始化.委托 = true
 
-                let orderArr: Order[] = []
                 if (b.data.data !== undefined) {
                     const result = b.data.data ? b.data.data.result || [] : []
                     result.forEach(v => {
-                        if (v.contractCode === 'BTCUSDT' && v.taskStatusD === '未触发') {
-                            orderArr.push({
+                        let k = '' as 'Hopex_BTC' | 'Hopex_ETH' | ''
+                        if (v.contractCode === 'BTCUSDT' && v.taskStatusD === '未触发') { k = 'Hopex_BTC' }
+                        if (v.contractCode === 'ETHUSDT' && v.taskStatusD === '未触发') { k = 'Hopex_ETH' }
+                        if (k !== '') {
+                            __obj__[k].orderArr.push({
                                 type: '止损',
                                 timestamp: v.timestamp,
                                 id: String(v.taskId),
@@ -137,18 +156,19 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                     })
                 }
 
-                const id1Arr = orderArr.map(v => v.id).sort().join(',')
-                const id2Arr = this.jsonSync.rawData.symbol.Hopex_BTC.委托列表.map(v => v.id).sort().join(',')
+                hopexSymbolArr.forEach(symbol => {
+                    const id1Arr = __obj__[symbol].orderArr.map(v => v.id).sort().join(',')
+                    const id2Arr = this.jsonSync.rawData.symbol[symbol].委托列表.map(v => v.id).sort().join(',')
 
-                if (id1Arr !== id2Arr) {
-                    this.jsonSync.data.symbol.Hopex_BTC.委托列表.____set(orderArr)
-                    this.log('hopex 止损:' + (orderArr.length > 0 ? orderArr[0].price : '无'))
-                }
+                    if (id1Arr !== id2Arr) {
+                        this.jsonSync.data.symbol[symbol].委托列表.____set(__obj__[symbol].orderArr)
+                        this.log('hopex 止损:' + (__obj__[symbol].orderArr.length > 0 ? __obj__[symbol].orderArr[0].price : '无'))
+                    }
+                })
 
             } else {
                 this.hopex_初始化.委托 = false
                 this.log('hopex_初始化.委托 = false')
-                // await this.hopex_login()
             }
             await sleep(2000)
         }
