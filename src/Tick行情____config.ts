@@ -1852,14 +1852,22 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
                     ]
                 },
-                // {
-                //     numberColor: 'ETH颜色',
-                //     layerList: [
-                //         layer(ZeroLayer, { color: ETH颜色 }),
-                //         layer(LineLayer, { data: d.bitmex.阻力3涨, color: 买颜色 }),
-                //         layer(LineLayer, { data: d.bitmex.阻力3跌, color: 卖颜色 }),
-                //     ]
-                // },
+                {
+                    numberColor: 波动率颜色,
+                    numberX: 100,
+                    layerList: [
+                        layer(ZeroLayer, { color: 波动率颜色 }),
+                        layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 波动率颜色 }),
+                    ]
+                },
+                {
+                    numberColor: 石青,
+                    numberX: 100,
+                    layerList: [
+                        layer(ZeroLayer, { color: 石青 }),
+                        layer(LineLayer, { data: d.bitmex, color: 石青 }),
+                    ]
+                },
 
                 {
                     numberColor: BTC颜色,

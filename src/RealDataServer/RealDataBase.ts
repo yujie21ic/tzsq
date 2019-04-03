@@ -186,6 +186,7 @@ export class RealDataBase {
             price: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].price),
             side: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].side),
             size: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].size),
+            
         }
 
 
