@@ -148,7 +148,7 @@ export class RealDataBase {
 
 
     private item2(xxx: {
-        着笔: { side: BaseType.Side, size: number, price: number, buy1: number, sell1: number }[],
+        着笔: BaseType.着笔[],
         data1M: { id: number, close: number }[]
         data: BaseType.KLine[]
         orderBook: BaseType.OrderBook[]
@@ -162,6 +162,7 @@ export class RealDataBase {
         // 然后相加这个价位笔的加权计算，最终是正数，就是上涨，负数就是下跌
 
         const 着笔 = {
+            timestamp: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].timestamp),
             price: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].price),
             side: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].side),
             size: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].size),
