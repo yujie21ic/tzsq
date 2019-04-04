@@ -120,8 +120,8 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
         this.subscribe(this.ws_btc, type, 'BTCUSDT')
         this.subscribe(this.ws_btc2, type, 'BTCUSD')
 
-        this.subscribe(this.ws_btc, type, 'ETHUSDT')
-        this.subscribe(this.ws_btc2, type, 'ETHUSD')
+        this.subscribe(this.ws_eth, type, 'ETHUSDT')
+        this.subscribe(this.ws_eth2, type, 'ETHUSD')
 
         //
         this.ws_btc.onData = this.ws_eth.onData = this.ws_btc2.onData = this.ws_eth2.onData = (d: Frame) => {
