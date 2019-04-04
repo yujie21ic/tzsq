@@ -6,7 +6,7 @@ export namespace BaseType {
 
     export type BitmexSymbol = 'ETHUSD' | 'XBTUSD'
     export type BinanceSymbol = 'btcusdt' | 'ethusdt' //ws小写  http大写  卧槽
-    export type HopexSymbol = 'BTCUSDT' | 'ETHUSDT'
+    export type HopexSymbol = 'BTCUSDT' | 'ETHUSDT' | 'BTCUSD' | 'ETHUSD'
     export type MarketAndSymbol = {
         market: 'bitmex'
         symbol: BitmexSymbol

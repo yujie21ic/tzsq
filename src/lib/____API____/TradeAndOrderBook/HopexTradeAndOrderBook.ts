@@ -83,40 +83,48 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
         url: 'wss://api.hopex.com/ws'
     })
 
+    private ws_btc2 = new WebSocketClient({
+        ss: config.ss,
+        url: 'wss://api.hopex.com/ws'
+    })
+
     private ws_eth = new WebSocketClient({
         ss: config.ss,
         url: 'wss://api.hopex.com/ws'
     })
 
+    private ws_eth2 = new WebSocketClient({
+        ss: config.ss,
+        url: 'wss://api.hopex.com/ws'
+    })
+
+    private subscribe(ws: WebSocketClient, type: 'all' | 'trade' | 'order_book' = 'all', symbol: BaseType.HopexSymbol) {
+        ws.onStatusChange = () => {
+            if (ws.isConnected) {
+                if (type === 'order_book' || type === 'all') {
+                    ws.sendJSON(orderbook_subscribe_data(symbol))
+                }
+                if (type === 'trade' || type === 'all') {
+                    ws.sendJSON(deals_subscribe_data(symbol))
+                }
+            }
+            this.statusObservable.next({
+                isConnected: this.ws_btc.isConnected && this.ws_eth.isConnected && this.ws_btc2.isConnected && this.ws_eth2.isConnected
+            })
+        }
+    }
+
     constructor(type: 'all' | 'trade' | 'order_book' = 'all') {
         super()
 
-        this.ws_btc.onStatusChange = () => {
-            if (this.ws_btc.isConnected) {
-                if (type === 'order_book' || type === 'all') {
-                    this.ws_btc.sendJSON(orderbook_subscribe_data('BTCUSDT'))
-                }
-                if (type === 'trade' || type === 'all') {
-                    this.ws_btc.sendJSON(deals_subscribe_data('BTCUSDT'))
-                }
-            }
-            this.statusObservable.next({ isConnected: this.ws_btc.isConnected && this.ws_eth.isConnected })
-        }
+        this.subscribe(this.ws_btc, type, 'BTCUSDT')
+        this.subscribe(this.ws_btc2, type, 'BTCUSD')
 
+        this.subscribe(this.ws_btc, type, 'ETHUSDT')
+        this.subscribe(this.ws_btc2, type, 'ETHUSD')
 
-        this.ws_eth.onStatusChange = () => {
-            if (this.ws_eth.isConnected) {
-                if (type === 'order_book' || type === 'all') {
-                    this.ws_eth.sendJSON(orderbook_subscribe_data('ETHUSDT'))
-                }
-                if (type === 'trade' || type === 'all') {
-                    this.ws_eth.sendJSON(deals_subscribe_data('ETHUSDT'))
-                }
-            }
-            this.statusObservable.next({ isConnected: this.ws_btc.isConnected && this.ws_eth.isConnected })
-        }
-
-        this.ws_btc.onData = this.ws_eth.onData = (d: Frame) => {
+        //
+        this.ws_btc.onData = this.ws_eth.onData = this.ws_btc2.onData = this.ws_eth2.onData = (d: Frame) => {
 
             //着笔
             if (d.method === 'deals.update') {

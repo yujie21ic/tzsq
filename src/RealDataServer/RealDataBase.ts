@@ -93,7 +93,19 @@ export class RealDataBase {
                     data: [] as BaseType.KLine[],
                     orderBook: [] as BaseType.OrderBook[],
                 },
+                BTCUSD: {
+                    着笔: [] as { side: BaseType.Side, size: number, price: number, buy1: number, sell1: number }[],
+                    data1M: [] as { id: number, close: number }[],
+                    data: [] as BaseType.KLine[],
+                    orderBook: [] as BaseType.OrderBook[],
+                },
                 ETHUSDT: {
+                    着笔: [] as { side: BaseType.Side, size: number, price: number, buy1: number, sell1: number }[],
+                    data1M: [] as { id: number, close: number }[],
+                    data: [] as BaseType.KLine[],
+                    orderBook: [] as BaseType.OrderBook[],
+                },
+                ETHUSD: {
                     着笔: [] as { side: BaseType.Side, size: number, price: number, buy1: number, sell1: number }[],
                     data1M: [] as { id: number, close: number }[],
                     data: [] as BaseType.KLine[],
