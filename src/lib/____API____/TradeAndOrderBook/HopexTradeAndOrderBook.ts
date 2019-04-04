@@ -199,6 +199,14 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
         ETHUSDT: {
             sell: Object.create(null) as { [orderPrice: number]: number },
             buy: Object.create(null) as { [orderPrice: number]: number },
+        },
+        BTCUSD: {
+            sell: Object.create(null) as { [orderPrice: number]: number },
+            buy: Object.create(null) as { [orderPrice: number]: number },
+        },
+        ETHUSD: {
+            sell: Object.create(null) as { [orderPrice: number]: number },
+            buy: Object.create(null) as { [orderPrice: number]: number },
         }
     }
 }
