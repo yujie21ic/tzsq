@@ -1,7 +1,7 @@
 import { RealDataBase } from './RealDataServer/RealDataBase'
 import { layer, LayerItem } from './lib/Chart'
 import { LineLayer } from './lib/Chart/Layer/LineLayer'
-import { TextLayer } from './lib/Chart/Layer/TextLayer'
+import { TextLayer, LeftTextLayer } from './lib/Chart/Layer/TextLayer'
 import { lastNumber } from './lib/F/lastNumber'
 import { ZeroLayer } from './lib/Chart/Layer/ZeroLayer'
 import { 信号Layer } from './lib/Chart/Layer/信号Layer'
@@ -91,11 +91,15 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
                         layer(TextLayer, {
                             text:
+                                `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
+                                `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   `,
+                            color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+                        }),
+                        layer(LeftTextLayer, {
+                            text:
                                 `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
                                 `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
                                 `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
-                                `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
-                                `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   ` +
                                 `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
                             color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
                         })
