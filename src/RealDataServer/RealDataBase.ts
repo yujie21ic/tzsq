@@ -199,6 +199,7 @@ export class RealDataBase {
                 return [
                     { name: '涨', value: n === 1 ,color:0x0E6655},
                     { name: '跌', value: n === -1 ,color:0x943126},
+
                 ]
             })
 
