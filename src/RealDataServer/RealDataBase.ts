@@ -163,6 +163,7 @@ export class RealDataBase {
 
         const 着笔 = {
             timestamp: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].timestamp),
+            _500ms_id: 指标.map(() => xxx.着笔.length, i => timeID.timestampTo500msID(xxx.着笔[i].timestamp)),
             price: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].price),
             side: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].side),
             size: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].size),
@@ -182,6 +183,25 @@ export class RealDataBase {
                 return c > 0 ? 1 : -1
             }),
         }
+
+        const 着笔涨跌 = 指标.map(
+            () => data.length,
+            i => {
+                const id = data[i].id
+                let s = 0
+
+                for (let k = 着笔._500ms_id.length - 1; k >= 0; k--) {
+                    if (着笔._500ms_id[k] === id) {
+                        s = 着笔.涨跌[k]
+                        break
+                    }
+                }
+
+                return [
+                    { name: '涨', value: s === 1 },
+                    { name: '跌', value: s === -1 },
+                ]
+            })
 
 
         const _1分钟_收盘价 = 指标.map(() => data1M.length, i => data1M[i].close)
@@ -947,6 +967,7 @@ export class RealDataBase {
         return {
 
             着笔,
+            着笔涨跌,
             bitmex_价格_macd,
             _1分钟_,
 

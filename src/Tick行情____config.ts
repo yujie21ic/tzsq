@@ -43,9 +43,9 @@ const 石青 = 0x1685a9
 
 
 export const Tick行情____config: { [key in string]: ItemFunc } = {
-    
+
     实盘手动: (d, d2) => ({
-        heightList: [0.3, 0.7],
+        heightList: [0.3, 0.5, 0.2],
         items: [
             {
                 layerList: [
@@ -64,7 +64,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 ]
             },
             [
-                
+
                 {
                     numberColor: '0x000000',
                     layerList: [
@@ -104,6 +104,11 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
 
             ],
+            {
+                layerList: [
+                    layer(信号Layer, { data: d2.XBTUSD.bitmex.着笔涨跌, color: 0xaaaaaa }),
+                ]
+            }
             // [
             //     {
             //         layerList: [
@@ -127,7 +132,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
             //     ]
             // },
-           
+
         ]
     }),
     实盘动力手动: (d, d2) => ({
@@ -150,7 +155,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 ]
             },
             [
-                
+
                 {
                     numberColor: '0x000000',
                     layerList: [
@@ -208,7 +213,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
             //     ]
             // },
-           
+
         ]
     }),
 
@@ -220,7 +225,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 numberColor: 波动率颜色,
                 numberX: 100,
                 layerList: [
-                    layer(ZeroLayer, { color: 石青 }), 
+                    layer(ZeroLayer, { color: 石青 }),
                     layer(LineLayer, { data: d.hopex_bitmex_相对差价, color: 买颜色 }),
                     //layer(LineLayer, { data: d.hopex_bitmex_相对差价均线, color: 卖颜色 }),
                 ]
@@ -1814,7 +1819,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     着笔: (d, d2) => ({
         heightList: [0.5, 0.5],
         items: [
-            [ {
+            [{
                 numberColor: BTC颜色,
                 layerList: [
                     layer(LineLayer, { data: d2.XBTUSD.bitmex.着笔.price, color: BTC颜色 }),
@@ -1828,7 +1833,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layer(LineLayer, { data: d.bitmex.着笔.涨跌, color: 石青 }),
                 ]
             },],
-           
+
             {
                 layerList: [
                     layer(LineLayer, { data: d2.XBTUSD.bitmex.着笔.size, color: 0xffffff }),
@@ -2016,5 +2021,5 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             },
         ]
     }),
-   
+
 } 
