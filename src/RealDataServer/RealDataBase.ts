@@ -169,11 +169,11 @@ export class RealDataBase {
             size: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].size),
             涨跌: 指标.map(() => xxx.着笔.length, i => {
                 let c = 0
-                for (let k = i; k >= Math.max(0, i - 50); i--) {
-                    if (xxx.着笔[i].price === xxx.着笔[i].buy1) {
+                for (let k = i; k >= Math.max(0, i - 50); k--) {
+                    if (xxx.着笔[k].price === xxx.着笔[k].buy1) {
                         c += (i - k)
                     }
-                    else if (xxx.着笔[i].price === xxx.着笔[i].sell1) {
+                    else if (xxx.着笔[k].price === xxx.着笔[k].sell1) {
                         c -= (i - k)
                     }
                     else {
@@ -185,21 +185,20 @@ export class RealDataBase {
         }
 
         const 着笔涨跌 = 指标.map(
-            () => data.length,
+            () => data.length - 10,
             i => {
-                const id = data[i].id
-                let s = 0
+                let n = 0
 
                 for (let k = 着笔._500ms_id.length - 1; k >= 0; k--) {
-                    if (着笔._500ms_id[k] === id) {
-                        s = 着笔.涨跌[k]
+                    if (着笔._500ms_id[k] === data[i].id) {
+                        n = 着笔.涨跌[k]
                         break
                     }
                 }
 
                 return [
-                    { name: '涨', value: s === 1 },
-                    { name: '跌', value: s === -1 },
+                    { name: '涨', value: n === 1 },
+                    { name: '跌', value: n === -1 },
                 ]
             })
 
