@@ -39,7 +39,7 @@ export class RealData__Server extends RealDataBase {
         symbol: string
         xxxxxxxx: {
             着笔: {
-                ____push: (v: { side: BaseType.Side, size: number, price: number, buy1: number, sell1: number }) => void
+                ____push: (v: BaseType.着笔) => void
             },
             data: {
                 ____push: (v: BaseType.KLine) => void
@@ -77,6 +77,7 @@ export class RealData__Server extends RealDataBase {
                     price: p.price,
                     buy1: orderBook[orderBook.length - 1].buy.length > 0 ? orderBook[orderBook.length - 1].buy[0].price : NaN,
                     sell1: orderBook[orderBook.length - 1].sell.length > 0 ? orderBook[orderBook.length - 1].sell[0].price : NaN,
+                    timestamp: p.timestamp,
                 })
             }
         }

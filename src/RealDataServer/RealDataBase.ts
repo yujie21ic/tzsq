@@ -9,6 +9,13 @@ import { safeJSONParse } from '../lib/F/safeJSONParse'
 import * as fs from 'fs'
 import { formatDate } from '../lib/F/formatDate'
 
+const createItem = () => ({
+    着笔: [] as BaseType.着笔[],
+    data1M: [] as { id: number, close: number }[],
+    data: [] as BaseType.KLine[],
+    orderBook: [] as BaseType.OrderBook[],
+})
+
 export class RealDataBase {
     static 单位时间 = 500
 
@@ -79,66 +86,21 @@ export class RealDataBase {
         {
             startTick: 0,//tick的  1m的开始 没有对齐
             ctp: {
-                rb1905: {
-                    着笔: [] as { side: BaseType.Side, size: number, price: number, buy1: number, sell1: number }[],
-                    data1M: [] as { id: number, close: number }[],
-                    data: [] as BaseType.KLine[],
-                    orderBook: [] as BaseType.OrderBook[],
-                }
+                rb1905: createItem(),
             },
             hopex: {
-                BTCUSDT: {
-                    着笔: [] as { side: BaseType.Side, size: number, price: number, buy1: number, sell1: number }[],
-                    data1M: [] as { id: number, close: number }[],
-                    data: [] as BaseType.KLine[],
-                    orderBook: [] as BaseType.OrderBook[],
-                },
-                BTCUSD: {
-                    着笔: [] as { side: BaseType.Side, size: number, price: number, buy1: number, sell1: number }[],
-                    data1M: [] as { id: number, close: number }[],
-                    data: [] as BaseType.KLine[],
-                    orderBook: [] as BaseType.OrderBook[],
-                },
-                ETHUSDT: {
-                    着笔: [] as { side: BaseType.Side, size: number, price: number, buy1: number, sell1: number }[],
-                    data1M: [] as { id: number, close: number }[],
-                    data: [] as BaseType.KLine[],
-                    orderBook: [] as BaseType.OrderBook[],
-                },
-                ETHUSD: {
-                    着笔: [] as { side: BaseType.Side, size: number, price: number, buy1: number, sell1: number }[],
-                    data1M: [] as { id: number, close: number }[],
-                    data: [] as BaseType.KLine[],
-                    orderBook: [] as BaseType.OrderBook[],
-                },
+                BTCUSDT: createItem(),
+                BTCUSD: createItem(),
+                ETHUSDT: createItem(),
+                ETHUSD: createItem(),
             },
             bitmex: {
-                XBTUSD: {
-                    着笔: [] as { side: BaseType.Side, size: number, price: number, buy1: number, sell1: number }[],
-                    data1M: [] as { id: number, close: number }[],
-                    data: [] as BaseType.KLine[],
-                    orderBook: [] as BaseType.OrderBook[],
-                },
-                ETHUSD: {
-                    着笔: [] as { side: BaseType.Side, size: number, price: number, buy1: number, sell1: number }[],
-                    data1M: [] as { id: number, close: number }[],
-                    data: [] as BaseType.KLine[],
-                    orderBook: [] as BaseType.OrderBook[],
-                }
+                XBTUSD: createItem(),
+                ETHUSD: createItem(),
             },
             binance: {
-                btcusdt: {
-                    着笔: [] as { side: BaseType.Side, size: number, price: number, buy1: number, sell1: number }[],
-                    data1M: [] as { id: number, close: number }[],
-                    data: [] as BaseType.KLine[],
-                    orderBook: [] as BaseType.OrderBook[],
-                },
-                ethusdt: {
-                    着笔: [] as { side: BaseType.Side, size: number, price: number, buy1: number, sell1: number }[],
-                    data1M: [] as { id: number, close: number }[],
-                    data: [] as BaseType.KLine[],
-                    orderBook: [] as BaseType.OrderBook[],
-                },
+                btcusdt: createItem(),
+                ethusdt: createItem(),
             }
         }
     )

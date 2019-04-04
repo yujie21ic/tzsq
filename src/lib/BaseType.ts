@@ -64,11 +64,22 @@ export namespace BaseType {
         sell5_size: number
     }
 
+    export type 着笔 = {
+        timestamp: number
+        side: BaseType.Side,
+        size: number,
+        price: number,
+        buy1: number,
+        sell1: number
+    }
+
+
+    //binance
     export type Trade = { //着笔
         id: number
         timestamp: number
         price: number
-        size: number
+        size: number //负数是卖
     }
 
     export type KLine = { //K线
