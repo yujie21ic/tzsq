@@ -146,16 +146,18 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         items: [
             {
                 layerList: [
-                    layer(ZeroLayer, { color: 买颜色 }),
-                    layer(LineLayer, { data: d2.XBTUSD.hopex.价格macd.DIF, color: 买颜色1 }),
-                    layer(LineLayer, { data: d2.XBTUSD.hopex.价格macd.DEM, color: 买颜色 }),
+                    layer(ZeroLayer, { color: ETH颜色 }),
+                    layer(LineLayer, { data: d.hopex._12s_macd.DIF, color: 买颜色1 }),
+                    layer(LineLayer, { data: d.hopex._12s_macd.DEM, color: 买颜色 }),
+                    layer(BarLayer, { data: d.hopex._12s_macd.OSC, color: ETH颜色 }),
                 ]
             },
             {
                 layerList: [
-                    layer(ZeroLayer, { color: 买颜色 }),
-                    layer(LineLayer, { data: d2.XBTUSD.hopex.价格macd.DIF, color: 买颜色1 }),
-                    layer(LineLayer, { data: d2.XBTUSD.hopex.价格macd.DEM, color: 买颜色 }),
+                    layer(ZeroLayer, { color: ETH颜色 }),
+                    layer(LineLayer, { data: d.hopex._60s_macd.DIF, color: 买颜色1 }),
+                    layer(LineLayer, { data: d.hopex._60s_macd.DEM, color: 买颜色 }),
+                    layer(BarLayer, { data: d.hopex._60s_macd.OSC, color: ETH颜色 }),
                 ]
             },
             [
