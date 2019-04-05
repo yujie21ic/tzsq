@@ -34,7 +34,7 @@ const getData = async (p: {
             start += data.length
             data.forEach(v => {
                 retArr.push({
-                    id: timeID.timestampTo500msID(new Date(v.timestamp).getTime()),
+                    id: timeID._500ms.toID(new Date(v.timestamp).getTime()),
                     open: v.price,
                     high: v.price,
                     low: v.price,
@@ -66,7 +66,7 @@ export const syncBitmex500msKLine = (symbol: BaseType.BitmexSymbol) =>
             if (isNaN(lastItemID)) {
                 return new Date('2019-01-15T00:00:00').getTime()
             } else {
-                return timeID._500msIDToTimestamp((lastItemID + 1))
+                return timeID._500ms.toTimestamp((lastItemID + 1))
             }
         },
         getData: async (start: number) => {

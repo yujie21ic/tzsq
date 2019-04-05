@@ -1,29 +1,11 @@
 export namespace timeID {
 
-    export const timestampToOneMinuteID = (timestamp: number) =>
-        Math.floor(timestamp / 1000 / 60)
-
-    export const timestampTo500msID = (timestamp: number) =>
-        Math.floor(timestamp / 500)
-
-
-    export const oneMinuteIDToTimestamp = (id: number) =>
-        id * 1000 * 60
-
-    export const _500msIDToTimestamp = (id: number) =>
-        id * 500
-
-
-
-    //id对应的时间段
-    export const oneMinuteIDToTimestampRange = (id: number) => ({
-        大于等于: oneMinuteIDToTimestamp(id),
-        小于: oneMinuteIDToTimestamp(id + 1),
+    const f = (ms: number) => ({
+        toID: (timestamp: number) => Math.floor(timestamp / ms),
+        toTimestamp: (id: number) => id * ms, //>=id  <id+1
     })
 
-    export const _500msIDToTimestampRange = (id: number) => ({
-        大于等于: _500msIDToTimestamp(id),
-        小于: _500msIDToTimestamp(id + 1),
-    })
-
+    export const _500ms = f(500)
+    export const _12s = f(1000 * 12)
+    export const _60S = f(1000 * 60)
 }

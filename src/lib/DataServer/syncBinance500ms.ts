@@ -14,7 +14,7 @@ export const syncBinance500ms = (symbol: BaseType.BinanceSymbol) =>
             if (isNaN(lastItemID)) {
                 return 0
             } else {
-                const timestamp = timeID._500msIDToTimestamp(lastItemID + 1)
+                const timestamp = timeID._500ms.toTimestamp(lastItemID + 1)
 
                 const obj = await DB.getTrades(symbol).findOne<{}>({
                     raw: true,
@@ -52,7 +52,7 @@ export const syncBinance500ms = (symbol: BaseType.BinanceSymbol) =>
             }
             return {
                 tickArr: tickArr.map(v => ({
-                    id: timeID.timestampTo500msID(v.timestamp),
+                    id: timeID._500ms.toID(v.timestamp),
                     open: v.price,
                     high: v.price,
                     low: v.price,

@@ -126,7 +126,7 @@ export class RealData__Server extends RealDataBase {
 
 
         //1m
-        const _1m_id = timeID.timestampToOneMinuteID(p.timestamp)
+        const _1m_id = timeID._60S.toID(p.timestamp)
         if (this.on着笔_1m_Dic[p.symbol] === undefined) {
             this.on着笔_1m_Dic[p.symbol] = new Sampling({
                 close: '收',

@@ -67,7 +67,7 @@ export const syncHopex500msOrderBook = async () => {
         }
 
         samplingDic[symbol].in2({
-            id: timeID.timestampTo500msID(timestamp),
+            id: timeID._500ms.toID(timestamp),
             buy,
             sell,
         })

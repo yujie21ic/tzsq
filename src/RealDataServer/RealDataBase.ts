@@ -170,7 +170,7 @@ export class RealDataBase {
         // 然后相加这个价位笔的加权计算，最终是正数，就是上涨，负数就是下跌
         const 着笔 = {
             timestamp: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].timestamp),
-            _500ms_id: 指标.map(() => xxx.着笔.length, i => timeID.timestampTo500msID(xxx.着笔[i].timestamp)),
+            _500ms_id: 指标.map(() => xxx.着笔.length, i => timeID._500ms.toID(xxx.着笔[i].timestamp)),
             price: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].price),
             side: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].side),
             size: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].size),
@@ -225,7 +225,7 @@ export class RealDataBase {
 
         const 价格 = 盘口算价格 ? 盘口价格 : 收盘价
 
-        const 时间 = 指标.map(() => data.length, i => timeID._500msIDToTimestamp(data[i].id))
+        const 时间 = 指标.map(() => data.length, i => timeID._500ms.toTimestamp(data[i].id))
 
         const 时间str = 指标.map(() => 时间.length, i => formatDate(new Date(时间[i]), v => `${v.hh}:${v.mm}:${v.ss}:${v.msmsms}`))
 
@@ -1144,7 +1144,7 @@ export class RealDataBase {
         try {
             arr = safeJSONParse(fs.readFileSync('./db/成交记录.json').toString()) as BaseType.成交记录
             arr.forEach(v => {
-                dic[timeID.timestampTo500msID(v.timestamp)] = v.type
+                dic[timeID._500ms.toID(v.timestamp)] = v.type
             })
         } catch (e) {
             console.log('加载成交记录 错误', e)
@@ -1152,7 +1152,7 @@ export class RealDataBase {
 
         const 成交提示 = 指标.map(() => bitmex.时间.length, i => {
 
-            const key = timeID.timestampTo500msID(bitmex.时间[i])
+            const key = timeID._500ms.toID(bitmex.时间[i])
             const str = dic[key]
 
             return ['挂单买', '挂单卖', '挂单买成功', '挂单卖成功', '市价买', '市价卖'].map(v => ({
