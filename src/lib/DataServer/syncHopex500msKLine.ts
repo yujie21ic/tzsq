@@ -45,7 +45,7 @@ export const syncHopex500msKLine = async () => {
         }
 
         samplingDic[symbol].in2({
-            id: timeID.timestampTo500msID(timestamp),
+            id: timeID._500ms.toID(timestamp),
             open: v.price,
             high: v.price,
             low: v.price,

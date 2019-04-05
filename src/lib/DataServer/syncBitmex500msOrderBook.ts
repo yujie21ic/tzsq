@@ -76,7 +76,7 @@ export const syncBitmex500msOrderBook = async () => {
             }
 
             samplingDic[symbol].in2({
-                id: timeID.timestampTo500msID(new Date(timestamp).getTime()),
+                id: timeID._500ms.toID(new Date(timestamp).getTime()),
                 buy: bids.map(盘口map),
                 sell: asks.map(盘口map),
             })

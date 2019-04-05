@@ -70,7 +70,7 @@ const load = async () => {
         return
     }
 
-    时间str = 指标.map(() => data.length, i => new Date(timeID.oneMinuteIDToTimestamp(data[i].id)).toLocaleString())
+    时间str = 指标.map(() => data.length, i => new Date(timeID._60S.toTimestamp(data[i].id)).toLocaleString())
 
     const macd = 指标.macd(data.map(v => v.close), 1000)
     dif = macd.DIF
@@ -95,7 +95,7 @@ const load = async () => {
     if (res.data !== undefined) {
         console.log(res.data)
         res.data.filter(v => v.ordType === 'Stop' || v.ordType === 'StopLimit').forEach(v =>
-            止损1m_dic[timeID.timestampToOneMinuteID(new Date(v.transactTime).getTime())] = v.ordType
+            止损1m_dic[timeID._60S.toID(new Date(v.transactTime).getTime())] = v.ordType
         )
     }
 
@@ -103,7 +103,7 @@ const load = async () => {
     const arr = safeJSONParse(fs.readFileSync('./db/成交记录.json').toString()) as BaseType.成交记录
     const dic: { [key: number]: string } = Object.create(null)
     arr.forEach(v => {
-        dic[timeID.timestampToOneMinuteID(v.timestamp)] = v.type
+        dic[timeID._60S.toID(v.timestamp)] = v.type
     })
 
     成交提示 = data.map(v => [
@@ -130,7 +130,7 @@ window.addEventListener('mousedown', e => {
                         showWindow('Tick复盘', {
                             accountName: '',
                             symbol: nowSymbol,
-                            startTime: timeID.oneMinuteIDToTimestamp(S.data[getIndex()].id),
+                            startTime: timeID._60S.toTimestamp(S.data[getIndex()].id),
                         }, true),
                 },
                 { type: 'separator' },
@@ -162,7 +162,7 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
         title: nowSymbol,
         xStrArr: 时间str,
         显示y: v => {
-            const time = (arr[0] ? timeID.oneMinuteIDToTimestamp(arr[0].id) : 0) + v * 1000 * 60
+            const time = (arr[0] ? timeID._60S.toTimestamp(arr[0].id) : 0) + v * 1000 * 60
             if (time % (3600000 * 24) === 0) {
                 return formatDate(new Date(time), v => `${v.d}号`)
             } else {

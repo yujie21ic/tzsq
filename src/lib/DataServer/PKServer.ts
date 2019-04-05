@@ -14,8 +14,8 @@ PKServer.func.getBitmex500msOrderBook = async req => {
         raw: true,
         where: {
             id: {
-                [Sequelize.Op.gte]: timeID.timestampTo500msID(req.startTime),
-                [Sequelize.Op.lte]: timeID.timestampTo500msID(req.endTime),
+                [Sequelize.Op.gte]: timeID._500ms.toID(req.startTime),
+                [Sequelize.Op.lte]: timeID._500ms.toID(req.endTime),
             }
         },
         order: ['id'],

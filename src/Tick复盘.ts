@@ -91,7 +91,7 @@ class Tick复盘 extends _________________TickBase {
 
                     if (size !== 0) {
                         data.push({
-                            id: timeID.timestampTo500msID(timestamp),
+                            id: timeID._500ms.toID(timestamp),
                             open: obj.最新价,
                             high: obj.最新价,
                             low: obj.最新价,
@@ -109,7 +109,7 @@ class Tick复盘 extends _________________TickBase {
                     }
                     else {
                         data.push({
-                            id: timeID.timestampTo500msID(timestamp),
+                            id: timeID._500ms.toID(timestamp),
                             open: obj.最新价,
                             high: obj.最新价,
                             low: obj.最新价,
@@ -123,7 +123,7 @@ class Tick复盘 extends _________________TickBase {
                     }
 
                     orderBook.push({
-                        id: timeID.timestampTo500msID(timestamp),
+                        id: timeID._500ms.toID(timestamp),
                         buy: [{
                             price: obj.盘口买价,
                             size: obj.盘口买量,
