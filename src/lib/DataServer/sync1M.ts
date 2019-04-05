@@ -14,7 +14,7 @@ export const sync1M = (symbol: BaseType.BitmexSymbol | BaseType.BinanceSymbol) =
             if (isNaN(lastItemID)) {
                 return 0
             } else {
-                return timeID._500ms.toID(timeID._60S.toTimestamp(lastItemID + 1))
+                return timeID._500ms.toID(timeID._60s.toTimestamp(lastItemID + 1))
             }
         },
         getData: async (start: number) => {
@@ -36,7 +36,7 @@ export const sync1M = (symbol: BaseType.BitmexSymbol | BaseType.BinanceSymbol) =
             }
             return {
                 tickArr: tickArr.map(v => ({
-                    id: timeID._60S.toID(timeID._500ms.toTimestamp(v.id)),
+                    id: timeID._60s.toID(timeID._500ms.toTimestamp(v.id)),
                     open: v.open,
                     high: v.high,
                     low: v.low,

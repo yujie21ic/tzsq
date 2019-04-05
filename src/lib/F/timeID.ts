@@ -7,5 +7,5 @@ export namespace timeID {
 
     export const _500ms = f(500)
     export const _12s = f(1000 * 12)
-    export const _60S = f(1000 * 60)
+    export const _60s = f(1000 * 60)
 }
