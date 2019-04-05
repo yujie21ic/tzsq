@@ -166,6 +166,11 @@ export class RealDataBase {
             i => _12s价格[Math.floor(i / 120)],//<---------------没有对齐
         )
 
+        const _300s价格 = 指标.map(
+            () => Math.ceil(收盘价.length / 600),
+            i => _12s价格[Math.floor(i / 600)],//<---------------没有对齐
+        )
+
         const _12s_ = {
             收盘价: _12s价格,
             macd: 指标.macd(_12s价格, 1000),
@@ -176,6 +181,12 @@ export class RealDataBase {
             收盘价: _60s价格,
             macd: 指标.macd(_60s价格, 1000),
             布林带: 指标.布林带(_60s价格, 1000),
+        }
+
+        const _300s_ = {
+            收盘价: _300s价格,
+            macd: 指标.macd(_300s价格, 1000),
+            布林带: 指标.布林带(_300s价格, 1000),
         }
 
 
@@ -991,6 +1002,7 @@ export class RealDataBase {
 
             _12s_,
             _60s_,
+            _300s_,
 
             信号_摸顶盘口复盘专用,
             信号_抄底盘口复盘专用,

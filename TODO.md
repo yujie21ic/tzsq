@@ -23,3 +23,5 @@ chart 删除 右键合约
 
 source .nvm/nvm.sh
 screen -R a
+
+盘口归一化，不同价格用亮度，布满   没有最新价这个东西
