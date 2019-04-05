@@ -158,16 +158,23 @@ export class RealDataBase {
 
         const _12s价格 = 指标.map(
             () => Math.ceil(收盘价.length / 24),
-            i => 收盘价[Math.floor(i / 24)],
+            i => 收盘价[Math.floor(i / 24)],//<---------------没有对齐
         )
 
         const _60s价格 = 指标.map(
-            () => Math.ceil(_12s价格.length / 5),
-            i => _12s价格[Math.floor(i / 5)],
+            () => Math.ceil(收盘价.length / 120),
+            i => _12s价格[Math.floor(i / 120)],//<---------------没有对齐
         )
 
-        const _1分钟_ = {
+        const _12s_ = {
+            收盘价: _12s价格,
+            macd: 指标.macd(_12s价格, 1000),
+            布林带: 指标.布林带(_12s价格, 1000),
+        }
+
+        const _60s_ = {
             收盘价: _60s价格,
+            macd: 指标.macd(_60s价格, 1000),
             布林带: 指标.布林带(_60s价格, 1000),
         }
 
@@ -981,7 +988,9 @@ export class RealDataBase {
             着笔,
             着笔涨跌,
             bitmex_价格_macd,
-            _1分钟_,
+
+            _12s_,
+            _60s_,
 
             信号_摸顶盘口复盘专用,
             信号_抄底盘口复盘专用,

@@ -6,7 +6,6 @@ import { BitmexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/Bi
 import { HopexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
 import { CTP } from '../lib/____API____/TradeAndOrderBook/CTP'
-import { timeID } from '../lib/F/timeID'
 
 export class RealData__Server extends RealDataBase {
 
@@ -112,7 +111,7 @@ export class RealData__Server extends RealDataBase {
             sellSize: p.side === 'Sell' ? p.size : 0,
             sellCount: p.side === 'Sell' ? 1 : 0,
             成交性质: p.成交性质,
-        })       
+        })
     }
 
     private on盘口Dic = Object.create(null) as {
