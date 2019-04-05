@@ -225,7 +225,8 @@ export class RealDataBase {
         const 时间 = 指标.map(() => data.length, i => timeID._500msIDToTimestamp(data[i].id))
 
         const 时间str = 指标.map(() => 时间.length, i => formatDate(new Date(时间[i]), v => `${v.hh}:${v.mm}:${v.ss}:${v.msmsms}`))
-
+        const 价格macd = 指标.macd(价格,RealDataBase.单位时间)
+        
 
         //
         const __波动_测试 = 指标.map2({ index: 0, lastPrice: NaN }, (arr: {
@@ -965,7 +966,7 @@ export class RealDataBase {
 
 
         return {
-
+            价格macd,
             着笔,
             着笔涨跌,
             bitmex_价格_macd,
@@ -1039,7 +1040,8 @@ export class RealDataBase {
         const hopex_bitmex_差价 = 指标.map(() => Math.min(hopex.价格.length, bitmex.价格.length), i => hopex.价格[i] - bitmex.价格[i])
         const hopex_bitmex_差价均线 = 指标.SMA(hopex_bitmex_差价, 300, RealDataBase.单位时间)
         const hopex_bitmex_相对差价 = 指标.map(() => Math.min(hopex.价格.length, bitmex.价格.length), i => hopex_bitmex_差价[i] - hopex_bitmex_差价均线[i])
-        const hopex_bitmex_相对差价均线 = 指标.SMA(hopex_bitmex_相对差价, 300, RealDataBase.单位时间)
+        
+
 
         const bitmex_hopex_上涨差价 = 指标.map(() => Math.min(bitmex.价格_最高60.length, hopex.价格.length), i => bitmex.价格_最高60[i] - hopex.价格[i])
         const bitmex_hopex_下跌差价 = 指标.map(() => Math.min(bitmex.价格_最低60.length, hopex.价格.length), i => bitmex.价格_最低60[i] - hopex.价格[i])
@@ -1221,7 +1223,6 @@ export class RealDataBase {
 
         return {
             hopex_bitmex_相对差价,
-            hopex_bitmex_相对差价均线,
             bitmex_信号_摸顶_下跌平仓,
             bitmex_信号_抄底_上涨平仓,
             hopex_信号_摸顶_下跌平仓,
