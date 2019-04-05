@@ -156,20 +156,14 @@ export class RealDataBase {
 
         const 收盘价 = 指标.map(() => data.length, i => data[i].close)
 
-        const _12s价格 = 指标.map(
-            () => Math.ceil(收盘价.length / 24),
-            i => 收盘价[Math.floor(i / 24)],//<---------------没有对齐
+        const 映射到 = <T>(n: number, arr: ArrayLike<T>) => 指标.map(
+            () => Math.ceil(arr.length / (n * 2)),
+            i => arr[Math.floor(i / (n * 2))],//<---------------没有对齐
         )
 
-        const _60s价格 = 指标.map(
-            () => Math.ceil(收盘价.length / 120),
-            i => _12s价格[Math.floor(i / 120)],//<---------------没有对齐
-        )
-
-        const _300s价格 = 指标.map(
-            () => Math.ceil(收盘价.length / 600),
-            i => _12s价格[Math.floor(i / 600)],//<---------------没有对齐
-        )
+        const _12s价格 = 映射到(12, 收盘价)
+        const _60s价格 = 映射到(60, 收盘价)
+        const _300s价格 = 映射到(300, 收盘价)
 
         const _12s_ = {
             收盘价: _12s价格,
