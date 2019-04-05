@@ -156,14 +156,26 @@ export class RealDataBase {
 
         const 收盘价 = 指标.map(() => data.length, i => data[i].close)
 
-        const 映射到 = <T>(n: number, arr: ArrayLike<T>) => 指标.map(
-            () => Math.ceil(arr.length / (n * 2)),
-            i => arr[Math.floor(i / (n * 2))],//<---------------没有对齐
+        const 映射到 = (n: number) => 指标.map(
+            () => Math.ceil(data.length / (n * 2)),
+            i => data[Math.floor(i * (n * 2))],//<---------------没有对齐
         )
 
-        const _12s价格 = 映射到(12, 收盘价)
-        const _60s价格 = 映射到(60, 收盘价)
-        const _300s价格 = 映射到(300, 收盘价)
+        const 映射回 = <T>(n: number, arr: ArrayLike<T>) => 指标.map(
+            () => data.length,
+            i => arr[Math.floor(i / (n * 2))],//<---------------没有对齐
+        ) 
+
+
+
+        const 映射到close = (n: number) => {
+            const arr = 映射到(n)
+            return 指标.map(() => arr.length, i => arr[i].close)
+        }
+
+        const _12s价格 = 映射到close(12)
+        const _60s价格 = 映射到close(60)
+        const _300s价格 = 映射到close(300)
 
         const _12s_ = {
             收盘价: _12s价格,
@@ -183,6 +195,23 @@ export class RealDataBase {
             布林带: 指标.布林带(_300s价格, 1000),
         }
 
+        const _12s_macd = {
+            DIF: 映射回(12, _12s_.macd.DIF),
+            DEM: 映射回(12, _12s_.macd.DEM),
+            OSC: 映射回(12, _12s_.macd.OSC),
+        }
+
+        const _60s_macd = {
+            DIF: 映射回(60, _60s_.macd.DIF),
+            DEM: 映射回(60, _60s_.macd.DEM),
+            OSC: 映射回(60, _60s_.macd.OSC),
+        }
+
+        const _300s_macd = {
+            DIF: 映射回(300, _300s_.macd.DIF),
+            DEM: 映射回(300, _300s_.macd.DEM),
+            OSC: 映射回(300, _300s_.macd.OSC),
+        }
 
         //着笔
         // （当前时间-这个价位开始的时间）*1（上涨）
@@ -994,9 +1023,10 @@ export class RealDataBase {
             着笔涨跌,
             bitmex_价格_macd,
 
-            _12s_,
-            _60s_,
-            _300s_,
+            _60s_, 
+            _12s_macd,
+            _60s_macd,
+            _300s_macd,
 
             信号_摸顶盘口复盘专用,
             信号_抄底盘口复盘专用,
