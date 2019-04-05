@@ -45,7 +45,7 @@ const 石青 = 0x1685a9
 export const Tick行情____config: { [key in string]: ItemFunc } = {
 
     实盘手动: (d, d2) => ({
-        heightList: [0.3, 0.5, 0.2],
+        heightList: [0.2, 0.7, 0.1],
         items: [
             {
                 layerList: [
