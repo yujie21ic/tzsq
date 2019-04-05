@@ -11,7 +11,7 @@ export const DBServer = new JSONRPCServer({
 })
 
 DBServer.func.getKLine = async req => {
-    const timeFunc = req.type === '1m' ? timeID._60S.toID : timeID._500ms.toID
+    const timeFunc = req.type === '1m' ? timeID._60s.toID : timeID._500ms.toID
     const retData = await DB.getKLine(req.type, req.symbol).findAll<{}>({
         raw: true,
         where: {
