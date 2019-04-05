@@ -26,11 +26,6 @@ export class RealData__Server extends RealDataBase {
         hopex: boolean
     }) => { }
 
-
-    private on着笔_1m_Dic = Object.create(null) as {
-        [symbol: string]: Sampling<{ id: number, close: number }>
-    }
-
     private on着笔Dic = Object.create(null) as {
         [symbol: string]: Sampling<BaseType.KLine>
     }
@@ -44,11 +39,6 @@ export class RealData__Server extends RealDataBase {
             data: {
                 ____push: (v: BaseType.KLine) => void
                 ____updateLast: (v: BaseType.KLine) => void
-            },
-            data1M: {
-                ____set: (arr: { id: number, close: number }[]) => void
-                ____push: (v: { id: number, close: number }) => void
-                ____updateLast: (v: { id: number, close: number }) => void
             },
 
         }
@@ -122,27 +112,7 @@ export class RealData__Server extends RealDataBase {
             sellSize: p.side === 'Sell' ? p.size : 0,
             sellCount: p.side === 'Sell' ? 1 : 0,
             成交性质: p.成交性质,
-        })
-
-
-        //1m
-        const _1m_id = timeID._60s.toID(p.timestamp)
-        if (this.on着笔_1m_Dic[p.symbol] === undefined) {
-            this.on着笔_1m_Dic[p.symbol] = new Sampling({
-                close: '收',
-            })
-            this.on着笔_1m_Dic[p.symbol].onNew2 = item => p.xxxxxxxx.data1M.____push(item)
-            this.on着笔_1m_Dic[p.symbol].onUpdate2 = item => p.xxxxxxxx.data1M.____updateLast(item)
-            this.on着笔_1m_Dic[p.symbol].in2({
-                id: _1m_id,
-                close: NaN,
-            })
-        }
-
-        this.on着笔_1m_Dic[p.symbol].in2({
-            id: _1m_id,
-            close: p.price,
-        })
+        })       
     }
 
     private on盘口Dic = Object.create(null) as {

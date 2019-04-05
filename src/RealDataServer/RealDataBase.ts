@@ -11,7 +11,6 @@ import { formatDate } from '../lib/F/formatDate'
 
 const createItem = () => ({
     着笔: [] as BaseType.着笔[],
-    data1M: [] as { id: number, close: number }[],
     data: [] as BaseType.KLine[],
     orderBook: [] as BaseType.OrderBook[],
 })
@@ -148,19 +147,28 @@ export class RealDataBase {
 
 
     private item2(xxx: {
-        着笔: BaseType.着笔[],
-        data1M: { id: number, close: number }[]
+        着笔: BaseType.着笔[]
         data: BaseType.KLine[]
         orderBook: BaseType.OrderBook[]
     }, 盘口算价格: boolean) {
 
-        const { data1M, data, orderBook } = xxx
+        const { data, orderBook } = xxx
 
-        //60s
-        const _1分钟_收盘价 = 指标.map(() => data1M.length, i => data1M[i].close)
+        const 收盘价 = 指标.map(() => data.length, i => data[i].close)
+
+        const _12s价格 = 指标.map(
+            () => Math.ceil(收盘价.length / 24),
+            i => 收盘价[Math.floor(i / 24)],
+        )
+
+        const _60s价格 = 指标.map(
+            () => Math.ceil(_12s价格.length / 5),
+            i => _12s价格[Math.floor(i / 5)],
+        )
+
         const _1分钟_ = {
-            收盘价: _1分钟_收盘价,
-            布林带: 指标.布林带(_1分钟_收盘价, 1000),
+            收盘价: _60s价格,
+            布林带: 指标.布林带(_60s价格, 1000),
         }
 
 
@@ -221,15 +229,15 @@ export class RealDataBase {
             (orderBook[i].buy && orderBook[i].buy.length > 0 && orderBook[i].sell && orderBook[i].sell.length > 0) ?
                 ((orderBook[i].buy[0].price + orderBook[i].sell[0].price) / 2) : NaN)
 
-        const 收盘价 = 指标.map(() => data.length, i => data[i].close)
+
 
         const 价格 = 盘口算价格 ? 盘口价格 : 收盘价
 
         const 时间 = 指标.map(() => data.length, i => timeID._500ms.toTimestamp(data[i].id))
 
         const 时间str = 指标.map(() => 时间.length, i => formatDate(new Date(时间[i]), v => `${v.hh}:${v.mm}:${v.ss}:${v.msmsms}`))
-        const 价格macd = 指标.macd(价格,RealDataBase.单位时间)
-        
+        const 价格macd = 指标.macd(价格, RealDataBase.单位时间)
+
 
         //
         const __波动_测试 = 指标.map2({ index: 0, lastPrice: NaN }, (arr: {
@@ -1043,7 +1051,7 @@ export class RealDataBase {
         const hopex_bitmex_差价 = 指标.map(() => Math.min(hopex.价格.length, bitmex.价格.length), i => hopex.价格[i] - bitmex.价格[i])
         const hopex_bitmex_差价均线 = 指标.SMA(hopex_bitmex_差价, 300, RealDataBase.单位时间)
         const hopex_bitmex_相对差价 = 指标.map(() => Math.min(hopex.价格.length, bitmex.价格.length), i => hopex_bitmex_差价[i] - hopex_bitmex_差价均线[i])
-        
+
 
 
         const bitmex_hopex_上涨差价 = 指标.map(() => Math.min(bitmex.价格_最高60.length, hopex.价格.length), i => bitmex.价格_最高60[i] - hopex.价格[i])
