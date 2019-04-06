@@ -3,7 +3,7 @@ import { DataClient } from './RealDataServer/DataClient'
 import { speak } from './lib/F/speak'
 import { lastNumber } from './lib/F/lastNumber'
 import { mapObjIndexed } from './lib/F/mapObjIndexed'
-import { dialog } from './lib/UI/dialog';
+import { dialog } from './lib/UI/dialog'
 
 export const realTickClient = new DataClient.RealData__Client()
 
@@ -25,6 +25,19 @@ export class 提醒 extends React.Component {
         const 上轨 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._60s_.布林带.上轨)
         const 下轨 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._60s_.布林带.下轨)
         const 收盘价 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex.收盘价)
+
+
+        this.setAndSpeak(
+            '收盘价 大于等于 ' + this.大于等于,
+            0,
+            v => 收盘价 >= this.大于等于
+        )
+
+        this.setAndSpeak(
+            '收盘价 小于等于 ' + this.小于等于,
+            0,
+            v => 收盘价 <= this.小于等于
+        )
 
         this.setAndSpeak(
             '收盘价 大于 上轨 ',
