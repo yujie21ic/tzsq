@@ -85,6 +85,12 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d2.ETHUSD.hopex.价格, color: 石青 }),
                     ]
                 },
+                // {
+                //     numberColor: 波动率颜色,
+                //     layerList: [
+                //         layer(LineLayer, { data: d2.ETHUSD.bitmex.价格, color: 波动率颜色 }),
+                //     ]
+                // },
                
                 {
                     numberColor: BTC颜色,
@@ -175,11 +181,11 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     ]
                 },
                 {
-                    numberColor: 波动率颜色,
+                    numberColor: 净成交量颜色,
                     numberX: 100,
                     layerList: [
-                        layer(ZeroLayer, { color: 波动率颜色 }),
-                        layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 波动率颜色 }),
+                        layer(ZeroLayer, { color: 净成交量颜色 }),
+                        layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 净成交量颜色 }),
                     ]
                 },
                 {
