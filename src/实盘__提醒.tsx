@@ -43,17 +43,19 @@ export class 提醒 extends React.Component {
         const 下轨 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._60s_.布林带.下轨)
         const 收盘价 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex.收盘价)
 
+        const hopex收盘价 = lastNumber(realTickClient.dataExt.XBTUSD.hopex.收盘价)
+
 
         this.setAndSpeak(
-            '收盘价 大于等于 ' + this.大于等于,
+            '价格 大于等于 ' + this.大于等于,
             0,
-            v => 收盘价 >= this.大于等于
+            v => hopex收盘价 >= this.大于等于
         )
 
         this.setAndSpeak(
-            '收盘价 小于等于 ' + this.小于等于,
+            '价格 小于等于 ' + this.小于等于,
             0,
-            v => 收盘价 <= this.小于等于
+            v => hopex收盘价 <= this.小于等于
         )
 
         this.setAndSpeak(
