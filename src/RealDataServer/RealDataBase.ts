@@ -157,14 +157,23 @@ export class RealDataBase {
         const 收盘价 = 指标.map(() => data.length, i => data[i].close)
 
         const 映射到 = (n: number) => 指标.map(
-            () => Math.ceil(data.length / (n * 2)),
-            i => data[Math.floor(i * (n * 2))],//<---------------没有对齐
+            () => Math.ceil(data.length / n),
+            i => {
+                const start = data[0].id % n
+                const index = Math.min(data.length - 1, (start - 1) + i * n)
+                return data[index]
+            }
         )
 
         const 映射回 = <T>(n: number, arr: ArrayLike<T>) => 指标.map(
             () => data.length,
-            i => arr[Math.floor(i / (n * 2))],//<---------------没有对齐
-        ) 
+            i => {
+                const start = data[0].id % n
+                const index = Math.floor((i + start) / n)
+                return arr[index]
+            }
+            //arr[Math.floor(i / n)],//<---------------没有对齐
+        )
 
 
 
@@ -173,9 +182,9 @@ export class RealDataBase {
             return 指标.map(() => arr.length, i => arr[i].close)
         }
 
-        const _12s价格 = 映射到close(12)
-        const _60s价格 = 映射到close(60)
-        const _300s价格 = 映射到close(300)
+        const _12s价格 = 映射到close(12 * 2)
+        const _60s价格 = 映射到close(60 * 2)
+        const _300s价格 = 映射到close(300 * 2)
 
         const _12s_ = {
             macd: 指标.macd(_12s价格, 1000),
@@ -1020,7 +1029,7 @@ export class RealDataBase {
             着笔涨跌,
             bitmex_价格_macd,
 
-            _60s_, 
+            _60s_,
             _12s_macd,
             _60s_macd,
             _300s_macd,
