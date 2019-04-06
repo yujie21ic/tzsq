@@ -156,35 +156,28 @@ export class RealDataBase {
 
         const 收盘价 = 指标.map(() => data.length, i => data[i].close)
 
-        const 映射到 = (n: number) => 指标.map(
+        const 闪现 = (n: number) => 指标.map(
             () => Math.ceil(data.length / n),
             i => {
-                const xxx = data[0].id % n
-                const 多出 = (xxx === 0 ? 0 : n - xxx)
-                const index = Math.min(data.length - 1, (i + 1) * n - 1 + 多出)
+                const 多出 = n - data[0].id % n
+                const index = Math.min(data.length - 1, 多出 + i * n - 1)
                 return data[index]
             }
         )
 
-        const 映射回 = <T>(n: number, arr: ArrayLike<T>) => 指标.map(
+        const 闪回 = <T>(n: number, arr: ArrayLike<T>) => 指标.map(
             () => data.length,
             i => {
-                const xxx = data[0].id % n
-                const 多出 = (xxx === 0 ? 0 : n - xxx)
-                if (i < 多出) {
-                    return arr[0]
-                } else {
-                    const index = Math.floor((i - 多出) / n)
-                    return arr[index]
-                }
-
+                const 多出 = n - data[0].id % n
+                const index = Math.floor((i - 多出) / n + 1)
+                return arr[index]
             }
         )
 
 
 
         const 映射到close = (n: number) => {
-            const arr = 映射到(n)
+            const arr = 闪现(n)
             return 指标.map(() => arr.length, i => arr[i].close)
         }
 
@@ -208,21 +201,21 @@ export class RealDataBase {
         }
 
         const _12s_macd = {
-            DIF: 映射回(12, _12s_.macd.DIF),
-            DEM: 映射回(12, _12s_.macd.DEM),
-            OSC: 映射回(12, _12s_.macd.OSC),
+            DIF: 闪回(12, _12s_.macd.DIF),
+            DEM: 闪回(12, _12s_.macd.DEM),
+            OSC: 闪回(12, _12s_.macd.OSC),
         }
 
         const _60s_macd = {
-            DIF: 映射回(60, _60s_.macd.DIF),
-            DEM: 映射回(60, _60s_.macd.DEM),
-            OSC: 映射回(60, _60s_.macd.OSC),
+            DIF: 闪回(60, _60s_.macd.DIF),
+            DEM: 闪回(60, _60s_.macd.DEM),
+            OSC: 闪回(60, _60s_.macd.OSC),
         }
 
         const _300s_macd = {
-            DIF: 映射回(300, _300s_.macd.DIF),
-            DEM: 映射回(300, _300s_.macd.DEM),
-            OSC: 映射回(300, _300s_.macd.OSC),
+            DIF: 闪回(300, _300s_.macd.DIF),
+            DEM: 闪回(300, _300s_.macd.DEM),
+            OSC: 闪回(300, _300s_.macd.OSC),
         }
 
         //着笔
