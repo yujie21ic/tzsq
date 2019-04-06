@@ -3,7 +3,7 @@ import { BaseType } from './lib/BaseType'
 import { toBuySellPriceFunc } from './lib/F/toBuySellPriceFunc'
 import { lastNumber } from './lib/F/lastNumber'
 import { toRange } from './lib/F/toRange'
-import { toGridPoint } from './lib/F/toGridPoint'
+import { to价格对齐 } from './lib/F/to价格对齐'
 import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/PositionAndOrder'
 import { XBTUSD摸顶抄底追涨追跌__参数 } from './XBTUSD摸顶抄底追涨追跌__参数'
 import { RealDataBase } from './RealDataServer/RealDataBase'
@@ -204,7 +204,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 return stop({
                     symbol: 'BTCUSDT',
                     side,
-                    price: toGridPoint({
+                    price: to价格对齐({
                         grid: 0.5,
                         value: 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点,
                         side,
@@ -238,7 +238,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                     return false
                 }
 
-                const 新的Price = toGridPoint({
+                const 新的Price = to价格对齐({
                     grid: 0.5,
                     value: 开仓均价 + (side === 'Buy' ? - 推 : 推),
                     side,

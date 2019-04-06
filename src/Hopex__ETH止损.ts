@@ -1,9 +1,9 @@
 import { PositionAndOrder } from './lib/____API____/PositionAndOrder/PositionAndOrder'
 import { BaseType } from './lib/BaseType'
 import { lastNumber } from './lib/F/lastNumber'
-import { toGridPoint } from './lib/F/toGridPoint'
 import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/PositionAndOrder'
 import { toRange } from './lib/F/toRange'
+import { to价格对齐 } from './lib/F/to价格对齐'
 
 const 初始止损 = (p: {
     波动率: number
@@ -45,7 +45,7 @@ export class Hopex__ETH止损 implements PositionAndOrderTask {
                 return self.hopex_stop({
                     symbol: 'ETHUSDT',
                     side,
-                    price: toGridPoint({
+                    price: to价格对齐({
                         grid: 0.05,
                         value: 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点,
                         side,
