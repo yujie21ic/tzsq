@@ -159,8 +159,9 @@ export class RealDataBase {
         const 映射到 = (n: number) => 指标.map(
             () => Math.ceil(data.length / n),
             i => {
-                const start = data[0].id % n
-                const index = Math.min(data.length - 1, (start - 1) + i * n)
+                const xxx = data[0].id % n
+                const 多出 = (xxx === 0 ? 0 : n - xxx)
+                const index = Math.min(data.length - 1, (i + 1) * n - 1 + 多出)
                 return data[index]
             }
         )
@@ -168,9 +169,15 @@ export class RealDataBase {
         const 映射回 = <T>(n: number, arr: ArrayLike<T>) => 指标.map(
             () => data.length,
             i => {
-                const start = data[0].id % n
-                const index = Math.floor((i + start) / n)
-                return arr[index]
+                const xxx = data[0].id % n
+                const 多出 = (xxx === 0 ? 0 : n - xxx)
+                if (i < 多出) {
+                    return arr[0]
+                } else {
+                    const index = Math.floor((i - 多出) / n)
+                    return arr[index]
+                }
+
             }
         )
 
