@@ -172,7 +172,6 @@ export class RealDataBase {
                 const index = Math.floor((i + start) / n)
                 return arr[index]
             }
-            //arr[Math.floor(i / n)],//<---------------没有对齐
         )
 
 
