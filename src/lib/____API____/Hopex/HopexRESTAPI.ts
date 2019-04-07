@@ -27,16 +27,20 @@ const HopexRESTAPI__http = <T>(p: { cookie?: string, url: string, param?: any })
 
 export const HopexRESTAPI = {
 
-    // login: async (p: { userName: string, password: string }) =>
-    //     HopexRESTAPI__http({
-    //         url: 'https://web.hopex.com/api/v1/User/Login?culture=zh-CN',
-    //         param: {
-    //             loginType: 'pcweb',
-    //             password: p.password,
-    //             registType: p.userName.indexOf('@') !== -1 ? 'Email' : 'Phone',
-    //             userName: p.userName,
-    //         },
-    //     }),
+    maker: async (cookie: string, p: { symbol: BaseType.HopexSymbol, size: number, price: number, side: BaseType.Side }) =>
+        HopexRESTAPI__http({
+            cookie,
+            url: 'https://web.hopex.com/api/v1/gateway/User/Order?culture=zh-CN',
+            param: {
+                lang: 'zh-CN',
+                market: p.symbol,
+                marketCode: p.symbol,
+                contractCode: p.symbol,
+                orderPrice: String(p.price),
+                orderQuantity: String(p.size),
+                side: p.side === 'Sell' ? '1' : '2',
+            },
+        }),
 
 
     taker: async (cookie: string, p: { symbol: BaseType.HopexSymbol, size: number, side: BaseType.Side }) =>
@@ -76,7 +80,7 @@ export const HopexRESTAPI = {
             cookie,
             url: 'https://web.hopex.com/api/v1/gateway/User/CancelConditionOrder?culture=zh-CN',
             param: {
-                contractCode: 'BTCUSDT',
+                // contractCode: 'BTCUSDT',
                 taskId: p.orderID,
             },
         }),
@@ -84,7 +88,7 @@ export const HopexRESTAPI = {
     getPositions: async (cookie: string) =>
         HopexRESTAPI__http<{
             data?: {
-                contractCode: 'BTCUSDT' | 'ETHUSDT'
+                contractCode: BaseType.HopexSymbol
                 positionQuantity: string // "+2"  "-2"
                 entryPriceD: number
             }[]
@@ -97,7 +101,7 @@ export const HopexRESTAPI = {
         HopexRESTAPI__http<{
             data?: {
                 result?: {
-                    contractCode: 'BTCUSDT' | 'ETHUSDT'
+                    contractCode: BaseType.HopexSymbol
                     taskStatusD: '未触发'
                     timestamp: number
                     taskId: number
