@@ -74,6 +74,17 @@ export namespace BaseType {
     }
 
 
+    export type Order = {
+        type: '限价' | '限价只减仓' | '止损'
+        timestamp: number
+        id: string
+        side: BaseType.Side
+        cumQty: number      //成交数量
+        orderQty: number    //委托数量
+        price: number
+    }
+
+
     //binance
     export type Trade = { //着笔
         id: number

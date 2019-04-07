@@ -21,7 +21,7 @@ const symbol = () => ({
         自动止损: false,
         自动推止损: false,
     },
-    委托列表: [] as Order[],
+    委托列表: [] as BaseType.Order[],
     仓位数量: 0,
     开仓均价: 0,
 })
@@ -40,15 +40,7 @@ export const createJSONSync = () =>
         }
     })
 
-type Order = {
-    type: '限价' | '限价只减仓' | '止损'
-    timestamp: number
-    id: string
-    side: BaseType.Side
-    cumQty: number      //成交数量
-    orderQty: number    //委托数量
-    price: number
-}
+
 
 let callID = 0
 

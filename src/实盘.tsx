@@ -21,6 +21,38 @@ const rpc = OrderClient.rpc.func
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
 
+const Table = (p: {
+    委托列表: BaseType.Order[]
+    side: BaseType.Side
+    取消f: (id: string) => void
+}) =>
+    <table style={{
+        width: '150px',
+        margin: '15px auto',
+    }}>
+        <tbody>
+            {p.委托列表.filter(v => v.side === p.side).map((v, i) =>
+                <tr key={v.id}
+                    style={{
+                        cursor: 'pointer',
+                        fontSize: '20px',
+                        width: '100%',
+                        color:
+                            v.type === '限价只减仓' ? 'yellow'
+                                : v.type === '止损' ? '#cc66ff'
+                                    : p.side === 'Buy' ? 'rgba(72, 170, 101, 1)' : 'rgba(72, 170, 101, 1)'
+                    }}
+                    onClick={() => p.取消f(v.id)}
+                >
+                    <td style={{ width: '65%' }}>{v.price}</td>
+                    <td style={{ width: '35%' }}>{v.cumQty}/{v.orderQty}</td>
+                </tr>
+            )}
+        </tbody>
+    </table>
+
+
+
 class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH', 位置: number, 倍数: number }> {
 
     get仓位() {
@@ -38,7 +70,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
 
 
         // 
-        const arr = orderClient.jsonSync.rawData.symbol[this.props.symbol].委托列表
+        const 委托列表 = orderClient.jsonSync.rawData.symbol[this.props.symbol].委托列表
         const 委托 = {
             id: '',
             side: '' as BaseType.Side,
@@ -46,7 +78,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
             orderQty: 0,    //委托数量
             price: 0,
         }
-        const x = arr.find(v => v.type !== '止损')
+        const x = 委托列表.find(v => v.type !== '止损')
         if (x === undefined) {
             委托.id = ''
         } else {
@@ -58,7 +90,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
         }
 
         let 止损价格 = 0
-        const y = arr.find(v => v.type === '止损')
+        const y = 委托列表.find(v => v.type === '止损')
         if (y === undefined) {
             止损价格 = 0
         } else {
@@ -141,6 +173,9 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                                 size: 下单数量,
                             })}
                         />
+                        <Table 委托列表={委托列表} side='Buy' 取消f={id => {
+                            HopexRESTAPI.cancel(hopexCookie, { orderID: Number(id) })
+                        }} />
                     </div>
                     <div
                         style={{ width: '50%' }}>
@@ -153,6 +188,9 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                                 size: 下单数量,
                             })}
                         />
+                        <Table 委托列表={委托列表} side='Sell' 取消f={id => {
+                            HopexRESTAPI.cancel(hopexCookie, { orderID: Number(id) })
+                        }} />
                     </div>
                 </div>
 
@@ -203,6 +241,9 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                             })}
                         />
                         <br />
+                        <Table 委托列表={委托列表} side='Buy' 取消f={id => {
+                            rpc.取消委托({ cookie, orderID: [id] })
+                        }} />
                     </div>
 
                     <div
@@ -246,6 +287,9 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                             })}
                         />
                         <br />
+                        <Table 委托列表={委托列表} side='Sell' 取消f={id => {
+                            rpc.取消委托({ cookie, orderID: [id] })
+                        }} />
                     </div>
                 </div>
             }
