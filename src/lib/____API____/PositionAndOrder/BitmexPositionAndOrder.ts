@@ -21,7 +21,7 @@ const symbol = () => ({
         自动止损: false,
         自动推止损: false,
     },
-    委托列表: [] as Order[],
+    委托列表: [] as BaseType.Order[],
     仓位数量: 0,
     开仓均价: 0,
 })
@@ -40,15 +40,7 @@ export const createJSONSync = () =>
         }
     })
 
-type Order = {
-    type: '限价' | '限价只减仓' | '止损'
-    timestamp: number
-    id: string
-    side: BaseType.Side
-    cumQty: number      //成交数量
-    orderQty: number    //委托数量
-    price: number
-}
+
 
 let callID = 0
 
@@ -134,16 +126,18 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     private async hoex_委托_轮询() {
         while (true) {
             const __obj__ = {
-                Hopex_BTC: [] as Order[],
-                Hopex_ETH: [] as Order[],
+                Hopex_BTC: [] as BaseType.Order[],
+                Hopex_ETH: [] as BaseType.Order[],
             }
-            const { data } = await HopexRESTAPI.getConditionOrders(this.hopexCookie)
 
-            if (data !== undefined) {
+            const 止损data = (await HopexRESTAPI.getConditionOrders(this.hopexCookie)).data
+            const 委托data = (await HopexRESTAPI.getOpenOrders(this.hopexCookie)).data
+
+            if (止损data !== undefined && 委托data !== undefined) {
                 this.hopex_初始化.委托 = true
 
-                if (data.data !== undefined) {
-                    const result = data.data ? data.data.result || [] : []
+                if (止损data.data !== undefined) {
+                    const result = 止损data.data ? 止损data.data.result || [] : []
                     result.forEach(v => {
                         let k = '' as 'Hopex_BTC' | 'Hopex_ETH' | ''
                         if (v.contractCode === 'BTCUSDT' && v.taskStatusD === '未触发') { k = 'Hopex_BTC' }
@@ -161,6 +155,25 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                         }
                     })
                 }
+                if (委托data.data !== undefined) {
+                    委托data.data.forEach(v => {
+                        let k = '' as 'Hopex_BTC' | 'Hopex_ETH' | ''
+                        if (v.contractCode === 'BTCUSDT') { k = 'Hopex_BTC' }
+                        if (v.contractCode === 'ETHUSDT') { k = 'Hopex_ETH' }
+                        if (k !== '') {
+                            __obj__[k].push({
+                                type: '限价',
+                                timestamp: new Date(v.ctime).getTime(),
+                                id: String(v.orderId),
+                                side: v.side === '2' ? 'Buy' : 'Sell',
+                                cumQty: Number(v.fillQuantity.split(',').join('')),
+                                orderQty: Number(v.leftQuantity.split(',').join('')),
+                                price: Number(v.orderPrice.split(',').join('')),
+                            })
+                        }
+                    })
+                }
+
                 hopexSymbolArr.forEach(symbol => {
                     const id1Arr = __obj__[symbol].map(v => v.id).sort().join(',')
                     const id2Arr = this.jsonSync.rawData.symbol[symbol].委托列表.map(v => v.id).sort().join(',')
@@ -322,7 +335,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         })
     }
 
-    hopex_taker = async (p: { symbol: 'BTCUSDT' | 'ETHUSDT', size: number, side: BaseType.Side }) => {
+    hopex_taker = async (p: { symbol: BaseType.HopexSymbol, size: number, side: BaseType.Side }) => {
         this.log(`hopex_taker ${p.side} ${p.size}`)
         const b = (await HopexRESTAPI.taker(this.hopexCookie, p)).error === undefined
         this.log(`hopex_taker ${b ? '成功' : '失败'}`)
@@ -332,7 +345,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         return b
     }
 
-    hopex_stop = async (p: { symbol: 'BTCUSDT' | 'ETHUSDT', side: BaseType.Side, price: number }) => {
+    hopex_stop = async (p: { symbol: BaseType.HopexSymbol, side: BaseType.Side, price: number }) => {
         this.log(`hopex_stop ${p.side} ${p.price}`)
         const b = (await HopexRESTAPI.stop(this.hopexCookie, p)).error === undefined
         this.log(`hopex_stop ${b ? '成功' : '失败'}`)

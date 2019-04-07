@@ -1,6 +1,7 @@
 import { BaseType } from '../../BaseType'
 import { JSONRequest } from '../../F/JSONRequest'
 import { config } from '../../../config'
+import { queryStringStringify } from '../../F/queryStringStringify'
 
 const header = {
     Origin: 'https://www.hopex.com',
@@ -25,21 +26,26 @@ const HopexRESTAPI__http = <T>(p: { cookie?: string, url: string, param?: any })
     })
 
 
+
 export const HopexRESTAPI = {
 
-    // login: async (p: { userName: string, password: string }) =>
-    //     HopexRESTAPI__http({
-    //         url: 'https://web.hopex.com/api/v1/User/Login?culture=zh-CN',
-    //         param: {
-    //             loginType: 'pcweb',
-    //             password: p.password,
-    //             registType: p.userName.indexOf('@') !== -1 ? 'Email' : 'Phone',
-    //             userName: p.userName,
-    //         },
-    //     }),
+    maker: async (cookie: string, p: { symbol: BaseType.HopexSymbol, size: number, price: number, side: BaseType.Side }) =>
+        HopexRESTAPI__http({
+            cookie,
+            url: 'https://web.hopex.com/api/v1/gateway/User/Order?culture=zh-CN',
+            param: {
+                lang: 'zh-CN',
+                market: p.symbol,
+                marketCode: p.symbol,
+                contractCode: p.symbol,
+                orderPrice: String(p.price),
+                orderQuantity: String(p.size),
+                side: p.side === 'Sell' ? '1' : '2',
+            },
+        }),
 
 
-    taker: async (cookie: string, p: { symbol: 'BTCUSDT' | 'ETHUSDT', size: number, side: BaseType.Side }) =>
+    taker: async (cookie: string, p: { symbol: BaseType.HopexSymbol, size: number, side: BaseType.Side }) =>
         HopexRESTAPI__http({
             cookie,
             url: 'https://web.hopex.com/api/v1/gateway/User/Order?culture=zh-CN',
@@ -53,7 +59,7 @@ export const HopexRESTAPI = {
             },
         }),
 
-    stop: async (cookie: string, p: { symbol: 'BTCUSDT' | 'ETHUSDT', side: BaseType.Side, price: number }) =>
+    stop: async (cookie: string, p: { symbol: BaseType.HopexSymbol, side: BaseType.Side, price: number }) =>
         HopexRESTAPI__http({
             cookie,
             url: 'https://web.hopex.com/api/v1/gateway/User/ConditionOrder?culture=zh-CN',
@@ -71,20 +77,22 @@ export const HopexRESTAPI = {
             },
         }),
 
-    cancel: async (cookie: string, p: { orderID: number }) =>
+    cancel: async (cookie: string, p: { orderID: number, contractCode?: BaseType.HopexSymbol }) =>
         HopexRESTAPI__http({
             cookie,
-            url: 'https://web.hopex.com/api/v1/gateway/User/CancelConditionOrder?culture=zh-CN',
-            param: {
-                contractCode: 'BTCUSDT',
-                taskId: p.orderID,
-            },
+            url: `https://web.hopex.com/api/v1/gateway/User/CancelOrder?` + queryStringStringify(
+                {
+                    culture: 'zh-CN',
+                    contractCode: p.contractCode || 'BTCUSDT',  //?????????????????????????????????
+                    orderId: p.orderID,
+                },
+            )
         }),
 
     getPositions: async (cookie: string) =>
         HopexRESTAPI__http<{
             data?: {
-                contractCode: 'BTCUSDT' | 'ETHUSDT'
+                contractCode: BaseType.HopexSymbol
                 positionQuantity: string // "+2"  "-2"
                 entryPriceD: number
             }[]
@@ -93,11 +101,28 @@ export const HopexRESTAPI = {
             url: 'https://web.hopex.com/api/v1/gateway/User/Positions?culture=zh-CN',
         }),
 
+
+    getOpenOrders: async (cookie: string) =>
+        HopexRESTAPI__http<{
+            data?: {
+                contractCode: BaseType.HopexSymbol
+                fillQuantity: string    //已成交
+                leftQuantity: string    //总
+                ctime: string //"2019-04-07 18:36:24"
+                orderPrice: string
+                orderId: number
+                side: string
+            }[]
+        }>({
+            cookie,
+            url: 'https://web.hopex.com/api/v1/gateway/User/OpenOrders?culture=zh-CN',
+        }),
+
     getConditionOrders: async (cookie: string) =>
         HopexRESTAPI__http<{
             data?: {
                 result?: {
-                    contractCode: 'BTCUSDT' | 'ETHUSDT'
+                    contractCode: BaseType.HopexSymbol
                     taskStatusD: '未触发'
                     timestamp: number
                     taskId: number
@@ -109,11 +134,11 @@ export const HopexRESTAPI = {
             cookie,
             url: 'https://web.hopex.com/api/v1/gateway/User/ConditionOrders?limit=10&culture=zh-CN',
             param: {
-                contractCode: 'BTCUSDT',
                 endTime: '0',
                 lang: 'zh-CN',
-                market: 'BTCUSDT',
-                marketCode: 'BTCUSDT',
+                // market: 'BTCUSDT',    //应该是网页调用错了
+                // marketCode: 'BTCUSDT',
+                // contractCode: 'BTCUSDT',
                 side: '0',
                 startTime: '0',
                 taskStatusList: ['1'],

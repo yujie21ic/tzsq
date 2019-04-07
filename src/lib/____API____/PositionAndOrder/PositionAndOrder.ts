@@ -49,9 +49,9 @@ export interface PositionAndOrder {
 
     //hopex_API
 
-    hopex_taker: (p: { symbol: 'BTCUSDT' | 'ETHUSDT', size: number, side: BaseType.Side }) => boolean | Promise<boolean>
+    hopex_taker: (p: { symbol: BaseType.HopexSymbol, size: number, side: BaseType.Side }) => boolean | Promise<boolean>
 
-    hopex_stop: (p: { symbol: 'BTCUSDT' | 'ETHUSDT', side: BaseType.Side, price: number }) => boolean | Promise<boolean>
+    hopex_stop: (p: { symbol: BaseType.HopexSymbol, side: BaseType.Side, price: number }) => boolean | Promise<boolean>
 
     hopex_cancel: (p: { orderID: number }) => boolean | Promise<boolean>
 

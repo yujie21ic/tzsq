@@ -10,6 +10,7 @@ import { Button } from './lib/UI/Button'
 import { Switch } from '@material-ui/core'
 import { HopexRESTAPI } from './lib/____API____/Hopex/HopexRESTAPI'
 import { realTickClient, 提醒 } from './实盘__提醒'
+import { lastNumber } from './lib/F/lastNumber'
 
 
 const account = config.account![windowExt.accountName]
@@ -20,6 +21,38 @@ const rpc = OrderClient.rpc.func
 
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
+
+const Table = (p: {
+    委托列表: BaseType.Order[]
+    side: BaseType.Side
+    取消f: (id: string) => void
+}) =>
+    <table style={{
+        width: '150px',
+        margin: '15px auto',
+    }}>
+        <tbody>
+            {p.委托列表.filter(v => v.side === p.side).map((v, i) =>
+                <tr key={v.id}
+                    style={{
+                        cursor: 'pointer',
+                        fontSize: '20px',
+                        width: '100%',
+                        color:
+                            v.type === '限价只减仓' ? 'yellow'
+                                : v.type === '止损' ? '#cc66ff'
+                                    : p.side === 'Buy' ? 'rgba(72, 170, 101, 1)' : 'rgba(72, 170, 101, 1)'
+                    }}
+                    onClick={() => p.取消f(v.id)}
+                >
+                    <td style={{ width: '65%' }}>{v.price}</td>
+                    <td style={{ width: '35%' }}>{v.cumQty}/{v.orderQty}</td>
+                </tr>
+            )}
+        </tbody>
+    </table>
+
+
 
 class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH', 位置: number, 倍数: number }> {
 
@@ -38,7 +71,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
 
 
         // 
-        const arr = orderClient.jsonSync.rawData.symbol[this.props.symbol].委托列表
+        const 委托列表 = orderClient.jsonSync.rawData.symbol[this.props.symbol].委托列表
         const 委托 = {
             id: '',
             side: '' as BaseType.Side,
@@ -46,7 +79,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
             orderQty: 0,    //委托数量
             price: 0,
         }
-        const x = arr.find(v => v.type !== '止损')
+        const x = 委托列表.find(v => v.type !== '止损')
         if (x === undefined) {
             委托.id = ''
         } else {
@@ -58,7 +91,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
         }
 
         let 止损价格 = 0
-        const y = arr.find(v => v.type === '止损')
+        const y = 委托列表.find(v => v.type === '止损')
         if (y === undefined) {
             止损价格 = 0
         } else {
@@ -107,7 +140,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                 <p>仓位:{this.get仓位()}</p>
                 <p>止损:{get止损()}</p>
                 <p>委托:{get委托()}</p>
-                {/* <p>
+                <p>
                     摸顶:<Switch checked={任务开关.自动开仓摸顶} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓摸顶', value: v }) }} />
                     抄底:<Switch checked={任务开关.自动开仓抄底} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓抄底', value: v }) }} />
                 </p>
@@ -118,7 +151,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                 <p>
                     止盈波段:<Switch checked={任务开关.自动止盈波段} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动止盈波段', value: v }) }} />
                     推止损:<Switch checked={任务开关.自动推止损} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动推止损', value: v }) }} />
-                </p> */}
+                </p>
                 <p>
                     止损:<Switch checked={任务开关.自动止损} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动止损', value: v }) }} />
                 </p>
@@ -135,24 +168,42 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                         <Button
                             bgColor={GREEN}
                             text={下单数量 + ''}
-                            left={() => HopexRESTAPI.taker(hopexCookie, {
+                            left={() => HopexRESTAPI.maker(hopexCookie, {
+                                symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
+                                price: lastNumber(realTickClient.dataExt[symbol === 'Hopex_BTC' ? 'XBTUSD' : 'ETHUSD'].hopex.买.盘口1价),
+                                side: 'Buy',
+                                size: 下单数量,
+                            })}
+                            right={() => HopexRESTAPI.taker(hopexCookie, {
                                 symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
                                 side: 'Buy',
                                 size: 下单数量,
                             })}
                         />
+                        <Table 委托列表={委托列表} side='Buy' 取消f={id => {
+                            HopexRESTAPI.cancel(hopexCookie, { orderID: Number(id), contractCode: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT' })
+                        }} />
                     </div>
                     <div
                         style={{ width: '50%' }}>
                         <Button
                             bgColor={RED}
                             text={-下单数量 + ''}
-                            left={() => HopexRESTAPI.taker(hopexCookie, {
+                            left={() => HopexRESTAPI.maker(hopexCookie, {
+                                symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
+                                price: lastNumber(realTickClient.dataExt[symbol === 'Hopex_BTC' ? 'XBTUSD' : 'ETHUSD'].hopex.卖.盘口1价),
+                                side: 'Sell',
+                                size: 下单数量,
+                            })}
+                            right={() => HopexRESTAPI.taker(hopexCookie, {
                                 symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
                                 side: 'Sell',
                                 size: 下单数量,
                             })}
                         />
+                        <Table 委托列表={委托列表} side='Sell' 取消f={id => {
+                            HopexRESTAPI.cancel(hopexCookie, { orderID: Number(id), contractCode: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT' })
+                        }} />
                     </div>
                 </div>
 
@@ -203,6 +254,9 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                             })}
                         />
                         <br />
+                        <Table 委托列表={委托列表} side='Buy' 取消f={id => {
+                            rpc.取消委托({ cookie, orderID: [id] })
+                        }} />
                     </div>
 
                     <div
@@ -246,6 +300,9 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                             })}
                         />
                         <br />
+                        <Table 委托列表={委托列表} side='Sell' 取消f={id => {
+                            rpc.取消委托({ cookie, orderID: [id] })
+                        }} />
                     </div>
                 </div>
             }
