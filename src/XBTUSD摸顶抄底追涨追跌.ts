@@ -184,7 +184,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         const cancel = (arr: string[]) =>
             market === 'bitmex' ?
                 self.cancel({ orderID: arr }) :
-                self.hopex_cancel({ orderID: arr[0] })
+                self.hopex_cancel({ symbol: 'BTCUSDT', orderID: arr[0] })
 
 
 

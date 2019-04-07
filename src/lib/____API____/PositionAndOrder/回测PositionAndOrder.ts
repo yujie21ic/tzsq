@@ -77,7 +77,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         return true
     }
 
-    hopex_cancel = (p: { orderID: string }) => {
+    hopex_cancel = (p: { symbol: BaseType.HopexSymbol, orderID: string }) => {
         this.jsonSync.rawData.symbol.Hopex_BTC.委托列表 = this.jsonSync.rawData.symbol.Hopex_BTC.委托列表.filter(v =>
             v.id !== p.orderID
         )

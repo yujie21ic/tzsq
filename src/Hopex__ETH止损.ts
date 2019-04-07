@@ -60,7 +60,7 @@ export class Hopex__ETH止损 implements PositionAndOrderTask {
         else if (止损委托.length === 1) {
             //没有仓位 或者 止损方向错了
             if (仓位数量 === 0 || (仓位数量 > 0 && 止损委托[0].side !== 'Sell') || (仓位数量 < 0 && 止损委托[0].side !== 'Buy')) {
-                return self.hopex_cancel({ orderID: 止损委托[0].id })
+                return self.hopex_cancel({ symbol: 'ETHUSDT', orderID: 止损委托[0].id })
             }
             else {
                 //不要推止损
@@ -70,13 +70,13 @@ export class Hopex__ETH止损 implements PositionAndOrderTask {
         }
         else if (止损委托.length === 2 && 止损委托[0].side === 止损委托[1].side) {
             if (止损委托[0].side === 'Sell') {
-                return self.hopex_cancel({ orderID: 止损委托[0].price < 止损委托[1].price ? 止损委托[0].id : 止损委托[1].id })
+                return self.hopex_cancel({ symbol: 'ETHUSDT', orderID: 止损委托[0].price < 止损委托[1].price ? 止损委托[0].id : 止损委托[1].id })
             } else {
-                return self.hopex_cancel({ orderID: 止损委托[0].price > 止损委托[1].price ? 止损委托[0].id : 止损委托[1].id })
+                return self.hopex_cancel({ symbol: 'ETHUSDT', orderID: 止损委托[0].price > 止损委托[1].price ? 止损委托[0].id : 止损委托[1].id })
             }
         }
         else {
-            return self.hopex_cancel({ orderID: 止损委托[0].id })
+            return self.hopex_cancel({ symbol: 'ETHUSDT', orderID: 止损委托[0].id })
         }
     }
 
