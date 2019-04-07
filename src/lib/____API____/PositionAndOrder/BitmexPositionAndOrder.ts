@@ -126,8 +126,8 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     private async hoex_委托_轮询() {
         while (true) {
             const __obj__ = {
-                Hopex_BTC: [] as Order[],
-                Hopex_ETH: [] as Order[],
+                Hopex_BTC: [] as BaseType.Order[],
+                Hopex_ETH: [] as BaseType.Order[],
             }
 
             const 止损data = (await HopexRESTAPI.getConditionOrders(this.hopexCookie)).data
