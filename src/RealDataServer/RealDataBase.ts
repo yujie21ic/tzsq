@@ -169,7 +169,7 @@ export class RealDataBase {
             () => data.length,
             i => {
                 const 多出 = n - data[0].id % n
-                const index = Math.floor((i - 多出) / n + 1)
+                const index = Math.ceil((i - 多出) / n)
                 return arr[index]
             }
         )
