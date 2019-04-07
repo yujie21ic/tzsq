@@ -10,6 +10,7 @@ import { Button } from './lib/UI/Button'
 import { Switch } from '@material-ui/core'
 import { HopexRESTAPI } from './lib/____API____/Hopex/HopexRESTAPI'
 import { realTickClient, 提醒 } from './实盘__提醒'
+import { lastNumber } from './lib/F/lastNumber'
 
 
 const account = config.account![windowExt.accountName]
@@ -167,7 +168,13 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                         <Button
                             bgColor={GREEN}
                             text={下单数量 + ''}
-                            left={() => HopexRESTAPI.taker(hopexCookie, {
+                            left={() => HopexRESTAPI.maker(hopexCookie, {
+                                symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
+                                price: lastNumber(realTickClient.dataExt[symbol === 'Hopex_BTC' ? 'XBTUSD' : 'ETHUSD'].hopex.买.盘口1),
+                                side: 'Buy',
+                                size: 下单数量,
+                            })}
+                            right={() => HopexRESTAPI.taker(hopexCookie, {
                                 symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
                                 side: 'Buy',
                                 size: 下单数量,
@@ -184,7 +191,13 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                         <Button
                             bgColor={RED}
                             text={-下单数量 + ''}
-                            left={() => HopexRESTAPI.taker(hopexCookie, {
+                            left={() => HopexRESTAPI.maker(hopexCookie, {
+                                symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
+                                price: lastNumber(realTickClient.dataExt[symbol === 'Hopex_BTC' ? 'XBTUSD' : 'ETHUSD'].hopex.卖.盘口1),
+                                side: 'Sell',
+                                size: 下单数量,
+                            })}
+                            right={() => HopexRESTAPI.taker(hopexCookie, {
                                 symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
                                 side: 'Sell',
                                 size: 下单数量,
