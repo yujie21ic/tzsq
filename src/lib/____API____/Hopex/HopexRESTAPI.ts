@@ -39,7 +39,7 @@ export const HopexRESTAPI = {
     //     }),
 
 
-    taker: async (cookie: string, p: { symbol: 'BTCUSDT' | 'ETHUSDT', size: number, side: BaseType.Side }) =>
+    taker: async (cookie: string, p: { symbol: BaseType.HopexSymbol, size: number, side: BaseType.Side }) =>
         HopexRESTAPI__http({
             cookie,
             url: 'https://web.hopex.com/api/v1/gateway/User/Order?culture=zh-CN',
@@ -53,7 +53,7 @@ export const HopexRESTAPI = {
             },
         }),
 
-    stop: async (cookie: string, p: { symbol: 'BTCUSDT' | 'ETHUSDT', side: BaseType.Side, price: number }) =>
+    stop: async (cookie: string, p: { symbol: BaseType.HopexSymbol, side: BaseType.Side, price: number }) =>
         HopexRESTAPI__http({
             cookie,
             url: 'https://web.hopex.com/api/v1/gateway/User/ConditionOrder?culture=zh-CN',

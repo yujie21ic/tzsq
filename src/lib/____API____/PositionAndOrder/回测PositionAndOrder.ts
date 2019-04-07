@@ -22,7 +22,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
     }
 
 
-    hopex_taker = (p: { symbol: 'BTCUSDT' | 'ETHUSDT', size: number, side: BaseType.Side }) => {
+    hopex_taker = (p: { symbol: BaseType.HopexSymbol, size: number, side: BaseType.Side }) => {
 
         const item = p.symbol === 'BTCUSDT' ? this.jsonSync.rawData.symbol.Hopex_BTC : this.jsonSync.rawData.symbol.Hopex_ETH
         const symbol = p.symbol === 'BTCUSDT' ? 'XBTUSD' : 'ETHUSD'
@@ -62,7 +62,7 @@ export class 回测PositionAndOrder implements PositionAndOrder {
         return true
     }
 
-    hopex_stop = (p: { symbol: 'BTCUSDT' | 'ETHUSDT', side: BaseType.Side, price: number }) => {
+    hopex_stop = (p: { symbol: BaseType.HopexSymbol, side: BaseType.Side, price: number }) => {
         const item = p.symbol === 'BTCUSDT' ? this.jsonSync.rawData.symbol.Hopex_BTC : this.jsonSync.rawData.symbol.Hopex_ETH
 
         item.委托列表.push({
