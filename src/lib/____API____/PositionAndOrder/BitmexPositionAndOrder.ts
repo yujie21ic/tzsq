@@ -357,7 +357,11 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     hopex_cancel = async (p: { orderID: number }) => {
         this.log(`hopex_cancel ${p.orderID}`)
-        const b = (await HopexRESTAPI.cancel(this.hopexCookie, p)).error === undefined
+        const xxx = this.jsonSync.rawData.symbol.Hopex_BTC.委托列表.find(v => v.id === String(p.orderID))
+        const b = (await HopexRESTAPI.cancel(this.hopexCookie, {
+            orderID: p.orderID,
+            contractCode: xxx ? 'BTCUSDT' : 'ETHUSDT'
+        })).error === undefined
         this.log(`hopex_cancel ${b ? '成功' : '失败'}`)
         if (b) {
             this.hopex_初始化.委托 = false
