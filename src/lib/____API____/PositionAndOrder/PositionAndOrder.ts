@@ -53,7 +53,7 @@ export interface PositionAndOrder {
 
     hopex_stop: (p: { symbol: BaseType.HopexSymbol, side: BaseType.Side, price: number }) => boolean | Promise<boolean>
 
-    hopex_cancel: (p: { orderID: number }) => boolean | Promise<boolean>
+    hopex_cancel: (p: { orderID: string }) => boolean | Promise<boolean>
 
     //API
     maker: (p: {
