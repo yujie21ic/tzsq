@@ -7,8 +7,10 @@ const 买卖 = (p: {
     成交量: ArrayLike<number>
     盘口: ArrayLike<number>
     盘口1: ArrayLike<number>
+    盘口1价: ArrayLike<number>
     反向成交量: ArrayLike<number>
     反向盘口: ArrayLike<number>
+    反向盘口1价: ArrayLike<number>
     反向盘口1: ArrayLike<number>
 }) => {
 
@@ -57,12 +59,17 @@ export const get买卖 = ({ data, orderBook }: {
     const 盘口买1 = 指标.map(() => orderBook.length, i => orderBook[i].buy.length > 0 ? orderBook[i].buy[0].size : NaN)
     const 盘口卖1 = 指标.map(() => orderBook.length, i => orderBook[i].sell.length > 0 ? orderBook[i].sell[0].size : NaN)
 
+    const 盘口买1价 = 指标.map(() => orderBook.length, i => orderBook[i].buy.length > 0 ? orderBook[i].buy[0].price : NaN)
+    const 盘口卖1价 = 指标.map(() => orderBook.length, i => orderBook[i].sell.length > 0 ? orderBook[i].sell[0].price : NaN)
+
     const 买 = 买卖({
         成交量: 成交量买,
         盘口: 盘口买,
         盘口1: 盘口买1,
+        盘口1价: 盘口买1价,
         反向成交量: 成交量卖,
         反向盘口: 盘口卖,
+        反向盘口1价: 盘口卖1价,
         反向盘口1: 盘口卖1,
     })
 
@@ -70,8 +77,10 @@ export const get买卖 = ({ data, orderBook }: {
         成交量: 成交量卖,
         盘口: 盘口卖,
         盘口1: 盘口卖1,
+        盘口1价: 盘口卖1价,
         反向成交量: 成交量买,
         反向盘口: 盘口买,
+        反向盘口1价: 盘口买1价,
         反向盘口1: 盘口买1,
     })
 

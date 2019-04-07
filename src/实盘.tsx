@@ -170,7 +170,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                             text={下单数量 + ''}
                             left={() => HopexRESTAPI.maker(hopexCookie, {
                                 symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
-                                price: lastNumber(realTickClient.dataExt[symbol === 'Hopex_BTC' ? 'XBTUSD' : 'ETHUSD'].hopex.买.盘口1),
+                                price: lastNumber(realTickClient.dataExt[symbol === 'Hopex_BTC' ? 'XBTUSD' : 'ETHUSD'].hopex.买.盘口1价),
                                 side: 'Buy',
                                 size: 下单数量,
                             })}
@@ -181,9 +181,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                             })}
                         />
                         <Table 委托列表={委托列表} side='Buy' 取消f={id => {
-                            HopexRESTAPI.cancel(hopexCookie, { orderID: Number(id), contractCode: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT' }).then(v => {
-                                console.log(id, v)
-                            })
+                            HopexRESTAPI.cancel(hopexCookie, { orderID: Number(id), contractCode: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT' })
                         }} />
                     </div>
                     <div
@@ -193,7 +191,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                             text={-下单数量 + ''}
                             left={() => HopexRESTAPI.maker(hopexCookie, {
                                 symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
-                                price: lastNumber(realTickClient.dataExt[symbol === 'Hopex_BTC' ? 'XBTUSD' : 'ETHUSD'].hopex.卖.盘口1),
+                                price: lastNumber(realTickClient.dataExt[symbol === 'Hopex_BTC' ? 'XBTUSD' : 'ETHUSD'].hopex.卖.盘口1价),
                                 side: 'Sell',
                                 size: 下单数量,
                             })}
