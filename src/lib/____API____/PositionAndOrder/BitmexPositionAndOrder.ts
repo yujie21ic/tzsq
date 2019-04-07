@@ -137,13 +137,15 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                 Hopex_BTC: [] as Order[],
                 Hopex_ETH: [] as Order[],
             }
-            const { data } = await HopexRESTAPI.getConditionOrders(this.hopexCookie)
 
-            if (data !== undefined) {
+            const 止损data = (await HopexRESTAPI.getConditionOrders(this.hopexCookie)).data
+            const 委托data = (await HopexRESTAPI.getOpenOrders(this.hopexCookie)).data
+
+            if (止损data !== undefined && 委托data !== undefined) {
                 this.hopex_初始化.委托 = true
 
-                if (data.data !== undefined) {
-                    const result = data.data ? data.data.result || [] : []
+                if (止损data.data !== undefined) {
+                    const result = 止损data.data ? 止损data.data.result || [] : []
                     result.forEach(v => {
                         let k = '' as 'Hopex_BTC' | 'Hopex_ETH' | ''
                         if (v.contractCode === 'BTCUSDT' && v.taskStatusD === '未触发') { k = 'Hopex_BTC' }
@@ -161,6 +163,25 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                         }
                     })
                 }
+                if (委托data.data !== undefined) {
+                    委托data.data.forEach(v => {
+                        let k = '' as 'Hopex_BTC' | 'Hopex_ETH' | ''
+                        if (v.contractCode === 'BTCUSDT') { k = 'Hopex_BTC' }
+                        if (v.contractCode === 'ETHUSDT') { k = 'Hopex_ETH' }
+                        if (k !== '') {
+                            __obj__[k].push({
+                                type: '限价',
+                                timestamp: new Date(v.ctime).getTime(),
+                                id: String(v.orderId),
+                                side: v.side === '2' ? 'Buy' : 'Sell',
+                                cumQty: Number(v.fillQuantity.split(',').join('')),
+                                orderQty: Number(v.leftQuantity.split(',').join('')),
+                                price: Number(v.orderPrice.split(',').join('')),
+                            })
+                        }
+                    })
+                }
+
                 hopexSymbolArr.forEach(symbol => {
                     const id1Arr = __obj__[symbol].map(v => v.id).sort().join(',')
                     const id2Arr = this.jsonSync.rawData.symbol[symbol].委托列表.map(v => v.id).sort().join(',')

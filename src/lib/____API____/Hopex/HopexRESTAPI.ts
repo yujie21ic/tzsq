@@ -104,6 +104,8 @@ export const HopexRESTAPI = {
                 contractCode: BaseType.HopexSymbol
                 fillQuantity: string    //已成交
                 leftQuantity: string    //总
+                ctime: string //"2019-04-07 18:36:24"
+                orderPrice: string
                 orderId: number
                 side: string
             }[]
