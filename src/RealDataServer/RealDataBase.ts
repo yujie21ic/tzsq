@@ -158,6 +158,7 @@ export class RealDataBase {
 
         const 映射到其他周期 = (n: number) => 指标.map(
             () => {
+                if (data.length === 0) return 0
                 const 多出 = n - data[0].id % n
                 return Math.ceil(data.length / n) + 多出 === n ? 0 : 1
             },
