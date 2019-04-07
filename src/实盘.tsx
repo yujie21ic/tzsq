@@ -174,7 +174,9 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                             })}
                         />
                         <Table 委托列表={委托列表} side='Buy' 取消f={id => {
-                            HopexRESTAPI.cancel(hopexCookie, { orderID: Number(id) })
+                            HopexRESTAPI.cancel(hopexCookie, { orderID: Number(id), contractCode: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT' }).then(v => {
+                                console.log(id, v)
+                            })
                         }} />
                     </div>
                     <div
@@ -189,7 +191,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                             })}
                         />
                         <Table 委托列表={委托列表} side='Sell' 取消f={id => {
-                            HopexRESTAPI.cancel(hopexCookie, { orderID: Number(id) })
+                            HopexRESTAPI.cancel(hopexCookie, { orderID: Number(id), contractCode: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT' })
                         }} />
                     </div>
                 </div>

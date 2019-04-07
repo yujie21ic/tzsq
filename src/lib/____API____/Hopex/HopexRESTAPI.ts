@@ -1,6 +1,7 @@
 import { BaseType } from '../../BaseType'
 import { JSONRequest } from '../../F/JSONRequest'
 import { config } from '../../../config'
+import { queryStringStringify } from '../../F/queryStringStringify'
 
 const header = {
     Origin: 'https://www.hopex.com',
@@ -23,6 +24,7 @@ const HopexRESTAPI__http = <T>(p: { cookie?: string, url: string, param?: any })
             } :
             header
     })
+
 
 
 export const HopexRESTAPI = {
@@ -75,14 +77,16 @@ export const HopexRESTAPI = {
             },
         }),
 
-    cancel: async (cookie: string, p: { orderID: number }) =>
+    cancel: async (cookie: string, p: { orderID: number, contractCode?: BaseType.HopexSymbol }) =>
         HopexRESTAPI__http({
             cookie,
-            url: 'https://web.hopex.com/api/v1/gateway/User/CancelConditionOrder?culture=zh-CN',
-            param: {
-                // contractCode: 'BTCUSDT',  //应该是网页调用错了
-                taskId: p.orderID,
-            },
+            url: `https://web.hopex.com/api/v1/gateway/User/CancelOrder?` + queryStringStringify(
+                {
+                    culture: 'zh-CN',
+                    contractCode: p.contractCode || 'BTCUSDT',  //?????????????????????????????????
+                    orderId: p.orderID,
+                },
+            )
         }),
 
     getPositions: async (cookie: string) =>
