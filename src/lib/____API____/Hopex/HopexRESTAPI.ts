@@ -80,7 +80,7 @@ export const HopexRESTAPI = {
             cookie,
             url: 'https://web.hopex.com/api/v1/gateway/User/CancelConditionOrder?culture=zh-CN',
             param: {
-                // contractCode: 'BTCUSDT',
+                // contractCode: 'BTCUSDT',  //应该是网页调用错了
                 taskId: p.orderID,
             },
         }),
@@ -96,8 +96,6 @@ export const HopexRESTAPI = {
             cookie,
             url: 'https://web.hopex.com/api/v1/gateway/User/Positions?culture=zh-CN',
         }),
-
-
 
 
     getOpenOrders: async (cookie: string) =>
@@ -130,11 +128,11 @@ export const HopexRESTAPI = {
             cookie,
             url: 'https://web.hopex.com/api/v1/gateway/User/ConditionOrders?limit=10&culture=zh-CN',
             param: {
-                contractCode: 'BTCUSDT',
                 endTime: '0',
                 lang: 'zh-CN',
-                market: 'BTCUSDT',
-                marketCode: 'BTCUSDT',
+                // market: 'BTCUSDT',    //应该是网页调用错了
+                // marketCode: 'BTCUSDT',
+                // contractCode: 'BTCUSDT',
                 side: '0',
                 startTime: '0',
                 taskStatusList: ['1'],
