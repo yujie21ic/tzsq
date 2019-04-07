@@ -97,6 +97,23 @@ export const HopexRESTAPI = {
             url: 'https://web.hopex.com/api/v1/gateway/User/Positions?culture=zh-CN',
         }),
 
+
+
+
+    getOpenOrders: async (cookie: string) =>
+        HopexRESTAPI__http<{
+            data?: {
+                contractCode: BaseType.HopexSymbol
+                fillQuantity: string    //已成交
+                leftQuantity: string    //总
+                orderId: number
+                side: string
+            }[]
+        }>({
+            cookie,
+            url: 'https://web.hopex.com/api/v1/gateway/User/OpenOrders?culture=zh-CN',
+        }),
+
     getConditionOrders: async (cookie: string) =>
         HopexRESTAPI__http<{
             data?: {
