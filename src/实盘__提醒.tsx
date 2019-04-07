@@ -72,16 +72,16 @@ export class 提醒 extends React.Component {
 
         //________________________________________________________________________
 
-        if (realTickClient.dataExt.XBTUSD.提醒.length > 0) {
-            const arr = realTickClient.dataExt.XBTUSD.提醒[realTickClient.dataExt.XBTUSD.提醒.length - 1]
-            arr.forEach(v => {
-                this.setAndSpeak(
-                    v.name,
-                    0,
-                    xxx => v.value,
-                )
-            })
-        }
+        // if (realTickClient.dataExt.XBTUSD.提醒.length > 0) {
+        //     const arr = realTickClient.dataExt.XBTUSD.提醒[realTickClient.dataExt.XBTUSD.提醒.length - 1]
+        //     arr.forEach(v => {
+        //         this.setAndSpeak(
+        //             v.name,
+        //             0,
+        //             xxx => v.value,
+        //         )
+        //     })
+        // }
 
         //________________________________________________________________________
 
@@ -91,7 +91,7 @@ export class 提醒 extends React.Component {
         this.setAndSpeak(
             '比 特 币 成交量',
             volum,
-            v => volum > 200 && 波动率 >= 0.1
+            v => volum > 150 && 波动率 >= 0.1
         )
 
 
