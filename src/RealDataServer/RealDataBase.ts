@@ -157,7 +157,10 @@ export class RealDataBase {
         const 收盘价 = 指标.map(() => data.length, i => data[i].close)
 
         const 映射到其他周期 = (n: number) => 指标.map(
-            () => Math.ceil(data.length / n),
+            () => {
+                const 多出 = n - data[0].id % n
+                return Math.ceil(data.length / n) + 多出 === n ? 0 : 1
+            },
             i => {
                 const 多出 = n - data[0].id % n
                 const index = Math.min(data.length - 1, 多出 + i * n - 1)
