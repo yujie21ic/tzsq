@@ -205,21 +205,21 @@ export class RealDataBase {
         }
 
         const _12s_macd = {
-            DIF: 映射回500ms(12, _12s_.macd.DIF),
-            DEM: 映射回500ms(12, _12s_.macd.DEM),
-            OSC: 映射回500ms(12, _12s_.macd.OSC),
+            DIF: 映射回500ms(12 * 2, _12s_.macd.DIF),
+            DEM: 映射回500ms(12 * 2, _12s_.macd.DEM),
+            OSC: 映射回500ms(12 * 2, _12s_.macd.OSC),
         }
 
         const _60s_macd = {
-            DIF: 映射回500ms(60, _60s_.macd.DIF),
-            DEM: 映射回500ms(60, _60s_.macd.DEM),
-            OSC: 映射回500ms(60, _60s_.macd.OSC),
+            DIF: 映射回500ms(60 * 2, _60s_.macd.DIF),
+            DEM: 映射回500ms(60 * 2, _60s_.macd.DEM),
+            OSC: 映射回500ms(60 * 2, _60s_.macd.OSC),
         }
 
         const _300s_macd = {
-            DIF: 映射回500ms(300, _300s_.macd.DIF),
-            DEM: 映射回500ms(300, _300s_.macd.DEM),
-            OSC: 映射回500ms(300, _300s_.macd.OSC),
+            DIF: 映射回500ms(300 * 2, _300s_.macd.DIF),
+            DEM: 映射回500ms(300 * 2, _300s_.macd.DEM),
+            OSC: 映射回500ms(300 * 2, _300s_.macd.OSC),
         }
 
         //着笔
