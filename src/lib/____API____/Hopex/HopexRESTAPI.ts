@@ -77,13 +77,13 @@ export const HopexRESTAPI = {
             },
         }),
 
-    cancel: async (cookie: string, p: { orderID: number, contractCode?: BaseType.HopexSymbol }) =>
+    cancel: async (cookie: string, p: { orderID: number, contractCode: BaseType.HopexSymbol }) =>
         HopexRESTAPI__http({
             cookie,
             url: `https://web.hopex.com/api/v1/gateway/User/CancelOrder?` + queryStringStringify(
                 {
                     culture: 'zh-CN',
-                    contractCode: p.contractCode || 'BTCUSDT',  //?????????????????????????????????
+                    contractCode: 'BTCUSDT',  //?????????????????????????????????
                     orderId: p.orderID,
                 },
             )
