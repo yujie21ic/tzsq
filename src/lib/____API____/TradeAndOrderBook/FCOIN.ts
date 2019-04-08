@@ -18,11 +18,9 @@ export class FCOIN extends TradeAndOrderBook {
             if (this.ws.isConnected) {
                 this.ws.sendJSON({ 'cmd': 'ping', 'args': [Date.now()], id: '__ping__' })
             }
-
         }, 1000)
 
         this.ws.onStatusChange = () => {
-            alert(this.ws.isConnected)
             if (this.ws.isConnected) {
                 this.ws.sendJSON({ 'cmd': 'sub', 'args': ['depth.L20.btcusdt', 'trade.btcusdt'], id: '__depth__and__trade__' })
             }
@@ -33,8 +31,6 @@ export class FCOIN extends TradeAndOrderBook {
 
 
         this.ws.onData = (d: {}) => {
-            // console.log(JSON.stringify(d, null, 4))
-
             const type = ((d as any).type as string).split('.')
             const topic = type[0]
             const symbol = type[type.length - 1]
