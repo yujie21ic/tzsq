@@ -15,14 +15,17 @@ export class RealData__Server extends RealDataBase {
     private bitmex = new BitmexTradeAndOrderBook()
     private binance = new BinanceTradeAndOrderBook()
     private hopex = new HopexTradeAndOrderBook()
+    private fcoin = new HopexTradeAndOrderBook()
 
     _binance = false
     _bitmex = false
     _hopex = false
+    _fcoin = false
     onTitle = (p: {
         binance: boolean
         bitmex: boolean
         hopex: boolean
+        fcoin: boolean
     }) => { }
 
     private on着笔Dic = Object.create(null) as {
@@ -167,34 +170,34 @@ export class RealData__Server extends RealDataBase {
             this.wss = new WebSocket.Server({ port: 6666 })
         }
 
+        const onTitle = () => this.onTitle({
+            binance: this._binance,
+            bitmex: this._bitmex,
+            hopex: this._hopex,
+            fcoin: this._fcoin,
+        })
 
 
         this.bitmex.statusObservable.subscribe(v => {
             this._bitmex = v.isConnected
-            this.onTitle({
-                binance: this._binance,
-                bitmex: this._bitmex,
-                hopex: this._hopex,
-            })
+            onTitle()
         })
 
 
         this.binance.statusObservable.subscribe(v => {
             this._binance = v.isConnected
-            this.onTitle({
-                binance: this._binance,
-                bitmex: this._bitmex,
-                hopex: this._hopex,
-            })
+            onTitle()
         })
 
         this.hopex.statusObservable.subscribe(v => {
             this._hopex = v.isConnected
-            this.onTitle({
-                binance: this._binance,
-                bitmex: this._bitmex,
-                hopex: this._hopex,
-            })
+            onTitle()
+        })
+
+
+        this.fcoin.statusObservable.subscribe(v => {
+            this._fcoin = v.isConnected
+            onTitle()
         })
 
 
@@ -325,6 +328,33 @@ export class RealData__Server extends RealDataBase {
             this.on盘口({
                 symbol,
                 xxxxxxxx: this.jsonSync.data.hopex[symbol].orderBook,
+                timestamp,
+                orderBook: {
+                    id: Math.floor(timestamp / RealDataBase.单位时间),
+                    buy,
+                    sell,
+                }
+            })
+        })
+
+
+
+        this.fcoin.tradeObservable.subscribe(({ symbol, timestamp, price, side, size }) => {
+            this.on着笔({
+                symbol,
+                xxxxxxxx: this.jsonSync.data.fcoin[symbol as 'btcusdt'],
+                timestamp,
+                price,
+                side,
+                size,
+            })
+        })
+
+
+        this.fcoin.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
+            this.on盘口({
+                symbol,
+                xxxxxxxx: this.jsonSync.data.fcoin[symbol as 'btcusdt'].orderBook,
                 timestamp,
                 orderBook: {
                     id: Math.floor(timestamp / RealDataBase.单位时间),

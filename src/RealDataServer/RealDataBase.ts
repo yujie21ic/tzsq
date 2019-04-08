@@ -19,59 +19,59 @@ export class RealDataBase {
     static 单位时间 = 500
 
     删除历史() {
-        const length = Math.min(
+        // const length = Math.min(
 
-            //hopex
-            this.jsonSync.rawData.hopex.BTCUSDT.data.length,
-            this.jsonSync.rawData.hopex.BTCUSDT.orderBook.length,
+        //     //hopex
+        //     this.jsonSync.rawData.hopex.BTCUSDT.data.length,
+        //     this.jsonSync.rawData.hopex.BTCUSDT.orderBook.length,
 
-            this.jsonSync.rawData.hopex.ETHUSDT.data.length,
-            this.jsonSync.rawData.hopex.ETHUSDT.orderBook.length,
+        //     this.jsonSync.rawData.hopex.ETHUSDT.data.length,
+        //     this.jsonSync.rawData.hopex.ETHUSDT.orderBook.length,
 
-            //bitmex
-            this.jsonSync.rawData.bitmex.XBTUSD.data.length,
-            this.jsonSync.rawData.bitmex.XBTUSD.orderBook.length,
+        //     //bitmex
+        //     this.jsonSync.rawData.bitmex.XBTUSD.data.length,
+        //     this.jsonSync.rawData.bitmex.XBTUSD.orderBook.length,
 
-            this.jsonSync.rawData.bitmex.ETHUSD.data.length,
-            this.jsonSync.rawData.bitmex.ETHUSD.orderBook.length,
+        //     this.jsonSync.rawData.bitmex.ETHUSD.data.length,
+        //     this.jsonSync.rawData.bitmex.ETHUSD.orderBook.length,
 
-            //binance
-            this.jsonSync.rawData.binance.btcusdt.data.length,
-            this.jsonSync.rawData.binance.btcusdt.orderBook.length,
+        //     //binance
+        //     this.jsonSync.rawData.binance.btcusdt.data.length,
+        //     this.jsonSync.rawData.binance.btcusdt.orderBook.length,
 
-            this.jsonSync.rawData.binance.ethusdt.data.length,
-            this.jsonSync.rawData.binance.ethusdt.orderBook.length,
-        )
+        //     this.jsonSync.rawData.binance.ethusdt.data.length,
+        //     this.jsonSync.rawData.binance.ethusdt.orderBook.length,
+        // )
 
 
-        if (length > 120 * 60) {
+        // if (length > 120 * 60) {
 
-            const deleteCount = 120 * 30
-            this.jsonSync.rawData.startTick += deleteCount
+        //     const deleteCount = 120 * 30
+        //     this.jsonSync.rawData.startTick += deleteCount
 
-            //hopex
-            this.jsonSync.rawData.hopex.BTCUSDT.data.splice(0, deleteCount)
-            this.jsonSync.rawData.hopex.BTCUSDT.orderBook.splice(0, deleteCount)
+        //     //hopex
+        //     this.jsonSync.rawData.hopex.BTCUSDT.data.splice(0, deleteCount)
+        //     this.jsonSync.rawData.hopex.BTCUSDT.orderBook.splice(0, deleteCount)
 
-            this.jsonSync.rawData.hopex.ETHUSDT.data.splice(0, deleteCount)
-            this.jsonSync.rawData.hopex.ETHUSDT.orderBook.splice(0, deleteCount)
+        //     this.jsonSync.rawData.hopex.ETHUSDT.data.splice(0, deleteCount)
+        //     this.jsonSync.rawData.hopex.ETHUSDT.orderBook.splice(0, deleteCount)
 
-            //bitmex
-            this.jsonSync.rawData.bitmex.XBTUSD.data.splice(0, deleteCount)
-            this.jsonSync.rawData.bitmex.XBTUSD.orderBook.splice(0, deleteCount)
+        //     //bitmex
+        //     this.jsonSync.rawData.bitmex.XBTUSD.data.splice(0, deleteCount)
+        //     this.jsonSync.rawData.bitmex.XBTUSD.orderBook.splice(0, deleteCount)
 
-            this.jsonSync.rawData.bitmex.ETHUSD.data.splice(0, deleteCount)
-            this.jsonSync.rawData.bitmex.ETHUSD.orderBook.splice(0, deleteCount)
+        //     this.jsonSync.rawData.bitmex.ETHUSD.data.splice(0, deleteCount)
+        //     this.jsonSync.rawData.bitmex.ETHUSD.orderBook.splice(0, deleteCount)
 
-            //binance
-            this.jsonSync.rawData.binance.btcusdt.data.splice(0, deleteCount)
-            this.jsonSync.rawData.binance.btcusdt.orderBook.splice(0, deleteCount)
+        //     //binance
+        //     this.jsonSync.rawData.binance.btcusdt.data.splice(0, deleteCount)
+        //     this.jsonSync.rawData.binance.btcusdt.orderBook.splice(0, deleteCount)
 
-            this.jsonSync.rawData.binance.ethusdt.data.splice(0, deleteCount)
-            this.jsonSync.rawData.binance.ethusdt.orderBook.splice(0, deleteCount)
+        //     this.jsonSync.rawData.binance.ethusdt.data.splice(0, deleteCount)
+        //     this.jsonSync.rawData.binance.ethusdt.orderBook.splice(0, deleteCount)
 
-            this.重新初始化() //卡死？
-        }
+        //     this.重新初始化() //卡死？
+        // }
 
 
     }
@@ -92,6 +92,9 @@ export class RealDataBase {
                 BTCUSD: createItem(),
                 ETHUSDT: createItem(),
                 ETHUSD: createItem(),
+            },
+            fcoin: {
+                btcusdt: createItem(),
             },
             bitmex: {
                 XBTUSD: createItem(),
