@@ -2,9 +2,10 @@ import { TradeAndOrderBook } from './TradeAndOrderBook'
 import { config } from '../../../config'
 import { WebSocketClient } from '../../F/WebSocketClient'
 import { splitEvery } from 'ramda'
+import { BaseType } from '../../BaseType'
 
 
-export class FCOIN extends TradeAndOrderBook {
+export class FCOIN extends TradeAndOrderBook<BaseType.FcoinSymbol>{
 
     private ws = new WebSocketClient({
         ss: config.ss,
@@ -16,13 +17,21 @@ export class FCOIN extends TradeAndOrderBook {
 
         setInterval(() => {
             if (this.ws.isConnected) {
-                this.ws.sendJSON({ 'cmd': 'ping', 'args': [Date.now()], id: '__ping__' })
+                this.ws.sendJSON({
+                    'cmd': 'ping',
+                    'args': [Date.now()],
+                    'id': '__ping__'
+                })
             }
         }, 1000)
 
         this.ws.onStatusChange = () => {
             if (this.ws.isConnected) {
-                this.ws.sendJSON({ 'cmd': 'sub', 'args': ['depth.L20.btcusdt', 'trade.btcusdt'], id: '__depth__and__trade__' })
+                this.ws.sendJSON({
+                    'cmd': 'sub',
+                    'args': ['depth.L20.btcusdt', 'trade.btcusdt', 'depth.L20.ethusdt', 'trade.ethusdt'],
+                    'id': '__depth__and__trade__'
+                })
             }
             this.statusObservable.next({
                 isConnected: this.ws.isConnected
@@ -33,7 +42,7 @@ export class FCOIN extends TradeAndOrderBook {
         this.ws.onData = (d: {}) => {
             const type = ((d as any).type as string).split('.')
             const topic = type[0]
-            const symbol = type[type.length - 1]
+            const symbol = type[type.length - 1] as BaseType.FcoinSymbol
 
             if (topic === 'depth') {
 
@@ -41,7 +50,6 @@ export class FCOIN extends TradeAndOrderBook {
                     ts: number
                     bids: number[]
                     asks: number[]
-
                 }
 
                 this.orderBookObservable.next({
