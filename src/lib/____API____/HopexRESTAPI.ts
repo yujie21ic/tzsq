@@ -64,7 +64,7 @@ export const HopexRESTAPI = {
             cookie,
             url: 'https://web.hopex.com/api/v1/gateway/User/ConditionOrder?culture=zh-CN',
             param: {
-                expectedPrice: String(p.side === 'Sell' ? String(p.price - 100) : String(p.price + 100)),
+                expectedPrice: String(p.side === 'Sell' ? String(p.price - 10) : String(p.price + 10)),
                 expectedQuantity: String(100000),
                 lang: 'zh-CN',
                 market: p.symbol,
@@ -72,7 +72,7 @@ export const HopexRESTAPI = {
                 contractCode: p.symbol,
                 side: p.side === 'Sell' ? 1 : 2,
                 trigPrice: String(p.side === 'Sell' ? String(p.price) : String(p.price)),
-                trigType: 'market_price',
+                trigType: 'faire_price',
                 type: 'LimitLoss',
             },
         }),
