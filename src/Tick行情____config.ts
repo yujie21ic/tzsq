@@ -73,7 +73,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 净成交量颜色 }),
                     ]
                 },
-               
+
                 // {
                 //     numberColor: 石青,
                 //     layerList: [
@@ -86,7 +86,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d2.XBTUSD.fcoin.价格, color: 波动率颜色 }),
                     ]
                 },
-               
+
                 {
                     numberColor: 0x000000,
                     layerList: [
@@ -150,7 +150,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
     实盘fcoin手动: (d, d2) => ({
-        heightList: [0.2,0.2, 0.5, 0.1],
+        heightList: [0.2, 0.2, 0.5, 0.1],
         items: [
             {
                 layerList: [
@@ -171,14 +171,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data:  d2.XBTUSD.fcoin.买.盘口, color: 买颜色 }),
-                    layer(LineLayer, { data:  d2.XBTUSD.fcoin.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d2.XBTUSD.fcoin.买.盘口, color: 买颜色 }),
+                    layer(LineLayer, { data: d2.XBTUSD.fcoin.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
                     //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
-                    layer(LineLayer, { data:  d2.XBTUSD.fcoin.买.净盘口_均线3, color: ETH颜色 }),
+                    layer(LineLayer, { data: d2.XBTUSD.fcoin.买.净盘口_均线3, color: ETH颜色 }),
                     layer(TextLayer, {
                         text:
-                            `买1  :${(lastNumber( d2.XBTUSD.fcoin.买.盘口1) ).toFixed(2)}个  ` +
-                            `卖1  :${(lastNumber( d2.XBTUSD.fcoin.卖.盘口1) ).toFixed(2)}个   ` +
+                            `买1  :${(lastNumber(d2.XBTUSD.fcoin.买.盘口1)).toFixed(2)}个  ` +
+                            `卖1  :${(lastNumber(d2.XBTUSD.fcoin.卖.盘口1)).toFixed(2)}个   ` +
                             `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
                         color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
                     })
@@ -193,7 +193,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 净成交量颜色 }),
                     ]
                 },
-               
+
                 {
                     numberColor: 石青,
                     layerList: [
@@ -206,7 +206,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 //         layer(LineLayer, { data: d2.XBTUSD.fcoin.价格, color: 波动率颜色 }),
                 //     ]
                 // },
-               
+
                 {
                     numberColor: 0x000000,
                     layerList: [
@@ -271,7 +271,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
     实盘macd: (d, d2) => ({
-        heightList: [0.3,0.3, 0.4],
+        heightList: [0.3, 0.3, 0.4],
         items: [
             {
                 layerList: [
@@ -2219,6 +2219,21 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layer(LineLayer, { data: d.hopex.买.净盘口_均线3, color: ETH颜色 }),
                 ]
             },
+        ]
+    }),
+
+
+    hopex对赌炒单: (d, d2) => ({
+        heightList: [1],
+        items: [
+            {
+                layerList: [
+                    layer(LineLayer, { data: d2.ETHUSD.binance.卖.盘口1价, color: 卖颜色 }),
+                    layer(LineLayer, { data: d2.ETHUSD.binance.买.盘口1价, color: 买颜色 }),
+                    layer(LineLayer, { data: d2.ETHUSD.hopex.价格, color: 0xffff00 }),
+                ]
+            },
+
         ]
     }),
 
