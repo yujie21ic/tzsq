@@ -1100,13 +1100,13 @@ export class RealDataBase {
 
     private item = (symbol: BaseType.BitmexSymbol, binanceSymbol: BaseType.BinanceSymbol, hopexSymbol: BaseType.HopexSymbol, fcoinSymbol: BaseType.FcoinSymbol) => {
 
-        const binance = this.item2(this.data.binance[binanceSymbol], false)
+        const binance = this.item2(this.data.binance[binanceSymbol], true)
 
         const bitmex = this.item2(this.data.bitmex[symbol], true)
 
-        const hopex = this.item2(this.data.hopex[hopexSymbol], false)
+        const hopex = this.item2(this.data.hopex[hopexSymbol], true)
 
-        const fcoin = this.item2(this.data.fcoin[fcoinSymbol], false)
+        const fcoin = this.item2(this.data.fcoin[fcoinSymbol], true)
 
 
 
