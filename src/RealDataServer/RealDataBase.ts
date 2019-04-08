@@ -1098,13 +1098,16 @@ export class RealDataBase {
     }
 
 
-    private item = (symbol: BaseType.BitmexSymbol, binanceSymbol: BaseType.BinanceSymbol, hopexSymbol: BaseType.HopexSymbol) => {
+    private item = (symbol: BaseType.BitmexSymbol, binanceSymbol: BaseType.BinanceSymbol, hopexSymbol: BaseType.HopexSymbol, fcoinSymbol: BaseType.FcoinSymbol) => {
 
         const binance = this.item2(this.data.binance[binanceSymbol], false)
 
         const bitmex = this.item2(this.data.bitmex[symbol], true)
 
         const hopex = this.item2(this.data.hopex[hopexSymbol], false)
+
+        const fcoin = this.item2(this.data.fcoin[fcoinSymbol], false)
+
 
 
         const hopex_bitmex_差价 = 指标.map(() => Math.min(hopex.价格.length, bitmex.价格.length), i => hopex.价格[i] - bitmex.价格[i])
@@ -1330,19 +1333,20 @@ export class RealDataBase {
             binance,
             bitmex,
             hopex,
+            fcoin,
         }
     }
 
     dataExt = {
-        XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT'),
-        ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT'),
+        XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT', 'btcusdt'),
+        ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
         ctp: this.item2(this.data.ctp.rb1905, true),
     }
 
     重新初始化 = () => {
         this.dataExt = {
-            XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT'),
-            ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT'),
+            XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT', 'btcusdt'),
+            ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
             ctp: this.item2(this.data.ctp.rb1905, true),
         }
     }

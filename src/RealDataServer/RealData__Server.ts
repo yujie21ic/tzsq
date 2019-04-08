@@ -6,6 +6,7 @@ import { BitmexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/Bi
 import { HopexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
 import { CTP } from '../lib/____API____/TradeAndOrderBook/CTP'
+import { FCOIN } from '../lib/____API____/TradeAndOrderBook/FCOIN'
 
 export class RealData__Server extends RealDataBase {
 
@@ -15,7 +16,7 @@ export class RealData__Server extends RealDataBase {
     private bitmex = new BitmexTradeAndOrderBook()
     private binance = new BinanceTradeAndOrderBook()
     private hopex = new HopexTradeAndOrderBook()
-    private fcoin = new HopexTradeAndOrderBook()
+    private fcoin = new FCOIN()
 
     _binance = false
     _bitmex = false
