@@ -178,12 +178,12 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
                         symbol: d.data.contractCode,
                         timestamp: Number(d.timestamp),
                         buy: buy.slice(0, 5).map(v => ({
-                            price: Number(v),
-                            size: obj.buy[Number(v)],
+                            price: Number(v.split(',').join('')),
+                            size: obj.buy[Number(v.split(',').join(''))],
                         })),
                         sell: sell.slice(0, 5).map(v => ({
-                            price: Number(v),
-                            size: obj.sell[Number(v)],
+                            price: Number(v.split(',').join('')),
+                            size: obj.sell[Number(v.split(',').join(''))],
                         })),
                     })
                 }

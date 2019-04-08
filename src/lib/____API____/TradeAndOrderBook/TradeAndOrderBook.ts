@@ -1,7 +1,7 @@
 import { BaseType } from '../../BaseType'
 import { Subject } from 'rxjs'
 
-export class TradeAndOrderBook<T extends string> {
+export class TradeAndOrderBook<T extends string = string> {
 
     statusObservable = new Subject<{
         isConnected: boolean
