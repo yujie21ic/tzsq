@@ -8,7 +8,7 @@ import { BaseType } from './lib/BaseType'
 import { windowExt } from './windowExt'
 import { Button } from './lib/UI/Button'
 import { Switch } from '@material-ui/core'
-import { HopexRESTAPI } from './lib/____API____/Hopex/HopexRESTAPI'
+import { HopexRESTAPI } from './lib/____API____/HopexRESTAPI'
 import { realTickClient, 提醒 } from './实盘__提醒'
 import { lastNumber } from './lib/F/lastNumber'
 
