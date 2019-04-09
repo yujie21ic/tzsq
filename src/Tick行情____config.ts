@@ -2230,8 +2230,9 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layerList: [
                     layer(LineLayer, { data: d2.ETHUSD.binance.卖.盘口1价, color: 卖颜色 }),
                     layer(LineLayer, { data: d2.ETHUSD.binance.买.盘口1价, color: 买颜色 }),
-                    layer(LineLayer, { data: d2.ETHUSD.hopex.卖.盘口1价, color: 0xffff00 }),
-                    layer(LineLayer, { data: d2.ETHUSD.hopex.买.盘口1价, color: 0xaaaaaa }),
+                    layer(LineLayer, { data: d2.ETHUSD.hopex.收盘价, color: 0xffffff }),
+                    layer(LineLayer, { data: d2.ETHUSD.hopex.卖.盘口1价, color: 0xff0000 }),
+                    layer(LineLayer, { data: d2.ETHUSD.hopex.买.盘口1价, color: 0x00ff00 }),
                 ]
             },
 
