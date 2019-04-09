@@ -293,6 +293,36 @@ export class RealDataBase {
         const 价格macd = 指标.macd(价格, RealDataBase.单位时间)
 
 
+
+        const 买均价_300 = 指标.map(() => data.length, i => {
+            if (i >= 300) {
+                let sum = 0
+                let vol = 0
+                for (let k = i - 300; k <= i; k++) {
+                    vol += data[k].buySize
+                    sum += data[k].buySize * data[k].close //
+                }
+                return sum / vol
+            } else {
+                return NaN
+            }
+        })
+        const 卖均价_300 = 指标.map(() => data.length, i => {
+            if (i >= 300) {
+                let sum = 0
+                let vol = 0
+                for (let k = i - 300; k <= i; k++) {
+                    vol += data[k].sellSize
+                    sum += data[k].sellSize * data[k].close
+                }
+                return sum / vol
+            } else {
+                return NaN
+            }
+        })
+
+
+
         //
         const __波动_测试 = 指标.map2({ index: 0, lastPrice: NaN }, (arr: {
             价格: number
@@ -1093,7 +1123,9 @@ export class RealDataBase {
 
             价格_最高60,
             价格_最低60,
-            价格_最高60_价差
+            价格_最高60_价差,
+            买均价_300,
+            卖均价_300,
         }
     }
 

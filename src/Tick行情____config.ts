@@ -45,6 +45,20 @@ const 石青 = 0x1685a9
 
 export const Tick行情____config: { [key in string]: ItemFunc } = {
 
+    xxxxxxxxxxxxx: (d, d2) => ({
+        heightList: [1],
+        items: [
+            {
+                layerList: [
+                    layer(LineLayer, { data: d.bitmex.买均价_300, color: 买颜色 }),
+                    layer(LineLayer, { data: d.bitmex.卖均价_300, color: 卖颜色 }),
+                    layer(LineLayer, { data:d.bitmex.收盘价, color: 0xffffff }),
+                ]
+            },
+
+        ]
+    }),
+
     hopex对赌炒单: (d, d2) => ({
         heightList: [1],
         items: [
