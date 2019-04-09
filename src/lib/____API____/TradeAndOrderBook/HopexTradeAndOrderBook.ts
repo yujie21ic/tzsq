@@ -168,9 +168,8 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
                     timestamp: Number(d.timestamp),
                     side: 'Buy',
                     size: 0,
-                    price: Number(d.data.marketPrice.split(',').join('')),     //居然返回字符串样式
+                    price: Number(d.data.fairPrice.split(',').join('')),     //居然返回字符串样式
                 })
-
             }
 
             // //盘口
