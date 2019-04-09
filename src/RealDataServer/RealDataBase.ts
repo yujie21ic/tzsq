@@ -294,26 +294,26 @@ export class RealDataBase {
 
 
 
-        const 买均价_300 = 指标.map(() => data.length, i => {
+        const 买均价_300 = 指标.map(() => Math.min(data.length, 卖.盘口1价.length), i => {
             if (i >= 300) {
                 let sum = 0
                 let vol = 0
                 for (let k = i - 300; k <= i; k++) {
                     vol += data[k].buySize
-                    sum += data[k].buySize * data[k].close //
+                    sum += data[k].buySize * 卖.盘口1价[k]
                 }
                 return sum / vol
             } else {
                 return NaN
             }
         })
-        const 卖均价_300 = 指标.map(() => data.length, i => {
+        const 卖均价_300 = 指标.map(() => Math.min(data.length, 买.盘口1价.length), i => {
             if (i >= 300) {
                 let sum = 0
                 let vol = 0
                 for (let k = i - 300; k <= i; k++) {
                     vol += data[k].sellSize
-                    sum += data[k].sellSize * data[k].close
+                    sum += data[k].sellSize * 买.盘口1价[k]
                 }
                 return sum / vol
             } else {
