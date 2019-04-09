@@ -294,7 +294,7 @@ export class RealDataBase {
 
 
 
-        const 买均价_300 = 指标.map(() => Math.min(data.length, 卖.盘口1价.length), i => {
+        const 被动_卖均价_300 = 指标.map(() => Math.min(data.length, 卖.盘口1价.length), i => {
             if (i >= 300) {
                 let sum = 0
                 let vol = 0
@@ -307,7 +307,8 @@ export class RealDataBase {
                 return NaN
             }
         })
-        const 卖均价_300 = 指标.map(() => Math.min(data.length, 买.盘口1价.length), i => {
+
+        const 被动_买均价_300 = 指标.map(() => Math.min(data.length, 买.盘口1价.length), i => {
             if (i >= 300) {
                 let sum = 0
                 let vol = 0
@@ -1124,8 +1125,8 @@ export class RealDataBase {
             价格_最高60,
             价格_最低60,
             价格_最高60_价差,
-            买均价_300,
-            卖均价_300,
+            被动_买均价_300: 被动_买均价_300,
+            被动_卖均价_300: 被动_卖均价_300,
         }
     }
 

@@ -50,8 +50,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         items: [
             {
                 layerList: [
-                    layer(LineLayer, { data: d.bitmex.买均价_300, color: 买颜色 }),
-                    layer(LineLayer, { data: d.bitmex.卖均价_300, color: 卖颜色 }),
+                    layer(LineLayer, { data: d.bitmex.被动_买均价_300, color: 买颜色 }),
+                    layer(LineLayer, { data: d.bitmex.被动_卖均价_300, color: 卖颜色 }),
                     layer(LineLayer, { data:d.bitmex.收盘价, color: 0xffffff }),
                 ]
             },
