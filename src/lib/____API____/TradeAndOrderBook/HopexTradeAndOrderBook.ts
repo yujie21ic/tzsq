@@ -39,6 +39,15 @@ type Frame = {
         side: string            // 1 Sell    2 Buy
     }[]
 }
+    |
+{
+    method: 'price.update'
+    timestamp: number
+    data: {
+        contractCode: BaseType.HopexSymbol
+        fairPrice: string
+    }
+}
 
 
 const head_data = (name: string) => ({
@@ -49,7 +58,7 @@ const head_data = (name: string) => ({
     'version': '1.0',
     'msgType': 'request',
     'timestamps': String(Date.now()),
-    'serialNumber': '5'
+    'serialNumber': '5',
 })
 
 const orderbook_subscribe_data = (symbol: BaseType.HopexSymbol) => (
@@ -64,15 +73,25 @@ const orderbook_subscribe_data = (symbol: BaseType.HopexSymbol) => (
     }
 )
 
-const deals_subscribe_data = (symbol: BaseType.HopexSymbol) => ({
-    'head': head_data('deals'),
+// const deals_subscribe_data = (symbol: BaseType.HopexSymbol) => ({
+//     'head': head_data('deals'),
+//     'param': {
+//         'lastId': -1, //猜的
+//         'limit': 20,
+//         'market': symbol,
+//         'marketCode': symbol,
+//         'contractCode': symbol,
+//         'lang': 'cn'
+//     }
+// })
+
+const price_subscribe_data = (symbol: BaseType.HopexSymbol) => ({
+    'head': head_data('price'),
     'param': {
-        'lastId': -1, //猜的
-        'limit': 20,
-        'market': symbol,
-        'marketCode': symbol,
-        'contractCode': symbol,
-        'lang': 'cn'
+        lang: 'zh-CN',
+        contractCode: symbol,
+        market: symbol,
+        marketCode: symbol,
     }
 })
 
@@ -105,7 +124,8 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
                     ws.sendJSON(orderbook_subscribe_data(symbol))
                 }
                 if (type === 'trade' || type === 'all') {
-                    ws.sendJSON(deals_subscribe_data(symbol))
+                    // ws.sendJSON(deals_subscribe_data(symbol))
+                    ws.sendJSON(price_subscribe_data(symbol))
                 }
             }
             this.statusObservable.next({
@@ -137,6 +157,19 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
                         price: Number(v.fillPrice.split(',').join('')),     //居然返回字符串样式
                     })
                 })
+            }
+
+            //合理价格
+            if (d.method === 'price.update') {
+
+                this.tradeObservable.next({
+                    symbol: d.data.contractCode,
+                    timestamp: Number(d.timestamp),
+                    side: 'Buy',
+                    size: 0,
+                    price: Number(d.data.fairPrice.split(',').join('')),     //居然返回字符串样式
+                })
+
             }
 
             // //盘口
