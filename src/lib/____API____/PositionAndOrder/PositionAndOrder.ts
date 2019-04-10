@@ -38,6 +38,7 @@ export interface PositionAndOrder {
             ETHUSD: ITEM
             Hopex_BTC: ITEM
             Hopex_ETH: ITEM
+            FCoin_BTC: ITEM
         }
     }>
 
