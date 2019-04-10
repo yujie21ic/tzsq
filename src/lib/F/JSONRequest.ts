@@ -46,7 +46,6 @@ export const JSONRequest = <T>({
         requestOptions.body = typeof body === 'string' ? body : JSON.stringify(body)
     }
 
-    console.log('requestOptions',requestOptions)
     request(requestOptions, (error, response) => {
         if (response === undefined) {
             resolve({
