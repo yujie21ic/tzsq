@@ -47,12 +47,13 @@ export const FCoinHTTP = {
     getActiveOrders: async (cookie: string, p: { symbol: string }) =>
         f1<{
             data: {
+                id: string
                 created_at: number
                 symbol: string
                 type: 'buy_limit' | 'sell_limit'
                 amount: string
-                price: number
-                finished_at: number
+                filled_amount: string
+                price: string
             }[]
         }>({
             cookie,
