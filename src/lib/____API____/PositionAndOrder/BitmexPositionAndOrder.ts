@@ -55,6 +55,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     private cookie: string
     private hopexCookie: string
+    private fcoinCookie: string
 
     log: (text: string) => void
     private ws: BitMEXWS
@@ -77,7 +78,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         委托: false,
     }
 
-    private async hoex_仓位_轮询() {
+    private async hopex_仓位_轮询() {
         while (true) {
             const __obj__ = {
                 Hopex_BTC: {
@@ -124,7 +125,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         }
     }
 
-    private async hoex_委托_轮询() {
+    private async hopex_委托_轮询() {
         while (true) {
             const __obj__ = {
                 Hopex_BTC: [] as BaseType.Order[],
@@ -195,17 +196,76 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
 
     private async hopex_轮询() {
-        this.hoex_仓位_轮询()
-        this.hoex_委托_轮询()
+        this.hopex_仓位_轮询()
+        this.hopex_委托_轮询()
     }
 
 
-    constructor(p: { accountName: string, cookie: string, hopexCookie: string }) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private async fcoin_仓位_轮询() {
+    }
+
+    private async fcoin_委托_轮询() {
+    }
+
+
+    private async fcoin_轮询() {
+        this.fcoin_仓位_轮询()
+        this.fcoin_委托_轮询()
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    constructor(p: { accountName: string, cookie: string, hopexCookie: string, fcoinCookie: string }) {
         this.cookie = p.cookie
         this.hopexCookie = p.hopexCookie
+        this.fcoinCookie = p.fcoinCookie
 
         if (this.hopexCookie !== '') {
             this.hopex_轮询()
+        }
+
+        if (this.fcoinCookie !== '') {
+            this.fcoin_轮询()
         }
 
         this.ws = new BitMEXWS(p.cookie, [

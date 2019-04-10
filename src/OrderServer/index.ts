@@ -22,7 +22,8 @@ if (config.orderServer !== undefined) {
         const account = new BitmexPositionAndOrder({
             accountName: k,
             cookie: v.cookie,
-            hopexCookie: v.hopexCookie || '',
+            hopexCookie: v.hopexCookie,
+            fcoinCookie: v.fcoinCookie,
         })
         account.runTask(new XBTUSD摸顶抄底追涨追跌())
         account.runTask(new Hopex__ETH止损())
