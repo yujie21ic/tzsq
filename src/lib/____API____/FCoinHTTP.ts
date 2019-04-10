@@ -10,14 +10,13 @@ const __ = {
     key: '',
 }
 
-export const f2 = <T>(p: { url: string, param?: any }) => { //url参数 需要字母按顺序来
+export const f2 = <T>(p: { url: string, method: 'POST' | 'GET', param?: any }) => { //url参数 需要字母按顺序来
     const TIMESTAMP = Date.now() + ''
-    const method = p.param ? 'POST' : 'GET'
     const postBody = p.param ? JSON.stringify(p.param) : ''
-    const SIGNATURE = createHmac('sha1', __.secret).update(base64(`${method}${p.url}${TIMESTAMP}${postBody}`)).digest().toString('base64')
+    const SIGNATURE = createHmac('sha1', __.secret).update(base64(`${p.method}${p.url}${TIMESTAMP}${postBody}`)).digest().toString('base64')
     return JSONRequest<T>({
         url: p.url,
-        method,
+        method: p.method,
         body: postBody,
         ss: config.ss,
         headers: {
@@ -29,10 +28,10 @@ export const f2 = <T>(p: { url: string, param?: any }) => { //url参数 需要�
     })
 }
 
-const f1 = <T>(p: { url: string, cookie: string, param?: any }) =>
+const f1 = <T>(p: { url: string, method: 'POST' | 'GET', cookie: string, param?: any }) =>
     JSONRequest<T>({
         url: p.url,
-        method: p.param ? 'POST' : 'GET',
+        method: p.method,
         body: p.param,
         ss: config.ss,
         headers: {
@@ -57,6 +56,7 @@ export const FCoinHTTP = {
             }[]
         }>({
             cookie,
+            method: 'GET',
             url: 'https://exchange.fcoin.com/api/web/v1/orders/active-orders?' + queryStringStringify({
                 account_type: 'margin',
                 limit: 100,
@@ -75,6 +75,7 @@ export const FCoinHTTP = {
             }
         }>({
             cookie,
+            method: 'GET',
             url: 'https://exchange.fcoin.com/openapi/v3/leveraged/accounts/balances',
         }),
 
@@ -84,6 +85,7 @@ export const FCoinHTTP = {
             data: string
         }>({
             cookie,
+            method: 'POST',
             url: 'https://exchange.fcoin.com/api/web/v1/orders',
             param: {
                 account_type: 'margin',
@@ -94,5 +96,13 @@ export const FCoinHTTP = {
                 symbol: p.symbol,
                 type: p.side === 'Buy' ? 'buy_limit' : 'sell_limit',
             }
+        }),
+
+
+    cancel: async (cookie: string, id: string) =>
+        f1({
+            cookie,
+            method: 'POST',
+            url: `https://exchange.fcoin.com/api/web/v1/orders/${id}/submit-cancel`,
         }),
 }
