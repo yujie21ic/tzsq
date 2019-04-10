@@ -170,13 +170,13 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                                 bgColor={GREEN}
                                 text={下单数量 + ''}
                                 left={() => FCoinHTTP.order(fcoinCookie, {
-                                    symbol: 'btcudst',
+                                    symbol: 'btcusdt',
                                     price: lastNumber(realTickClient.dataExt.XBTUSD.fcoin.买.盘口1价),
                                     side: 'Buy',
                                     size: 下单数量,
                                 })}
                                 right={() => FCoinHTTP.order(fcoinCookie, {
-                                    symbol: 'btcudst',
+                                    symbol: 'btcusdt',
                                     price: lastNumber(realTickClient.dataExt.XBTUSD.fcoin.卖.盘口1价),
                                     side: 'Buy',
                                     size: 下单数量,
@@ -192,13 +192,13 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                                 bgColor={RED}
                                 text={-下单数量 + ''}
                                 left={() => FCoinHTTP.order(fcoinCookie, {
-                                    symbol: 'btcudst',
+                                    symbol: 'btcusdt',
                                     price: lastNumber(realTickClient.dataExt.XBTUSD.fcoin.卖.盘口1价),
                                     side: 'Sell',
                                     size: 下单数量,
                                 })}
                                 right={() => FCoinHTTP.order(fcoinCookie, {
-                                    symbol: 'btcudst',
+                                    symbol: 'btcusdt',
                                     price: lastNumber(realTickClient.dataExt.XBTUSD.fcoin.买.盘口1价),
                                     side: 'Sell',
                                     size: 下单数量,
