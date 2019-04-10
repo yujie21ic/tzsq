@@ -3,7 +3,7 @@ import { SyncKLine } from './SyncKLine'
 import { DB } from './DB'
 import { timeID } from '../F/timeID'
 import { sleep } from '../F/sleep'
-import { BitMEXRESTAPI } from '../____API____/BitMEX/BitMEXRESTAPI'
+import { BitMEXHTTP } from '../____API____/BitMEX/BitMEXHTTP'
 import { toRange } from '../F/toRange'
 
 
@@ -18,7 +18,7 @@ const getData = async (p: {
     let start = 0
 
     while (true) {
-        const { data } = (await BitMEXRESTAPI.Trade.get('', {
+        const { data } = (await BitMEXHTTP.Trade.get('', {
             start,
             symbol: p.symbol,
             count: 500,

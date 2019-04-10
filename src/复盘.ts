@@ -11,7 +11,7 @@ import { toRange } from './lib/F/toRange'
 import { showWindow, windowExt } from './windowExt'
 import { config } from './config'
 import { 信号Layer } from './lib/Chart/Layer/信号Layer'
-import { BitMEXRESTAPI } from './lib/____API____/BitMEX/BitMEXRESTAPI'
+import { BitMEXHTTP } from './lib/____API____/BitMEX/BitMEXHTTP'
 import * as fs from 'fs'
 import { safeJSONParse } from './lib/F/safeJSONParse'
 import { 指标 } from './指标/指标'
@@ -84,7 +84,7 @@ const load = async () => {
     }
 
 
-    const res = await BitMEXRESTAPI.Execution.getTradeHistory(cookie, {
+    const res = await BitMEXHTTP.Execution.getTradeHistory(cookie, {
         reverse: true,
         count: 500,
         filter: JSON.stringify({ 'symbol': nowSymbol }),

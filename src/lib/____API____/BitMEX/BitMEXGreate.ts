@@ -89,13 +89,39 @@ export namespace BitMEXMessage {${
 }`)
 
 
-    fs.writeFileSync('./src/lib/____API____/BitMEX/BitMEXRESTAPI.ts', `
+    fs.writeFileSync('./src/lib/____API____/BitMEX/BitMEXHTTP.ts', `
 //greate by https://www.bitmex.com/api/explorer/swagger.json
 
 import { BitMEXMessage } from './BitMEXMessage'
-import { BitMEXRESTAPI__http } from './BitMEXRESTAPI__http'
+import { queryStringStringify } from '../../F/queryStringStringify'
+import { JSONRequest } from '../../F/JSONRequest'
+import { config } from '../../../config'
 
-export const BitMEXRESTAPI = {${
+export const f = async <T>(obj: { method: string, path: string, cookie: string, req: any }) => {
+
+    const { method, req } = obj
+
+    const url = 'https://www.bitmex.com' + (
+        (method === 'GET' || method === 'DELETE') ?
+            (obj.path + '?' + queryStringStringify(req)) :
+            obj.path
+    )
+
+    const body = (method === 'GET' || method === 'DELETE') ? undefined : req
+
+    return await JSONRequest<T>({
+        headers: obj.cookie === '' ? undefined : {
+            Cookie: obj.cookie,
+            Referer: 'https://www.bitmex.com/app/trade/XBTUSD',
+        },
+        url,
+        method,
+        body,
+        ss: config.ss
+    })
+}
+
+export const BitMEXHTTP = {${
         R.toPairs(dic).map((tag: any) =>
             `${BR2}${TAB}${tag[0]}: {${
             R.toPairs(tag[1]).map((v: any) =>

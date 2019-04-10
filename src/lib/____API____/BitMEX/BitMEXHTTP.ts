@@ -2,9 +2,35 @@
 //greate by https://www.bitmex.com/api/explorer/swagger.json
 
 import { BitMEXMessage } from './BitMEXMessage'
-import { BitMEXRESTAPI__http } from './BitMEXRESTAPI__http'
+import { queryStringStringify } from '../../F/queryStringStringify'
+import { JSONRequest } from '../../F/JSONRequest'
+import { config } from '../../../config'
 
-export const BitMEXRESTAPI = {
+export const f = async <T>(obj: { method: string, path: string, cookie: string, req: any }) => {
+
+    const { method, req } = obj
+
+    const url = 'https://www.bitmex.com' + (
+        (method === 'GET' || method === 'DELETE') ?
+            (obj.path + '?' + queryStringStringify(req)) :
+            obj.path
+    )
+
+    const body = (method === 'GET' || method === 'DELETE') ? undefined : req
+
+    return await JSONRequest<T>({
+        headers: obj.cookie === '' ? undefined : {
+            Cookie: obj.cookie,
+            Referer: 'https://www.bitmex.com/app/trade/XBTUSD',
+        },
+        url,
+        method,
+        body,
+        ss: config.ss
+    })
+}
+
+export const BitMEXHTTP = {
 
     Announcement: {
 
@@ -230,7 +256,7 @@ Note that this method will always return item keys, even when not specified, so 
             clOrdLinkID?: string /* ''  Deprecated: linked orders are not supported after 2018/11/10.*/
             pegOffsetValue?: number /* 'double'  Optional trailing offset from the current price for 'Stop', 'StopLimit', 'MarketIfTouched', and 'LimitIfTouched' orders; use a negative offset for stop-sell orders and buy-if-touched orders. Optional offset from the peg price for 'Pegged' orders.*/
             pegPriceType?: string /* ''  Optional peg price type. Valid options: LastPeg, MidPricePeg, MarketPeg, PrimaryPeg, TrailingStopPeg.*/
-            ordType?: string /* ''  Order type. Valid options: Market, Limit, Stop, StopLimit, MarketIfTouched, LimitIfTouched, MarketWithLeftOverAsLimit, Pegged. Defaults to 'Limit' when `price` is specified. Defaults to 'Stop' when `stopPx` is specified. Defaults to 'StopLimit' when `price` and `stopPx` are specified.*/
+            ordType?: string /* ''  Order type. Valid options: Market, Limit, Stop, StopLimit, MarketIfTouched, LimitIfTouched, Pegged. Defaults to 'Limit' when `price` is specified. Defaults to 'Stop' when `stopPx` is specified. Defaults to 'StopLimit' when `price` and `stopPx` are specified.*/
             timeInForce?: string /* ''  Time in force. Valid options: Day, GoodTillCancel, ImmediateOrCancel, FillOrKill. Defaults to 'GoodTillCancel' for 'Limit', 'StopLimit', and 'LimitIfTouched' orders.*/
             execInst?: string /* ''  Optional execution instructions. Valid options: ParticipateDoNotInitiate, AllOrNone, MarkPrice, IndexPrice, LastPrice, Close, ReduceOnly, Fixed. 'AllOrNone' instruction requires `displayQty` to be 0. 'MarkPrice', 'IndexPrice' or 'LastPrice' instruction valid for 'Stop', 'StopLimit', 'MarketIfTouched', and 'LimitIfTouched' orders.*/
             contingencyType?: string /* ''  Deprecated: linked orders are not supported after 2018/11/10.*/
@@ -459,6 +485,7 @@ Note that this method will always return item keys, even when not specified, so 
             amount: number /* 'int64'  Amount of withdrawal currency.*/
             address: string /* ''  Destination Address.*/
             fee?: number /* 'double'  Network fee for Bitcoin withdrawals. If not specified, a default value will be calculated based on Bitcoin network conditions. You will have a chance to confirm this via email.*/
+            text?: string /* ''  Optional annotation, e.g. 'Transfer to home wallet'.*/
         }) => BitMEXRESTAPI__http<BitMEXMessage.Transaction>({ cookie, method: 'POST', path: '/api/v1/user/requestWithdrawal', req }),
 
         cancelWithdrawal: (cookie: string, req: {

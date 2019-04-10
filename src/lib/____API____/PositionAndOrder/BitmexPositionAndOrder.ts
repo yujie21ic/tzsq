@@ -1,5 +1,5 @@
 import { BaseType } from '../../BaseType'
-import { BitMEXRESTAPI } from '../BitMEX/BitMEXRESTAPI'
+import { BitMEXHTTP } from '../BitMEX/BitMEXHTTP'
 import { sleep } from '../../F/sleep'
 import { JSONRequestError } from '../../F/JSONRequest'
 import { logToFile } from '../../F/logToFile'
@@ -423,7 +423,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         reduceOnly: boolean
         text: string
     }>(
-        (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
+        (cookie, p) => BitMEXHTTP.Order.new(cookie, {
             symbol: p.symbol,
             ordType: 'Limit',
             side: p.side,
@@ -438,7 +438,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         side: BaseType.Side
         price: number
     }>(
-        (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
+        (cookie, p) => BitMEXHTTP.Order.new(cookie, {
             symbol: 'XBTUSD', //<-----------------------
             ordType: 'Stop',
             stopPx: p.price,
@@ -453,7 +453,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         orderID: string
         price: number
     }>(
-        (cookie, p) => BitMEXRESTAPI.Order.amend(cookie, {
+        (cookie, p) => BitMEXHTTP.Order.amend(cookie, {
             orderID: p.orderID,
             stopPx: p.price,
         })
@@ -463,7 +463,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         orderID: string
         price: () => number
     }>(
-        (cookie, p) => BitMEXRESTAPI.Order.amend(cookie, {
+        (cookie, p) => BitMEXHTTP.Order.amend(cookie, {
             orderID: p.orderID,
             price: p.price(),
         })
@@ -476,7 +476,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         price: () => number
         text: string
     }>(
-        (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
+        (cookie, p) => BitMEXHTTP.Order.new(cookie, {
             symbol: p.symbol,
             ordType: 'Limit',
             side: p.side,
@@ -492,7 +492,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         size: number
         text: string
     }>(
-        (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
+        (cookie, p) => BitMEXHTTP.Order.new(cookie, {
             symbol: p.symbol,
             ordType: 'Market',
             side: p.side,
@@ -505,7 +505,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         symbol: BaseType.BitmexSymbol
         text: string
     }>(
-        (cookie, p) => BitMEXRESTAPI.Order.new(cookie, {
+        (cookie, p) => BitMEXHTTP.Order.new(cookie, {
             symbol: p.symbol,
             ordType: 'Market',
             execInst: 'Close',
@@ -516,7 +516,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     cancel = this.DDOS调用<{
         orderID: string[]
     }>(
-        (cookie, p) => BitMEXRESTAPI.Order.cancel(cookie, { orderID: JSON.stringify(p.orderID) })
+        (cookie, p) => BitMEXHTTP.Order.cancel(cookie, { orderID: JSON.stringify(p.orderID) })
     )
 
 
