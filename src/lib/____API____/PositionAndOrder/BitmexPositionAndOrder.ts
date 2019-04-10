@@ -234,10 +234,15 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                     }
                 })
 
+                console.log('仓位数量', 仓位数量, '开仓均价', 开仓均价)
+
                 if (this.jsonSync.rawData.symbol.FCoin_BTC.仓位数量 !== 仓位数量) this.jsonSync.data.symbol.FCoin_BTC.仓位数量.____set(NaN)
                 if (this.jsonSync.rawData.symbol.FCoin_BTC.开仓均价 !== 开仓均价) this.jsonSync.data.symbol.FCoin_BTC.开仓均价.____set(NaN)
 
             } else {
+
+                console.log('仓位数量', NaN, '开仓均价', NaN)
+
                 if (isNaN(this.jsonSync.rawData.symbol.FCoin_BTC.仓位数量) === false) this.jsonSync.data.symbol.FCoin_BTC.仓位数量.____set(NaN)
                 if (isNaN(this.jsonSync.rawData.symbol.FCoin_BTC.开仓均价) === false) this.jsonSync.data.symbol.FCoin_BTC.开仓均价.____set(NaN)
             }

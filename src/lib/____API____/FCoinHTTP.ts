@@ -28,8 +28,9 @@ export const f2 = <T>(p: { url: string, method: 'POST' | 'GET', param?: any }) =
     })
 }
 
-const f1 = <T>(p: { url: string, method: 'POST' | 'GET', cookie: string, param?: any }) =>
-    JSONRequest<T>({
+const f1 = <T>(p: { url: string, method: 'POST' | 'GET', cookie: string, param?: any }) => {
+    alert(p.url + '\n' + JSON.stringify(p.param, null, 4))
+    return JSONRequest<T>({
         url: p.url,
         method: p.method,
         body: p.param,
@@ -40,6 +41,7 @@ const f1 = <T>(p: { url: string, method: 'POST' | 'GET', cookie: string, param?:
             token: p.cookie,
         }
     })
+}
 
 
 
