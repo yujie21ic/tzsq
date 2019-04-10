@@ -8,7 +8,7 @@ import { BaseType } from './lib/BaseType'
 import { windowExt } from './windowExt'
 import { Button } from './lib/UI/Button'
 import { Switch } from '@material-ui/core'
-import { HopexRESTAPI } from './lib/____API____/HopexRESTAPI'
+import { HopexHTTP } from './lib/____API____/HopexHTTP'
 import { realTickClient, 提醒 } from './实盘__提醒'
 import { lastNumber } from './lib/F/lastNumber'
 
@@ -168,20 +168,20 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                         <Button
                             bgColor={GREEN}
                             text={下单数量 + ''}
-                            left={() => HopexRESTAPI.maker(hopexCookie, {
+                            left={() => HopexHTTP.maker(hopexCookie, {
                                 symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
                                 price: lastNumber(realTickClient.dataExt[symbol === 'Hopex_BTC' ? 'XBTUSD' : 'ETHUSD'].hopex.买.盘口1价),
                                 side: 'Buy',
                                 size: 下单数量,
                             })}
-                            right={() => HopexRESTAPI.taker(hopexCookie, {
+                            right={() => HopexHTTP.taker(hopexCookie, {
                                 symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
                                 side: 'Buy',
                                 size: 下单数量,
                             })}
                         />
                         <Table 委托列表={委托列表} side='Buy' 取消f={id => {
-                            HopexRESTAPI.cancel(hopexCookie, { orderID: Number(id), contractCode: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT' })
+                            HopexHTTP.cancel(hopexCookie, { orderID: Number(id), contractCode: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT' })
                         }} />
                     </div>
                     <div
@@ -189,20 +189,20 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                         <Button
                             bgColor={RED}
                             text={-下单数量 + ''}
-                            left={() => HopexRESTAPI.maker(hopexCookie, {
+                            left={() => HopexHTTP.maker(hopexCookie, {
                                 symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
                                 price: lastNumber(realTickClient.dataExt[symbol === 'Hopex_BTC' ? 'XBTUSD' : 'ETHUSD'].hopex.卖.盘口1价),
                                 side: 'Sell',
                                 size: 下单数量,
                             })}
-                            right={() => HopexRESTAPI.taker(hopexCookie, {
+                            right={() => HopexHTTP.taker(hopexCookie, {
                                 symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
                                 side: 'Sell',
                                 size: 下单数量,
                             })}
                         />
                         <Table 委托列表={委托列表} side='Sell' 取消f={id => {
-                            HopexRESTAPI.cancel(hopexCookie, { orderID: Number(id), contractCode: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT' })
+                            HopexHTTP.cancel(hopexCookie, { orderID: Number(id), contractCode: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT' })
                         }} />
                     </div>
                 </div>

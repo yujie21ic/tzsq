@@ -9,7 +9,7 @@ import { BitMEXWSAPI } from '../BitMEX/BitMEXWSAPI'
 import { RealData__Server } from '../../../RealDataServer/RealData__Server'
 import { toCacheFunc } from '../../F/toCacheFunc'
 import { PositionAndOrder, PositionAndOrderTask } from './PositionAndOrder'
-import { HopexRESTAPI } from '../HopexRESTAPI'
+import { HopexHTTP } from '../HopexHTTP'
 
 const symbol = () => ({
     任务开关: {
@@ -88,7 +88,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                     开仓均价: 0,
                 },
             }
-            const { data } = await HopexRESTAPI.getPositions(this.hopexCookie)
+            const { data } = await HopexHTTP.getPositions(this.hopexCookie)
             if (data !== undefined) {
                 this.hopex_初始化.仓位 = true
 
@@ -130,8 +130,8 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                 Hopex_ETH: [] as BaseType.Order[],
             }
 
-            const 止损data = (await HopexRESTAPI.getConditionOrders(this.hopexCookie)).data
-            const 委托data = (await HopexRESTAPI.getOpenOrders(this.hopexCookie)).data
+            const 止损data = (await HopexHTTP.getConditionOrders(this.hopexCookie)).data
+            const 委托data = (await HopexHTTP.getOpenOrders(this.hopexCookie)).data
 
             if (止损data !== undefined && 委托data !== undefined) {
                 this.hopex_初始化.委托 = true
@@ -337,7 +337,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     hopex_taker = async (p: { symbol: BaseType.HopexSymbol, size: number, side: BaseType.Side }) => {
         this.log(`hopex_taker ${p.side} ${p.size}`)
-        const b = (await HopexRESTAPI.taker(this.hopexCookie, p)).error === undefined
+        const b = (await HopexHTTP.taker(this.hopexCookie, p)).error === undefined
         this.log(`hopex_taker ${b ? '成功' : '失败'}`)
         if (b) {
             this.hopex_初始化.仓位 = false
@@ -347,7 +347,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     hopex_stop = async (p: { symbol: BaseType.HopexSymbol, side: BaseType.Side, price: number }) => {
         this.log(`hopex_stop ${p.side} ${p.price}`)
-        const b = (await HopexRESTAPI.stop(this.hopexCookie, p)).error === undefined
+        const b = (await HopexHTTP.stop(this.hopexCookie, p)).error === undefined
         this.log(`hopex_stop ${b ? '成功' : '失败'}`)
         if (b) {
             this.hopex_初始化.委托 = false
@@ -356,7 +356,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     }
 
     hopex_cancel = async (p: { symbol: BaseType.HopexSymbol, orderID: string }) => {
-        const b = (await HopexRESTAPI.cancel(this.hopexCookie, {
+        const b = (await HopexHTTP.cancel(this.hopexCookie, {
             orderID: Number(p.orderID),
             contractCode: p.symbol,
         })).error === undefined

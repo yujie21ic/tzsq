@@ -9,7 +9,7 @@ const header = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
 }
 
-const HopexRESTAPI__http = <T>(p: { cookie?: string, url: string, param?: any }) =>
+const f = <T>(p: { cookie?: string, url: string, param?: any }) =>
     JSONRequest<T>({
         url: p.url,
         method: p.param ? 'POST' : 'GET',
@@ -23,14 +23,12 @@ const HopexRESTAPI__http = <T>(p: { cookie?: string, url: string, param?: any })
                 Cookie: p.cookie,
             } :
             header
-    })
+    }) 
 
-
-
-export const HopexRESTAPI = {
+export const HopexHTTP = {
 
     maker: async (cookie: string, p: { symbol: BaseType.HopexSymbol, size: number, price: number, side: BaseType.Side }) =>
-        HopexRESTAPI__http({
+        f({
             cookie,
             url: 'https://web.hopex.com/api/v1/gateway/User/Order?culture=zh-CN',
             param: {
@@ -46,7 +44,7 @@ export const HopexRESTAPI = {
 
 
     taker: async (cookie: string, p: { symbol: BaseType.HopexSymbol, size: number, side: BaseType.Side }) =>
-        HopexRESTAPI__http({
+        f({
             cookie,
             url: 'https://web.hopex.com/api/v1/gateway/User/Order?culture=zh-CN',
             param: {
@@ -60,7 +58,7 @@ export const HopexRESTAPI = {
         }),
 
     stop: async (cookie: string, p: { symbol: BaseType.HopexSymbol, side: BaseType.Side, price: number }) =>
-        HopexRESTAPI__http({
+        f({
             cookie,
             url: 'https://web.hopex.com/api/v1/gateway/User/ConditionOrder?culture=zh-CN',
             param: {
@@ -78,7 +76,7 @@ export const HopexRESTAPI = {
         }),
 
     cancel: async (cookie: string, p: { orderID: number, contractCode: BaseType.HopexSymbol }) =>
-        HopexRESTAPI__http({
+        f({
             cookie,
             url: `https://web.hopex.com/api/v1/gateway/User/CancelOrder?` + queryStringStringify(
                 {
@@ -90,7 +88,7 @@ export const HopexRESTAPI = {
         }),
 
     getPositions: async (cookie: string) =>
-        HopexRESTAPI__http<{
+        f<{
             data?: {
                 contractCode: BaseType.HopexSymbol
                 positionQuantity: string // "+2"  "-2"
@@ -103,7 +101,7 @@ export const HopexRESTAPI = {
 
 
     getOpenOrders: async (cookie: string) =>
-        HopexRESTAPI__http<{
+        f<{
             data?: {
                 contractCode: BaseType.HopexSymbol
                 fillQuantity: string    //已成交
@@ -119,7 +117,7 @@ export const HopexRESTAPI = {
         }),
 
     getConditionOrders: async (cookie: string) =>
-        HopexRESTAPI__http<{
+        f<{
             data?: {
                 result?: {
                     contractCode: BaseType.HopexSymbol
