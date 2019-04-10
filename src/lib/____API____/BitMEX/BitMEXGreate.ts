@@ -97,7 +97,7 @@ import { queryStringStringify } from '../../F/queryStringStringify'
 import { JSONRequest } from '../../F/JSONRequest'
 import { config } from '../../../config'
 
-export const f = async <T>(obj: { method: string, path: string, cookie: string, req: any }) => {
+const f = async <T>(obj: { method: string, path: string, cookie: string, req: any }) => {
 
     const { method, req } = obj
 
