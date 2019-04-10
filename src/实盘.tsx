@@ -67,7 +67,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
 
     render() {
         const { 仓位数量, 任务开关 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
-        const 下单数量 = (this.props.symbol === 'XBTUSD' || this.props.symbol === 'Hopex_BTC' ? account.交易.XBTUSD.数量 : account.交易.ETHUSD.数量) * this.props.倍数
+        const 下单数量 = this.props.symbol === 'FCoin_BTC' ? 0.001 : (this.props.symbol === 'XBTUSD' || this.props.symbol === 'Hopex_BTC' ? account.交易.XBTUSD.数量 : account.交易.ETHUSD.数量) * this.props.倍数
 
 
         // 
