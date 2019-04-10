@@ -34,7 +34,7 @@ export const funcList = {
     任务_开关: {
         req: {
             cookie: '',
-            symbol: '' as 'XBTUSD' | 'ETHUSD' | 'Hopex_BTC' | 'Hopex_ETH',
+            symbol: '' as 'XBTUSD' | 'ETHUSD' | 'Hopex_BTC' | 'Hopex_ETH' | 'FCoin_BTC',
             任务名字: '' as '自动开仓摸顶' | '自动开仓抄底' | '自动开仓追涨' | '自动开仓追跌' | '自动止盈波段' | '自动止损' | '自动推止损',
             value: false,
         },
