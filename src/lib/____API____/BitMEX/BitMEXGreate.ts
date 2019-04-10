@@ -125,7 +125,7 @@ export const BitMEXHTTP = {${
         R.toPairs(dic).map((tag: any) =>
             `${BR2}${TAB}${tag[0]}: {${
             R.toPairs(tag[1]).map((v: any) =>
-                `${BR2}${TAB2}${v[0]}: (cookie: string, req: ${v[1].reqType}) => BitMEXRESTAPI__http<${v[1].resType}>({ cookie, method: '${v[1].method}', path: '/api/v1${v[1].path}', req })`
+                `${BR2}${TAB2}${v[0]}: (cookie: string, req: ${v[1].reqType}) => f<${v[1].resType}>({ cookie, method: '${v[1].method}', path: '/api/v1${v[1].path}', req })`
             )}
     }`).join(',')}
 }`)

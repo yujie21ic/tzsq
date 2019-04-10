@@ -36,9 +36,9 @@ export const BitMEXHTTP = {
 
         get: (cookie: string, req: {
             columns?: string /* 'JSON'  Array of column names to fetch. If omitted, will return all columns.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Announcement[]>({ cookie, method: 'GET', path: '/api/v1/announcement', req }),
+        }) => f<BitMEXMessage.Announcement[]>({ cookie, method: 'GET', path: '/api/v1/announcement', req }),
 
-        getUrgent: (cookie: string, req: {}) => BitMEXRESTAPI__http<BitMEXMessage.Announcement[]>({ cookie, method: 'GET', path: '/api/v1/announcement/urgent', req })
+        getUrgent: (cookie: string, req: {}) => f<BitMEXMessage.Announcement[]>({ cookie, method: 'GET', path: '/api/v1/announcement/urgent', req })
     },
 
     APIKey: {
@@ -49,23 +49,23 @@ export const BitMEXHTTP = {
             permissions?: string /* 'JSON'  Key Permissions. All keys can read margin and position data. Additional permissions must be added. Available: ["order", "orderCancel", "withdraw"].*/
             enabled?: boolean /* ''  Set to true to enable this key on creation. Otherwise, it must be explicitly enabled via /apiKey/enable.*/
             token?: string /* ''  OTP Token (YubiKey, Google Authenticator)*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.APIKey>({ cookie, method: 'POST', path: '/api/v1/apiKey', req }),
+        }) => f<BitMEXMessage.APIKey>({ cookie, method: 'POST', path: '/api/v1/apiKey', req }),
 
         get: (cookie: string, req: {
             reverse?: boolean /* ''  If true, will sort results newest first.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.APIKey[]>({ cookie, method: 'GET', path: '/api/v1/apiKey', req }),
+        }) => f<BitMEXMessage.APIKey[]>({ cookie, method: 'GET', path: '/api/v1/apiKey', req }),
 
         remove: (cookie: string, req: {
             apiKeyID: string /* ''  API Key ID (public component).*/
-        }) => BitMEXRESTAPI__http<{ success: boolean }>({ cookie, method: 'DELETE', path: '/api/v1/apiKey', req }),
+        }) => f<{ success: boolean }>({ cookie, method: 'DELETE', path: '/api/v1/apiKey', req }),
 
         disable: (cookie: string, req: {
             apiKeyID: string /* ''  API Key ID (public component).*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.APIKey>({ cookie, method: 'POST', path: '/api/v1/apiKey/disable', req }),
+        }) => f<BitMEXMessage.APIKey>({ cookie, method: 'POST', path: '/api/v1/apiKey/disable', req }),
 
         enable: (cookie: string, req: {
             apiKeyID: string /* ''  API Key ID (public component).*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.APIKey>({ cookie, method: 'POST', path: '/api/v1/apiKey/enable', req })
+        }) => f<BitMEXMessage.APIKey>({ cookie, method: 'POST', path: '/api/v1/apiKey/enable', req })
     },
 
     Chat: {
@@ -75,16 +75,16 @@ export const BitMEXHTTP = {
             start?: number /* 'int32'  Starting ID for results.*/
             reverse?: boolean /* ''  If true, will sort results newest first.*/
             channelID?: number /* 'double'  Channel id. GET /chat/channels for ids. Leave blank for all.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Chat[]>({ cookie, method: 'GET', path: '/api/v1/chat', req }),
+        }) => f<BitMEXMessage.Chat[]>({ cookie, method: 'GET', path: '/api/v1/chat', req }),
 
         new: (cookie: string, req: {
             message: string /* ''  */
             channelID?: number /* 'double'  Channel to post to. Default 1 (English).*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Chat>({ cookie, method: 'POST', path: '/api/v1/chat', req }),
+        }) => f<BitMEXMessage.Chat>({ cookie, method: 'POST', path: '/api/v1/chat', req }),
 
-        getChannels: (cookie: string, req: {}) => BitMEXRESTAPI__http<BitMEXMessage.ChatChannel[]>({ cookie, method: 'GET', path: '/api/v1/chat/channels', req }),
+        getChannels: (cookie: string, req: {}) => f<BitMEXMessage.ChatChannel[]>({ cookie, method: 'GET', path: '/api/v1/chat/channels', req }),
 
-        getConnected: (cookie: string, req: {}) => BitMEXRESTAPI__http<BitMEXMessage.ConnectedUsers>({ cookie, method: 'GET', path: '/api/v1/chat/connected', req })
+        getConnected: (cookie: string, req: {}) => f<BitMEXMessage.ConnectedUsers>({ cookie, method: 'GET', path: '/api/v1/chat/connected', req })
     },
 
     Execution: {
@@ -102,7 +102,7 @@ Note that this method will always return item keys, even when not specified, so 
             reverse?: boolean /* ''  If true, will sort results newest first.*/
             startTime?: string /* 'date-time'  Starting date filter for results.*/
             endTime?: string /* 'date-time'  Ending date filter for results.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Execution[]>({ cookie, method: 'GET', path: '/api/v1/execution', req }),
+        }) => f<BitMEXMessage.Execution[]>({ cookie, method: 'GET', path: '/api/v1/execution', req }),
 
         getTradeHistory: (cookie: string, req: {
             symbol?: string /* ''  Instrument symbol. Send a bare series (e.g. XBU) to get data for the nearest expiring contract in that series.
@@ -117,7 +117,7 @@ Note that this method will always return item keys, even when not specified, so 
             reverse?: boolean /* ''  If true, will sort results newest first.*/
             startTime?: string /* 'date-time'  Starting date filter for results.*/
             endTime?: string /* 'date-time'  Ending date filter for results.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Execution[]>({ cookie, method: 'GET', path: '/api/v1/execution/tradeHistory', req })
+        }) => f<BitMEXMessage.Execution[]>({ cookie, method: 'GET', path: '/api/v1/execution/tradeHistory', req })
     },
 
     Funding: {
@@ -135,7 +135,7 @@ Note that this method will always return item keys, even when not specified, so 
             reverse?: boolean /* ''  If true, will sort results newest first.*/
             startTime?: string /* 'date-time'  Starting date filter for results.*/
             endTime?: string /* 'date-time'  Ending date filter for results.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Funding[]>({ cookie, method: 'GET', path: '/api/v1/funding', req })
+        }) => f<BitMEXMessage.Funding[]>({ cookie, method: 'GET', path: '/api/v1/funding', req })
     },
 
     Instrument: {
@@ -153,15 +153,15 @@ Note that this method will always return item keys, even when not specified, so 
             reverse?: boolean /* ''  If true, will sort results newest first.*/
             startTime?: string /* 'date-time'  Starting date filter for results.*/
             endTime?: string /* 'date-time'  Ending date filter for results.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Instrument[]>({ cookie, method: 'GET', path: '/api/v1/instrument', req }),
+        }) => f<BitMEXMessage.Instrument[]>({ cookie, method: 'GET', path: '/api/v1/instrument', req }),
 
-        getActive: (cookie: string, req: {}) => BitMEXRESTAPI__http<BitMEXMessage.Instrument[]>({ cookie, method: 'GET', path: '/api/v1/instrument/active', req }),
+        getActive: (cookie: string, req: {}) => f<BitMEXMessage.Instrument[]>({ cookie, method: 'GET', path: '/api/v1/instrument/active', req }),
 
-        getIndices: (cookie: string, req: {}) => BitMEXRESTAPI__http<BitMEXMessage.Instrument[]>({ cookie, method: 'GET', path: '/api/v1/instrument/indices', req }),
+        getIndices: (cookie: string, req: {}) => f<BitMEXMessage.Instrument[]>({ cookie, method: 'GET', path: '/api/v1/instrument/indices', req }),
 
-        getActiveAndIndices: (cookie: string, req: {}) => BitMEXRESTAPI__http<BitMEXMessage.Instrument[]>({ cookie, method: 'GET', path: '/api/v1/instrument/activeAndIndices', req }),
+        getActiveAndIndices: (cookie: string, req: {}) => f<BitMEXMessage.Instrument[]>({ cookie, method: 'GET', path: '/api/v1/instrument/activeAndIndices', req }),
 
-        getActiveIntervals: (cookie: string, req: {}) => BitMEXRESTAPI__http<BitMEXMessage.InstrumentInterval>({ cookie, method: 'GET', path: '/api/v1/instrument/activeIntervals', req }),
+        getActiveIntervals: (cookie: string, req: {}) => f<BitMEXMessage.InstrumentInterval>({ cookie, method: 'GET', path: '/api/v1/instrument/activeIntervals', req }),
 
         getCompositeIndex: (cookie: string, req: {
             symbol?: string /* ''  The composite index symbol.*/
@@ -174,7 +174,7 @@ Note that this method will always return item keys, even when not specified, so 
             reverse?: boolean /* ''  If true, will sort results newest first.*/
             startTime?: string /* 'date-time'  Starting date filter for results.*/
             endTime?: string /* 'date-time'  Ending date filter for results.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.IndexComposite[]>({ cookie, method: 'GET', path: '/api/v1/instrument/compositeIndex', req })
+        }) => f<BitMEXMessage.IndexComposite[]>({ cookie, method: 'GET', path: '/api/v1/instrument/compositeIndex', req })
     },
 
     Insurance: {
@@ -192,16 +192,16 @@ Note that this method will always return item keys, even when not specified, so 
             reverse?: boolean /* ''  If true, will sort results newest first.*/
             startTime?: string /* 'date-time'  Starting date filter for results.*/
             endTime?: string /* 'date-time'  Ending date filter for results.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Insurance[]>({ cookie, method: 'GET', path: '/api/v1/insurance', req })
+        }) => f<BitMEXMessage.Insurance[]>({ cookie, method: 'GET', path: '/api/v1/insurance', req })
     },
 
     Leaderboard: {
 
         get: (cookie: string, req: {
             method?: string /* ''  Ranking type. Options: "notional", "ROE"*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Leaderboard[]>({ cookie, method: 'GET', path: '/api/v1/leaderboard', req }),
+        }) => f<BitMEXMessage.Leaderboard[]>({ cookie, method: 'GET', path: '/api/v1/leaderboard', req }),
 
-        getName: (cookie: string, req: {}) => BitMEXRESTAPI__http<{ name: string }>({ cookie, method: 'GET', path: '/api/v1/leaderboard/name', req })
+        getName: (cookie: string, req: {}) => f<{ name: string }>({ cookie, method: 'GET', path: '/api/v1/leaderboard/name', req })
     },
 
     Liquidation: {
@@ -219,12 +219,12 @@ Note that this method will always return item keys, even when not specified, so 
             reverse?: boolean /* ''  If true, will sort results newest first.*/
             startTime?: string /* 'date-time'  Starting date filter for results.*/
             endTime?: string /* 'date-time'  Ending date filter for results.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Liquidation[]>({ cookie, method: 'GET', path: '/api/v1/liquidation', req })
+        }) => f<BitMEXMessage.Liquidation[]>({ cookie, method: 'GET', path: '/api/v1/liquidation', req })
     },
 
     GlobalNotification: {
 
-        get: (cookie: string, req: {}) => BitMEXRESTAPI__http<BitMEXMessage.GlobalNotification[]>({ cookie, method: 'GET', path: '/api/v1/globalNotification', req })
+        get: (cookie: string, req: {}) => f<BitMEXMessage.GlobalNotification[]>({ cookie, method: 'GET', path: '/api/v1/globalNotification', req })
     },
 
     Order: {
@@ -242,7 +242,7 @@ Note that this method will always return item keys, even when not specified, so 
             reverse?: boolean /* ''  If true, will sort results newest first.*/
             startTime?: string /* 'date-time'  Starting date filter for results.*/
             endTime?: string /* 'date-time'  Ending date filter for results.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Order[]>({ cookie, method: 'GET', path: '/api/v1/order', req }),
+        }) => f<BitMEXMessage.Order[]>({ cookie, method: 'GET', path: '/api/v1/order', req }),
 
         new: (cookie: string, req: {
             symbol: string /* ''  Instrument symbol. e.g. 'XBTUSD'.*/
@@ -261,7 +261,7 @@ Note that this method will always return item keys, even when not specified, so 
             execInst?: string /* ''  Optional execution instructions. Valid options: ParticipateDoNotInitiate, AllOrNone, MarkPrice, IndexPrice, LastPrice, Close, ReduceOnly, Fixed. 'AllOrNone' instruction requires `displayQty` to be 0. 'MarkPrice', 'IndexPrice' or 'LastPrice' instruction valid for 'Stop', 'StopLimit', 'MarketIfTouched', and 'LimitIfTouched' orders.*/
             contingencyType?: string /* ''  Deprecated: linked orders are not supported after 2018/11/10.*/
             text?: string /* ''  Optional order annotation. e.g. 'Take profit'.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Order>({ cookie, method: 'POST', path: '/api/v1/order', req }),
+        }) => f<BitMEXMessage.Order>({ cookie, method: 'POST', path: '/api/v1/order', req }),
 
         amend: (cookie: string, req: {
             orderID?: string /* ''  Order ID*/
@@ -275,36 +275,36 @@ Note that this method will always return item keys, even when not specified, so 
             stopPx?: number /* 'double'  Optional trigger price for 'Stop', 'StopLimit', 'MarketIfTouched', and 'LimitIfTouched' orders. Use a price below the current price for stop-sell orders and buy-if-touched orders.*/
             pegOffsetValue?: number /* 'double'  Optional trailing offset from the current price for 'Stop', 'StopLimit', 'MarketIfTouched', and 'LimitIfTouched' orders; use a negative offset for stop-sell orders and buy-if-touched orders. Optional offset from the peg price for 'Pegged' orders.*/
             text?: string /* ''  Optional amend annotation. e.g. 'Adjust skew'.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Order>({ cookie, method: 'PUT', path: '/api/v1/order', req }),
+        }) => f<BitMEXMessage.Order>({ cookie, method: 'PUT', path: '/api/v1/order', req }),
 
         cancel: (cookie: string, req: {
             orderID?: string /* 'JSON'  Order ID(s).*/
             clOrdID?: string /* 'JSON'  Client Order ID(s). See POST /order.*/
             text?: string /* ''  Optional cancellation annotation. e.g. 'Spread Exceeded'.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Order[]>({ cookie, method: 'DELETE', path: '/api/v1/order', req }),
+        }) => f<BitMEXMessage.Order[]>({ cookie, method: 'DELETE', path: '/api/v1/order', req }),
 
         newBulk: (cookie: string, req: {
             orders?: string /* 'JSON'  An array of orders.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Order[]>({ cookie, method: 'POST', path: '/api/v1/order/bulk', req }),
+        }) => f<BitMEXMessage.Order[]>({ cookie, method: 'POST', path: '/api/v1/order/bulk', req }),
 
         amendBulk: (cookie: string, req: {
             orders?: string /* 'JSON'  An array of orders.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Order[]>({ cookie, method: 'PUT', path: '/api/v1/order/bulk', req }),
+        }) => f<BitMEXMessage.Order[]>({ cookie, method: 'PUT', path: '/api/v1/order/bulk', req }),
 
         closePosition: (cookie: string, req: {
             symbol: string /* ''  Symbol of position to close.*/
             price?: number /* 'double'  Optional limit price.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Order /* description:Resulting close order.*/>({ cookie, method: 'POST', path: '/api/v1/order/closePosition', req }),
+        }) => f<BitMEXMessage.Order /* description:Resulting close order.*/>({ cookie, method: 'POST', path: '/api/v1/order/closePosition', req }),
 
         cancelAll: (cookie: string, req: {
             symbol?: string /* ''  Optional symbol. If provided, only cancels orders for that symbol.*/
             filter?: string /* 'JSON'  Optional filter for cancellation. Use to only cancel some orders, e.g. `{"side": "Buy"}`.*/
             text?: string /* ''  Optional cancellation annotation. e.g. 'Spread Exceeded'*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Order[]>({ cookie, method: 'DELETE', path: '/api/v1/order/all', req }),
+        }) => f<BitMEXMessage.Order[]>({ cookie, method: 'DELETE', path: '/api/v1/order/all', req }),
 
         cancelAllAfter: (cookie: string, req: {
             timeout: number /* 'double'  Timeout in ms. Set to 0 to cancel this timer. */
-        }) => BitMEXRESTAPI__http<{}>({ cookie, method: 'POST', path: '/api/v1/order/cancelAllAfter', req })
+        }) => f<{}>({ cookie, method: 'POST', path: '/api/v1/order/cancelAllAfter', req })
     },
 
     OrderBook: {
@@ -312,7 +312,7 @@ Note that this method will always return item keys, even when not specified, so 
         getL2: (cookie: string, req: {
             symbol: string /* ''  Instrument symbol. Send a series (e.g. XBT) to get data for the nearest contract in that series.*/
             depth?: number /* 'int32'  Orderbook depth per side. Send 0 for full depth.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.OrderBookL2[]>({ cookie, method: 'GET', path: '/api/v1/orderBook/L2', req })
+        }) => f<BitMEXMessage.OrderBookL2[]>({ cookie, method: 'GET', path: '/api/v1/orderBook/L2', req })
     },
 
     Position: {
@@ -321,27 +321,27 @@ Note that this method will always return item keys, even when not specified, so 
             filter?: string /* 'JSON'  Table filter. For example, send {"symbol": "XBTUSD"}.*/
             columns?: string /* 'JSON'  Which columns to fetch. For example, send ["columnName"].*/
             count?: number /* 'int32'  Number of rows to fetch.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Position[]>({ cookie, method: 'GET', path: '/api/v1/position', req }),
+        }) => f<BitMEXMessage.Position[]>({ cookie, method: 'GET', path: '/api/v1/position', req }),
 
         isolateMargin: (cookie: string, req: {
             symbol: string /* ''  Position symbol to isolate.*/
             enabled?: boolean /* ''  True for isolated margin, false for cross margin.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Position /* description:Affected position.*/>({ cookie, method: 'POST', path: '/api/v1/position/isolate', req }),
+        }) => f<BitMEXMessage.Position /* description:Affected position.*/>({ cookie, method: 'POST', path: '/api/v1/position/isolate', req }),
 
         updateRiskLimit: (cookie: string, req: {
             symbol: string /* ''  Symbol of position to update risk limit on.*/
             riskLimit: number /* 'int64'  New Risk Limit, in Satoshis.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Position /* description:Affected position.*/>({ cookie, method: 'POST', path: '/api/v1/position/riskLimit', req }),
+        }) => f<BitMEXMessage.Position /* description:Affected position.*/>({ cookie, method: 'POST', path: '/api/v1/position/riskLimit', req }),
 
         transferIsolatedMargin: (cookie: string, req: {
             symbol: string /* ''  Symbol of position to isolate.*/
             amount: number /* 'int64'  Amount to transfer, in Satoshis. May be negative.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Position /* description:Affected position.*/>({ cookie, method: 'POST', path: '/api/v1/position/transferMargin', req }),
+        }) => f<BitMEXMessage.Position /* description:Affected position.*/>({ cookie, method: 'POST', path: '/api/v1/position/transferMargin', req }),
 
         updateLeverage: (cookie: string, req: {
             symbol: string /* ''  Symbol of position to adjust.*/
             leverage: number /* 'double'  Leverage value. Send a number between 0.01 and 100 to enable isolated margin with a fixed leverage. Send 0 to enable cross margin.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Position /* description:Affected position.*/>({ cookie, method: 'POST', path: '/api/v1/position/leverage', req })
+        }) => f<BitMEXMessage.Position /* description:Affected position.*/>({ cookie, method: 'POST', path: '/api/v1/position/leverage', req })
     },
 
     Quote: {
@@ -359,7 +359,7 @@ Note that this method will always return item keys, even when not specified, so 
             reverse?: boolean /* ''  If true, will sort results newest first.*/
             startTime?: string /* 'date-time'  Starting date filter for results.*/
             endTime?: string /* 'date-time'  Ending date filter for results.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Quote[]>({ cookie, method: 'GET', path: '/api/v1/quote', req }),
+        }) => f<BitMEXMessage.Quote[]>({ cookie, method: 'GET', path: '/api/v1/quote', req }),
 
         getBucketed: (cookie: string, req: {
             binSize?: string /* ''  Time interval to bucket by. Available options: [1m,5m,1h,1d].*/
@@ -376,16 +376,16 @@ Note that this method will always return item keys, even when not specified, so 
             reverse?: boolean /* ''  If true, will sort results newest first.*/
             startTime?: string /* 'date-time'  Starting date filter for results.*/
             endTime?: string /* 'date-time'  Ending date filter for results.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Quote[]>({ cookie, method: 'GET', path: '/api/v1/quote/bucketed', req })
+        }) => f<BitMEXMessage.Quote[]>({ cookie, method: 'GET', path: '/api/v1/quote/bucketed', req })
     },
 
     Schema: {
 
         get: (cookie: string, req: {
             model?: string /* ''  Optional model filter. If omitted, will return all models.*/
-        }) => BitMEXRESTAPI__http<{}>({ cookie, method: 'GET', path: '/api/v1/schema', req }),
+        }) => f<{}>({ cookie, method: 'GET', path: '/api/v1/schema', req }),
 
-        websocketHelp: (cookie: string, req: {}) => BitMEXRESTAPI__http<{}>({ cookie, method: 'GET', path: '/api/v1/schema/websocketHelp', req })
+        websocketHelp: (cookie: string, req: {}) => f<{}>({ cookie, method: 'GET', path: '/api/v1/schema/websocketHelp', req })
     },
 
     Settlement: {
@@ -403,16 +403,16 @@ Note that this method will always return item keys, even when not specified, so 
             reverse?: boolean /* ''  If true, will sort results newest first.*/
             startTime?: string /* 'date-time'  Starting date filter for results.*/
             endTime?: string /* 'date-time'  Ending date filter for results.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Settlement[]>({ cookie, method: 'GET', path: '/api/v1/settlement', req })
+        }) => f<BitMEXMessage.Settlement[]>({ cookie, method: 'GET', path: '/api/v1/settlement', req })
     },
 
     Stats: {
 
-        get: (cookie: string, req: {}) => BitMEXRESTAPI__http<BitMEXMessage.Stats[]>({ cookie, method: 'GET', path: '/api/v1/stats', req }),
+        get: (cookie: string, req: {}) => f<BitMEXMessage.Stats[]>({ cookie, method: 'GET', path: '/api/v1/stats', req }),
 
-        history: (cookie: string, req: {}) => BitMEXRESTAPI__http<BitMEXMessage.StatsHistory[]>({ cookie, method: 'GET', path: '/api/v1/stats/history', req }),
+        history: (cookie: string, req: {}) => f<BitMEXMessage.StatsHistory[]>({ cookie, method: 'GET', path: '/api/v1/stats/history', req }),
 
-        historyUSD: (cookie: string, req: {}) => BitMEXRESTAPI__http<BitMEXMessage.StatsUSD[]>({ cookie, method: 'GET', path: '/api/v1/stats/historyUSD', req })
+        historyUSD: (cookie: string, req: {}) => f<BitMEXMessage.StatsUSD[]>({ cookie, method: 'GET', path: '/api/v1/stats/historyUSD', req })
     },
 
     Trade: {
@@ -430,7 +430,7 @@ Note that this method will always return item keys, even when not specified, so 
             reverse?: boolean /* ''  If true, will sort results newest first.*/
             startTime?: string /* 'date-time'  Starting date filter for results.*/
             endTime?: string /* 'date-time'  Ending date filter for results.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Trade[]>({ cookie, method: 'GET', path: '/api/v1/trade', req }),
+        }) => f<BitMEXMessage.Trade[]>({ cookie, method: 'GET', path: '/api/v1/trade', req }),
 
         getBucketed: (cookie: string, req: {
             binSize?: string /* ''  Time interval to bucket by. Available options: [1m,5m,1h,1d].*/
@@ -447,37 +447,37 @@ Note that this method will always return item keys, even when not specified, so 
             reverse?: boolean /* ''  If true, will sort results newest first.*/
             startTime?: string /* 'date-time'  Starting date filter for results.*/
             endTime?: string /* 'date-time'  Ending date filter for results.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.TradeBin[]>({ cookie, method: 'GET', path: '/api/v1/trade/bucketed', req })
+        }) => f<BitMEXMessage.TradeBin[]>({ cookie, method: 'GET', path: '/api/v1/trade/bucketed', req })
     },
 
     User: {
 
         getDepositAddress: (cookie: string, req: {
             currency?: string /* ''  */
-        }) => BitMEXRESTAPI__http<string>({ cookie, method: 'GET', path: '/api/v1/user/depositAddress', req }),
+        }) => f<string>({ cookie, method: 'GET', path: '/api/v1/user/depositAddress', req }),
 
         getWallet: (cookie: string, req: {
             currency?: string /* ''  */
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Wallet>({ cookie, method: 'GET', path: '/api/v1/user/wallet', req }),
+        }) => f<BitMEXMessage.Wallet>({ cookie, method: 'GET', path: '/api/v1/user/wallet', req }),
 
         getWalletHistory: (cookie: string, req: {
             currency?: string /* ''  */
             count?: number /* 'double'  Number of results to fetch.*/
             start?: number /* 'double'  Starting point for results.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Transaction[]>({ cookie, method: 'GET', path: '/api/v1/user/walletHistory', req }),
+        }) => f<BitMEXMessage.Transaction[]>({ cookie, method: 'GET', path: '/api/v1/user/walletHistory', req }),
 
         getWalletSummary: (cookie: string, req: {
             currency?: string /* ''  */
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Transaction[]>({ cookie, method: 'GET', path: '/api/v1/user/walletSummary', req }),
+        }) => f<BitMEXMessage.Transaction[]>({ cookie, method: 'GET', path: '/api/v1/user/walletSummary', req }),
 
         getExecutionHistory: (cookie: string, req: {
             symbol: string /* ''  */
             timestamp: string /* 'date-time'  */
-        }) => BitMEXRESTAPI__http<{}>({ cookie, method: 'GET', path: '/api/v1/user/executionHistory', req }),
+        }) => f<{}>({ cookie, method: 'GET', path: '/api/v1/user/executionHistory', req }),
 
         minWithdrawalFee: (cookie: string, req: {
             currency?: string /* ''  */
-        }) => BitMEXRESTAPI__http<{}>({ cookie, method: 'GET', path: '/api/v1/user/minWithdrawalFee', req }),
+        }) => f<{}>({ cookie, method: 'GET', path: '/api/v1/user/minWithdrawalFee', req }),
 
         requestWithdrawal: (cookie: string, req: {
             otpToken?: string /* ''  2FA token. Required if 2FA is enabled on your account.*/
@@ -486,45 +486,45 @@ Note that this method will always return item keys, even when not specified, so 
             address: string /* ''  Destination Address.*/
             fee?: number /* 'double'  Network fee for Bitcoin withdrawals. If not specified, a default value will be calculated based on Bitcoin network conditions. You will have a chance to confirm this via email.*/
             text?: string /* ''  Optional annotation, e.g. 'Transfer to home wallet'.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Transaction>({ cookie, method: 'POST', path: '/api/v1/user/requestWithdrawal', req }),
+        }) => f<BitMEXMessage.Transaction>({ cookie, method: 'POST', path: '/api/v1/user/requestWithdrawal', req }),
 
         cancelWithdrawal: (cookie: string, req: {
             token: string /* ''  */
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Transaction>({ cookie, method: 'POST', path: '/api/v1/user/cancelWithdrawal', req }),
+        }) => f<BitMEXMessage.Transaction>({ cookie, method: 'POST', path: '/api/v1/user/cancelWithdrawal', req }),
 
         confirmWithdrawal: (cookie: string, req: {
             token: string /* ''  */
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Transaction>({ cookie, method: 'POST', path: '/api/v1/user/confirmWithdrawal', req }),
+        }) => f<BitMEXMessage.Transaction>({ cookie, method: 'POST', path: '/api/v1/user/confirmWithdrawal', req }),
 
         confirm: (cookie: string, req: {
             token: string /* ''  */
-        }) => BitMEXRESTAPI__http<BitMEXMessage.AccessToken>({ cookie, method: 'POST', path: '/api/v1/user/confirmEmail', req }),
+        }) => f<BitMEXMessage.AccessToken>({ cookie, method: 'POST', path: '/api/v1/user/confirmEmail', req }),
 
-        getAffiliateStatus: (cookie: string, req: {}) => BitMEXRESTAPI__http<BitMEXMessage.Affiliate>({ cookie, method: 'GET', path: '/api/v1/user/affiliateStatus', req }),
+        getAffiliateStatus: (cookie: string, req: {}) => f<BitMEXMessage.Affiliate>({ cookie, method: 'GET', path: '/api/v1/user/affiliateStatus', req }),
 
         checkReferralCode: (cookie: string, req: {
             referralCode?: string /* ''  */
-        }) => BitMEXRESTAPI__http<number /* format:double*/>({ cookie, method: 'GET', path: '/api/v1/user/checkReferralCode', req }),
+        }) => f<number /* format:double*/>({ cookie, method: 'GET', path: '/api/v1/user/checkReferralCode', req }),
 
-        logout: (cookie: string, req: {}) => BitMEXRESTAPI__http<null>({ cookie, method: 'POST', path: '/api/v1/user/logout', req }),
+        logout: (cookie: string, req: {}) => f<null>({ cookie, method: 'POST', path: '/api/v1/user/logout', req }),
 
         savePreferences: (cookie: string, req: {
             prefs: string /* 'JSON'  */
             overwrite?: boolean /* ''  If true, will overwrite all existing preferences.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.User>({ cookie, method: 'POST', path: '/api/v1/user/preferences', req }),
+        }) => f<BitMEXMessage.User>({ cookie, method: 'POST', path: '/api/v1/user/preferences', req }),
 
-        get: (cookie: string, req: {}) => BitMEXRESTAPI__http<BitMEXMessage.User>({ cookie, method: 'GET', path: '/api/v1/user', req }),
+        get: (cookie: string, req: {}) => f<BitMEXMessage.User>({ cookie, method: 'GET', path: '/api/v1/user', req }),
 
-        getCommission: (cookie: string, req: {}) => BitMEXRESTAPI__http<BitMEXMessage.UserCommissionsBySymbol>({ cookie, method: 'GET', path: '/api/v1/user/commission', req }),
+        getCommission: (cookie: string, req: {}) => f<BitMEXMessage.UserCommissionsBySymbol>({ cookie, method: 'GET', path: '/api/v1/user/commission', req }),
 
         getMargin: (cookie: string, req: {
             currency?: string /* ''  */
-        }) => BitMEXRESTAPI__http<BitMEXMessage.Margin>({ cookie, method: 'GET', path: '/api/v1/user/margin', req }),
+        }) => f<BitMEXMessage.Margin>({ cookie, method: 'GET', path: '/api/v1/user/margin', req }),
 
         communicationToken: (cookie: string, req: {
             token: string /* ''  */
             platformAgent: string /* ''  */
-        }) => BitMEXRESTAPI__http<BitMEXMessage.CommunicationToken[]>({ cookie, method: 'POST', path: '/api/v1/user/communicationToken', req })
+        }) => f<BitMEXMessage.CommunicationToken[]>({ cookie, method: 'POST', path: '/api/v1/user/communicationToken', req })
     },
 
     UserEvent: {
@@ -532,6 +532,6 @@ Note that this method will always return item keys, even when not specified, so 
         get: (cookie: string, req: {
             count?: number /* 'double'  Number of results to fetch.*/
             startId?: number /* 'double'  Cursor for pagination.*/
-        }) => BitMEXRESTAPI__http<BitMEXMessage.UserEvent[]>({ cookie, method: 'GET', path: '/api/v1/userEvent', req })
+        }) => f<BitMEXMessage.UserEvent[]>({ cookie, method: 'GET', path: '/api/v1/userEvent', req })
     }
 }
