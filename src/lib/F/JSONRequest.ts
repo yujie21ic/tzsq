@@ -13,7 +13,7 @@ export const JSONRequest = <T>({
 }: {
     url: string
     method?: string
-    body?: any
+    body?: any //string的话 不编码
     ss?: boolean
     headers?: { [key: string]: string }
 }) => new Promise<{
@@ -43,9 +43,10 @@ export const JSONRequest = <T>({
     }
 
     if (body !== undefined) {
-        requestOptions.body = JSON.stringify(body)
+        requestOptions.body = typeof body === 'string' ? body : JSON.stringify(body)
     }
 
+    console.log('requestOptions',requestOptions)
     request(requestOptions, (error, response) => {
         if (response === undefined) {
             resolve({
