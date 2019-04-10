@@ -1,5 +1,5 @@
 import { TradeAndOrderBook } from './TradeAndOrderBook'
-import { BitMEXWSAPI } from '../BitMEX/BitMEXWSAPI'
+import { BitMEXWS } from '../BitMEX/BitMEXWS'
 import { BaseType } from '../../BaseType'
 
 const 盘口map = (v: any) => ({
@@ -9,7 +9,7 @@ const 盘口map = (v: any) => ({
 
 export class BitmexTradeAndOrderBook extends TradeAndOrderBook<BaseType.BitmexSymbol> {
 
-    private ws = new BitMEXWSAPI('', [
+    private ws = new BitMEXWS('', [
         { theme: 'trade', filter: 'XBTUSD' },
         { theme: 'trade', filter: 'ETHUSD' },
         { theme: 'orderBook10', filter: 'XBTUSD' },

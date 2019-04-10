@@ -5,7 +5,7 @@ import { JSONRequestError } from '../../F/JSONRequest'
 import { logToFile } from '../../F/logToFile'
 import { keys } from 'ramda'
 import { JSONSync } from '../../F/JSONSync'
-import { BitMEXWSAPI } from '../BitMEX/BitMEXWSAPI'
+import { BitMEXWS } from '../BitMEX/BitMEXWS'
 import { RealData__Server } from '../../../RealDataServer/RealData__Server'
 import { toCacheFunc } from '../../F/toCacheFunc'
 import { PositionAndOrder, PositionAndOrderTask } from './PositionAndOrder'
@@ -56,7 +56,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     private hopexCookie: string
 
     log: (text: string) => void
-    private ws: BitMEXWSAPI
+    private ws: BitMEXWS
 
 
     get本地维护仓位数量(symbol: BaseType.BitmexSymbol) {
@@ -207,7 +207,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
             this.hopex_轮询()
         }
 
-        this.ws = new BitMEXWSAPI(p.cookie, [
+        this.ws = new BitMEXWS(p.cookie, [
             { theme: 'margin' },
             { theme: 'position', filter: 'XBTUSD' },
             { theme: 'order', filter: 'XBTUSD' },

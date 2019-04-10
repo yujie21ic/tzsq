@@ -2,7 +2,7 @@ import { Sampling } from '../F/Sampling'
 import { BaseType } from '../BaseType'
 import { DB } from './DB'
 import { timeID } from '../F/timeID'
-import { BitMEXWSAPI } from '../____API____/BitMEX/BitMEXWSAPI'
+import { BitMEXWS } from '../____API____/BitMEX/BitMEXWS'
 
 const 盘口map = (v: any) => ({
     price: Number(v[0]),
@@ -10,11 +10,11 @@ const 盘口map = (v: any) => ({
 })
 
 let samplingDic: { [symbol: string]: Sampling<BaseType.OrderBook> }
-let ws: BitMEXWSAPI
+let ws: BitMEXWS
 
 export const syncBitmex500msOrderBook = async () => {
 
-    ws = new BitMEXWSAPI('', [
+    ws = new BitMEXWS('', [
         { theme: 'orderBook10', filter: 'XBTUSD' },
         { theme: 'orderBook10', filter: 'ETHUSD' },
     ])

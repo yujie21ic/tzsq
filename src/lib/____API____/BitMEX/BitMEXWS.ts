@@ -91,7 +91,7 @@ type FrameData = (
 }
 
 
-export class BitMEXWSAPI {
+export class BitMEXWS {
 
     data = {
         announcement: new Map<string, BitMEXMessage.Announcement>(),
