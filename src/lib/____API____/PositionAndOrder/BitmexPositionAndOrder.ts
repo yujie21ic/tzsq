@@ -251,10 +251,10 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
             if (data !== undefined) {
                 const arr: BaseType.Order[] = data.data.map(v => ({
-                    type: '限价',
+                    type: '限价' as '限价',
                     timestamp: v.created_at,
                     id: v.id,
-                    side: v.type === 'buy_limit' ? 'Buy' : 'Sell',
+                    side: (v.type === 'buy_limit' ? 'Buy' : 'Sell') as BaseType.Side,
                     cumQty: Number(v.filled_amount.split(',').join('')),
                     orderQty: Number(v.amount.split(',').join('')),
                     price: Number(v.price),
