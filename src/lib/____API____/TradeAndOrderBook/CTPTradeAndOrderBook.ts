@@ -5,7 +5,7 @@ import { BaseType } from '../../BaseType'
 import { TradeAndOrderBook } from './TradeAndOrderBook'
 import { get成交性质 } from '../../F/get成交性质'
 
-export class CTP extends TradeAndOrderBook<string>{
+export class CTPTradeAndOrderBook extends TradeAndOrderBook<string>{
 
     private udpServer = dgram.createSocket('udp4')
 

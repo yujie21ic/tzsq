@@ -5,8 +5,8 @@ import { BinanceTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/B
 import { BitmexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/BitmexTradeAndOrderBook'
 import { HopexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
-import { CTP } from '../lib/____API____/TradeAndOrderBook/CTP'
-import { FCOIN } from '../lib/____API____/TradeAndOrderBook/FCOIN'
+import { CTPTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/CTPTradeAndOrderBook'
+import { FCoinTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/FCoinTradeAndOrderBook'
 
 export class RealData__Server extends RealDataBase {
 
@@ -16,7 +16,7 @@ export class RealData__Server extends RealDataBase {
     private bitmex = new BitmexTradeAndOrderBook()
     private binance = new BinanceTradeAndOrderBook()
     private hopex = new HopexTradeAndOrderBook()
-    private fcoin = new FCOIN()
+    private fcoin = new FCoinTradeAndOrderBook()
 
     _binance = false
     _bitmex = false
@@ -155,7 +155,7 @@ export class RealData__Server extends RealDataBase {
         this.on盘口Dic[p.symbol].in2(p.orderBook)
     }
 
-    private ctp = new CTP()
+    private ctp = new CTPTradeAndOrderBook()
 
     private wsServer: boolean
 

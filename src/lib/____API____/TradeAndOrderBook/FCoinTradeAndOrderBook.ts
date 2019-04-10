@@ -5,7 +5,7 @@ import { splitEvery } from 'ramda'
 import { BaseType } from '../../BaseType'
 
 
-export class FCOIN extends TradeAndOrderBook<BaseType.FcoinSymbol>{
+export class FCoinTradeAndOrderBook extends TradeAndOrderBook<BaseType.FcoinSymbol>{
 
     private ws = new WebSocketClient({
         ss: config.ss,
