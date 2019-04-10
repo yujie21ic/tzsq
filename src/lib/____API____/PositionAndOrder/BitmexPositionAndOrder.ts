@@ -10,7 +10,7 @@ import { RealData__Server } from '../../../RealDataServer/RealData__Server'
 import { toCacheFunc } from '../../F/toCacheFunc'
 import { PositionAndOrder, PositionAndOrderTask } from './PositionAndOrder'
 import { HopexHTTP } from '../HopexHTTP'
-import { FCoinHTTP } from '../FCoinHTTP';
+import { FCoinHTTP } from '../FCoinHTTP'
 
 const symbol = () => ({
     任务开关: {
