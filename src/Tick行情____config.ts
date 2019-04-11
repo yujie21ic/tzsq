@@ -233,7 +233,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                             text:
                                 `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
                                 `hopex:${lastNumber(d2.ETHUSD.hopex.价格).toFixed(2)}  ` +
-                                `fcoin:${lastNumber(d2.XBTUSD.fcoin.收盘价).toFixed(2)}  ` +
+                                `fcoin:${lastNumber(d2.XBTUSD.fcoin.价格).toFixed(2)}  ` +
                                 `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
                                 `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
                                 `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
@@ -267,7 +267,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 {
                     numberColor: BTC颜色,
                     layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.fcoin.收盘价, color: 波动率颜色 }),
+                        layer(LineLayer, { data: d2.XBTUSD.fcoin.价格, color: 波动率颜色 }),
                         //layer(LineLayer, { data: d2.XBTUSD.hopex.收盘价, color: ETH颜色 }),
                         
                     ]
