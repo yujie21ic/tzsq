@@ -13,11 +13,14 @@ import { realTickClient, 提醒 } from './实盘__提醒'
 import { lastNumber } from './lib/F/lastNumber'
 import { FCoinHTTP } from './lib/____API____/FCoinHTTP'
 
+const 市价追高 = 10
 
 const account = config.account![windowExt.accountName]
 const { cookie, hopexCookie, fcoinCookie } = account
 const orderClient = new OrderClient(account.cookie)
 const rpc = OrderClient.rpc.func
+
+
 
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
@@ -177,7 +180,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                                 })}
                                 right={() => FCoinHTTP.order(fcoinCookie, {
                                     symbol: 'btcusdt',
-                                    price: lastNumber(realTickClient.dataExt.XBTUSD.fcoin.卖.盘口1价),
+                                    price: lastNumber(realTickClient.dataExt.XBTUSD.fcoin.卖.盘口1价) + 市价追高,
                                     side: 'Buy',
                                     size: 下单数量,
                                 })}
@@ -199,7 +202,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                                 })}
                                 right={() => FCoinHTTP.order(fcoinCookie, {
                                     symbol: 'btcusdt',
-                                    price: lastNumber(realTickClient.dataExt.XBTUSD.fcoin.买.盘口1价),
+                                    price: lastNumber(realTickClient.dataExt.XBTUSD.fcoin.买.盘口1价) - 市价追高,
                                     side: 'Sell',
                                     size: 下单数量,
                                 })}
