@@ -341,6 +341,7 @@ export class RealData__Server extends RealDataBase {
 
 
         this.fcoin.tradeObservable.subscribe(({ symbol, timestamp, price, side, size }) => {
+            if (symbol === 'btcusdt') console.log('on着笔', price)
             this.on着笔({
                 symbol,
                 xxxxxxxx: this.jsonSync.data.fcoin[symbol],
@@ -353,6 +354,7 @@ export class RealData__Server extends RealDataBase {
 
 
         this.fcoin.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
+            if (symbol === 'btcusdt') console.log('on盘口', buy[0].price, sell[0].price)
             this.on盘口({
                 symbol,
                 xxxxxxxx: this.jsonSync.data.fcoin[symbol].orderBook,
