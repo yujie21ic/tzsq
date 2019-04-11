@@ -430,6 +430,9 @@ export class RealDataBase {
         const 价格_波动率60 = 指标.波动率(价格, 60, RealDataBase.单位时间)
         const 价格_波动率300 = 指标.波动率(价格, 300, RealDataBase.单位时间)
 
+        const tick力量指数12 = 指标.map(() => Math.min(_12s_macd.DIF.length,买.净成交量_累加12.length), i =>(买.净成交量_累加12[i]/100000)*_12s_macd.OSC[i])
+        const tick力量指数60 = 指标.map(() => Math.min(_60s_macd.DIF.length,买.净成交量_累加60.length), i =>(买.净成交量_累加60[i]/100000)*_60s_macd.OSC[i])
+
 
         const 折返率 = 指标.map(() => 价格_波动率30.length, i => toRange({ min: 4, max: 15, value: 价格_波动率30[i] / 10 }))
 
@@ -1062,6 +1065,8 @@ export class RealDataBase {
 
 
         return {
+            tick力量指数60,
+            tick力量指数12,
             价格macd,
             着笔,
             着笔涨跌,
