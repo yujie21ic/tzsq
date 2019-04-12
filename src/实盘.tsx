@@ -13,11 +13,14 @@ import { realTickClient, 提醒 } from './实盘__提醒'
 import { lastNumber } from './lib/F/lastNumber'
 import { FCoinHTTP } from './lib/____API____/FCoinHTTP'
 
+const 市价追高 = 10
 
 const account = config.account![windowExt.accountName]
 const { cookie, hopexCookie, fcoinCookie } = account
 const orderClient = new OrderClient(account.cookie)
 const rpc = OrderClient.rpc.func
+
+
 
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
@@ -66,8 +69,26 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
     }
 
     render() {
-        const { 仓位数量, 任务开关 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
+        const { 仓位数量, 开仓均价, 任务开关 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
         const 下单数量 = this.props.symbol === 'FCoin_BTC' ? 0.001 : (this.props.symbol === 'XBTUSD' || this.props.symbol === 'Hopex_BTC' ? account.交易.XBTUSD.数量 : account.交易.ETHUSD.数量) * this.props.倍数
+
+        const fcoin_btc_数量 = 仓位数量
+        const fcoin_usdt_数量 = 开仓均价
+
+        const fcoin_buy = (price: number) => FCoinHTTP.order(fcoinCookie, {
+            symbol: 'btcusdt',
+            side: 'Buy',
+            price,
+            size: Math.floor(fcoin_usdt_数量 / price * 1000) / 1000,
+        })
+
+        const fcoin_sell = (price: number) => FCoinHTTP.order(fcoinCookie, {
+            symbol: 'btcusdt',
+            side: 'Sell',
+            price,
+            size: Math.floor(fcoin_btc_数量 * 1000) / 1000,
+        })
+
 
 
         // 
@@ -168,19 +189,9 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                             style={{ width: '50%' }}>
                             <Button
                                 bgColor={GREEN}
-                                text={下单数量 + ''}
-                                left={() => FCoinHTTP.order(fcoinCookie, {
-                                    symbol: 'btcusdt',
-                                    price: lastNumber(realTickClient.dataExt.XBTUSD.fcoin.买.盘口1价),
-                                    side: 'Buy',
-                                    size: 下单数量,
-                                })}
-                                right={() => FCoinHTTP.order(fcoinCookie, {
-                                    symbol: 'btcusdt',
-                                    price: lastNumber(realTickClient.dataExt.XBTUSD.fcoin.卖.盘口1价),
-                                    side: 'Buy',
-                                    size: 下单数量,
-                                })}
+                                text={'全买'}
+                                left={() => fcoin_buy(lastNumber(realTickClient.dataExt.XBTUSD.fcoin.买.盘口1价))}
+                                right={() => fcoin_buy(lastNumber(realTickClient.dataExt.XBTUSD.fcoin.卖.盘口1价) + 市价追高)}
                             />
                             <Table 委托列表={委托列表} side='Buy' 取消f={id => {
                                 FCoinHTTP.cancel(fcoinCookie, id)
@@ -190,19 +201,9 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                             style={{ width: '50%' }}>
                             <Button
                                 bgColor={RED}
-                                text={-下单数量 + ''}
-                                left={() => FCoinHTTP.order(fcoinCookie, {
-                                    symbol: 'btcusdt',
-                                    price: lastNumber(realTickClient.dataExt.XBTUSD.fcoin.卖.盘口1价),
-                                    side: 'Sell',
-                                    size: 下单数量,
-                                })}
-                                right={() => FCoinHTTP.order(fcoinCookie, {
-                                    symbol: 'btcusdt',
-                                    price: lastNumber(realTickClient.dataExt.XBTUSD.fcoin.买.盘口1价),
-                                    side: 'Sell',
-                                    size: 下单数量,
-                                })}
+                                text={'全卖'}
+                                left={() => fcoin_sell(lastNumber(realTickClient.dataExt.XBTUSD.fcoin.卖.盘口1价))}
+                                right={() => fcoin_sell(lastNumber(realTickClient.dataExt.XBTUSD.fcoin.买.盘口1价) - 市价追高)}
                             />
                             <Table 委托列表={委托列表} side='Sell' 取消f={id => {
                                 FCoinHTTP.cancel(fcoinCookie, id)
