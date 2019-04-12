@@ -189,7 +189,9 @@ export class RealDataBase {
             return 指标.map(() => arr.length, i => arr[i].close)
         }
 
+        const _20s价格 = 映射到其他周期_close(20*2)
         const _12s价格 = 映射到其他周期_close(12 * 2)
+        const _13s价格 = 映射到其他周期_close(13 * 2)
         const _60s价格 = 映射到其他周期_close(60 * 2)
         const _300s价格 = 映射到其他周期_close(300 * 2)
 
@@ -197,6 +199,13 @@ export class RealDataBase {
             macd: 指标.macd(_12s价格, 1000),
             布林带: 指标.布林带(_12s价格, 1000),
         }
+        const _13s_ = {
+            布林带: 指标.布林带(_13s价格, 1000),
+        }
+        const _20s_ = {
+            布林带: 指标.布林带(_20s价格, 1000),
+        }
+      
 
         const _60s_ = {
             macd: 指标.macd(_60s价格, 1000),
@@ -212,6 +221,16 @@ export class RealDataBase {
             DIF: 映射回500ms(12 * 2, _12s_.macd.DIF),
             DEM: 映射回500ms(12 * 2, _12s_.macd.DEM),
             OSC: 映射回500ms(12 * 2, _12s_.macd.OSC),
+        }
+        const _20s_布林 = {
+            上轨: 映射回500ms(20 * 2, _20s_.布林带.上轨),
+            中轨: 映射回500ms(20 * 2, _20s_.布林带.中轨),
+            下轨: 映射回500ms(20 * 2, _20s_.布林带.下轨),
+        }
+        const _13s_布林 = {
+            上轨: 映射回500ms(13 * 2, _13s_.布林带.上轨),
+            中轨: 映射回500ms(13 * 2, _13s_.布林带.中轨),
+            下轨: 映射回500ms(13 * 2, _13s_.布林带.下轨),
         }
 
         const _60s_macd = {
@@ -421,6 +440,13 @@ export class RealDataBase {
         //价格
         const 价格_均线300 = 指标.SMA(价格, 300, RealDataBase.单位时间)
         const 价格_均线120 = 指标.SMA(价格, 120, RealDataBase.单位时间)
+        const 价格_均线13 = 指标.SMA(价格, 13, RealDataBase.单位时间)
+        const 价格_均线20 = 指标.SMA(价格, 20, RealDataBase.单位时间)
+        const 价格_均线34 = 指标.SMA(价格, 34, RealDataBase.单位时间)
+        const 价格_均线89 = 指标.SMA(价格, 89, RealDataBase.单位时间)
+        const 价格_均线144 = 指标.SMA(价格, 144, RealDataBase.单位时间)
+        const 价格_均线12 = 指标.SMA(价格, 12, RealDataBase.单位时间)
+        const 价格_均线60 = 指标.SMA(价格, 60, RealDataBase.单位时间)
         const 价格均线价差 = 指标.map(() => Math.min(价格_均线300.length, 价格_均线120.length), i => 价格_均线120[i] - 价格_均线300[i])
 
         const bitmex_价格_macd = 指标.macd带参数(价格, 36, 78, 27, RealDataBase.单位时间)
@@ -1065,6 +1091,13 @@ export class RealDataBase {
 
 
         return {
+            价格_均线13,
+            价格_均线34,
+            价格_均线20,
+            价格_均线89,
+            价格_均线144,
+            价格_均线12,
+            价格_均线60,
             tick力量指数60,
             tick力量指数12,
             价格macd,
@@ -1073,7 +1106,9 @@ export class RealDataBase {
             bitmex_价格_macd,
 
             _60s_,
+            _20s_布林,
             _12s_macd,
+            _13s_布林,
             _60s_macd,
             _300s_macd,
 

@@ -241,21 +241,21 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         })
                     ]
                 },
-                // {
-                //     numberColor: 净成交量颜色,
-                //     numberX: 100,
-                //     layerList: [
-                //         layer(ZeroLayer, { color: 净成交量颜色 }),
-                //         layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 净成交量颜色 }),
-                //     ]
-                // },
+                {
+                    numberColor: 净成交量颜色,
+                    numberX: 100,
+                    layerList: [
+                        layer(ZeroLayer, { color: 净成交量颜色 }),
+                        layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 净成交量颜色 }),
+                    ]
+                },
 
-                // {
-                //     numberColor: 石青,
-                //     layerList: [
-                //         layer(LineLayer, { data: d2.ETHUSD.hopex.价格, color: 石青 }),
-                //     ]
-                // },
+                {
+                    numberColor: 石青,
+                    layerList: [
+                        layer(LineLayer, { data: d2.ETHUSD.hopex.价格, color: 石青 }),
+                    ]
+                },
                 // {
                 //     numberColor: 波动率颜色,
                 //     layerList: [
@@ -268,7 +268,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     numberColor: BTC颜色,
                     layerList: [
                         layer(LineLayer, { data: d2.XBTUSD.fcoin.价格, color: 波动率颜色 }),
-                        //layer(LineLayer, { data: d2.XBTUSD.hopex.收盘价, color: ETH颜色 }),
+                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
                         
                     ]
                 },
@@ -595,6 +595,50 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                                 `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
                             color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
                         })
+                    ]
+                },
+            ],
+        ]
+    }),
+    实盘均线: (d, d2) => ({
+        heightList: [1],
+        items: [
+            [
+                // {
+                //     numberColor: BTC颜色,
+                //     layerList: [
+                //         layer(LineLayer, { data: d2.XBTUSD.hopex.价格_波动率60, color: BTC颜色 }),
+                //     ]
+                // },
+                {
+                    numberColor: BTC颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格_均线13, color: 买颜色 }),
+                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格_均线34, color:  卖颜色}),
+                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格_均线144, color:  石青}),
+                    ]
+                },
+            ],
+        ]
+    }),
+    实盘布林: (d, d2) => ({
+        heightList: [1],
+        items: [
+            [
+                // {
+                //     numberColor: BTC颜色,
+                //     layerList: [
+                       
+                //     ]
+                // },
+                {
+                    numberColor: BTC颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+                        layer(LineLayer, { data: d2.XBTUSD.hopex._13s_布林.上轨, color: 买颜色 }),
+                        layer(LineLayer, { data: d2.XBTUSD.hopex._13s_布林.下轨, color: 卖颜色 }),
+                        layer(LineLayer, { data: d2.XBTUSD.hopex._13s_布林.中轨, color: BTC颜色 }),
                     ]
                 },
             ],
