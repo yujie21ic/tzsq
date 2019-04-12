@@ -189,7 +189,7 @@ export class RealDataBase {
             return 指标.map(() => arr.length, i => arr[i].close)
         }
 
-        const _20s价格 = 映射到其他周期_close(20*2)
+        const _20s价格 = 映射到其他周期_close(20 * 2)
         const _12s价格 = 映射到其他周期_close(12 * 2)
         const _13s价格 = 映射到其他周期_close(13 * 2)
         const _60s价格 = 映射到其他周期_close(60 * 2)
@@ -205,7 +205,7 @@ export class RealDataBase {
         const _20s_ = {
             布林带: 指标.布林带(_20s价格, 1000),
         }
-      
+
 
         const _60s_ = {
             macd: 指标.macd(_60s价格, 1000),
@@ -314,10 +314,10 @@ export class RealDataBase {
 
 
         const 被动_卖均价_300 = 指标.map(() => Math.min(data.length, 卖.盘口1价.length), i => {
-            if (i >= 300) {
+            if (i >= 600) {
                 let sum = 0
                 let vol = 0
-                for (let k = i - 300; k <= i; k++) {
+                for (let k = i - 600; k <= i; k++) {
                     vol += data[k].buySize
                     sum += data[k].buySize * 卖.盘口1价[k]
                 }
@@ -328,10 +328,10 @@ export class RealDataBase {
         })
 
         const 被动_买均价_300 = 指标.map(() => Math.min(data.length, 买.盘口1价.length), i => {
-            if (i >= 300) {
+            if (i >= 600) {
                 let sum = 0
                 let vol = 0
-                for (let k = i - 300; k <= i; k++) {
+                for (let k = i - 600; k <= i; k++) {
                     vol += data[k].sellSize
                     sum += data[k].sellSize * 买.盘口1价[k]
                 }
@@ -456,8 +456,8 @@ export class RealDataBase {
         const 价格_波动率60 = 指标.波动率(价格, 60, RealDataBase.单位时间)
         const 价格_波动率300 = 指标.波动率(价格, 300, RealDataBase.单位时间)
 
-        const tick力量指数12 = 指标.map(() => Math.min(_12s_macd.DIF.length,买.净成交量_累加12.length), i =>(买.净成交量_累加12[i]/100000)*_12s_macd.OSC[i])
-        const tick力量指数60 = 指标.map(() => Math.min(_60s_macd.DIF.length,买.净成交量_累加60.length), i =>(买.净成交量_累加60[i]/100000)*_60s_macd.OSC[i])
+        const tick力量指数12 = 指标.map(() => Math.min(_12s_macd.DIF.length, 买.净成交量_累加12.length), i => (买.净成交量_累加12[i] / 100000) * _12s_macd.OSC[i])
+        const tick力量指数60 = 指标.map(() => Math.min(_60s_macd.DIF.length, 买.净成交量_累加60.length), i => (买.净成交量_累加60[i] / 100000) * _60s_macd.OSC[i])
 
 
         const 折返率 = 指标.map(() => 价格_波动率30.length, i => toRange({ min: 4, max: 15, value: 价格_波动率30[i] / 10 }))
