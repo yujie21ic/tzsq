@@ -39,6 +39,24 @@ export interface PositionAndOrder {
             Hopex_BTC: ITEM
             Hopex_ETH: ITEM
             FCoin_BTC: ITEM
+        },
+        market: {
+            hopex: {
+                BTCUSDT: ITEM
+                ETHUSDT: ITEM
+                ETCUSDT: ITEM
+                LTCUSDT: ITEM
+                BCHUSDT: ITEM
+                BSVUSDT: ITEM
+            },
+            fcoin: {
+                btcusdt: ITEM
+                ethusdt: ITEM
+            },
+            bitmex: {
+                XBTUSD: ITEM
+                ETHUSD: ITEM
+            },
         }
     }>
 

@@ -39,6 +39,24 @@ export const createJSONSync = () =>
             Hopex_BTC: symbol(),
             Hopex_ETH: symbol(),
             FCoin_BTC: symbol(),
+        },
+        market: {
+            hopex: {
+                BTCUSDT: symbol(),
+                ETHUSDT: symbol(),
+                ETCUSDT: symbol(),
+                LTCUSDT: symbol(),
+                BCHUSDT: symbol(),
+                BSVUSDT: symbol(),
+            },
+            fcoin: {
+                btcusdt: symbol(),
+                ethusdt: symbol(),
+            },
+            bitmex: {
+                XBTUSD: symbol(),
+                ETHUSD: symbol(),
+            },
         }
     })
 
