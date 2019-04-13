@@ -46,6 +46,8 @@ export interface PositionAndOrder {
                 ETHUSDT: ITEM
                 ETCUSDT: ITEM
                 LTCUSDT: ITEM
+                XRPUSDT: ITEM
+                EOSUSDT: ITEM
                 BCHUSDT: ITEM
                 BSVUSDT: ITEM
             },

@@ -92,6 +92,8 @@ export class RealDataBase {
                 ETHUSDT: createItem(),
                 ETCUSDT: createItem(),
                 LTCUSDT: createItem(),
+                XRPUSDT: createItem(),
+                EOSUSDT: createItem(),
                 BCHUSDT: createItem(),
                 BSVUSDT: createItem(),
             },
@@ -1425,6 +1427,8 @@ export class RealDataBase {
             BCHUSDT: this.item2(this.data.hopex.BCHUSDT, false),
             BSVUSDT: this.item2(this.data.hopex.BSVUSDT, false),
             LTCUSDT: this.item2(this.data.hopex.LTCUSDT, false),
+            XRPUSDT: this.item2(this.data.hopex.XRPUSDT, false),
+            EOSUSDT: this.item2(this.data.hopex.EOSUSDT, false),
         }
     }
 
@@ -1442,6 +1446,9 @@ export class RealDataBase {
                 BCHUSDT: this.item2(this.data.hopex.BCHUSDT, false),
                 BSVUSDT: this.item2(this.data.hopex.BSVUSDT, false),
                 LTCUSDT: this.item2(this.data.hopex.LTCUSDT, false),
+                XRPUSDT: this.item2(this.data.hopex.XRPUSDT, false),
+                EOSUSDT: this.item2(this.data.hopex.EOSUSDT, false),
+
             }
         }
     }

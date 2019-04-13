@@ -7,8 +7,8 @@ export namespace BaseType {
     export type BitmexSymbol = 'ETHUSD' | 'XBTUSD'
     export type BinanceSymbol = 'btcusdt' | 'ethusdt' //ws小写  http大写  卧槽
 
-    export type HopexSymbol = 'BTCUSDT' | 'ETHUSDT' | 'ETCUSDT' | 'LTCUSDT' | 'BCHUSDT' | 'BSVUSDT'
-    export const HopexSymbolArr = ['BTCUSDT', 'ETHUSDT', 'ETCUSDT', 'LTCUSDT', 'BCHUSDT', 'BSVUSDT'] as BaseType.HopexSymbol[]
+    export type HopexSymbol = 'BTCUSDT' | 'ETHUSDT' | 'ETCUSDT' | 'LTCUSDT' | 'BCHUSDT' | 'BSVUSDT'|'XRPUSDT'|'EOSUSDT'
+    export const HopexSymbolArr = ['BTCUSDT', 'ETHUSDT', 'ETCUSDT', 'LTCUSDT','XRPUSDT','EOSUSDT', 'BCHUSDT', 'BSVUSDT'] as BaseType.HopexSymbol[]
 
     export type FcoinSymbol = 'btcusdt' | 'ethusdt'
 

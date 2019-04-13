@@ -222,6 +222,8 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
         ETHUSDT: createItem(),
         ETCUSDT: createItem(),
         LTCUSDT: createItem(),
+        XRPUSDT: createItem(),
+        EOSUSDT: createItem(),
         BCHUSDT: createItem(),
         BSVUSDT: createItem(),
     }

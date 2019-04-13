@@ -45,6 +45,8 @@ export const createJSONSync = () =>
                 BTCUSDT: symbol(),
                 ETHUSDT: symbol(),
                 ETCUSDT: symbol(),
+                XRPUSDT: symbol(),
+                EOSUSDT: symbol(),
                 LTCUSDT: symbol(),
                 BCHUSDT: symbol(),
                 BSVUSDT: symbol(),
@@ -103,6 +105,8 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                 ETHUSDT: { 仓位数量: 0, 开仓均价: 0, },
                 ETCUSDT: { 仓位数量: 0, 开仓均价: 0, },
                 LTCUSDT: { 仓位数量: 0, 开仓均价: 0, },
+                XRPUSDT: { 仓位数量: 0, 开仓均价: 0, },
+                EOSUSDT: { 仓位数量: 0, 开仓均价: 0, },
                 BCHUSDT: { 仓位数量: 0, 开仓均价: 0, },
                 BSVUSDT: { 仓位数量: 0, 开仓均价: 0, },
             }
@@ -142,6 +146,8 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                 ETHUSDT: [] as BaseType.Order[],
                 ETCUSDT: [] as BaseType.Order[],
                 LTCUSDT: [] as BaseType.Order[],
+                XRPUSDT: [] as BaseType.Order[],
+                EOSUSDT: [] as BaseType.Order[],
                 BCHUSDT: [] as BaseType.Order[],
                 BSVUSDT: [] as BaseType.Order[],
             }
