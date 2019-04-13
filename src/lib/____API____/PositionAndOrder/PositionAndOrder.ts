@@ -41,16 +41,7 @@ export interface PositionAndOrder {
         //     FCoin_BTC: ITEM
         // },
         market: {
-            hopex: {
-                BTCUSDT: ITEM
-                ETHUSDT: ITEM
-                ETCUSDT: ITEM
-                LTCUSDT: ITEM
-                XRPUSDT: ITEM
-                EOSUSDT: ITEM
-                BCHUSDT: ITEM
-                BSVUSDT: ITEM
-            },
+            hopex: BaseType.MapDic<ITEM, typeof BaseType.HopexSymbolDic>
             fcoin: {
                 btcusdt: ITEM
                 ethusdt: ITEM
