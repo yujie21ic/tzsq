@@ -1,4 +1,4 @@
-import keys from "ramda/es/keys";
+import { keys } from 'ramda'
 
 export namespace BaseType {
 
