@@ -1,16 +1,27 @@
+import { keys } from 'ramda'
+
 export namespace BaseType {
 
     export type Omit<T, K extends string> = Pick<T, Exclude<keyof T, K>>
 
+    export const HopexSymbolDic = {
+        'BTCUSDT': {},
+        'ETHUSDT': {},
+        'ETCUSDT': {},
+        'LTCUSDT': {},
+        'BCHUSDT': {},
+        'BSVUSDT': {},
+        'XRPUSDT': {},
+        'EOSUSDT': {},
+    }
+    export type HopexSymbol = keyof typeof HopexSymbolDic
+    export const HopexSymbolArr = keys(HopexSymbolDic)
 
 
     export type BitmexSymbol = 'ETHUSD' | 'XBTUSD'
     export type BinanceSymbol = 'btcusdt' | 'ethusdt' //ws小写  http大写  卧槽
 
-    export type HopexSymbol = 'BTCUSDT' | 'ETHUSDT' | 'ETCUSDT' | 'LTCUSDT' | 'BCHUSDT' | 'BSVUSDT'|'XRPUSDT'|'EOSUSDT'
-    export const HopexSymbolArr = ['BTCUSDT', 'ETHUSDT', 'ETCUSDT', 'LTCUSDT','XRPUSDT','EOSUSDT', 'BCHUSDT', 'BSVUSDT'] as BaseType.HopexSymbol[]
-
-    export type FcoinSymbol = 'btcusdt' | 'ethusdt'
+    export type FCoinSymbol = 'btcusdt' | 'ethusdt'
 
 
 
