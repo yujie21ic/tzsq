@@ -28,7 +28,11 @@ export class 提醒 extends React.Component {
 
     dic: { [key: string]: number } = Object.create(null)
     小于等于 = 1000
+    中线小于等于 = 1000
+    关键点小于等于 = 1000
     大于等于 = 20000
+    中线大于等于 = 20000
+    关键点大于等于 = 20000
 
     setAndSpeak(str: string, v: number, f: (v: number) => boolean) {
         this.dic[str] = v
@@ -51,11 +55,31 @@ export class 提醒 extends React.Component {
             0,
             v => hopex收盘价 >= this.大于等于
         )
+        this.setAndSpeak(
+            '中线价格 大于等于 ' + this.中线大于等于,
+            0,
+            v => hopex收盘价 >= this.中线大于等于
+        )
+        this.setAndSpeak(
+            '关键点大于等于 大于等于 ' + this.关键点大于等于,
+            0,
+            v => hopex收盘价 >= this.关键点大于等于
+        )
 
         this.setAndSpeak(
             '价格 小于等于 ' + this.小于等于,
             0,
             v => hopex收盘价 <= this.小于等于
+        )
+        this.setAndSpeak(
+            '中线小于等于价格 小于等于 ' + this.中线小于等于,
+            0,
+            v => hopex收盘价 <= this.中线小于等于
+        )
+        this.setAndSpeak(
+            '关键点小于等于 小于等于 ' + this.关键点小于等于,
+            0,
+            v => hopex收盘价 <= this.关键点小于等于
         )
 
         this.setAndSpeak(
@@ -121,7 +145,37 @@ export class 提醒 extends React.Component {
                     })
                 }}
             >
-                {`hopex <= ${this.小于等于}`}
+                {`超短小于 ${this.小于等于}`}
+            </a>
+            <a
+                style={{ fontSize: 20, color: 'yellow' }}
+                href='#'
+                onClick={() => {
+                    dialog.showInput({
+                        title: '<=',
+                        value: this.中线小于等于 + '',
+                        onOK: v => {
+                            this.中线小于等于 = Number(v)
+                        }
+                    })
+                }}
+            >
+                {`中线小于 <= ${this.中线小于等于}`}
+            </a>
+            <a
+                style={{ fontSize: 20, color: 'yellow' }}
+                href='#'
+                onClick={() => {
+                    dialog.showInput({
+                        title: '<=',
+                        value: this.关键点小于等于 + '',
+                        onOK: v => {
+                            this.关键点小于等于 = Number(v)
+                        }
+                    })
+                }}
+            >
+                {`关键点小于 ${this.关键点小于等于}`}
             </a>
             <br />
             <a
@@ -137,7 +191,37 @@ export class 提醒 extends React.Component {
                     })
                 }}
             >
-                {`hopex >= ${this.大于等于}`}
+                {`超短大于 ${this.大于等于}`}
+            </a>
+            <a
+                style={{ fontSize: 20, color: 'yellow' }}
+                href='#'
+                onClick={() => {
+                    dialog.showInput({
+                        title: '>=',
+                        value: this.中线大于等于 + '',
+                        onOK: v => {
+                            this.中线大于等于 = Number(v)
+                        }
+                    })
+                }}
+            >
+                {`中线大于 ${this.中线大于等于}`}
+            </a>
+            <a
+                style={{ fontSize: 20, color: 'yellow' }}
+                href='#'
+                onClick={() => {
+                    dialog.showInput({
+                        title: '>=',
+                        value: this.关键点大于等于 + '',
+                        onOK: v => {
+                            this.关键点大于等于 = Number(v)
+                        }
+                    })
+                }}
+            >
+                {`关键点大于 ${this.关键点大于等于}`}
             </a>
 
             <pre style={{ fontSize: 20, color: 'white' }}>
