@@ -173,18 +173,24 @@ server.func.下单 = async req => {
         })
 }
 
-server.func.任务_开关 = async req => false//{
-// const account = accountDic.get(req.cookie)
-// if (account === undefined) throw 'cookie不存在'
-// if (req.symbol !== 'XBTUSD' && req.symbol !== 'ETHUSD' && req.symbol !== 'BTCUSDT' && req.symbol !== 'ETHUSDT') throw 'symbol不存在'
+server.func.任务_开关 = async req => {
+    const account = accountDic.get(req.cookie)
+    if (account === undefined) throw 'cookie不存在'
 
-// const { 任务开关 } = account.jsonSync.data.market[req.market][req.symbol]
-// if (Object.keys(任务开关).some(v => v === req.任务名字) === false) throw '任务不存在'
+    const { market } = account.jsonSync.data
 
-// 任务开关[req.任务名字].____set(req.value)
+    if (Object.keys(market).some(v => v === req.market) === false) throw 'market 不存在'
 
-// return true
-// }
+    if (Object.keys(market[req.market as 'bitmex']).some(v => v === req.symbol) === false) throw 'symbol 不存在'
 
-//
+    const { 任务开关 } = account.jsonSync.data.market[req.market as 'bitmex'][req.symbol as 'XBTUSD']
+
+    if (Object.keys(任务开关).some(v => v === req.任务名字) === false) throw '任务不存在'
+
+    任务开关[req.任务名字].____set(req.value)
+
+    return true
+}
+
+
 console.log('运行中...   记得 客户端 打开量化 ...')
