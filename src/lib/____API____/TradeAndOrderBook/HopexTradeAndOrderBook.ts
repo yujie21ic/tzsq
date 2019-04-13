@@ -97,7 +97,7 @@ const price_subscribe_data = (symbol: BaseType.HopexSymbol) => ({
 })
 
 const arr = ['BTCUSDT', 'ETHUSDT', 'ETCUSDT', 'LTCUSDT', 'BCHUSDT', 'BSVUSDT'] as BaseType.HopexSymbol[]
-const item = () => ({
+const createItem = () => ({
     sell: Object.create(null) as { [orderPrice: number]: number },
     buy: Object.create(null) as { [orderPrice: number]: number },
 })
@@ -219,11 +219,11 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
     }
 
     private orderBook = {
-        BTCUSDT: item(),
-        ETHUSDT: item(),
-        ETCUSDT: item(),
-        LTCUSDT: item(),
-        BCHUSDT: item(),
-        BSVUSDT: item(),
+        BTCUSDT: createItem(),
+        ETHUSDT: createItem(),
+        ETCUSDT: createItem(),
+        LTCUSDT: createItem(),
+        BCHUSDT: createItem(),
+        BSVUSDT: createItem(),
     }
 }

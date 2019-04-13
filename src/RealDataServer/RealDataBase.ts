@@ -90,6 +90,10 @@ export class RealDataBase {
             hopex: {
                 BTCUSDT: createItem(),
                 ETHUSDT: createItem(),
+                ETCUSDT: createItem(),
+                LTCUSDT: createItem(),
+                BCHUSDT: createItem(),
+                BSVUSDT: createItem(),
             },
             fcoin: {
                 btcusdt: createItem(),
@@ -1412,6 +1416,12 @@ export class RealDataBase {
         XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT', 'btcusdt'),
         ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
         ctp: this.item2(this.data.ctp.rb1905, true),
+        hopex: {
+            ETCUSDT: this.item2(this.data.hopex.ETCUSDT, false),
+            BCHUSDT: this.item2(this.data.hopex.BCHUSDT, false),
+            BSVUSDT: this.item2(this.data.hopex.BSVUSDT, false),
+            LTCUSDT: this.item2(this.data.hopex.LTCUSDT, false),
+        }
     }
 
     重新初始化 = () => {
@@ -1419,6 +1429,12 @@ export class RealDataBase {
             XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT', 'btcusdt'),
             ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
             ctp: this.item2(this.data.ctp.rb1905, true),
+            hopex: {
+                ETCUSDT: this.item2(this.data.hopex.ETCUSDT, false),
+                BCHUSDT: this.item2(this.data.hopex.BCHUSDT, false),
+                BSVUSDT: this.item2(this.data.hopex.BSVUSDT, false),
+                LTCUSDT: this.item2(this.data.hopex.LTCUSDT, false),
+            }
         }
     }
 
