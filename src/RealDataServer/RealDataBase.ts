@@ -1415,8 +1415,12 @@ export class RealDataBase {
     dataExt = {
         XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT', 'btcusdt'),
         ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
-        ctp: this.item2(this.data.ctp.rb1905, true),
+        ctp: {
+            rb1905: this.item2(this.data.ctp.rb1905, true),
+        },
         hopex: {
+            BTCUSDT: this.item2(this.data.hopex.BTCUSDT, false),
+            ETHUSDT: this.item2(this.data.hopex.ETHUSDT, false),
             ETCUSDT: this.item2(this.data.hopex.ETCUSDT, false),
             BCHUSDT: this.item2(this.data.hopex.BCHUSDT, false),
             BSVUSDT: this.item2(this.data.hopex.BSVUSDT, false),
@@ -1428,8 +1432,12 @@ export class RealDataBase {
         this.dataExt = {
             XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT', 'btcusdt'),
             ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
-            ctp: this.item2(this.data.ctp.rb1905, true),
+            ctp: {
+                rb1905: this.item2(this.data.ctp.rb1905, true),
+            },
             hopex: {
+                BTCUSDT: this.item2(this.data.hopex.BTCUSDT, false),
+                ETHUSDT: this.item2(this.data.hopex.ETHUSDT, false),
                 ETCUSDT: this.item2(this.data.hopex.ETCUSDT, false),
                 BCHUSDT: this.item2(this.data.hopex.BCHUSDT, false),
                 BSVUSDT: this.item2(this.data.hopex.BSVUSDT, false),
