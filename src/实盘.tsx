@@ -72,7 +72,7 @@ class Item extends React.Component<{ market: 'bitmex' | 'hopex' | 'fcoin', symbo
 
     render() {
         const { 仓位数量, 开仓均价, 任务开关 } = this.props.data()
-        const 下单数量 = 100 * this.props.倍数
+        const 下单数量 = 1 * this.props.倍数
 
         const fcoin_btc_数量 = 仓位数量
         const fcoin_usdt_数量 = 开仓均价
@@ -153,7 +153,7 @@ class Item extends React.Component<{ market: 'bitmex' | 'hopex' | 'fcoin', symbo
                 flexDirection: 'column',
                 justifyContent: 'left',
             }}>
-                <p style={{ color: '#cc66ff' }}>{this.props.symbol} {仓位数量 !== 0 && this.props.market === 'bitmex' ? <a
+                <p style={{ color: '#cc66ff' }}>{this.props.market + '_' + this.props.symbol} {仓位数量 !== 0 && this.props.market === 'bitmex' ? <a
                     href='#'
                     style={{ color: RED }}
                     onClick={() => rpc.市价平仓({ cookie, symbol: this.props.symbol as BaseType.BitmexSymbol })}
