@@ -96,27 +96,23 @@ const price_subscribe_data = (symbol: BaseType.HopexSymbol) => ({
     }
 })
 
+const arr = ['BTCUSDT', 'ETHUSDT', 'ETCUSDT', 'LTCUSDT', 'BCHUSDT', 'BSVUSDT'] as BaseType.HopexSymbol[]
+const item = () => ({
+    sell: Object.create(null) as { [orderPrice: number]: number },
+    buy: Object.create(null) as { [orderPrice: number]: number },
+})
+
 export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymbol> {
 
-    private ws_btc = new WebSocketClient({
-        ss: config.ss,
-        url: 'wss://api.hopex.com/ws'
-    })
-
-    private ws_btc2 = new WebSocketClient({
-        ss: config.ss,
-        url: 'wss://api.hopex.com/ws'
-    })
-
-    private ws_eth = new WebSocketClient({
-        ss: config.ss,
-        url: 'wss://api.hopex.com/ws'
-    })
-
-    private ws_eth2 = new WebSocketClient({
-        ss: config.ss,
-        url: 'wss://api.hopex.com/ws'
-    })
+    private wsArr = arr.map(symbol =>
+        ({
+            symbol,
+            ws: new WebSocketClient({
+                ss: config.ss,
+                url: 'wss://api.hopex.com/ws'
+            })
+        })
+    )
 
     private subscribe(ws: WebSocketClient, type: 'all' | 'trade' | 'order_book' = 'all', symbol: BaseType.HopexSymbol) {
         ws.onStatusChange = () => {
@@ -125,12 +121,12 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
                     ws.sendJSON(orderbook_subscribe_data(symbol))
                 }
                 if (type === 'trade' || type === 'all') {
-                    // ws.sendJSON(deals_subscribe_data(symbol))
-                    ws.sendJSON(price_subscribe_data(symbol))
+                    // ws.sendJSON(deals_subscribe_data(symbol)) //着笔
+                    ws.sendJSON(price_subscribe_data(symbol))    //合理价格
                 }
             }
             this.statusObservable.next({
-                isConnected: this.ws_btc.isConnected && this.ws_eth.isConnected && this.ws_btc2.isConnected && this.ws_eth2.isConnected
+                isConnected: this.wsArr.every(v => v.ws.isConnected)
             })
         }
     }
@@ -138,108 +134,96 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
     constructor(type: 'all' | 'trade' | 'order_book' = 'all') {
         super()
 
-        this.subscribe(this.ws_btc, type, 'BTCUSDT')
-        this.subscribe(this.ws_btc2, type, 'BTCUSD')
+        this.wsArr.forEach(v => {
+            this.subscribe(v.ws, type, v.symbol)
+            v.ws.onData = this.onFrame
+        })
+    }
 
-        this.subscribe(this.ws_eth, type, 'ETHUSDT')
-        this.subscribe(this.ws_eth2, type, 'ETHUSD')
+    private onFrame = (d: Frame) => {
 
-        //
-        this.ws_btc.onData = this.ws_eth.onData = this.ws_btc2.onData = this.ws_eth2.onData = (d: Frame) => {
-
-            //着笔
-            if (d.method === 'deals.update') {
-                d.data.forEach(v => {
-                    this.tradeObservable.next({
-                        symbol: v.contractCode,
-                        timestamp: Number(d.timestamp),
-                        side: v.side === '1' ? 'Sell' : 'Buy',
-                        size: Number(v.fillQuantity.split(',').join('')),   //居然返回字符串样式
-                        price: Number(v.fillPrice.split(',').join('')),     //居然返回字符串样式
-                    })
-                })
-            }
-
-            //合理价格
-            if (d.method === 'price.update') {
-
+        //着笔
+        if (d.method === 'deals.update') {
+            d.data.forEach(v => {
                 this.tradeObservable.next({
+                    symbol: v.contractCode,
+                    timestamp: Number(d.timestamp),
+                    side: v.side === '1' ? 'Sell' : 'Buy',
+                    size: Number(v.fillQuantity.split(',').join('')),   //居然返回字符串样式
+                    price: Number(v.fillPrice.split(',').join('')),     //居然返回字符串样式
+                })
+            })
+        }
+
+        //合理价格
+        if (d.method === 'price.update') {
+
+            this.tradeObservable.next({
+                symbol: d.data.contractCode,
+                timestamp: Number(d.timestamp),
+                side: 'Buy',
+                size: 0,
+                price: Number(d.data.fairPrice.split(',').join('')),     //居然返回字符串样式
+            })
+        }
+
+        // //盘口
+        if (d.method === 'orderbook.update') {
+            const obj = this.orderBook[d.data.contractCode]
+
+            d.data.asks.forEach(v => {
+                const price = Number(v.orderPrice)
+                const size = v.orderQuantity
+
+                if (size === 0) {
+                    delete obj.sell[price]
+                } else {
+                    obj.sell[price] = size
+                }
+            })
+
+            d.data.bids.forEach(v => {
+                const price = Number(v.orderPrice)
+                const size = v.orderQuantity
+
+                if (size === 0) {
+                    delete obj.buy[price]
+                } else {
+                    obj.buy[price] = size
+                }
+            })
+
+            const buy = Object.keys(obj.buy).sort((a, b) => Number(b) - Number(a))
+            const sell = Object.keys(obj.sell).sort()
+
+            if (buy.length >= 5 && sell.length >= 5) {
+
+                //删除50以上的
+                buy.slice(50).forEach(v => delete obj.buy[Number(v)])
+                sell.slice(50).forEach(v => delete obj.sell[Number(v)])
+
+                this.orderBookObservable.next({
                     symbol: d.data.contractCode,
                     timestamp: Number(d.timestamp),
-                    side: 'Buy',
-                    size: 0,
-                    price: Number(d.data.fairPrice.split(',').join('')),     //居然返回字符串样式
+                    buy: buy.slice(0, 5).map(v => ({
+                        price: Number(v.split(',').join('')),
+                        size: obj.buy[Number(v.split(',').join(''))],
+                    })),
+                    sell: sell.slice(0, 5).map(v => ({
+                        price: Number(v.split(',').join('')),
+                        size: obj.sell[Number(v.split(',').join(''))],
+                    })),
                 })
-            }
-
-            // //盘口
-            if (d.method === 'orderbook.update') {
-                const obj = this.orderBook[d.data.contractCode]
-
-                d.data.asks.forEach(v => {
-                    const price = Number(v.orderPrice)
-                    const size = v.orderQuantity
-
-                    if (size === 0) {
-                        delete obj.sell[price]
-                    } else {
-                        obj.sell[price] = size
-                    }
-                })
-
-                d.data.bids.forEach(v => {
-                    const price = Number(v.orderPrice)
-                    const size = v.orderQuantity
-
-                    if (size === 0) {
-                        delete obj.buy[price]
-                    } else {
-                        obj.buy[price] = size
-                    }
-                })
-
-                const buy = Object.keys(obj.buy).sort((a, b) => Number(b) - Number(a))
-                const sell = Object.keys(obj.sell).sort()
-
-                if (buy.length >= 5 && sell.length >= 5) {
-
-                    //删除50以上的
-                    buy.slice(50).forEach(v => delete obj.buy[Number(v)])
-                    sell.slice(50).forEach(v => delete obj.sell[Number(v)])
-
-                    this.orderBookObservable.next({
-                        symbol: d.data.contractCode,
-                        timestamp: Number(d.timestamp),
-                        buy: buy.slice(0, 5).map(v => ({
-                            price: Number(v.split(',').join('')),
-                            size: obj.buy[Number(v.split(',').join(''))],
-                        })),
-                        sell: sell.slice(0, 5).map(v => ({
-                            price: Number(v.split(',').join('')),
-                            size: obj.sell[Number(v.split(',').join(''))],
-                        })),
-                    })
-                }
             }
         }
     }
 
     private orderBook = {
-        BTCUSDT: {
-            sell: Object.create(null) as { [orderPrice: number]: number },
-            buy: Object.create(null) as { [orderPrice: number]: number },
-        },
-        ETHUSDT: {
-            sell: Object.create(null) as { [orderPrice: number]: number },
-            buy: Object.create(null) as { [orderPrice: number]: number },
-        },
-        BTCUSD: {
-            sell: Object.create(null) as { [orderPrice: number]: number },
-            buy: Object.create(null) as { [orderPrice: number]: number },
-        },
-        ETHUSD: {
-            sell: Object.create(null) as { [orderPrice: number]: number },
-            buy: Object.create(null) as { [orderPrice: number]: number },
-        }
+        BTCUSDT: item(),
+        ETHUSDT: item(),
+        ETCUSDT: item(),
+        LTCUSDT: item(),
+        BCHUSDT: item(),
+        BSVUSDT: item(),
     }
 }

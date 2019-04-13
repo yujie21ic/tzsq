@@ -89,9 +89,7 @@ export class RealDataBase {
             },
             hopex: {
                 BTCUSDT: createItem(),
-                BTCUSD: createItem(),
                 ETHUSDT: createItem(),
-                ETHUSD: createItem(),
             },
             fcoin: {
                 btcusdt: createItem(),
