@@ -120,9 +120,9 @@ server.func.下单 = async req => {
         throw '服务器还没有 买1 卖1 价格'
     }
 
-    const { 仓位数量 } = account.jsonSync.rawData.symbol[req.symbol]
+    const { 仓位数量 } = account.jsonSync.rawData.market.bitmex[req.symbol]
 
-    const 活动委托 = account.jsonSync.rawData.symbol[req.symbol].委托列表.filter(v => v.type !== '止损')
+    const 活动委托 = account.jsonSync.rawData.market.bitmex[req.symbol].委托列表.filter(v => v.type !== '止损')
 
     if (活动委托.length > 1) {
         throw '已经有委托了'
@@ -173,18 +173,18 @@ server.func.下单 = async req => {
         })
 }
 
-server.func.任务_开关 = async req => {
-    const account = accountDic.get(req.cookie)
-    if (account === undefined) throw 'cookie不存在'
-    if (req.symbol !== 'XBTUSD' && req.symbol !== 'ETHUSD' && req.symbol !== 'Hopex_BTC' && req.symbol !== 'Hopex_ETH') throw 'symbol不存在'
+server.func.任务_开关 = async req => false//{
+// const account = accountDic.get(req.cookie)
+// if (account === undefined) throw 'cookie不存在'
+// if (req.symbol !== 'XBTUSD' && req.symbol !== 'ETHUSD' && req.symbol !== 'BTCUSDT' && req.symbol !== 'ETHUSDT') throw 'symbol不存在'
 
-    const { 任务开关 } = account.jsonSync.data.symbol[req.symbol]
-    if (Object.keys(任务开关).some(v => v === req.任务名字) === false) throw '任务不存在'
+// const { 任务开关 } = account.jsonSync.data.market[req.market][req.symbol]
+// if (Object.keys(任务开关).some(v => v === req.任务名字) === false) throw '任务不存在'
 
-    任务开关[req.任务名字].____set(req.value)
+// 任务开关[req.任务名字].____set(req.value)
 
-    return true
-}
+// return true
+// }
 
 //
 console.log('运行中...   记得 客户端 打开量化 ...')
