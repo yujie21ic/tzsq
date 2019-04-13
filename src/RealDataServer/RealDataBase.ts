@@ -1167,7 +1167,7 @@ export class RealDataBase {
     }
 
 
-    private item = (symbol: BaseType.BitmexSymbol, binanceSymbol: BaseType.BinanceSymbol, hopexSymbol: BaseType.HopexSymbol, fcoinSymbol: BaseType.FcoinSymbol) => {
+    private item = (symbol: BaseType.BitmexSymbol, binanceSymbol: BaseType.BinanceSymbol, hopexSymbol: BaseType.HopexSymbol, fcoinSymbol: BaseType.FCoinSymbol) => {
 
         const binance = this.item2(this.data.binance[binanceSymbol], true)
 

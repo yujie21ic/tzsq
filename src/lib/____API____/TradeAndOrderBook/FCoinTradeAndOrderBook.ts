@@ -5,7 +5,7 @@ import { splitEvery } from 'ramda'
 import { BaseType } from '../../BaseType'
 
 
-export class FCoinTradeAndOrderBook extends TradeAndOrderBook<BaseType.FcoinSymbol>{
+export class FCoinTradeAndOrderBook extends TradeAndOrderBook<BaseType.FCoinSymbol>{
 
     private ws = new WebSocketClient({
         ss: config.ss,
@@ -42,7 +42,7 @@ export class FCoinTradeAndOrderBook extends TradeAndOrderBook<BaseType.FcoinSymb
         this.ws.onData = (d: {}) => {
             const type = ((d as any).type as string).split('.')
             const topic = type[0]
-            const symbol = type[type.length - 1] as BaseType.FcoinSymbol
+            const symbol = type[type.length - 1] as BaseType.FCoinSymbol
 
             if (topic === 'depth') {
 
