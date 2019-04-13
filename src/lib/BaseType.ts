@@ -3,8 +3,6 @@ import { keys } from 'ramda'
 export namespace BaseType {
 
     export type Omit<T, K extends string> = Pick<T, Exclude<keyof T, K>>
-    export type MapDic<T, OBJ> = { [K in keyof OBJ]: T }
-
     export type BitmexSymbol = 'ETHUSD' | 'XBTUSD'
     export type BinanceSymbol = 'btcusdt' | 'ethusdt' //ws小写  http大写  卧槽
 
