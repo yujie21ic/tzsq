@@ -12,6 +12,7 @@ import { HopexHTTP } from './lib/____API____/HopexHTTP'
 import { realTickClient, 提醒 } from './实盘__提醒'
 import { lastNumber } from './lib/F/lastNumber'
 import { FCoinHTTP } from './lib/____API____/FCoinHTTP'
+import { PositionAndOrder } from './lib/____API____/PositionAndOrder/PositionAndOrder'
 
 const 市价追高 = 10
 
@@ -20,6 +21,7 @@ const { cookie, hopexCookie, fcoinCookie } = account
 const orderClient = new OrderClient(account.cookie)
 const rpc = OrderClient.rpc.func
 
+type XXX = PositionAndOrder['jsonSync']['rawData']['market']['bitmex']['XBTUSD']
 
 
 const RED = 'rgba(229, 101, 70, 1)'
@@ -57,10 +59,10 @@ const Table = (p: {
 
 
 
-class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH' | 'FCoin_BTC', 位置: number, 倍数: number }> {
+class Item extends React.Component<{ market: 'bitmex' | 'hopex' | 'fcoin', symbol: string, data: () => XXX, 位置: number, 倍数: number }> {
 
     get仓位() {
-        const { 仓位数量, 开仓均价 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
+        const { 仓位数量, 开仓均价 } = this.props.data()
         if (仓位数量 !== 0) {
             return <span><span style={{ color: 仓位数量 < 0 ? RED : GREEN }}>{String(仓位数量)}</span>@<span>{String(开仓均价)}</span></span>
         } else {
@@ -69,8 +71,8 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
     }
 
     render() {
-        const { 仓位数量, 开仓均价, 任务开关 } = orderClient.jsonSync.rawData.symbol[this.props.symbol]
-        const 下单数量 = this.props.symbol === 'FCoin_BTC' ? 0.001 : (this.props.symbol === 'XBTUSD' || this.props.symbol === 'Hopex_BTC' ? account.交易.XBTUSD.数量 : account.交易.ETHUSD.数量) * this.props.倍数
+        const { 仓位数量, 开仓均价, 任务开关 } = this.props.data()
+        const 下单数量 = 100 * this.props.倍数
 
         const fcoin_btc_数量 = 仓位数量
         const fcoin_usdt_数量 = 开仓均价
@@ -92,7 +94,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
 
 
         // 
-        const 委托列表 = orderClient.jsonSync.rawData.symbol[this.props.symbol].委托列表
+        const 委托列表 = this.props.data().委托列表
         const 委托 = {
             id: '',
             side: '' as BaseType.Side,
@@ -144,8 +146,6 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
             }
         }
 
-        const { symbol } = this.props
-
 
         return <div>
             <div style={{
@@ -153,33 +153,33 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                 flexDirection: 'column',
                 justifyContent: 'left',
             }}>
-                <p style={{ color: this.props.symbol === 'XBTUSD' ? '#cc66ff' : '#aaaa00' }}>{this.props.symbol} {仓位数量 !== 0 && symbol !== 'FCoin_BTC' && symbol !== 'Hopex_BTC' && symbol !== 'Hopex_ETH' ? <a
+                <p style={{ color: '#cc66ff' }}>{this.props.symbol} {仓位数量 !== 0 && this.props.market === 'bitmex' ? <a
                     href='#'
                     style={{ color: RED }}
-                    onClick={() => rpc.市价平仓({ cookie, symbol })}
+                    onClick={() => rpc.市价平仓({ cookie, symbol: this.props.symbol as BaseType.BitmexSymbol })}
                 >市价平仓</a> : undefined} </p>
                 <p>仓位:{this.get仓位()}</p>
                 <p>止损:{get止损()}</p>
                 <p>委托:{get委托()}</p>
                 <p>
-                    摸顶:<Switch checked={任务开关.自动开仓摸顶} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓摸顶', value: v }) }} />
-                    抄底:<Switch checked={任务开关.自动开仓抄底} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓抄底', value: v }) }} />
+                    摸顶:<Switch checked={任务开关.自动开仓摸顶} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol as BaseType.BitmexSymbol, 任务名字: '自动开仓摸顶', value: v }) }} />
+                    抄底:<Switch checked={任务开关.自动开仓抄底} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol as BaseType.BitmexSymbol, 任务名字: '自动开仓抄底', value: v }) }} />
                 </p>
                 <p>
-                    追涨:<Switch checked={任务开关.自动开仓追涨} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓追涨', value: v }) }} />
-                    追跌:<Switch checked={任务开关.自动开仓追跌} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动开仓追跌', value: v }) }} />
+                    追涨:<Switch checked={任务开关.自动开仓追涨} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol as BaseType.BitmexSymbol, 任务名字: '自动开仓追涨', value: v }) }} />
+                    追跌:<Switch checked={任务开关.自动开仓追跌} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol as BaseType.BitmexSymbol, 任务名字: '自动开仓追跌', value: v }) }} />
                 </p>
                 <p>
-                    止盈波段:<Switch checked={任务开关.自动止盈波段} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动止盈波段', value: v }) }} />
-                    推止损:<Switch checked={任务开关.自动推止损} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动推止损', value: v }) }} />
+                    止盈波段:<Switch checked={任务开关.自动止盈波段} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol as BaseType.BitmexSymbol, 任务名字: '自动止盈波段', value: v }) }} />
+                    推止损:<Switch checked={任务开关.自动推止损} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol as BaseType.BitmexSymbol, 任务名字: '自动推止损', value: v }) }} />
                 </p>
                 <p>
-                    止损:<Switch checked={任务开关.自动止损} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol, 任务名字: '自动止损', value: v }) }} />
+                    止损:<Switch checked={任务开关.自动止损} onChange={(e, v) => { rpc.任务_开关({ cookie, symbol: this.props.symbol as BaseType.BitmexSymbol, 任务名字: '自动止损', value: v }) }} />
                 </p>
             </div>
 
             {
-                symbol === 'FCoin_BTC' ?
+                this.props.market === 'fcoin' ?
                     <div style={{
                         display: 'flex',
                         flexDirection: 'row',
@@ -210,7 +210,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                             }} />
                         </div>
                     </div>
-                    : symbol === 'Hopex_BTC' || symbol === 'Hopex_ETH' ?
+                    : this.props.market === 'hopex' ?
                         <div style={{
                             display: 'flex',
                             flexDirection: 'row',
@@ -222,19 +222,19 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                                     bgColor={GREEN}
                                     text={下单数量 + ''}
                                     left={() => HopexHTTP.maker(hopexCookie, {
-                                        symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
-                                        price: lastNumber(realTickClient.dataExt[symbol === 'Hopex_BTC' ? 'XBTUSD' : 'ETHUSD'].hopex.买.盘口1价),
+                                        symbol: this.props.symbol as BaseType.HopexSymbol,
+                                        price: lastNumber(realTickClient.dataExt.hopex[this.props.symbol as BaseType.HopexSymbol].买.盘口1价),
                                         side: 'Buy',
                                         size: 下单数量,
                                     })}
                                     right={() => HopexHTTP.taker(hopexCookie, {
-                                        symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
+                                        symbol: this.props.symbol as BaseType.HopexSymbol,
                                         side: 'Buy',
                                         size: 下单数量,
                                     })}
                                 />
                                 <Table 委托列表={委托列表} side='Buy' 取消f={id => {
-                                    HopexHTTP.cancel(hopexCookie, { orderID: Number(id), contractCode: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT' })
+                                    HopexHTTP.cancel(hopexCookie, { orderID: Number(id), contractCode: this.props.symbol as BaseType.HopexSymbol })
                                 }} />
                             </div>
                             <div
@@ -243,19 +243,19 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                                     bgColor={RED}
                                     text={-下单数量 + ''}
                                     left={() => HopexHTTP.maker(hopexCookie, {
-                                        symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
-                                        price: lastNumber(realTickClient.dataExt[symbol === 'Hopex_BTC' ? 'XBTUSD' : 'ETHUSD'].hopex.卖.盘口1价),
+                                        symbol: this.props.symbol as BaseType.HopexSymbol,
+                                        price: lastNumber(realTickClient.dataExt.hopex[this.props.symbol as BaseType.HopexSymbol].卖.盘口1价),
                                         side: 'Sell',
                                         size: 下单数量,
                                     })}
                                     right={() => HopexHTTP.taker(hopexCookie, {
-                                        symbol: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT',
+                                        symbol: this.props.symbol as BaseType.HopexSymbol,
                                         side: 'Sell',
                                         size: 下单数量,
                                     })}
                                 />
                                 <Table 委托列表={委托列表} side='Sell' 取消f={id => {
-                                    HopexHTTP.cancel(hopexCookie, { orderID: Number(id), contractCode: symbol === 'Hopex_BTC' ? 'BTCUSDT' : 'ETHUSDT' })
+                                    HopexHTTP.cancel(hopexCookie, { orderID: Number(id), contractCode: this.props.symbol as BaseType.HopexSymbol })
                                 }} />
                             </div>
                         </div>
@@ -273,7 +273,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                                     text={下单数量 + ' 买' + (this.props.位置 + 1)}
                                     left={() => rpc.下单({
                                         cookie,
-                                        symbol,
+                                        symbol: this.props.symbol as BaseType.BitmexSymbol,
                                         type: 'maker',
                                         side: 'Buy',
                                         size: 下单数量,
@@ -282,7 +282,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                                     })}
                                     right={() => rpc.下单({
                                         cookie,
-                                        symbol,
+                                        symbol: this.props.symbol as BaseType.BitmexSymbol,
                                         type: 'taker',
                                         side: 'Buy',
                                         size: 下单数量,
@@ -298,7 +298,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                                     text={'5秒最低 买' + (this.props.位置 + 1)}
                                     left={() => rpc.下单({
                                         cookie,
-                                        symbol,
+                                        symbol: this.props.symbol as BaseType.BitmexSymbol,
                                         type: 'maker',
                                         side: 'Buy',
                                         size: 下单数量,
@@ -321,7 +321,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                                     text={-下单数量 + ' 卖' + (this.props.位置 + 1)}
                                     left={() => rpc.下单({
                                         cookie,
-                                        symbol,
+                                        symbol: this.props.symbol as BaseType.BitmexSymbol,
                                         type: 'maker',
                                         side: 'Sell',
                                         size: 下单数量,
@@ -330,7 +330,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                                     })}
                                     right={() => rpc.下单({
                                         cookie,
-                                        symbol,
+                                        symbol: this.props.symbol as BaseType.BitmexSymbol,
                                         type: 'taker',
                                         side: 'Sell',
                                         size: 下单数量,
@@ -344,7 +344,7 @@ class Item extends React.Component<{ symbol: 'XBTUSD' | 'Hopex_BTC' | 'Hopex_ETH
                                     text={'5秒最高 卖' + (this.props.位置 + 1)}
                                     left={() => rpc.下单({
                                         cookie,
-                                        symbol,
+                                        symbol: this.props.symbol as BaseType.BitmexSymbol,
                                         type: 'maker',
                                         side: 'Sell',
                                         size: 下单数量,
@@ -414,10 +414,9 @@ export class 交易 extends React.Component {
                 userSelect: 'none',
                 cursor: 'default'
             }}>
-                {/* <Item symbol='XBTUSD' 位置={this.位置} 倍数={this.倍数} /> */}
-                {/* <Item symbol='Hopex_BTC' 位置={this.位置} 倍数={this.倍数} /> */}
-                <Item symbol='FCoin_BTC' 位置={this.位置} 倍数={this.倍数} />
-                <Item symbol='Hopex_ETH' 位置={this.位置} 倍数={this.倍数} />
+
+                <Item market='fcoin' symbol='btcusdt' data={() => orderClient.jsonSync.rawData.market.fcoin.btcusdt} 位置={this.位置} 倍数={this.倍数} />
+                <Item market='hopex' symbol='ETHUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.ETHUSDT} 位置={this.位置} 倍数={this.倍数} />
             </div>
     }
 

@@ -15,14 +15,6 @@ export type ConfigType = {
             cookie: string
             hopexCookie: string
             fcoinCookie: string
-            交易: {
-                XBTUSD: {
-                    数量: number
-                }
-                ETHUSD: {
-                    数量: number
-                }
-            }
             计分板倍数?: number
         }
     }
