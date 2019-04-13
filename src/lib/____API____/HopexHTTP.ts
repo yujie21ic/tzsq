@@ -23,7 +23,7 @@ const f = <T>(p: { cookie?: string, url: string, param?: any }) =>
                 Cookie: p.cookie,
             } :
             header
-    }) 
+    })
 
 export const HopexHTTP = {
 
@@ -75,13 +75,14 @@ export const HopexHTTP = {
             },
         }),
 
+
     cancel: async (cookie: string, p: { orderID: number, contractCode: BaseType.HopexSymbol }) =>
         f({
             cookie,
             url: `https://web.hopex.com/api/v1/gateway/User/CancelOrder?` + queryStringStringify(
                 {
                     culture: 'zh-CN',
-                    contractCode: 'BTCUSDT',  //?????????????????????????????????
+                    contractCode: p.contractCode,
                     orderId: p.orderID,
                 },
             )
