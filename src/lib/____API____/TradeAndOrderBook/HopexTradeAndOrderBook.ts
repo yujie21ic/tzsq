@@ -96,7 +96,6 @@ const price_subscribe_data = (symbol: BaseType.HopexSymbol) => ({
     }
 })
 
-const arr = ['BTCUSDT', 'ETHUSDT', 'ETCUSDT', 'LTCUSDT', 'BCHUSDT', 'BSVUSDT'] as BaseType.HopexSymbol[]
 const createItem = () => ({
     sell: Object.create(null) as { [orderPrice: number]: number },
     buy: Object.create(null) as { [orderPrice: number]: number },
@@ -104,7 +103,7 @@ const createItem = () => ({
 
 export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymbol> {
 
-    private wsArr = arr.map(symbol =>
+    private wsArr = BaseType.HopexSymbolArr.map(symbol =>
         ({
             symbol,
             ws: new WebSocketClient({

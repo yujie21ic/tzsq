@@ -33,13 +33,13 @@ export const createJSONSync = () =>
             time: number
             total: number
         }[],
-        symbol: {
-            XBTUSD: symbol(),
-            ETHUSD: symbol(),
-            Hopex_BTC: symbol(),
-            Hopex_ETH: symbol(),
-            FCoin_BTC: symbol(),
-        },
+        // symbol: {
+        //     XBTUSD: symbol(),
+        //     ETHUSD: symbol(),
+        //     Hopex_BTC: symbol(),
+        //     Hopex_ETH: symbol(),
+        //     FCoin_BTC: symbol(),
+        // },
         market: {
             hopex: {
                 BTCUSDT: symbol(),
@@ -67,7 +67,6 @@ let callID = 0
 const 重试几次 = 10
 const 重试休息多少毫秒 = 10
 
-const hopexSymbolArr = ['Hopex_BTC' as 'Hopex_BTC', 'Hopex_ETH' as 'Hopex_ETH']
 
 
 export class BitmexPositionAndOrder implements PositionAndOrder {
@@ -100,14 +99,12 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     private async hopex_仓位_轮询() {
         while (true) {
             const __obj__ = {
-                Hopex_BTC: {
-                    仓位数量: 0,
-                    开仓均价: 0,
-                },
-                Hopex_ETH: {
-                    仓位数量: 0,
-                    开仓均价: 0,
-                },
+                BTCUSDT: { 仓位数量: 0, 开仓均价: 0, },
+                ETHUSDT: { 仓位数量: 0, 开仓均价: 0, },
+                ETCUSDT: { 仓位数量: 0, 开仓均价: 0, },
+                LTCUSDT: { 仓位数量: 0, 开仓均价: 0, },
+                BCHUSDT: { 仓位数量: 0, 开仓均价: 0, },
+                BSVUSDT: { 仓位数量: 0, 开仓均价: 0, },
             }
             const { data } = await HopexHTTP.getPositions(this.hopexCookie)
             if (data !== undefined) {
@@ -115,23 +112,17 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
                 const arr = data.data || []
                 arr.forEach(v => {
-                    if (v.contractCode === 'BTCUSDT') {
-                        __obj__.Hopex_BTC.仓位数量 = Number(v.positionQuantity.split(',').join(''))
-                        __obj__.Hopex_BTC.开仓均价 = v.entryPriceD
-                    }
-                    else if (v.contractCode === 'ETHUSDT') {
-                        __obj__.Hopex_ETH.仓位数量 = Number(v.positionQuantity.split(',').join(''))
-                        __obj__.Hopex_ETH.开仓均价 = v.entryPriceD
-                    }
+                    __obj__[v.contractCode].仓位数量 = Number(v.positionQuantity.split(',').join(''))
+                    __obj__[v.contractCode].开仓均价 = v.entryPriceD
                 })
 
-                hopexSymbolArr.forEach(symbol => {
-                    if (this.jsonSync.rawData.symbol[symbol].仓位数量 !== __obj__[symbol].仓位数量) {
-                        this.jsonSync.data.symbol[symbol].仓位数量.____set(__obj__[symbol].仓位数量)
+                BaseType.HopexSymbolArr.forEach(symbol => {
+                    if (this.jsonSync.rawData.market.hopex[symbol].仓位数量 !== __obj__[symbol].仓位数量) {
+                        this.jsonSync.data.market.hopex[symbol].仓位数量.____set(__obj__[symbol].仓位数量)
                         this.log(`hopex ${symbol} 仓位数量: + ${__obj__[symbol].仓位数量}`)
                     }
-                    if (this.jsonSync.rawData.symbol[symbol].开仓均价 !== __obj__[symbol].开仓均价) {
-                        this.jsonSync.data.symbol[symbol].开仓均价.____set(__obj__[symbol].开仓均价)
+                    if (this.jsonSync.rawData.market.hopex[symbol].开仓均价 !== __obj__[symbol].开仓均价) {
+                        this.jsonSync.data.market.hopex[symbol].开仓均价.____set(__obj__[symbol].开仓均价)
                         this.log(`hopex ${symbol} 开仓均价: + ${__obj__[symbol].开仓均价}`)
                     }
                 })
@@ -147,8 +138,12 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     private async hopex_委托_轮询() {
         while (true) {
             const __obj__ = {
-                Hopex_BTC: [] as BaseType.Order[],
-                Hopex_ETH: [] as BaseType.Order[],
+                BTCUSDT: [] as BaseType.Order[],
+                ETHUSDT: [] as BaseType.Order[],
+                ETCUSDT: [] as BaseType.Order[],
+                LTCUSDT: [] as BaseType.Order[],
+                BCHUSDT: [] as BaseType.Order[],
+                BSVUSDT: [] as BaseType.Order[],
             }
 
             const 止损data = (await HopexHTTP.getConditionOrders(this.hopexCookie)).data
@@ -160,11 +155,8 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                 if (止损data.data !== undefined) {
                     const result = 止损data.data ? 止损data.data.result || [] : []
                     result.forEach(v => {
-                        let k = '' as 'Hopex_BTC' | 'Hopex_ETH' | ''
-                        if (v.contractCode === 'BTCUSDT' && v.taskStatusD === '未触发') { k = 'Hopex_BTC' }
-                        if (v.contractCode === 'ETHUSDT' && v.taskStatusD === '未触发') { k = 'Hopex_ETH' }
-                        if (k !== '') {
-                            __obj__[k].push({
+                        if (v.taskStatusD === '未触发') {
+                            __obj__[v.contractCode].push({
                                 type: '止损',
                                 timestamp: v.timestamp,
                                 id: String(v.taskId),
@@ -178,29 +170,24 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                 }
                 if (委托data.data !== undefined) {
                     委托data.data.forEach(v => {
-                        let k = '' as 'Hopex_BTC' | 'Hopex_ETH' | ''
-                        if (v.contractCode === 'BTCUSDT') { k = 'Hopex_BTC' }
-                        if (v.contractCode === 'ETHUSDT') { k = 'Hopex_ETH' }
-                        if (k !== '') {
-                            __obj__[k].push({
-                                type: '限价',
-                                timestamp: new Date(v.ctime).getTime(),
-                                id: String(v.orderId),
-                                side: v.side === '2' ? 'Buy' : 'Sell',
-                                cumQty: Number(v.fillQuantity.split(',').join('')),
-                                orderQty: Number(v.leftQuantity.split(',').join('')),
-                                price: Number(v.orderPrice.split(',').join('')),
-                            })
-                        }
+                        __obj__[v.contractCode].push({
+                            type: '限价',
+                            timestamp: new Date(v.ctime).getTime(),
+                            id: String(v.orderId),
+                            side: v.side === '2' ? 'Buy' : 'Sell',
+                            cumQty: Number(v.fillQuantity.split(',').join('')),
+                            orderQty: Number(v.leftQuantity.split(',').join('')),
+                            price: Number(v.orderPrice.split(',').join('')),
+                        })
                     })
                 }
 
-                hopexSymbolArr.forEach(symbol => {
+                BaseType.HopexSymbolArr.forEach(symbol => {
                     const id1Arr = __obj__[symbol].map(v => v.id).sort().join(',')
-                    const id2Arr = this.jsonSync.rawData.symbol[symbol].委托列表.map(v => v.id).sort().join(',')
+                    const id2Arr = this.jsonSync.rawData.market.hopex[symbol].委托列表.map(v => v.id).sort().join(',')
 
                     if (id1Arr !== id2Arr) {
-                        this.jsonSync.data.symbol[symbol].委托列表.____set(__obj__[symbol])
+                        this.jsonSync.data.market.hopex[symbol].委托列表.____set(__obj__[symbol])
                         this.log('hopex ' + symbol + '止损:' + (__obj__[symbol].length > 0 ? __obj__[symbol][0].price : '无'))
                     }
                 })
@@ -252,13 +239,13 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                     }
                 })
 
-                if (this.jsonSync.rawData.symbol.FCoin_BTC.仓位数量 !== 仓位数量) this.jsonSync.data.symbol.FCoin_BTC.仓位数量.____set(仓位数量)
-                if (this.jsonSync.rawData.symbol.FCoin_BTC.开仓均价 !== 开仓均价) this.jsonSync.data.symbol.FCoin_BTC.开仓均价.____set(开仓均价)
+                if (this.jsonSync.rawData.market.fcoin.btcusdt.仓位数量 !== 仓位数量) this.jsonSync.data.market.fcoin.btcusdt.仓位数量.____set(仓位数量)
+                if (this.jsonSync.rawData.market.fcoin.btcusdt.开仓均价 !== 开仓均价) this.jsonSync.data.market.fcoin.btcusdt.开仓均价.____set(开仓均价)
 
             } else {
 
-                if (isNaN(this.jsonSync.rawData.symbol.FCoin_BTC.仓位数量) === false) this.jsonSync.data.symbol.FCoin_BTC.仓位数量.____set(NaN)
-                if (isNaN(this.jsonSync.rawData.symbol.FCoin_BTC.开仓均价) === false) this.jsonSync.data.symbol.FCoin_BTC.开仓均价.____set(NaN)
+                if (isNaN(this.jsonSync.rawData.market.fcoin.btcusdt.仓位数量) === false) this.jsonSync.data.market.fcoin.btcusdt.仓位数量.____set(NaN)
+                if (isNaN(this.jsonSync.rawData.market.fcoin.btcusdt.开仓均价) === false) this.jsonSync.data.market.fcoin.btcusdt.开仓均价.____set(NaN)
             }
             await sleep(1000)
         }
@@ -280,15 +267,15 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                 }))
 
                 const id1Arr = arr.map(v => v.id).sort().join(',')
-                const id2Arr = this.jsonSync.rawData.symbol.FCoin_BTC.委托列表.map(v => v.id).sort().join(',')
+                const id2Arr = this.jsonSync.rawData.market.fcoin.btcusdt.委托列表.map(v => v.id).sort().join(',')
 
                 if (id1Arr !== id2Arr) {
-                    this.jsonSync.data.symbol.FCoin_BTC.委托列表.____set(arr)
+                    this.jsonSync.data.market.fcoin.btcusdt.委托列表.____set(arr)
                 }
 
             } else {
-                if (this.jsonSync.rawData.symbol.FCoin_BTC.委托列表.length !== 0) {
-                    this.jsonSync.data.symbol.FCoin_BTC.委托列表.____set([])
+                if (this.jsonSync.rawData.market.fcoin.btcusdt.委托列表.length !== 0) {
+                    this.jsonSync.data.market.fcoin.btcusdt.委托列表.____set([])
                 }
             }
             await sleep(1000)
@@ -391,8 +378,8 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         ['XBTUSD' as 'XBTUSD', 'ETHUSD' as 'ETHUSD'].forEach(symbol => {
             this.ws.data.position.forEach(item => {
                 if (item.symbol === symbol) {
-                    const { 仓位数量, 开仓均价 } = this.jsonSync.data.symbol[symbol]
-                    const raw = this.jsonSync.rawData.symbol[symbol]
+                    const { 仓位数量, 开仓均价 } = this.jsonSync.data.market.bitmex[symbol]
+                    const raw = this.jsonSync.rawData.market.bitmex[symbol]
                     if (item !== undefined) {
                         if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== item.avgCostPrice) {
                             仓位数量.____set(item.currentQty)
@@ -414,7 +401,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     private updateOrder() {
 
-        keys(this.jsonSync.rawData.symbol).forEach(symbol => {
+        keys(this.jsonSync.rawData.market.bitmex).forEach(symbol => {
 
             const arr = [] as {
                 type: '限价' | '限价只减仓' | '止损'
@@ -465,7 +452,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
             })
 
 
-            this.jsonSync.data.symbol[symbol].委托列表.____set(arr)
+            this.jsonSync.data.market.bitmex[symbol].委托列表.____set(arr)
         })
     }
 

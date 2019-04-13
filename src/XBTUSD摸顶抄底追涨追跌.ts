@@ -32,7 +32,7 @@ type XXX = {
     market: 'bitmex' | 'hopex'
     d: RealDataBase['dataExt']['XBTUSD']['bitmex']
     state: XBTUSD摸顶抄底追涨追跌['bitmex_state']
-    item: PositionAndOrder['jsonSync']['rawData']['symbol']['XBTUSD']
+    item: PositionAndOrder['jsonSync']['rawData']['market']['bitmex']['XBTUSD']
 }
 
 const get浮盈点数 = (x: XXX) => {
@@ -77,13 +77,13 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             market: 'hopex',
             d: self.realData.dataExt.XBTUSD.hopex,
             state: this.hopex_state,
-            item: self.jsonSync.rawData.symbol.Hopex_BTC,
+            item: self.jsonSync.rawData.market.hopex.BTCUSDT,
         }
 
         const bbb = this.止损_step(self, x)
         if (bbb) return bbb
 
-        const { 仓位数量 } = self.jsonSync.rawData.symbol.Hopex_BTC
+        const { 仓位数量 } = self.jsonSync.rawData.market.hopex.BTCUSDT
         if (仓位数量 === 0) {
             this.hopex_state.开仓状态 = {
                 最大仓位abs: NaN,
@@ -105,7 +105,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
             market: 'bitmex',
             d: self.realData.dataExt.XBTUSD.bitmex,
             state: this.bitmex_state,
-            item: self.jsonSync.rawData.symbol.XBTUSD,
+            item: self.jsonSync.rawData.market.bitmex.XBTUSD,
         }
 
         const aaa = this.bitmex_委托检测(self, x)
@@ -114,7 +114,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         const bbb = this.止损_step(self, x)
         if (bbb) return bbb
 
-        const { 仓位数量 } = self.jsonSync.rawData.symbol.XBTUSD
+        const { 仓位数量 } = self.jsonSync.rawData.market.bitmex.XBTUSD
         if (仓位数量 === 0) {
             this.bitmex_state.开仓状态 = {
                 最大仓位abs: NaN,

@@ -33,13 +33,13 @@ export interface PositionAndOrder {
             time: number
             total: number
         }[]
-        symbol: {
-            XBTUSD: ITEM
-            ETHUSD: ITEM
-            Hopex_BTC: ITEM
-            Hopex_ETH: ITEM
-            FCoin_BTC: ITEM
-        },
+        // symbol: {
+        //     XBTUSD: ITEM
+        //     ETHUSD: ITEM
+        //     Hopex_BTC: ITEM
+        //     Hopex_ETH: ITEM
+        //     FCoin_BTC: ITEM
+        // },
         market: {
             hopex: {
                 BTCUSDT: ITEM
