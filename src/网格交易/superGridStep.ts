@@ -1,4 +1,4 @@
-import { range } from 'ramda'
+import { range } from './node_modules/ramda'
 import { 策略运行器 } from '../WebService/策略运行器'
 import { getGridPrice } from './getGridPrice'
 import * as electron from 'electron'
