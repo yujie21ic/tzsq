@@ -8,6 +8,7 @@ import { get买卖 } from '../指标/买卖'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
 import * as fs from 'fs'
 import { formatDate } from '../lib/F/formatDate'
+import { mapObjIndexed } from '../lib/F/mapObjIndexed'
 
 const createItem = () => ({
     着笔: [] as BaseType.着笔[],
@@ -87,16 +88,7 @@ export class RealDataBase {
             ctp: {
                 rb1905: createItem(),
             },
-            hopex: {
-                BTCUSDT: createItem(),
-                ETHUSDT: createItem(),
-                ETCUSDT: createItem(),
-                LTCUSDT: createItem(),
-                XRPUSDT: createItem(),
-                EOSUSDT: createItem(),
-                BCHUSDT: createItem(),
-                BSVUSDT: createItem(),
-            },
+            hopex: mapObjIndexed(createItem, BaseType.HopexSymbolDic),
             fcoin: {
                 btcusdt: createItem(),
                 ethusdt: createItem(),
@@ -1420,16 +1412,7 @@ export class RealDataBase {
         ctp: {
             rb1905: this.item2(this.data.ctp.rb1905, true),
         },
-        hopex: {
-            BTCUSDT: this.item2(this.data.hopex.BTCUSDT, false),
-            ETHUSDT: this.item2(this.data.hopex.ETHUSDT, false),
-            ETCUSDT: this.item2(this.data.hopex.ETCUSDT, false),
-            BCHUSDT: this.item2(this.data.hopex.BCHUSDT, false),
-            BSVUSDT: this.item2(this.data.hopex.BSVUSDT, false),
-            LTCUSDT: this.item2(this.data.hopex.LTCUSDT, false),
-            XRPUSDT: this.item2(this.data.hopex.XRPUSDT, false),
-            EOSUSDT: this.item2(this.data.hopex.EOSUSDT, false),
-        }
+        hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic)
     }
 
     重新初始化 = () => {
@@ -1439,17 +1422,7 @@ export class RealDataBase {
             ctp: {
                 rb1905: this.item2(this.data.ctp.rb1905, true),
             },
-            hopex: {
-                BTCUSDT: this.item2(this.data.hopex.BTCUSDT, false),
-                ETHUSDT: this.item2(this.data.hopex.ETHUSDT, false),
-                ETCUSDT: this.item2(this.data.hopex.ETCUSDT, false),
-                BCHUSDT: this.item2(this.data.hopex.BCHUSDT, false),
-                BSVUSDT: this.item2(this.data.hopex.BSVUSDT, false),
-                LTCUSDT: this.item2(this.data.hopex.LTCUSDT, false),
-                XRPUSDT: this.item2(this.data.hopex.XRPUSDT, false),
-                EOSUSDT: this.item2(this.data.hopex.EOSUSDT, false),
-
-            }
+            hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic)
         }
     }
 

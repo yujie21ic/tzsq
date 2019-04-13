@@ -2,6 +2,7 @@ import { TradeAndOrderBook } from './TradeAndOrderBook'
 import { BaseType } from '../../BaseType'
 import { config } from '../../../config'
 import { WebSocketClient } from '../../F/WebSocketClient'
+import { mapObjIndexed } from '../../F/mapObjIndexed'
 
 type Frame = {
     method: 'orderbook.update'
@@ -217,14 +218,5 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
         }
     }
 
-    private orderBook = {
-        BTCUSDT: createItem(),
-        ETHUSDT: createItem(),
-        ETCUSDT: createItem(),
-        LTCUSDT: createItem(),
-        XRPUSDT: createItem(),
-        EOSUSDT: createItem(),
-        BCHUSDT: createItem(),
-        BSVUSDT: createItem(),
-    }
+    private orderBook = mapObjIndexed(createItem, BaseType.HopexSymbolDic)
 }

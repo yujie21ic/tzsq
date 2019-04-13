@@ -11,6 +11,7 @@ import { toCacheFunc } from '../../F/toCacheFunc'
 import { PositionAndOrder, PositionAndOrderTask } from './PositionAndOrder'
 import { HopexHTTP } from '../HopexHTTP'
 import { FCoinHTTP } from '../FCoinHTTP'
+import { mapObjIndexed } from '../../F/mapObjIndexed'
 
 const symbol = () => ({
     任务开关: {
@@ -33,24 +34,8 @@ export const createJSONSync = () =>
             time: number
             total: number
         }[],
-        // symbol: {
-        //     XBTUSD: symbol(),
-        //     ETHUSD: symbol(),
-        //     Hopex_BTC: symbol(),
-        //     Hopex_ETH: symbol(),
-        //     FCoin_BTC: symbol(),
-        // },
         market: {
-            hopex: {
-                BTCUSDT: symbol(),
-                ETHUSDT: symbol(),
-                ETCUSDT: symbol(),
-                XRPUSDT: symbol(),
-                EOSUSDT: symbol(),
-                LTCUSDT: symbol(),
-                BCHUSDT: symbol(),
-                BSVUSDT: symbol(),
-            },
+            hopex: mapObjIndexed(symbol, BaseType.HopexSymbolDic),
             fcoin: {
                 btcusdt: symbol(),
                 ethusdt: symbol(),
@@ -100,16 +85,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     private async hopex_仓位_轮询() {
         while (true) {
-            const __obj__ = {
-                BTCUSDT: { 仓位数量: 0, 开仓均价: 0, },
-                ETHUSDT: { 仓位数量: 0, 开仓均价: 0, },
-                ETCUSDT: { 仓位数量: 0, 开仓均价: 0, },
-                LTCUSDT: { 仓位数量: 0, 开仓均价: 0, },
-                XRPUSDT: { 仓位数量: 0, 开仓均价: 0, },
-                EOSUSDT: { 仓位数量: 0, 开仓均价: 0, },
-                BCHUSDT: { 仓位数量: 0, 开仓均价: 0, },
-                BSVUSDT: { 仓位数量: 0, 开仓均价: 0, },
-            }
+            const __obj__ = mapObjIndexed(() => ({ 仓位数量: 0, 开仓均价: 0, }), BaseType.HopexSymbolDic)
             const { data } = await HopexHTTP.getPositions(this.hopexCookie)
             if (data !== undefined) {
                 this.hopex_初始化.仓位 = true
@@ -141,17 +117,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     private async hopex_委托_轮询() {
         while (true) {
-            const __obj__ = {
-                BTCUSDT: [] as BaseType.Order[],
-                ETHUSDT: [] as BaseType.Order[],
-                ETCUSDT: [] as BaseType.Order[],
-                LTCUSDT: [] as BaseType.Order[],
-                XRPUSDT: [] as BaseType.Order[],
-                EOSUSDT: [] as BaseType.Order[],
-                BCHUSDT: [] as BaseType.Order[],
-                BSVUSDT: [] as BaseType.Order[],
-            }
-
+            const __obj__ = mapObjIndexed(() => [] as BaseType.Order[], BaseType.HopexSymbolDic)
             const 止损data = (await HopexHTTP.getConditionOrders(this.hopexCookie)).data
             const 委托data = (await HopexHTTP.getOpenOrders(this.hopexCookie)).data
 
