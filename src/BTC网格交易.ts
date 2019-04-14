@@ -37,27 +37,32 @@ type 参数 = {
 
 
 let 网格配置: 参数
-let api: any
 
 
 
 import { PositionAndOrder } from './lib/____API____/PositionAndOrder/PositionAndOrder'
 import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/PositionAndOrder'
+import { lastNumber } from './lib/F/lastNumber'
 
 export class BTC网格交易 implements PositionAndOrderTask {
 
+    self = {} as PositionAndOrder
+    lastFillSide = '' as BaseType.Side
+    lastFillPrice = NaN
+    lastFillTime = 0
 
-    get加仓数量 = (累计: number) => 网格配置.加仓.get单个格子数量(累计 + Math.abs(api.myPosition))
 
-    get减仓数量 = (累计: number) => 网格配置.减仓.get单个格子数量(累计 + Math.abs(api.myPosition))
+    get加仓数量 = (累计: number) => 网格配置.加仓.get单个格子数量(累计 + Math.abs(this.get仓位数量()))
 
-    get开仓均价 = () => api.开仓均价
+    get减仓数量 = (累计: number) => 网格配置.减仓.get单个格子数量(累计 + Math.abs(this.get仓位数量()))
 
-    getLastFillPrice = () => api.lastFillPrice
+    get仓位数量 = () => this.self.jsonSync.rawData.market.bitmex.XBTUSD.仓位数量
 
-    getBuy1 = () => api.buy1
+    get开仓均价 = () => this.self.jsonSync.rawData.market.bitmex.XBTUSD.开仓均价
 
-    getSell1 = () => api.sell1
+    getBuy1 = () => lastNumber(this.self.realData.dataExt.XBTUSD.bitmex.买.盘口1价)
+
+    getSell1 = () => lastNumber(this.self.realData.dataExt.XBTUSD.bitmex.卖.盘口1价)
 
 
     __getPrice = (side: BaseType.Side, 网格点: number, _price_?: number, 必须盈利 = true) => {
@@ -91,14 +96,14 @@ export class BTC网格交易 implements PositionAndOrderTask {
         let p = this.__getPrice(side, 网格点, undefined, 必须盈利)
 
         //重挂时间内
-        if (api.lastFillSide === side &&
+        if (this.lastFillSide === side &&
             (
-                (side === 'Buy' && p >= this.getLastFillPrice()) ||
-                (side === 'Sell' && p <= this.getLastFillPrice())
+                (side === 'Buy' && p >= this.lastFillPrice) ||
+                (side === 'Sell' && p <= this.lastFillPrice)
             ) &&
-            Date.now() < api.lastFillTime + 重挂时间 * 1000
+            Date.now() < this.lastFillTime + 重挂时间 * 1000
         ) {
-            p = this.__getPrice(side, 网格点, this.getLastFillPrice(), 必须盈利)
+            p = this.__getPrice(side, 网格点, this.lastFillPrice, 必须盈利)
         }
 
         return p
@@ -108,12 +113,12 @@ export class BTC网格交易 implements PositionAndOrderTask {
         let p = this.getPrice(side, 网格点, 重挂时间, true)
 
         //多仓小于min 亏损加仓
-        if (side === 'Buy' && api.myPosition > 0 && api.myPosition < 网格配置.多仓.min) {
+        if (side === 'Buy' && this.get仓位数量() > 0 && this.get仓位数量() < 网格配置.多仓.min) {
             p = this.getPrice('Buy', 网格点, 重挂时间, false)
         }
 
         //空仓小于min 亏损加仓 
-        if (side === 'Sell' && api.myPosition < 0 && Math.abs(api.myPosition) < 网格配置.空仓.min) {
+        if (side === 'Sell' && this.get仓位数量() < 0 && Math.abs(this.get仓位数量()) < 网格配置.空仓.min) {
             p = this.getPrice('Sell', 网格点, 重挂时间, false)
         }
 
@@ -122,9 +127,9 @@ export class BTC网格交易 implements PositionAndOrderTask {
             const price = side === 'Buy' ? p - i * 网格点 : p + i * 网格点
             let count: number
             if (side === 'Buy') {
-                count = api.myPosition > 0 ? this.get加仓数量(累计) : this.get减仓数量(累计)
+                count = this.get仓位数量() > 0 ? this.get加仓数量(累计) : this.get减仓数量(累计)
             } else {
-                count = api.myPosition < 0 ? this.get加仓数量(累计) : this.get减仓数量(累计)
+                count = this.get仓位数量() < 0 ? this.get加仓数量(累计) : this.get减仓数量(累计)
             }
             累计 += count
             return { side, price, count }
@@ -144,18 +149,18 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
         let cancelIDs: string[] = []
 
-        api.活动委托.forEach(v => {
+        this.self.jsonSync.rawData.market.bitmex.XBTUSD.委托列表.forEach(v => {
 
 
             const PRICE = v.price
 
             //这个价格没有委托 取消掉
             if (dic[PRICE] === undefined) {
-                cancelIDs.push(v.orderID)
+                cancelIDs.push(v.id)
             }
             // 委托数量不一样 取消掉
             else if (v.orderQty !== dic[PRICE].count) {
-                cancelIDs.push(v.orderID)
+                cancelIDs.push(v.id)
             }
             //委托数量一样
             else {
@@ -191,34 +196,34 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
 
     onTick(self: PositionAndOrder) {
-        const 减仓距离 = this.get开仓均价() === 0 ? 0 : Math.abs(this.get开仓均价() - (api.myPosition > 0 ? this.getSell1() : this.getBuy1()))
+        const 减仓距离 = this.get开仓均价() === 0 ? 0 : Math.abs(this.get开仓均价() - (this.get仓位数量() > 0 ? this.getSell1() : this.getBuy1()))
         const 减仓 = this.getOrderArr(
-            api.myPosition > 0 ? 'Sell' : 'Buy',
+            this.get仓位数量() > 0 ? 'Sell' : 'Buy',
             网格配置.减仓.get单个格子大小(减仓距离),
             网格配置.减仓.格数,
             网格配置.减仓.重挂时间
         ).filter(v => v.side === 'Buy' ? 网格配置.减仓.buy条件({
-            仓位数量: api.myPosition,
+            仓位数量: this.get仓位数量(),
             价格: v.price,
             开仓均价: this.get开仓均价()
         }) : 网格配置.减仓.sell条件({
-            仓位数量: api.myPosition,
+            仓位数量: this.get仓位数量(),
             价格: v.price,
             开仓均价: this.get开仓均价()
         }))
 
-        const 加仓距离 = this.get开仓均价() === 0 ? 0 : Math.abs(this.get开仓均价() - (api.myPosition > 0 ? this.getBuy1() : this.getSell1()))
+        const 加仓距离 = this.get开仓均价() === 0 ? 0 : Math.abs(this.get开仓均价() - (this.get仓位数量() > 0 ? this.getBuy1() : this.getSell1()))
         const 加仓 = this.getOrderArr(
-            api.myPosition > 0 ? 'Buy' : 'Sell',
+            this.get仓位数量() > 0 ? 'Buy' : 'Sell',
             网格配置.加仓.get单个格子大小(加仓距离),
             网格配置.加仓.格数,
             网格配置.加仓.重挂时间
         ).filter(v => v.side === 'Buy' ? 网格配置.加仓.buy条件({
-            仓位数量: api.myPosition,
+            仓位数量: this.get仓位数量(),
             价格: v.price,
             开仓均价: this.get开仓均价()
         }) : 网格配置.加仓.sell条件({
-            仓位数量: api.myPosition,
+            仓位数量: this.get仓位数量(),
             价格: v.price,
             开仓均价: this.get开仓均价()
         }))
@@ -230,40 +235,40 @@ export class BTC网格交易 implements PositionAndOrderTask {
         for (let i = 0; i < 减仓.length; i++) {
             count += 减仓[i].count
             //没有仓位 Buy
-            if (api.myPosition === 0) {
+            if (this.get仓位数量() === 0) {
                 if (count > 网格配置.多仓.max) break
             }
             //多仓
-            if (api.myPosition > 0) {
+            if (this.get仓位数量() > 0) {
                 //不能减仓
-                if (网格配置.多仓.min !== 0 && api.myPosition < 网格配置.多仓.min) {
+                if (网格配置.多仓.min !== 0 && this.get仓位数量() < 网格配置.多仓.min) {
                     break
                 }
 
                 //减仓后不能 反手 > 最大仓位
-                if (api.myPosition - count < -网格配置.空仓.max) {
+                if (this.get仓位数量() - count < -网格配置.空仓.max) {
                     break
                 }
 
                 //减仓后 < 最小仓位 下一格就不减仓了
-                if (网格配置.多仓.min !== 0 && api.myPosition - count < 网格配置.多仓.min) {
+                if (网格配置.多仓.min !== 0 && this.get仓位数量() - count < 网格配置.多仓.min) {
                     temp = true
                 }
             }
             //空仓
-            if (api.myPosition < 0) {
+            if (this.get仓位数量() < 0) {
                 //不能减仓
-                if (网格配置.空仓.min !== 0 && api.myPosition > -网格配置.空仓.min) {
+                if (网格配置.空仓.min !== 0 && this.get仓位数量() > -网格配置.空仓.min) {
                     break
                 }
 
                 //减仓后不能 反手 > 最大仓位
-                if (api.myPosition + count > 网格配置.多仓.max) {
+                if (this.get仓位数量() + count > 网格配置.多仓.max) {
                     break
                 }
 
                 //减仓后 < 最小仓位 下一格就不减仓了
-                if (网格配置.空仓.min !== 0 && api.myPosition + count > -网格配置.空仓.min) {
+                if (网格配置.空仓.min !== 0 && this.get仓位数量() + count > -网格配置.空仓.min) {
                     temp = true
                 }
             }
@@ -276,20 +281,20 @@ export class BTC网格交易 implements PositionAndOrderTask {
         for (let i = 0; i < 加仓.length; i++) {
             count += 加仓[i].count
             //没有仓位 Sell
-            if (api.myPosition === 0) {
+            if (this.get仓位数量() === 0) {
                 if (count > 网格配置.空仓.max) break
             }
             //多仓
-            if (api.myPosition > 0) {
+            if (this.get仓位数量() > 0) {
                 //加仓后不能 > 最大仓位
-                if (api.myPosition + count > 网格配置.多仓.max) {
+                if (this.get仓位数量() + count > 网格配置.多仓.max) {
                     break
                 }
             }
             //空仓
-            if (api.myPosition < 0) {
+            if (this.get仓位数量() < 0) {
                 //加仓后不能 > 最大仓位
-                if (api.myPosition - count < -网格配置.空仓.max) {
+                if (this.get仓位数量() - count < -网格配置.空仓.max) {
                     break
                 }
             }
