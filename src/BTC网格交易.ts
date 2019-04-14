@@ -144,7 +144,6 @@ export class BTC网格交易 implements PositionAndOrderTask {
                 console.log('maker多个', arr)
                 return this.self.maker多个({ symbol: 'XBTUSD', arr })
             } else {
-                console.log('_____________')
                 return false
             }
         }
@@ -204,10 +203,6 @@ export class BTC网格交易 implements PositionAndOrderTask {
             价格: v.price,
             开仓均价: this.get开仓均价()
         }))
-
-
-        console.log('加仓', JSON.stringify(加仓, null, 4))
-        console.log('减仓', JSON.stringify(减仓, null, 4))
 
         let arr: { side: BaseType.Side, price: number, count: number }[] = []
 
