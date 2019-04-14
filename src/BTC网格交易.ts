@@ -29,7 +29,6 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
 
     __getPrice = (side: BaseType.Side, 网格点: number, _price_?: number, 必须盈利 = true) => {
-        // console.log(side, '必须盈利', 必须盈利)
         if (side === 'Buy') {
             const arr = [_price_, this.getSell1(), ...[必须盈利 ? [this.get开仓均价()] : []]].filter(v => v !== 0 && v !== undefined) as number[]
             let price = Math.min(...arr)
@@ -101,7 +100,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
 
     //price 不能重复
-    sync活动委托 = async (arr: { side: BaseType.Side, price: number, count: number }[]) => {
+    sync活动委托 = (arr: { side: BaseType.Side, price: number, count: number }[]) => {
 
         let dic: { [price: number]: { side: BaseType.Side, count: number } } = {}
 
@@ -130,7 +129,8 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
 
         if (cancelIDs.length !== 0) {
-            return await this.self.cancel({ orderID: cancelIDs })
+            console.log('取消', cancelIDs)
+            return this.self.cancel({ orderID: cancelIDs })
         } else {
             let arr: { side: BaseType.Side, price: number, size: number }[] = []
             for (const price in dic) {
@@ -141,8 +141,10 @@ export class BTC网格交易 implements PositionAndOrderTask {
                 })
             }
             if (arr.length !== 0) {
-                return await this.self.maker多个({ symbol: 'XBTUSD', arr })
+                console.log('maker多个', arr)
+                return this.self.maker多个({ symbol: 'XBTUSD', arr })
             } else {
+                console.log('_____________')
                 return false
             }
         }
@@ -276,6 +278,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
             arr.push(加仓[i])
         }
 
+        console.log(JSON.stringify(arr, null, 4))
         return this.sync活动委托(arr)
     }
 
