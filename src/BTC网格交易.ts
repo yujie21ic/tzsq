@@ -6,7 +6,6 @@ import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/Positio
 import { lastNumber } from './lib/F/lastNumber'
 import { BTC网格交易__参数 } from './BTC网格交易__参数'
 
-
 export class BTC网格交易 implements PositionAndOrderTask {
 
     self = {} as PositionAndOrder
@@ -14,14 +13,13 @@ export class BTC网格交易 implements PositionAndOrderTask {
     lastFillPrice = NaN
     lastFillTime = 0
 
-
     get加仓数量 = (累计: number) => BTC网格交易__参数.加仓.get单个格子数量(累计 + Math.abs(this.get仓位数量()))
 
     get减仓数量 = (累计: number) => BTC网格交易__参数.减仓.get单个格子数量(累计 + Math.abs(this.get仓位数量()))
 
     get仓位数量 = () => this.self.jsonSync.rawData.market.bitmex.XBTUSD.仓位数量
 
-    get开仓均价 = () => this.self.jsonSync.rawData.market.bitmex.XBTUSD.开仓均价
+    get开仓均价 = () => this.self.jsonSync.rawData.market.bitmex.XBTUSD.开仓均价 || lastNumber(this.self.realData.dataExt.XBTUSD.bitmex.买.盘口1价)
 
     getBuy1 = () => lastNumber(this.self.realData.dataExt.XBTUSD.bitmex.买.盘口1价)
 
