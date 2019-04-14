@@ -132,16 +132,16 @@ export class BTC网格交易 implements PositionAndOrderTask {
         if (cancelIDs.length !== 0) {
             return await this.self.cancel({ orderID: cancelIDs })
         } else {
-            let arr: { side: BaseType.Side, price: number, count: number }[] = []
+            let arr: { side: BaseType.Side, price: number, size: number }[] = []
             for (const price in dic) {
                 arr.push({
                     side: dic[price].side,
                     price: Number(price),
-                    count: dic[price].count,
+                    size: dic[price].count,
                 })
             }
             if (arr.length !== 0) {
-                return await api.order(arr)
+                return await this.self.maker多个({ symbol: 'XBTUSD', arr })
             } else {
                 return false
             }
