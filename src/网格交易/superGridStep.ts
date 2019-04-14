@@ -1,32 +1,14 @@
-
+import { BaseType } from '../lib/BaseType'
+import { to价格对齐 } from '../lib/F/to价格对齐'
+import { range } from 'ramda'
 
 //网格买入   网格卖出
 
-//全局类型
-
-type KLineItem = {
-    index: number
-    open: number
-    close: number
-    high: number
-    low: number
-    volume: number
-}
-
-type KLineCycle = '1m' | '5m' | '1h' | '1d'
-
-type BinanceSymbol = 'btcusdt' | 'ethusdt'
-type BitmexSymbol = 'ETHUSD' | 'XBTUSD' | 'BCHZ18' | 'ADAM18' | 'BCHM18' | 'ETHM18' | 'LTCM18' | 'XBTU18' | 'XRPU18' | 'XRPZ18' | 'XBTM18'
-
-type Side = 'Buy' | 'Sell'
-
-
-
 type AAAA = {
-    网格点: (n: number) => number //n是距离   没算累计
+    网格点: (n: number) => number       //n是距离   没算累计
     格数: number
     重挂时间: number
-    数量: (n: number) => number//n是仓位数量   算了累计
+    数量: (n: number) => number         //n是仓位数量   算了累计
     buy条件: (p: {
         仓位数量: number
         价格: number
@@ -51,44 +33,25 @@ type SuperGridConfig = {
         min: number
         max: number
     }
-    退出程序: (p: {
-        仓位数量: number
-        价格: number
-        开仓均价: number
-    }) => boolean
 }
 
-type RealType = {
-    config: {
-        cookie: string
-        symbol: BitmexSymbol
-    }
-    ploy: SuperGridConfig
-}
 
-declare const real: RealType
-
-
-
-import { getGridPrice } from './getGridPrice'
-import * as electron from 'electron'
-
-let api: 策略运行器
 let superGridConfig: SuperGridConfig
+let api: any
 
 const get加仓数量 = (累计: number) => superGridConfig.加仓.数量(累计 + Math.abs(api.myPosition))
 
 const get减仓数量 = (累计: number) => superGridConfig.减仓.数量(累计 + Math.abs(api.myPosition))
 
 
-//
 const get开仓均价 = () => Math.round(api.开仓均价 * superGridConfig.价钱除以多少)
 const getLastFillPrice = () => Math.round(api.lastFillPrice * superGridConfig.价钱除以多少)
 const getLastPrice = () => Math.round(api.lastPrice * superGridConfig.价钱除以多少)
 const getBuy1 = () => Math.round(api.buy1 * superGridConfig.价钱除以多少)
 const getSell1 = () => Math.round(api.sell1 * superGridConfig.价钱除以多少)
 
-const __getPrice = (side: Side, 网格点: number, _price_?: number, 必须盈利 = true) => {
+
+const __getPrice = (side: BaseType.Side, 网格点: number, _price_?: number, 必须盈利 = true) => {
     // console.log(side, '必须盈利', 必须盈利)
     if (side == 'Buy') {
         const arr = [_price_, getSell1(), ...[必须盈利 ? [get开仓均价()] : []]].filter(v => v != 0 && v != undefined) as number[]
@@ -96,10 +59,10 @@ const __getPrice = (side: Side, 网格点: number, _price_?: number, 必须盈�
 
         //多仓.最大价格 删除
 
-        return getGridPrice({
+        return to价格对齐({
             side: 'Buy',
-            price: price,
-            gridPoint: 网格点
+            value: price,
+            grid: 网格点
         })
     } else {
         const arr = [_price_, getBuy1(), ...[必须盈利 ? [get开仓均价()] : []]].filter(v => v != 0 && v != undefined) as number[]
@@ -107,15 +70,15 @@ const __getPrice = (side: Side, 网格点: number, _price_?: number, 必须盈�
 
         //空仓.最小价格 删除
 
-        return getGridPrice({
+        return to价格对齐({
             side: 'Sell',
-            price: price,
-            gridPoint: 网格点
+            value: price,
+            grid: 网格点
         })
     }
 }
 
-const getPrice = (side: Side, 网格点: number, 重挂时间: number, 必须盈利: boolean) => {
+const getPrice = (side: BaseType.Side, 网格点: number, 重挂时间: number, 必须盈利: boolean) => {
     let p = __getPrice(side, 网格点, undefined, 必须盈利)
 
     //重挂时间内
@@ -132,7 +95,7 @@ const getPrice = (side: Side, 网格点: number, 重挂时间: number, 必须盈
     return p
 }
 
-const getOrderArr = (side: Side, 网格点: number, 格数: number, 重挂时间: number) => {
+const getOrderArr = (side: BaseType.Side, 网格点: number, 格数: number, 重挂时间: number) => {
     let p = getPrice(side, 网格点, 重挂时间, true)
 
     //多仓小于min 亏损加仓
@@ -161,14 +124,6 @@ const getOrderArr = (side: Side, 网格点: number, 格数: number, 重挂时间
 
 const step = () => {
 
-    if (superGridConfig.退出程序({
-        仓位数量: api.myPosition,
-        价格: getLastPrice(),
-        开仓均价: get开仓均价()
-    })) {
-        electron.remote.getCurrentWindow().close()
-        return
-    }
 
     const 减仓距离 = get开仓均价() == 0 ? 0 : Math.abs(get开仓均价() - (api.myPosition > 0 ? getSell1() : getBuy1()))
     const 减仓 = getOrderArr(
@@ -202,7 +157,7 @@ const step = () => {
         开仓均价: get开仓均价()
     }))
 
-    let arr: { side: Side, price: number, count: number }[] = []
+    let arr: { side: BaseType.Side, price: number, count: number }[] = []
 
     let count = 0
     let temp = false
@@ -279,9 +234,9 @@ const step = () => {
 }
 
 //price 不能重复
-const sync活动委托 = (arr: { side: Side, price: number, count: number }[]) => {
+const sync活动委托 = (arr: { side: BaseType.Side, price: number, count: number }[]) => {
 
-    let dic: { [price: number]: { side: Side, count: number } } = {}
+    let dic: { [price: number]: { side: BaseType.Side, count: number } } = {}
 
     arr.forEach(v => {
         dic[v.price] = { side: v.side, count: v.count }
@@ -315,7 +270,7 @@ const sync活动委托 = (arr: { side: Side, price: number, count: number }[]) =
     if (cancelIDs.length != 0) {
         api.orderCancel(cancelIDs)
     } else {
-        let arr: { side: Side, price: number, count: number }[] = []
+        let arr: { side: BaseType.Side, price: number, count: number }[] = []
         for (const price in dic) {
             arr.push({
                 side: dic[price].side,
@@ -325,10 +280,4 @@ const sync活动委托 = (arr: { side: Side, price: number, count: number }[]) =
         }
         api.order(arr)
     }
-}
-
-export const superGridStep = (p2: SuperGridConfig) => (api2: 策略运行器) => {
-    api = api2
-    superGridConfig = p2
-    step()
 }
