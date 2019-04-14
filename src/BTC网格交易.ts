@@ -150,8 +150,18 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
 
 
-    onFilled(p: { symbol: BaseType.BitmexSymbol, type: '限价' | '限价只减仓' | '止损' | '强平' }) {
-
+    onFilled(p: {
+        symbol: BaseType.BitmexSymbol
+        side: BaseType.Side
+        price: number
+        size: number
+        type: '限价' | '限价只减仓' | '止损' | '强平'
+    }) {
+        if (p.symbol === 'XBTUSD') {
+            this.lastFillSide = p.side
+            this.lastFillPrice = p.price
+            this.lastFillTime = Date.now()
+        }
     }
 
     onHopexTick(self: PositionAndOrder) {
@@ -160,6 +170,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
 
     onTick(self: PositionAndOrder) {
+        this.self = self
         const 减仓距离 = this.get开仓均价() === 0 ? 0 : Math.abs(this.get开仓均价() - (this.get仓位数量() > 0 ? this.getSell1() : this.getBuy1()))
         const 减仓 = this.getOrderArr(
             this.get仓位数量() > 0 ? 'Sell' : 'Buy',

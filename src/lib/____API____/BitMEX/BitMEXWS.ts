@@ -363,27 +363,54 @@ export class BitMEXWS {
         this.新成交(order)
 
         if (order.ordType === 'Limit' && order.execInst === 'ParticipateDoNotInitiate,ReduceOnly' && order.ordStatus === 'Filled') {
-            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '限价只减仓' })
+            this.filledObservable.next({
+                symbol: order.symbol as BaseType.BitmexSymbol,
+                side: order.side as BaseType.Side,
+                price: order.price,
+                size: order.orderQty,
+                type: '限价只减仓',
+            })
         }
         else if (order.ordType === 'Stop' && order.execInst === 'Close,LastPrice' && order.ordStatus === 'Filled') {
-            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '止损' })
+            this.filledObservable.next({
+                symbol: order.symbol as BaseType.BitmexSymbol,
+                side: order.side as BaseType.Side,
+                price: order.stopPx, //<-------------------------------------------------??
+                size: order.orderQty,
+                type: '止损',
+            })
         }
         else if (order.ordType === 'Limit' && order.ordStatus === 'Filled') {
-            this.filledObservable.next({ symbol: order.symbol as BaseType.BitmexSymbol, type: '限价' })
+            this.filledObservable.next({
+                symbol: order.symbol as BaseType.BitmexSymbol,
+                side: order.side as BaseType.Side,
+                price: order.price,
+                size: order.orderQty,
+                type: '限价',
+            })
         }
     }
 
     onExecution(execution: BitMEXMessage.Execution) {
         if (execution.ordType === 'StopLimit') {
             this.新成交(execution)
-            this.filledObservable.next({ symbol: execution.symbol as BaseType.BitmexSymbol, type: '强平' })
+            this.filledObservable.next({
+                symbol: execution.symbol as BaseType.BitmexSymbol,
+                side: execution.side as BaseType.Side,
+                price: execution.stopPx, //<--------------------------------------------??
+                size: execution.orderQty,//<--------------------------------------------??
+                type: '强平',
+            })
         }
     }
 
 
     //
     filledObservable = new Subject<{
-        symbol: BaseType.BitmexSymbol,
+        symbol: BaseType.BitmexSymbol
+        side: BaseType.Side
+        price: number
+        size: number
         type: '限价' | '限价只减仓' | '止损' | '强平'
     }>()
 }

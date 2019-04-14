@@ -134,5 +134,11 @@ export interface PositionAndOrder {
 export interface PositionAndOrderTask {
     onTick(self: PositionAndOrder): boolean | Promise<boolean>
     onHopexTick(self: PositionAndOrder): boolean | Promise<boolean>
-    onFilled(p: { symbol: BaseType.BitmexSymbol, type: '限价' | '限价只减仓' | '止损' | '强平' }): void
+    onFilled(p: {
+        symbol: BaseType.BitmexSymbol
+        side: BaseType.Side
+        price: number
+        size: number
+        type: '限价' | '限价只减仓' | '止损' | '强平'
+    }): void
 }
