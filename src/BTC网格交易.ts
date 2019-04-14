@@ -173,7 +173,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
     onTick(self: PositionAndOrder) {
         this.self = self
-        const 减仓距离 = this.get开仓均价() === 0 ? 0 : Math.abs(this.get开仓均价() - (this.get仓位数量() > 0 ? this.getSell1() : this.getBuy1()))
+        const 减仓距离 = this.get开仓均价() === 0 ? 0 : Math.abs(this.get开仓均价() - (this.get仓位数量() > 0 ? this.getBuy1() : this.getSell1()))
         const 减仓 = this.getOrderArr(
             this.get仓位数量() > 0 ? 'Sell' : 'Buy',
             BTC网格交易__参数.减仓.get单个格子大小(减仓距离),
@@ -189,7 +189,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
             开仓均价: this.get开仓均价()
         }))
 
-        const 加仓距离 = this.get开仓均价() === 0 ? 0 : Math.abs(this.get开仓均价() - (this.get仓位数量() > 0 ? this.getBuy1() : this.getSell1()))
+        const 加仓距离 = this.get开仓均价() === 0 ? 0 : Math.abs(this.get开仓均价() - (this.get仓位数量() > 0 ? this.getSell1() : this.getBuy1()))
         const 加仓 = this.getOrderArr(
             this.get仓位数量() > 0 ? 'Buy' : 'Sell',
             BTC网格交易__参数.加仓.get单个格子大小(加仓距离),
@@ -204,6 +204,10 @@ export class BTC网格交易 implements PositionAndOrderTask {
             价格: v.price,
             开仓均价: this.get开仓均价()
         }))
+
+
+        console.log('加仓', JSON.stringify(加仓, null, 4))
+        console.log('减仓', JSON.stringify(减仓, null, 4))
 
         let arr: { side: BaseType.Side, price: number, count: number }[] = []
 
@@ -278,7 +282,6 @@ export class BTC网格交易 implements PositionAndOrderTask {
             arr.push(加仓[i])
         }
 
-        console.log(JSON.stringify(arr, null, 4))
         return this.sync活动委托(arr)
     }
 
