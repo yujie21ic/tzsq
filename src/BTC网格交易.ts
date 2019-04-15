@@ -19,9 +19,9 @@ export class BTC网格交易 implements PositionAndOrderTask {
     lastFillPrice = NaN
     lastFillTime = 0
 
-    get加仓数量 = (累计: number) => BTC网格交易__参数.加仓.get单个格子数量(累计 + Math.abs(this.get仓位数量()))
+    get加仓数量 = (累计: number) => BTC网格交易__参数.加仓.单个格子数量//(累计 + Math.abs(this.get仓位数量()))
 
-    get减仓数量 = (累计: number) => BTC网格交易__参数.减仓.get单个格子数量(累计 + Math.abs(this.get仓位数量()))
+    get减仓数量 = (累计: number) => BTC网格交易__参数.减仓.单个格子数量//(累计 + Math.abs(this.get仓位数量()))
 
     get仓位数量 = () => this.self.jsonSync.rawData.market.bitmex.XBTUSD.仓位数量
 
@@ -30,7 +30,6 @@ export class BTC网格交易 implements PositionAndOrderTask {
     getBuy1 = () => lastNumber(this.self.realData.dataExt.XBTUSD.bitmex.买.盘口1价)
 
     getSell1 = () => lastNumber(this.self.realData.dataExt.XBTUSD.bitmex.卖.盘口1价)
-
 
     __getPrice = (side: BaseType.Side, 网格点: number, _price_?: number, 必须盈利 = true) => {
         if (side === 'Buy') {
@@ -162,9 +161,10 @@ export class BTC网格交易 implements PositionAndOrderTask {
         size: number
         type: '限价' | '限价只减仓' | '止损' | '强平'
     }) {
+        console.log('onFilled', JSON.stringify(p))
         if (p.symbol === 'XBTUSD') {
             this.lastFillSide = p.side
-            this.lastFillPrice = p.price
+            this.lastFillPrice = p.side === 'Buy' ? p.price - 0.5 : p.price + 0.5//>---------------------
             this.lastFillTime = Date.now()
         }
     }
@@ -176,37 +176,21 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
     onTick(self: PositionAndOrder) {
         this.self = self
-        const 减仓距离 = this.get开仓均价() === 0 ? 0 : Math.abs(this.get开仓均价() - (this.get仓位数量() > 0 ? this.getBuy1() : this.getSell1()))
+        //const 减仓距离 = this.get开仓均价() === 0 ? 0 : Math.abs(this.get开仓均价() - (this.get仓位数量() > 0 ? this.getBuy1() : this.getSell1()))
         const 减仓 = this.getOrderArr(
             this.get仓位数量() > 0 ? 'Sell' : 'Buy',
-            BTC网格交易__参数.减仓.get单个格子大小(减仓距离),
+            BTC网格交易__参数.减仓.单个格子大小,//(减仓距离),
             BTC网格交易__参数.减仓.格数,
             BTC网格交易__参数.减仓.重挂时间
-        ).filter(v => v.side === 'Buy' ? BTC网格交易__参数.减仓.buy条件({
-            仓位数量: this.get仓位数量(),
-            价格: v.price,
-            开仓均价: this.get开仓均价()
-        }) : BTC网格交易__参数.减仓.sell条件({
-            仓位数量: this.get仓位数量(),
-            价格: v.price,
-            开仓均价: this.get开仓均价()
-        }))
+        )
 
-        const 加仓距离 = this.get开仓均价() === 0 ? 0 : Math.abs(this.get开仓均价() - (this.get仓位数量() > 0 ? this.getSell1() : this.getBuy1()))
+        //const 加仓距离 = this.get开仓均价() === 0 ? 0 : Math.abs(this.get开仓均价() - (this.get仓位数量() > 0 ? this.getSell1() : this.getBuy1()))
         const 加仓 = this.getOrderArr(
             this.get仓位数量() > 0 ? 'Buy' : 'Sell',
-            BTC网格交易__参数.加仓.get单个格子大小(加仓距离),
+            BTC网格交易__参数.加仓.单个格子大小,//(加仓距离),
             BTC网格交易__参数.加仓.格数,
             BTC网格交易__参数.加仓.重挂时间
-        ).filter(v => v.side === 'Buy' ? BTC网格交易__参数.加仓.buy条件({
-            仓位数量: this.get仓位数量(),
-            价格: v.price,
-            开仓均价: this.get开仓均价()
-        }) : BTC网格交易__参数.加仓.sell条件({
-            仓位数量: this.get仓位数量(),
-            价格: v.price,
-            开仓均价: this.get开仓均价()
-        }))
+        )
 
         let arr: { side: BaseType.Side, price: number, count: number }[] = []
 
