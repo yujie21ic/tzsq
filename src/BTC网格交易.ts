@@ -4,6 +4,7 @@ import { PositionAndOrder } from './lib/____API____/PositionAndOrder/PositionAnd
 import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/PositionAndOrder'
 import { lastNumber } from './lib/F/lastNumber'
 import { BTC网格交易__参数 } from './BTC网格交易__参数'
+import { to价格对齐 } from './lib/F/to价格对齐'
 
 export class BTC网格交易 implements PositionAndOrderTask {
 
@@ -19,7 +20,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
     private getSell1 = () => lastNumber(this.self.realData.dataExt.XBTUSD.bitmex.卖.盘口1价)
 
-    private toList = (side: BaseType.Side, price: number, reduceOnly: boolean) =>
+    private toList = ({ side, price, reduceOnly }: { side: BaseType.Side, price: number, reduceOnly: boolean }) =>
         range(0, 50).map(i =>
             ({
                 side,
@@ -57,25 +58,44 @@ export class BTC网格交易 implements PositionAndOrderTask {
         this.self = self
         return this.sync委托列表([
             ...this.get加仓().filter(this.同一个价位不连续挂2次).slice(0, BTC网格交易__参数.格数),
-            ...this.get减仓().filter(this.同一个价位不连续挂2次).slice(0, BTC网格交易__参数.格数),
+            ...this.get减仓(),
         ])
     }
 
-
-    //盈利加仓 数量判断
-    // to价格对齐({
-    //     side: 'Sell',
-    //     value: price,
-    //     grid: BTC网格交易__参数.单个格子大小
-    // })  
-
-
     private get减仓() {
-        // let arr: { side: BaseType.Side, price: number, size: number, reduceOnly: boolean }[] = []
-        return this.toList(BTC网格交易__参数.方向 === 'Sell' ? 'Buy' : 'Sell', 1000, true)
+        const count = this.get仓位数量()
+        if (BTC网格交易__参数.方向 === 'Buy' && count > 0) {
+            return this.toList({
+                side: 'Sell',
+                price: to价格对齐({
+                    side: 'Sell',
+                    value: Math.max(this.getSell1(), this.get开仓均价()),
+                    grid: BTC网格交易__参数.单个格子大小,
+                }),
+                reduceOnly: true,
+            }).filter(this.同一个价位不连续挂2次).slice(0, BTC网格交易__参数.格数) //TODO数量判断
+        }
+        else if (BTC网格交易__参数.方向 === 'Sell' && count < 0) {
+            return this.toList({
+                side: 'Buy',
+                price: to价格对齐({
+                    side: 'Buy',
+                    value: Math.min(this.getBuy1(), this.get开仓均价()),
+                    grid: BTC网格交易__参数.单个格子大小,
+                }),
+                reduceOnly: true,
+            }).filter(this.同一个价位不连续挂2次).slice(0, BTC网格交易__参数.格数) //TODO数量判断
+        } else {
+            return []
+        }
     }
 
+
+
     private get加仓() {
+        const count = this.get仓位数量()
+
+        //TODO数量判断 盈利加仓 
         return this.toList(BTC网格交易__参数.方向, 1000, false)
     }
 
