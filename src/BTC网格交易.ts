@@ -108,7 +108,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
             (BTC网格交易__参数.方向 === 'Buy' && count < 0)
         ) {
             格数 = BTC网格交易__参数.格数
-        } 
+        }
 
         return this.toList({
             side: BTC网格交易__参数.方向,
@@ -119,7 +119,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
                     (BTC网格交易__参数.盈利加仓 ? this.getBuy1() : Math.min(this.getBuy1(), this.get开仓均价())),
                 grid: BTC网格交易__参数.单个格子大小,
             }),
-            reduceOnly: true,
+            reduceOnly: false,
         }).filter(this.同一个价位不连续挂2次).slice(0, 格数)
     }
 
