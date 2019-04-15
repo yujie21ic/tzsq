@@ -96,10 +96,19 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
 
     private get加仓() {
-        const count = this.get仓位数量()
+        let value = BTC网格交易__参数.方向 === 'Sell' ?
+            (BTC网格交易__参数.盈利加仓 ? this.getSell1() : Math.max(this.getSell1(), this.get开仓均价())) :
+            (BTC网格交易__参数.盈利加仓 ? this.getBuy1() : Math.min(this.getBuy1(), this.get开仓均价()))
 
-        //TODO数量判断 盈利加仓 
-        return this.toList(BTC网格交易__参数.方向, 1000, false)
+        return this.toList({
+            side: BTC网格交易__参数.方向,
+            price: to价格对齐({
+                side: BTC网格交易__参数.方向,
+                value,
+                grid: BTC网格交易__参数.单个格子大小,
+            }),
+            reduceOnly: true,
+        }).filter(this.同一个价位不连续挂2次).slice(0, BTC网格交易__参数.单个格子大小) //TODO 最大仓位判断
     }
 
 
