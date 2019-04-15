@@ -100,7 +100,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
         if (BTC网格交易__参数.加仓 === false) return []
 
         const count = this.get仓位数量()
-        const 最大格数 = Math.floor(Math.abs(count) / BTC网格交易__参数.单个格子大小)
+        const 最大格数 = Math.floor((BTC网格交易__参数.最大仓位 - Math.abs(count)) / BTC网格交易__参数.单个格子大小)
         let 格数 = Math.min(最大格数, BTC网格交易__参数.格数)
 
         if (
@@ -108,7 +108,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
             (BTC网格交易__参数.方向 === 'Buy' && count < 0)
         ) {
             格数 = BTC网格交易__参数.格数
-        }
+        } 
 
         return this.toList({
             side: BTC网格交易__参数.方向,
