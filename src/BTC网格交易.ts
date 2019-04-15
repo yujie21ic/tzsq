@@ -8,8 +8,8 @@ import { BTC网格交易__参数 } from './BTC网格交易__参数'
 export class BTC网格交易 implements PositionAndOrderTask {
 
     private self = {} as PositionAndOrder
-    private lastFillSide = '' as BaseType.Side
-    private lastFillPrice = NaN
+    private lastBuyPrice = NaN
+    private lastSellPrice = NaN
 
     private get仓位数量 = () => this.self.jsonSync.rawData.market.bitmex.XBTUSD.仓位数量
 
@@ -20,7 +20,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
     private getSell1 = () => lastNumber(this.self.realData.dataExt.XBTUSD.bitmex.卖.盘口1价)
 
     private toList = (side: BaseType.Side, price: number, reduceOnly: boolean) =>
-        range(0, BTC网格交易__参数.格数).map(i =>
+        range(0, 50).map(i =>
             ({
                 side,
                 price: side === 'Buy' ? price - i * BTC网格交易__参数.单个格子大小 : price + i * BTC网格交易__参数.单个格子大小,
@@ -38,8 +38,11 @@ export class BTC网格交易 implements PositionAndOrderTask {
     }) {
         console.log('onFilled', JSON.stringify(p))
         if (p.symbol === 'XBTUSD') {
-            this.lastFillSide = p.side
-            this.lastFillPrice = p.price
+            if (p.side === 'Buy') {
+                this.lastBuyPrice = p.price
+            } else {
+                this.lastSellPrice = p.price
+            }
         }
     }
 
@@ -47,19 +50,25 @@ export class BTC网格交易 implements PositionAndOrderTask {
         return false
     }
 
+    private 同一个价位不连续挂2次 = (v: { side: BaseType.Side, price: number }) =>
+        (v.side === 'Buy' && v.price !== this.lastBuyPrice) || (v.side === 'Sell' && v.price !== this.lastSellPrice)
+
     onTick(self: PositionAndOrder) {
         this.self = self
-        return this.sync委托列表([...this.get加仓(), ...this.get减仓()])
+        return this.sync委托列表([
+            ...this.get加仓().filter(this.同一个价位不连续挂2次).slice(0, BTC网格交易__参数.格数),
+            ...this.get减仓().filter(this.同一个价位不连续挂2次).slice(0, BTC网格交易__参数.格数),
+        ])
     }
 
 
+    //盈利加仓 数量判断
     // to价格对齐({
     //     side: 'Sell',
     //     value: price,
     //     grid: BTC网格交易__参数.单个格子大小
     // })  
 
-    //盈利加仓 数量判断  同一个价位 不连续挂2次 
 
     private get减仓() {
         // let arr: { side: BaseType.Side, price: number, size: number, reduceOnly: boolean }[] = []
