@@ -81,11 +81,7 @@ export interface PositionAndOrder {
 
     maker多个: (p: {
         symbol: BaseType.BitmexSymbol;
-        arr: {
-            side: BaseType.Side;
-            price: number;
-            size: number;
-        }[];
+        arr: { side: BaseType.Side, price: number, size: number, reduceOnly: boolean }[]
     }) => boolean | Promise<boolean>
 
     stop: (p: {

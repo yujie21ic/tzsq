@@ -536,7 +536,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     maker多个 = this.DDOS调用<{
         symbol: BaseType.BitmexSymbol
-        arr: { side: BaseType.Side, price: number, size: number }[] //reduceOnly: boolean
+        arr: { side: BaseType.Side, price: number, size: number, reduceOnly: boolean }[]
     }>(
         (cookie, p) => BitMEXHTTP.Order.newBulk(cookie, {
             orders: JSON.stringify(p.arr.map(v =>
@@ -546,7 +546,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                     side: v.side,
                     orderQty: v.size,
                     price: v.price,
-                    execInst: /*p.reduceOnly ? 'ParticipateDoNotInitiate,ReduceOnly' :*/ 'ParticipateDoNotInitiate',
+                    execInst: v.reduceOnly ? 'ParticipateDoNotInitiate,ReduceOnly' : 'ParticipateDoNotInitiate',
                 })
             ))
         })
