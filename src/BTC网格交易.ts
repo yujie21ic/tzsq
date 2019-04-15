@@ -48,24 +48,27 @@ export class BTC网格交易 implements PositionAndOrderTask {
     }
 
     onTick(self: PositionAndOrder) {
-
         this.self = self
-
-        const 减仓 = this.toList(BTC网格交易__参数.方向 === 'Sell' ? 'Buy' : 'Sell', 1000, true)
-
-        const 加仓 = this.toList(BTC网格交易__参数.方向, 1000, false)
-
-        // to价格对齐({
-        //     side: 'Sell',
-        //     value: price,
-        //     grid: BTC网格交易__参数.单个格子大小
-        // })  
-
-        //盈利加仓 数量判断  同一个价位 不连续挂2次 
-
-        return this.sync委托列表([...减仓, ...加仓])
+        return this.sync委托列表([...this.get加仓(), ...this.get减仓()])
     }
 
+
+    // to价格对齐({
+    //     side: 'Sell',
+    //     value: price,
+    //     grid: BTC网格交易__参数.单个格子大小
+    // })  
+
+    //盈利加仓 数量判断  同一个价位 不连续挂2次 
+
+    private get减仓() {
+        // let arr: { side: BaseType.Side, price: number, size: number, reduceOnly: boolean }[] = []
+        return this.toList(BTC网格交易__参数.方向 === 'Sell' ? 'Buy' : 'Sell', 1000, true)
+    }
+
+    private get加仓() {
+        return this.toList(BTC网格交易__参数.方向, 1000, false)
+    }
 
 
     private sync委托列表(arr: { side: BaseType.Side, price: number, size: number, reduceOnly: boolean }[]) {
