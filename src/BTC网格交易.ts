@@ -108,7 +108,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
                 grid: BTC网格交易__参数.单个格子大小,
             }),
             reduceOnly: true,
-        }).filter(this.同一个价位不连续挂2次).slice(0, BTC网格交易__参数.单个格子大小) //TODO 最大仓位判断
+        }).filter(this.同一个价位不连续挂2次).slice(0, BTC网格交易__参数.格数) //TODO 最大仓位判断
     }
 
 
