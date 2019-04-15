@@ -64,6 +64,9 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
     private get减仓() {
         const count = this.get仓位数量()
+        const 最大格数 = Math.floor(Math.abs(count) / BTC网格交易__参数.单个格子大小)
+        const 格数 = Math.min(最大格数, BTC网格交易__参数.格数)
+
         if (BTC网格交易__参数.方向 === 'Buy' && count > 0) {
             return this.toList({
                 side: 'Sell',
@@ -73,7 +76,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
                     grid: BTC网格交易__参数.单个格子大小,
                 }),
                 reduceOnly: true,
-            }).filter(this.同一个价位不连续挂2次).slice(0, BTC网格交易__参数.格数) //TODO数量判断
+            }).filter(this.同一个价位不连续挂2次).slice(0, 格数)
         }
         else if (BTC网格交易__参数.方向 === 'Sell' && count < 0) {
             return this.toList({
@@ -84,7 +87,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
                     grid: BTC网格交易__参数.单个格子大小,
                 }),
                 reduceOnly: true,
-            }).filter(this.同一个价位不连续挂2次).slice(0, BTC网格交易__参数.格数) //TODO数量判断
+            }).filter(this.同一个价位不连续挂2次).slice(0, 格数)
         } else {
             return []
         }
