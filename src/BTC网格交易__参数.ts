@@ -13,6 +13,8 @@ type 参数 = {
     方向: BaseType.Side
     最大仓位: number
     盈利加仓: boolean
+    加仓: boolean
+    减仓: boolean
 }
 
 
@@ -23,4 +25,6 @@ export const BTC网格交易__参数: 参数 = {
     方向: 'Sell',
     最大仓位: 1000,
     盈利加仓: true,
+    加仓: true,
+    减仓: true,
 } 

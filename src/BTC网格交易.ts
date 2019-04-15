@@ -57,12 +57,14 @@ export class BTC网格交易 implements PositionAndOrderTask {
     onTick(self: PositionAndOrder) {
         this.self = self
         return this.sync委托列表([
-            ...this.get加仓().filter(this.同一个价位不连续挂2次).slice(0, BTC网格交易__参数.格数),
+            ...this.get加仓(),
             ...this.get减仓(),
         ])
     }
 
     private get减仓() {
+        if (BTC网格交易__参数.减仓 === false) return []
+
         const count = this.get仓位数量()
         const 最大格数 = Math.floor(Math.abs(count) / BTC网格交易__参数.单个格子大小)
         const 格数 = Math.min(最大格数, BTC网格交易__参数.格数)
@@ -94,17 +96,16 @@ export class BTC网格交易 implements PositionAndOrderTask {
     }
 
 
-
     private get加仓() {
-        let value = BTC网格交易__参数.方向 === 'Sell' ?
-            (BTC网格交易__参数.盈利加仓 ? this.getSell1() : Math.max(this.getSell1(), this.get开仓均价())) :
-            (BTC网格交易__参数.盈利加仓 ? this.getBuy1() : Math.min(this.getBuy1(), this.get开仓均价()))
+        if (BTC网格交易__参数.加仓 === false) return []
 
         return this.toList({
             side: BTC网格交易__参数.方向,
             price: to价格对齐({
                 side: BTC网格交易__参数.方向,
-                value,
+                value: BTC网格交易__参数.方向 === 'Sell' ?
+                    (BTC网格交易__参数.盈利加仓 ? this.getSell1() : Math.max(this.getSell1(), this.get开仓均价())) :
+                    (BTC网格交易__参数.盈利加仓 ? this.getBuy1() : Math.min(this.getBuy1(), this.get开仓均价())),
                 grid: BTC网格交易__参数.单个格子大小,
             }),
             reduceOnly: true,
