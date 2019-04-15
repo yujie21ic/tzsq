@@ -6,6 +6,12 @@ import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/Positio
 import { lastNumber } from './lib/F/lastNumber'
 import { BTC网格交易__参数 } from './BTC网格交易__参数'
 
+// 方向  多 空 横
+// 加仓开关
+// 减仓开关
+// 价格止损：到达价格，全部平仓+停止挂单
+// 最大仓位
+
 export class BTC网格交易 implements PositionAndOrderTask {
 
     self = {} as PositionAndOrder

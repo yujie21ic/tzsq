@@ -34,7 +34,7 @@ type 参数 = {
 
 export const BTC网格交易__参数: 参数 = {
     加仓: {
-        get单个格子大小: (n: number) => 0.5,
+        get单个格子大小: (n: number) => 1,
         get单个格子数量: (n: number) => 25,
 
         格数: 10,
@@ -53,7 +53,7 @@ export const BTC网格交易__参数: 参数 = {
         }) => true,
     },
     减仓: {
-        get单个格子大小: (n: number) => 0.5,
+        get单个格子大小: (n: number) => 1,
         get单个格子数量: (n: number) => 25,
 
         格数: 10,
@@ -72,11 +72,11 @@ export const BTC网格交易__参数: 参数 = {
         }) => true,
     },
     多仓: {
-        min: 100,
+        min: 0,
         max: 1000,
     },
     空仓: {
-        min: 100,
+        min: 0,
         max: 1000,
     },
 } 
