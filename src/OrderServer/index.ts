@@ -9,7 +9,6 @@ import { kvs } from '../lib/F/kvs'
 import { toRange } from '../lib/F/toRange'
 import { toBuySellPriceFunc } from '../lib/F/toBuySellPriceFunc'
 import { XBTUSD摸顶抄底追涨追跌 } from '../task/XBTUSD摸顶抄底追涨追跌'
-import { PositionAndOrder } from '../lib/____API____/PositionAndOrder/PositionAndOrder'
 import { Hopex__ETH止损 } from '../task/Hopex__ETH止损'
 import { BTC网格交易 } from '../task/BTC网格交易'
 
@@ -17,7 +16,7 @@ import { BTC网格交易 } from '../task/BTC网格交易'
 
 //运行的账户
 //cookie --> Account
-const accountDic = new Map<string, PositionAndOrder>()
+const accountDic = new Map<string, BitmexPositionAndOrder>()
 if (config.orderServer !== undefined) {
     kvs(config.orderServer).forEach(({ k, v }) => {
         const account = new BitmexPositionAndOrder({
@@ -198,7 +197,7 @@ server.func.任务 = async req => {
     const account = accountDic.get(req.cookie)
     if (account === undefined) throw 'cookie不存在'
 
-    throw 'TODO'
+    account.set任务(req)
 
     return false
 }

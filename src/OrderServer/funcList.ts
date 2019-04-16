@@ -45,7 +45,7 @@ export const funcList = {
     任务: {
         req: {
             cookie: '',
-            任务名字: '',
+            名字: '',
             开关: false,
             参数: '',
         },

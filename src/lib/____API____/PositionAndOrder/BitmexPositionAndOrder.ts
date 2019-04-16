@@ -12,6 +12,8 @@ import { PositionAndOrder, PositionAndOrderTask } from './PositionAndOrder'
 import { HopexHTTP } from '../HopexHTTP'
 import { FCoinHTTP } from '../FCoinHTTP'
 import { mapObjIndexed } from '../../F/mapObjIndexed'
+import { typeObjectParse } from '../../F/typeObjectParse'
+import { safeJSONParse } from '../../F/safeJSONParse'
 
 const symbol = () => ({
     任务开关: {
@@ -689,6 +691,15 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         this.刷新到jsonsync任务()
     }
 
+    set任务(p: { 名字: string, 开关: boolean, 参数: string }) {
+        const task = this.taskDic.get(p.名字)
+        if (task !== undefined) {
+            task.开关 = p.开关
+            task.参数 = typeObjectParse(task.参数type)(safeJSONParse(p.参数))
+            this.刷新到jsonsync任务()
+        }
+    }
+
 
     private 刷新到jsonsync任务() {
         let arr = [] as { 名字: string, 开关: boolean, 参数: string }[]
@@ -701,8 +712,6 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         })
         this.jsonSync.data.任务.____set(arr)
     }
-
-
 }
 
 const __realData__ = toCacheFunc(() => new RealData__Server(false))
