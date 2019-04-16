@@ -71,6 +71,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         }
     }
 
+
     onHopexTick(self: PositionAndOrder) {
 
         const x: XXX = {
@@ -101,71 +102,73 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
     onTick(self: PositionAndOrder) {
 
-        const x: XXX = {
-            market: 'bitmex',
-            d: self.realData.dataExt.XBTUSD.bitmex,
-            state: this.bitmex_state,
-            item: self.jsonSync.rawData.market.bitmex.XBTUSD,
-        }
+        // const x: XXX = {
+        //     market: 'bitmex',
+        //     d: self.realData.dataExt.XBTUSD.bitmex,
+        //     state: this.bitmex_state,
+        //     item: self.jsonSync.rawData.market.bitmex.XBTUSD,
+        // }
 
-        const aaa = this.bitmex_委托检测(self, x)
-        if (aaa) return aaa
+        // const aaa = this.bitmex_委托检测(self, x)
+        // if (aaa) return aaa
 
-        const bbb = this.止损_step(self, x)
-        if (bbb) return bbb
+        // const bbb = this.止损_step(self, x)
+        // if (bbb) return bbb
 
-        const { 仓位数量 } = self.jsonSync.rawData.market.bitmex.XBTUSD
-        if (仓位数量 === 0) {
-            this.bitmex_state.开仓状态 = {
-                最大仓位abs: NaN,
-                最后一次开仓时间: NaN,
-                最后一次开仓折返率: NaN,
-                摸顶抄底超时秒: NaN,
-                第2次超时: false,
-                已经平了一半了: false,
-            }
-            return this.开仓_step(self, x)
-        } else {
-            return this.平仓_step(self, x)
-        }
+        // const { 仓位数量 } = self.jsonSync.rawData.market.bitmex.XBTUSD
+        // if (仓位数量 === 0) {
+        //     this.bitmex_state.开仓状态 = {
+        //         最大仓位abs: NaN,
+        //         最后一次开仓时间: NaN,
+        //         最后一次开仓折返率: NaN,
+        //         摸顶抄底超时秒: NaN,
+        //         第2次超时: false,
+        //         已经平了一半了: false,
+        //     }
+        //     return this.开仓_step(self, x)
+        // } else {
+        //     return this.平仓_step(self, x)
+        // }
+
+        return true
     }
 
-    private bitmex_委托检测(self: PositionAndOrder, x: XXX) {
-        const { item } = x
-        const { 仓位数量 } = item
+    // private bitmex_委托检测(self: PositionAndOrder, x: XXX) {
+    //     const { item } = x
+    //     const { 仓位数量 } = item
 
-        //委托检测
-        const 活动委托 = item.委托列表.filter(v => v.type !== '止损')
+    //     //委托检测
+    //     const 活动委托 = item.委托列表.filter(v => v.type !== '止损')
 
-        //没有委托
-        if (活动委托.length === 0) {
-            return false //<----------------------------------------------
-        }
-        else if (活动委托.length === 1) {
-            if (
-                //没有仓位随便
-                仓位数量 === 0 ||
+    //     //没有委托
+    //     if (活动委托.length === 0) {
+    //         return false //<----------------------------------------------
+    //     }
+    //     else if (活动委托.length === 1) {
+    //         if (
+    //             //没有仓位随便
+    //             仓位数量 === 0 ||
 
-                //有仓位 有委托 只能是 
-                //部分成交的委托 
-                //依赖ws先返回 委托更新 再返回仓位更新      //<---------------------------------------------
-                (活动委托[0].type === '限价' && 活动委托[0].cumQty !== 0) ||
+    //             //有仓位 有委托 只能是 
+    //             //部分成交的委托 
+    //             //依赖ws先返回 委托更新 再返回仓位更新      //<---------------------------------------------
+    //             (活动委托[0].type === '限价' && 活动委托[0].cumQty !== 0) ||
 
-                //或者 限价只减仓委托
-                活动委托[0].type === '限价只减仓'
-            ) {
-                return false //<----------------------------------------------
-            } else {
-                self.log('bitmex 委托检测step 取消委托 ' + 活动委托[0].type)
-                return self.cancel({ orderID: 活动委托.map(v => v.id) })
-            }
-        }
-        else {
-            //多个委托  全部给取消  
-            self.log('bitmex 委托检测step 委托检测step 取消多个委托 ' + 活动委托.map(v => v.type).join(','))
-            return self.cancel({ orderID: 活动委托.map(v => v.id) })
-        }
-    }
+    //             //或者 限价只减仓委托
+    //             活动委托[0].type === '限价只减仓'
+    //         ) {
+    //             return false //<----------------------------------------------
+    //         } else {
+    //             self.log('bitmex 委托检测step 取消委托 ' + 活动委托[0].type)
+    //             return self.cancel({ orderID: 活动委托.map(v => v.id) })
+    //         }
+    //     }
+    //     else {
+    //         //多个委托  全部给取消  
+    //         self.log('bitmex 委托检测step 委托检测step 取消多个委托 ' + 活动委托.map(v => v.type).join(','))
+    //         return self.cancel({ orderID: 活动委托.map(v => v.id) })
+    //     }
+    // }
 
     private 止损_step(self: PositionAndOrder, x: XXX) {
 
