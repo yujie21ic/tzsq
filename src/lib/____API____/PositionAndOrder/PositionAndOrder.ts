@@ -122,6 +122,8 @@ export interface PositionAndOrderTask {
     参数type: any
     参数: any
 
+    on参数更新?: () => void
+
     onTick(self: PositionAndOrder): boolean | Promise<boolean>
     onHopexTick(self: PositionAndOrder): boolean | Promise<boolean>
     onFilled(p: {

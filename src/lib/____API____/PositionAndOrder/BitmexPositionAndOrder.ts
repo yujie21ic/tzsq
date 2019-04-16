@@ -686,6 +686,10 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         this.task2(name, task)
 
         this.刷新到jsonsync任务()
+
+        task.on参数更新 = () => {
+            this.刷新到jsonsync任务()
+        }
     }
 
     set任务(p: { 名字: string, 开关: boolean, 参数: string }) {

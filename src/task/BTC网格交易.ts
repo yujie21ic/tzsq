@@ -78,7 +78,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
     onTick(self: PositionAndOrder) {
         this.self = self
 
-        // 止损
+        // 止损 on参数更新
         // const { 仓位数量, 开仓均价, 委托列表 } = self.jsonSync.rawData.market.bitmex.XBTUSD
 
         // const 止损委托 = 委托列表.filter(v => v.type === '止损')
