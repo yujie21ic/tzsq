@@ -1,12 +1,12 @@
-import { PositionAndOrder } from './lib/____API____/PositionAndOrder/PositionAndOrder'
-import { BaseType } from './lib/BaseType'
-import { toBuySellPriceFunc } from './lib/F/toBuySellPriceFunc'
-import { lastNumber } from './lib/F/lastNumber'
-import { toRange } from './lib/F/toRange'
-import { to价格对齐 } from './lib/F/to价格对齐'
-import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/PositionAndOrder'
+import { PositionAndOrder } from '../lib/____API____/PositionAndOrder/PositionAndOrder'
+import { BaseType } from '../lib/BaseType'
+import { toBuySellPriceFunc } from '../lib/F/toBuySellPriceFunc'
+import { lastNumber } from '../lib/F/lastNumber'
+import { toRange } from '../lib/F/toRange'
+import { to价格对齐 } from '../lib/F/to价格对齐'
+import { PositionAndOrderTask } from '../lib/____API____/PositionAndOrder/PositionAndOrder'
 import { XBTUSD摸顶抄底追涨追跌__参数 } from './XBTUSD摸顶抄底追涨追跌__参数'
-import { RealDataBase } from './RealDataServer/RealDataBase'
+import { RealDataBase } from '../RealDataServer/RealDataBase'
 
 const newState = () => ({
     连续止损次数: 0,

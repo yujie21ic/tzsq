@@ -1,6 +1,7 @@
+import { config } from '../config'
+import { toRange } from '../lib/F/toRange'
 
-import { toRange } from './lib/F/toRange'
-import { config } from './config'
+
 
 export namespace XBTUSD摸顶抄底追涨追跌__参数 {
 

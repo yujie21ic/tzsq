@@ -1,4 +1,6 @@
-import { BaseType } from './lib/BaseType'
+import { BaseType } from '../lib/BaseType'
+
+
 
 // 方向  多 空 横
 // 加仓开关

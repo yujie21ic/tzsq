@@ -1,6 +1,6 @@
 import { BitmexPositionAndOrder } from './lib/____API____/PositionAndOrder/BitmexPositionAndOrder'
 import { config } from './config'
-import { BTC网格交易 } from './BTC网格交易'
+import { BTC网格交易 } from './task/BTC网格交易'
 
 const account = new BitmexPositionAndOrder({
     accountName: 'fc01',

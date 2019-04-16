@@ -1,10 +1,10 @@
-import { BaseType } from './lib/BaseType'
+import { BaseType } from '../lib/BaseType'
 import { range } from 'ramda'
-import { PositionAndOrder } from './lib/____API____/PositionAndOrder/PositionAndOrder'
-import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/PositionAndOrder'
-import { lastNumber } from './lib/F/lastNumber'
+import { PositionAndOrder } from '../lib/____API____/PositionAndOrder/PositionAndOrder'
+import { PositionAndOrderTask } from '../lib/____API____/PositionAndOrder/PositionAndOrder'
+import { lastNumber } from '../lib/F/lastNumber'
 import { BTC网格交易__参数 } from './BTC网格交易__参数'
-import { to价格对齐 } from './lib/F/to价格对齐'
+import { to价格对齐 } from '../lib/F/to价格对齐'
 
 export class BTC网格交易 implements PositionAndOrderTask {
 

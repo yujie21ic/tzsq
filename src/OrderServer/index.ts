@@ -8,9 +8,9 @@ import { safeJSONParse } from '../lib/F/safeJSONParse'
 import { kvs } from '../lib/F/kvs'
 import { toRange } from '../lib/F/toRange'
 import { toBuySellPriceFunc } from '../lib/F/toBuySellPriceFunc'
-import { XBTUSD摸顶抄底追涨追跌 } from '../XBTUSD摸顶抄底追涨追跌'
+import { XBTUSD摸顶抄底追涨追跌 } from '../task/XBTUSD摸顶抄底追涨追跌'
 import { PositionAndOrder } from '../lib/____API____/PositionAndOrder/PositionAndOrder'
-import { Hopex__ETH止损 } from '../Hopex__ETH止损'
+import { Hopex__ETH止损 } from '../task/Hopex__ETH止损'
 
 
 

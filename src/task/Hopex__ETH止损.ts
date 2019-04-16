@@ -1,9 +1,10 @@
-import { PositionAndOrder } from './lib/____API____/PositionAndOrder/PositionAndOrder'
-import { BaseType } from './lib/BaseType'
-import { lastNumber } from './lib/F/lastNumber'
-import { PositionAndOrderTask } from './lib/____API____/PositionAndOrder/PositionAndOrder'
-import { toRange } from './lib/F/toRange'
-import { to价格对齐 } from './lib/F/to价格对齐'
+import { toRange } from '../lib/F/toRange'
+import { PositionAndOrderTask, PositionAndOrder } from '../lib/____API____/PositionAndOrder/PositionAndOrder'
+import { BaseType } from '../lib/BaseType'
+import { lastNumber } from '../lib/F/lastNumber'
+import { to价格对齐 } from '../lib/F/to价格对齐'
+
+ 
 
 const 初始止损 = (p: {
     波动率: number
