@@ -14,9 +14,11 @@ const orderClient = new OrderClient(cookie)
 class APP extends React.Component {
 
     componentWillMount() {
-        orderClient.jsonSync.subject.subscribe(v => {
+        const f = () => {
+            requestAnimationFrame(f)
             this.forceUpdate()
-        })
+        }
+        f()
     }
 
     任务开关 = (名字: string) => {
@@ -79,35 +81,37 @@ class APP extends React.Component {
     }
 
     render() {
-        return <div style={{
-            backgroundColor: '#24292d',
-            margin: 'auto auto',
-            padding: '10px 5px',
-            fontFamily: 'SourceHanSansSC-regular',
-            color: 'white',
-            fontSize: '24px',
-            userSelect: 'none',
-            cursor: 'default'
-        }}>
-            {orderClient.jsonSync.rawData.任务.map(v =>
-                <div
-                    key={v.名字}
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'left',
-                    }}>
-                    <p style={{ color: '#cc66ff' }}>{v.名字}</p>
-                    开关:<Switch checked={v.开关} onChange={() => this.任务开关(v.名字)} />
-                    参数:
+        return orderClient.isConnected === false ?
+            <a href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a> :
+            <div style={{
+                backgroundColor: '#24292d',
+                margin: 'auto auto',
+                padding: '10px 5px',
+                fontFamily: 'SourceHanSansSC-regular',
+                color: 'white',
+                fontSize: '24px',
+                userSelect: 'none',
+                cursor: 'default'
+            }}>
+                {orderClient.jsonSync.rawData.任务.map(v =>
+                    <div
+                        key={v.名字}
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'left',
+                        }}>
+                        <p style={{ color: '#cc66ff' }}>{v.名字}</p>
+                        开关:<Switch checked={v.开关} onChange={() => this.任务开关(v.名字)} />
+                        参数:
                     {kvs(JSON.parse(v.参数)).map(p =>
-                        <div key={p.k}>
-                            {p.k}:{this.renderItem(v.名字, p.k, p.v)}
-                        </div>
-                    )}
-                </div>
-            )}
-        </div >
+                            <div key={p.k}>
+                                {p.k}:{this.renderItem(v.名字, p.k, p.v)}
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div >
     }
 }
 
