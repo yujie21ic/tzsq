@@ -205,6 +205,13 @@ export class BTC网格交易 implements PositionAndOrderTask {
             else if (v.orderQty !== dic[PRICE].size) {
                 cancelIDs.push(v.id)
             }
+            // 只减仓模式 不一样 取消掉
+            else if (
+                (v.type === '限价' && dic[PRICE].reduceOnly === true) ||
+                (v.type === '限价只减仓' && dic[PRICE].reduceOnly === false)
+            ) {
+                cancelIDs.push(v.id)
+            }
             //委托数量一样
             else {
                 delete dic[PRICE]
