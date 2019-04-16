@@ -33,13 +33,11 @@ export interface PositionAndOrder {
             time: number
             total: number
         }[]
-        // symbol: {
-        //     XBTUSD: ITEM
-        //     ETHUSD: ITEM
-        //     Hopex_BTC: ITEM
-        //     Hopex_ETH: ITEM
-        //     FCoin_BTC: ITEM
-        // },
+        任务: {
+            名字: string
+            开关: boolean
+            参数: string
+        }[]
         market: {
             hopex: {
                 [K in keyof typeof BaseType.HopexSymbolDic]: ITEM

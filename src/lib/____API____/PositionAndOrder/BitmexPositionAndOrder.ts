@@ -34,6 +34,11 @@ export const createJSONSync = () =>
             time: number
             total: number
         }[],
+        任务: [] as {
+            名字: string
+            开关: boolean
+            参数: string
+        }[],
         market: {
             hopex: mapObjIndexed(symbol, BaseType.HopexSymbolDic),
             fcoin: {
