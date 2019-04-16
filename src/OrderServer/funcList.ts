@@ -29,18 +29,7 @@ export const funcList = {
             最低_最高: false,
         },
         res: false,
-    },
-
-    任务_开关__临时: {
-        req: {
-            cookie: '',
-            market: '',
-            symbol: '',
-            任务名字: '' as '自动开仓摸顶' | '自动开仓抄底' | '自动开仓追涨' | '自动开仓追跌' | '自动止盈波段' | '自动止损' | '自动推止损',
-            value: false,
-        },
-        res: false,
-    },
+    },    
 
     任务: {
         req: {
