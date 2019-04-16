@@ -8,4 +8,4 @@ const account = new BitmexPositionAndOrder({
     hopexCookie: '',
     fcoinCookie: '',
 })
-account.runTask(new BTC网格交易())
+account.runTask('网格', new BTC网格交易())

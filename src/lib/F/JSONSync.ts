@@ -44,7 +44,7 @@ export class JSONSync<T>{
                 }
             }
         } else if (v instanceof Object) {
-            return mapObjIndexed((_, key) => this.mapJSON([...path, key]), v)
+            return mapObjIndexed((_, key) => this.mapJSON([...path, String(key)]), v)
         } else {
             return {}
         }
