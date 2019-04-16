@@ -101,14 +101,16 @@ class APP extends React.Component {
                             flexDirection: 'column',
                             justifyContent: 'left',
                         }}>
-                        <p style={{ color: '#cc66ff' }}>{v.名字}</p>
-                        开关:<Switch checked={v.开关} onChange={() => this.任务开关(v.名字)} />
-                        参数:
-                    {kvs(JSON.parse(v.参数)).map(p =>
-                            <div key={p.k}>
-                                {p.k}:{this.renderItem(v.名字, p.k, p.v)}
-                            </div>
-                        )}
+
+                        <a style={{ fontSize: 28, color: v.开关 ? '#cc66ff' : '#666666' }} href='#' onClick={() => this.任务开关(v.名字)}>{v.名字}</a>
+
+                        {
+                            kvs(JSON.parse(v.参数)).map(p =>
+                                <div key={p.k}>
+                                    {p.k}:{this.renderItem(v.名字, p.k, p.v)}
+                                </div>
+                            )
+                        }
                     </div>
                 )}
             </div >
