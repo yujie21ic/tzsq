@@ -31,7 +31,9 @@ export const funcList = {
         res: false,
     },
 
-    任务_开关: {
+
+    //任务  任务参数  任务开关
+    任务_开关__临时: {
         req: {
             cookie: '',
             market: '',

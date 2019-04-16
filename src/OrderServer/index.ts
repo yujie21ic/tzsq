@@ -173,7 +173,7 @@ server.func.下单 = async req => {
         })
 }
 
-server.func.任务_开关 = async req => {
+server.func.任务_开关__临时 = async req => {
     const account = accountDic.get(req.cookie)
     if (account === undefined) throw 'cookie不存在'
 
