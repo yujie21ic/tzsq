@@ -26,6 +26,10 @@ const menu = Menu.buildFromTemplate([
       {
         label: `实盘`,
         click: () => showWindow('实盘', { accountName: v.k })
+      },
+      {
+        label: `任务遥控器`,
+        click: () => showWindow('任务遥控器', { accountName: v.k })
       }
     ]
   })),
