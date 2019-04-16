@@ -685,6 +685,21 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         this.ws.filledObservable.subscribe(v => task.onFilled(v))
         this.task1(task)
         this.task2(task)
+
+        this.刷新到jsonsync任务()
+    }
+
+
+    private 刷新到jsonsync任务() {
+        let arr = [] as { 名字: string, 开关: boolean, 参数: string }[]
+        this.taskDic.forEach((v, k) => {
+            arr.push({
+                名字: k,
+                开关: v.开关,
+                参数: JSON.stringify(v.参数)
+            })
+        })
+        this.jsonSync.data.任务.____set(arr)
     }
 
 
