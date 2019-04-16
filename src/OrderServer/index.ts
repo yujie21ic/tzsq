@@ -192,5 +192,13 @@ server.func.任务_开关__临时 = async req => {
     return true
 }
 
+server.func.任务 = async req => {
+    const account = accountDic.get(req.cookie)
+    if (account === undefined) throw 'cookie不存在'
+
+    throw 'TODO'
+
+    return false
+}
 
 console.log('运行中...   记得 客户端 打开量化 ...')
