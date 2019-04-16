@@ -52,6 +52,11 @@ const get浮盈点数 = (x: XXX) => {
 
 export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
+    开关 = false
+    参数type = {}
+    参数 = {}
+
+
     private bitmex_state = newState()
     private hopex_state = newState()
 

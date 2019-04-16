@@ -4,7 +4,7 @@ import { BaseType } from '../lib/BaseType'
 import { lastNumber } from '../lib/F/lastNumber'
 import { to价格对齐 } from '../lib/F/to价格对齐'
 
- 
+
 
 const 初始止损 = (p: {
     波动率: number
@@ -15,6 +15,11 @@ const 初始止损 = (p: {
 })
 
 export class Hopex__ETH止损 implements PositionAndOrderTask {
+
+    开关 = false
+    参数type = {}
+    参数 = {}
+
 
     onFilled(p: { symbol: BaseType.BitmexSymbol, type: '限价' | '限价只减仓' | '止损' | '强平' }) {
 

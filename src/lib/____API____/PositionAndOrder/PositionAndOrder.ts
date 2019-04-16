@@ -125,7 +125,12 @@ export interface PositionAndOrder {
 
 }
 
-export interface PositionAndOrderTask {
+export interface PositionAndOrderTask<T = any> {
+
+    开关: boolean
+    参数type: T
+    参数: T
+
     onTick(self: PositionAndOrder): boolean | Promise<boolean>
     onHopexTick(self: PositionAndOrder): boolean | Promise<boolean>
     onFilled(p: {

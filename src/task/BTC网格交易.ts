@@ -8,6 +8,10 @@ import { to价格对齐 } from '../lib/F/to价格对齐'
 
 export class BTC网格交易 implements PositionAndOrderTask {
 
+    开关 = false
+    参数type = {}
+    参数 = {}
+
     private self = {} as PositionAndOrder
     private lastBuyPrice = NaN
     private lastSellPrice = NaN
