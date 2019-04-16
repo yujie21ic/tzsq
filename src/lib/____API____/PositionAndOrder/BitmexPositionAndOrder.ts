@@ -674,7 +674,11 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         }
     }
 
-    runTask(task: PositionAndOrderTask) {
+    private taskDic = new Map<string, PositionAndOrderTask>()
+
+    runTask(name: string, task: PositionAndOrderTask) {
+        this.taskDic.set(name, task)
+
         this.realData.onTitle = obj => {
             this.log(JSON.stringify(obj))
         }

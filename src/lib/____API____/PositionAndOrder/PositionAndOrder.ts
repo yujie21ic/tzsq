@@ -121,7 +121,7 @@ export interface PositionAndOrder {
         orderID: string[]
     }) => boolean | Promise<boolean>
 
-    runTask(task: PositionAndOrderTask): void
+    runTask(name: string, task: PositionAndOrderTask): void
 
 }
 
