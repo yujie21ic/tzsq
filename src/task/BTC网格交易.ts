@@ -35,11 +35,23 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
     private get仓位数量 = () => this.self.jsonSync.rawData.market.bitmex.XBTUSD.仓位数量
 
-    private get开仓均价 = () => this.self.jsonSync.rawData.market.bitmex.XBTUSD.开仓均价
-
     private getBuy1 = () => lastNumber(this.self.realData.dataExt.XBTUSD.bitmex.买.盘口1价)
 
     private getSell1 = () => lastNumber(this.self.realData.dataExt.XBTUSD.bitmex.卖.盘口1价)
+
+    private sellPrice = () => Math.max(this.getSell1(), this.self.jsonSync.rawData.market.bitmex.XBTUSD.开仓均价)
+
+    private buyPrice = () => {
+        const { 开仓均价 } = this.self.jsonSync.rawData.market.bitmex.XBTUSD
+        const buy1 = this.getBuy1()
+
+        if (开仓均价 === 0) {
+            return buy1
+        } else {
+            return Math.min(buy1, 开仓均价)
+        }
+    }
+
 
     private toList = ({ side, price, reduceOnly }: { side: BaseType.Side, price: number, reduceOnly: boolean }) =>
         range(0, 50).map(i =>
@@ -121,7 +133,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
                 side: 'Sell',
                 price: to价格对齐({
                     side: 'Sell',
-                    value: Math.max(this.getSell1(), this.get开仓均价()),
+                    value: this.sellPrice(),
                     grid: this.参数.单个格子大小,
                 }),
                 reduceOnly: true,
@@ -132,7 +144,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
                 side: 'Buy',
                 price: to价格对齐({
                     side: 'Buy',
-                    value: Math.min(this.getBuy1(), this.get开仓均价()),
+                    value: this.buyPrice(),
                     grid: this.参数.单个格子大小,
                 }),
                 reduceOnly: true,
@@ -162,8 +174,8 @@ export class BTC网格交易 implements PositionAndOrderTask {
             price: to价格对齐({
                 side: this.参数.方向,
                 value: this.参数.方向 === 'Sell' ?
-                    (this.参数.盈利加仓 ? this.getSell1() : Math.max(this.getSell1(), this.get开仓均价())) :
-                    (this.参数.盈利加仓 ? this.getBuy1() : Math.min(this.getBuy1(), this.get开仓均价())),
+                    (this.参数.盈利加仓 ? this.getSell1() : this.sellPrice()) :
+                    (this.参数.盈利加仓 ? this.getBuy1() : this.buyPrice()),
                 grid: this.参数.单个格子大小,
             }),
             reduceOnly: false,
