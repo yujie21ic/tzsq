@@ -77,6 +77,32 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
     onTick(self: PositionAndOrder) {
         this.self = self
+
+        // 止损
+        // const { 仓位数量, 开仓均价, 委托列表 } = self.jsonSync.rawData.market.bitmex.XBTUSD
+
+        // const 止损委托 = 委托列表.filter(v => v.type === '止损')
+
+        // if (仓位数量 !== 0 && 止损委托.length <= 1) {
+        //     const 止损side = 仓位数量 > 0 ? 'Sell' : 'Buy'
+        //     const 止损价格 = to价格对齐({
+        //         grid: 0.5,
+        //         value: 仓位数量 > 0 ? 开仓均价 - this.参数.止损点 : 开仓均价 + this.参数.止损点,
+        //         side: 止损side,
+        //     })
+        //     //没有仓位 或者 止损方向错了
+        //     //  if (仓位数量 === 0 || (仓位数量 > 0 && 止损委托[0].side !== 'Sell') || (仓位数量 < 0 && 止损委托[0].side !== 'Buy')) {
+        //     //     return self.cancel({ orderID: 止损委托.map(v => v.id) })
+        //     // }
+
+
+        // } else if (止损委托.length > 0) {
+        //     return self.cancel({ orderID: 止损委托.map(v => v.id) })
+        // } else {
+        //     return false
+        // }
+
+
         return this.sync委托列表([
             ...this.get加仓(),
             ...this.get减仓(),
