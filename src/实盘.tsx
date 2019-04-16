@@ -7,7 +7,7 @@ import { config } from './config'
 import { BaseType } from './lib/BaseType'
 import { windowExt } from './windowExt'
 import { Button } from './lib/UI/Button'
-import { Switch } from '@material-ui/core'
+//import { Switch } from '@material-ui/core'
 import { HopexHTTP } from './lib/____API____/HopexHTTP'
 import { realTickClient, 提醒 } from './实盘__提醒'
 import { lastNumber } from './lib/F/lastNumber'
@@ -71,7 +71,7 @@ class Item extends React.Component<{ market: 'bitmex' | 'hopex' | 'fcoin', symbo
     }
 
     render() {
-        const { 仓位数量, 开仓均价, 任务开关 } = this.props.data()
+        const { 仓位数量, 开仓均价 } = this.props.data()
         const 下单数量 = 1000 * this.props.倍数
 
         const fcoin_btc_数量 = 仓位数量
@@ -161,7 +161,7 @@ class Item extends React.Component<{ market: 'bitmex' | 'hopex' | 'fcoin', symbo
                 <p>仓位:{this.get仓位()}</p>
                 <p>止损:{get止损()}</p>
                 <p>委托:{get委托()}</p>
-                <p>
+                {/* <p>
                     摸顶:<Switch checked={任务开关.自动开仓摸顶} onChange={(e, v) => { rpc.任务_开关__临时({ cookie, market: this.props.market, symbol: this.props.symbol, 任务名字: '自动开仓摸顶', value: v }) }} />
                     抄底:<Switch checked={任务开关.自动开仓抄底} onChange={(e, v) => { rpc.任务_开关__临时({ cookie, market: this.props.market, symbol: this.props.symbol, 任务名字: '自动开仓抄底', value: v }) }} />
                 </p>
@@ -175,7 +175,7 @@ class Item extends React.Component<{ market: 'bitmex' | 'hopex' | 'fcoin', symbo
                 </p>
                 <p>
                     止损:<Switch checked={任务开关.自动止损} onChange={(e, v) => { rpc.任务_开关__临时({ cookie, market: this.props.market, symbol: this.props.symbol, 任务名字: '自动止损', value: v }) }} />
-                </p>
+                </p> */}
             </div>
 
             {
