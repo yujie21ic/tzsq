@@ -3,15 +3,6 @@ import { JSONSync } from '../../F/JSONSync'
 import { RealDataBase } from '../../../RealDataServer/RealDataBase'
 
 type ITEM = {
-    任务开关: {
-        自动开仓摸顶: boolean
-        自动开仓抄底: boolean
-        自动开仓追涨: boolean
-        自动开仓追跌: boolean
-        自动止盈波段: boolean
-        自动止损: boolean
-        自动推止损: boolean
-    }
     委托列表: {
         type: '限价' | '限价只减仓' | '止损'
         timestamp: number
@@ -125,11 +116,11 @@ export interface PositionAndOrder {
 
 }
 
-export interface PositionAndOrderTask<T = any> {
+export interface PositionAndOrderTask {
 
     开关: boolean
-    参数type: T
-    参数: T
+    参数type: any
+    参数: any
 
     onTick(self: PositionAndOrder): boolean | Promise<boolean>
     onHopexTick(self: PositionAndOrder): boolean | Promise<boolean>

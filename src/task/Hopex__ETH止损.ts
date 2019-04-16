@@ -27,9 +27,7 @@ export class Hopex__ETH止损 implements PositionAndOrderTask {
 
     onHopexTick(self: PositionAndOrder) {
 
-        const { 仓位数量, 开仓均价, 任务开关, 委托列表 } = self.jsonSync.rawData.market.hopex.ETHUSDT
-
-        if (任务开关.自动止损 === false) return false
+        const { 仓位数量, 开仓均价, 委托列表 } = self.jsonSync.rawData.market.hopex.ETHUSDT
 
         const 止损委托 = 委托列表.filter(v => v.type === '止损')
 
@@ -69,8 +67,7 @@ export class Hopex__ETH止损 implements PositionAndOrderTask {
                 return self.hopex_cancel({ symbol: 'ETHUSDT', orderID: 止损委托[0].id })
             }
             else {
-                //不要推止损
-                if (任务开关.自动推止损 === false) return false
+                //不要推止损 
                 return false
             }
         }

@@ -53,8 +53,26 @@ const get浮盈点数 = (x: XXX) => {
 export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
     开关 = false
-    参数type = {}
-    参数 = {}
+
+    参数type = {
+        自动开仓摸顶: false,
+        自动开仓抄底: false,
+        自动开仓追涨: false,
+        自动开仓追跌: false,
+        自动止盈波段: false,
+        自动止损: false,
+        自动推止损: false,
+    }
+
+    参数 = {
+        自动开仓摸顶: false,
+        自动开仓抄底: false,
+        自动开仓追涨: false,
+        自动开仓追跌: false,
+        自动止盈波段: false,
+        自动止损: false,
+        自动推止损: false,
+    }
 
 
     private bitmex_state = newState()
@@ -179,9 +197,9 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         const { market, state, d, item } = x
 
-        const { 仓位数量, 开仓均价, 任务开关 } = item
+        const { 仓位数量, 开仓均价 } = item
 
-        if (任务开关.自动止损 === false) return false
+        if (this.参数.自动止损 === false) return false
 
         const 止损委托 = item.委托列表.filter(v => v.type === '止损')
 
@@ -230,7 +248,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                 return cancel(止损委托.map(v => v.id))
             }
             else {
-                if (item.任务开关.自动推止损 === false) return false //自动推止损 任务没打开
+                if (this.参数.自动推止损 === false) return false //自动推止损 任务没打开
 
                 //修改止损  只能改小  不能改大
                 const { price, side } = 止损委托[0]
@@ -282,17 +300,15 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
 
         const { market, item, d, state } = x
 
-        const { 任务开关 } = item
-
         const 活动委托 = item.委托列表.filter(v => v.type !== '止损')
 
         const 仓位数量 = market === 'bitmex' ? self.get本地维护仓位数量('XBTUSD') : item.仓位数量
 
         if (
-            任务开关.自动开仓追涨 === false &&
-            任务开关.自动开仓追跌 === false &&
-            任务开关.自动开仓抄底 === false &&
-            任务开关.自动开仓摸顶 === false
+            this.参数.自动开仓追涨 === false &&
+            this.参数.自动开仓追跌 === false &&
+            this.参数.自动开仓抄底 === false &&
+            this.参数.自动开仓摸顶 === false
         ) return false
 
         const 信号灯Type = self.realData.get信号灯Type(market)
@@ -313,10 +329,10 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         //开仓
         if (仓位数量 === 0 && 活动委托.length === 0 && 信号灯Type !== 'none') {
 
-            if (信号灯Type === '追涨' && 任务开关.自动开仓追涨 === false) return false
-            if (信号灯Type === '追跌' && 任务开关.自动开仓追跌 === false) return false
-            if (信号灯Type === '抄底' && 任务开关.自动开仓抄底 === false) return false
-            if (信号灯Type === '摸顶' && 任务开关.自动开仓摸顶 === false) return false
+            if (信号灯Type === '追涨' && this.参数.自动开仓追涨 === false) return false
+            if (信号灯Type === '追跌' && this.参数.自动开仓追跌 === false) return false
+            if (信号灯Type === '抄底' && this.参数.自动开仓抄底 === false) return false
+            if (信号灯Type === '摸顶' && this.参数.自动开仓摸顶 === false) return false
             if (
                 (lastNumber(d.时间) - state.最后一次信号时间 < 20 * 1000) && //没有超时
                 (                                             //抵消
@@ -390,12 +406,12 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
     private 平仓_step(self: PositionAndOrder, x: XXX) {
 
         const { market, item, d, state } = x
-        const { 任务开关, 仓位数量 } = item
+        const { 仓位数量 } = item
         const 活动委托 = item.委托列表.filter(v => v.type !== '止损')
 
 
         //开关没打开
-        if (任务开关.自动止盈波段 === false) return false
+        if (this.参数.自动止盈波段 === false) return false
 
         //仓位变大了 更新开仓状态
         if (isNaN(state.开仓状态.最大仓位abs) || state.开仓状态.最大仓位abs < Math.abs(仓位数量)) {

@@ -16,15 +16,6 @@ import { typeObjectParse } from '../../F/typeObjectParse'
 import { safeJSONParse } from '../../F/safeJSONParse'
 
 const symbol = () => ({
-    任务开关: {
-        自动开仓摸顶: false,
-        自动开仓抄底: false,
-        自动开仓追涨: false,
-        自动开仓追跌: false,
-        自动止盈波段: false,
-        自动止损: false,
-        自动推止损: false,
-    },
     委托列表: [] as BaseType.Order[],
     仓位数量: 0,
     开仓均价: 0,
