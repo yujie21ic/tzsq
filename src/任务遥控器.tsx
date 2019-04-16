@@ -104,12 +104,12 @@ class APP extends React.Component {
 
                         <a style={{ fontSize: 28, color: v.开关 ? '#cc66ff' : '#666666' }} href='#' onClick={() => this.任务开关(v.名字)}>{v.名字}</a>
 
-                        {v.开关 ?
+                        {//v.开关 ?
                             kvs(JSON.parse(v.参数)).map(p =>
                                 <div key={p.k}>
                                     {p.k}:{this.renderItem(v.名字, p.k, p.v)}
                                 </div>
-                            ) : ''
+                            ) //: ''
                         }
                     </div>
                 )}
