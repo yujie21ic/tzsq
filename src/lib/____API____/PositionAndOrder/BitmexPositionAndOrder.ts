@@ -694,7 +694,6 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     set_任务_开关(p: { 名字: string, 开关: boolean }) {
         const task = this.taskDic.get(p.名字)
-        console.log('set_任务_开关', p)
         if (task !== undefined) {
             task.开关 = p.开关
             this.刷新到jsonsync任务()
@@ -703,7 +702,6 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     set_任务_参数(p: { 名字: string, 参数: string }) {
         const task = this.taskDic.get(p.名字)
-        console.log('set_任务_参数', p)
         if (task !== undefined) {
             task.参数 = typeObjectParse(task.参数type)({ ...task.参数, ...safeJSONParse(p.参数) })
             this.刷新到jsonsync任务()
