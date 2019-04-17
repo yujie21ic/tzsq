@@ -180,7 +180,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
             this.参数.最大仓位 - Math.abs(count) : //方向一致
             this.参数.最大仓位 + Math.abs(count)   //方向不一致
 
-        const 格数 = Math.min(this.参数.格数, Math.floor(剩余 / this.参数.单个格子数量))
+        const 格数 = Math.min(this.参数.格数, Math.floor(Math.max(0, 剩余) / this.参数.单个格子数量))
 
         return this.toList({
             side: this.参数.方向,
