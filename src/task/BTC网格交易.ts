@@ -143,7 +143,8 @@ export class BTC网格交易 implements PositionAndOrderTask {
         if (this.参数.减仓 === false) return []
 
         const count = this.get仓位数量()
-        const 格数 = Math.min(this.参数.格数, Math.floor(Math.max(0, (Math.abs(count) - this.参数.留多少不减仓)) / this.参数.单个格子数量))
+        const 剩余 = Math.max(0, (Math.abs(count) - this.参数.留多少不减仓))
+        const 格数 = Math.min(this.参数.格数, Math.floor(剩余 / this.参数.单个格子数量))
 
         if (this.参数.方向 === 'Buy' && count > 0) {
             return this.toList({
@@ -176,11 +177,13 @@ export class BTC网格交易 implements PositionAndOrderTask {
         if (this.参数.加仓 === false) return []
 
         const count = this.get仓位数量()
-        const 剩余 = ((this.参数.方向 === 'Buy' && count >= 0) || (this.参数.方向 === 'Sell' && count <= 0)) ?
-            this.参数.最大仓位 - Math.abs(count) : //方向一致
-            this.参数.最大仓位 + Math.abs(count)   //方向不一致
+        const 剩余 = Math.max(0,
+            ((this.参数.方向 === 'Buy' && count >= 0) || (this.参数.方向 === 'Sell' && count <= 0)) ?
+                this.参数.最大仓位 - Math.abs(count) : //方向一致
+                this.参数.最大仓位 + Math.abs(count)   //方向不一致
+        )
 
-        const 格数 = Math.min(this.参数.格数, Math.floor(Math.max(0, 剩余) / this.参数.单个格子数量))
+        const 格数 = Math.min(this.参数.格数, Math.floor(剩余 / this.参数.单个格子数量))
 
         return this.toList({
             side: this.参数.方向,
