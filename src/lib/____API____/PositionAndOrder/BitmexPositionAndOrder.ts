@@ -353,7 +353,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                     if (item !== undefined) {
                         if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== item.avgCostPrice) {
                             仓位数量.____set(item.currentQty)
-                            开仓均价.____set(item.avgCostPrice)
+                            开仓均价.____set(Number(item.avgCostPrice)) //<---------------------------null to 0
                             this.log(`仓位更新: ${symbol} 仓位数量:${item.currentQty}  本地维护仓位数量:${this.ws.仓位数量.get(symbol)}  开仓均价:${item.avgCostPrice}`)
                         }
                     } else {
