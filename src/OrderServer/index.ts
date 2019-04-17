@@ -175,11 +175,20 @@ server.func.下单 = async req => {
 }
  
 
-server.func.任务 = async req => {
+server.func.set_任务_开关 = async req => {
     const account = accountDic.get(req.cookie)
     if (account === undefined) throw 'cookie不存在'
 
-    account.set任务(req)
+    account.set_任务_开关(req)
+
+    return false
+}
+
+server.func.set_任务_参数 = async req => {
+    const account = accountDic.get(req.cookie)
+    if (account === undefined) throw 'cookie不存在'
+
+    account.set_任务_参数(req)
 
     return false
 }

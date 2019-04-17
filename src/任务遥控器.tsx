@@ -21,27 +21,25 @@ class APP extends React.Component {
         f()
     }
 
-    任务开关 = (名字: string) => {
+    set_任务_开关 = (名字: string) => {
         const item = orderClient.jsonSync.rawData.任务.find(v => v.名字 === 名字)
         if (item !== undefined) {
-            OrderClient.rpc.func.任务({
+            OrderClient.rpc.func.set_任务_开关({
                 cookie,
                 名字,
                 开关: !item.开关,
-                参数: item.参数,
             })
         }
     }
 
-    setValue = (名字: string, key: string, value: any) => {
+    set_任务_参数 = (名字: string, key: string, value: any) => {
         const item = orderClient.jsonSync.rawData.任务.find(v => v.名字 === 名字)
 
         if (item !== undefined) {
-            OrderClient.rpc.func.任务({
+            OrderClient.rpc.func.set_任务_参数({
                 cookie,
                 名字,
-                开关: item.开关,
-                参数: JSON.stringify({ ...JSON.parse(item.参数), [key]: value }),
+                参数: JSON.stringify({ [key]: value }),
             })
         }
 
@@ -49,7 +47,7 @@ class APP extends React.Component {
 
     renderItem = (名字: string, key: string, value: any) => {
         if (typeof value === 'boolean') {
-            return <Switch checked={value} onChange={() => this.setValue(名字, key, !value)} />
+            return <Switch checked={value} onChange={() => this.set_任务_参数(名字, key, !value)} />
         }
         else if (typeof value === 'number') {
             return <a
@@ -59,7 +57,7 @@ class APP extends React.Component {
                     dialog.showInput({
                         title: key,
                         value: String(value),
-                        onOK: v => this.setValue(名字, key, Number(v)),
+                        onOK: v => this.set_任务_参数(名字, key, Number(v)),
                     })
                 }}
             >
@@ -70,7 +68,7 @@ class APP extends React.Component {
             return <a
                 style={{ fontSize: 28, color: value === 'Sell' ? 'red' : 'green' }}
                 href='#'
-                onClick={() => this.setValue(名字, key, value === 'Sell' ? 'Buy' : 'Sell')}
+                onClick={() => this.set_任务_参数(名字, key, value === 'Sell' ? 'Buy' : 'Sell')}
             >
                 {String(value)}
             </a>
@@ -102,7 +100,7 @@ class APP extends React.Component {
                             justifyContent: 'left',
                         }}>
 
-                        <a style={{ fontSize: 28, color: v.开关 ? '#cc66ff' : '#666666' }} href='#' onClick={() => this.任务开关(v.名字)}>{v.名字}</a>
+                        <a style={{ fontSize: 28, color: v.开关 ? '#cc66ff' : '#666666' }} href='#' onClick={() => this.set_任务_开关(v.名字)}>{v.名字}</a>
 
                         {//v.开关 ?
                             kvs(JSON.parse(v.参数)).map(p =>

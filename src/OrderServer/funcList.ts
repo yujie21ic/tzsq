@@ -29,13 +29,21 @@ export const funcList = {
             最低_最高: false,
         },
         res: false,
-    },    
+    },
 
-    任务: {
+    set_任务_开关: {
         req: {
             cookie: '',
             名字: '',
             开关: false,
+        },
+        res: false,
+    },
+
+    set_任务_参数: {
+        req: {
+            cookie: '',
+            名字: '',
             参数: '',
         },
         res: false,
