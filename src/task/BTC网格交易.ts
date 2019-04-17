@@ -190,7 +190,13 @@ export class BTC网格交易 implements PositionAndOrderTask {
                 grid: this.参数.单个格子大小,
             }),
             reduceOnly: false,
-        }).filter(this.同一个价位不连续挂2次).slice(0, 格数)
+        }).filter(this.同一个价位不连续挂2次).filter(v =>
+            this.参数.止损价格 === 0 ?
+                true :
+                this.参数.方向 === 'Buy' ?
+                    v.price > this.参数.止损价格 :
+                    v.price < this.参数.止损价格
+        ).slice(0, 格数)
     }
 
 
