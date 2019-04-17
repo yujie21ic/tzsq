@@ -14,6 +14,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
         格数: 5,
         方向: 'Sell' as BaseType.Side,
         最大仓位: 1000,
+        留多少不减仓: 0,
         盈利加仓: true,
         加仓: true,
         减仓: true,
@@ -25,6 +26,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
         格数: 5,
         方向: 'Sell' as BaseType.Side,
         最大仓位: 1000,
+        留多少不减仓: 0,
         盈利加仓: true,
         加仓: true,
         减仓: true,
@@ -141,7 +143,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
         if (this.参数.减仓 === false) return []
 
         const count = this.get仓位数量()
-        const 格数 = Math.min(this.参数.格数, Math.floor(Math.abs(count) / this.参数.单个格子数量))
+        const 格数 = Math.min(this.参数.格数, Math.floor(Math.max(0, (Math.abs(count) - this.参数.留多少不减仓)) / this.参数.单个格子数量))
 
         if (this.参数.方向 === 'Buy' && count > 0) {
             return this.toList({
