@@ -189,7 +189,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
         let cancelIDs: string[] = []
 
-        this.self.jsonSync.rawData.market.bitmex.XBTUSD.委托列表.forEach(v => {
+        this.self.jsonSync.rawData.market.bitmex.XBTUSD.委托列表.filter(v => v.type === '限价' || v.type === '限价只减仓').forEach(v => {
             const PRICE = v.price
 
             //这个价格没有委托 取消掉
