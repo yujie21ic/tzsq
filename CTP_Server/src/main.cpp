@@ -150,7 +150,7 @@ TThostFtdcPasswordType gInvesterPassword = "//123123";                     // 投
 // 行情参数
 CThostFtdcMdApi *g_pMdUserApi = nullptr;                           // 行情指针
 char gMdFrontAddr[] = "tcp://180.168.212.228:41213";               // 模拟行情前置地址
-char *g_pInstrumentID[] = {"rb1905"}; // 行情合约代码列表，中、上、大、郑交易所各选一种
+char *g_pInstrumentID[] = {"rb1910"}; // 行情合约代码列表，中、上、大、郑交易所各选一种
 int instrumentNum = 1;                                             // 行情合约订阅数量 
 
 // 交易参数
@@ -450,7 +450,8 @@ void CustomMdSpi::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *pDepthMar
 	std::cout << "=====获得深度行情=====" << std::endl;
 
 	Json my_json = Json::array{
-		pDepthMarketData->InstrumentID,  //合约代码
+		// pDepthMarketData->InstrumentID,  //合约代码
+		"rb_zhuli",
 		pDepthMarketData->UpdateTime,	 //时间
 		pDepthMarketData->UpdateMillisec,//毫秒
 		pDepthMarketData->LastPrice,	 //最新价
