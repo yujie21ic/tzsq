@@ -11,6 +11,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
     参数type = {
         单个格子大小: 2.5,
         单个格子数量: 25,
+        最小盈利点: 0,
         格数: 5,
         方向: 'Sell' as BaseType.Side,
         最大仓位: 1000,
@@ -23,6 +24,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
     参数 = {
         单个格子大小: 2.5,
         单个格子数量: 25,
+        最小盈利点: 0,
         格数: 5,
         方向: 'Sell' as BaseType.Side,
         最大仓位: 1000,
@@ -151,7 +153,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
                 side: 'Sell',
                 price: to价格对齐({
                     side: 'Sell',
-                    value: this.sellPrice(),
+                    value: this.sellPrice() + Math.max(0, this.参数.最小盈利点),
                     grid: this.参数.单个格子大小,
                 }),
                 reduceOnly: true,
@@ -162,7 +164,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
                 side: 'Buy',
                 price: to价格对齐({
                     side: 'Buy',
-                    value: this.buyPrice(),
+                    value: this.buyPrice() - Math.max(0, this.参数.最小盈利点),
                     grid: this.参数.单个格子大小,
                 }),
                 reduceOnly: true,
