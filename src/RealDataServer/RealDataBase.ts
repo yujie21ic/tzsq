@@ -151,7 +151,7 @@ export class RealDataBase {
         data: BaseType.KLine[]
         orderBook: BaseType.OrderBook[]
     }, 盘口算价格: boolean) {
-
+        盘口算价格 = false
         const { data, orderBook } = xxx
 
         const 收盘价 = 指标.map(() => data.length, i => data[i].close)

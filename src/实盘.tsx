@@ -72,7 +72,7 @@ class Item extends React.Component<{ market: 'bitmex' | 'hopex' | 'fcoin', symbo
 
     render() {
         const { 仓位数量, 开仓均价 } = this.props.data()
-        const 下单数量 = 1000 * this.props.倍数
+        const 下单数量 = 5000 * this.props.倍数
 
         const fcoin_btc_数量 = 仓位数量
         const fcoin_usdt_数量 = 开仓均价
@@ -414,8 +414,9 @@ export class 交易 extends React.Component {
                 userSelect: 'none',
                 cursor: 'default'
             }}>
+                <Item market='bitmex' symbol='XBTUSD' data={() => orderClient.jsonSync.rawData.market.bitmex.XBTUSD} 位置={this.位置} 倍数={this.倍数} />
                 <Item market='hopex' symbol='BTCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.BTCUSDT} 位置={this.位置} 倍数={this.倍数} />
-                <Item market='hopex' symbol='ETHUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.ETHUSDT} 位置={this.位置} 倍数={this.倍数} />
+                {/* <Item market='hopex' symbol='ETHUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.ETHUSDT} 位置={this.位置} 倍数={this.倍数} /> */}
                 {/* <Item market='hopex' symbol='ETCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.ETCUSDT} 位置={this.位置} 倍数={this.倍数} /> */}
                 {/* <Item market='hopex' symbol='LTCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.LTCUSDT} 位置={this.位置} 倍数={this.倍数} />
                 <Item market='hopex' symbol='XRPUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.XRPUSDT} 位置={this.位置} 倍数={this.倍数} /> */}
