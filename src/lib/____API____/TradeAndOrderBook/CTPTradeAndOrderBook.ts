@@ -31,19 +31,41 @@ export class CTPTradeAndOrderBook extends TradeAndOrderBook<string>{
                 毫秒: fix浮点(Number(arr[2])),
                 最新价: fix浮点(Number(arr[3])),
                 累计成交量: fix浮点(Number(arr[4])),
-                盘口买价: fix浮点(Number(arr[5])),
-                盘口买量: fix浮点(Number(arr[6])),
-                盘口卖价: fix浮点(Number(arr[7])),
-                盘口卖量: fix浮点(Number(arr[8])),
-                持仓量: fix浮点(Number(arr[9])),
-                成交金额: fix浮点(Number(arr[10])),
+
+                盘口买1价: fix浮点(Number(arr[5])),
+                盘口买1量: fix浮点(Number(arr[6])),
+                盘口卖1价: fix浮点(Number(arr[7])),
+                盘口卖1量: fix浮点(Number(arr[8])),
+
+                盘口买2价: fix浮点(Number(arr[9])),
+                盘口买2量: fix浮点(Number(arr[10])),
+                盘口卖2价: fix浮点(Number(arr[11])),
+                盘口卖2量: fix浮点(Number(arr[12])),
+
+                盘口买3价: fix浮点(Number(arr[13])),
+                盘口买3量: fix浮点(Number(arr[14])),
+                盘口卖3价: fix浮点(Number(arr[15])),
+                盘口卖3量: fix浮点(Number(arr[16])),
+
+                盘口买4价: fix浮点(Number(arr[17])),
+                盘口买4量: fix浮点(Number(arr[18])),
+                盘口卖4价: fix浮点(Number(arr[19])),
+                盘口卖4量: fix浮点(Number(arr[20])),
+
+                盘口买5价: fix浮点(Number(arr[21])),
+                盘口买5量: fix浮点(Number(arr[22])),
+                盘口卖5价: fix浮点(Number(arr[23])),
+                盘口卖5量: fix浮点(Number(arr[24])),
+
+                持仓量: fix浮点(Number(arr[25])),
+                成交金额: fix浮点(Number(arr[26])),
             }
 
 
             //last 初始化
             if (this.last === undefined) {
                 this.last = {
-                    side: obj.最新价 >= obj.盘口卖价 ? 'Sell' : 'Buy',
+                    side: obj.最新价 >= obj.盘口卖1价 ? 'Sell' : 'Buy',
                     price: obj.最新价,
                     累计成交量: obj.累计成交量,
                     持仓量: obj.持仓量,
@@ -73,7 +95,7 @@ export class CTPTradeAndOrderBook extends TradeAndOrderBook<string>{
             date.setSeconds(s)
             date.setMilliseconds(obj.毫秒)
 
-            const timestamp = date.getTime() 
+            const timestamp = date.getTime()
 
             if (size !== 0) {
                 this.tradeObservable.next({
@@ -93,14 +115,51 @@ export class CTPTradeAndOrderBook extends TradeAndOrderBook<string>{
             this.orderBookObservable.next({
                 symbol: obj.合约代码,
                 timestamp,
-                buy: [{
-                    price: obj.盘口买价,
-                    size: obj.盘口买量,
-                }],
-                sell: [{
-                    price: obj.盘口卖价,
-                    size: obj.盘口卖量,
-                }],
+                buy: [
+                    {
+                        price: obj.盘口买1价,
+                        size: obj.盘口买1量,
+                    },
+                    {
+                        price: obj.盘口买2价,
+                        size: obj.盘口买2量,
+                    },
+                    {
+                        price: obj.盘口买3价,
+                        size: obj.盘口买3量,
+                    },
+                    {
+                        price: obj.盘口买4价,
+                        size: obj.盘口买4量,
+                    },
+                    {
+                        price: obj.盘口买5价,
+                        size: obj.盘口买5量,
+                    },
+                ],
+                sell: [
+                    {
+                        price: obj.盘口卖1价,
+                        size: obj.盘口卖1量,
+                    },
+                    {
+                        price: obj.盘口卖2价,
+                        size: obj.盘口卖2量,
+                    },
+                    {
+                        price: obj.盘口卖3价,
+                        size: obj.盘口卖3量,
+                    },
+                    {
+                        price: obj.盘口卖4价,
+                        size: obj.盘口卖4量,
+                    },
+                    {
+                        price: obj.盘口卖5价,
+                        size: obj.盘口卖5量,
+                    },
+
+                ],
             })
 
         })

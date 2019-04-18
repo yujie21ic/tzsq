@@ -456,10 +456,32 @@ void CustomMdSpi::OnRtnDepthMarketData(CThostFtdcDepthMarketDataField *pDepthMar
 		pDepthMarketData->UpdateMillisec,//毫秒
 		pDepthMarketData->LastPrice,	 //最新价
 		pDepthMarketData->Volume,		 //成交量
-		pDepthMarketData->BidPrice1,	 //盘口买价
-		pDepthMarketData->BidVolume1,	 //盘口买量
-		pDepthMarketData->AskPrice1,	 //盘口卖价
-		pDepthMarketData->AskVolume1,	 //盘口卖量
+
+		pDepthMarketData->BidPrice1,	 //盘口买1价
+		pDepthMarketData->BidVolume1,	 //盘口买1量
+		pDepthMarketData->AskPrice1,	 //盘口卖1价
+		pDepthMarketData->AskVolume1,	 //盘口卖1量
+
+		pDepthMarketData->BidPrice2,	 //盘口买2价
+		pDepthMarketData->BidVolume2,	 //盘口买2量
+		pDepthMarketData->AskPrice2,	 //盘口卖2价
+		pDepthMarketData->AskVolume2,	 //盘口卖2量
+
+		pDepthMarketData->BidPrice3,	 //盘口买3价
+		pDepthMarketData->BidVolume3,	 //盘口买3量
+		pDepthMarketData->AskPrice3,	 //盘口卖3价
+		pDepthMarketData->AskVolume3,	 //盘口卖3量
+
+		pDepthMarketData->BidPrice4,	 //盘口买4价
+		pDepthMarketData->BidVolume4,	 //盘口买4量
+		pDepthMarketData->AskPrice4,	 //盘口卖4价
+		pDepthMarketData->AskVolume4,	 //盘口卖4量
+
+		pDepthMarketData->BidPrice5,	 //盘口买5价
+		pDepthMarketData->BidVolume5,	 //盘口买5量
+		pDepthMarketData->AskPrice5,	 //盘口卖5价
+		pDepthMarketData->AskVolume5,	 //盘口卖5量
+
 		pDepthMarketData->OpenInterest,	 //持仓量
 		pDepthMarketData->Turnover,		 //成交金额
 	};
