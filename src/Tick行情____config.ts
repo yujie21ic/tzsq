@@ -2852,11 +2852,13 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 {
                     layerList: [
                         layer(ZeroLayer, { color: 0xaaaaaa }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净盘口_均线3, color: ETH颜色 }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口卖1加被吃的, color: 幽灵卖颜色 }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.盘口1, color: 卖颜色1 }),
+                        layer(LineLayer, { data: d2.ctp.rb_zhuli.买.买成交量累加, color: 买颜色 }),
+                        layer(LineLayer, { data: d2.ctp.rb_zhuli.买.卖成交量累加, color: 卖颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净盘口_均线3, color: ETH颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.盘口1, color: 卖颜色1 }),
                     ]
                 },
                 // {
@@ -2894,33 +2896,20 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
         ]
     }),
-    // 双开,双平,多换,空换,多平,空平,空开,多开,
-    '螺纹成交量2': (d, d2) => ({
+    '螺纹成交量1': (d, d2) => ({
         heightList: [1],
         items: [
             [
                 {
                     layerList: [
                         layer(ZeroLayer, { color: 0xaaaaaa }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净盘口_均线3, color: ETH颜色 }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口卖1加被吃的, color: 幽灵卖颜色 }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.盘口1, color: 卖颜色1 }),
-                    ]
-                },
-                // {
-                //     numberColor: 'ETH颜色',
-                //     layerList: [
-                //         layer(ZeroLayer, { color: ETH颜色 }),
-                //         layer(LineLayer, { data: d2.ctp.rb_zhuli.阻力3涨, color: 买颜色 }),
-                //         layer(LineLayer, { data: d2.ctp.rb_zhuli.阻力3跌, color: 卖颜色 }),
-                //     ]
-                // },
-                {
-                    numberColor: BTC颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.价格, color: BTC颜色 }),
+                        layer(LineLayer, { data: d2.ctp.rb_zhuli.买.买成交量累加, color: 买颜色 }),
+                        layer(LineLayer, { data: d2.ctp.rb_zhuli.买.卖成交量累加, color: 卖颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净盘口_均线3, color: ETH颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.盘口1, color: 卖颜色1 }),
                     ]
                 },
                 // {
@@ -2930,35 +2919,22 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 //         layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净成交量_累加60, color: 波动率颜色 }),
                 //     ]
                 // },
+                {
+                    numberColor: BTC颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d2.ctp.rb_zhuli.价格, color: BTC颜色 }),
+                    ]
+                },
+
             ],
             // {
             //     layerList: [
             //         layer(ZeroLayer, { color: 0xaaaaaa }),
-            //         layer(LineLayer, { data: d2.ctp.rb_zhuli.成交性质.多平, color: BTC颜色 }),
-            //         layer(LineLayer, { data: d2.ctp.rb_zhuli.成交性质.空平, color: ETH颜色 }),
             //         layer(LineLayer, { data: d2.ctp.rb_zhuli.买.成交量, color: 买颜色 }),
             //         layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-            //         layer(TextLayer, { text: '多平 空平      ', color: 0xffff00 })
-            //     ]
-            // // },
-            // {
-            //     layerList: [
-            //         layer(ZeroLayer, { color: 0xaaaaaa }),
-            //         // layer(LineLayer, { data: d2.ctp.rb_zhuli.成交性质.空开, color: BTC颜色 }),
-            //         // layer(LineLayer, { data: d2.ctp.rb_zhuli.成交性质.多开, color: ETH颜色 }),
-            //         layer(LineLayer, { data: d2.ctp.rb_zhuli.买.成交量, color: 买颜色 }),
-            //         layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-            //         //layer(TextLayer, { text: '空开 多开      ', color: 0xffff00 })
+            //         layer(TextLayer, { text: '成交量      ', color: 0xffff00 })
             //     ]
             // },
-            // // {
-            // //     layerList: [
-            // //         layer(ZeroLayer, { color: 0xaaaaaa }),
-            // //         layer(LineLayer, { data: d2.ctp.rb_zhuli.买.成交量, color: 买颜色 }),
-            // //         layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-            // //         layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
-            // //     ]
-            // // },
             // {
             //     layerList: [
             //         layer(ZeroLayer, { color: 0xaaaaaa }),
@@ -2971,7 +2947,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
         ]
     }),
-
+    
+    
     着笔: (d, d2) => ({
         heightList: [0.5, 0.5],
         items: [

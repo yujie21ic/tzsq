@@ -18,7 +18,7 @@ const 买卖 = (p: {
     const 净成交量乘以10 = 指标.map(() => Math.min(p.成交量.length, p.反向成交量.length), i => (p.成交量[i] - p.反向成交量[i]) * 10)
     const 净盘口 = 指标.map(() => Math.min(p.盘口.length, p.反向盘口.length), i => p.盘口[i] - p.反向盘口[i])
     const 成交量 = 指标.map(() => Math.min(p.成交量.length), i => p.成交量[i])
-
+    const 反向成交量 = 指标.map(() => Math.min(p.成交量.length), i => p.反向成交量[i])
 
     return {
         //成交量
@@ -31,6 +31,8 @@ const 买卖 = (p: {
         盘口1价: p.盘口1价,
         成交量_累加60: 指标.累加(成交量, 60, RealDataBase.单位时间),
 
+        买成交量累加: 指标.累加(成交量, 15, RealDataBase.单位时间),
+        卖成交量累加: 指标.累加(反向成交量, 15, RealDataBase.单位时间),
         //净成交量
         净成交量,
         净成交量_累加5: 指标.累加(净成交量, 5, RealDataBase.单位时间),
