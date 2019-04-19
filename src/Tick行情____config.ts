@@ -50,7 +50,7 @@ const 黑色 = 0x000000
 export const Tick行情____config: { [key in string]: ItemFunc } = {
 
     xxxxxxxxxxxxx: (d, d2) => ({
-        heightList: [0.5],
+        heightList: [0.5,0.5],
         items: [
             [{
                 layerList: [
