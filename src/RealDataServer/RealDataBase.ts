@@ -1125,6 +1125,9 @@ export class RealDataBase {
             盘口买1加被吃的: 指标.map(() => Math.min(买.盘口1.length, xxx.吃单情况.length), i => 买.盘口1[i] + xxx.吃单情况[i].买.被吃量),
             盘口卖1加被吃的: 指标.map(() => Math.min(卖.盘口1.length, xxx.吃单情况.length), i => 卖.盘口1[i] + xxx.吃单情况[i].卖.被吃量),
 
+            盘口买加主动买: 指标.map(() => Math.min(买.盘口1.length, xxx.吃单情况.length), i => 买.盘口1[i] + xxx.吃单情况[i].卖.被吃量),
+            盘口卖加主动卖: 指标.map(() => Math.min(卖.盘口1.length, xxx.吃单情况.length), i => 卖.盘口1[i] + xxx.吃单情况[i].买.被吃量),
+
 
             价格_均线13,
             价格_均线34,
