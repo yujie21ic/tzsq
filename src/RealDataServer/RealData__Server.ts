@@ -43,6 +43,28 @@ export class RealData__Server extends RealDataBase {
                 ____push: (v: BaseType.KLine) => void
                 ____updateLast: (v: BaseType.KLine) => void
             },
+            盘口吃单情况: {
+                ____push: (v: {
+                    买: {
+                        价: number
+                        被吃量: number
+                    },
+                    卖: {
+                        价: number
+                        被吃量: number
+                    }
+                }) => void
+                ____updateLast: (v: {
+                    买: {
+                        价: number
+                        被吃量: number
+                    },
+                    卖: {
+                        价: number
+                        被吃量: number
+                    }
+                }) => void
+            },
 
         }
         timestamp: number
@@ -59,7 +81,7 @@ export class RealData__Server extends RealDataBase {
             this.jsonSync.data.startTick.____set(tick)
         }
 
-
+        //着笔
         //本地 ws 服务 才要
         if (this.wsServer && p.key === 'bitmex_XBTUSD') {
             const { orderBook } = this.jsonSync.rawData.bitmex.XBTUSD
@@ -75,7 +97,9 @@ export class RealData__Server extends RealDataBase {
             }
         }
 
-        //tick
+        //盘口吃单情况
+
+        //500ms
         if (this.on着笔Dic[p.key] === undefined) {
             this.on着笔Dic[p.key] = new Sampling<BaseType.KLine>({
                 open: '开',
