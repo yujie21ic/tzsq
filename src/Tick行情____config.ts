@@ -2831,15 +2831,9 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     }),
     // 双开,双平,多换,空换,多平,空平,空开,多开,
     '螺纹成交量1': (d, d2) => ({
-        heightList: [0.4, 0.2, 0.2, 0.2],
+        heightList: [0.6, 0.2, 0.2],
         items: [
             [
-                {
-                    numberColor: BTC颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.价格, color: BTC颜色 }),
-                    ]
-                },
                 {
                     numberColor: 波动率颜色,
                     layerList: [
@@ -2847,35 +2841,22 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净成交量_累加60, color: 波动率颜色 }),
                     ]
                 },
+                {
+                    numberColor: BTC颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d2.ctp.rb_zhuli.价格, color: BTC颜色 }),
+                    ]
+                },
+               
             ],
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d2.ctp.rb_zhuli.成交性质.双开, color: BTC颜色 }),
-                    layer(LineLayer, { data: d2.ctp.rb_zhuli.成交性质.双平, color: ETH颜色 }),
                     layer(LineLayer, { data: d2.ctp.rb_zhuli.买.成交量, color: 买颜色 }),
                     layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-                    layer(TextLayer, { text: '双开 双平      ', color: 0xffff00 })
+                    layer(TextLayer, { text: '成交量      ', color: 0xffff00 })
                 ]
             },
-            {
-                layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d2.ctp.rb_zhuli.成交性质.多换, color: BTC颜色 }),
-                    layer(LineLayer, { data: d2.ctp.rb_zhuli.成交性质.空换, color: ETH颜色 }),
-                    layer(LineLayer, { data: d2.ctp.rb_zhuli.买.成交量, color: 买颜色 }),
-                    layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-                    layer(TextLayer, { text: '多换 空换      ', color: 0xffff00 })
-                ]
-            },
-            // {
-            //     layerList: [
-            //         layer(ZeroLayer, { color: 0xaaaaaa }),
-            //         layer(LineLayer, { data: d2.ctp.rb_zhuli.买.成交量, color: 买颜色 }),
-            //         layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-            //         layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
-            //     ]
-            // },
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
