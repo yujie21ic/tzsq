@@ -15,19 +15,24 @@ const createItem = () => ({
 
 
 
+
+
     //合起来 ???????
     data: [] as BaseType.KLine[],
+
     orderBook: [] as BaseType.OrderBook[],
-    盘口吃单情况: {
+
+    //最后一个被吃的价  和  量
+    吃单情况: [] as {
         买: {
-            价: NaN,
-            被吃量: 0,
+            价: number
+            被吃量: number
         },
         卖: {
-            价: NaN,
-            被吃量: 0,
+            价: number
+            被吃量: number
         }
-    },
+    }[],
 })
 
 export class RealDataBase {
