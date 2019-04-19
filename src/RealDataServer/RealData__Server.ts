@@ -43,6 +43,38 @@ export class RealData__Server extends RealDataBase {
                 ____push: (v: BaseType.KLine) => void
                 ____updateLast: (v: BaseType.KLine) => void
             },
+            吃单情况: {
+                ____get: () => {
+                    买: {
+                        价: number
+                        被吃量: number
+                    },
+                    卖: {
+                        价: number
+                        被吃量: number
+                    }
+                }[]
+                ____push: (v: {
+                    买: {
+                        价: number
+                        被吃量: number
+                    },
+                    卖: {
+                        价: number
+                        被吃量: number
+                    }
+                }) => void
+                ____updateLast: (v: {
+                    买: {
+                        价: number
+                        被吃量: number
+                    },
+                    卖: {
+                        价: number
+                        被吃量: number
+                    }
+                }) => void
+            },
 
         }
         timestamp: number
@@ -59,7 +91,7 @@ export class RealData__Server extends RealDataBase {
             this.jsonSync.data.startTick.____set(tick)
         }
 
-
+        //着笔
         //本地 ws 服务 才要
         if (this.wsServer && p.key === 'bitmex_XBTUSD') {
             const { orderBook } = this.jsonSync.rawData.bitmex.XBTUSD
@@ -75,7 +107,11 @@ export class RealData__Server extends RealDataBase {
             }
         }
 
-        //tick
+
+
+
+
+        //500ms
         if (this.on着笔Dic[p.key] === undefined) {
             this.on着笔Dic[p.key] = new Sampling<BaseType.KLine>({
                 open: '开',
@@ -88,18 +124,73 @@ export class RealData__Server extends RealDataBase {
                 sellCount: '累加',
                 成交性质: '收',
             })
-            this.on着笔Dic[p.key].onNew2 = item => p.xxxxxxxx.data.____push(item)
-            this.on着笔Dic[p.key].onUpdate2 = item => p.xxxxxxxx.data.____updateLast(item)
+
+            this.on着笔Dic[p.key].onNew2 = item => {
+                p.xxxxxxxx.data.____push(item)
+
+                //重复 ____push
+                const arr = p.xxxxxxxx.吃单情况.____get()
+                const last = arr.length > 0 ? arr[arr.length - 1] : {
+                    买: {
+                        价: NaN,
+                        被吃量: 0,
+                    },
+                    卖: {
+                        价: NaN,
+                        被吃量: 0,
+                    }
+                }
+                p.xxxxxxxx.吃单情况.____push({
+                    买: {
+                        价: item.close,
+                        被吃量: last.买.价 !== item.close ? item.buySize : last.买.被吃量 + item.buySize,
+                    },
+                    卖: {
+                        价: item.close,
+                        被吃量: last.卖.价 !== item.close ? item.sellSize : last.卖.被吃量 + item.sellSize,
+                    }
+                })
+            }
+
+            this.on着笔Dic[p.key].onUpdate2 = item => {
+                p.xxxxxxxx.data.____updateLast(item)
+                const arr = p.xxxxxxxx.吃单情况.____get()
+
+                //重复 ____updateLast
+                const last = arr.length > 0 ? arr[arr.length - 1] : {
+                    买: {
+                        价: NaN,
+                        被吃量: 0,
+                    },
+                    卖: {
+                        价: NaN,
+                        被吃量: 0,
+                    }
+                }
+                p.xxxxxxxx.吃单情况.____updateLast({
+                    买: {
+                        价: item.close,
+                        被吃量: last.买.价 !== item.close ? item.buySize : last.买.被吃量 + item.buySize,
+                    },
+                    卖: {
+                        价: item.close,
+                        被吃量: last.卖.价 !== item.close ? item.sellSize : last.卖.被吃量 + item.sellSize,
+                    }
+                })
+            }
+
+
             this.on着笔Dic[p.key].in2({
                 id: this.data.startTick,
                 open: NaN,
                 high: NaN,
                 low: NaN,
                 close: NaN,
-                buySize: NaN,
-                buyCount: NaN,
-                sellSize: NaN,
-                sellCount: NaN,
+                //
+                buySize: 0,
+                buyCount: 0,
+                sellSize: 0,
+                sellCount: 0,
                 成交性质: '不知道',
             })
         }
