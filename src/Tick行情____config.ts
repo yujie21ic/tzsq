@@ -1085,15 +1085,13 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 ]
             },
             [
-                {
-                    numberColor: 净成交量颜色,
-                    numberX: 100,
-                    layerList: [
-                        layer(ZeroLayer, { color: 净成交量颜色 }),
-                        //layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 净成交量颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.fcoin.买.净成交量_累加60, color: 净成交量颜色 }),
-                    ]
-                },
+                // {
+                //     numberColor: 净成交量颜色,
+                //     numberX: 100,
+                //     layerList: [
+                //         layer(LineLayer, { data: d2.ETHUSD.hopex.价格, color: 石青 }),
+                //     ]
+                // },
                 // {
                 //     numberColor: 石青,
                 //     layerList: [
@@ -1103,8 +1101,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 {
                     numberColor: 波动率颜色,
                     layerList: [
-                        layer(ZeroLayer, { color: 波动率颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.bitmex.tick力量指数60, color: 波动率颜色 }),
+                        layer(LineLayer, { data: d.bitmex.吃单情况_买_被吃量, color: 买颜色 }),
+                        layer(LineLayer, { data: d.bitmex.吃单情况_卖_被吃量, color: 卖颜色 }),
                     ]
                 },
 
@@ -2851,6 +2849,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     numberColor: BTC颜色,
                     layerList: [
                         layer(LineLayer, { data: d2.ctp.rb_zhuli.价格, color: BTC颜色 }),
+                    ]
+                },
+                {
+                    numberColor: 波动率颜色,
+                    layerList: [
+                        layer(ZeroLayer, { color: 0xaaaaaa }),
+                        layer(LineLayer, { data: d.bitmex.吃单情况_买_被吃量, color: 买颜色 }),
+                        layer(LineLayer, { data: d.bitmex.吃单情况_卖_被吃量, color: 卖颜色 ,临时参数: '变成负数' }),
                     ]
                 },
                
