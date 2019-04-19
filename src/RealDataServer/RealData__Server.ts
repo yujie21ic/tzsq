@@ -44,26 +44,14 @@ export class RealData__Server extends RealDataBase {
                 ____updateLast: (v: BaseType.KLine) => void
             },
             盘口吃单情况: {
-                ____push: (v: {
-                    买: {
-                        价: number
-                        被吃量: number
-                    },
-                    卖: {
-                        价: number
-                        被吃量: number
-                    }
-                }) => void
-                ____updateLast: (v: {
-                    买: {
-                        价: number
-                        被吃量: number
-                    },
-                    卖: {
-                        价: number
-                        被吃量: number
-                    }
-                }) => void
+                买: {
+                    价: { ____get: () => number, ____set: (v: number) => void }
+                    被吃量: { ____get: () => number, ____set: (v: number) => void }
+                },
+                卖: {
+                    价: { ____get: () => number, ____set: (v: number) => void }
+                    被吃量: { ____get: () => number, ____set: (v: number) => void }
+                }
             },
 
         }
@@ -98,6 +86,14 @@ export class RealData__Server extends RealDataBase {
         }
 
         //盘口吃单情况
+        const XX = p.side === 'Buy' ? p.xxxxxxxx.盘口吃单情况.买 : p.xxxxxxxx.盘口吃单情况.卖
+        if (XX.价.____get() !== p.price) {
+            XX.价.____set(p.price)
+            XX.被吃量.____set(p.size)
+        } else {
+            XX.被吃量.____set(XX.被吃量.____get() + p.size)
+        }
+
 
         //500ms
         if (this.on着笔Dic[p.key] === undefined) {

@@ -8,9 +8,11 @@ type OP = { path: PATH, value: any }
 type MAPTO<T> = {
     [K in keyof T]:
     T[K] extends number | string | boolean ? {
+        ____get: () => T[K]
         ____set: (v: T[K]) => void
     } :
     T[K] extends Array<infer TT> ? {
+        ____get: () => Array<TT>
         ____set: (v: Array<TT>) => void
         ____push: (v: TT) => void
         ____updateLast: (v: TT) => void
@@ -30,11 +32,13 @@ export class JSONSync<T>{
         const v = this.get(path)
         if (typeof v === 'number' || typeof v === 'string' || typeof v === 'boolean') {
             return {
+                ____get: () => this.get(path),
                 ____set: (value: any) => this.set({ path, value }),
             }
         }
         else if (v instanceof Array) {
             return {
+                ____get: () => this.get(path),
                 ____set: (value: any) => this.set({ path, value }),
                 ____push: (value: any) => {
                     this.set({ path: [...path, '__push__'], value })

@@ -13,19 +13,21 @@ import { mapObjIndexed } from '../lib/F/mapObjIndexed'
 const createItem = () => ({
     着笔: [] as BaseType.着笔[],
 
+
+
     //合起来 ???????
     data: [] as BaseType.KLine[],
     orderBook: [] as BaseType.OrderBook[],
-    盘口吃单情况: [] as {
+    盘口吃单情况: {
         买: {
-            价: number
-            被吃量: number
+            价: NaN,
+            被吃量: 0,
         },
         卖: {
-            价: number
-            被吃量: number
+            价: NaN,
+            被吃量: 0,
         }
-    }[],
+    },
 })
 
 export class RealDataBase {
