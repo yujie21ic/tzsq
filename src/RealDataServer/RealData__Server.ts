@@ -109,6 +109,46 @@ export class RealData__Server extends RealDataBase {
 
 
 
+        //吃单情况
+        if (p.xxxxxxxx.吃单情况.____get().length === 0) {
+            p.xxxxxxxx.吃单情况.____push({
+                买: {
+                    价: NaN,
+                    被吃量: 0,
+                },
+                卖: {
+                    价: NaN,
+                    被吃量: 0,
+                }
+            })
+        }
+
+        //
+        while (p.xxxxxxxx.吃单情况.____get().length < tick - this.jsonSync.rawData.startTick + 1) {
+            const arr = p.xxxxxxxx.吃单情况.____get()
+            p.xxxxxxxx.吃单情况.____push(arr[arr.length - 1])
+        }
+
+        //
+        const arr = p.xxxxxxxx.吃单情况.____get()
+        const item = {
+            买: {
+                价: arr[arr.length - 1].买.价,
+                被吃量: arr[arr.length - 1].买.被吃量,
+            },
+            卖: {
+                价: arr[arr.length - 1].卖.价,
+                被吃量: arr[arr.length - 1].卖.被吃量,
+            }
+        }
+        const xx = p.side === 'Sell' ? item.买 : item.卖
+        if (xx.价 !== p.price) xx.被吃量 = 0
+        xx.被吃量 += p.size
+        xx.价 = p.price
+        p.xxxxxxxx.吃单情况.____updateLast(item)
+
+
+
 
 
         //500ms
@@ -125,61 +165,8 @@ export class RealData__Server extends RealDataBase {
                 成交性质: '收',
             })
 
-            this.on着笔Dic[p.key].onNew2 = item => {
-                p.xxxxxxxx.data.____push(item)
-
-                //重复 ____push
-                const arr = p.xxxxxxxx.吃单情况.____get()
-                const last = arr.length > 0 ? arr[arr.length - 1] : {
-                    买: {
-                        价: NaN,
-                        被吃量: 0,
-                    },
-                    卖: {
-                        价: NaN,
-                        被吃量: 0,
-                    }
-                }
-                p.xxxxxxxx.吃单情况.____push({
-                    买: {
-                        价: item.close,
-                        被吃量: last.买.价 !== item.close ? item.buySize : last.买.被吃量 + item.buySize,
-                    },
-                    卖: {
-                        价: item.close,
-                        被吃量: last.卖.价 !== item.close ? item.sellSize : last.卖.被吃量 + item.sellSize,
-                    }
-                })
-            }
-
-            this.on着笔Dic[p.key].onUpdate2 = item => {
-                p.xxxxxxxx.data.____updateLast(item)
-                const arr = p.xxxxxxxx.吃单情况.____get()
-
-                //重复 ____updateLast
-                const last = arr.length > 0 ? arr[arr.length - 1] : {
-                    买: {
-                        价: NaN,
-                        被吃量: 0,
-                    },
-                    卖: {
-                        价: NaN,
-                        被吃量: 0,
-                    }
-                }
-                p.xxxxxxxx.吃单情况.____updateLast({
-                    买: {
-                        价: item.close,
-                        被吃量: last.买.价 !== item.close ? item.buySize : last.买.被吃量 + item.buySize,
-                    },
-                    卖: {
-                        价: item.close,
-                        被吃量: last.卖.价 !== item.close ? item.sellSize : last.卖.被吃量 + item.sellSize,
-                    }
-                })
-            }
-
-
+            this.on着笔Dic[p.key].onNew2 = item => p.xxxxxxxx.data.____push(item)
+            this.on着笔Dic[p.key].onUpdate2 = item => p.xxxxxxxx.data.____updateLast(item)
             this.on着笔Dic[p.key].in2({
                 id: this.data.startTick,
                 open: NaN,
