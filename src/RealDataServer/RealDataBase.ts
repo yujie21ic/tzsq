@@ -169,6 +169,16 @@ export class RealDataBase {
         着笔: BaseType.着笔[]
         data: BaseType.KLine[]
         orderBook: BaseType.OrderBook[]
+        吃单情况: {
+            买: {
+                价: number;
+                被吃量: number;
+            };
+            卖: {
+                价: number;
+                被吃量: number;
+            };
+        }[]
     }, 盘口算价格: boolean) {
         盘口算价格 = false
         const { data, orderBook } = xxx
@@ -1106,6 +1116,12 @@ export class RealDataBase {
 
 
         return {
+            吃单情况: xxx.吃单情况,
+
+
+            吃单情况_买_被吃量: 指标.map(() => xxx.吃单情况.length, i => xxx.吃单情况[i].买.被吃量),
+            吃单情况_卖_被吃量: 指标.map(() => xxx.吃单情况.length, i => xxx.吃单情况[i].卖.被吃量),
+
             价格_均线13,
             价格_均线34,
             价格_均线20,
@@ -1180,8 +1196,8 @@ export class RealDataBase {
             价格_最高60,
             价格_最低60,
             价格_最高60_价差,
-            被动_买均价_300: 被动_买均价_300,
-            被动_卖均价_300: 被动_卖均价_300,
+            被动_买均价_300,
+            被动_卖均价_300,
         }
     }
 
