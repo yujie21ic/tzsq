@@ -32,8 +32,8 @@ type ItemFunc = (d: D, d2: D2) => {
 const ETH颜色 = 0xaaaa00
 const BTC颜色 = 0xcc66ff
 
-const 幽灵买颜色 = 0x333333
-const 幽灵卖颜色 = 0x333333
+const 幽灵买颜色 = 0x666666
+const 幽灵卖颜色 = 0x666666
 
 const 买颜色 = 0x0E6655
 const 买颜色1 = 0x16A085
