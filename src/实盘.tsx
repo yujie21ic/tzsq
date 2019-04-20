@@ -72,7 +72,7 @@ class Item extends React.Component<{ market: 'bitmex' | 'hopex' | 'fcoin', symbo
 
     render() {
         const { 仓位数量, 开仓均价 } = this.props.data()
-        const 下单数量 = 5000 * this.props.倍数
+        const 下单数量 = 10000 * this.props.倍数
 
         const fcoin_btc_数量 = 仓位数量
         const fcoin_usdt_数量 = 开仓均价
