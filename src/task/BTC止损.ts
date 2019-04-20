@@ -45,7 +45,7 @@ export class BTC止损 implements PositionAndOrderTask {
                 return self.stop({
                     side,
                     price: to价格对齐({
-                        grid: 0.05,
+                        grid: 0.5,
                         value: 仓位数量 > 0 ? 开仓均价 - 止损点 : 开仓均价 + 止损点,
                         side,
                     }),
