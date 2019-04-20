@@ -11,7 +11,7 @@ import { toBuySellPriceFunc } from '../lib/F/toBuySellPriceFunc'
 import { XBTUSD摸顶抄底追涨追跌 } from '../task/XBTUSD摸顶抄底追涨追跌'
 import { Hopex__ETH止损 } from '../task/Hopex__ETH止损'
 import { BTC网格交易 } from '../task/BTC网格交易'
-
+import { BTC止损 } from '../task/BTC止损'
 
 
 //运行的账户
@@ -28,6 +28,7 @@ if (config.orderServer !== undefined) {
         account.runTask('hopex_btc_摸顶抄底', new XBTUSD摸顶抄底追涨追跌())
         account.runTask('hopex_eth_止损', new Hopex__ETH止损())
         account.runTask('bitmex_btc_网格', new BTC网格交易())
+        account.runTask('bitmex_btc_止损', new BTC止损())
         accountDic.set(v.cookie, account) //key is cookie 
     })
 } else {
@@ -173,7 +174,7 @@ server.func.下单 = async req => {
             text: '手动maker',
         })
 }
- 
+
 
 server.func.set_任务_开关 = async req => {
     const account = accountDic.get(req.cookie)
