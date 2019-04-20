@@ -62,6 +62,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         自动止盈波段: false,
         自动止损: false,
         自动推止损: false,
+        数量:100,
     }
 
     参数 = {
@@ -72,6 +73,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
         自动止盈波段: false,
         自动止损: false,
         自动推止损: false,
+        单位数量:100,
     }
 
 
@@ -360,13 +362,13 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                         self.taker({
                             symbol: 'XBTUSD',
                             side: 开仓side,
-                            size: XBTUSD摸顶抄底追涨追跌__参数.交易数量 * (state.连续止损次数 + 1),
+                            size: this.参数.单位数量 * (state.连续止损次数 + 1),
                             text: 信号灯Type,
                         }) :
                         self.maker({
                             symbol: 'XBTUSD',
                             side: 开仓side,
-                            size: XBTUSD摸顶抄底追涨追跌__参数.交易数量 * (state.连续止损次数 + 1),
+                            size: this.参数.单位数量 * (state.连续止损次数 + 1),
                             price: toBuySellPriceFunc(开仓side, () => self.realData.getOrderPrice({
                                 symbol: 'XBTUSD',
                                 side: 开仓side,
@@ -380,7 +382,7 @@ export class XBTUSD摸顶抄底追涨追跌 implements PositionAndOrderTask {
                     self.hopex_taker({
                         symbol: 'BTCUSDT',
                         side: 开仓side,
-                        size: XBTUSD摸顶抄底追涨追跌__参数.交易数量 * (state.连续止损次数 + 1),
+                        size: this.参数.单位数量 * (state.连续止损次数 + 1),
                     })
             } else {
                 return true
