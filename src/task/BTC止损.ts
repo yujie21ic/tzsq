@@ -36,7 +36,7 @@ export class BTC止损 implements PositionAndOrderTask {
             }
         }
 
-        const { 仓位数量, 开仓均价, 委托列表 } = self.jsonSync.rawData.market.hopex.ETHUSDT
+        const { 仓位数量, 开仓均价, 委托列表 } = self.jsonSync.rawData.market.bitmex.XBTUSD
 
         const 止损委托 = 委托列表.filter(v => v.type === '止损')
 
