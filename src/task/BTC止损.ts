@@ -26,8 +26,6 @@ export class BTC止损 implements PositionAndOrderTask {
 
     onTick(self: PositionAndOrder) {
 
-
-
         const 止损点 = toRange({ min: 5, max: 100, value: this.参数.止损点 })
         if (this.参数.止损点 !== 止损点) {
             this.参数.止损点 = 止损点
