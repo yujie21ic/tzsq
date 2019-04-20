@@ -8,8 +8,7 @@ export type ConfigType = {
             hopexCookie: string
             fcoinCookie: string
         }
-    }
-    量化数量?: number
+    } 
     account?: {
         [name: string]: {
             cookie: string

@@ -1,11 +1,6 @@
-import { config } from '../config'
 import { toRange } from '../lib/F/toRange'
 
-
-
-export namespace XBTUSD摸顶抄底追涨追跌__参数 {
-
-    export const 交易数量 = config.量化数量 || 2
+export namespace XBTUSD摸顶抄底追涨追跌__参数 {    
 
     export const 初始止损 = (p: {
         波动率: number
