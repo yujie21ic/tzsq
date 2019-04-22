@@ -1128,9 +1128,11 @@ export class RealDataBase {
             盘口买加主动买: 指标.map(() => Math.min(买.盘口1.length, xxx.吃单情况.length), i => 买.盘口1[i] + xxx.吃单情况[i].卖.被吃量),
             盘口卖加主动卖: 指标.map(() => Math.min(卖.盘口1.length, xxx.吃单情况.length), i => 卖.盘口1[i] + xxx.吃单情况[i].买.被吃量),
 
-            价格乘以ln净成交量: 指标.map(() => Math.min(收盘价.length, 买.净成交量.length), i => 收盘价[i] * Math.log(买.净成交量[i])),
-            价格乘以ln主动买: 指标.map(() => Math.min(收盘价.length, xxx.吃单情况.length), i => 收盘价[i] * Math.log(xxx.吃单情况[i].卖.被吃量)),
-            价格乘以ln主动卖: 指标.map(() => Math.min(收盘价.length, xxx.吃单情况.length), i => 收盘价[i] * Math.log(xxx.吃单情况[i].买.被吃量)),
+            价格乘以ln净成交量: 指标.map(() => Math.min(收盘价.length, 买.净成交量.length), i => 收盘价[i] * Math.log(买.净成交量_累加5[i])),
+            // 价格乘以ln主动买: 指标.map(() => Math.min(收盘价.length, xxx.吃单情况.length), i => 收盘价[i] * Math.log(xxx.吃单情况[i].卖.被吃量)),
+            // 价格乘以ln主动卖: 指标.map(() => Math.min(收盘价.length, xxx.吃单情况.length), i => 收盘价[i] * Math.log(xxx.吃单情况[i].买.被吃量)),
+            价格乘以ln主动买: 指标.map(() => Math.min(收盘价.length, xxx.吃单情况.length), i => 收盘价[i] * Math.log(买.成交量_累加5[i])),
+            价格乘以ln主动卖: 指标.map(() => Math.min(收盘价.length, xxx.吃单情况.length), i => 收盘价[i] * Math.log(卖.成交量_累加5[i])),
 
 
             价格_均线13,
