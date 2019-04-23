@@ -7,14 +7,14 @@ export class BTC止损 implements PositionAndOrderTask {
 
     开关 = false
     参数type = {
-        A: 0,
-        B: 0,
-        C: 0,
+        A: false,
+        B: false,
+        C: false,
     }
     参数 = {
-        A: 0,
-        B: 0,
-        C: 0,
+        A: false,
+        B: false,
+        C: false,
     }
 
     on参数更新?: () => void
