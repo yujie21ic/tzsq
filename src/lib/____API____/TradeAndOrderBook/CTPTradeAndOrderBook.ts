@@ -59,9 +59,8 @@ export class CTPTradeAndOrderBook extends TradeAndOrderBook<string>{
 
                 持仓量: fix浮点(Number(arr[25])),
                 成交金额: fix浮点(Number(arr[26])),
-            }
-
-
+            } 
+            
             //last 初始化
             if (this.last === undefined) {
                 this.last = {
