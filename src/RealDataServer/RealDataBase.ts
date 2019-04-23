@@ -9,6 +9,7 @@ import { safeJSONParse } from '../lib/F/safeJSONParse'
 import * as fs from 'fs'
 import { formatDate } from '../lib/F/formatDate'
 import { mapObjIndexed } from '../lib/F/mapObjIndexed'
+import { ______CTP__config } from './______CTP__config'
 
 const createItem = () => ({
     着笔: [] as BaseType.着笔[],
@@ -104,9 +105,7 @@ export class RealDataBase {
     jsonSync = new JSONSync(
         {
             startTick: 0,//tick的  1m的开始 没有对齐
-            ctp: {
-                rb1910: createItem(),
-            },
+            ctp: mapObjIndexed(createItem, ______CTP__config),
             hopex: mapObjIndexed(createItem, BaseType.HopexSymbolDic),
             fcoin: {
                 btcusdt: createItem(),
@@ -1131,7 +1130,7 @@ export class RealDataBase {
             价格乘以ln净成交量: 指标.map(() => Math.min(收盘价.length, 买.成交量_累加60.length), i => 收盘价[i] * Math.log(买.净成交量_累加60[i])),
             // 价格乘以ln主动买: 指标.map(() => Math.min(收盘价.length, xxx.吃单情况.length), i => 收盘价[i] * Math.log(xxx.吃单情况[i].卖.被吃量)),
             // 价格乘以ln主动卖: 指标.map(() => Math.min(收盘价.length, xxx.吃单情况.length), i => 收盘价[i] * Math.log(xxx.吃单情况[i].买.被吃量)),
-            价格乘以ln主动买: 指标.map(() => Math.min(收盘价.length,买.成交量_累加60.length), i => 收盘价[i] * Math.log(买.成交量_累加60[i])),
+            价格乘以ln主动买: 指标.map(() => Math.min(收盘价.length, 买.成交量_累加60.length), i => 收盘价[i] * Math.log(买.成交量_累加60[i])),
             价格乘以ln主动卖: 指标.map(() => Math.min(收盘价.length, 卖.成交量_累加60.length), i => 收盘价[i] * Math.log(卖.成交量_累加60[i])),
 
 
@@ -1457,9 +1456,7 @@ export class RealDataBase {
     dataExt = {
         XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT', 'btcusdt'),
         ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
-        ctp: {
-            rb1910: this.item2(this.data.ctp.rb1910, true),
-        },
+        ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
         hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic)
     }
 
@@ -1467,9 +1464,7 @@ export class RealDataBase {
         this.dataExt = {
             XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT', 'btcusdt'),
             ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
-            ctp: {
-                rb1910: this.item2(this.data.ctp.rb1910, true),
-            },
+            ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
             hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic)
         }
     }
