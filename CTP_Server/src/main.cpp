@@ -151,7 +151,7 @@ TThostFtdcPasswordType gInvesterPassword = "//123123";                     // 投
 CThostFtdcMdApi *g_pMdUserApi = nullptr;                           // 行情指针
 char gMdFrontAddr[] = "tcp://180.168.212.228:41213";               // 模拟行情前置地址
 #include "config.h"
-int instrumentNum = 1;                                             // 行情合约订阅数量 
+int instrumentNum = sizeof(g_pInstrumentID)/sizeof(char *);                                             // 行情合约订阅数量 
 
 // 交易参数
 CThostFtdcTraderApi *g_pTradeUserApi = nullptr;                    // 交易指针
