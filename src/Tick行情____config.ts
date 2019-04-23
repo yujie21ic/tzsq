@@ -5,12 +5,12 @@ import { TextLayer, LeftTextLayer } from './lib/Chart/Layer/TextLayer'
 import { lastNumber } from './lib/F/lastNumber'
 import { ZeroLayer } from './lib/Chart/Layer/ZeroLayer'
 import { 信号Layer } from './lib/Chart/Layer/信号Layer'
-import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
-import { 笔Layer } from './lib/Chart/Layer/笔Layer'
-import { get笔Index, get线段, 合并后的K线 } from './指标/缠中说禅'
-import { 线段Layer } from './lib/Chart/Layer/线段Layer'
-import { 合并后的Layer } from './lib/Chart/Layer/合并后的Layer'
-import { BarLayer } from './lib/Chart/Layer/BarLayer'
+//import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
+//import { 笔Layer } from './lib/Chart/Layer/笔Layer'
+//import { get笔Index, get线段, 合并后的K线 } from './指标/缠中说禅'
+//import { 线段Layer } from './lib/Chart/Layer/线段Layer'
+//import { 合并后的Layer } from './lib/Chart/Layer/合并后的Layer'
+//import { BarLayer } from './lib/Chart/Layer/BarLayer'
 
 
 
@@ -829,639 +829,639 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
         ]
     }),
-    实盘fcoin手动: (d, d2) => ({
-        heightList: [0.2, 0.2, 0.5, 0.1],
-        items: [
-            {
-                layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
-                    layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
-                    //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
-                    layer(LineLayer, { data: d.bitmex.买.净盘口_均线3, color: ETH颜色 }),
-                    layer(TextLayer, {
-                        text:
-                            `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
-                            `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   ` +
-                            `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
-                        color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                    })
-                ]
-            },
-            {
-                layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d2.XBTUSD.fcoin.买.盘口, color: 买颜色 }),
-                    layer(LineLayer, { data: d2.XBTUSD.fcoin.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
-                    //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
-                    layer(LineLayer, { data: d2.XBTUSD.fcoin.买.净盘口_均线3, color: ETH颜色 }),
-                    layer(TextLayer, {
-                        text:
-                            `买1  :${(lastNumber(d2.XBTUSD.fcoin.买.盘口1)).toFixed(2)}个  ` +
-                            `卖1  :${(lastNumber(d2.XBTUSD.fcoin.卖.盘口1)).toFixed(2)}个   ` +
-                            `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
-                        color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                    })
-                ]
-            },
-            [
-                {
-                    numberColor: 0x000000,
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
-                        layer(TextLayer, {
-                            text:
-                                `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
-                                `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   `,
-                            color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                        }),
-                        layer(LeftTextLayer, {
-                            text:
-                                `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
-                                `hopex:${lastNumber(d2.ETHUSD.hopex.价格).toFixed(2)}  ` +
-                                `fcoin:${lastNumber(d2.XBTUSD.fcoin.价格).toFixed(2)}  ` +
-                                `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
-                                `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
-                                `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
-                            color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                        })
-                    ]
-                },
-                {
-                    numberColor: 净成交量颜色,
-                    numberX: 100,
-                    layerList: [
-                        layer(ZeroLayer, { color: 净成交量颜色 }),
-                        layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 净成交量颜色 }),
-                    ]
-                },
+    // 实盘fcoin手动: (d, d2) => ({
+    //     heightList: [0.2, 0.2, 0.5, 0.1],
+    //     items: [
+    //         {
+    //             layerList: [
+    //                 layer(ZeroLayer, { color: 0xaaaaaa }),
+    //                 layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
+    //                 layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
+    //                 //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
+    //                 layer(LineLayer, { data: d.bitmex.买.净盘口_均线3, color: ETH颜色 }),
+    //                 layer(TextLayer, {
+    //                     text:
+    //                         `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
+    //                         `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   ` +
+    //                         `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
+    //                     color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //                 })
+    //             ]
+    //         },
+    //         {
+    //             layerList: [
+    //                 layer(ZeroLayer, { color: 0xaaaaaa }),
+    //                 layer(LineLayer, { data: d2.XBTUSD.fcoin.买.盘口, color: 买颜色 }),
+    //                 layer(LineLayer, { data: d2.XBTUSD.fcoin.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
+    //                 //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
+    //                 layer(LineLayer, { data: d2.XBTUSD.fcoin.买.净盘口_均线3, color: ETH颜色 }),
+    //                 layer(TextLayer, {
+    //                     text:
+    //                         `买1  :${(lastNumber(d2.XBTUSD.fcoin.买.盘口1)).toFixed(2)}个  ` +
+    //                         `卖1  :${(lastNumber(d2.XBTUSD.fcoin.卖.盘口1)).toFixed(2)}个   ` +
+    //                         `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
+    //                     color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //                 })
+    //             ]
+    //         },
+    //         [
+    //             {
+    //                 numberColor: 0x000000,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(TextLayer, {
+    //                         text:
+    //                             `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
+    //                             `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   `,
+    //                         color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //                     }),
+    //                     layer(LeftTextLayer, {
+    //                         text:
+    //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
+    //                             `hopex:${lastNumber(d2.ETHUSD.hopex.价格).toFixed(2)}  ` +
+    //                             `fcoin:${lastNumber(d2.XBTUSD.fcoin.价格).toFixed(2)}  ` +
+    //                             `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
+    //                             `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
+    //                             `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
+    //                         color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //                     })
+    //                 ]
+    //             },
+    //             {
+    //                 numberColor: 净成交量颜色,
+    //                 numberX: 100,
+    //                 layerList: [
+    //                     layer(ZeroLayer, { color: 净成交量颜色 }),
+    //                     layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 净成交量颜色 }),
+    //                 ]
+    //             },
 
-                {
-                    numberColor: 石青,
-                    layerList: [
-                        layer(LineLayer, { data: d2.ETHUSD.hopex.价格, color: 石青 }),
-                    ]
-                },
-                // {
-                //     numberColor: 波动率颜色,
-                //     layerList: [
-                //         layer(LineLayer, { data: d2.XBTUSD.fcoin.价格, color: 波动率颜色 }),
-                //     ]
-                // },
-
-
-                {
-                    numberColor: BTC颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.fcoin.价格, color: 波动率颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
-
-                    ]
-                },
+    //             {
+    //                 numberColor: 石青,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.ETHUSD.hopex.价格, color: 石青 }),
+    //                 ]
+    //             },
+    //             // {
+    //             //     numberColor: 波动率颜色,
+    //             //     layerList: [
+    //             //         layer(LineLayer, { data: d2.XBTUSD.fcoin.价格, color: 波动率颜色 }),
+    //             //     ]
+    //             // },
 
 
-            ],
-            {
-                layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.bitmex.着笔涨跌, color: 0xaaaaaa }),
-                ]
-            }
-            // [
-            //     {
-            //         layerList: [
-            //             layer(ZeroLayer, { color: 0xaaaaaa }),
+    //             {
+    //                 numberColor: BTC颜色,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.fcoin.价格, color: 波动率颜色 }),
+    //                     layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
 
-            //             layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
-            //             layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-            //             //layer(LineLayer, { data: d.bitmex.卖.净成交量_累加10, color: ETH颜色 }),
-            //             //layer(LineLayer, { data: d.bitmex.买.净成交量_累加10, color: BTC颜色 }),
-            //             //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
-            //             layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
-            //         ]
-            //     },
-            // ],
+    //                 ]
+    //             },
 
 
-            // {
-            //     layerList: [
-            //         layer(LineLayer, { data: d.期货.买.盘口, color: 买颜色 }),
-            //         layer(LineLayer, { data: d.期货.卖.盘口, color: 卖颜色 }),
-            //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
-            //     ]
-            // },
+    //         ],
+    //         {
+    //             layerList: [
+    //                 layer(信号Layer, { data: d2.XBTUSD.bitmex.着笔涨跌, color: 0xaaaaaa }),
+    //             ]
+    //         }
+    //         // [
+    //         //     {
+    //         //         layerList: [
+    //         //             layer(ZeroLayer, { color: 0xaaaaaa }),
 
-        ]
-    }),
-    实盘fcoin手动成交量: (d, d2) => ({
-        heightList: [0.2, 0.2, 0.5, 0.1],
-        items: [
-            {
-                layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
-                    layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
-                    //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
-                    layer(LineLayer, { data: d.bitmex.买.净盘口_均线3, color: ETH颜色 }),
-                    layer(TextLayer, {
-                        text:
-                            `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
-                            `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   ` +
-                            `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
-                        color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                    })
-                ]
-            },
-            {
-                layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d2.XBTUSD.fcoin.买.净成交量_累加60, color: 买颜色 }),
-                    layer(LineLayer, { data: d2.XBTUSD.fcoin.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
-                    //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
-                    layer(LineLayer, { data: d2.XBTUSD.fcoin.买.净盘口_均线3, color: ETH颜色 }),
-                    layer(TextLayer, {
-                        text:
-                            `买1  :${(lastNumber(d2.XBTUSD.fcoin.买.盘口1)).toFixed(2)}个  ` +
-                            `卖1  :${(lastNumber(d2.XBTUSD.fcoin.卖.盘口1)).toFixed(2)}个   ` +
-                            `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
-                        color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                    })
-                ]
-            },
-            [
-                {
-                    numberColor: 净成交量颜色,
-                    numberX: 100,
-                    layerList: [
-                        layer(ZeroLayer, { color: 净成交量颜色 }),
-                        //layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 净成交量颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.fcoin.买.净成交量_累加60, color: 净成交量颜色 }),
-                    ]
-                },
-
-                {
-                    numberColor: 石青,
-                    layerList: [
-                        layer(LineLayer, { data: d2.ETHUSD.hopex.价格, color: 石青 }),
-                    ]
-                },
-                // {
-                //     numberColor: 波动率颜色,
-                //     layerList: [
-                //         layer(LineLayer, { data: d2.XBTUSD.fcoin.价格, color: 波动率颜色 }),
-                //     ]
-                // },
-
-                {
-                    numberColor: 0x000000,
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
-                        layer(TextLayer, {
-                            text:
-                                `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
-                                `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   `,
-                            color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                        }),
-                        layer(LeftTextLayer, {
-                            text:
-                                `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
-                                `hopex:${lastNumber(d2.ETHUSD.hopex.价格).toFixed(2)}  ` +
-                                `fcoin:${lastNumber(d2.XBTUSD.fcoin.价格).toFixed(2)}  ` +
-                                `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
-                                `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
-                                `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
-                            color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                        })
-                    ]
-                },
-                {
-                    numberColor: BTC颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.fcoin.价格, color: 波动率颜色 }),
-                    ]
-                },
+    //         //             layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
+    //         //             layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
+    //         //             //layer(LineLayer, { data: d.bitmex.卖.净成交量_累加10, color: ETH颜色 }),
+    //         //             //layer(LineLayer, { data: d.bitmex.买.净成交量_累加10, color: BTC颜色 }),
+    //         //             //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
+    //         //             layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
+    //         //         ]
+    //         //     },
+    //         // ],
 
 
-            ],
-            {
-                layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.bitmex.着笔涨跌, color: 0xaaaaaa }),
-                ]
-            }
-            // [
-            //     {
-            //         layerList: [
-            //             layer(ZeroLayer, { color: 0xaaaaaa }),
+    //         // {
+    //         //     layerList: [
+    //         //         layer(LineLayer, { data: d.期货.买.盘口, color: 买颜色 }),
+    //         //         layer(LineLayer, { data: d.期货.卖.盘口, color: 卖颜色 }),
+    //         //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
+    //         //     ]
+    //         // },
 
-            //             layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
-            //             layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-            //             //layer(LineLayer, { data: d.bitmex.卖.净成交量_累加10, color: ETH颜色 }),
-            //             //layer(LineLayer, { data: d.bitmex.买.净成交量_累加10, color: BTC颜色 }),
-            //             //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
-            //             layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
-            //         ]
-            //     },
-            // ],
+    //     ]
+    // }),
+    // 实盘fcoin手动成交量: (d, d2) => ({
+    //     heightList: [0.2, 0.2, 0.5, 0.1],
+    //     items: [
+    //         {
+    //             layerList: [
+    //                 layer(ZeroLayer, { color: 0xaaaaaa }),
+    //                 layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
+    //                 layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
+    //                 //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
+    //                 layer(LineLayer, { data: d.bitmex.买.净盘口_均线3, color: ETH颜色 }),
+    //                 layer(TextLayer, {
+    //                     text:
+    //                         `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
+    //                         `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   ` +
+    //                         `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
+    //                     color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //                 })
+    //             ]
+    //         },
+    //         {
+    //             layerList: [
+    //                 layer(ZeroLayer, { color: 0xaaaaaa }),
+    //                 layer(LineLayer, { data: d2.XBTUSD.fcoin.买.净成交量_累加60, color: 买颜色 }),
+    //                 layer(LineLayer, { data: d2.XBTUSD.fcoin.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
+    //                 //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
+    //                 layer(LineLayer, { data: d2.XBTUSD.fcoin.买.净盘口_均线3, color: ETH颜色 }),
+    //                 layer(TextLayer, {
+    //                     text:
+    //                         `买1  :${(lastNumber(d2.XBTUSD.fcoin.买.盘口1)).toFixed(2)}个  ` +
+    //                         `卖1  :${(lastNumber(d2.XBTUSD.fcoin.卖.盘口1)).toFixed(2)}个   ` +
+    //                         `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
+    //                     color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //                 })
+    //             ]
+    //         },
+    //         [
+    //             {
+    //                 numberColor: 净成交量颜色,
+    //                 numberX: 100,
+    //                 layerList: [
+    //                     layer(ZeroLayer, { color: 净成交量颜色 }),
+    //                     //layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 净成交量颜色 }),
+    //                     layer(LineLayer, { data: d2.XBTUSD.fcoin.买.净成交量_累加60, color: 净成交量颜色 }),
+    //                 ]
+    //             },
 
+    //             {
+    //                 numberColor: 石青,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.ETHUSD.hopex.价格, color: 石青 }),
+    //                 ]
+    //             },
+    //             // {
+    //             //     numberColor: 波动率颜色,
+    //             //     layerList: [
+    //             //         layer(LineLayer, { data: d2.XBTUSD.fcoin.价格, color: 波动率颜色 }),
+    //             //     ]
+    //             // },
 
-            // {
-            //     layerList: [
-            //         layer(LineLayer, { data: d.期货.买.盘口, color: 买颜色 }),
-            //         layer(LineLayer, { data: d.期货.卖.盘口, color: 卖颜色 }),
-            //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
-            //     ]
-            // },
-
-        ]
-    }),
-    测试力量指数: (d, d2) => ({
-        heightList: [0.2, 0.7],
-        items: [
-            {
-                layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
-                    layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
-                    //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
-                    layer(LineLayer, { data: d.bitmex.买.净盘口_均线3, color: ETH颜色 }),
-                    layer(TextLayer, {
-                        text:
-                            `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
-                            `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   ` +
-                            `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
-                        color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                    })
-                ]
-            },
-            [
-                {
-                    numberColor: 净成交量颜色,
-                    numberX: 100,
-                    layerList: [
-                        layer(ZeroLayer, { color: 净成交量颜色 }),
-                        //layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 净成交量颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.fcoin.买.净成交量_累加60, color: 净成交量颜色 }),
-                    ]
-                },
-                // {
-                //     numberColor: 石青,
-                //     layerList: [
-                //         layer(LineLayer, { data: d2.ETHUSD.hopex.价格, color: 石青 }),
-                //     ]
-                // },
-                {
-                    numberColor: 波动率颜色,
-                    layerList: [
-                        layer(ZeroLayer, { color: 波动率颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.bitmex.tick力量指数60, color: 波动率颜色 }),
-                    ]
-                },
-
-                {
-                    numberColor: 0x000000,
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
-                        layer(TextLayer, {
-                            text:
-                                `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
-                                `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   `,
-                            color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                        }),
-                        layer(LeftTextLayer, {
-                            text:
-                                `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
-                                `hopex:${lastNumber(d2.ETHUSD.hopex.价格).toFixed(2)}  ` +
-                                `fcoin:${lastNumber(d2.XBTUSD.fcoin.价格).toFixed(2)}  ` +
-                                `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
-                                `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
-                                `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
-                            color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                        })
-                    ]
-                },
-                {
-                    numberColor: BTC颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
-                        //layer(LineLayer, { data: d2.XBTUSD.fcoin.价格, color: 波动率颜色 }),
-                    ]
-                },
+    //             {
+    //                 numberColor: 0x000000,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(TextLayer, {
+    //                         text:
+    //                             `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
+    //                             `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   `,
+    //                         color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //                     }),
+    //                     layer(LeftTextLayer, {
+    //                         text:
+    //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
+    //                             `hopex:${lastNumber(d2.ETHUSD.hopex.价格).toFixed(2)}  ` +
+    //                             `fcoin:${lastNumber(d2.XBTUSD.fcoin.价格).toFixed(2)}  ` +
+    //                             `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
+    //                             `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
+    //                             `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
+    //                         color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //                     })
+    //                 ]
+    //             },
+    //             {
+    //                 numberColor: BTC颜色,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+    //                     layer(LineLayer, { data: d2.XBTUSD.fcoin.价格, color: 波动率颜色 }),
+    //                 ]
+    //             },
 
 
-            ],
-            // [
-            //     {
-            //         layerList: [
-            //             layer(ZeroLayer, { color: 0xaaaaaa }),
+    //         ],
+    //         {
+    //             layerList: [
+    //                 layer(信号Layer, { data: d2.XBTUSD.bitmex.着笔涨跌, color: 0xaaaaaa }),
+    //             ]
+    //         }
+    //         // [
+    //         //     {
+    //         //         layerList: [
+    //         //             layer(ZeroLayer, { color: 0xaaaaaa }),
 
-            //             layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
-            //             layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-            //             //layer(LineLayer, { data: d.bitmex.卖.净成交量_累加10, color: ETH颜色 }),
-            //             //layer(LineLayer, { data: d.bitmex.买.净成交量_累加10, color: BTC颜色 }),
-            //             //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
-            //             layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
-            //         ]
-            //     },
-            // ],
-
-
-            // {
-            //     layerList: [
-            //         layer(LineLayer, { data: d.期货.买.盘口, color: 买颜色 }),
-            //         layer(LineLayer, { data: d.期货.卖.盘口, color: 卖颜色 }),
-            //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
-            //     ]
-            // },
-
-        ]
-    }),
-    实盘macd: (d, d2) => ({
-        heightList: [0.3, 0.3, 0.4],
-        items: [
-            {
-                layerList: [
-                    layer(ZeroLayer, { color: ETH颜色 }),
-                    layer(LineLayer, { data: d.hopex._12s_macd.DIF, color: 买颜色1 }),
-                    layer(LineLayer, { data: d.hopex._12s_macd.DEM, color: 买颜色 }),
-                    layer(BarLayer, { data: d.hopex._12s_macd.OSC, color: ETH颜色 }),
-                ]
-            },
-            {
-                layerList: [
-                    layer(ZeroLayer, { color: ETH颜色 }),
-                    layer(LineLayer, { data: d.hopex._60s_macd.DIF, color: 买颜色1 }),
-                    layer(LineLayer, { data: d.hopex._60s_macd.DEM, color: 买颜色 }),
-                    layer(BarLayer, { data: d.hopex._60s_macd.OSC, color: ETH颜色 }),
-                ]
-            },
-            [
-
-                {
-                    numberColor: '0x000000',
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
-                    ]
-                },
-                {
-                    numberColor: 石青,
-                    layerList: [
-                        layer(LineLayer, { data: d2.ETHUSD.hopex.价格, color: 石青 }),
-                    ]
-                },
-                {
-                    numberColor: 波动率颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.bitmex.tick力量指数12, color: 波动率颜色 }),
-                    ]
-                },
-                {
-                    numberColor: 净成交量颜色,
-                    numberX: 100,
-                    layerList: [
-                        layer(ZeroLayer, { color: 净成交量颜色 }),
-                        layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 净成交量颜色 }),
-                    ]
-                },
-                {
-                    numberColor: BTC颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
-                        layer(TextLayer, {
-                            text:
-                                `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
-                                `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   `,
-                            color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                        }),
-                        layer(LeftTextLayer, {
-                            text:
-                                `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
-                                `hopex:${lastNumber(d2.ETHUSD.hopex.价格).toFixed(2)}  ` +
-                                `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
-                                `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
-                                `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
-                            color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                        })
-                    ]
-                },
-            ],
-        ]
-    }),
-    实盘均线: (d, d2) => ({
-        heightList: [1],
-        items: [
-            [
-                // {
-                //     numberColor: BTC颜色,
-                //     layerList: [
-                //         layer(LineLayer, { data: d2.XBTUSD.hopex.价格_波动率60, color: BTC颜色 }),
-                //     ]
-                // },
-                {
-                    numberColor: BTC颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格_均线13, color: 买颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格_均线34, color: 卖颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格_均线144, color: 石青 }),
-                    ]
-                },
-            ],
-        ]
-    }),
-    实盘布林: (d, d2) => ({
-        heightList: [1],
-        items: [
-            [
-                // {
-                //     numberColor: BTC颜色,
-                //     layerList: [
-
-                //     ]
-                // },
-                {
-                    numberColor: BTC颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.hopex._13s_布林.上轨, color: 买颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.hopex._13s_布林.下轨, color: 卖颜色 }),
-                        layer(LineLayer, { data: d2.XBTUSD.hopex._13s_布林.中轨, color: BTC颜色 }),
-                    ]
-                },
-            ],
-        ]
-    }),
-    实盘动力手动: (d, d2) => ({
-        heightList: [0.3, 0.7],
-        items: [
-            {
-                layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
-                    layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
-                    //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
-                    layer(LineLayer, { data: d.bitmex.买.净盘口_均线3, color: ETH颜色 }),
-                    layer(TextLayer, {
-                        text:
-                            `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
-                            `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   ` +
-                            `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
-                        color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                    })
-                ]
-            },
-            [
-
-                {
-                    numberColor: '0x000000',
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
-                    ]
-                },
-                {
-                    numberColor: 石青,
-                    numberX: 100,
-                    layerList: [
-                        layer(ZeroLayer, { color: 石青 }),
-                        layer(LineLayer, { data: d.bitmex.阻力3涨, color: 买颜色 }),
-                        layer(LineLayer, { data: d.bitmex.阻力3跌, color: 卖颜色 }),
-                    ]
-                },
-                {
-                    numberColor: BTC颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
-                        layer(TextLayer, {
-                            text:
-                                `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
-                                `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
-                                `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
-                                `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
-                                `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   ` +
-                                `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
-                            color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                        })
-                    ]
-                },
+    //         //             layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
+    //         //             layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
+    //         //             //layer(LineLayer, { data: d.bitmex.卖.净成交量_累加10, color: ETH颜色 }),
+    //         //             //layer(LineLayer, { data: d.bitmex.买.净成交量_累加10, color: BTC颜色 }),
+    //         //             //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
+    //         //             layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
+    //         //         ]
+    //         //     },
+    //         // ],
 
 
-            ],
-            // [
-            //     {
-            //         layerList: [
-            //             layer(ZeroLayer, { color: 0xaaaaaa }),
+    //         // {
+    //         //     layerList: [
+    //         //         layer(LineLayer, { data: d.期货.买.盘口, color: 买颜色 }),
+    //         //         layer(LineLayer, { data: d.期货.卖.盘口, color: 卖颜色 }),
+    //         //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
+    //         //     ]
+    //         // },
 
-            //             layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
-            //             layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-            //             //layer(LineLayer, { data: d.bitmex.卖.净成交量_累加10, color: ETH颜色 }),
-            //             //layer(LineLayer, { data: d.bitmex.买.净成交量_累加10, color: BTC颜色 }),
-            //             //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
-            //             layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
-            //         ]
-            //     },
-            // ],
+    //     ]
+    // }),
+    // 测试力量指数: (d, d2) => ({
+    //     heightList: [0.2, 0.7],
+    //     items: [
+    //         {
+    //             layerList: [
+    //                 layer(ZeroLayer, { color: 0xaaaaaa }),
+    //                 layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
+    //                 layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
+    //                 //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
+    //                 layer(LineLayer, { data: d.bitmex.买.净盘口_均线3, color: ETH颜色 }),
+    //                 layer(TextLayer, {
+    //                     text:
+    //                         `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
+    //                         `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   ` +
+    //                         `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
+    //                     color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //                 })
+    //             ]
+    //         },
+    //         [
+    //             {
+    //                 numberColor: 净成交量颜色,
+    //                 numberX: 100,
+    //                 layerList: [
+    //                     layer(ZeroLayer, { color: 净成交量颜色 }),
+    //                     //layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 净成交量颜色 }),
+    //                     layer(LineLayer, { data: d2.XBTUSD.fcoin.买.净成交量_累加60, color: 净成交量颜色 }),
+    //                 ]
+    //             },
+    //             // {
+    //             //     numberColor: 石青,
+    //             //     layerList: [
+    //             //         layer(LineLayer, { data: d2.ETHUSD.hopex.价格, color: 石青 }),
+    //             //     ]
+    //             // },
+    //             {
+    //                 numberColor: 波动率颜色,
+    //                 layerList: [
+    //                     layer(ZeroLayer, { color: 波动率颜色 }),
+    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.tick力量指数60, color: 波动率颜色 }),
+    //                 ]
+    //             },
+
+    //             {
+    //                 numberColor: 0x000000,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(TextLayer, {
+    //                         text:
+    //                             `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
+    //                             `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   `,
+    //                         color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //                     }),
+    //                     layer(LeftTextLayer, {
+    //                         text:
+    //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
+    //                             `hopex:${lastNumber(d2.ETHUSD.hopex.价格).toFixed(2)}  ` +
+    //                             `fcoin:${lastNumber(d2.XBTUSD.fcoin.价格).toFixed(2)}  ` +
+    //                             `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
+    //                             `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
+    //                             `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
+    //                         color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //                     })
+    //                 ]
+    //             },
+    //             {
+    //                 numberColor: BTC颜色,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+    //                     //layer(LineLayer, { data: d2.XBTUSD.fcoin.价格, color: 波动率颜色 }),
+    //                 ]
+    //             },
 
 
-            // {
-            //     layerList: [
-            //         layer(LineLayer, { data: d.期货.买.盘口, color: 买颜色 }),
-            //         layer(LineLayer, { data: d.期货.卖.盘口, color: 卖颜色 }),
-            //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
-            //     ]
-            // },
+    //         ],
+    //         // [
+    //         //     {
+    //         //         layerList: [
+    //         //             layer(ZeroLayer, { color: 0xaaaaaa }),
 
-        ]
-    }),
+    //         //             layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
+    //         //             layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
+    //         //             //layer(LineLayer, { data: d.bitmex.卖.净成交量_累加10, color: ETH颜色 }),
+    //         //             //layer(LineLayer, { data: d.bitmex.买.净成交量_累加10, color: BTC颜色 }),
+    //         //             //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
+    //         //             layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
+    //         //         ]
+    //         //     },
+    //         // ],
 
-    实盘相对价差: (d, d2) => ({
-        heightList: [0.3, 0.7],
-        items: [
-            {
 
-                numberColor: 波动率颜色,
-                numberX: 100,
-                layerList: [
-                    layer(ZeroLayer, { color: 石青 }),
-                    layer(LineLayer, { data: d.hopex_bitmex_相对差价, color: 买颜色 }),
-                    //layer(LineLayer, { data: d.hopex_bitmex_相对差价均线, color: 卖颜色 }),
-                ]
-            },
-            [
-                {
-                    numberColor: '0x000000',
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
-                    ]
-                },
-                {
-                    numberColor: 波动率颜色,
-                    numberX: 100,
-                    layerList: [
-                        layer(ZeroLayer, { color: 波动率颜色 }),
-                        layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 波动率颜色 }),
-                    ]
-                },
-                // {
-                //     numberColor: 石青,
-                //     numberX: 100,
-                //     layerList: [
-                //         //layer(ZeroLayer, { color: 石青 }),
-                //         layer(LineLayer, { data: d.bitmex.着笔.涨跌, color: 石青 }),
-                //     ]
-                // },
+    //         // {
+    //         //     layerList: [
+    //         //         layer(LineLayer, { data: d.期货.买.盘口, color: 买颜色 }),
+    //         //         layer(LineLayer, { data: d.期货.卖.盘口, color: 卖颜色 }),
+    //         //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
+    //         //     ]
+    //         // },
 
-                {
-                    numberColor: BTC颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
-                        layer(TextLayer, {
-                            text:
-                                `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
-                                `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
-                                `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
-                                `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
-                                `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   ` +
-                                `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
-                            color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                        })
-                    ]
-                },
-                // {
-                //     numberColor: 石青,
-                //     numberX: 100,
-                //     layerList: [
-                //         layer(ZeroLayer, { color: 波动率颜色 }),
+    //     ]
+    // }),
+    // 实盘macd: (d, d2) => ({
+    //     heightList: [0.3, 0.3, 0.4],
+    //     items: [
+    //         {
+    //             layerList: [
+    //                 layer(ZeroLayer, { color: ETH颜色 }),
+    //                 layer(LineLayer, { data: d.hopex._12s_macd.DIF, color: 买颜色1 }),
+    //                 layer(LineLayer, { data: d.hopex._12s_macd.DEM, color: 买颜色 }),
+    //                 layer(BarLayer, { data: d.hopex._12s_macd.OSC, color: ETH颜色 }),
+    //             ]
+    //         },
+    //         {
+    //             layerList: [
+    //                 layer(ZeroLayer, { color: ETH颜色 }),
+    //                 layer(LineLayer, { data: d.hopex._60s_macd.DIF, color: 买颜色1 }),
+    //                 layer(LineLayer, { data: d.hopex._60s_macd.DEM, color: 买颜色 }),
+    //                 layer(BarLayer, { data: d.hopex._60s_macd.OSC, color: ETH颜色 }),
+    //             ]
+    //         },
+    //         [
 
-                //     ]
-                // },
-            ],
+    //             {
+    //                 numberColor: '0x000000',
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+    //                 ]
+    //             },
+    //             {
+    //                 numberColor: 石青,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.ETHUSD.hopex.价格, color: 石青 }),
+    //                 ]
+    //             },
+    //             {
+    //                 numberColor: 波动率颜色,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.tick力量指数12, color: 波动率颜色 }),
+    //                 ]
+    //             },
+    //             {
+    //                 numberColor: 净成交量颜色,
+    //                 numberX: 100,
+    //                 layerList: [
+    //                     layer(ZeroLayer, { color: 净成交量颜色 }),
+    //                     layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 净成交量颜色 }),
+    //                 ]
+    //             },
+    //             {
+    //                 numberColor: BTC颜色,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(TextLayer, {
+    //                         text:
+    //                             `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
+    //                             `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   `,
+    //                         color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //                     }),
+    //                     layer(LeftTextLayer, {
+    //                         text:
+    //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
+    //                             `hopex:${lastNumber(d2.ETHUSD.hopex.价格).toFixed(2)}  ` +
+    //                             `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
+    //                             `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
+    //                             `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
+    //                         color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //                     })
+    //                 ]
+    //             },
+    //         ],
+    //     ]
+    // }),
+    // 实盘均线: (d, d2) => ({
+    //     heightList: [1],
+    //     items: [
+    //         [
+    //             // {
+    //             //     numberColor: BTC颜色,
+    //             //     layerList: [
+    //             //         layer(LineLayer, { data: d2.XBTUSD.hopex.价格_波动率60, color: BTC颜色 }),
+    //             //     ]
+    //             // },
+    //             {
+    //                 numberColor: BTC颜色,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+    //                     layer(LineLayer, { data: d2.XBTUSD.hopex.价格_均线13, color: 买颜色 }),
+    //                     layer(LineLayer, { data: d2.XBTUSD.hopex.价格_均线34, color: 卖颜色 }),
+    //                     layer(LineLayer, { data: d2.XBTUSD.hopex.价格_均线144, color: 石青 }),
+    //                 ]
+    //             },
+    //         ],
+    //     ]
+    // }),
+    // 实盘布林: (d, d2) => ({
+    //     heightList: [1],
+    //     items: [
+    //         [
+    //             // {
+    //             //     numberColor: BTC颜色,
+    //             //     layerList: [
 
-            // {
-            //     layerList: [
-            //         layer(ZeroLayer, { color: 0xaaaaaa }),
-            //         layer(LineLayer, { data: d.bitmex.卖.成交量_累加60, color: 卖颜色, 临时参数: '变成负数' }),
-            //         layer(LineLayer, { data: d.bitmex.买.成交量_累加60, color: 买颜色 }),
-            //         //layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 石青 }),
-            //         layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
-            //     ]
-            // },
-            // {
-            //     layerList: [
-            //         layer(ZeroLayer, { color: 0xaaaaaa }),
-            //         layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
-            //         layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
-            //         //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
-            //         layer(LineLayer, { data: d.bitmex.买.净盘口_均线3, color: ETH颜色 }),
-            //         layer(TextLayer, {
-            //             text:
-            //                 `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
-            //                 `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   ` +
-            //                 `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
-            //             color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-            //         })
-            //     ]
-            // },
-        ]
-    }),
+    //             //     ]
+    //             // },
+    //             {
+    //                 numberColor: BTC颜色,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+    //                     layer(LineLayer, { data: d2.XBTUSD.hopex._13s_布林.上轨, color: 买颜色 }),
+    //                     layer(LineLayer, { data: d2.XBTUSD.hopex._13s_布林.下轨, color: 卖颜色 }),
+    //                     layer(LineLayer, { data: d2.XBTUSD.hopex._13s_布林.中轨, color: BTC颜色 }),
+    //                 ]
+    //             },
+    //         ],
+    //     ]
+    // }),
+    // 实盘动力手动: (d, d2) => ({
+    //     heightList: [0.3, 0.7],
+    //     items: [
+    //         {
+    //             layerList: [
+    //                 layer(ZeroLayer, { color: 0xaaaaaa }),
+    //                 layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
+    //                 layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
+    //                 //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
+    //                 layer(LineLayer, { data: d.bitmex.买.净盘口_均线3, color: ETH颜色 }),
+    //                 layer(TextLayer, {
+    //                     text:
+    //                         `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
+    //                         `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   ` +
+    //                         `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
+    //                     color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //                 })
+    //             ]
+    //         },
+    //         [
+
+    //             {
+    //                 numberColor: '0x000000',
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+    //                 ]
+    //             },
+    //             {
+    //                 numberColor: 石青,
+    //                 numberX: 100,
+    //                 layerList: [
+    //                     layer(ZeroLayer, { color: 石青 }),
+    //                     layer(LineLayer, { data: d.bitmex.阻力3涨, color: 买颜色 }),
+    //                     layer(LineLayer, { data: d.bitmex.阻力3跌, color: 卖颜色 }),
+    //                 ]
+    //             },
+    //             {
+    //                 numberColor: BTC颜色,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(TextLayer, {
+    //                         text:
+    //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
+    //                             `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
+    //                             `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
+    //                             `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
+    //                             `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   ` +
+    //                             `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
+    //                         color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //                     })
+    //                 ]
+    //             },
+
+
+    //         ],
+    //         // [
+    //         //     {
+    //         //         layerList: [
+    //         //             layer(ZeroLayer, { color: 0xaaaaaa }),
+
+    //         //             layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
+    //         //             layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
+    //         //             //layer(LineLayer, { data: d.bitmex.卖.净成交量_累加10, color: ETH颜色 }),
+    //         //             //layer(LineLayer, { data: d.bitmex.买.净成交量_累加10, color: BTC颜色 }),
+    //         //             //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
+    //         //             layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
+    //         //         ]
+    //         //     },
+    //         // ],
+
+
+    //         // {
+    //         //     layerList: [
+    //         //         layer(LineLayer, { data: d.期货.买.盘口, color: 买颜色 }),
+    //         //         layer(LineLayer, { data: d.期货.卖.盘口, color: 卖颜色 }),
+    //         //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
+    //         //     ]
+    //         // },
+
+    //     ]
+    // }),
+
+    // 实盘相对价差: (d, d2) => ({
+    //     heightList: [0.3, 0.7],
+    //     items: [
+    //         {
+
+    //             numberColor: 波动率颜色,
+    //             numberX: 100,
+    //             layerList: [
+    //                 layer(ZeroLayer, { color: 石青 }),
+    //                 layer(LineLayer, { data: d.hopex_bitmex_相对差价, color: 买颜色 }),
+    //                 //layer(LineLayer, { data: d.hopex_bitmex_相对差价均线, color: 卖颜色 }),
+    //             ]
+    //         },
+    //         [
+    //             {
+    //                 numberColor: '0x000000',
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+    //                 ]
+    //             },
+    //             {
+    //                 numberColor: 波动率颜色,
+    //                 numberX: 100,
+    //                 layerList: [
+    //                     layer(ZeroLayer, { color: 波动率颜色 }),
+    //                     layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 波动率颜色 }),
+    //                 ]
+    //             },
+    //             // {
+    //             //     numberColor: 石青,
+    //             //     numberX: 100,
+    //             //     layerList: [
+    //             //         //layer(ZeroLayer, { color: 石青 }),
+    //             //         layer(LineLayer, { data: d.bitmex.着笔.涨跌, color: 石青 }),
+    //             //     ]
+    //             // },
+
+    //             {
+    //                 numberColor: BTC颜色,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(TextLayer, {
+    //                         text:
+    //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
+    //                             `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
+    //                             `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
+    //                             `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
+    //                             `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   ` +
+    //                             `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
+    //                         color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //                     })
+    //                 ]
+    //             },
+    //             // {
+    //             //     numberColor: 石青,
+    //             //     numberX: 100,
+    //             //     layerList: [
+    //             //         layer(ZeroLayer, { color: 波动率颜色 }),
+
+    //             //     ]
+    //             // },
+    //         ],
+
+    //         // {
+    //         //     layerList: [
+    //         //         layer(ZeroLayer, { color: 0xaaaaaa }),
+    //         //         layer(LineLayer, { data: d.bitmex.卖.成交量_累加60, color: 卖颜色, 临时参数: '变成负数' }),
+    //         //         layer(LineLayer, { data: d.bitmex.买.成交量_累加60, color: 买颜色 }),
+    //         //         //layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 石青 }),
+    //         //         layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
+    //         //     ]
+    //         // },
+    //         // {
+    //         //     layerList: [
+    //         //         layer(ZeroLayer, { color: 0xaaaaaa }),
+    //         //         layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
+    //         //         layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
+    //         //         //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
+    //         //         layer(LineLayer, { data: d.bitmex.买.净盘口_均线3, color: ETH颜色 }),
+    //         //         layer(TextLayer, {
+    //         //             text:
+    //         //                 `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
+    //         //                 `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   ` +
+    //         //                 `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
+    //         //             color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
+    //         //         })
+    //         //     ]
+    //         // },
+    //     ]
+    // }),
 
     // 复盘上涨: (d, d2) => ({
     //     heightList: [0.4, 0.15, 0.15, 0.2, 0.1],
@@ -1933,94 +1933,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
     //     ]
     // }),
-    复盘hopex下跌: (d, d2) => ({
-        heightList: [0.4, 0.15, 0.15, 0.2, 0.1],
-        items: [
-            [
-
-                {
-                    numberColor: 波动率颜色,
-                    numberX: 100,
-                    layerList: [
-                        layer(ZeroLayer, { color: 波动率颜色 }),
-                        layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 波动率颜色 }),
-                    ]
-                },
-                {
-                    numberColor: 石青,
-                    numberX: 100,
-                    layerList: [
-                        layer(LineLayer, { data: d.bitmex.价格_波动率30, color: 石青 }),
-
-                    ]
-                },
-                {
-                    numberColor: BTC颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
-                        layer(TextLayer, {
-                            text:
-                                `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
-                                `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
-                                `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
-                                `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
-                                `卖1  :${(lastNumber(d.bitmex.卖.盘口1) / 10000).toFixed(2)}万   ` +
-                                `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
-                            color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
-                        })
-                    ]
-                },
-                {
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
-                    ]
-                },
-            ],
-
-
-
-            {
-                layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
-                    layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
-                    layer(LineLayer, { data: d.bitmex.买.净盘口, color: BTC颜色 }),
-                    layer(LineLayer, { data: d.bitmex.买.净盘口_均线3, color: ETH颜色 }),
-                ]
-            },
-            {
-                layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.hopex_信号_抄底, color: 买颜色 }),
-                    layer(TextLayer, {
-                        text:
-                            `hopex_信号_抄底                    `,
-                        color: ETH颜色,
-                    })
-                ]
-            },
-            {
-                layerList: [
-                    layer(信号Layer, { data: d.bitmex.信号_抄底hopex专用, color: 买颜色 }),
-                    layer(TextLayer, {
-                        text:
-                            `信号_抄底hopex专用                    `,
-                        color: ETH颜色,
-                    })
-                ]
-            },
-            {
-                layerList: [
-                    layer(信号Layer, { data: d.hopex_信号_抄底_上涨平仓, color: 买颜色 }),
-                    layer(TextLayer, {
-                        text:
-                            `hopex_信号_摸顶_下跌平仓                    `,
-                        color: ETH颜色,
-                    })
-                ]
-            },
-
-        ]
-    }),
+    
 
     // 实盘: (d, d2) => ({
     //     heightList: [0.5, 0.15, 0.1, 0.15, 0.1],
@@ -2947,7 +2860,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
         ]
     }),
-    '螺纹成交量3': (d, d2) => ({
+    '螺纹': (d, d2) => ({
         heightList: [0.2,0.8],
         items: [
             {
@@ -3005,213 +2918,445 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
         ]
     }),
+    'PTA': (d, d2) => ({
+        heightList: [0.2,0.8],
+        items: [
+            {
+                layerList: [
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.价格乘以ln主动买, color: 买颜色, 临时参数: '变成负数' }),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.价格乘以ln主动卖, color: 卖颜色, 临时参数: '变成负数'}),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d2.ctp.ta909.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d2.ctp.ta909.买.净盘口_均线3, color: ETH颜色 }),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                    layer(LineLayer, { data: d2.ctp.ta909.卖.盘口1, color: 卖颜色1 }),
+                ]
+            },
+            [
+                {
+                    layerList: [
+                        //layer(ZeroLayer, { color: 0xaaaaaa }),
+                        layer(LineLayer, { data: d2.ctp.ta909.买.买成交量累加, color: 买颜色 }),
+                        layer(LineLayer, { data: d2.ctp.ta909.买.卖成交量累加, color: 卖颜色}),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口1, color: 卖颜色1 }),
+                    ]
+                },
+                {
+                    layerList: [
+                        layer(ZeroLayer, { color: 0xaaaaaa }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.买成交量累加, color: 买颜色 }),
+                        layer(LineLayer, { data: d2.ctp.ta909.买.净成交量_累加300, color: 净成交量颜色}),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口1, color: 卖颜色1 }),
+                    ]
+                },
+              
+                {
+                    numberColor: BTC颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d2.ctp.ta909.价格, color: BTC颜色 }),
+                        layer(TextLayer, {
+                            text:
+                                `买1  :${(lastNumber(d2.ctp.ta909.买.盘口1)).toFixed(2)}  ` +
+                                `卖1  :${(lastNumber(d2.ctp.ta909.卖.盘口1) ).toFixed(2)}   ` ,
+                            color: ETH颜色,
+                        })
+                    ]
+                },
+
+            ],
+
+        ]
+    }),
+    '铁矿': (d, d2) => ({
+        heightList: [0.2,0.8],
+        items: [
+            {
+                layerList: [
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.价格乘以ln主动买, color: 买颜色, 临时参数: '变成负数' }),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.价格乘以ln主动卖, color: 卖颜色, 临时参数: '变成负数'}),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d2.ctp.i1909.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d2.ctp.i1909.买.净盘口_均线3, color: ETH颜色 }),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                    layer(LineLayer, { data: d2.ctp.i1909.卖.盘口1, color: 卖颜色1 }),
+                ]
+            },
+            [
+                {
+                    layerList: [
+                        //layer(ZeroLayer, { color: 0xaaaaaa }),
+                        layer(LineLayer, { data: d2.ctp.i1909.买.买成交量累加, color: 买颜色 }),
+                        layer(LineLayer, { data: d2.ctp.i1909.买.卖成交量累加, color: 卖颜色}),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口1, color: 卖颜色1 }),
+                    ]
+                },
+                {
+                    layerList: [
+                        layer(ZeroLayer, { color: 0xaaaaaa }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.买成交量累加, color: 买颜色 }),
+                        layer(LineLayer, { data: d2.ctp.i1909.买.净成交量_累加300, color: 净成交量颜色}),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口1, color: 卖颜色1 }),
+                    ]
+                },
+              
+                {
+                    numberColor: BTC颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d2.ctp.i1909.价格, color: BTC颜色 }),
+                        layer(TextLayer, {
+                            text:
+                                `买1  :${(lastNumber(d2.ctp.i1909.买.盘口1)).toFixed(2)}  ` +
+                                `卖1  :${(lastNumber(d2.ctp.i1909.卖.盘口1) ).toFixed(2)}   ` ,
+                            color: ETH颜色,
+                        })
+                    ]
+                },
+
+            ],
+
+        ]
+    }),
+    '郑醇': (d, d2) => ({
+        heightList: [0.2,0.8],
+        items: [
+            {
+                layerList: [
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.价格乘以ln主动买, color: 买颜色, 临时参数: '变成负数' }),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.价格乘以ln主动卖, color: 卖颜色, 临时参数: '变成负数'}),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d2.ctp.MA909.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d2.ctp.MA909.买.净盘口_均线3, color: ETH颜色 }),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                    layer(LineLayer, { data: d2.ctp.MA909.卖.盘口1, color: 卖颜色1 }),
+                ]
+            },
+            [
+                {
+                    layerList: [
+                        //layer(ZeroLayer, { color: 0xaaaaaa }),
+                        layer(LineLayer, { data: d2.ctp.MA909.买.买成交量累加, color: 买颜色 }),
+                        layer(LineLayer, { data: d2.ctp.MA909.买.卖成交量累加, color: 卖颜色}),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口1, color: 卖颜色1 }),
+                    ]
+                },
+                {
+                    layerList: [
+                        layer(ZeroLayer, { color: 0xaaaaaa }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.买成交量累加, color: 买颜色 }),
+                        layer(LineLayer, { data: d2.ctp.MA909.买.净成交量_累加300, color: 净成交量颜色}),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口1, color: 卖颜色1 }),
+                    ]
+                },
+              
+                {
+                    numberColor: BTC颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d2.ctp.MA909.价格, color: BTC颜色 }),
+                        layer(TextLayer, {
+                            text:
+                                `买1  :${(lastNumber(d2.ctp.MA909.买.盘口1)).toFixed(2)}  ` +
+                                `卖1  :${(lastNumber(d2.ctp.MA909.卖.盘口1) ).toFixed(2)}   ` ,
+                            color: ETH颜色,
+                        })
+                    ]
+                },
+
+            ],
+
+        ]
+    }),
+    '白糖': (d, d2) => ({
+        heightList: [0.2,0.8],
+        items: [
+            {
+                layerList: [
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.价格乘以ln主动买, color: 买颜色, 临时参数: '变成负数' }),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.价格乘以ln主动卖, color: 卖颜色, 临时参数: '变成负数'}),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d2.ctp.SR909.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d2.ctp.SR909.买.净盘口_均线3, color: ETH颜色 }),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                    layer(LineLayer, { data: d2.ctp.SR909.卖.盘口1, color: 卖颜色1 }),
+                ]
+            },
+            [
+                {
+                    layerList: [
+                        //layer(ZeroLayer, { color: 0xaaaaaa }),
+                        layer(LineLayer, { data: d2.ctp.SR909.买.买成交量累加, color: 买颜色 }),
+                        layer(LineLayer, { data: d2.ctp.SR909.买.卖成交量累加, color: 卖颜色}),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口1, color: 卖颜色1 }),
+                    ]
+                },
+                {
+                    layerList: [
+                        layer(ZeroLayer, { color: 0xaaaaaa }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.买成交量累加, color: 买颜色 }),
+                        layer(LineLayer, { data: d2.ctp.SR909.买.净成交量_累加300, color: 净成交量颜色}),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口1, color: 卖颜色1 }),
+                    ]
+                },
+              
+                {
+                    numberColor: BTC颜色,
+                    layerList: [
+                        layer(LineLayer, { data: d2.ctp.SR909.价格, color: BTC颜色 }),
+                        layer(TextLayer, {
+                            text:
+                                `买1  :${(lastNumber(d2.ctp.SR909.买.盘口1)).toFixed(2)}  ` +
+                                `卖1  :${(lastNumber(d2.ctp.SR909.卖.盘口1) ).toFixed(2)}   ` ,
+                            color: ETH颜色,
+                        })
+                    ]
+                },
+
+            ],
+
+        ]
+    }),
     
     
-    着笔: (d, d2) => ({
-        heightList: [0.5, 0.5],
-        items: [
-            [{
-                numberColor: BTC颜色,
-                layerList: [
-                    layer(LineLayer, { data: d2.XBTUSD.bitmex.着笔.price, color: BTC颜色 }),
-                ]
-            },
-            {
-                numberColor: 石青,
-                numberX: 100,
-                layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.bitmex.着笔.涨跌, color: 石青 }),
-                ]
-            },],
+    // 着笔: (d, d2) => ({
+    //     heightList: [0.5, 0.5],
+    //     items: [
+    //         [{
+    //             numberColor: BTC颜色,
+    //             layerList: [
+    //                 layer(LineLayer, { data: d2.XBTUSD.bitmex.着笔.price, color: BTC颜色 }),
+    //             ]
+    //         },
+    //         {
+    //             numberColor: 石青,
+    //             numberX: 100,
+    //             layerList: [
+    //                 layer(ZeroLayer, { color: 0xaaaaaa }),
+    //                 layer(LineLayer, { data: d.bitmex.着笔.涨跌, color: 石青 }),
+    //             ]
+    //         },],
 
-            {
-                layerList: [
-                    layer(LineLayer, { data: d2.XBTUSD.bitmex.着笔.size, color: 0xffffff }),
-                ]
-            },
-        ]
-    }),
-
-
-    '3D 测试': (d, d2) => ({
-        heightList: [0.4, 0.4, 0.2],
-        items: [
-            {
-                numberColor: BTC颜色,
-                layerList: [
-                    layer(KLineLayer, { data: d2.XBTUSD.bitmex.KLine }),
-                    layer(笔Layer, { data: get笔Index(d2.XBTUSD.bitmex.KLine), color: 0xffff00 }),
-                    layer(线段Layer, { data: get线段(get笔Index(d2.XBTUSD.bitmex.KLine)), color: 0xaa0000 }),
-                    layer(合并后的Layer, { data: 合并后的K线(d2.XBTUSD.bitmex.KLine), color: 0xffff00 }),
-                ]
-            },
-            {
-                layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
-                    layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-                    layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
-                ]
-            },
-            {
-                layerList: [
-                    layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
-                    layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色 }),
-                    layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
-                ]
-            },
-        ]
-    }),
-
-    'ctp波动_测试': (d, d2) => ({
-        heightList: [0.6, 0.4],
-        items: [
-            [
-                {
-                    layerList: [
-                        layer(ZeroLayer, { color: 波动率颜色 }),
-                        layer(LineLayer, { data: d2.ctp.rb1910.波动_测试.净成交量_累加10, color: 波动率颜色 }),
-                    ]
-                },
-                {
-                    numberColor: BTC颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d2.ctp.rb1910.波动_测试.价格, color: BTC颜色 }),
-                        //layer(LineLayer, { data: d.bitmex.波动_测试.买均价_10, color: 买颜色 }),
-                        //layer(LineLayer, { data: d.bitmex.波动_测试.卖均价_10, color: 卖颜色 }),
-                    ]
-                },
-            ],
-
-            {
-                layerList: [
-                    layer(BarLayer, { data: d2.ctp.rb1910.波动_测试.持续秒, color: 0xffffff }),
-                ]
-            },
-        ]
-    }),
+    //         {
+    //             layerList: [
+    //                 layer(LineLayer, { data: d2.XBTUSD.bitmex.着笔.size, color: 0xffffff }),
+    //             ]
+    //         },
+    //     ]
+    // }),
 
 
-    hopex: (d, d2) => ({
-        heightList: [0.2, 0.2, 0.2, 0.2, 0.2],
-        items: [
-            [
-                {
-                    numberColor: '0x000000',
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
-                    ]
-                },
-            ],
-            {
-                layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.hopex_信号_抄底_上涨平仓, color: 卖颜色 }),
-                ]
-            },
-            {
-                layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.hopex_信号_摸顶_下跌平仓, color: 买颜色 }),
-                ]
-            },
-            {
-                layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.hopex_信号_摸顶, color: 卖颜色 }),
-                ]
-            },
-            {
-                layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.hopex_信号_抄底, color: 买颜色 }),
-                ]
-            },
-        ]
-    }),
+    // '3D 测试': (d, d2) => ({
+    //     heightList: [0.4, 0.4, 0.2],
+    //     items: [
+    //         {
+    //             numberColor: BTC颜色,
+    //             layerList: [
+    //                 layer(KLineLayer, { data: d2.XBTUSD.bitmex.KLine }),
+    //                 layer(笔Layer, { data: get笔Index(d2.XBTUSD.bitmex.KLine), color: 0xffff00 }),
+    //                 layer(线段Layer, { data: get线段(get笔Index(d2.XBTUSD.bitmex.KLine)), color: 0xaa0000 }),
+    //                 layer(合并后的Layer, { data: 合并后的K线(d2.XBTUSD.bitmex.KLine), color: 0xffff00 }),
+    //             ]
+    //         },
+    //         {
+    //             layerList: [
+    //                 layer(ZeroLayer, { color: 0xaaaaaa }),
+    //                 layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
+    //                 layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
+    //                 layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
+    //             ]
+    //         },
+    //         {
+    //             layerList: [
+    //                 layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
+    //                 layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色 }),
+    //                 layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
+    //             ]
+    //         },
+    //     ]
+    // }),
 
-    '波动_测试': (d, d2) => ({
-        heightList: [0.6, 0.4],
-        items: [
-            [
-                {
-                    layerList: [
-                        layer(ZeroLayer, { color: 波动率颜色 }),
-                        layer(LineLayer, { data: d.bitmex.波动_测试.净成交量_累加10, color: 波动率颜色 }),
-                    ]
-                },
-                {
-                    numberColor: BTC颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d.bitmex.波动_测试.价格, color: BTC颜色 }),
-                        //layer(LineLayer, { data: d.bitmex.波动_测试.买均价_10, color: 买颜色 }),
-                        //layer(LineLayer, { data: d.bitmex.波动_测试.卖均价_10, color: 卖颜色 }),
-                    ]
-                },
-            ],
+    // 'ctp波动_测试': (d, d2) => ({
+    //     heightList: [0.6, 0.4],
+    //     items: [
+    //         [
+    //             {
+    //                 layerList: [
+    //                     layer(ZeroLayer, { color: 波动率颜色 }),
+    //                     layer(LineLayer, { data: d2.ctp.rb1910.波动_测试.净成交量_累加10, color: 波动率颜色 }),
+    //                 ]
+    //             },
+    //             {
+    //                 numberColor: BTC颜色,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.ctp.rb1910.波动_测试.价格, color: BTC颜色 }),
+    //                     //layer(LineLayer, { data: d.bitmex.波动_测试.买均价_10, color: 买颜色 }),
+    //                     //layer(LineLayer, { data: d.bitmex.波动_测试.卖均价_10, color: 卖颜色 }),
+    //                 ]
+    //             },
+    //         ],
 
-            {
-                layerList: [
-                    layer(BarLayer, { data: d.bitmex.波动_测试.持续秒, color: 0xffffff }),
-                ]
-            },
-        ]
-    }),
+    //         {
+    //             layerList: [
+    //                 layer(BarLayer, { data: d2.ctp.rb1910.波动_测试.持续秒, color: 0xffffff }),
+    //             ]
+    //         },
+    //     ]
+    // }),
 
-    hopex原始数据: (d, d2) => ({
-        heightList: [0.4, 0.4, 0.2],
-        items: [
-            [
-                {
-                    numberColor: '0x000000',
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
-                    ]
-                },
-                {
-                    numberColor: BTC颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
-                    ]
-                },
-                {
-                    numberColor: 波动率颜色,
-                    numberX: 100,
-                    layerList: [
-                        layer(ZeroLayer, { color: 波动率颜色 }),
-                        layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 波动率颜色 }),
-                        layer(LineLayer, { data: d.hopex.买.净成交量_累加60乘以10, color: 石青 }),
-                    ]
-                },
-            ],
 
-            {
-                layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
+    // hopex: (d, d2) => ({
+    //     heightList: [0.2, 0.2, 0.2, 0.2, 0.2],
+    //     items: [
+    //         [
+    //             {
+    //                 numberColor: '0x000000',
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+    //                 ]
+    //             },
+    //         ],
+    //         {
+    //             layerList: [
+    //                 layer(信号Layer, { data: d2.XBTUSD.hopex_信号_抄底_上涨平仓, color: 卖颜色 }),
+    //             ]
+    //         },
+    //         {
+    //             layerList: [
+    //                 layer(信号Layer, { data: d2.XBTUSD.hopex_信号_摸顶_下跌平仓, color: 买颜色 }),
+    //             ]
+    //         },
+    //         {
+    //             layerList: [
+    //                 layer(信号Layer, { data: d2.XBTUSD.hopex_信号_摸顶, color: 卖颜色 }),
+    //             ]
+    //         },
+    //         {
+    //             layerList: [
+    //                 layer(信号Layer, { data: d2.XBTUSD.hopex_信号_抄底, color: 买颜色 }),
+    //             ]
+    //         },
+    //     ]
+    // }),
 
-                    layer(LineLayer, { data: d.hopex.买.成交量, color: 买颜色 }),
-                    layer(LineLayer, { data: d.hopex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-                    //layer(LineLayer, { data: d.hopex.卖.净成交量_累加10, color: ETH颜色 }),
-                    layer(LineLayer, { data: d.hopex.买.净成交量_累加10, color: BTC颜色 }),
-                    //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
-                    layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
-                ]
-            },
-            // {
-            //     layerList: [
-            //         layer(LineLayer, { data: d.期货.买.盘口, color: 买颜色 }),
-            //         layer(LineLayer, { data: d.期货.卖.盘口, color: 卖颜色 }),
-            //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
-            //     ]
-            // },
-            {
-                layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d.hopex.买.盘口, color: 买颜色1 }),
-                    layer(LineLayer, { data: d.hopex.卖.盘口, color: 卖颜色1, 临时参数: '变成负数' }),
-                    //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
-                    layer(LineLayer, { data: d.hopex.买.净盘口_均线3, color: ETH颜色 }),
-                ]
-            },
-        ]
-    }),
+    // '波动_测试': (d, d2) => ({
+    //     heightList: [0.6, 0.4],
+    //     items: [
+    //         [
+    //             {
+    //                 layerList: [
+    //                     layer(ZeroLayer, { color: 波动率颜色 }),
+    //                     layer(LineLayer, { data: d.bitmex.波动_测试.净成交量_累加10, color: 波动率颜色 }),
+    //                 ]
+    //             },
+    //             {
+    //                 numberColor: BTC颜色,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d.bitmex.波动_测试.价格, color: BTC颜色 }),
+    //                     //layer(LineLayer, { data: d.bitmex.波动_测试.买均价_10, color: 买颜色 }),
+    //                     //layer(LineLayer, { data: d.bitmex.波动_测试.卖均价_10, color: 卖颜色 }),
+    //                 ]
+    //             },
+    //         ],
+
+    //         {
+    //             layerList: [
+    //                 layer(BarLayer, { data: d.bitmex.波动_测试.持续秒, color: 0xffffff }),
+    //             ]
+    //         },
+    //     ]
+    // }),
+
+    // hopex原始数据: (d, d2) => ({
+    //     heightList: [0.4, 0.4, 0.2],
+    //     items: [
+    //         [
+    //             {
+    //                 numberColor: '0x000000',
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.hopex.价格, color: ETH颜色 }),
+    //                 ]
+    //             },
+    //             {
+    //                 numberColor: BTC颜色,
+    //                 layerList: [
+    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                 ]
+    //             },
+    //             {
+    //                 numberColor: 波动率颜色,
+    //                 numberX: 100,
+    //                 layerList: [
+    //                     layer(ZeroLayer, { color: 波动率颜色 }),
+    //                     layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 波动率颜色 }),
+    //                     layer(LineLayer, { data: d.hopex.买.净成交量_累加60乘以10, color: 石青 }),
+    //                 ]
+    //             },
+    //         ],
+
+    //         {
+    //             layerList: [
+    //                 layer(ZeroLayer, { color: 0xaaaaaa }),
+
+    //                 layer(LineLayer, { data: d.hopex.买.成交量, color: 买颜色 }),
+    //                 layer(LineLayer, { data: d.hopex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
+    //                 //layer(LineLayer, { data: d.hopex.卖.净成交量_累加10, color: ETH颜色 }),
+    //                 layer(LineLayer, { data: d.hopex.买.净成交量_累加10, color: BTC颜色 }),
+    //                 //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
+    //                 layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
+    //             ]
+    //         },
+    //         // {
+    //         //     layerList: [
+    //         //         layer(LineLayer, { data: d.期货.买.盘口, color: 买颜色 }),
+    //         //         layer(LineLayer, { data: d.期货.卖.盘口, color: 卖颜色 }),
+    //         //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
+    //         //     ]
+    //         // },
+    //         {
+    //             layerList: [
+    //                 layer(ZeroLayer, { color: 0xaaaaaa }),
+    //                 layer(LineLayer, { data: d.hopex.买.盘口, color: 买颜色1 }),
+    //                 layer(LineLayer, { data: d.hopex.卖.盘口, color: 卖颜色1, 临时参数: '变成负数' }),
+    //                 //layer(LineLayer, { data: d.期货.买.净盘口, color: BTC颜色 }),
+    //                 layer(LineLayer, { data: d.hopex.买.净盘口_均线3, color: ETH颜色 }),
+    //             ]
+    //         },
+    //     ]
+    // }),
 
 
 
