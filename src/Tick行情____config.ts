@@ -2817,28 +2817,28 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     numberColor: 波动率颜色,
                     layerList: [
                         layer(ZeroLayer, { color: 波动率颜色 }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净成交量_累加60, color: 波动率颜色 }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.买.净成交量_累加60, color: 波动率颜色 }),
                     ]
                 },
                 {
                     numberColor: BTC颜色,
                     layerList: [
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.价格, color: BTC颜色 }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.价格, color: BTC颜色 }),
                     ]
                 },
             ],
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d2.ctp.rb_zhuli.买.成交量, color: 买颜色 }),
-                    layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d2.ctp.rb1910.买.成交量, color: 买颜色 }),
+                    layer(LineLayer, { data: d2.ctp.rb1910.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
                     layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
                 ]
             },
             {
                 layerList: [
-                    layer(LineLayer, { data: d2.ctp.rb_zhuli.买.盘口, color: 买颜色 }),
-                    layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.盘口, color: 卖颜色 }),
+                    layer(LineLayer, { data: d2.ctp.rb1910.买.盘口, color: 买颜色 }),
+                    layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口, color: 卖颜色 }),
                     layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
                 ]
             },
@@ -2852,26 +2852,26 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 {
                     layerList: [
                         layer(ZeroLayer, { color: 0xaaaaaa }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.买.买成交量累加, color: 买颜色 }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.买.卖成交量累加, color: 卖颜色 }),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净盘口_均线3, color: ETH颜色 }),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口卖1加被吃的, color: 幽灵卖颜色 }),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.盘口1, color: 卖颜色1 }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.买.买成交量累加, color: 买颜色 }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.买.卖成交量累加, color: 卖颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口1, color: 卖颜色1 }),
                     ]
                 },
                 // {
                 //     numberColor: 波动率颜色,
                 //     layerList: [
                 //         layer(ZeroLayer, { color: 波动率颜色 }),
-                //         layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净成交量_累加60, color: 波动率颜色 }),
+                //         layer(LineLayer, { data: d2.ctp.rb1910.买.净成交量_累加60, color: 波动率颜色 }),
                 //     ]
                 // },
                 {
                     numberColor: BTC颜色,
                     layerList: [
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.价格, color: BTC颜色 }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.价格, color: BTC颜色 }),
                     ]
                 },
 
@@ -2879,17 +2879,17 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             // {
             //     layerList: [
             //         layer(ZeroLayer, { color: 0xaaaaaa }),
-            //         layer(LineLayer, { data: d2.ctp.rb_zhuli.买.成交量, color: 买颜色 }),
-            //         layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
+            //         layer(LineLayer, { data: d2.ctp.rb1910.买.成交量, color: 买颜色 }),
+            //         layer(LineLayer, { data: d2.ctp.rb1910.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
             //         layer(TextLayer, { text: '成交量      ', color: 0xffff00 })
             //     ]
             // },
             // {
             //     layerList: [
             //         layer(ZeroLayer, { color: 0xaaaaaa }),
-            //         layer(LineLayer, { data: d2.ctp.rb_zhuli.买.盘口, color: 买颜色 }),
-            //         layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
-            //         layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净盘口_均线3, color: ETH颜色 }),
+            //         layer(LineLayer, { data: d2.ctp.rb1910.买.盘口, color: 买颜色 }),
+            //         layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
+            //         layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
             //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
             //     ]
             // },
@@ -2903,26 +2903,26 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 {
                     layerList: [
                         layer(ZeroLayer, { color: 0xaaaaaa }),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.价格乘以ln主动买, color: 买颜色, 临时参数: '变成负数' }),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.价格乘以ln主动卖, color: 卖颜色, 临时参数: '变成负数'}),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净盘口_均线3, color: ETH颜色 }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口卖1加被吃的, color: 幽灵卖颜色 }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.盘口1, color: 卖颜色1 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.价格乘以ln主动买, color: 买颜色, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.价格乘以ln主动卖, color: 卖颜色, 临时参数: '变成负数'}),
+                        layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口1, color: 卖颜色1 }),
                     ]
                 },
                 // {
                 //     numberColor: 波动率颜色,
                 //     layerList: [
                 //         layer(ZeroLayer, { color: 波动率颜色 }),
-                //         layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净成交量_累加60, color: 波动率颜色 }),
+                //         layer(LineLayer, { data: d2.ctp.rb1910.买.净成交量_累加60, color: 波动率颜色 }),
                 //     ]
                 // },
                 {
                     numberColor: BTC颜色,
                     layerList: [
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.价格, color: BTC颜色 }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.价格, color: BTC颜色 }),
                     ]
                 },
 
@@ -2930,17 +2930,17 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             // {
             //     layerList: [
             //         layer(ZeroLayer, { color: 0xaaaaaa }),
-            //         layer(LineLayer, { data: d2.ctp.rb_zhuli.买.成交量, color: 买颜色 }),
-            //         layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
+            //         layer(LineLayer, { data: d2.ctp.rb1910.买.成交量, color: 买颜色 }),
+            //         layer(LineLayer, { data: d2.ctp.rb1910.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
             //         layer(TextLayer, { text: '成交量      ', color: 0xffff00 })
             //     ]
             // },
             // {
             //     layerList: [
             //         layer(ZeroLayer, { color: 0xaaaaaa }),
-            //         layer(LineLayer, { data: d2.ctp.rb_zhuli.买.盘口, color: 买颜色 }),
-            //         layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
-            //         layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净盘口_均线3, color: ETH颜色 }),
+            //         layer(LineLayer, { data: d2.ctp.rb1910.买.盘口, color: 买颜色 }),
+            //         layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
+            //         layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
             //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
             //     ]
             // },
@@ -2953,49 +2953,49 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    //layer(LineLayer, { data: d2.ctp.rb_zhuli.价格乘以ln主动买, color: 买颜色, 临时参数: '变成负数' }),
-                    //layer(LineLayer, { data: d2.ctp.rb_zhuli.价格乘以ln主动卖, color: 卖颜色, 临时参数: '变成负数'}),
-                    //layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
-                    layer(LineLayer, { data: d2.ctp.rb_zhuli.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
-                    layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净盘口_均线3, color: ETH颜色 }),
-                    //layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口卖1加被吃的, color: 幽灵卖颜色 }),
-                    layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.盘口1, color: 卖颜色1 }),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.价格乘以ln主动买, color: 买颜色, 临时参数: '变成负数' }),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.价格乘以ln主动卖, color: 卖颜色, 临时参数: '变成负数'}),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d2.ctp.rb1910.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
+                    //layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                    layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口1, color: 卖颜色1 }),
                 ]
             },
             [
                 {
                     layerList: [
                         //layer(ZeroLayer, { color: 0xaaaaaa }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.买.买成交量累加, color: 买颜色 }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.买.卖成交量累加, color: 卖颜色}),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净盘口_均线3, color: ETH颜色 }),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口卖1加被吃的, color: 幽灵卖颜色 }),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.盘口1, color: 卖颜色1 }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.买.买成交量累加, color: 买颜色 }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.买.卖成交量累加, color: 卖颜色}),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口1, color: 卖颜色1 }),
                     ]
                 },
                 {
                     layerList: [
                         layer(ZeroLayer, { color: 0xaaaaaa }),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.买.买成交量累加, color: 买颜色 }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净成交量_累加300, color: 净成交量颜色}),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.买.净盘口_均线3, color: ETH颜色 }),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.盘口卖1加被吃的, color: 幽灵卖颜色 }),
-                        //layer(LineLayer, { data: d2.ctp.rb_zhuli.卖.盘口1, color: 卖颜色1 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.买成交量累加, color: 买颜色 }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.买.净成交量_累加300, color: 净成交量颜色}),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                        //layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口1, color: 卖颜色1 }),
                     ]
                 },
               
                 {
                     numberColor: BTC颜色,
                     layerList: [
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.价格, color: BTC颜色 }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.价格, color: BTC颜色 }),
                         layer(TextLayer, {
                             text:
-                                `买1  :${(lastNumber(d2.ctp.rb_zhuli.买.盘口1)).toFixed(2)}  ` +
-                                `卖1  :${(lastNumber(d2.ctp.rb_zhuli.卖.盘口1) ).toFixed(2)}   ` ,
+                                `买1  :${(lastNumber(d2.ctp.rb1910.买.盘口1)).toFixed(2)}  ` +
+                                `卖1  :${(lastNumber(d2.ctp.rb1910.卖.盘口1) ).toFixed(2)}   ` ,
                             color: ETH颜色,
                         })
                     ]
@@ -3071,13 +3071,13 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 {
                     layerList: [
                         layer(ZeroLayer, { color: 波动率颜色 }),
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.波动_测试.净成交量_累加10, color: 波动率颜色 }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.波动_测试.净成交量_累加10, color: 波动率颜色 }),
                     ]
                 },
                 {
                     numberColor: BTC颜色,
                     layerList: [
-                        layer(LineLayer, { data: d2.ctp.rb_zhuli.波动_测试.价格, color: BTC颜色 }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.波动_测试.价格, color: BTC颜色 }),
                         //layer(LineLayer, { data: d.bitmex.波动_测试.买均价_10, color: 买颜色 }),
                         //layer(LineLayer, { data: d.bitmex.波动_测试.卖均价_10, color: 卖颜色 }),
                     ]
@@ -3086,7 +3086,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
             {
                 layerList: [
-                    layer(BarLayer, { data: d2.ctp.rb_zhuli.波动_测试.持续秒, color: 0xffffff }),
+                    layer(BarLayer, { data: d2.ctp.rb1910.波动_测试.持续秒, color: 0xffffff }),
                 ]
             },
         ]

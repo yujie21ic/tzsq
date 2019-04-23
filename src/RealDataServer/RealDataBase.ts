@@ -105,7 +105,7 @@ export class RealDataBase {
         {
             startTick: 0,//tick的  1m的开始 没有对齐
             ctp: {
-                rb_zhuli: createItem(),
+                rb1910: createItem(),
             },
             hopex: mapObjIndexed(createItem, BaseType.HopexSymbolDic),
             fcoin: {
@@ -1458,7 +1458,7 @@ export class RealDataBase {
         XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT', 'btcusdt'),
         ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
         ctp: {
-            rb_zhuli: this.item2(this.data.ctp.rb_zhuli, true),
+            rb1910: this.item2(this.data.ctp.rb1910, true),
         },
         hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic)
     }
@@ -1468,7 +1468,7 @@ export class RealDataBase {
             XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT', 'btcusdt'),
             ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
             ctp: {
-                rb_zhuli: this.item2(this.data.ctp.rb_zhuli, true),
+                rb1910: this.item2(this.data.ctp.rb1910, true),
             },
             hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic)
         }

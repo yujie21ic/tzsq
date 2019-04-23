@@ -239,9 +239,9 @@ export namespace DataClient {
 
 
             this.data.startTick = data[0].id
-            this.data.ctp.rb_zhuli.data = data
-            this.data.ctp.rb_zhuli.orderBook = orderBook
-            console.log('rb_zhuli', data, orderBook)
+            this.data.ctp.rb1910.data = data
+            this.data.ctp.rb1910.orderBook = orderBook
+            console.log('rb1910', data, orderBook)
             this.重新初始化()
         }
 

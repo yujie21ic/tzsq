@@ -26,6 +26,9 @@
     <ClInclude Include="..\src\json11.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\config.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\CTP_API\thostmduserapi.dll">
