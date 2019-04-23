@@ -13,6 +13,7 @@ import { realTickClient, 提醒 } from './实盘__提醒'
 import { lastNumber } from './lib/F/lastNumber'
 import { FCoinHTTP } from './lib/____API____/FCoinHTTP'
 import { PositionAndOrder } from './lib/____API____/PositionAndOrder/PositionAndOrder'
+import { 任务遥控器 } from './任务遥控器'
 
 const 市价追高 = 10
 
@@ -399,29 +400,37 @@ export class 交易 extends React.Component {
     }
 
 
+    选项卡 = true
 
     render() {
-        return orderClient.isConnected === false ?
-            <a href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a> :
-            <div style={{
-                backgroundColor: '#24292d',
-                margin: 'auto auto',
-                width: `${theme.右边空白}px`,
-                padding: '10px 5px',
-                fontFamily: 'SourceHanSansSC-regular',
-                color: 'white',
-                fontSize: '24px',
-                userSelect: 'none',
-                cursor: 'default'
-            }}>
-                <Item market='bitmex' symbol='XBTUSD' data={() => orderClient.jsonSync.rawData.market.bitmex.XBTUSD} 位置={this.位置} 倍数={this.倍数} />
-                <Item market='hopex' symbol='BTCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.BTCUSDT} 位置={this.位置} 倍数={this.倍数} />
-                {/* <Item market='hopex' symbol='ETHUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.ETHUSDT} 位置={this.位置} 倍数={this.倍数} /> */}
-                {/* <Item market='hopex' symbol='ETCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.ETCUSDT} 位置={this.位置} 倍数={this.倍数} /> */}
-                {/* <Item market='hopex' symbol='LTCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.LTCUSDT} 位置={this.位置} 倍数={this.倍数} />
+        return <div style={{ backgroundColor: '#24292d' }}>
+            <a style={{ fontSize: 28, color: '#666666' }} href='#' onClick={() => {
+                this.选项卡 = !this.选项卡
+            }}>切换</a>
+
+            {this.选项卡 ?
+                (orderClient.isConnected === false ?
+                    <a href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a> :
+                    <div style={{
+                        backgroundColor: '#24292d',
+                        margin: 'auto auto',
+                        width: `${theme.右边空白}px`,
+                        padding: '10px 5px',
+                        fontFamily: 'SourceHanSansSC-regular',
+                        color: 'white',
+                        fontSize: '24px',
+                        userSelect: 'none',
+                        cursor: 'default'
+                    }}>
+                        <Item market='bitmex' symbol='XBTUSD' data={() => orderClient.jsonSync.rawData.market.bitmex.XBTUSD} 位置={this.位置} 倍数={this.倍数} />
+                        <Item market='hopex' symbol='BTCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.BTCUSDT} 位置={this.位置} 倍数={this.倍数} />
+                        {/* <Item market='hopex' symbol='ETHUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.ETHUSDT} 位置={this.位置} 倍数={this.倍数} /> */}
+                        {/* <Item market='hopex' symbol='ETCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.ETCUSDT} 位置={this.位置} 倍数={this.倍数} /> */}
+                        {/* <Item market='hopex' symbol='LTCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.LTCUSDT} 位置={this.位置} 倍数={this.倍数} />
                 <Item market='hopex' symbol='XRPUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.XRPUSDT} 位置={this.位置} 倍数={this.倍数} /> */}
-                {/* <Item market='hopex' symbol='BSVUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.BSVUSDT} 位置={this.位置} 倍数={this.倍数} /> */}
-            </div>
+                        {/* <Item market='hopex' symbol='BSVUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.BSVUSDT} 位置={this.位置} 倍数={this.倍数} /> */}
+                    </div>) : <任务遥控器 />}
+        </div>
     }
 
 }

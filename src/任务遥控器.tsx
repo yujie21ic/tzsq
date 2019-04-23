@@ -11,7 +11,7 @@ const { cookie } = config.account![windowExt.accountName]
 const orderClient = new OrderClient(cookie)
 
 
-class APP extends React.Component {
+export class 任务遥控器 extends React.Component {
 
     折叠dic = new Map<string, boolean>()
 
@@ -122,4 +122,4 @@ class APP extends React.Component {
 }
 
 
-ReactDOM.render(<APP />, document.querySelector('#root'))
+// ReactDOM.render(<APP />, document.querySelector('#root'))

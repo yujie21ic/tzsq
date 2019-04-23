@@ -131,7 +131,7 @@ export class 提醒 extends React.Component {
     }
 
     render() {
-        return <div style={{ width: '100%', height: '100%', backgroundColor: 'black' }}>
+        return 1 + 1 === 2 ? '' : <div style={{ width: '100%', height: '100%', backgroundColor: 'black' }}>
             <a
                 style={{ fontSize: 20, color: 'yellow' }}
                 href='#'
