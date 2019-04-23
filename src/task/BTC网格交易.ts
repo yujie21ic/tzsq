@@ -16,7 +16,8 @@ export class BTC网格交易 implements PositionAndOrderTask {
         方向: 'Sell' as BaseType.Side,
         最大仓位: 1000,
         留多少不减仓: 0,
-        盈利加仓: true,
+        盈利加仓: false,
+        亏损减仓: false,
         加仓: true,
         减仓: true,
         止损价格: 6000,
@@ -29,7 +30,8 @@ export class BTC网格交易 implements PositionAndOrderTask {
         方向: 'Sell' as BaseType.Side,
         最大仓位: 1000,
         留多少不减仓: 0,
-        盈利加仓: true,
+        盈利加仓: false,
+        亏损减仓: false,
         加仓: true,
         减仓: true,
         止损价格: 6000,
@@ -45,16 +47,16 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
     private getSell1 = () => lastNumber(this.self.realData.dataExt.XBTUSD.bitmex.卖.盘口1价)
 
-    private sellPrice = () => Math.max(this.getSell1(), this.self.jsonSync.rawData.market.bitmex.XBTUSD.开仓均价)
+    private sellPrice = (盈利减仓_盈利点 = 0) => Math.max(this.getSell1(), this.self.jsonSync.rawData.market.bitmex.XBTUSD.开仓均价 + 盈利减仓_盈利点)
 
-    private buyPrice = () => {
+    private buyPrice = (盈利减仓_盈利点 = 0) => {
         const { 开仓均价 } = this.self.jsonSync.rawData.market.bitmex.XBTUSD
         const buy1 = this.getBuy1()
 
         if (开仓均价 === 0) {
             return buy1
         } else {
-            return Math.min(buy1, 开仓均价)
+            return Math.min(buy1, 开仓均价 - 盈利减仓_盈利点)
         }
     }
 
@@ -153,7 +155,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
                 side: 'Sell',
                 price: to价格对齐({
                     side: 'Sell',
-                    value: this.sellPrice() + Math.max(0, this.参数.最小盈利点),
+                    value: this.参数.亏损减仓 ? this.getSell1() : this.sellPrice(this.参数.最小盈利点),
                     grid: this.参数.单个格子大小,
                 }),
                 reduceOnly: true,
@@ -164,7 +166,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
                 side: 'Buy',
                 price: to价格对齐({
                     side: 'Buy',
-                    value: this.buyPrice() - Math.max(0, this.参数.最小盈利点),
+                    value: this.参数.亏损减仓 ? this.getBuy1() : this.buyPrice(this.参数.最小盈利点),
                     grid: this.参数.单个格子大小,
                 }),
                 reduceOnly: true,
