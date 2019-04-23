@@ -84,19 +84,19 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
 
-    hopex对赌炒单: (d, d2) => ({
-        heightList: [1],
-        items: [
-            {
-                layerList: [
-                    layer(LineLayer, { data: d2.ETHUSD.hopex.收盘价, color: 0xffffff }),
-                    layer(LineLayer, { data: d2.ETHUSD.hopex.卖.盘口1价, color: 0x00ff00 }),
-                    layer(LineLayer, { data: d2.ETHUSD.hopex.买.盘口1价, color: 0xff0000 }),
-                ]
-            },
+    // hopex对赌炒单: (d, d2) => ({
+    //     heightList: [1],
+    //     items: [
+    //         {
+    //             layerList: [
+    //                 layer(LineLayer, { data: d2.ETHUSD.hopex.收盘价, color: 0xffffff }),
+    //                 layer(LineLayer, { data: d2.ETHUSD.hopex.卖.盘口1价, color: 0x00ff00 }),
+    //                 layer(LineLayer, { data: d2.ETHUSD.hopex.买.盘口1价, color: 0xff0000 }),
+    //             ]
+    //         },
 
-        ]
-    }),
+    //     ]
+    // }),
 
     实盘手动: (d, d2) => ({
         heightList: [0.2, 0.7, 0.1],
