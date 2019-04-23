@@ -53,11 +53,11 @@ export class _________________TickBase {
 
             const { left, right } = this.getLeftRight()
 
-            const xArr = this.nowChart.indexOf('CTP') !== -1 ? d2.ctp.rb1910.时间 :
+            const xArr = this.nowChart.indexOf('CTP') !== -1 ? d2.ctp.TA909.时间 :
                 this.nowChart === 'ctp波动_测试' ? d2.ctp.rb1910.波动_测试.时间 :
                     this.nowChart === '波动_测试' ? d.bitmex.波动_测试.时间 : d.bitmex.时间
 
-            const xStrArr = this.nowChart.indexOf('CTP') !== -1 ? d2.ctp.rb1910.时间str :
+            const xStrArr = this.nowChart.indexOf('CTP') !== -1 ? d2.ctp.TA909.时间str :
                 this.nowChart === 'ctp波动_测试' ? d2.ctp.rb1910.波动_测试.时间str :
                     this.nowChart === '波动_测试' ? d.bitmex.波动_测试.时间str : d.bitmex.时间str
 
@@ -100,7 +100,7 @@ export class _________________TickBase {
         let right = this.nowChart === '着笔' ? Math.max(d.bitmex.着笔.price.length) - 1 :
             this.nowChart === '波动_测试' ? Math.max(d.bitmex.波动_测试.累计买.length) - 1 :
                 this.nowChart === 'ctp波动_测试' ? Math.max(d2.ctp.rb1910.波动_测试.累计买.length) - 1 :
-                    this.nowChart.indexOf('CTP') !== -1 ? Math.max(this.real.dataExt.ctp.rb1910.价格.length, this.real.dataExt.ctp.rb1910.盘口.length) - 1 :
+                    this.nowChart.indexOf('CTP') !== -1 ? Math.max(this.real.dataExt.ctp.TA909.价格.length, this.real.dataExt.ctp.TA909.盘口.length) - 1 :
                         Math.max(d.binance.价格.length, d.hopex.价格.length, d.bitmex.价格.length, d.bitmex.买.盘口.length, d.bitmex.卖.盘口.length) - 1
 
 
