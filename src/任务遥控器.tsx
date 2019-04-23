@@ -13,6 +13,8 @@ const orderClient = new OrderClient(cookie)
 
 class APP extends React.Component {
 
+    折叠dic = new Map<string, boolean>()
+
     componentWillMount() {
         const f = () => {
             requestAnimationFrame(f)
@@ -100,14 +102,18 @@ class APP extends React.Component {
                             justifyContent: 'left',
                         }}>
 
-                        <a style={{ fontSize: 28, color: v.开关 ? '#cc66ff' : '#666666' }} href='#' onClick={() => this.set_任务_开关(v.名字)}>{v.名字}</a>
 
-                        {//v.开关 ?
+                        <p><a style={{ fontSize: 28, color: this.折叠dic.get(v.名字) ? '#cc66ff' : '#666666' }} href='#' onClick={() => {
+                            this.折叠dic.set(v.名字, !this.折叠dic.get(v.名字))
+                        }}>{v.名字}</a><Switch checked={v.开关} onChange={() => this.set_任务_开关(v.名字)} /></p>
+
+
+                        {this.折叠dic.get(v.名字) ?
                             kvs(JSON.parse(v.参数)).map(p =>
                                 <div key={p.k}>
                                     {p.k}:{this.renderItem(v.名字, p.k, p.v)}
                                 </div>
-                            ) //: ''
+                            ) : ''
                         }
                     </div>
                 )}
