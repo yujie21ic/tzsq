@@ -110,11 +110,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
         const 止损委托 = self.jsonSync.rawData.market.bitmex.XBTUSD.委托列表.filter(v => v.type === '止损')
         const 止损side = this.参数.方向 === 'Buy' ? 'Sell' : 'Buy'
 
-        if (this.参数.止损价格 === 0) {
-            if (止损委托.length !== 0) {
-                return self.cancel({ orderID: 止损委托.map(v => v.id) })
-            }
-        } else {
+        if (this.参数.止损价格 !== 0) {
             if (止损委托.length === 0) {
                 return self.stop({
                     side: 止损side,
