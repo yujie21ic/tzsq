@@ -9,12 +9,14 @@ export class CTPTradeAndOrderBook extends TradeAndOrderBook<string>{
 
     private udpServer = dgram.createSocket('udp4')
 
-    private last: {
-        side: BaseType.Side
-        price: number
-        累计成交量: number
-        持仓量: number
-    } | undefined
+    private dic = Object.create(null) as {
+        [symbol: string]: {
+            side: BaseType.Side
+            price: number
+            累计成交量: number
+            持仓量: number
+        } | undefined
+    }
 
 
     run() {
@@ -61,11 +63,11 @@ export class CTPTradeAndOrderBook extends TradeAndOrderBook<string>{
                 成交金额: fix浮点(Number(arr[26])),
             }
 
-            
 
-            //last 初始化
-            if (this.last === undefined) {
-                this.last = {
+
+            const last = this.dic[obj.合约代码]
+            if (last === undefined) {
+                this.dic[obj.合约代码] = {
                     side: obj.最新价 >= obj.盘口卖1价 ? 'Sell' : 'Buy',
                     price: obj.最新价,
                     累计成交量: obj.累计成交量,
@@ -76,17 +78,17 @@ export class CTPTradeAndOrderBook extends TradeAndOrderBook<string>{
 
 
             //last
-            if (this.last.price !== obj.最新价) {
-                this.last.side = obj.最新价 > this.last.price ? 'Buy' : 'Sell'
-                this.last.price = obj.最新价
+            if (last.price !== obj.最新价) {
+                last.side = obj.最新价 > last.price ? 'Buy' : 'Sell'
+                last.price = obj.最新价
             }
 
-            const size = obj.累计成交量 - this.last.累计成交量
-            const side = this.last.side
-            const 持仓量新增 = obj.持仓量 - this.last.持仓量
+            const size = obj.累计成交量 - last.累计成交量
+            const side = last.side
+            const 持仓量新增 = obj.持仓量 - last.持仓量
 
-            this.last.累计成交量 = obj.累计成交量
-            this.last.持仓量 = obj.持仓量
+            last.累计成交量 = obj.累计成交量
+            last.持仓量 = obj.持仓量
 
 
             const date = new Date()
@@ -109,7 +111,7 @@ export class CTPTradeAndOrderBook extends TradeAndOrderBook<string>{
                         side,
                         size,
                         持仓量新增,
-                    })
+                    }),
                 })
             }
 
