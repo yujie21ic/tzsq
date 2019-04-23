@@ -37,30 +37,32 @@ export class CTPTradeAndOrderBook extends TradeAndOrderBook<string>{
                 盘口卖1价: fix浮点(Number(arr[7])),
                 盘口卖1量: fix浮点(Number(arr[8])),
 
-                盘口买2价: fix浮点(Number(arr[9])),
-                盘口买2量: fix浮点(Number(arr[10])),
-                盘口卖2价: fix浮点(Number(arr[11])),
-                盘口卖2量: fix浮点(Number(arr[12])),
+                // 盘口买2价: fix浮点(Number(arr[9])),
+                // 盘口买2量: fix浮点(Number(arr[10])),
+                // 盘口卖2价: fix浮点(Number(arr[11])),
+                // 盘口卖2量: fix浮点(Number(arr[12])),
 
-                盘口买3价: fix浮点(Number(arr[13])),
-                盘口买3量: fix浮点(Number(arr[14])),
-                盘口卖3价: fix浮点(Number(arr[15])),
-                盘口卖3量: fix浮点(Number(arr[16])),
+                // 盘口买3价: fix浮点(Number(arr[13])),
+                // 盘口买3量: fix浮点(Number(arr[14])),
+                // 盘口卖3价: fix浮点(Number(arr[15])),
+                // 盘口卖3量: fix浮点(Number(arr[16])),
 
-                盘口买4价: fix浮点(Number(arr[17])),
-                盘口买4量: fix浮点(Number(arr[18])),
-                盘口卖4价: fix浮点(Number(arr[19])),
-                盘口卖4量: fix浮点(Number(arr[20])),
+                // 盘口买4价: fix浮点(Number(arr[17])),
+                // 盘口买4量: fix浮点(Number(arr[18])),
+                // 盘口卖4价: fix浮点(Number(arr[19])),
+                // 盘口卖4量: fix浮点(Number(arr[20])),
 
-                盘口买5价: fix浮点(Number(arr[21])),
-                盘口买5量: fix浮点(Number(arr[22])),
-                盘口卖5价: fix浮点(Number(arr[23])),
-                盘口卖5量: fix浮点(Number(arr[24])),
+                // 盘口买5价: fix浮点(Number(arr[21])),
+                // 盘口买5量: fix浮点(Number(arr[22])),
+                // 盘口卖5价: fix浮点(Number(arr[23])),
+                // 盘口卖5量: fix浮点(Number(arr[24])),
 
                 持仓量: fix浮点(Number(arr[25])),
                 成交金额: fix浮点(Number(arr[26])),
-            } 
+            }
+
             
+
             //last 初始化
             if (this.last === undefined) {
                 this.last = {
@@ -119,44 +121,44 @@ export class CTPTradeAndOrderBook extends TradeAndOrderBook<string>{
                         price: obj.盘口买1价,
                         size: obj.盘口买1量,
                     },
-                    {
-                        price: obj.盘口买2价,
-                        size: obj.盘口买2量,
-                    },
-                    {
-                        price: obj.盘口买3价,
-                        size: obj.盘口买3量,
-                    },
-                    {
-                        price: obj.盘口买4价,
-                        size: obj.盘口买4量,
-                    },
-                    {
-                        price: obj.盘口买5价,
-                        size: obj.盘口买5量,
-                    },
+                    // {
+                    //     price: obj.盘口买2价,
+                    //     size: obj.盘口买2量,
+                    // },
+                    // {
+                    //     price: obj.盘口买3价,
+                    //     size: obj.盘口买3量,
+                    // },
+                    // {
+                    //     price: obj.盘口买4价,
+                    //     size: obj.盘口买4量,
+                    // },
+                    // {
+                    //     price: obj.盘口买5价,
+                    //     size: obj.盘口买5量,
+                    // },
                 ],
                 sell: [
                     {
                         price: obj.盘口卖1价,
                         size: obj.盘口卖1量,
                     },
-                    {
-                        price: obj.盘口卖2价,
-                        size: obj.盘口卖2量,
-                    },
-                    {
-                        price: obj.盘口卖3价,
-                        size: obj.盘口卖3量,
-                    },
-                    {
-                        price: obj.盘口卖4价,
-                        size: obj.盘口卖4量,
-                    },
-                    {
-                        price: obj.盘口卖5价,
-                        size: obj.盘口卖5量,
-                    },
+                    // {
+                    //     price: obj.盘口卖2价,
+                    //     size: obj.盘口卖2量,
+                    // },
+                    // {
+                    //     price: obj.盘口卖3价,
+                    //     size: obj.盘口卖3量,
+                    // },
+                    // {
+                    //     price: obj.盘口卖4价,
+                    //     size: obj.盘口卖4量,
+                    // },
+                    // {
+                    //     price: obj.盘口卖5价,
+                    //     size: obj.盘口卖5量,
+                    // },
 
                 ],
             })
