@@ -8,10 +8,14 @@ export class BTC止损 implements PositionAndOrderTask {
 
     开关 = false
     参数type = {
-        止损点: 0
+        A: 0,
+        B: 0,
+        C: 0,
     }
     参数 = {
-        止损点: 0
+        A: 0,
+        B: 0,
+        C: 0,
     }
 
     on参数更新?: () => void
@@ -26,15 +30,9 @@ export class BTC止损 implements PositionAndOrderTask {
 
     onTick(self: PositionAndOrder) {
 
-        const 止损点 = toRange({ min: 0, max: 100, value: this.参数.止损点 })
-        if (this.参数.止损点 !== 止损点) {
-            this.参数.止损点 = 止损点
-            if (this.on参数更新 !== undefined) {
-                this.on参数更新()
-            }
-        }
+        const 止损点 = (this.参数.A ? 5 : 0) + (this.参数.B ? 5 : 0) + (this.参数.C ? 5 : 0)
 
-        if (this.参数.止损点 === 0) return false
+        if (止损点 === 0) return false
 
         const { 仓位数量, 开仓均价, 委托列表 } = self.jsonSync.rawData.market.bitmex.XBTUSD
 
