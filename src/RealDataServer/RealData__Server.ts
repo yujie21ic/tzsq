@@ -311,30 +311,30 @@ export class RealData__Server extends RealDataBase {
         //
         this.ctp.run()
         this.ctp.tradeObservable.subscribe(({ symbol, timestamp, side, size, price, 成交性质 }) => {
-            if (symbol === 'rb1910')
-                this.on着笔({
-                    key: 'ctp_' + symbol,
-                    xxxxxxxx: this.jsonSync.data.ctp[symbol],
-                    timestamp,
-                    side: side as BaseType.Side,
-                    size,
-                    price,
-                    成交性质,
-                })
+            //if (symbol === 'rb1910')
+            this.on着笔({
+                key: 'ctp_' + symbol,
+                xxxxxxxx: this.jsonSync.data.ctp[symbol as 'rb1910'],
+                timestamp,
+                side: side as BaseType.Side,
+                size,
+                price,
+                成交性质,
+            })
         })
 
-        this.ctp.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
-            if (symbol === 'rb1910')
-                this.on盘口({
-                    key: 'ctp_' + symbol,
-                    xxxxxxxx: this.jsonSync.data.ctp[symbol].orderBook,
-                    timestamp,
-                    orderBook: {
-                        id: Math.floor(timestamp / RealDataBase.单位时间),
-                        buy,
-                        sell,
-                    }
-                })
+        this.ctp.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {``
+            //if (symbol === 'rb1910')
+            this.on盘口({
+                key: 'ctp_' + symbol,
+                xxxxxxxx: this.jsonSync.data.ctp[symbol as 'rb1910'].orderBook,
+                timestamp,
+                orderBook: {
+                    id: Math.floor(timestamp / RealDataBase.单位时间),
+                    buy,
+                    sell,
+                }
+            })
         })
 
 
