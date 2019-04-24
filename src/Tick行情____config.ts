@@ -2890,7 +2890,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 },
                 {
                     layerList: [
-                        layer(ZeroLayer, { color: 0xaaaaaa }),
+                        layer(ZeroLayer, { color: ETH颜色 }),
                         //layer(LineLayer, { data: d2.ctp.rb1910.买.买成交量累加, color: 买颜色 }),
                         layer(LineLayer, { data: d2.ctp.rb1910.买.净成交量_累加300, color: 净成交量颜色}),
                         //layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
