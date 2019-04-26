@@ -3,8 +3,6 @@ import * as ReactDOM from 'react-dom'
 import { style } from 'typestyle'
 import { reverse } from 'ramda'
 import { DataClient } from './RealDataServer/DataClient'
-import { dialog } from './lib/UI/dialog'
-import { setWindowTitle } from './lib/F/setWindowTitle'
 
 const orderTbodyTdSell = style({
 
