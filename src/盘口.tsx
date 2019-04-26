@@ -145,7 +145,7 @@ const Table = (props: {
                                 backgroundColor: props.data.backgroundColor
                             }}>&nbsp;</div>
                             <span style={{ position: 'relative', paddingRight: '20px' }}>
-                                {(v.size / 10000).toFixed(2)}万
+                                {v.size}
                             </span>
                         </div>
                     </td>
