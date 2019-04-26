@@ -163,8 +163,6 @@ const Table = (props: {
 const realTickClient = new DataClient.RealData__Client()
 class APP extends React.Component {
 
-    nowType = '现货 btcusdt'
-
     componentWillMount() {
 
         const f = () => {
@@ -172,35 +170,11 @@ class APP extends React.Component {
             this.forceUpdate()
         }
         f()
-
-
-        window.addEventListener('mousedown', e => {
-            if (e.button === 2) {
-                dialog.popupMenu(
-                    ['期货 XBTUSD', '期货 ETHUSD', '现货 btcusdt', '现货 ethusdt'].map(v =>
-                        ({
-                            label: v,
-                            type: 'checkbox' as 'checkbox',
-                            checked: v === this.nowType,
-                            click: () => {
-                                this.nowType = v as any
-                                setWindowTitle(this.nowType + ' 盘口')
-                            }
-                        })
-                    )
-                )
-            }
-        })
-
-        setWindowTitle(this.nowType + ' 盘口')
     }
 
     render() {
-        const arr = this.nowType.split(' ')
 
-        const item = arr[0] === '期货' ?
-            realTickClient.data.bitmex[arr[1] as 'XBTUSD'] :
-            realTickClient.data.binance[arr[1] as 'btcusdt']
+        const item = realTickClient.data.ctp.rb1910
 
         return <Ordering
             data={{
