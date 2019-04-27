@@ -36,9 +36,9 @@ export class RealData__Server extends RealDataBase {
     private on着笔(p: {
         key: string
         xxxxxxxx: {
-            着笔: {
-                ____push: (v: BaseType.着笔) => void
-            },
+            // 着笔: {
+            //     ____push: (v: BaseType.着笔) => void
+            // },
             data: {
                 ____push: (v: BaseType.KLine) => void
                 ____updateLast: (v: BaseType.KLine) => void
@@ -93,19 +93,19 @@ export class RealData__Server extends RealDataBase {
 
         //着笔
         //本地 ws 服务 才要
-        if (this.wsServer && p.key === 'bitmex_XBTUSD') {
-            const { orderBook } = this.jsonSync.rawData.bitmex.XBTUSD
-            if (orderBook.length > 0) {
-                p.xxxxxxxx.着笔.____push({
-                    side: p.side,
-                    size: p.size,
-                    price: p.price,
-                    buy1: orderBook[orderBook.length - 1].buy.length > 0 ? orderBook[orderBook.length - 1].buy[0].price : NaN,
-                    sell1: orderBook[orderBook.length - 1].sell.length > 0 ? orderBook[orderBook.length - 1].sell[0].price : NaN,
-                    timestamp: p.timestamp,
-                })
-            }
-        }
+        // if (this.wsServer && p.key === 'bitmex_XBTUSD') {
+        //     const { orderBook } = this.jsonSync.rawData.bitmex.XBTUSD
+        //     if (orderBook.length > 0) {
+        //         p.xxxxxxxx.着笔.____push({
+        //             side: p.side,
+        //             size: p.size,
+        //             price: p.price,
+        //             buy1: orderBook[orderBook.length - 1].buy.length > 0 ? orderBook[orderBook.length - 1].buy[0].price : NaN,
+        //             sell1: orderBook[orderBook.length - 1].sell.length > 0 ? orderBook[orderBook.length - 1].sell[0].price : NaN,
+        //             timestamp: p.timestamp,
+        //         })
+        //     }
+        // }
 
 
 
@@ -235,12 +235,12 @@ export class RealData__Server extends RealDataBase {
 
     private ctp = new CTPTradeAndOrderBook()
 
-    private wsServer: boolean
+    // private wsServer: boolean
 
     constructor(wsServer = true) {
         super()
 
-        this.wsServer = wsServer
+        // this.wsServer = wsServer
 
         this.重新初始化()//<-----------fix 
 
