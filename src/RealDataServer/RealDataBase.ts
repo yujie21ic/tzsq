@@ -12,7 +12,7 @@ import { mapObjIndexed } from '../lib/F/mapObjIndexed'
 import { ______CTP__config } from './______CTP__config'
 
 const createItem = () => ({
-    着笔: [] as BaseType.着笔[],
+    // 着笔: [] as BaseType.着笔[],
 
 
 
@@ -165,7 +165,7 @@ export class RealDataBase {
 
 
     private item2(xxx: {
-        着笔: BaseType.着笔[]
+        //着笔: BaseType.着笔[]
         data: BaseType.KLine[]
         orderBook: BaseType.OrderBook[]
         吃单情况: {
@@ -273,52 +273,52 @@ export class RealDataBase {
         // （当前时间-这个价位开始的时间）*1（上涨）
         // （当前时间-这个价位开始的时间）*-1（下跌）
         // 然后相加这个价位笔的加权计算，最终是正数，就是上涨，负数就是下跌
-        const 着笔 = {
-            timestamp: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].timestamp),
-            _500ms_id: 指标.map(() => xxx.着笔.length, i => timeID._500ms.toID(xxx.着笔[i].timestamp)),
-            price: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].price),
-            side: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].side),
-            size: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].size),
-            涨跌: 指标.map(() => xxx.着笔.length, i => {
-                let c = 0
-                for (let k = i; k >= Math.max(0, i - 50); k--) {
-                    if (xxx.着笔[k].price === xxx.着笔[k].buy1) {
-                        c += (i - k)
-                    }
-                    else if (xxx.着笔[k].price === xxx.着笔[k].sell1) {
-                        c -= (i - k)
-                    }
-                    else {
-                        break
-                    }
-                }
-                return c > 0 ? 1 : -1
-            }),
-        }
+        // const 着笔 = {
+        //     timestamp: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].timestamp),
+        //     _500ms_id: 指标.map(() => xxx.着笔.length, i => timeID._500ms.toID(xxx.着笔[i].timestamp)),
+        //     price: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].price),
+        //     side: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].side),
+        //     size: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].size),
+        //     涨跌: 指标.map(() => xxx.着笔.length, i => {
+        //         let c = 0
+        //         for (let k = i; k >= Math.max(0, i - 50); k--) {
+        //             if (xxx.着笔[k].price === xxx.着笔[k].buy1) {
+        //                 c += (i - k)
+        //             }
+        //             else if (xxx.着笔[k].price === xxx.着笔[k].sell1) {
+        //                 c -= (i - k)
+        //             }
+        //             else {
+        //                 break
+        //             }
+        //         }
+        //         return c > 0 ? 1 : -1
+        //     }),
+        // }
 
 
 
 
         //500ms
 
-        const 着笔涨跌 = 指标.map(
-            () => data.length - 10,
-            i => {
-                let n = 0
+        // const 着笔涨跌 = 指标.map(
+        //     () => data.length - 10,
+        //     i => {
+        //         let n = 0
 
-                for (let k = 着笔._500ms_id.length - 1; k >= 0; k--) {
-                    if (着笔._500ms_id[k] === data[i].id) {
-                        n = 着笔.涨跌[k]
-                        break
-                    }
-                }
+        //         for (let k = 着笔._500ms_id.length - 1; k >= 0; k--) {
+        //             if (着笔._500ms_id[k] === data[i].id) {
+        //                 n = 着笔.涨跌[k]
+        //                 break
+        //             }
+        //         }
 
-                return [
-                    { name: '涨', value: n === 1, color: 0x0E6655 },
-                    { name: '跌', value: n === -1, color: 0x943126 },
+        //         return [
+        //             { name: '涨', value: n === 1, color: 0x0E6655 },
+        //             { name: '跌', value: n === -1, color: 0x943126 },
 
-                ]
-            })
+        //         ]
+        //     })
 
         盘口算价格 = true
 
@@ -1144,8 +1144,8 @@ export class RealDataBase {
             tick力量指数60,
             tick力量指数12,
             价格macd,
-            着笔,
-            着笔涨跌,
+            // 着笔,
+            // 着笔涨跌,
             bitmex_价格_macd,
 
             _60s_,
