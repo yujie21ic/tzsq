@@ -109,6 +109,8 @@ export class 提醒 extends React.Component {
 
         //________________________________________________________________________
 
+       
+
 
         const volum = realTickClient.get期货多少秒内成交量__万为单位('XBTUSD', 15)
         const 波动率 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex.价格_波动率30)
@@ -116,6 +118,13 @@ export class 提醒 extends React.Component {
             '比 特 币 成交量',
             volum,
             v => volum > 200 && 波动率 >= 0.1
+        )
+        const 买盘 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex.买.盘口)
+        const 卖盘 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex.卖.盘口)
+        this.setAndSpeak(
+            '比 特 币 盘口大量',
+            volum,
+            v => 买盘 > 800*10000 && 卖盘>800*10000
         )
 
 
