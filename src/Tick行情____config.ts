@@ -4,7 +4,7 @@ import { LineLayer } from './lib/Chart/Layer/LineLayer'
 import { TextLayer, LeftTextLayer } from './lib/Chart/Layer/TextLayer'
 import { lastNumber } from './lib/F/lastNumber'
 import { ZeroLayer } from './lib/Chart/Layer/ZeroLayer'
-import { 信号Layer } from './lib/Chart/Layer/信号Layer'
+//import { 信号Layer } from './lib/Chart/Layer/信号Layer'
 //import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
 //import { 笔Layer } from './lib/Chart/Layer/笔Layer'
 //import { get笔Index, get线段, 合并后的K线 } from './指标/缠中说禅'
@@ -99,7 +99,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     // }),
 
     实盘手动: (d, d2) => ({
-        heightList: [0.2, 0.7, 0.1],
+        heightList: [0.2, 0.8],
         items: [
             {
                 layerList: [
@@ -178,11 +178,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
 
             ],
-            {
-                layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.bitmex.着笔涨跌, color: 0xaaaaaa }),
-                ]
-            }
+           
             // [
             //     {
             //         layerList: [
@@ -210,7 +206,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
     实盘手动成交量: (d, d2) => ({
-        heightList: [0.2, 0.7, 0.1],
+        heightList: [0.2, 0.8],
         items: [
             {
                 layerList: [
@@ -285,17 +281,13 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
 
             ],
-            {
-                layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.bitmex.着笔涨跌, color: 0xaaaaaa }),
-                ]
-            }
+          
            
 
         ]
     }),
     实盘手动ETC: (d, d2) => ({
-        heightList: [0.2, 0.7, 0.1],
+        heightList: [0.2, 0.8],
         items: [
             {
                 layerList: [
@@ -365,11 +357,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     ]
                 },
             ],
-            {
-                layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.bitmex.着笔涨跌, color: 0xaaaaaa }),
-                ]
-            }
+           
             // [
             //     {
             //         layerList: [
@@ -397,7 +385,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
     实盘手动XRP: (d, d2) => ({
-        heightList: [0.2, 0.7, 0.1],
+        heightList: [0.2, 0.8],
         items: [
             {
                 layerList: [
@@ -467,11 +455,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     ]
                 },
             ],
-            {
-                layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.bitmex.着笔涨跌, color: 0xaaaaaa }),
-                ]
-            }
+           
             // [
             //     {
             //         layerList: [
@@ -499,7 +483,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
     实盘手动EOS: (d, d2) => ({
-        heightList: [0.2, 0.7, 0.1],
+        heightList: [0.2, 0.8],
         items: [
             {
                 layerList: [
@@ -569,11 +553,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     ]
                 },
             ],
-            {
-                layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.bitmex.着笔涨跌, color: 0xaaaaaa }),
-                ]
-            }
+           
             // [
             //     {
             //         layerList: [
@@ -602,7 +582,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     }),
 
     实盘手动LTC: (d, d2) => ({
-        heightList: [0.2, 0.7, 0.1],
+        heightList: [0.2, 0.8],
         items: [
             {
                 layerList: [
@@ -679,11 +659,6 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     ]
                 },
             ],
-            {
-                layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.bitmex.着笔涨跌, color: 0xaaaaaa }),
-                ]
-            }
             // [
             //     {
             //         layerList: [
@@ -711,7 +686,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
     实盘手动BCH: (d, d2) => ({
-        heightList: [0.2, 0.7, 0.1],
+        heightList: [0.2, 0.8],
         items: [
             {
                 layerList: [
@@ -781,11 +756,6 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     ]
                 },
             ],
-            {
-                layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.bitmex.着笔涨跌, color: 0xaaaaaa }),
-                ]
-            }
             // [
             //     {
             //         layerList: [
@@ -813,7 +783,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         ]
     }),
     实盘手动BSV: (d, d2) => ({
-        heightList: [0.2, 0.7, 0.1],
+        heightList: [0.2, 0.8],
         items: [
             {
                 layerList: [
@@ -883,11 +853,6 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     ]
                 },
             ],
-            {
-                layerList: [
-                    layer(信号Layer, { data: d2.XBTUSD.bitmex.着笔涨跌, color: 0xaaaaaa }),
-                ]
-            }
             // [
             //     {
             //         layerList: [
