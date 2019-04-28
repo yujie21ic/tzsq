@@ -49,10 +49,10 @@ export class Coordinate extends Container {
     }
 
     drawH(width: number, height: number) {
-        const { g } = this
-        g.lineStyle(1, theme.边框颜色)
-        g.moveTo(width, 0)
-        g.lineTo(width, height)
+        // const { g } = this
+        // g.lineStyle(1, theme.边框颜色)
+        // g.moveTo(width, 0)
+        // g.lineTo(width, height)
     }
 
     drawTemp(x: number, height: number, msg: string) {

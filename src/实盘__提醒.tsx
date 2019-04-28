@@ -109,7 +109,7 @@ export class 提醒 extends React.Component {
 
         //________________________________________________________________________
 
-       
+
 
 
         const volum = realTickClient.get期货多少秒内成交量__万为单位('XBTUSD', 15)
@@ -125,6 +125,7 @@ export class 提醒 extends React.Component {
             '比 特 币 盘口大量',
             volum,
             v => 买盘 > 800*10000 || 卖盘>800*10000
+
         )
 
 
@@ -140,7 +141,7 @@ export class 提醒 extends React.Component {
     }
 
     render() {
-        return 1 + 1 === 2 ? '' : <div style={{ width: '100%', height: '100%', backgroundColor: 'black' }}>
+        return <div style={{ width: '100%', height: '100%', backgroundColor: 'black' }}>
             <a
                 style={{ fontSize: 20, color: 'yellow' }}
                 href='#'
