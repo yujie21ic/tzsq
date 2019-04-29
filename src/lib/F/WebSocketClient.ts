@@ -45,10 +45,14 @@ export class WebSocketClient {
         return this._isConnected
     }
 
+    static id = 0
+    id = WebSocketClient.id++
+
     private connect = () => {
         this.ws = this.createWS()
-
+        console.log('ws 连接中 ' + this.id)
         this.ws.onopen = () => {
+            console.log('ws 连接成功 ' + this.id)
             if (this._isConnected === false) {
                 this._isConnected = true
                 this.onStatusChange()
@@ -62,6 +66,8 @@ export class WebSocketClient {
     }
 
     private reconnect = () => {
+        console.log('ws 断开重连 ' + this.id)
+
         //destroy
         if (this.ws !== undefined) {
             this.ws.onopen = this.ws.onerror = this.ws.onclose = this.ws.onmessage = () => { }
