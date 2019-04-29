@@ -124,7 +124,8 @@ export class 提醒 extends React.Component {
         this.setAndSpeak(
             '比 特 币 盘口大量',
             volum,
-            v => 买盘 > 800 * 10000 && 卖盘 > 800 * 10000
+            v => 买盘 > 800*10000 || 卖盘>800*10000
+
         )
 
 
