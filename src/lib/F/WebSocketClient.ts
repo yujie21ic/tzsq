@@ -52,6 +52,7 @@ export class WebSocketClient {
         this.ws = this.createWS()
         console.log('ws 连接中 ' + this.id)
         this.ws.onopen = () => {
+            console.log('ws 连接成功 ' + this.id)
             if (this._isConnected === false) {
                 this._isConnected = true
                 this.onStatusChange()
