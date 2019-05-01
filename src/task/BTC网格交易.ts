@@ -18,8 +18,8 @@ export class BTC网格交易 implements PositionAndOrderTask {
         留多少不减仓: 0,
         盈利加仓: false,
         亏损减仓: false,
-        加仓: true,
-        减仓: true,
+        加仓: false,
+        减仓: false,
         止损价格: 0,
     }
     参数 = {
@@ -32,8 +32,8 @@ export class BTC网格交易 implements PositionAndOrderTask {
         留多少不减仓: 0,
         盈利加仓: false,
         亏损减仓: false,
-        加仓: true,
-        减仓: true,
+        加仓: false,
+        减仓: false,
         止损价格: 0,
     }
 
