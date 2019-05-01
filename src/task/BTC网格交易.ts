@@ -148,10 +148,10 @@ export class BTC网格交易 implements PositionAndOrderTask {
         let 格数 = Math.min(this.参数.格数, Math.floor(剩余 / this.参数.单个格子数量))
         let size = this.参数.单个格子数量
 
-        if (剩余 !== 0 && this.参数.格数 !== 0 && 格数 === 0) {
-            格数 = 1
-            size = 剩余
-        }
+        // if (剩余 !== 0 && this.参数.格数 !== 0 && 格数 === 0) {
+        //     格数 = 1
+        //     size = 剩余
+        // }
 
         if (this.参数.方向 === 'Buy' && count > 0) {
             return this.toList({
