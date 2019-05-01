@@ -61,12 +61,12 @@ export class BTC网格交易 implements PositionAndOrderTask {
     }
 
 
-    private toList = ({ side, price, reduceOnly }: { side: BaseType.Side, price: number, reduceOnly: boolean }) =>
+    private toList = ({ side, price, reduceOnly, size }: { side: BaseType.Side, price: number, reduceOnly: boolean, size?: number }) =>
         range(0, 50).map(i =>
             ({
                 side,
                 price: side === 'Buy' ? price - i * this.参数.单个格子大小 : price + i * this.参数.单个格子大小,
-                size: this.参数.单个格子数量,
+                size: size === undefined ? this.参数.单个格子数量 : size,
                 reduceOnly,
             })
         )
@@ -144,10 +144,18 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
         const count = this.get仓位数量()
         const 剩余 = Math.max(0, (Math.abs(count) - this.参数.留多少不减仓))
-        const 格数 = Math.min(this.参数.格数, Math.floor(剩余 / this.参数.单个格子数量))
+
+        let 格数 = Math.min(this.参数.格数, Math.floor(剩余 / this.参数.单个格子数量))
+        let size = this.参数.单个格子数量
+
+        if (剩余 !== 0 && this.参数.格数 !== 0 && 格数 === 0) {
+            格数 = 1
+            size = 剩余
+        }
 
         if (this.参数.方向 === 'Buy' && count > 0) {
             return this.toList({
+                size,
                 side: 'Sell',
                 price: to价格对齐({
                     side: 'Sell',
@@ -159,6 +167,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
         }
         else if (this.参数.方向 === 'Sell' && count < 0) {
             return this.toList({
+                size,
                 side: 'Buy',
                 price: to价格对齐({
                     side: 'Buy',
