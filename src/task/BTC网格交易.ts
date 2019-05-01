@@ -12,7 +12,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
         单个格子大小: 0.5,
         单个格子数量: 25,
         最小盈利点: 0,
-        格数: 5,
+        格数: 1,
         方向: 'Sell' as BaseType.Side,
         最大仓位: 1000,
         留多少不减仓: 0,
@@ -20,21 +20,21 @@ export class BTC网格交易 implements PositionAndOrderTask {
         亏损减仓: false,
         加仓: true,
         减仓: true,
-        止损价格: 6000,
+        止损价格: 0,
     }
     参数 = {
         单个格子大小: 0.5,
         单个格子数量: 25,
         最小盈利点: 0,
-        格数: 5,
-        方向: 'Sell' as BaseType.Side,
+        格数: 1,
+        方向: 'Buy' as BaseType.Side,
         最大仓位: 1000,
         留多少不减仓: 0,
         盈利加仓: false,
         亏损减仓: false,
         加仓: true,
         减仓: true,
-        止损价格: 6000,
+        止损价格: 0,
     }
 
     private self = {} as PositionAndOrder
