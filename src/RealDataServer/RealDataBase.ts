@@ -1459,7 +1459,7 @@ export class RealDataBase {
         ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
         ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
         hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
-        ix: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.IXSymbolDic)
+        ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic)
     }
 
     重新初始化 = () => {
@@ -1468,7 +1468,7 @@ export class RealDataBase {
             ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
             ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
             hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
-            ix: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.IXSymbolDic),
+            ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),
         }
     }
 

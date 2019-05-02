@@ -19,7 +19,7 @@ export namespace BaseType {
 
 
     export const IXSymbolDic = {
-        'BTCUSDT': {},
+        'BTCUSD': {},
     }
     export type IXSymbol = keyof typeof IXSymbolDic
     export const IXSymbolArr = keys(IXSymbolDic)
