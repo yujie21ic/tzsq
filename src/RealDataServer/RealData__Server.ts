@@ -396,7 +396,7 @@ export class RealData__Server extends RealDataBase {
         //ix
         this.ix.tradeObservable.subscribe(({ symbol, timestamp, price, side, size }) => {
             this.on着笔({
-                key: 'binance_' + symbol,
+                key: 'ix_' + symbol,
                 xxxxxxxx: this.jsonSync.data.ix[symbol],
                 timestamp,
                 price,
@@ -408,7 +408,7 @@ export class RealData__Server extends RealDataBase {
 
         this.ix.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
             this.on盘口({
-                key: 'binance_' + symbol,
+                key: 'ix_' + symbol,
                 xxxxxxxx: this.jsonSync.data.ix[symbol].orderBook,
                 timestamp,
                 orderBook: {
