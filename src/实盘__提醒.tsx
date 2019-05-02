@@ -157,6 +157,7 @@ export class 提醒 extends React.Component {
             >
                 {`超短小于 ${this.小于等于}`}
             </a>
+            <br/>
             <a
                 style={{ fontSize: 20, color: 'yellow' }}
                 href='#'
@@ -172,6 +173,7 @@ export class 提醒 extends React.Component {
             >
                 {`中线小于 <= ${this.中线小于等于}`}
             </a>
+            <br/>
             <a
                 style={{ fontSize: 20, color: 'yellow' }}
                 href='#'
@@ -203,6 +205,7 @@ export class 提醒 extends React.Component {
             >
                 {`超短大于 ${this.大于等于}`}
             </a>
+            <br/>
             <a
                 style={{ fontSize: 20, color: 'yellow' }}
                 href='#'
@@ -218,6 +221,7 @@ export class 提醒 extends React.Component {
             >
                 {`中线大于 ${this.中线大于等于}`}
             </a>
+            <br/>
             <a
                 style={{ fontSize: 20, color: 'yellow' }}
                 href='#'
