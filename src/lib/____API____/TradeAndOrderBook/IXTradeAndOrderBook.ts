@@ -1,5 +1,4 @@
 import { TradeAndOrderBook } from './TradeAndOrderBook'
-import { BaseType } from '../../BaseType'
 import { config } from '../../../config'
 import { WebSocketClient } from '../../F/WebSocketClient'
 
