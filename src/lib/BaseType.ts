@@ -18,6 +18,13 @@ export namespace BaseType {
     export const HopexSymbolArr = keys(HopexSymbolDic)
 
 
+    export const IXSymbolDic = {
+        'BTCUSDT': {},
+    }
+    export type IXSymbol = keyof typeof IXSymbolDic
+    export const IXSymbolArr = keys(IXSymbolDic)
+
+
     export type BitmexSymbol = 'ETHUSD' | 'XBTUSD'
     export type BinanceSymbol = 'btcusdt' | 'ethusdt' //ws小写  http大写  卧槽
 

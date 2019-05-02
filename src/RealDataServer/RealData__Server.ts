@@ -7,6 +7,7 @@ import { HopexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/Hop
 import { RealDataBase } from './RealDataBase'
 import { CTPTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/CTPTradeAndOrderBook'
 import { FCoinTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/FCoinTradeAndOrderBook'
+import { IXTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/IXTradeAndOrderBook'
 
 export class RealData__Server extends RealDataBase {
 
@@ -15,6 +16,7 @@ export class RealData__Server extends RealDataBase {
 
     private bitmex = new BitmexTradeAndOrderBook()
     private binance = new BinanceTradeAndOrderBook()
+    private ix = new IXTradeAndOrderBook()
     private hopex = new HopexTradeAndOrderBook()
     private fcoin = new FCoinTradeAndOrderBook()
 
@@ -323,7 +325,8 @@ export class RealData__Server extends RealDataBase {
             })
         })
 
-        this.ctp.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {``
+        this.ctp.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
+            ``
             //if (symbol === 'rb1910')
             this.on盘口({
                 key: 'ctp_' + symbol,
@@ -388,6 +391,35 @@ export class RealData__Server extends RealDataBase {
             })
 
         })
+
+
+        //ix
+        this.ix.tradeObservable.subscribe(({ symbol, timestamp, price, side, size }) => {
+            this.on着笔({
+                key: 'binance_' + symbol,
+                xxxxxxxx: this.jsonSync.data.ix[symbol],
+                timestamp,
+                price,
+                side,
+                size,
+            })
+        })
+
+
+        this.ix.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
+            this.on盘口({
+                key: 'binance_' + symbol,
+                xxxxxxxx: this.jsonSync.data.ix[symbol].orderBook,
+                timestamp,
+                orderBook: {
+                    id: Math.floor(timestamp / RealDataBase.单位时间),
+                    buy,
+                    sell,
+                }
+            })
+
+        })
+        //
 
 
 

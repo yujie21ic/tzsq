@@ -1,6 +1,7 @@
 import { TradeAndOrderBook } from './TradeAndOrderBook'
 import { config } from '../../../config'
 import { WebSocketClient } from '../../F/WebSocketClient'
+import { BaseType } from '../../BaseType'
 
 
 type 着笔 = {
@@ -38,7 +39,7 @@ const 盘口map = (v: any) => ({
     size: Number(v[1]),
 })
 
-export class IXTradeAndOrderBook extends TradeAndOrderBook {
+export class IXTradeAndOrderBook extends TradeAndOrderBook<BaseType.IXSymbol> {
 
     private 着笔ws = new WebSocketClient({
         ss: config.ss,

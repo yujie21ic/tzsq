@@ -118,7 +118,8 @@ export class RealDataBase {
             binance: {
                 btcusdt: createItem(),
                 ethusdt: createItem(),
-            }
+            },
+            ix: mapObjIndexed(createItem, BaseType.IXSymbolDic),
         }
     )
 
@@ -1457,7 +1458,8 @@ export class RealDataBase {
         XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT', 'btcusdt'),
         ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
         ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
-        hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic)
+        hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
+        ix: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.IXSymbolDic)
     }
 
     重新初始化 = () => {
@@ -1465,7 +1467,8 @@ export class RealDataBase {
             XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT', 'btcusdt'),
             ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
             ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
-            hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic)
+            hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
+            ix: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.IXSymbolDic),
         }
     }
 
