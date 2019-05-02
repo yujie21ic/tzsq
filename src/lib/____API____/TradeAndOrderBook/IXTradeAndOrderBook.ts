@@ -9,7 +9,7 @@ type 着笔 = {
     'data': {
         'time': number
         'side': 'buy' | 'sell'
-        'values': any //[            string,         // 成交价            string,         // 成交量        ]
+        'values': string[]   //成交价      成交量
     }[]
 }
 
