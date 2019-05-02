@@ -9,10 +9,7 @@ type 着笔 = {
     'data': {
         'time': number
         'side': 'buy' | 'sell'
-        'values': [
-            string,         // 成交价
-            string,         // 成交量
-        ]
+        'values': any //[            string,         // 成交价            string,         // 成交量        ]
     }[]
 }
 
@@ -20,16 +17,10 @@ type 盘口 = {
     'code': 0,
     'data': {
         'asks': {
-            'values': [
-                string,      // 卖价
-                string,      // 卖量
-            ]
+            'values': any //[                string,      // 卖价                string,      // 卖量            ]
         }[]
         'bids': {
-            'values': [
-                string,      // 卖价
-                string,      // 卖量
-            ]
+            'values': any //[                string,      // 卖价                string,      // 卖量            ]
         }[]
     }
 }
