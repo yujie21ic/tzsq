@@ -17,17 +17,17 @@ type 盘口 = {
     'code': 0,
     'data': {
         'asks': {
-            'values': any //[                string,      // 卖价                string,      // 卖量            ]
+            'values': string[]   // 卖价    卖量     
         }[]
         'bids': {
-            'values': any //[                string,      // 卖价                string,      // 卖量            ]
+            'values': string[]  // 卖价     卖量          
         }[]
     }
 }
 
-const 盘口map = (v: any) => ({
-    price: Number(v[0]),
-    size: Number(v[1]),
+const 盘口map = (v: {values: string[]}) => ({
+    price: Number(v.values[0]),
+    size: Number(v.values[1]),
 })
 
 export class IXTradeAndOrderBook extends TradeAndOrderBook<BaseType.IXSymbol> {
