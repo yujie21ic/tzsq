@@ -41,7 +41,7 @@ export class BitfinexTradeAndOrderBook extends TradeAndOrderBook<BaseType.Bitfin
         }
 
         this.ws.onData = (d: any) => {
-            console.log(JSON.stringify(d, null, 4))
+            // console.log(JSON.stringify(d, null, 4))
 
             //
             if (Array.isArray(d) && d.length === 3 && d[1] === 'te' && Array.isArray(d[2])) {

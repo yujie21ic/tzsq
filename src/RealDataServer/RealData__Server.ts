@@ -427,7 +427,7 @@ export class RealData__Server extends RealDataBase {
         this.bitfinex.tradeObservable.subscribe(({ symbol, timestamp, price, side, size }) => {
             this.on着笔({
                 key: 'bitfinex_' + symbol,
-                xxxxxxxx: this.jsonSync.data.ix[symbol],
+                xxxxxxxx: this.jsonSync.data.bitfinex[symbol],
                 timestamp,
                 price,
                 side,
@@ -439,7 +439,7 @@ export class RealData__Server extends RealDataBase {
         this.bitfinex.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
             this.on盘口({
                 key: 'bitfinex_' + symbol,
-                xxxxxxxx: this.jsonSync.data.ix[symbol].orderBook,
+                xxxxxxxx: this.jsonSync.data.bitfinex[symbol].orderBook,
                 timestamp,
                 orderBook: {
                     id: Math.floor(timestamp / RealDataBase.单位时间),
