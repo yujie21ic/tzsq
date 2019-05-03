@@ -4,15 +4,6 @@ import { WebSocketClient } from '../../F/WebSocketClient'
 import { BaseType } from '../../BaseType'
 
 
-type Frame = {
-    'code': number,
-    'data': {
-        'time': number
-        'side': 'buy' | 'sell'
-        'values': string[]   //成交价      成交量
-    }[]
-}
-
 
 export class BitfinexTradeAndOrderBook extends TradeAndOrderBook<BaseType.BitfinexSymbol> {
 
@@ -39,7 +30,21 @@ export class BitfinexTradeAndOrderBook extends TradeAndOrderBook<BaseType.Bitfin
             }
         }
 
-        this.ws.onData = (d: Frame) => {
+        this.ws.onData = (d: any) => {
+            console.log(JSON.stringify(d, null, 4))
+
+            //
+            if (Array.isArray(d) && d.length === 3 && d[1] === 'te' && Array.isArray(d[2])) {
+                const [, mts, amount, price] = d[2]
+
+                this.tradeObservable.next({
+                    symbol: 'BTCUSD',
+                    timestamp: mts,
+                    price,
+                    side: amount > 0 ? 'Buy' : 'Sell',
+                    size: Math.abs(amount),
+                })
+            }
 
         }
 
