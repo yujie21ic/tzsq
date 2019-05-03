@@ -16,6 +16,16 @@ export class BitfinexTradeAndOrderBook extends TradeAndOrderBook<BaseType.Bitfin
     constructor() {
         super()
 
+        setInterval(() => {
+            if (this.ws.isConnected) {
+                this.ws.sendJSON({
+                    'event': 'ping',
+                    'cid': Date.now(),
+                })
+            }
+        }, 1000)
+
+
         this.ws.onStatusChange = () => {
             this.statusObservable.next({
                 isConnected: this.ws.isConnected
