@@ -252,14 +252,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d2.ix.BTCUSD.价格, color: 石青 }),
                     ]
                 },
-                // {
-                //     numberColor: ETH颜色,
-                //     numberX: 100,
-                //     layerList: [
-                //         layer(ZeroLayer, { color: ETH颜色 }),
-                //         layer(LineLayer, { data: d.bitmex.买.净成交量_累加300, color: ETH颜色 }),
-                //     ]
-                // },
+                {
+                    numberColor: ETH颜色,
+                    numberX: 100,
+                    layerList: [
+                        layer(ZeroLayer, { color: ETH颜色 }),
+                        layer(LineLayer, { data: d2.bitfinex.BTCUSD.买.净成交量_累加300, color: ETH颜色 }),
+                    ]
+                },
                 // {
                 //     numberX: 100,
                 //     layerList: [
@@ -267,6 +267,13 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 //         layer(LineLayer, { data: d.bitmex.买.卖成交量累加, color: 卖颜色 }),
                 //     ]
                 // },
+                {
+                    numberX: 100,
+                    layerList: [
+                        layer(LineLayer, { data: d2.bitfinex.BTCUSD.买.买成交量累加, color: 买颜色 }),
+                        layer(LineLayer, { data: d2.bitfinex.BTCUSD.买.卖成交量累加, color: 卖颜色 }),
+                    ]
+                },
 
 
 
