@@ -4,6 +4,7 @@ import { PositionAndOrder } from '../lib/____API____/PositionAndOrder/PositionAn
 import { PositionAndOrderTask } from '../lib/____API____/PositionAndOrder/PositionAndOrder'
 import { lastNumber } from '../lib/F/lastNumber'
 import { to价格对齐 } from '../lib/F/to价格对齐'
+import { sleep } from '../lib/F/sleep'
 
 export class BTC网格交易 implements PositionAndOrderTask {
 
@@ -97,12 +98,25 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
     on参数更新?: () => void
 
-    onHopexTick(self: PositionAndOrder) {
-        return false
-    }
-
     private 同一个价位不连续挂2次 = (v: { side: BaseType.Side, price: number }) =>
         (v.side === 'Buy' && v.price !== this.lastBuyPrice) || (v.side === 'Sell' && v.price !== this.lastSellPrice)
+
+    private async run1(self: PositionAndOrder) {
+        while (true) {
+            if (this.开关) {
+                if (self.bitmex_初始化.仓位 && self.bitmex_初始化.委托) {
+                    if (await this.onTick(self)) {
+                        await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
+                    }
+                }
+            }
+            await sleep(100)
+        }
+    }
+
+    run(self: PositionAndOrder) {
+        this.run1(self)
+    }
 
     onTick(self: PositionAndOrder) {
         this.self = self

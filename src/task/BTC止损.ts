@@ -1,6 +1,7 @@
 import { PositionAndOrderTask, PositionAndOrder } from '../lib/____API____/PositionAndOrder/PositionAndOrder'
 import { BaseType } from '../lib/BaseType'
 import { to价格对齐 } from '../lib/F/to价格对齐'
+import { sleep } from '../lib/F/sleep';
 
 
 export class BTC止损 implements PositionAndOrderTask {
@@ -27,8 +28,21 @@ export class BTC止损 implements PositionAndOrderTask {
 
     }
 
-    onHopexTick(self: PositionAndOrder) {
-        return true
+    private async run1(self: PositionAndOrder) {
+        while (true) {
+            if (this.开关) {
+                if (self.bitmex_初始化.仓位 && self.bitmex_初始化.委托) {
+                    if (await this.onTick(self)) {
+                        await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
+                    }
+                }
+            }
+            await sleep(100)
+        }
+    }
+
+    run(self: PositionAndOrder) {
+        this.run1(self)
     }
 
     onTick(self: PositionAndOrder) {
