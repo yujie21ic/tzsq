@@ -71,12 +71,12 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     jsonSync = createJSONSync()
 
 
-    private bitmex_初始化 = {
+    bitmex_初始化 = {
         仓位: false,
         委托: false,
     }
 
-    private hopex_初始化 = {
+    hopex_初始化 = {
         仓位: false,
         委托: false,
     }
@@ -481,11 +481,26 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
                     //
                     if (this.ws !== undefined) {
+
+                        //单个委托
                         if (ret.data.orderID !== undefined && ret.data.ordStatus !== undefined) {
                             this.ws.onAction({
                                 action: 'insert',
                                 table: 'order',
                                 data: [ret.data as any],
+                            })
+                        }
+
+                        //批量委托 批量取消
+                        if (Array.isArray(ret.data)) {
+                            ret.data.forEach(v => {
+                                if (v.orderID !== undefined && v.ordStatus !== undefined) {
+                                    this.ws.onAction({
+                                        action: 'insert',
+                                        table: 'order',
+                                        data: [v as any],
+                                    })
+                                }
                             })
                         }
                     }
@@ -645,33 +660,31 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     realData = __realData__()
 
-    private async task1(name: string, task: PositionAndOrderTask) {
-        while (true) {
-            const task = this.taskDic.get(name)
-            if (task !== undefined && task.开关) {
-                if (this.bitmex_初始化.仓位 && this.bitmex_初始化.委托) {
-                    if (await task.onTick(this)) {
-                        await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
-                    }
-                }
-            }
-            await sleep(100)
-        }
-    }
+    // private async task1(task: PositionAndOrderTask) {
+    //     while (true) {
+    //         if (task.开关) {
+    //             if (this.bitmex_初始化.仓位 && this.bitmex_初始化.委托) {
+    //                 if (await task.onTick(this)) {
+    //                     await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
+    //                 }
+    //             }
+    //         }
+    //         await sleep(100)
+    //     }
+    // }
 
-    private async task2(name: string, task: PositionAndOrderTask) {
-        while (true) {
-            const task = this.taskDic.get(name)
-            if (task !== undefined && task.开关) {
-                if (this.hopex_初始化.仓位 && this.hopex_初始化.委托) {
-                    if (await task.onHopexTick(this)) {
-                        await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
-                    }
-                }
-            }
-            await sleep(100)
-        }
-    }
+    // private async task2(task: PositionAndOrderTask) {
+    //     while (true) {
+    //         if (task.开关) {
+    //             if (this.hopex_初始化.仓位 && this.hopex_初始化.委托) {
+    //                 if (await task.onHopexTick(this)) {
+    //                     await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
+    //                 }
+    //             }
+    //         }
+    //         await sleep(100)
+    //     }
+    // }
 
     private taskDic = new Map<string, PositionAndOrderTask>()
 
@@ -682,8 +695,11 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
             this.log(JSON.stringify(obj))
         }
         this.ws.filledObservable.subscribe(v => task.onFilled(v))
-        this.task1(name, task)
-        this.task2(name, task)
+
+
+        task.run(this)
+        // this.task1(task)
+        // this.task2(task)
 
         this.刷新到jsonsync任务()
 

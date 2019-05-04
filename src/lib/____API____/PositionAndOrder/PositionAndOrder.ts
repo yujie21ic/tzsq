@@ -114,6 +114,17 @@ export interface PositionAndOrder {
 
     runTask(name: string, task: PositionAndOrderTask): void
 
+
+    bitmex_初始化 : {
+        仓位: boolean
+        委托: boolean
+    }
+
+    hopex_初始化: {
+        仓位: boolean
+        委托: boolean
+    }
+
 }
 
 export interface PositionAndOrderTask {
@@ -124,8 +135,13 @@ export interface PositionAndOrderTask {
 
     on参数更新?: () => void
 
-    onTick(self: PositionAndOrder): boolean | Promise<boolean>
-    onHopexTick(self: PositionAndOrder): boolean | Promise<boolean>
+
+    run(self: PositionAndOrder): void
+
+    // onTick(self: PositionAndOrder): boolean | Promise<boolean>
+    // onHopexTick(self: PositionAndOrder): boolean | Promise<boolean>
+
+
     onFilled(p: {
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
