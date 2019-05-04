@@ -61,7 +61,6 @@ export class BTC网格交易 implements PositionAndOrderTask {
         }
     }
 
-
     private toList = ({ side, price, size }: { side: BaseType.Side, price: number, size?: number }) =>
         range(0, 50).map(i =>
             ({
@@ -146,13 +145,15 @@ export class BTC网格交易 implements PositionAndOrderTask {
     private async run1(self: PositionAndOrder, f: () => boolean | Promise<boolean>) {
         while (true) {
             if (this.开关) {
-                if (self.bitmex_初始化.仓位 && self.bitmex_初始化.委托) {
-                    if (await f()) {
-                        await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
-                    }
+                if (self.bitmex_初始化.仓位 && self.bitmex_初始化.委托 && this.self.get本地维护仓位数量('XBTUSD') === this.self.jsonSync.rawData.market.bitmex.XBTUSD.仓位数量) {
+                    //if (
+                    await f()
+                    // ) {
+                    //await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
+                    //}
                 }
             }
-            await sleep(100)
+            await sleep(0)
         }
     }
 

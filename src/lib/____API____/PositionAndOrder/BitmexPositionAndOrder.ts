@@ -458,7 +458,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         return b
     }
 
-    private DDOS调用 = <P extends any>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
+    private DDOS调用 = <P extends any>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>, is取消 = false) =>
         async (p: P) => {
             const startTime = Date.now()
             let success = false
@@ -476,14 +476,14 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                     errMsg = JSON.stringify(ret)
                     break
                 }
-                else if (ret.error === undefined && ret.data !== undefined && ret.data.ordStatus !== 'Canceled' && ret.data.ordStatus !== 'Rejected') {
+                else if (ret.error === undefined && ret.data !== undefined && ((ret.data.ordStatus !== 'Canceled' && is取消 === false)) && ret.data.ordStatus !== 'Rejected') {
                     success = true
 
                     //
                     if (this.ws !== undefined) {
                         if (ret.data.orderID !== undefined && ret.data.ordStatus !== undefined) {
                             this.ws.onAction({
-                                action: 'insert',
+                                action: is取消 ? 'delete' : 'insert',
                                 table: 'order',
                                 data: [ret.data as any],
                             })
@@ -639,7 +639,8 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     cancel = this.DDOS调用<{
         orderID: string[]
     }>(
-        (cookie, p) => BitMEXHTTP.Order.cancel(cookie, { orderID: JSON.stringify(p.orderID) })
+        (cookie, p) => BitMEXHTTP.Order.cancel(cookie, { orderID: JSON.stringify(p.orderID) }),
+        true,
     )
 
 
