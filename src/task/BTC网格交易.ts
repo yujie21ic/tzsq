@@ -9,8 +9,8 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
     开关 = false
     参数type = {
-        单个格子大小: 0.5,
-        单个格子数量: 25,
+        网格大小: 0.5,
+        单位数量: 25,
         最小盈利点: 0,
         格数: 1,
         方向: 'Sell' as BaseType.Side,
@@ -23,8 +23,8 @@ export class BTC网格交易 implements PositionAndOrderTask {
         止损价格: 0,
     }
     参数 = {
-        单个格子大小: 0.5,
-        单个格子数量: 25,
+        网格大小: 0.5,
+        单位数量: 25,
         最小盈利点: 0,
         格数: 1,
         方向: 'Buy' as BaseType.Side,
@@ -65,8 +65,8 @@ export class BTC网格交易 implements PositionAndOrderTask {
         range(0, 50).map(i =>
             ({
                 side,
-                price: side === 'Buy' ? price - i * this.参数.单个格子大小 : price + i * this.参数.单个格子大小,
-                size: size === undefined ? this.参数.单个格子数量 : size,
+                price: side === 'Buy' ? price - i * this.参数.网格大小 : price + i * this.参数.网格大小,
+                size: size === undefined ? this.参数.单位数量 : size,
                 reduceOnly,
             })
         )
@@ -145,8 +145,8 @@ export class BTC网格交易 implements PositionAndOrderTask {
         const count = this.get仓位数量()
         const 剩余 = Math.max(0, (Math.abs(count) - this.参数.留多少不减仓))
 
-        let 格数 = Math.min(this.参数.格数, Math.floor(剩余 / this.参数.单个格子数量))
-        let size = this.参数.单个格子数量
+        let 格数 = Math.min(this.参数.格数, Math.floor(剩余 / this.参数.单位数量))
+        let size = this.参数.单位数量
 
         // 部分成交 不行
         // if (剩余 !== 0 && this.参数.格数 !== 0 && 格数 === 0) {
@@ -161,7 +161,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
                 price: to价格对齐({
                     side: 'Sell',
                     value: this.参数.亏损减仓 ? this.getSell1() : this.sellPrice(this.参数.最小盈利点),
-                    grid: this.参数.单个格子大小,
+                    grid: this.参数.网格大小,
                 }),
                 reduceOnly: true,
             }).filter(this.同一个价位不连续挂2次).slice(0, 格数)
@@ -173,7 +173,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
                 price: to价格对齐({
                     side: 'Buy',
                     value: this.参数.亏损减仓 ? this.getBuy1() : this.buyPrice(this.参数.最小盈利点),
-                    grid: this.参数.单个格子大小,
+                    grid: this.参数.网格大小,
                 }),
                 reduceOnly: true,
             }).filter(this.同一个价位不连续挂2次).slice(0, 格数)
@@ -193,7 +193,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
                 this.参数.最大仓位 + Math.abs(count)   //方向不一致
         )
 
-        const 格数 = Math.min(this.参数.格数, Math.floor(剩余 / this.参数.单个格子数量))
+        const 格数 = Math.min(this.参数.格数, Math.floor(剩余 / this.参数.单位数量))
 
         return this.toList({
             side: this.参数.方向,
@@ -202,7 +202,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
                 value: this.参数.方向 === 'Sell' ?
                     (this.参数.盈利加仓 ? this.getSell1() : this.sellPrice()) :
                     (this.参数.盈利加仓 ? this.getBuy1() : this.buyPrice()),
-                grid: this.参数.单个格子大小,
+                grid: this.参数.网格大小,
             }),
             reduceOnly: false,
         }).filter(this.同一个价位不连续挂2次).filter(v =>

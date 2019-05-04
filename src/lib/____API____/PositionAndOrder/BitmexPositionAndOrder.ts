@@ -645,10 +645,9 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     realData = __realData__()
 
-    private async task1(name: string, task: PositionAndOrderTask) {
+    private async task1(task: PositionAndOrderTask) {
         while (true) {
-            const task = this.taskDic.get(name)
-            if (task !== undefined && task.开关) {
+            if (task.开关) {
                 if (this.bitmex_初始化.仓位 && this.bitmex_初始化.委托) {
                     if (await task.onTick(this)) {
                         await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
@@ -659,10 +658,9 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         }
     }
 
-    private async task2(name: string, task: PositionAndOrderTask) {
+    private async task2(task: PositionAndOrderTask) {
         while (true) {
-            const task = this.taskDic.get(name)
-            if (task !== undefined && task.开关) {
+            if (task.开关) {
                 if (this.hopex_初始化.仓位 && this.hopex_初始化.委托) {
                     if (await task.onHopexTick(this)) {
                         await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
@@ -682,8 +680,9 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
             this.log(JSON.stringify(obj))
         }
         this.ws.filledObservable.subscribe(v => task.onFilled(v))
-        this.task1(name, task)
-        this.task2(name, task)
+        
+        this.task1(task)
+        this.task2(task)
 
         this.刷新到jsonsync任务()
 
