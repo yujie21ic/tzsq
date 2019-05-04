@@ -133,10 +133,16 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
 
     private 加仓task = () =>
-        this.sync委托列表(false, this.get加仓())
+        this.sync委托列表({
+            reduceOnly: false,
+            arr: this.get加仓()
+        })
 
     private 减仓task = () =>
-        this.sync委托列表(false, this.get减仓())
+        this.sync委托列表({
+            reduceOnly: true,
+            arr: this.get减仓()
+        })
 
     private async run1(self: PositionAndOrder, f: () => boolean | Promise<boolean>) {
         while (true) {
@@ -233,7 +239,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
     }
 
 
-    private sync委托列表(reduceOnly: boolean, arr: { side: BaseType.Side, price: number, size: number, reduceOnly: boolean }[]) {
+    private sync委托列表({ reduceOnly, arr }: { reduceOnly: boolean, arr: { side: BaseType.Side, price: number, size: number, reduceOnly: boolean }[] }) {
 
         //price 不能重复
         let dic: { [price: number]: { side: BaseType.Side, size: number, reduceOnly: boolean } } = {}
