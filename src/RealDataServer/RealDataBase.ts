@@ -1413,6 +1413,7 @@ export class RealDataBase {
 
 
         return {
+            hopex_bitmex_差价,
             hopex_bitmex_相对差价,
             bitmex_信号_摸顶_下跌平仓,
             bitmex_信号_抄底_上涨平仓,
