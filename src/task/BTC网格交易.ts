@@ -132,11 +132,11 @@ export class BTC网格交易 implements PositionAndOrderTask {
     }
 
 
-    private 加仓减仓task = () =>
-        this.sync委托列表([
-            ...this.get加仓(),
-            ...this.get减仓(),
-        ])
+    private 加仓task = () =>
+        this.sync委托列表(false, this.get加仓())
+
+    private 减仓task = () =>
+        this.sync委托列表(false, this.get减仓())
 
     private async run1(self: PositionAndOrder, f: () => boolean | Promise<boolean>) {
         while (true) {
@@ -153,7 +153,8 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
     run(self: PositionAndOrder) {
         this.run1(self, this.止损task)
-        this.run1(self, this.加仓减仓task)
+        this.run1(self, this.加仓task)
+        this.run1(self, this.减仓task)
     }
 
     private get减仓() {
@@ -232,7 +233,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
     }
 
 
-    private sync委托列表(arr: { side: BaseType.Side, price: number, size: number, reduceOnly: boolean }[]) {
+    private sync委托列表(reduceOnly: boolean, arr: { side: BaseType.Side, price: number, size: number, reduceOnly: boolean }[]) {
 
         //price 不能重复
         let dic: { [price: number]: { side: BaseType.Side, size: number, reduceOnly: boolean } } = {}
@@ -243,7 +244,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
         let cancelIDs: string[] = []
 
-        this.self.jsonSync.rawData.market.bitmex.XBTUSD.委托列表.filter(v => v.type === '限价' || v.type === '限价只减仓').forEach(v => {
+        this.self.jsonSync.rawData.market.bitmex.XBTUSD.委托列表.filter(v => v.type === (reduceOnly ? '限价只减仓' : '限价')).forEach(v => {
             const PRICE = v.price
 
             //这个价格没有委托 取消掉
@@ -252,13 +253,6 @@ export class BTC网格交易 implements PositionAndOrderTask {
             }
             // 委托数量不一样 取消掉
             else if (v.orderQty !== dic[PRICE].size) {
-                cancelIDs.push(v.id)
-            }
-            // 只减仓模式 不一样 取消掉
-            else if (
-                (v.type === '限价' && dic[PRICE].reduceOnly === true) ||
-                (v.type === '限价只减仓' && dic[PRICE].reduceOnly === false)
-            ) {
                 cancelIDs.push(v.id)
             }
             //委托数量一样
