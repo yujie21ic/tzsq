@@ -62,13 +62,12 @@ export class BTC网格交易 implements PositionAndOrderTask {
     }
 
 
-    private toList = ({ side, price, reduceOnly, size }: { side: BaseType.Side, price: number, reduceOnly: boolean, size?: number }) =>
+    private toList = ({ side, price, size }: { side: BaseType.Side, price: number, size?: number }) =>
         range(0, 50).map(i =>
             ({
                 side,
                 price: side === 'Buy' ? price - i * this.参数.网格大小 : price + i * this.参数.网格大小,
                 size: size === undefined ? this.参数.单位数量 : size,
-                reduceOnly,
             })
         )
 
@@ -188,7 +187,6 @@ export class BTC网格交易 implements PositionAndOrderTask {
                     value: this.参数.亏损减仓 ? this.getSell1() : this.sellPrice(this.参数.最小盈利点),
                     grid: this.参数.网格大小,
                 }),
-                reduceOnly: true,
             }).filter(this.同一个价位不连续挂2次).slice(0, 格数)
         }
         else if (this.参数.方向 === 'Sell' && count < 0) {
@@ -200,7 +198,6 @@ export class BTC网格交易 implements PositionAndOrderTask {
                     value: this.参数.亏损减仓 ? this.getBuy1() : this.buyPrice(this.参数.最小盈利点),
                     grid: this.参数.网格大小,
                 }),
-                reduceOnly: true,
             }).filter(this.同一个价位不连续挂2次).slice(0, 格数)
         } else {
             return []
@@ -229,7 +226,6 @@ export class BTC网格交易 implements PositionAndOrderTask {
                     (this.参数.盈利加仓 ? this.getBuy1() : this.buyPrice()),
                 grid: this.参数.网格大小,
             }),
-            reduceOnly: false,
         }).filter(this.同一个价位不连续挂2次).filter(v =>
             this.参数.止损价格 === 0 ?
                 true :
@@ -240,13 +236,13 @@ export class BTC网格交易 implements PositionAndOrderTask {
     }
 
 
-    private sync委托列表({ reduceOnly, arr }: { reduceOnly: boolean, arr: { side: BaseType.Side, price: number, size: number, reduceOnly: boolean }[] }) {
+    private sync委托列表({ reduceOnly, arr }: { reduceOnly: boolean, arr: { side: BaseType.Side, price: number, size: number }[] }) {
 
         //price 不能重复
-        let dic: { [price: number]: { side: BaseType.Side, size: number, reduceOnly: boolean } } = {}
+        let dic: { [price: number]: { side: BaseType.Side, size: number } } = {}
 
         arr.forEach(v => {
-            dic[v.price] = { side: v.side, size: v.size, reduceOnly: v.reduceOnly }
+            dic[v.price] = { side: v.side, size: v.size }
         })
 
         let cancelIDs: string[] = []
@@ -279,7 +275,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
                     side: dic[price].side,
                     price: Number(price),
                     size: dic[price].size,
-                    reduceOnly: dic[price].reduceOnly,
+                    reduceOnly,
                 })
             }
             if (arr.length !== 0) {
