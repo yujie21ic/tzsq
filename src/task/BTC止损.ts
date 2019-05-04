@@ -1,7 +1,7 @@
 import { PositionAndOrderTask, PositionAndOrder } from '../lib/____API____/PositionAndOrder/PositionAndOrder'
 import { BaseType } from '../lib/BaseType'
 import { to价格对齐 } from '../lib/F/to价格对齐'
-import { sleep } from '../lib/F/sleep';
+import { sleep } from '../lib/F/sleep'
 
 
 export class BTC止损 implements PositionAndOrderTask {
