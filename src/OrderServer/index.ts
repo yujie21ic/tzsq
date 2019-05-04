@@ -8,8 +8,6 @@ import { safeJSONParse } from '../lib/F/safeJSONParse'
 import { kvs } from '../lib/F/kvs'
 import { toRange } from '../lib/F/toRange'
 import { toBuySellPriceFunc } from '../lib/F/toBuySellPriceFunc'
-import { XBTUSD摸顶抄底追涨追跌 } from '../task/XBTUSD摸顶抄底追涨追跌'
-//import { Hopex__ETH止损 } from '../task/Hopex__ETH止损'
 import { BTC网格交易 } from '../task/BTC网格交易'
 import { BTC止损 } from '../task/BTC止损'
 
@@ -25,8 +23,6 @@ if (config.orderServer !== undefined) {
             hopexCookie: v.hopexCookie,
             fcoinCookie: v.fcoinCookie,
         })
-        account.runTask('hopex_btc_摸顶抄底', new XBTUSD摸顶抄底追涨追跌())
-        // account.runTask('hopex_eth_止损', new Hopex__ETH止损())
         account.runTask('bitmex_btc_网格_1', new BTC网格交易())
         account.runTask('bitmex_btc_网格_2', new BTC网格交易())
         account.runTask('bitmex_btc_止损', new BTC止损())
