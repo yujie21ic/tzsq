@@ -101,21 +101,8 @@ export class BTC网格交易 implements PositionAndOrderTask {
     private 同一个价位不连续挂2次 = (v: { side: BaseType.Side, price: number }) =>
         (v.side === 'Buy' && v.price !== this.lastBuyPrice) || (v.side === 'Sell' && v.price !== this.lastSellPrice)
 
-    private async run1(self: PositionAndOrder, f: () => boolean | Promise<boolean>) {
-        while (true) {
-            if (this.开关) {
-                if (self.bitmex_初始化.仓位 && self.bitmex_初始化.委托) {
-                    if (await f()) {
-                        await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
-                    }
-                }
-            }
-            await sleep(100)
-        }
-    }
 
-
-    止损task = () => {
+    private 止损task = () => {
         const { self } = this
         const 止损委托 = self.jsonSync.rawData.market.bitmex.XBTUSD.委托列表.filter(v => v.type === '止损')
         const 止损side = this.参数.方向 === 'Buy' ? 'Sell' : 'Buy'
@@ -145,12 +132,24 @@ export class BTC网格交易 implements PositionAndOrderTask {
     }
 
 
-    加仓减仓task = () =>
+    private 加仓减仓task = () =>
         this.sync委托列表([
             ...this.get加仓(),
             ...this.get减仓(),
         ])
 
+    private async run1(self: PositionAndOrder, f: () => boolean | Promise<boolean>) {
+        while (true) {
+            if (this.开关) {
+                if (self.bitmex_初始化.仓位 && self.bitmex_初始化.委托) {
+                    if (await f()) {
+                        await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
+                    }
+                }
+            }
+            await sleep(100)
+        }
+    }
 
     run(self: PositionAndOrder) {
         this.run1(self, this.止损task)
