@@ -158,6 +158,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
     }
 
     run(self: PositionAndOrder) {
+        this.self = self
         this.run1(self, this.止损task)
         this.run1(self, this.加仓task)
         this.run1(self, this.减仓task)
