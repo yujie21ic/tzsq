@@ -458,7 +458,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         return b
     }
 
-    private DDOS调用 = <P extends any>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>, is取消 = false) =>
+    private DDOS调用 = <P extends any>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
         async (p: P) => {
             const startTime = Date.now()
             let success = false
@@ -476,16 +476,31 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                     errMsg = JSON.stringify(ret)
                     break
                 }
-                else if (ret.error === undefined && ret.data !== undefined && ((ret.data.ordStatus !== 'Canceled' && is取消 === false)) && ret.data.ordStatus !== 'Rejected') {
+                else if (ret.error === undefined && ret.data !== undefined && ret.data.ordStatus !== 'Canceled' && ret.data.ordStatus !== 'Rejected') {
                     success = true
 
                     //
                     if (this.ws !== undefined) {
+
+                        //单个委托
                         if (ret.data.orderID !== undefined && ret.data.ordStatus !== undefined) {
                             this.ws.onAction({
-                                action: is取消 ? 'delete' : 'insert',
+                                action: 'insert',
                                 table: 'order',
                                 data: [ret.data as any],
+                            })
+                        }
+
+                        //批量委托 批量取消
+                        if (Array.isArray(ret.data)) {
+                            ret.data.forEach(v => {
+                                if (v.orderID !== undefined && v.ordStatus !== undefined) {
+                                    this.ws.onAction({
+                                        action: 'insert',
+                                        table: 'order',
+                                        data: [v as any],
+                                    })
+                                }
                             })
                         }
                     }
@@ -639,8 +654,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     cancel = this.DDOS调用<{
         orderID: string[]
     }>(
-        (cookie, p) => BitMEXHTTP.Order.cancel(cookie, { orderID: JSON.stringify(p.orderID) }),
-        true,
+        (cookie, p) => BitMEXHTTP.Order.cancel(cookie, { orderID: JSON.stringify(p.orderID) })
     )
 
 
