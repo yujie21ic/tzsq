@@ -120,12 +120,13 @@ export class BTC网格交易 implements PositionAndOrderTask {
         return false
     }
 
+    private 方向一致 = () => (this.参数.方向 === 'Buy' && this.get仓位数量() >= 0) || (this.参数.方向 === 'Sell' && this.get仓位数量() <= 0)
 
     private 加仓task = () =>
         this.sync委托列表({
             reduceOnly: false,
             side: this.参数.方向,
-            剩余: Math.max(0, ((this.参数.方向 === 'Buy' && this.get仓位数量() >= 0) || (this.参数.方向 === 'Sell' && this.get仓位数量() <= 0)) ?
+            剩余: Math.max(0, this.方向一致() ?
                 this.参数.最大仓位 - Math.abs(this.get仓位数量()) : //方向一致
                 this.参数.最大仓位 + Math.abs(this.get仓位数量())   //方向不一致
             ),
@@ -197,17 +198,18 @@ export class BTC网格交易 implements PositionAndOrderTask {
                 grid: this.参数.网格大小,
             }),
         }).filter(this.同一个价位不连续挂2次).filter(v =>
-            this.参数.止损价格 === 0 ?
-                (
-                    this.get强平价格() === 0 ? true :
-                        this.参数.方向 === 'Buy' ?
-                            v.price > this.get强平价格() :
-                            v.price < this.get强平价格()
-                )
-                :
-                this.参数.方向 === 'Buy' ?
-                    v.price > Math.max(this.参数.止损价格, this.get强平价格()) :
-                    v.price < Math.min(this.参数.止损价格, this.get强平价格())
+            this.方向一致() === false ? true :
+                this.参数.止损价格 === 0 ?
+                    (
+                        this.get强平价格() === 0 ? true :
+                            this.参数.方向 === 'Buy' ?
+                                v.price > this.get强平价格() :
+                                v.price < this.get强平价格()
+                    )
+                    :
+                    this.参数.方向 === 'Buy' ?
+                        v.price > Math.max(this.参数.止损价格, this.get强平价格()) :
+                        v.price < Math.min(this.参数.止损价格, this.get强平价格())
         ).slice(0, this.参数.格数)
     }
 
