@@ -4,9 +4,7 @@ import { 指标 } from '../指标/指标'
 import { toRange } from '../lib/F/toRange'
 import { is连续几根全亮 } from '../lib/F/is连续几根全亮'
 import { timeID } from '../lib/F/timeID'
-import { get买卖 } from '../指标/买卖'
-import { safeJSONParse } from '../lib/F/safeJSONParse'
-import * as fs from 'fs'
+import { get买卖 } from '../指标/买卖' 
 import { formatDate } from '../lib/F/formatDate'
 import { mapObjIndexed } from '../lib/F/mapObjIndexed'
 import { ______CTP__config } from './______CTP__config'
@@ -1326,39 +1324,7 @@ export class RealDataBase {
                 { name: 'bm折返 >', value: bitmex.价格_最高60[i] - bitmex.价格[i] > (bitmex.折返率[i] - 1) },
                 { name: 'hp折返 <', value: hopex.价格_最高60[i] - hopex.价格[i] < (bitmex.折返率[i] * 0.5) },
             ]
-        )
-
-        let arr = [] as BaseType.成交记录
-        const dic: { [key: number]: string } = Object.create(null)
-
-        try {
-            arr = safeJSONParse(fs.readFileSync('./db/成交记录.json').toString()) as BaseType.成交记录
-            arr.forEach(v => {
-                dic[timeID._500ms.toID(v.timestamp)] = v.type
-            })
-        } catch (e) {
-            console.log('加载成交记录 错误', e)
-        }
-
-        const 成交提示 = 指标.map(() => bitmex.时间.length, i => {
-
-            const key = timeID._500ms.toID(bitmex.时间[i])
-            const str = dic[key]
-
-            return ['挂单买', '挂单卖', '挂单买成功', '挂单卖成功', '市价买', '市价卖'].map(v => ({
-                name: v, value:
-                    str === v
-            }))
-
-        })
-
-
-
-
-
-
-
-
+        ) 
 
 
         const bitmex__摸顶抄底_平仓 = (type: '摸顶' | '抄底') => 指标.map(
@@ -1440,9 +1406,7 @@ export class RealDataBase {
             bitmex_hopex_下跌相对差价macd,
 
             bitmex_信号_追涨,
-            bitmex_信号_追跌,
-
-            成交提示,
+            bitmex_信号_追跌, 
 
             hopex_信号_抄底,
             hopex_信号_摸顶,
