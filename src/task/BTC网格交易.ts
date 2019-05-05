@@ -212,6 +212,11 @@ export class BTC网格交易 implements PositionAndOrderTask {
         const 当前委托 = this.self.jsonSync.rawData.market.bitmex.XBTUSD.委托列表.filter(v => v.type === (reduceOnly ? '限价只减仓' : '限价'))
 
 
+        if (当前委托.every(v => v.side === side) === false) {
+            return this.self.cancel({ orderID: 当前委托.map(v => v.id) })
+        }
+
+
 
 
         return false
