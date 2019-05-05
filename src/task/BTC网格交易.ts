@@ -241,7 +241,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
     private sync委托列表__2({ reduceOnly, side, arr }: { reduceOnly: boolean, side: BaseType.Side, arr: { price: number, size: number }[] }) {
 
-        //console.log('arr', JSON.stringify(arr, null, 4))
+        console.log('arr', JSON.stringify(arr, null, 4))
 
         //price 不能重复
         let dic: { [price: number]: { size: number } } = {}
