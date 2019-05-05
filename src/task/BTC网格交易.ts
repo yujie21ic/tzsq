@@ -44,6 +44,8 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
     private get仓位数量 = () => this.self.jsonSync.rawData.market.bitmex.XBTUSD.仓位数量
 
+    private get强平价格 = () => this.self.jsonSync.rawData.market.bitmex.XBTUSD.强平价格
+
     private getBuy1 = () => lastNumber(this.self.realData.dataExt.XBTUSD.bitmex.买.盘口1价)
 
     private getSell1 = () => lastNumber(this.self.realData.dataExt.XBTUSD.bitmex.卖.盘口1价)
@@ -231,8 +233,8 @@ export class BTC网格交易 implements PositionAndOrderTask {
             this.参数.止损价格 === 0 ?
                 true :
                 this.参数.方向 === 'Buy' ?
-                    v.price > this.参数.止损价格 :
-                    v.price < this.参数.止损价格
+                    v.price > Math.max(this.参数.止损价格, this.get强平价格()) :
+                    v.price < Math.min(this.参数.止损价格, this.get强平价格())
         ).slice(0, 格数)
     }
 
