@@ -224,7 +224,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
         剩余 += 当前委托.length > 0 ? 当前委托[0].cumQty : 0 //部分成交加到剩余里面        
         const xxx: { price: number, size: number }[] = [] //计算出同步委托列表
         let i = 0
-        while (剩余 > 0 || i < arr.length - 1) {
+        while (剩余 > 0 && i < arr.length - 1) {
             const size = 剩余 >= this.参数.单位数量 ? this.参数.单位数量 : 剩余
             xxx.push({
                 price: arr[i].price,
