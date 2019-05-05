@@ -19,6 +19,7 @@ const symbol = () => ({
     委托列表: [] as BaseType.Order[],
     仓位数量: 0,
     开仓均价: 0,
+    强平价格: 0,
 })
 
 export const createJSONSync = () =>
@@ -348,18 +349,20 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         ['XBTUSD' as 'XBTUSD', 'ETHUSD' as 'ETHUSD'].forEach(symbol => {
             this.ws.data.position.forEach(item => {
                 if (item.symbol === symbol) {
-                    const { 仓位数量, 开仓均价 } = this.jsonSync.data.market.bitmex[symbol]
+                    const { 仓位数量, 开仓均价, 强平价格 } = this.jsonSync.data.market.bitmex[symbol]
                     const raw = this.jsonSync.rawData.market.bitmex[symbol]
                     if (item !== undefined) {
-                        if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== item.avgCostPrice) {
+                        if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== item.avgCostPrice || raw.强平价格 !== item.liquidationPrice) {
                             仓位数量.____set(item.currentQty)
                             开仓均价.____set(Number(item.avgCostPrice)) //<---------------------------null to 0
-                            this.log(`仓位更新: ${symbol} 仓位数量:${item.currentQty}  本地维护仓位数量:${this.ws.仓位数量.get(symbol)}  开仓均价:${item.avgCostPrice}`)
+                            强平价格.____set(Number(item.liquidationPrice)) //null to 0
+                            this.log(`仓位更新: ${symbol} 仓位数量:${item.currentQty} 强平价格:${item.liquidationPrice}  本地维护仓位数量:${this.ws.仓位数量.get(symbol)}  开仓均价:${item.avgCostPrice}`)
                         }
                     } else {
-                        if (raw.仓位数量 !== 0 || raw.开仓均价 !== 0) {
+                        if (raw.仓位数量 !== 0 || raw.开仓均价 !== 0 || raw.强平价格 !== 0) {
                             仓位数量.____set(0)
                             开仓均价.____set(0)
+                            强平价格.____set(0)
                             this.log(`仓位更新: ${symbol} 仓位数量:0  本地维护仓位数量:${this.ws.仓位数量.get(symbol)}`)
                         }
                     }
