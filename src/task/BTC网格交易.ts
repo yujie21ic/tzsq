@@ -198,7 +198,13 @@ export class BTC网格交易 implements PositionAndOrderTask {
             }),
         }).filter(this.同一个价位不连续挂2次).filter(v =>
             this.参数.止损价格 === 0 ?
-                true :
+                (
+                    this.get强平价格() === 0 ? true :
+                        this.参数.方向 === 'Buy' ?
+                            v.price > this.get强平价格() :
+                            v.price < this.get强平价格()
+                )
+                :
                 this.参数.方向 === 'Buy' ?
                     v.price > Math.max(this.参数.止损价格, this.get强平价格()) :
                     v.price < Math.min(this.参数.止损价格, this.get强平价格())
@@ -224,7 +230,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
         剩余 += 当前委托.length > 0 ? 当前委托[0].cumQty : 0 //部分成交加到剩余里面        
         const xxx: { price: number, size: number }[] = [] //计算出同步委托列表
         let i = 0
-        while (剩余 > 0 && i < arr.length - 1) {
+        while (剩余 > 0 && i < arr.length) {
             const size = 剩余 >= this.参数.单位数量 ? this.参数.单位数量 : 剩余
             xxx.push({
                 price: arr[i].price,
@@ -234,14 +240,11 @@ export class BTC网格交易 implements PositionAndOrderTask {
             i++
         }
 
-
         return this.sync委托列表__2({ reduceOnly, side, arr: xxx })
     }
 
 
     private sync委托列表__2({ reduceOnly, side, arr }: { reduceOnly: boolean, side: BaseType.Side, arr: { price: number, size: number }[] }) {
-
-        console.log('arr', JSON.stringify(arr, null, 4))
 
         //price 不能重复
         let dic: { [price: number]: { size: number } } = {}
