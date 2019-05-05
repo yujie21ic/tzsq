@@ -91,8 +91,10 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
                 const arr = data.data || []
                 arr.forEach(v => {
-                    __obj__[v.contractCode].仓位数量 = Number(v.positionQuantity.split(',').join(''))
-                    __obj__[v.contractCode].开仓均价 = v.entryPriceD
+                    if (__obj__[v.contractCode] !== undefined) {//!!!!!!!!!!!!!!!!!!!!!!
+                        __obj__[v.contractCode].仓位数量 = Number(v.positionQuantity.split(',').join(''))
+                        __obj__[v.contractCode].开仓均价 = v.entryPriceD
+                    }
                 })
 
                 BaseType.HopexSymbolArr.forEach(symbol => {
