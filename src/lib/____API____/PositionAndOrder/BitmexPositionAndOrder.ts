@@ -129,29 +129,31 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                     const result = 止损data.data ? 止损data.data.result || [] : []
                     result.forEach(v => {
                         if (v.taskStatusD === '未触发') {
-                            __obj__[v.contractCode].push({
-                                type: '止损',
-                                timestamp: v.timestamp,
-                                id: String(v.taskId),
-                                side: v.taskTypeD === '买入止损' ? 'Buy' : 'Sell',
-                                cumQty: 0,
-                                orderQty: 100000,
-                                price: Number(v.trigPrice.split(',').join('')),
-                            })
+                            if (__obj__[v.contractCode] !== undefined)
+                                __obj__[v.contractCode].push({
+                                    type: '止损',
+                                    timestamp: v.timestamp,
+                                    id: String(v.taskId),
+                                    side: v.taskTypeD === '买入止损' ? 'Buy' : 'Sell',
+                                    cumQty: 0,
+                                    orderQty: 100000,
+                                    price: Number(v.trigPrice.split(',').join('')),
+                                })
                         }
                     })
                 }
                 if (委托data.data !== undefined) {
                     委托data.data.forEach(v => {
-                        __obj__[v.contractCode].push({
-                            type: '限价',
-                            timestamp: new Date(v.ctime).getTime(),
-                            id: String(v.orderId),
-                            side: v.side === '2' ? 'Buy' : 'Sell',
-                            cumQty: Number(v.fillQuantity.split(',').join('')),
-                            orderQty: Number(v.leftQuantity.split(',').join('')),
-                            price: Number(v.orderPrice.split(',').join('')),
-                        })
+                        if (__obj__[v.contractCode] !== undefined)
+                            __obj__[v.contractCode].push({
+                                type: '限价',
+                                timestamp: new Date(v.ctime).getTime(),
+                                id: String(v.orderId),
+                                side: v.side === '2' ? 'Buy' : 'Sell',
+                                cumQty: Number(v.fillQuantity.split(',').join('')),
+                                orderQty: Number(v.leftQuantity.split(',').join('')),
+                                price: Number(v.orderPrice.split(',').join('')),
+                            })
                     })
                 }
 
