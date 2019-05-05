@@ -209,66 +209,82 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
     private sync委托列表({ reduceOnly, 剩余, side, arr }: { reduceOnly: boolean, 剩余: number, side: BaseType.Side, arr: { price: number }[] }) {
 
-        const 当前委托 = this.self.jsonSync.rawData.market.bitmex.XBTUSD.委托列表.filter(v => v.type === (reduceOnly ? '限价只减仓' : '限价'))
+        const 当前委托 = this.self.jsonSync.rawData.market.bitmex.XBTUSD.委托列表
+            .filter(v => v.type === (reduceOnly ? '限价只减仓' : '限价'))
+            .sort((a, b) => side === 'Sell' ? a.price - b.price : b.price - a.price)
 
 
-        if (当前委托.every(v => v.side === side) === false) {
-            return this.self.cancel({ orderID: 当前委托.map(v => v.id) })
+        //side不对的委托 先取消掉
+        const side不对的委托 = 当前委托.filter(v => v.side !== side)
+        if (side不对的委托.length !== 0) {
+            return this.self.cancel({ orderID: side不对的委托.map(v => v.id) })
         }
 
 
+        剩余 += 当前委托.length > 0 ? 当前委托[0].cumQty : 0 //部分成交加到剩余里面        
+        const xxx: { price: number, size: number }[] = [] //计算出同步委托列表
+        let i = 0
+        while (剩余 > 0 || i < arr.length - 1) {
+            const size = 剩余 >= this.参数.单位数量 ? this.参数.单位数量 : 剩余
+            xxx.push({
+                price: arr[i].price,
+                size,
+            })
+            剩余 -= size
+        }
 
 
-        return false
+        return this.sync委托列表__2({ reduceOnly, side, arr: xxx })
     }
 
 
-    //  //price 不能重复
-    //  let dic: { [price: number]: { side: BaseType.Side, size: number } } = {}
+    private sync委托列表__2({ reduceOnly, side, arr }: { reduceOnly: boolean, side: BaseType.Side, arr: { price: number, size: number }[] }) {
 
-    //  arr.forEach(v => {
-    //      dic[v.price] = { side: v.side, size: this.参数.单位数量 }
-    //  })
+        //price 不能重复
+        let dic: { [price: number]: { size: number } } = {}
 
-    //  let cancelIDs: string[] = []
+        arr.forEach(v => dic[v.price] = { size: v.size })
 
-    //  this.self.jsonSync.rawData.market.bitmex.XBTUSD.委托列表.filter(v => v.type === (reduceOnly ? '限价只减仓' : '限价')).forEach(v => {
-    //      const PRICE = v.price
+        let cancelIDs: string[] = []
 
-    //      //这个价格没有委托 取消掉
-    //      if (dic[PRICE] === undefined) {
-    //          cancelIDs.push(v.id)
-    //      }
-    //      // 委托数量不一样 取消掉
-    //      else if (v.orderQty !== dic[PRICE].size) {
-    //          cancelIDs.push(v.id)
-    //      }
-    //      //委托数量一样
-    //      else {
-    //          delete dic[PRICE]
-    //      }
-    //  })
+        this.self.jsonSync.rawData.market.bitmex.XBTUSD.委托列表.filter(v => v.type === (reduceOnly ? '限价只减仓' : '限价')).forEach(v => {
+            const PRICE = v.price
+
+            //这个价格没有委托 取消掉
+            if (dic[PRICE] === undefined) {
+                cancelIDs.push(v.id)
+            }
+            // 委托数量不一样 取消掉
+            else if (v.orderQty !== dic[PRICE].size) {
+                cancelIDs.push(v.id)
+            }
+            //委托数量一样
+            else {
+                delete dic[PRICE]
+            }
+        })
 
 
-    //  if (cancelIDs.length !== 0) {
-    //      console.log('取消', cancelIDs)
-    //      return this.self.cancel({ orderID: cancelIDs })
-    //  } else {
-    //      let arr: { side: BaseType.Side, price: number, size: number, reduceOnly: boolean }[] = []
-    //      for (const price in dic) {
-    //          arr.push({
-    //              side: dic[price].side,
-    //              price: Number(price),
-    //              size: dic[price].size,
-    //              reduceOnly,
-    //          })
-    //      }
-    //      if (arr.length !== 0) {
-    //          console.log('maker多个', arr)
-    //          return this.self.maker多个({ symbol: 'XBTUSD', arr })
-    //      } else {
-    //          return false
-    //      }
-    //  }
+        if (cancelIDs.length !== 0) {
+            console.log('取消', cancelIDs)
+            return this.self.cancel({ orderID: cancelIDs })
+        } else {
+            let arr: { side: BaseType.Side, price: number, size: number, reduceOnly: boolean }[] = []
+            for (const price in dic) {
+                arr.push({
+                    side,
+                    price: Number(price),
+                    size: dic[price].size,
+                    reduceOnly,
+                })
+            }
+            if (arr.length !== 0) {
+                console.log('maker多个', arr)
+                return this.self.maker多个({ symbol: 'XBTUSD', arr })
+            } else {
+                return false
+            }
+        }
+    }
 
 }
