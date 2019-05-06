@@ -10,7 +10,7 @@ import { JSONRequest } from './lib/F/JSONRequest'
 import { 笔Layer } from './lib/Chart/Layer/笔Layer'
 import { get笔Index, get线段 } from './指标/缠中说禅'
 import { 线段Layer } from './lib/Chart/Layer/线段Layer'
-import { queryStringStringify } from './lib/F/queryStringStringify';
+import { queryStringStringify } from './lib/F/queryStringStringify'
 
 theme.右边空白 = 0
 
