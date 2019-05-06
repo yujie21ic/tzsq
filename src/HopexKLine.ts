@@ -21,9 +21,10 @@ type KL = {
     close: number
 }
 
+
 class Real {
 
-    时间str: ArrayLike<string> = []
+    timeArr: ArrayLike<string> = []
     kline: ArrayLike<KL> = []
 
     load = async () => {
@@ -48,7 +49,7 @@ class Real {
 
         const arr = data.data
 
-        this.时间str = 指标.map(() => arr.length, i => new Date(Number(arr[i][0]) * 1000).toLocaleString())
+        this.timeArr = 指标.map(() => arr.length, i => new Date(Number(arr[i][0]) * 1000).toLocaleString())
 
         this.kline = arr.map(v => ({
             id: timeID._60s.toID(Number(v[0]) * 1000),
@@ -71,7 +72,6 @@ const real = new Real()
 let S = {
     left: 200,
     right: 300,
-    data: [] as ArrayLike<KL>,
 }
 
 let isDown = false
@@ -85,7 +85,6 @@ const load = async () => {
     S = {
         left: 0,
         right: 100,
-        data: []
     }
 
     await real.load()
@@ -93,19 +92,18 @@ const load = async () => {
     S = {
         left: Math.max(0, real.kline.length - 100),
         right: real.kline.length,
-        data: real.kline,
     }
 }
 
 chartInit(60, document.querySelector('#root') as HTMLElement, () => {
-    const arr = S.data
-    const klineData = arr
+
+    const kline = real.kline
 
     return {
         title: 'HopexKLine',
-        xStrArr: real.时间str,
+        xStrArr: real.timeArr,
         显示y: v => {
-            const time = (arr[0] ? timeID._60s.toTimestamp(arr[0].id) : 0) + v * 1000 * 60
+            const time = (kline[0] ? timeID._60s.toTimestamp(kline[0].id) : 0) + v * 1000 * 60
             if (time % (3600000 * 24) === 0) {
                 return formatDate(new Date(time), v => `${v.d}号`)
             } else {
@@ -119,9 +117,9 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
             items: [
                 {
                     layerList: [
-                        layer(KLineLayer, { data: klineData }),
-                        layer(笔Layer, { data: get笔Index(klineData), color: 0xffff00 }),
-                        layer(线段Layer, { data: get线段(get笔Index(klineData)), color: 0xaa0000 }),
+                        layer(KLineLayer, { data: kline }),
+                        layer(笔Layer, { data: get笔Index(kline), color: 0xffff00 }),
+                        layer(线段Layer, { data: get线段(get笔Index(kline)), color: 0xaa0000 }),
                     ]
                 },
 
@@ -135,13 +133,13 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
 const xx = () => {
     const 多出 = 12
 
-    S.left = toRange({ min: -多出, max: S.data.length - 多出, value: S.left })
+    S.left = toRange({ min: -多出, max: real.kline.length - 多出, value: S.left })
 
     if (S.right <= S.left + 多出) {
         S.right = S.left + 多出
     }
 
-    S.right = toRange({ min: 多出, max: S.data.length + 多出, value: S.right })
+    S.right = toRange({ min: 多出, max: real.kline.length + 多出, value: S.right })
 }
 
 
