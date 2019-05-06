@@ -1,24 +1,18 @@
-import { chartInit, layer, getIndex } from './lib/Chart'
+import { chartInit, layer } from './lib/Chart'
 import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
-import { BarLayer } from './lib/Chart/Layer/BarLayer'
 import { BaseType } from './lib/BaseType'
 import { formatDate } from './lib/F/formatDate'
-import { DBClient } from './lib/DataServer/DBClient'
-import { dialog } from './lib/UI/dialog'
 import { timeID } from './lib/F/timeID'
 import { theme } from './lib/Chart/theme'
 import { toRange } from './lib/F/toRange'
-import { showWindow } from './windowExt'
 import { 指标 } from './指标/指标'
-import { LineLayer } from './lib/Chart/Layer/LineLayer'
+import { JSONRequest } from './lib/F/JSONRequest'
+import { 笔Layer } from './lib/Chart/Layer/笔Layer'
+import { get笔Index, get线段 } from './指标/缠中说禅'
+import { 线段Layer } from './lib/Chart/Layer/线段Layer'
+import { queryStringStringify } from './lib/F/queryStringStringify';
 
 theme.右边空白 = 0
-
-
-// import { get笔Index, 合并后的K线, get线段 } from './RealDataServer/缠中说禅'
-// import { 线段Layer } from './lib/Chart/Layer/线段Layer'
-// import { 合并后的Layer } from './lib/Chart/Layer/合并后的Layer'
-// import { 笔Layer } from './lib/Chart/Layer/笔Layer'
 
 let nowSymbol: BaseType.BitmexSymbol = 'XBTUSD'
 
@@ -34,13 +28,9 @@ let startLeft = 0
 let startRight = 0
 
 
-
-
-
-let dif: ArrayLike<number> = []
-let dem: ArrayLike<number> = []
-let osc: ArrayLike<number> = []
 let 时间str: ArrayLike<string> = []
+
+const toS = (n: number) => Math.floor(n / 1000)
 
 const load = async () => {
     S = {
@@ -49,11 +39,17 @@ const load = async () => {
         data: []
     }
 
-    const { data, error, msg } = await DBClient.func.getKLine({
-        type: '1m',
-        symbol: nowSymbol,
-        startTime: Date.now() - 24 * 60 * 60 * 1000 * 40,
-        endTime: Date.now(),
+    const { data, error, msg } = await JSONRequest<{ data: string[][] }>({
+        url: 'https://web.hopex.com/api/v1/gateway/Home/KLines?' + queryStringStringify({
+            startTime: toS(Date.now() - (1000 * 60 * 60 * 24)),
+            endTime: toS(Date.now() + 1000 * 60),
+            interval: 60,
+            market: 'BTCUSD',
+            marketCode: 'BTCUSD',
+            contractCode: 'BTCUSD',
+        }),
+        method: 'GET',
+        ss: false,
     })
 
     if (data === undefined) {
@@ -61,58 +57,34 @@ const load = async () => {
         return
     }
 
-    时间str = 指标.map(() => data.length, i => new Date(timeID._60s.toTimestamp(data[i].id)).toLocaleString())
 
-    const macd = 指标.macd(data.map(v => v.close), 1000)
-    dif = macd.DIF
-    dem = macd.DEM
-    osc = macd.OSC
+    const arr = data.data
+
+    时间str = 指标.map(() => arr.length, i => new Date(Number(arr[i][0]) * 1000).toLocaleString())
 
     S = {
-        left: Math.max(0, data.length - 100),
-        right: data.length,
-        data: data
+        left: Math.max(0, arr.length - 100),
+        right: arr.length,
+        data: arr.map(v => ({
+            id: timeID._60s.toID(Number(v[0]) * 1000),
+            open: Number(v[1]),
+            high: Number(v[3]),
+            low: Number(v[4]),
+            close: Number(v[2]),
+            buySize: 0,
+            sellSize: 0,
+            buyCount: 0,
+            sellCount: 0,
+        }))
     }
-
 }
 
-window.addEventListener('mousedown', e => {
-    if (e.button === 2) {
-        dialog.popupMenu(
-            [
-                {
-                    label: '打开tick图',
-                    click: () =>
-                        showWindow('Tick复盘', {
-                            accountName: '',
-                            symbol: nowSymbol,
-                            startTime: timeID._60s.toTimestamp(S.data[getIndex()].id),
-                        }, true),
-                },
-                { type: 'separator' },
-                ...['XBTUSD', 'ETHUSD'].map(v =>
-                    ({
-                        label: v,
-                        type: 'checkbox' as 'checkbox',
-                        checked: nowSymbol === v,
-                        click: () => {
-                            nowSymbol = v as BaseType.BitmexSymbol
-                            load()
-                        }
-                    })),
-
-            ]
-        )
-    }
-})
 
 
 chartInit(60, document.querySelector('#root') as HTMLElement, () => {
     const arr = S.data
     const klineData = arr
 
-    const 成交买 = arr.map(v => -v.buySize)
-    const 成交卖 = arr.map(v => v.sellSize)
 
     return {
         title: nowSymbol,
@@ -128,27 +100,13 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
         left: S.left,
         right: S.right,
         items: {
-            heightList: [0.4, 0.4, 0.2],
+            heightList: [1],
             items: [
                 {
                     layerList: [
                         layer(KLineLayer, { data: klineData }),
-                        // layer(笔Layer, { data: get笔Index(klineData), color: 0xffff00 }),
-                        // layer(线段Layer, { data: get线段(get笔Index(klineData)), color: 0xaa0000 }),
-                        // layer(合并后的Layer, { data: 合并后的K线(klineData), color: 0xffff00 }),
-                    ]
-                },
-                {
-                    layerList: [
-                        layer(LineLayer, { data: dif, color: 0xffff00 }),
-                        layer(LineLayer, { data: dem, color: 0xaaaa00 }),
-                        layer(BarLayer, { data: osc, color: 0xeeeeee }),
-                    ]
-                },
-                {
-                    layerList: [
-                        layer(BarLayer, { data: 成交买, color: 0x48aa65 }),
-                        layer(BarLayer, { data: 成交卖, color: 0xe56546 }),
+                        layer(笔Layer, { data: get笔Index(klineData), color: 0xffff00 }),
+                        layer(线段Layer, { data: get线段(get笔Index(klineData)), color: 0xaa0000 }),
                     ]
                 },
 
