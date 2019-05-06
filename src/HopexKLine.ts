@@ -8,6 +8,7 @@ import { 笔Layer } from './lib/Chart/Layer/笔Layer'
 import { get笔Index, get线段 } from './指标/缠中说禅'
 import { 线段Layer } from './lib/Chart/Layer/线段Layer'
 import { HopexRealKLine } from './lib/____API____/HopexRealKLine'
+import { 指标 } from './指标/指标'
 
 theme.右边空白 = 0
 
@@ -30,6 +31,7 @@ let startX = 0
 let startLeft = 0
 let startRight = 0
 
+const timeArr = 指标.map(() => real.kline.length, i => new Date(timeID._60s.toTimestamp(real.kline[i].id)).toLocaleString())
 
 chartInit(60, document.querySelector('#root') as HTMLElement, () => {
 
@@ -37,7 +39,7 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
 
     return {
         title: 'HopexKLine',
-        xStrArr: real.timeArr,
+        xStrArr: timeArr,
         显示y: v => {
             const time = (kline[0] ? timeID._60s.toTimestamp(kline[0].id) : 0) + v * 1000 * 60
             if (time % (3600000 * 24) === 0) {
