@@ -1,6 +1,5 @@
 import { chartInit, layer } from './lib/Chart'
 import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
-import { BaseType } from './lib/BaseType'
 import { formatDate } from './lib/F/formatDate'
 import { timeID } from './lib/F/timeID'
 import { theme } from './lib/Chart/theme'
@@ -14,58 +13,44 @@ import { queryStringStringify } from './lib/F/queryStringStringify'
 
 theme.右边空白 = 0
 
-let nowSymbol: BaseType.BitmexSymbol = 'XBTUSD'
-
-let S = {
-    left: 200,
-    right: 300,
-    data: [] as BaseType.KLine[],
+type KL = {
+    id: number
+    open: number
+    high: number
+    low: number
+    close: number
 }
 
-let isDown = false
-let startX = 0
-let startLeft = 0
-let startRight = 0
+class Real {
 
+    时间str: ArrayLike<string> = []
+    kline: ArrayLike<KL> = []
 
-let 时间str: ArrayLike<string> = []
+    load = async () => {
 
-const toS = (n: number) => Math.floor(n / 1000)
+        const { data, error, msg } = await JSONRequest<{ data: string[][] }>({
+            url: 'https://web.hopex.com/api/v1/gateway/Home/KLines?' + queryStringStringify({
+                startTime: toS(Date.now() - (1000 * 60 * 60 * 24)),
+                endTime: toS(Date.now() + 1000 * 60),
+                interval: 60,
+                market: 'BTCUSD',
+                marketCode: 'BTCUSD',
+                contractCode: 'BTCUSD',
+            }),
+            method: 'GET',
+            ss: false,
+        })
 
-const load = async () => {
-    S = {
-        left: 0,
-        right: 100,
-        data: []
-    }
+        if (data === undefined) {
+            console.log('load error', error, msg)
+            return
+        }
 
-    const { data, error, msg } = await JSONRequest<{ data: string[][] }>({
-        url: 'https://web.hopex.com/api/v1/gateway/Home/KLines?' + queryStringStringify({
-            startTime: toS(Date.now() - (1000 * 60 * 60 * 24)),
-            endTime: toS(Date.now() + 1000 * 60),
-            interval: 60,
-            market: 'BTCUSD',
-            marketCode: 'BTCUSD',
-            contractCode: 'BTCUSD',
-        }),
-        method: 'GET',
-        ss: false,
-    })
+        const arr = data.data
 
-    if (data === undefined) {
-        console.log('load error', error, msg)
-        return
-    }
+        this.时间str = 指标.map(() => arr.length, i => new Date(Number(arr[i][0]) * 1000).toLocaleString())
 
-
-    const arr = data.data
-
-    时间str = 指标.map(() => arr.length, i => new Date(Number(arr[i][0]) * 1000).toLocaleString())
-
-    S = {
-        left: Math.max(0, arr.length - 100),
-        right: arr.length,
-        data: arr.map(v => ({
+        this.kline = arr.map(v => ({
             id: timeID._60s.toID(Number(v[0]) * 1000),
             open: Number(v[1]),
             high: Number(v[3]),
@@ -81,14 +66,44 @@ const load = async () => {
 
 
 
+const real = new Real()
+
+let S = {
+    left: 200,
+    right: 300,
+    data: [] as ArrayLike<KL>,
+}
+
+let isDown = false
+let startX = 0
+let startLeft = 0
+let startRight = 0
+
+const toS = (n: number) => Math.floor(n / 1000)
+
+const load = async () => {
+    S = {
+        left: 0,
+        right: 100,
+        data: []
+    }
+
+    await real.load()
+
+    S = {
+        left: Math.max(0, real.kline.length - 100),
+        right: real.kline.length,
+        data: real.kline,
+    }
+}
+
 chartInit(60, document.querySelector('#root') as HTMLElement, () => {
     const arr = S.data
     const klineData = arr
 
-
     return {
-        title: nowSymbol,
-        xStrArr: 时间str,
+        title: 'HopexKLine',
+        xStrArr: real.时间str,
         显示y: v => {
             const time = (arr[0] ? timeID._60s.toTimestamp(arr[0].id) : 0) + v * 1000 * 60
             if (time % (3600000 * 24) === 0) {
@@ -116,6 +131,7 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
 })
 
 
+
 const xx = () => {
     const 多出 = 12
 
@@ -127,6 +143,7 @@ const xx = () => {
 
     S.right = toRange({ min: 多出, max: S.data.length + 多出, value: S.right })
 }
+
 
 window.onmousewheel = (e: any) => {
 
@@ -146,8 +163,6 @@ window.onmousewheel = (e: any) => {
     startRight = S.right
 }
 
-
-
 window.onmousedown = e => {
     if (e.button === 0) {
         isDown = true
@@ -163,7 +178,6 @@ window.onmouseup = e => {
     }
 }
 
-
 window.onmousemove = e => {
     if (isDown) {
         S.left = startLeft - (startRight - startLeft) * (e.clientX - startX) / (document.body.clientWidth - theme.RIGHT_WIDTH)
@@ -171,7 +185,5 @@ window.onmousemove = e => {
         xx()
     }
 }
-
-
 
 load()
