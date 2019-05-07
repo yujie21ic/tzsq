@@ -7,6 +7,7 @@ import { toRange } from './lib/F/toRange'
 import { HopexRealKLine } from './lib/____API____/HopexRealKLine'
 import { 指标 } from './指标/指标'
 import { 竖线Layer } from './lib/Chart/Layer/竖线Layer'
+import { LineLayer } from './lib/Chart/Layer/LineLayer'
 
 
 const colorTable = [0x777777, 0xccff00, 0xcc66ff]
@@ -16,47 +17,46 @@ theme.右边空白 = 0
 const real = new HopexRealKLine()
 const timeArr = 指标.map(() => real.kline.length, i => new Date(timeID._60s.toTimestamp(real.kline[i].id)).toLocaleString())
 
-let 多力度: ArrayLike<number> = []
-let 空力度: ArrayLike<number> = []
-let 净力度: ArrayLike<number> = []
 const 开始点竖线: boolean[] = []
+let 力度Arr: { 多: ArrayLike<number>, 空: ArrayLike<number>, 净: ArrayLike<number> }[] = []
 
 const 更新力度 = () => {
+    力度Arr = []
 
-    多力度 = 指标.map2({}, (arr: number[]) => {
+    for (let index = 0; index < 开始点竖线.length; index++) {
+        if (开始点竖线[index] === true) {
 
-        const length = real.kline.length
+            const 多 = 指标.map2({}, (arr: number[]) => {
+                const length = real.kline.length
+                for (let i = Math.max(0, arr.length - 1); i < length; i++) {
+                    const 当前力度 = Math.max(0, real.kline[i].close - real.kline[i].open) //<-------
+                    if (i === index) {
+                        arr[i] = 当前力度
+                    } else {
+                        arr[i] = 当前力度 + (i === 0 ? NaN : arr[i - 1])
+                    }
 
-        for (let i = Math.max(0, arr.length - 1); i < length; i++) {
-            const 当前力度 = Math.max(0, real.kline[i].close - real.kline[i].open)
+                }
+            })
 
-            if (开始点竖线[i] === true) {
-                arr[i] = 当前力度
-            } else {
-                arr[i] = 当前力度 + (i === 0 ? NaN : arr[i - 1])
-            }
+            const 空 = 指标.map2({}, (arr: number[]) => {
+                const length = real.kline.length
+                for (let i = Math.max(0, arr.length - 1); i < length; i++) {
+                    const 当前力度 = Math.max(0, real.kline[i].open - real.kline[i].close) //<-------
+                    if (i === index) {
+                        arr[i] = 当前力度
+                    } else {
+                        arr[i] = 当前力度 + (i === 0 ? NaN : arr[i - 1])
+                    }
+                }
+            })
 
+
+            const 净 = 指标.map(() => Math.min(多.length, 空.length), i => 多[i] - 空[i])
+
+            力度Arr.push({ 多, 空, 净 })
         }
-    })
-
-    空力度 = 指标.map2({}, (arr: number[]) => {
-
-        const length = real.kline.length
-
-        for (let i = Math.max(0, arr.length - 1); i < length; i++) {
-            const 当前力度 = Math.max(0, real.kline[i].open - real.kline[i].close) //<-------
-
-            if (开始点竖线[i] === true) {
-                arr[i] = 当前力度
-            } else {
-                arr[i] = 当前力度 + (i === 0 ? NaN : arr[i - 1])
-            }
-
-        }
-    })
-
-
-    净力度 = 指标.map(() => Math.min(多力度.length, 空力度.length), i => 多力度[i] - 空力度[i])
+    }
 
 }
 
@@ -102,9 +102,9 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
                     ]
                 },
                 {
-                    layerList: [
-                        layer(力度对比Layer, { 多力度, 空力度, 净力度, 开始点竖线 }),
-                    ]
+                    layerList: 力度Arr.map((v, i) =>
+                        layer(LineLayer, { data: v.净, color: colorTable[Math.min(colorTable.length - 1, i)] })
+                    )
                 },
             ]
         }
@@ -169,83 +169,4 @@ window.onmousemove = e => {
         right = startRight - (startRight - startLeft) * (e.clientX - startX) / (document.body.clientWidth - theme.RIGHT_WIDTH)
         xx()
     }
-}
-
-
-
-import { Graphics } from 'pixi.js'
-import { Layer } from './lib/Chart/Layer/Layer'
-import { Viewport, To, TopBottom } from './lib/Chart/type'
-import { getTopAndBottom } from './lib/Chart/getTopAndBottom'
-import { combineTopAndBottom } from './lib/Chart/combineTopAndBottom'
-
-export class 力度对比Layer extends Layer<{
-    多力度: ArrayLike<number>
-    空力度: ArrayLike<number>
-    净力度: ArrayLike<number>
-    开始点竖线: boolean[]
-}> {
-
-    private g = new Graphics()
-
-    init() {
-        this.addChild(this.g)
-    }
-
-    render(viewport: Viewport, to: To, tb: TopBottom) {
-        const { g } = this
-        g.clear()
-
-        const { 多力度, 空力度, 净力度 } = this.props
-        const arr: { 多: number[], 空: number[], 净: number[] }[] = []
-
-        for (let i = 0; i < 净力度.length; i++) {
-            if (开始点竖线[i] === true) {
-                arr.push({ 多: [], 空: [], 净: [] })
-            }
-            if (arr.length > 0) {
-                arr[arr.length - 1].多.push(多力度[i])
-                arr[arr.length - 1].空.push(空力度[i])
-                arr[arr.length - 1].净.push(净力度[i])
-            }
-        }
-
-        let length = 0
-        arr.forEach(v => length = Math.max(length, v.净.length))
-        arr.forEach((v, i) => {
-            const data = v.净
-
-            g.lineStyle(1, colorTable[Math.min(colorTable.length - 1, i)])
-
-            let hasMove = false
-
-            for (let i = 0; i < length; i++) {
-                const v = data[i]
-
-                if (isNaN(v)) {
-                    hasMove = false
-                    continue
-                }
-                const x = viewport.width / length * (i + 0.5)
-                const y = to.y(v)
-
-                if (hasMove === false) {
-                    hasMove = true
-                    g.moveTo(x, y)
-                } else {
-                    g.lineTo(x, y)
-                }
-            }
-        })
-    }
-
-    getRight() {
-        return this.props.净力度.length - 1
-    }
-
-    updateTopAndBottom = (viewport: Viewport, tb: TopBottom) => {
-        const xx = getTopAndBottom(this.props.净力度)({ ...viewport, left: 0, right: this.props.净力度.length - 1 })
-        return combineTopAndBottom(tb, xx)
-    }
-
 } 
