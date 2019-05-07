@@ -57,7 +57,7 @@ const 更新力度 = () => {
     })
 
 
-    净力度 = 指标.map(() => real.kline.length, i => 多力度[i] - 空力度[i])
+    净力度 = 指标.map(() => Math.min(多力度.length, 空力度.length), i => 多力度[i] - 空力度[i])
 
 }
 
