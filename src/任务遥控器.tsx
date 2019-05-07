@@ -1,4 +1,4 @@
-import * as React from 'react' 
+import * as React from 'react'
 import { config } from './config'
 import { windowExt } from './windowExt'
 import { OrderClient } from './OrderServer/OrderClient'
@@ -8,7 +8,6 @@ import { dialog } from './lib/UI/dialog'
 
 const { cookie } = config.account![windowExt.accountName]
 const orderClient = new OrderClient(cookie)
-
 
 export class 任务遥控器 extends React.Component {
 
@@ -80,45 +79,40 @@ export class 任务遥控器 extends React.Component {
     }
 
     render() {
-        return orderClient.isConnected === false ?
-            <a href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a> :
-            <div style={{
-                backgroundColor: '#24292d',
-                margin: 'auto auto',
-                padding: '10px 5px',
-                fontFamily: 'SourceHanSansSC-regular',
-                color: 'white',
-                fontSize: '24px',
-                userSelect: 'none',
-                cursor: 'default'
-            }}>
-                {orderClient.jsonSync.rawData.任务.map(v =>
-                    <div
-                        key={v.名字}
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'left',
-                        }}>
+        return <div style={{
+            backgroundColor: '#24292d',
+            margin: 'auto auto',
+            padding: '10px 5px',
+            fontFamily: 'SourceHanSansSC-regular',
+            color: 'white',
+            fontSize: '24px',
+            userSelect: 'none',
+            cursor: 'default'
+        }}>
+            {orderClient.jsonSync.rawData.任务.map(v =>
+                <div
+                    key={v.名字}
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'left',
+                    }}>
 
 
-                        <p><a style={{ fontSize: 28, color: this.折叠dic.get(v.名字) ? '#cc66ff' : '#666666' }} href='#' onClick={() => {
-                            this.折叠dic.set(v.名字, !this.折叠dic.get(v.名字))
-                        }}>{v.名字}</a><Switch checked={v.开关} onChange={() => this.set_任务_开关(v.名字)} /></p>
+                    <p><a style={{ fontSize: 28, color: this.折叠dic.get(v.名字) ? '#cc66ff' : '#666666' }} href='#' onClick={() => {
+                        this.折叠dic.set(v.名字, !this.折叠dic.get(v.名字))
+                    }}>{v.名字}</a><Switch checked={v.开关} onChange={() => this.set_任务_开关(v.名字)} /></p>
 
 
-                        {this.折叠dic.get(v.名字) ?
-                            kvs(JSON.parse(v.参数)).map(p =>
-                                <div key={p.k}>
-                                    {p.k}:{this.renderItem(v.名字, p.k, p.v)}
-                                </div>
-                            ) : ''
-                        }
-                    </div>
-                )}
-            </div >
+                    {this.折叠dic.get(v.名字) ?
+                        kvs(JSON.parse(v.参数)).map(p =>
+                            <div key={p.k}>
+                                {p.k}:{this.renderItem(v.名字, p.k, p.v)}
+                            </div>
+                        ) : ''
+                    }
+                </div>
+            )}
+        </div >
     }
-}
-
-
-// ReactDOM.render(<APP />, document.querySelector('#root'))
+} 
