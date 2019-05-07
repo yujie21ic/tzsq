@@ -7,7 +7,7 @@ import { toRange } from './lib/F/toRange'
 import { HopexRealKLine } from './lib/____API____/HopexRealKLine'
 import { 指标 } from './指标/指标'
 import { 竖线Layer } from './lib/Chart/Layer/竖线Layer'
-import { LineLayer } from './lib/Chart/Layer/LineLayer';
+import { LineLayer } from './lib/Chart/Layer/LineLayer'
 
 theme.右边空白 = 0
 
