@@ -7,20 +7,19 @@ import { toRange } from './lib/F/toRange'
 import { HopexRealKLine } from './lib/____API____/HopexRealKLine'
 import { 指标 } from './指标/指标'
 import { 竖线Layer } from './lib/Chart/Layer/竖线Layer'
-import { LineLayer } from './lib/Chart/Layer/LineLayer'
+
+
+const colorTable = [0x777777, 0xccff00, 0xcc66ff]
+
 
 theme.右边空白 = 0
-
-const 买颜色 = 0x0E6655
-const 卖颜色 = 0x943126
-
 const real = new HopexRealKLine()
 const timeArr = 指标.map(() => real.kline.length, i => new Date(timeID._60s.toTimestamp(real.kline[i].id)).toLocaleString())
-const 开始点竖线: boolean[] = []
 
 let 多力度: ArrayLike<number> = []
 let 空力度: ArrayLike<number> = []
 let 净力度: ArrayLike<number> = []
+const 开始点竖线: boolean[] = []
 
 const 更新力度 = () => {
 
@@ -104,9 +103,7 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
                 },
                 {
                     layerList: [
-                        layer(LineLayer, { data: 多力度, color: 买颜色 }),
-                        layer(LineLayer, { data: 空力度, color: 卖颜色 }),
-                        layer(LineLayer, { data: 净力度, color: 0xffff00 }),
+                        layer(力度对比Layer, { 多力度, 空力度, 净力度, 开始点竖线 }),
                     ]
                 },
             ]
@@ -173,3 +170,82 @@ window.onmousemove = e => {
         xx()
     }
 }
+
+
+
+import { Graphics } from 'pixi.js'
+import { Layer } from './lib/Chart/Layer/Layer'
+import { Viewport, To, TopBottom } from './lib/Chart/type'
+import { getTopAndBottom } from './lib/Chart/getTopAndBottom'
+import { combineTopAndBottom } from './lib/Chart/combineTopAndBottom'
+
+export class 力度对比Layer extends Layer<{
+    多力度: ArrayLike<number>
+    空力度: ArrayLike<number>
+    净力度: ArrayLike<number>
+    开始点竖线: boolean[]
+}> {
+
+    private g = new Graphics()
+
+    init() {
+        this.addChild(this.g)
+    }
+
+    render(viewport: Viewport, to: To, tb: TopBottom) {
+        const { g } = this
+        g.clear()
+
+        const { 多力度, 空力度, 净力度 } = this.props
+        const arr: { 多: number[], 空: number[], 净: number[] }[] = []
+
+        for (let i = 0; i < 净力度.length; i++) {
+            if (开始点竖线[i] === true) {
+                arr.push({ 多: [], 空: [], 净: [] })
+            }
+            if (arr.length > 0) {
+                arr[arr.length - 1].多.push(多力度[i])
+                arr[arr.length - 1].空.push(空力度[i])
+                arr[arr.length - 1].净.push(净力度[i])
+            }
+        }
+
+        let length = 0
+        arr.forEach(v => length = Math.max(length, v.净.length))
+        arr.forEach((v, i) => {
+            const data = v.净
+
+            g.lineStyle(1, colorTable[Math.min(colorTable.length - 1, i)])
+
+            let hasMove = false
+
+            for (let i = 0; i < length; i++) {
+                const v = data[i]
+
+                if (isNaN(v)) {
+                    hasMove = false
+                    continue
+                }
+                const x = viewport.width / length * i
+                const y = to.y(v)
+
+                if (hasMove === false) {
+                    hasMove = true
+                    g.moveTo(x, y)
+                } else {
+                    g.lineTo(x, y)
+                }
+            }
+        })
+    }
+
+    getRight() {
+        return this.props.净力度.length - 1
+    }
+
+    updateTopAndBottom = (viewport: Viewport, tb: TopBottom) => {
+        const xx = getTopAndBottom(this.props.净力度)({ ...viewport, left: 0, right: this.props.净力度.length - 1 })
+        return combineTopAndBottom(tb, xx)
+    }
+
+} 
