@@ -8,12 +8,7 @@ import { dialog } from './lib/UI/dialog'
 import { timeID } from './lib/F/timeID'
 import { theme } from './lib/Chart/theme'
 import { toRange } from './lib/F/toRange'
-import { showWindow, windowExt } from './windowExt'
-import { config } from './config'
-import { 信号Layer } from './lib/Chart/Layer/信号Layer'
-import { BitMEXHTTP } from './lib/____API____/BitMEX/BitMEXHTTP'
-import * as fs from 'fs'
-import { safeJSONParse } from './lib/F/safeJSONParse'
+import { showWindow } from './windowExt'
 import { 指标 } from './指标/指标'
 import { LineLayer } from './lib/Chart/Layer/LineLayer'
 
@@ -40,11 +35,7 @@ let startRight = 0
 
 
 
-const account = config.account![windowExt.accountName]
-const { cookie } = account
 
-let 止损1m_dic: { [key: number]: string } = Object.create(null)
-let 成交提示: { name: string, value: boolean }[][] = []
 
 let dif: ArrayLike<number> = []
 let dem: ArrayLike<number> = []
@@ -82,41 +73,6 @@ const load = async () => {
         right: data.length,
         data: data
     }
-
-
-    const res = await BitMEXHTTP.Execution.getTradeHistory(cookie, {
-        reverse: true,
-        count: 500,
-        filter: JSON.stringify({ 'symbol': nowSymbol }),
-        columns: JSON.stringify([]),
-    })
-
-
-    if (res.data !== undefined) {
-        console.log(res.data)
-        res.data.filter(v => v.ordType === 'Stop' || v.ordType === 'StopLimit').forEach(v =>
-            止损1m_dic[timeID._60s.toID(new Date(v.transactTime).getTime())] = v.ordType
-        )
-    }
-
-
-    const arr = safeJSONParse(fs.readFileSync('./db/成交记录.json').toString()) as BaseType.成交记录
-    const dic: { [key: number]: string } = Object.create(null)
-    arr.forEach(v => {
-        dic[timeID._60s.toID(v.timestamp)] = v.type
-    })
-
-    成交提示 = data.map(v => [
-        // '挂单买' | '挂单卖' | '挂单买成功' | '挂单卖成功' | '市价买' | '市价卖'
-        { name: '挂单买', value: dic[v.id] === '挂单买' },
-        { name: '挂单卖', value: dic[v.id] === '挂单卖' },
-        { name: '挂单买成功', value: dic[v.id] === '挂单买成功' },
-        { name: '挂单卖成功', value: dic[v.id] === '挂单卖成功' },
-        { name: '市价买', value: dic[v.id] === '市价买' },
-        { name: '市价卖', value: dic[v.id] === '市价卖' },
-        { name: '实盘止损', value: 止损1m_dic[v.id] === 'Stop' },
-        { name: '实盘强平', value: 止损1m_dic[v.id] === 'StopLimit' },
-    ])
 
 }
 
@@ -172,7 +128,7 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
         left: S.left,
         right: S.right,
         items: {
-            heightList: [0.4, 0.2, 0.2, 0.2],
+            heightList: [0.4, 0.4, 0.2],
             items: [
                 {
                     layerList: [
@@ -180,11 +136,6 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
                         // layer(笔Layer, { data: get笔Index(klineData), color: 0xffff00 }),
                         // layer(线段Layer, { data: get线段(get笔Index(klineData)), color: 0xaa0000 }),
                         // layer(合并后的Layer, { data: 合并后的K线(klineData), color: 0xffff00 }),
-                    ]
-                },
-                {
-                    layerList: [
-                        layer(信号Layer, { data: 成交提示, color: 0xffff00 }),
                     ]
                 },
                 {

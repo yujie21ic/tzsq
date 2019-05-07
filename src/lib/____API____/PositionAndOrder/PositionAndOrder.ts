@@ -14,6 +14,7 @@ type ITEM = {
     }[]
     仓位数量: number
     开仓均价: number
+    强平价格: number
 }
 
 export interface PositionAndOrder {

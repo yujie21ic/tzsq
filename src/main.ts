@@ -12,6 +12,10 @@ const menu = Menu.buildFromTemplate([
     label: v.k,
     submenu: [
       {
+        label: 'HopexKLine',
+        click: () => showWindow('HopexKLine', { accountName: v.k })
+      },
+      {
         label: `盘口`,
         click: () => showWindow('盘口', { accountName: v.k })
       },

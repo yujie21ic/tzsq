@@ -4,13 +4,11 @@ import { LineLayer } from './lib/Chart/Layer/LineLayer'
 import { TextLayer, LeftTextLayer } from './lib/Chart/Layer/TextLayer'
 import { lastNumber } from './lib/F/lastNumber'
 import { ZeroLayer } from './lib/Chart/Layer/ZeroLayer'
-//import { 信号Layer } from './lib/Chart/Layer/信号Layer'
-//import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
-//import { 笔Layer } from './lib/Chart/Layer/笔Layer'
-//import { get笔Index, get线段, 合并后的K线 } from './指标/缠中说禅'
-//import { 线段Layer } from './lib/Chart/Layer/线段Layer'
-//import { 合并后的Layer } from './lib/Chart/Layer/合并后的Layer'
-//import { BarLayer } from './lib/Chart/Layer/BarLayer'
+import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
+import { 笔Layer } from './lib/Chart/Layer/笔Layer'
+import { get笔Index, get线段, 合并后的K线 } from './指标/缠中说禅'
+import { 线段Layer } from './lib/Chart/Layer/线段Layer'
+import { 合并后的Layer } from './lib/Chart/Layer/合并后的Layer' 
 
 
 
@@ -3257,35 +3255,35 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     // }),
 
 
-    // '3D 测试': (d, d2) => ({
-    //     heightList: [0.4, 0.4, 0.2],
-    //     items: [
-    //         {
-    //             numberColor: BTC颜色,
-    //             layerList: [
-    //                 layer(KLineLayer, { data: d2.XBTUSD.bitmex.KLine }),
-    //                 layer(笔Layer, { data: get笔Index(d2.XBTUSD.bitmex.KLine), color: 0xffff00 }),
-    //                 layer(线段Layer, { data: get线段(get笔Index(d2.XBTUSD.bitmex.KLine)), color: 0xaa0000 }),
-    //                 layer(合并后的Layer, { data: 合并后的K线(d2.XBTUSD.bitmex.KLine), color: 0xffff00 }),
-    //             ]
-    //         },
-    //         {
-    //             layerList: [
-    //                 layer(ZeroLayer, { color: 0xaaaaaa }),
-    //                 layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
-    //                 layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-    //                 layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
-    //             ]
-    //         },
-    //         {
-    //             layerList: [
-    //                 layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
-    //                 layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色 }),
-    //                 layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
-    //             ]
-    //         },
-    //     ]
-    // }),
+    '3D 测试': (d, d2) => ({
+        heightList: [0.4, 0.4, 0.2],
+        items: [
+            {
+                numberColor: BTC颜色,
+                layerList: [
+                    layer(KLineLayer, { data: d2.XBTUSD.bitmex.KLine }),
+                    layer(笔Layer, { data: get笔Index(d2.XBTUSD.bitmex.KLine), color: 0xffff00 }),
+                    layer(线段Layer, { data: get线段(get笔Index(d2.XBTUSD.bitmex.KLine)), color: 0xaa0000 }),
+                    layer(合并后的Layer, { data: 合并后的K线(d2.XBTUSD.bitmex.KLine), color: 0xffff00 }),
+                ]
+            },
+            {
+                layerList: [
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
+                    layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
+                    layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
+                    layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
+                ]
+            },
+            {
+                layerList: [
+                    layer(LineLayer, { data: d.bitmex.买.盘口, color: 买颜色 }),
+                    layer(LineLayer, { data: d.bitmex.卖.盘口, color: 卖颜色 }),
+                    layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
+                ]
+            },
+        ]
+    }),
 
     // 'ctp波动_测试': (d, d2) => ({
     //     heightList: [0.6, 0.4],

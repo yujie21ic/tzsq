@@ -408,28 +408,32 @@ export class 交易 extends React.Component {
                 this.选项卡 = !this.选项卡
             }}>切换</a>
 
-            {this.选项卡 ?
-                (orderClient.isConnected === false ?
-                    <a href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a> :
-                    <div style={{
-                        backgroundColor: '#24292d',
-                        margin: 'auto auto',
-                        width: `${theme.右边空白}px`,
-                        padding: '10px 5px',
-                        fontFamily: 'SourceHanSansSC-regular',
-                        color: 'white',
-                        fontSize: '24px',
-                        userSelect: 'none',
-                        cursor: 'default'
-                    }}>
-                        <Item market='bitmex' symbol='XBTUSD' data={() => orderClient.jsonSync.rawData.market.bitmex.XBTUSD} 位置={this.位置} 倍数={this.倍数} />
-                        <Item market='hopex' symbol='BTCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.BTCUSDT} 位置={this.位置} 倍数={this.倍数} />
-                        {/* <Item market='hopex' symbol='ETHUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.ETHUSDT} 位置={this.位置} 倍数={this.倍数} /> */}
-                        {/* <Item market='hopex' symbol='ETCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.ETCUSDT} 位置={this.位置} 倍数={this.倍数} /> */}
-                        {/* <Item market='hopex' symbol='LTCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.LTCUSDT} 位置={this.位置} 倍数={this.倍数} />
-                <Item market='hopex' symbol='XRPUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.XRPUSDT} 位置={this.位置} 倍数={this.倍数} /> */}
-                        {/* <Item market='hopex' symbol='BSVUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.BSVUSDT} 位置={this.位置} 倍数={this.倍数} /> */}
-                    </div>) : <任务遥控器 />}
+            <div hidden={orderClient.isConnected}>
+                <a style={{ fontSize: 16, color: '#666666' }} href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a>
+            </div>
+
+            <div hidden={!this.选项卡}>
+                <div style={{
+                    backgroundColor: '#24292d',
+                    margin: 'auto auto',
+                    width: `${theme.右边空白}px`,
+                    padding: '10px 5px',
+                    fontFamily: 'SourceHanSansSC-regular',
+                    color: 'white',
+                    fontSize: '24px',
+                    userSelect: 'none',
+                    cursor: 'default'
+                }}>
+                    <Item market='bitmex' symbol='XBTUSD' data={() => orderClient.jsonSync.rawData.market.bitmex.XBTUSD} 位置={this.位置} 倍数={this.倍数} />
+                    <Item market='hopex' symbol='BTCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.BTCUSDT} 位置={this.位置} 倍数={this.倍数} />
+                </div>)}
+                <任务遥控器 />
+            </div>
+
+            <div hidden={this.选项卡}>
+                <提醒 />
+            </div>
+
         </div>
     }
 
@@ -464,7 +468,7 @@ class 实盘 extends React.Component {
     render() {
         return <div style={{ display: 'flex', height: '100%' }}>
             <div style={{ flex: '1 1 auto' }} ref={this.initChart} />
-            <div style={{ width: `${theme.右边空白}px` }}><交易 /><提醒 /></div>
+            <div style={{ width: `${theme.右边空白}px` }}><交易 /></div>
         </div>
     }
 }

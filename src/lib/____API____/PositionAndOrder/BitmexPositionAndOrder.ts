@@ -19,6 +19,7 @@ const symbol = () => ({
     委托列表: [] as BaseType.Order[],
     仓位数量: 0,
     开仓均价: 0,
+    强平价格: 0,
 })
 
 export const createJSONSync = () =>
@@ -90,8 +91,10 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
                 const arr = data.data || []
                 arr.forEach(v => {
-                    __obj__[v.contractCode].仓位数量 = Number(v.positionQuantity.split(',').join(''))
-                    __obj__[v.contractCode].开仓均价 = v.entryPriceD
+                    if (__obj__[v.contractCode] !== undefined) {//!!!!!!!!!!!!!!!!!!!!!!
+                        __obj__[v.contractCode].仓位数量 = Number(v.positionQuantity.split(',').join(''))
+                        __obj__[v.contractCode].开仓均价 = v.entryPriceD
+                    }
                 })
 
                 BaseType.HopexSymbolArr.forEach(symbol => {
@@ -126,29 +129,31 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
                     const result = 止损data.data ? 止损data.data.result || [] : []
                     result.forEach(v => {
                         if (v.taskStatusD === '未触发') {
-                            __obj__[v.contractCode].push({
-                                type: '止损',
-                                timestamp: v.timestamp,
-                                id: String(v.taskId),
-                                side: v.taskTypeD === '买入止损' ? 'Buy' : 'Sell',
-                                cumQty: 0,
-                                orderQty: 100000,
-                                price: Number(v.trigPrice.split(',').join('')),
-                            })
+                            if (__obj__[v.contractCode] !== undefined)
+                                __obj__[v.contractCode].push({
+                                    type: '止损',
+                                    timestamp: v.timestamp,
+                                    id: String(v.taskId),
+                                    side: v.taskTypeD === '买入止损' ? 'Buy' : 'Sell',
+                                    cumQty: 0,
+                                    orderQty: 100000,
+                                    price: Number(v.trigPrice.split(',').join('')),
+                                })
                         }
                     })
                 }
                 if (委托data.data !== undefined) {
                     委托data.data.forEach(v => {
-                        __obj__[v.contractCode].push({
-                            type: '限价',
-                            timestamp: new Date(v.ctime).getTime(),
-                            id: String(v.orderId),
-                            side: v.side === '2' ? 'Buy' : 'Sell',
-                            cumQty: Number(v.fillQuantity.split(',').join('')),
-                            orderQty: Number(v.leftQuantity.split(',').join('')),
-                            price: Number(v.orderPrice.split(',').join('')),
-                        })
+                        if (__obj__[v.contractCode] !== undefined)
+                            __obj__[v.contractCode].push({
+                                type: '限价',
+                                timestamp: new Date(v.ctime).getTime(),
+                                id: String(v.orderId),
+                                side: v.side === '2' ? 'Buy' : 'Sell',
+                                cumQty: Number(v.fillQuantity.split(',').join('')),
+                                orderQty: Number(v.leftQuantity.split(',').join('')),
+                                price: Number(v.orderPrice.split(',').join('')),
+                            })
                     })
                 }
 
@@ -348,18 +353,20 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
         ['XBTUSD' as 'XBTUSD', 'ETHUSD' as 'ETHUSD'].forEach(symbol => {
             this.ws.data.position.forEach(item => {
                 if (item.symbol === symbol) {
-                    const { 仓位数量, 开仓均价 } = this.jsonSync.data.market.bitmex[symbol]
+                    const { 仓位数量, 开仓均价, 强平价格 } = this.jsonSync.data.market.bitmex[symbol]
                     const raw = this.jsonSync.rawData.market.bitmex[symbol]
                     if (item !== undefined) {
-                        if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== item.avgCostPrice) {
+                        if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== item.avgCostPrice || raw.强平价格 !== item.liquidationPrice) {
                             仓位数量.____set(item.currentQty)
                             开仓均价.____set(Number(item.avgCostPrice)) //<---------------------------null to 0
-                            this.log(`仓位更新: ${symbol} 仓位数量:${item.currentQty}  本地维护仓位数量:${this.ws.仓位数量.get(symbol)}  开仓均价:${item.avgCostPrice}`)
+                            强平价格.____set(Number(item.liquidationPrice)) //null to 0
+                            this.log(`仓位更新: ${symbol} 仓位数量:${item.currentQty} 强平价格:${item.liquidationPrice}  本地维护仓位数量:${this.ws.仓位数量.get(symbol)}  开仓均价:${item.avgCostPrice}`)
                         }
                     } else {
-                        if (raw.仓位数量 !== 0 || raw.开仓均价 !== 0) {
+                        if (raw.仓位数量 !== 0 || raw.开仓均价 !== 0 || raw.强平价格 !== 0) {
                             仓位数量.____set(0)
                             开仓均价.____set(0)
+                            强平价格.____set(0)
                             this.log(`仓位更新: ${symbol} 仓位数量:0  本地维护仓位数量:${this.ws.仓位数量.get(symbol)}`)
                         }
                     }

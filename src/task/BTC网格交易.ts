@@ -5,44 +5,36 @@ import { PositionAndOrderTask } from '../lib/____API____/PositionAndOrder/Positi
 import { lastNumber } from '../lib/F/lastNumber'
 import { to价格对齐 } from '../lib/F/to价格对齐'
 import { sleep } from '../lib/F/sleep'
+import { typeObjectParse } from '../lib/F/typeObjectParse'
+
+const 参数type = {
+    网格大小: 0.5,
+    单位数量: 25,
+    最小盈利点: 0,
+    格数: 1,
+    方向: 'Sell' as BaseType.Side,
+    最大仓位: 1000,
+    留多少不减仓: 0,
+    盈利加仓: false,
+    亏损减仓: false,
+    加仓: false,
+    减仓: false,
+    止损价格: 0,
+}
 
 export class BTC网格交易 implements PositionAndOrderTask {
 
     开关 = false
-    参数type = {
-        网格大小: 0.5,
-        单位数量: 25,
-        最小盈利点: 0,
-        格数: 1,
-        方向: 'Sell' as BaseType.Side,
-        最大仓位: 1000,
-        留多少不减仓: 0,
-        盈利加仓: false,
-        亏损减仓: false,
-        加仓: false,
-        减仓: false,
-        止损价格: 0,
-    }
-    参数 = {
-        网格大小: 0.5,
-        单位数量: 25,
-        最小盈利点: 0,
-        格数: 1,
-        方向: 'Buy' as BaseType.Side,
-        最大仓位: 1000,
-        留多少不减仓: 0,
-        盈利加仓: false,
-        亏损减仓: false,
-        加仓: false,
-        减仓: false,
-        止损价格: 0,
-    }
+    参数type = 参数type
+    参数 = typeObjectParse(参数type)({})
 
     private self = {} as PositionAndOrder
     private lastBuyPrice = NaN
     private lastSellPrice = NaN
 
     private get仓位数量 = () => this.self.jsonSync.rawData.market.bitmex.XBTUSD.仓位数量
+
+    private get强平价格 = () => this.self.jsonSync.rawData.market.bitmex.XBTUSD.强平价格
 
     private getBuy1 = () => lastNumber(this.self.realData.dataExt.XBTUSD.bitmex.买.盘口1价)
 
@@ -61,12 +53,11 @@ export class BTC网格交易 implements PositionAndOrderTask {
         }
     }
 
-    private toList = ({ side, price, size }: { side: BaseType.Side, price: number, size?: number }) =>
+    private toList = ({ side, price }: { side: BaseType.Side, price: number }) =>
         range(0, 50).map(i =>
             ({
                 side,
                 price: side === 'Buy' ? price - i * this.参数.网格大小 : price + i * this.参数.网格大小,
-                size: size === undefined ? this.参数.单位数量 : size,
             })
         )
 
@@ -129,29 +120,31 @@ export class BTC网格交易 implements PositionAndOrderTask {
         return false
     }
 
+    private 方向一致 = () => (this.参数.方向 === 'Buy' && this.get仓位数量() >= 0) || (this.参数.方向 === 'Sell' && this.get仓位数量() <= 0)
 
     private 加仓task = () =>
         this.sync委托列表({
             reduceOnly: false,
+            side: this.参数.方向,
+            剩余: Math.max(0, this.方向一致() ?
+                this.参数.最大仓位 - Math.abs(this.get仓位数量()) : //方向一致
+                this.参数.最大仓位 + Math.abs(this.get仓位数量())   //方向不一致
+            ),
             arr: this.get加仓()
         })
 
     private 减仓task = () =>
         this.sync委托列表({
             reduceOnly: true,
+            side: this.参数.方向 === 'Buy' ? 'Sell' : 'Buy',
+            剩余: Math.max(0, (Math.abs(this.get仓位数量()) - this.参数.留多少不减仓)),
             arr: this.get减仓()
         })
 
     private async run1(self: PositionAndOrder, f: () => boolean | Promise<boolean>) {
         while (true) {
-            if (this.开关) {
-                if (self.bitmex_初始化.仓位 && self.bitmex_初始化.委托 && this.self.get本地维护仓位数量('XBTUSD') === this.self.jsonSync.rawData.market.bitmex.XBTUSD.仓位数量) {
-                    //if (
-                    await f()
-                    // ) {
-                    //await sleep(2000) //发了请求 休息2秒  TODO 改成事务 不用sleep
-                    //}
-                }
+            if (this.开关 && self.bitmex_初始化.仓位 && self.bitmex_初始化.委托 && this.self.get本地维护仓位数量('XBTUSD') === this.self.jsonSync.rawData.market.bitmex.XBTUSD.仓位数量) {
+                await f()
             }
             await sleep(0)
         }
@@ -168,38 +161,25 @@ export class BTC网格交易 implements PositionAndOrderTask {
         if (this.参数.减仓 === false) return []
 
         const count = this.get仓位数量()
-        const 剩余 = Math.max(0, (Math.abs(count) - this.参数.留多少不减仓))
-
-        let 格数 = Math.min(this.参数.格数, Math.floor(剩余 / this.参数.单位数量))
-        let size = this.参数.单位数量
-
-        // 部分成交 不行
-        // if (剩余 !== 0 && this.参数.格数 !== 0 && 格数 === 0) {
-        //     格数 = 1
-        //     size = 剩余
-        // }
-
         if (this.参数.方向 === 'Buy' && count > 0) {
             return this.toList({
-                size,
                 side: 'Sell',
                 price: to价格对齐({
                     side: 'Sell',
                     value: this.参数.亏损减仓 ? this.getSell1() : this.sellPrice(this.参数.最小盈利点),
                     grid: this.参数.网格大小,
                 }),
-            }).filter(this.同一个价位不连续挂2次).slice(0, 格数)
+            }).filter(this.同一个价位不连续挂2次).slice(0, this.参数.格数)
         }
         else if (this.参数.方向 === 'Sell' && count < 0) {
             return this.toList({
-                size,
                 side: 'Buy',
                 price: to价格对齐({
                     side: 'Buy',
                     value: this.参数.亏损减仓 ? this.getBuy1() : this.buyPrice(this.参数.最小盈利点),
                     grid: this.参数.网格大小,
                 }),
-            }).filter(this.同一个价位不连续挂2次).slice(0, 格数)
+            }).filter(this.同一个价位不连续挂2次).slice(0, this.参数.格数)
         } else {
             return []
         }
@@ -208,16 +188,6 @@ export class BTC网格交易 implements PositionAndOrderTask {
 
     private get加仓() {
         if (this.参数.加仓 === false) return []
-
-        const count = this.get仓位数量()
-        const 剩余 = Math.max(0,
-            ((this.参数.方向 === 'Buy' && count >= 0) || (this.参数.方向 === 'Sell' && count <= 0)) ?
-                this.参数.最大仓位 - Math.abs(count) : //方向一致
-                this.参数.最大仓位 + Math.abs(count)   //方向不一致
-        )
-
-        const 格数 = Math.min(this.参数.格数, Math.floor(剩余 / this.参数.单位数量))
-
         return this.toList({
             side: this.参数.方向,
             price: to价格对齐({
@@ -228,23 +198,62 @@ export class BTC网格交易 implements PositionAndOrderTask {
                 grid: this.参数.网格大小,
             }),
         }).filter(this.同一个价位不连续挂2次).filter(v =>
-            this.参数.止损价格 === 0 ?
-                true :
-                this.参数.方向 === 'Buy' ?
-                    v.price > this.参数.止损价格 :
-                    v.price < this.参数.止损价格
-        ).slice(0, 格数)
+            this.方向一致() === false ? true :
+                this.参数.止损价格 === 0 ?
+                    (
+                        this.get强平价格() === 0 ? true :
+                            this.参数.方向 === 'Buy' ?
+                                v.price > this.get强平价格() :
+                                v.price < this.get强平价格()
+                    )
+                    :
+                    this.参数.方向 === 'Buy' ?
+                        v.price > Math.max(this.参数.止损价格, this.get强平价格()) :
+                        v.price < Math.min(this.参数.止损价格, this.get强平价格())
+        ).slice(0, this.参数.格数)
     }
 
 
-    private sync委托列表({ reduceOnly, arr }: { reduceOnly: boolean, arr: { side: BaseType.Side, price: number, size: number }[] }) {
+
+    private sync委托列表({ reduceOnly, 剩余, side, arr }: { reduceOnly: boolean, 剩余: number, side: BaseType.Side, arr: { price: number }[] }) {
+
+        const 当前委托 = this.self.jsonSync.rawData.market.bitmex.XBTUSD.委托列表
+            .filter(v => v.type === (reduceOnly ? '限价只减仓' : '限价'))
+            .sort((a, b) => side === 'Sell' ? a.price - b.price : b.price - a.price)
+
+
+        //side不对的委托 先取消掉
+        const side不对的委托 = 当前委托.filter(v => v.side !== side)
+        if (side不对的委托.length !== 0) {
+            return this.self.cancel({ orderID: side不对的委托.map(v => v.id) })
+        }
+
+
+        剩余 += 当前委托.length > 0 ? 当前委托[0].cumQty : 0 //部分成交加到剩余里面        
+        const xxx: { price: number, size: number }[] = [] //计算出同步委托列表
+        let i = 0
+        while (剩余 > 0 && i < arr.length) {
+            const size = 剩余 >= this.参数.单位数量 ? this.参数.单位数量 : 剩余
+            xxx.push({
+                price: arr[i].price,
+                size,
+            })
+            剩余 -= size
+            i++
+        }
+
+        return this.sync委托列表__2({ reduceOnly, side, arr: xxx })
+    }
+
+
+    private sync委托列表__2({ reduceOnly, side, arr }: { reduceOnly: boolean, side: BaseType.Side, arr: { price: number, size: number }[] }) {
+
+        //TODO 取消 挂上 改成  修改
 
         //price 不能重复
-        let dic: { [price: number]: { side: BaseType.Side, size: number } } = {}
+        let dic: { [price: number]: { size: number } } = {}
 
-        arr.forEach(v => {
-            dic[v.price] = { side: v.side, size: v.size }
-        })
+        arr.forEach(v => dic[v.price] = { size: v.size })
 
         let cancelIDs: string[] = []
 
@@ -273,7 +282,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
             let arr: { side: BaseType.Side, price: number, size: number, reduceOnly: boolean }[] = []
             for (const price in dic) {
                 arr.push({
-                    side: dic[price].side,
+                    side,
                     price: Number(price),
                     size: dic[price].size,
                     reduceOnly,
