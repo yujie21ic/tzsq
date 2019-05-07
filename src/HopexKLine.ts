@@ -4,9 +4,6 @@ import { formatDate } from './lib/F/formatDate'
 import { timeID } from './lib/F/timeID'
 import { theme } from './lib/Chart/theme'
 import { toRange } from './lib/F/toRange'
-import { 笔Layer } from './lib/Chart/Layer/笔Layer'
-import { get笔Index, get线段 } from './指标/缠中说禅'
-import { 线段Layer } from './lib/Chart/Layer/线段Layer'
 import { HopexRealKLine } from './lib/____API____/HopexRealKLine'
 import { 指标 } from './指标/指标'
 import { 竖线Layer } from './lib/Chart/Layer/竖线Layer'
@@ -52,10 +49,10 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
             items: [
                 {
                     layerList: [
-                        layer(竖线Layer, { data: 开始点竖线, color: 0x666666 }),
+                        layer(竖线Layer, { data: 开始点竖线, color: 0x555522 }),
                         layer(KLineLayer, { data: kline }),
-                        layer(笔Layer, { data: get笔Index(kline), color: 0xffff00 }),
-                        layer(线段Layer, { data: get线段(get笔Index(kline)), color: 0xaa0000 }),
+                        //layer(笔Layer, { data: get笔Index(kline), color: 0xffff00 }),
+                        //layer(线段Layer, { data: get线段(get笔Index(kline)), color: 0xaa0000 }),
                     ]
                 },
             ]

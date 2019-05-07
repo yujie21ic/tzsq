@@ -26,7 +26,11 @@ export class 竖线Layer extends Layer<{ data: ArrayLike<boolean>, color: number
 
         for (let i = Math.max(0, Math.floor(left)); i <= Math.min(Math.round(right), data.length - 1); i++) {
             if (data[i]) {
-                const x = to.x(i)
+                let x = to.x(i - 0.3)
+                g.moveTo(x, to.y(tb.top))
+                g.lineTo(x, to.y(tb.bottom))
+
+                x = to.x(i + 0.3)
                 g.moveTo(x, to.y(tb.top))
                 g.lineTo(x, to.y(tb.bottom))
             }
