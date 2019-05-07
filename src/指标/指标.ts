@@ -91,6 +91,7 @@ export namespace 指标 {
 
 
     //批量计算
+    //不访问 .length 直接 访问 [i] 会有问题
     export const map2 = <T, EXT>(
         ext: EXT,
         f: (arr: T[], ext: EXT) => void
