@@ -7,12 +7,59 @@ import { toRange } from './lib/F/toRange'
 import { HopexRealKLine } from './lib/____API____/HopexRealKLine'
 import { 指标 } from './指标/指标'
 import { 竖线Layer } from './lib/Chart/Layer/竖线Layer'
+import { LineLayer } from './lib/Chart/Layer/LineLayer';
 
 theme.右边空白 = 0
+
+const 买颜色 = 0x0E6655
+const 卖颜色 = 0x943126
 
 const real = new HopexRealKLine()
 const timeArr = 指标.map(() => real.kline.length, i => new Date(timeID._60s.toTimestamp(real.kline[i].id)).toLocaleString())
 const 开始点竖线: boolean[] = []
+
+let 多力度: ArrayLike<number> = []
+let 空力度: ArrayLike<number> = []
+let 净力度: ArrayLike<number> = []
+
+const 更新力度 = () => {
+
+    多力度 = 指标.map2({}, (arr: number[]) => {
+
+        const length = real.kline.length
+
+        for (let i = Math.max(0, arr.length - 1); i < length; i++) {
+            const 当前力度 = Math.max(0, real.kline[i].close - real.kline[i].open)
+
+            if (开始点竖线[i] === true) {
+                arr[i] = 当前力度
+            } else {
+                arr[i] = 当前力度 + (i === 0 ? NaN : arr[i - 1])
+            }
+
+        }
+    })
+
+    空力度 = 指标.map2({}, (arr: number[]) => {
+
+        const length = real.kline.length
+
+        for (let i = Math.max(0, arr.length - 1); i < length; i++) {
+            const 当前力度 = Math.max(0, real.kline[i].open - real.kline[i].close) //<-------
+
+            if (开始点竖线[i] === true) {
+                arr[i] = 当前力度
+            } else {
+                arr[i] = 当前力度 + (i === 0 ? NaN : arr[i - 1])
+            }
+
+        }
+    })
+
+
+    净力度 = 指标.map(() => real.kline.length, i => 多力度[i] - 空力度[i])
+
+}
 
 
 let left = 200
@@ -45,7 +92,7 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
         left: left,
         right: right,
         items: {
-            heightList: [1],
+            heightList: [0.6, 0.4],
             items: [
                 {
                     layerList: [
@@ -53,6 +100,13 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
                         layer(KLineLayer, { data: kline }),
                         //layer(笔Layer, { data: get笔Index(kline), color: 0xffff00 }),
                         //layer(线段Layer, { data: get线段(get笔Index(kline)), color: 0xaa0000 }),
+                    ]
+                },
+                {
+                    layerList: [
+                        layer(LineLayer, { data: 多力度, color: 买颜色 }),
+                        layer(LineLayer, { data: 空力度, color: 卖颜色 }),
+                        layer(LineLayer, { data: 净力度, color: 0xffff00 }),
                     ]
                 },
             ]
@@ -102,6 +156,7 @@ window.onmousedown = e => {
     if (e.button === 2) {
         const index = getIndex()
         开始点竖线[index] = !开始点竖线[index]
+        更新力度()
     }
 }
 
