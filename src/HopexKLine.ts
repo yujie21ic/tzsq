@@ -1,4 +1,4 @@
-import { chartInit, layer } from './lib/Chart'
+import { chartInit, layer, getIndex } from './lib/Chart'
 import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
 import { formatDate } from './lib/F/formatDate'
 import { timeID } from './lib/F/timeID'
@@ -9,29 +9,26 @@ import { get笔Index, get线段 } from './指标/缠中说禅'
 import { 线段Layer } from './lib/Chart/Layer/线段Layer'
 import { HopexRealKLine } from './lib/____API____/HopexRealKLine'
 import { 指标 } from './指标/指标'
+import { 竖线Layer } from './lib/Chart/Layer/竖线Layer'
 
 theme.右边空白 = 0
 
 const real = new HopexRealKLine()
+const timeArr = 指标.map(() => real.kline.length, i => new Date(timeID._60s.toTimestamp(real.kline[i].id)).toLocaleString())
+const 开始点竖线: boolean[] = []
 
-let S = {
-    left: 200,
-    right: 300,
-}
 
-real.onFirstLoad = () => {
-    S = {
-        left: Math.max(0, real.kline.length - 100),
-        right: real.kline.length,
-    }
-}
-
+let left = 200
+let right = 300
 let isDown = false
 let startX = 0
 let startLeft = 0
 let startRight = 0
 
-const timeArr = 指标.map(() => real.kline.length, i => new Date(timeID._60s.toTimestamp(real.kline[i].id)).toLocaleString())
+real.onFirstLoad = () => {
+    left = Math.max(0, real.kline.length - 100)
+    right = real.kline.length
+}
 
 chartInit(60, document.querySelector('#root') as HTMLElement, () => {
 
@@ -48,13 +45,14 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
                 return undefined
             }
         },
-        left: S.left,
-        right: S.right,
+        left: left,
+        right: right,
         items: {
             heightList: [1],
             items: [
                 {
                     layerList: [
+                        layer(竖线Layer, { data: 开始点竖线, color: 0x666666 }),
                         layer(KLineLayer, { data: kline }),
                         layer(笔Layer, { data: get笔Index(kline), color: 0xffff00 }),
                         layer(线段Layer, { data: get线段(get笔Index(kline)), color: 0xaa0000 }),
@@ -66,44 +64,47 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
 })
 
 
-
 const xx = () => {
     const 多出 = 12
 
-    S.left = toRange({ min: -多出, max: real.kline.length - 多出, value: S.left })
+    left = toRange({ min: -多出, max: real.kline.length - 多出, value: left })
 
-    if (S.right <= S.left + 多出) {
-        S.right = S.left + 多出
+    if (right <= left + 多出) {
+        right = left + 多出
     }
 
-    S.right = toRange({ min: 多出, max: real.kline.length + 多出, value: S.right })
+    right = toRange({ min: 多出, max: real.kline.length + 多出, value: right })
 }
 
 
 window.onmousewheel = (e: any) => {
 
-    const count = S.right - S.left
+    const count = right - left
     const d = e['wheelDelta'] / 120 * (count * 0.05)
 
     const n = startX / (document.body.clientWidth - theme.RIGHT_WIDTH)
 
 
-    S.left += d * n
-    S.right -= d * (1 - n)
+    left += d * n
+    right -= d * (1 - n)
 
     xx()
 
     startX = e['clientX']
-    startLeft = S.left
-    startRight = S.right
+    startLeft = left
+    startRight = right
 }
 
 window.onmousedown = e => {
     if (e.button === 0) {
         isDown = true
         startX = e.clientX
-        startLeft = S.left
-        startRight = S.right
+        startLeft = left
+        startRight = right
+    }
+    if (e.button === 2) {
+        const index = getIndex()
+        开始点竖线[index] = !开始点竖线[index]
     }
 }
 
@@ -115,8 +116,8 @@ window.onmouseup = e => {
 
 window.onmousemove = e => {
     if (isDown) {
-        S.left = startLeft - (startRight - startLeft) * (e.clientX - startX) / (document.body.clientWidth - theme.RIGHT_WIDTH)
-        S.right = startRight - (startRight - startLeft) * (e.clientX - startX) / (document.body.clientWidth - theme.RIGHT_WIDTH)
+        left = startLeft - (startRight - startLeft) * (e.clientX - startX) / (document.body.clientWidth - theme.RIGHT_WIDTH)
+        right = startRight - (startRight - startLeft) * (e.clientX - startX) / (document.body.clientWidth - theme.RIGHT_WIDTH)
         xx()
     }
-} 
+}
