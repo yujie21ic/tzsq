@@ -226,7 +226,7 @@ export class 力度对比Layer extends Layer<{
                     hasMove = false
                     continue
                 }
-                const x = viewport.width / length * i
+                const x = viewport.width / length * (i + 0.5)
                 const y = to.y(v)
 
                 if (hasMove === false) {
