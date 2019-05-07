@@ -47,7 +47,7 @@ const 净成交量颜色 = 0x424242
 const 石青 = 0x1685a9
 const 以太坊颜色 = 0x6d3939
 const LTC颜色 = 0x6d3939
-const bitmexETH颜色 = 0x508200
+//const bitmexETH颜色 = 0x508200
 const 黑色 = 0x000000
 
 
@@ -143,17 +143,17 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                         layer(LineLayer, { data: d2.hopex.LTCUSDT.价格, color: LTC颜色 }),
                     ]
                 },
-                {
-                    numberColor: 0x000000,
-                    layerList: [
-                        layer(LineLayer, { data: d2.ETHUSD.bitmex.价格, color: bitmexETH颜色 }),
-                    ]
-                },
+                // {
+                //     numberColor: 0x000000,
+                //     layerList: [
+                //         layer(LineLayer, { data: d2.ETHUSD.bitmex.价格, color: bitmexETH颜色 }),
+                //     ]
+                // },
                 {
                     numberColor: 净成交量颜色,
                     numberX: 100,
                     layerList: [
-                        layer(ZeroLayer, { color: 净成交量颜色 }),
+                        layer(ZeroLayer, { color: ETH颜色 }),
                         layer(LineLayer, { data: d.bitmex.买.净成交量_累加60, color: 净成交量颜色 }),
                     ]
                 },

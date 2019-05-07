@@ -320,7 +320,7 @@ export class RealDataBase {
         //         ]
         //     })
 
-        盘口算价格 = true
+        盘口算价格 = false
 
         const 盘口价格 = 指标.map(() => orderBook.length, i =>
             (orderBook[i].buy && orderBook[i].buy.length > 0 && orderBook[i].sell && orderBook[i].sell.length > 0) ?
