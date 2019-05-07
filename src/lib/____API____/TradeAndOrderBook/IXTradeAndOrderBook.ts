@@ -14,7 +14,7 @@ type 着笔 = {
 }
 
 type 盘口 = {
-    'code': 0,
+    'code': number,
     'data': {
         'asks': {
             'values': string[]   // 卖价    卖量     
@@ -25,7 +25,7 @@ type 盘口 = {
     }
 }
 
-const 盘口map = (v: {values: string[]}) => ({
+const 盘口map = (v: { values: string[] }) => ({
     price: Number(v.values[0]),
     size: Number(v.values[1]),
 })
@@ -53,24 +53,26 @@ export class IXTradeAndOrderBook extends TradeAndOrderBook<BaseType.IXSymbol> {
 
 
         this.着笔ws.onData = (d: 着笔) => {
-            d.data.forEach(v => {
-                this.tradeObservable.next({
-                    symbol: 'BTCUSD',
-                    timestamp: v.time,
-                    price: Number(v.values[0]),
-                    side: v.side === 'sell' ? 'Sell' : 'Buy',
-                    size: Number(v.values[1]),
+            if (d.code === 0)
+                d.data.forEach(v => {
+                    this.tradeObservable.next({
+                        symbol: 'BTCUSD',
+                        timestamp: v.time,
+                        price: Number(v.values[0]),
+                        side: v.side === 'sell' ? 'Sell' : 'Buy',
+                        size: Number(v.values[1]),
+                    })
                 })
-            })
         }
 
         this.盘口ws.onData = (d: 盘口) => {
-            this.orderBookObservable.next({
-                symbol: 'BTCUSD',
-                timestamp: Date.now(),//直接读取本地时间
-                buy: d.data.bids.map(盘口map),
-                sell: d.data.asks.map(盘口map),
-            })
+            if (d.code === 0)
+                this.orderBookObservable.next({
+                    symbol: 'BTCUSD',
+                    timestamp: Date.now(),//直接读取本地时间
+                    buy: d.data.bids.map(盘口map),
+                    sell: d.data.asks.map(盘口map),
+                })
         }
 
 
