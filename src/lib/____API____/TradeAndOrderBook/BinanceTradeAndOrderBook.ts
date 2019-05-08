@@ -11,6 +11,7 @@ const 盘口map = (v: any) => ({
 export class BinanceTradeAndOrderBook extends TradeAndOrderBook<BaseType.BinanceSymbol> {
 
     private ws = new WebSocketClient({
+        name: 'BinanceTradeAndOrderBook',
         ss: config.ss,
         url: 'wss://stream.binance.com:9443/stream?streams=' + [
             //近期交易
@@ -19,8 +20,8 @@ export class BinanceTradeAndOrderBook extends TradeAndOrderBook<BaseType.Binance
             //盘口 
             'btcusdt@depth5',
             'ethusdt@depth5'
-        ].join('/')
-    }) 
+        ].join('/'),
+    })
 
     constructor() {
         super()

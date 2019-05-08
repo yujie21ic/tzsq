@@ -8,8 +8,9 @@ import { BaseType } from '../../BaseType'
 export class FCoinTradeAndOrderBook extends TradeAndOrderBook<BaseType.FCoinSymbol>{
 
     private ws = new WebSocketClient({
+        name: 'FCoinTradeAndOrderBook',
         ss: config.ss,
-        url: 'wss://api.fcoin.com/v2/ws'
+        url: 'wss://api.fcoin.com/v2/ws',
     })
 
     constructor() {

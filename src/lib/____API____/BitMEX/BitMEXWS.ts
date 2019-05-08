@@ -138,11 +138,12 @@ export class BitMEXWS {
     constructor(cookie: string, subscribe: { theme: SubscribeTheme, filter?: string }[]) {
 
         const ws = this.ws = new WebSocketClient({
+            name: 'BitMEXWS',
             headers: {
                 Cookie: cookie
             },
             ss: config.ss,
-            url: 'wss://www.bitmex.com/realtime'
+            url: 'wss://www.bitmex.com/realtime',
         })
 
 

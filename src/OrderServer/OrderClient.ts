@@ -16,7 +16,8 @@ export class OrderClient {
     jsonSync = createJSONSync()
 
     private ws = new WebSocketClient({
-        url: `ws://${config.orderServerIP}:4567`
+        name: 'OrderClient',
+        url: `ws://${config.orderServerIP}:4567`,
     })
 
     private 收到了消息 = false

@@ -11,12 +11,15 @@ export class WebSocketClient {
     private ws?: WebSocket
     private createWS: () => WebSocket
     private _isConnected = false
+    private readonly name: string
 
     constructor(p: {
+        name: string
         url: string
         ss?: boolean
         headers?: { [key: string]: string }
     }) {
+        this.name = p.name
         const options: WebSocket.ClientOptions = {}
 
         if (p.ss) {
@@ -45,14 +48,11 @@ export class WebSocketClient {
         return this._isConnected
     }
 
-    static id = 0
-    id = WebSocketClient.id++
-
     private connect = () => {
         this.ws = this.createWS()
-        console.log('ws 连接中 ' + this.id)
+        console.log('ws 连接中 ' + name)
         this.ws.onopen = () => {
-            console.log('ws 连接成功 ' + this.id)
+            console.log('ws 连接成功 ' + this.name)
             if (this._isConnected === false) {
                 this._isConnected = true
                 this.onStatusChange()
@@ -66,7 +66,7 @@ export class WebSocketClient {
     }
 
     private reconnect = () => {
-        console.log('ws 断开重连 ' + this.id)
+        console.log('ws 断开重连 ' + this.name)
 
         //destroy
         if (this.ws !== undefined) {

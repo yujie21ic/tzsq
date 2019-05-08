@@ -14,7 +14,8 @@ export namespace DataClient {
     export class RealData__Client extends RealDataBase {
 
         private ws = new WebSocketClient({
-            url: 'ws://127.0.0.1:6666'
+            name:'DataClient',
+            url: 'ws://127.0.0.1:6666',
         })
 
         constructor() {

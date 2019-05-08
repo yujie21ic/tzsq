@@ -108,8 +108,9 @@ export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymb
         ({
             symbol,
             ws: new WebSocketClient({
+                name: 'HopexTradeAndOrderBook',
                 ss: config.ss,
-                url: 'wss://api.hopex.com/ws'
+                url: 'wss://api.hopex.com/ws',
             })
         })
     )

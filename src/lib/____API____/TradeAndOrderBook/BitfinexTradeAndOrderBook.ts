@@ -8,6 +8,7 @@ import { BaseType } from '../../BaseType'
 export class BitfinexTradeAndOrderBook extends TradeAndOrderBook<BaseType.BitfinexSymbol> {
 
     private ws = new WebSocketClient({
+        name: 'BitfinexTradeAndOrderBook',
         ss: config.ss,
         url: `wss://api-pub.bitfinex.com/ws/2`,
     })
