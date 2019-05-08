@@ -359,7 +359,6 @@ export class 交易 extends React.Component {
 
     componentWillMount() {
 
-
         const f = () => {
             requestAnimationFrame(f)
             this.forceUpdate()
@@ -367,6 +366,10 @@ export class 交易 extends React.Component {
         f()
 
         window.addEventListener('keydown', e => {
+
+            if (e.keyCode === 112) this.选项卡 = true
+            if (e.keyCode === 113) this.选项卡 = false
+
             if (e.keyCode >= 49 && e.keyCode <= 52) {
                 this.倍数 = e.keyCode - 48
             }
@@ -386,11 +389,8 @@ export class 交易 extends React.Component {
     选项卡 = true
 
     render() {
-        return <div style={{ backgroundColor: '#24292d' }}>
-            <a style={{ fontSize: 28, color: '#666666' }} href='#' onClick={() => {
-                this.选项卡 = !this.选项卡
-            }}>切换</a>
-
+        return <div style={{ backgroundColor: '#24292d' }}> 
+        
             <div hidden={orderClient.isConnected}>
                 <a style={{ fontSize: 16, color: '#666666' }} href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a>
             </div>
