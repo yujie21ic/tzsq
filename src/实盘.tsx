@@ -28,7 +28,7 @@ type XXX = PositionAndOrder['jsonSync']['rawData']['market']['bitmex']['XBTUSD']
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
 
-const Table = (p: {
+export const Table = (p: {
     委托列表: BaseType.Order[]
     side: BaseType.Side
     取消f: (id: string) => void
@@ -162,21 +162,6 @@ class Item extends React.Component<{ market: 'bitmex' | 'hopex' | 'fcoin', symbo
                 <p>仓位:{this.get仓位()}</p>
                 <p>止损:{get止损()}</p>
                 <p>委托:{get委托()}</p>
-                {/* <p>
-                    摸顶:<Switch checked={任务开关.自动开仓摸顶} onChange={(e, v) => { rpc.任务_开关__临时({ cookie, market: this.props.market, symbol: this.props.symbol, 任务名字: '自动开仓摸顶', value: v }) }} />
-                    抄底:<Switch checked={任务开关.自动开仓抄底} onChange={(e, v) => { rpc.任务_开关__临时({ cookie, market: this.props.market, symbol: this.props.symbol, 任务名字: '自动开仓抄底', value: v }) }} />
-                </p>
-                <p>
-                    追涨:<Switch checked={任务开关.自动开仓追涨} onChange={(e, v) => { rpc.任务_开关__临时({ cookie, market: this.props.market, symbol: this.props.symbol, 任务名字: '自动开仓追涨', value: v }) }} />
-                    追跌:<Switch checked={任务开关.自动开仓追跌} onChange={(e, v) => { rpc.任务_开关__临时({ cookie, market: this.props.market, symbol: this.props.symbol, 任务名字: '自动开仓追跌', value: v }) }} />
-                </p>
-                <p>
-                    止盈波段:<Switch checked={任务开关.自动止盈波段} onChange={(e, v) => { rpc.任务_开关__临时({ cookie, market: this.props.market, symbol: this.props.symbol, 任务名字: '自动止盈波段', value: v }) }} />
-                    推止损:<Switch checked={任务开关.自动推止损} onChange={(e, v) => { rpc.任务_开关__临时({ cookie, market: this.props.market, symbol: this.props.symbol, 任务名字: '自动推止损', value: v }) }} />
-                </p>
-                <p>
-                    止损:<Switch checked={任务开关.自动止损} onChange={(e, v) => { rpc.任务_开关__临时({ cookie, market: this.props.market, symbol: this.props.symbol, 任务名字: '自动止损', value: v }) }} />
-                </p> */}
             </div>
 
             {
@@ -194,9 +179,9 @@ class Item extends React.Component<{ market: 'bitmex' | 'hopex' | 'fcoin', symbo
                                 left={() => fcoin_buy(lastNumber(realTickClient.dataExt.XBTUSD.fcoin.买.盘口1价))}
                                 right={() => fcoin_buy(lastNumber(realTickClient.dataExt.XBTUSD.fcoin.卖.盘口1价) + 市价追高)}
                             />
-                            <Table 委托列表={委托列表} side='Buy' 取消f={id => {
+                            {/* <Table 委托列表={委托列表} side='Buy' 取消f={id => {
                                 FCoinHTTP.cancel(fcoinCookie, id)
-                            }} />
+                            }} /> */}
                         </div>
                         <div
                             style={{ width: '50%' }}>
@@ -206,9 +191,9 @@ class Item extends React.Component<{ market: 'bitmex' | 'hopex' | 'fcoin', symbo
                                 left={() => fcoin_sell(lastNumber(realTickClient.dataExt.XBTUSD.fcoin.卖.盘口1价))}
                                 right={() => fcoin_sell(lastNumber(realTickClient.dataExt.XBTUSD.fcoin.买.盘口1价) - 市价追高)}
                             />
-                            <Table 委托列表={委托列表} side='Sell' 取消f={id => {
+                            {/* <Table 委托列表={委托列表} side='Sell' 取消f={id => {
                                 FCoinHTTP.cancel(fcoinCookie, id)
-                            }} />
+                            }} /> */}
                         </div>
                     </div>
                     : this.props.market === 'hopex' ?
@@ -234,9 +219,9 @@ class Item extends React.Component<{ market: 'bitmex' | 'hopex' | 'fcoin', symbo
                                         size: 下单数量,
                                     })}
                                 />
-                                <Table 委托列表={委托列表} side='Buy' 取消f={id => {
+                                {/* <Table 委托列表={委托列表} side='Buy' 取消f={id => {
                                     HopexHTTP.cancel(hopexCookie, { orderID: Number(id), contractCode: this.props.symbol as BaseType.HopexSymbol })
-                                }} />
+                                }} /> */}
                             </div>
                             <div
                                 style={{ width: '50%' }}>
@@ -255,9 +240,9 @@ class Item extends React.Component<{ market: 'bitmex' | 'hopex' | 'fcoin', symbo
                                         size: 下单数量,
                                     })}
                                 />
-                                <Table 委托列表={委托列表} side='Sell' 取消f={id => {
+                                {/* <Table 委托列表={委托列表} side='Sell' 取消f={id => {
                                     HopexHTTP.cancel(hopexCookie, { orderID: Number(id), contractCode: this.props.symbol as BaseType.HopexSymbol })
-                                }} />
+                                }} /> */}
                             </div>
                         </div>
 
@@ -307,10 +292,9 @@ class Item extends React.Component<{ market: 'bitmex' | 'hopex' | 'fcoin', symbo
                                         最低_最高: true,
                                     })}
                                 />
-                                <br />
-                                <Table 委托列表={委托列表} side='Buy' 取消f={id => {
+                                {/* <Table 委托列表={委托列表} side='Buy' 取消f={id => {
                                     rpc.取消委托({ cookie, orderID: [id] })
-                                }} />
+                                }} /> */}
                             </div>
 
                             <div
@@ -353,10 +337,9 @@ class Item extends React.Component<{ market: 'bitmex' | 'hopex' | 'fcoin', symbo
                                         最低_最高: true,
                                     })}
                                 />
-                                <br />
-                                <Table 委托列表={委托列表} side='Sell' 取消f={id => {
+                                {/* <Table 委托列表={委托列表} side='Sell' 取消f={id => {
                                     rpc.取消委托({ cookie, orderID: [id] })
-                                }} />
+                                }} /> */}
                             </div>
                         </div>
             }
