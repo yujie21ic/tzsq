@@ -15,7 +15,7 @@ type KL = {
 
 export class HopexRealKLine {
 
-    kline: KL[] = []
+    readonly kline: KL[] = []
 
     onFirstLoad = () => { }
 
