@@ -373,12 +373,12 @@ export class 交易 extends React.Component {
             if (e.keyCode >= 49 && e.keyCode <= 52) {
                 this.倍数 = e.keyCode - 48
             }
-
-            if (e.keyCode === 37) {//left
+ 
+            if (e.keyCode === 65) {// a left
                 if (this.位置 > 0) this.位置--
             }
 
-            if (e.keyCode === 39) {//right
+            if (e.keyCode === 68) {//d right
                 if (this.位置 < 4) this.位置++
             }
 
@@ -389,8 +389,8 @@ export class 交易 extends React.Component {
     选项卡 = true
 
     render() {
-        return <div style={{ backgroundColor: '#24292d' }}> 
-        
+        return <div style={{ backgroundColor: '#24292d' }}>
+
             <div hidden={orderClient.isConnected}>
                 <a style={{ fontSize: 16, color: '#666666' }} href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a>
             </div>
