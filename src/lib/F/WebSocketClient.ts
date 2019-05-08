@@ -50,7 +50,7 @@ export class WebSocketClient {
 
     private connect = () => {
         this.ws = this.createWS()
-        console.log('ws 连接中 ' + name)
+        console.log('ws 连接中 ' + this.name)
         this.ws.onopen = () => {
             console.log('ws 连接成功 ' + this.name)
             if (this._isConnected === false) {
