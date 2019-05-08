@@ -412,8 +412,8 @@ export class 交易 extends React.Component {
                 <a style={{ fontSize: 16, color: '#666666' }} href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a>
             </div>
 
-            <div hidden={!this.选项卡}>
-                <div style={{
+            <div hidden={!this.选项卡}
+                style={{
                     backgroundColor: '#24292d',
                     margin: 'auto auto',
                     width: `${theme.右边空白}px`,
@@ -424,9 +424,8 @@ export class 交易 extends React.Component {
                     userSelect: 'none',
                     cursor: 'default'
                 }}>
-                    <Item market='bitmex' symbol='XBTUSD' data={() => orderClient.jsonSync.rawData.market.bitmex.XBTUSD} 位置={this.位置} 倍数={this.倍数} />
-                    <Item market='hopex' symbol='BTCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.BTCUSDT} 位置={this.位置} 倍数={this.倍数} />
-                </div>
+                <Item market='bitmex' symbol='XBTUSD' data={() => orderClient.jsonSync.rawData.market.bitmex.XBTUSD} 位置={this.位置} 倍数={this.倍数} />
+                <Item market='hopex' symbol='BTCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.BTCUSDT} 位置={this.位置} 倍数={this.倍数} />
                 <任务遥控器 />
             </div>
 
