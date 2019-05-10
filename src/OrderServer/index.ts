@@ -145,11 +145,11 @@ server.func.下单 = async req => {
     }
 
 
-    if ((仓位数量 > 0 && req.side !== 'Sell') ||
-        (仓位数量 < 0 && req.side !== 'Buy')
-    ) {
-        throw '不能加仓'
-    }
+    // if ((仓位数量 > 0 && req.side !== 'Sell') ||
+    //     (仓位数量 < 0 && req.side !== 'Buy')
+    // ) {
+    //     throw '不能加仓'
+    // }
 
     return req.type === 'taker' ?
         (req.最低_最高 ?
@@ -167,7 +167,7 @@ server.func.下单 = async req => {
             side: req.side,
             size: req.size,
             price: toBuySellPriceFunc(req.side, getPrice),
-            reduceOnly: 仓位数量 !== 0,
+            reduceOnly: false,//仓位数量 !== 0,
             text: '手动maker',
         })
 }
