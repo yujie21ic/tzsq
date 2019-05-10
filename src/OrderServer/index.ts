@@ -119,7 +119,7 @@ server.func.下单 = async req => {
         throw '服务器还没有 买1 卖1 价格'
     }
 
-    const { 仓位数量 } = account.jsonSync.rawData.market.bitmex[req.symbol]
+    //const { 仓位数量 } = account.jsonSync.rawData.market.bitmex[req.symbol]
 
     const 活动委托 = account.jsonSync.rawData.market.bitmex[req.symbol].委托列表.filter(v => v.type !== '止损')
 
