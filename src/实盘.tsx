@@ -370,10 +370,16 @@ export class 交易 extends React.Component {
             if (e.keyCode === 112) this.选项卡 = true
             if (e.keyCode === 113) this.选项卡 = false
 
+            
             if (e.keyCode >= 49 && e.keyCode <= 52) {
                 this.倍数 = e.keyCode - 48
             }
- 
+
+            if (e.keyCode ===192) {
+                this.倍数 = 0.5
+            }
+
+
             if (e.keyCode === 65) {// a left
                 if (this.位置 > 0) this.位置--
             }
