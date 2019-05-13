@@ -21,7 +21,6 @@ if (config.orderServer !== undefined) {
             accountName: k,
             cookie: v.cookie,
             hopexCookie: v.hopexCookie,
-            fcoinCookie: v.fcoinCookie,
         })
         account.runTask('bitmex_btc_网格_1', new BTC网格交易())
         account.runTask('bitmex_btc_网格_2', new BTC网格交易())
@@ -96,7 +95,7 @@ server.func.下单 = async req => {
     }
 
     const getOrderPrice = () =>
-        account.realData.getOrderPrice({
+        account._________________这里改成只需要bitmex的最新盘口.getOrderPrice({
             symbol: req.symbol,
             side: req.side,
             type: req.type,
@@ -106,7 +105,7 @@ server.func.下单 = async req => {
     const getPrice = req.最低_最高 ?
         () => {
             const price = getOrderPrice()
-            const { high, low } = account.realData.get期货多少秒内最高最低(req.symbol, 5)
+            const { high, low } = account._________________这里改成只需要bitmex的最新盘口.get期货多少秒内最高最低(req.symbol, 5)
             if (req.side === 'Buy') {
                 return Math.min(price, low)
             } else {
@@ -119,7 +118,7 @@ server.func.下单 = async req => {
         throw '服务器还没有 买1 卖1 价格'
     }
 
-    const { 仓位数量 } = account.jsonSync.rawData.market.bitmex[req.symbol]
+    //const { 仓位数量 } = account.jsonSync.rawData.market.bitmex[req.symbol]
 
     const 活动委托 = account.jsonSync.rawData.market.bitmex[req.symbol].委托列表.filter(v => v.type !== '止损')
 
@@ -145,11 +144,11 @@ server.func.下单 = async req => {
     }
 
 
-    if ((仓位数量 > 0 && req.side !== 'Sell') ||
-        (仓位数量 < 0 && req.side !== 'Buy')
-    ) {
-        throw '不能加仓'
-    }
+    // if ((仓位数量 > 0 && req.side !== 'Sell') ||
+    //     (仓位数量 < 0 && req.side !== 'Buy')
+    // ) {
+    //     throw '不能加仓'
+    // }
 
     return req.type === 'taker' ?
         (req.最低_最高 ?
@@ -167,7 +166,7 @@ server.func.下单 = async req => {
             side: req.side,
             size: req.size,
             price: toBuySellPriceFunc(req.side, getPrice),
-            reduceOnly: 仓位数量 !== 0,
+            reduceOnly: false,//仓位数量 !== 0,
             text: '手动maker',
         })
 }

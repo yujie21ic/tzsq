@@ -17,6 +17,12 @@ theme.右边空白 = 0
 const real = new HopexRealKLine()
 const timeArr = 指标.map(() => real.kline.length, i => new Date(timeID._60s.toTimestamp(real.kline[i].id)).toLocaleString())
 
+const close = 指标.map(() => real.kline.length, i => real.kline[i].close)
+const M5 = 指标.SMA(close, 5, 1000)
+const M10 = 指标.SMA(close, 10, 1000)
+const M25 = 指标.SMA(close, 25, 1000)
+const M50 = 指标.SMA(close, 50, 1000)
+
 const 开始点竖线: boolean[] = []
 let 力度Arr: { 多: ArrayLike<number>, 空: ArrayLike<number>, 净: ArrayLike<number> }[] = []
 
@@ -77,6 +83,12 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
 
     const kline = real.kline
 
+    //跟踪
+    if (isDown === false && right < kline.length + 5) {
+        left = left - ((kline.length + 5) - right)
+        right = kline.length + 5
+    }
+
     return {
         title: 'HopexKLine',
         xStrArr: timeArr,
@@ -99,6 +111,10 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
                         layer(KLineLayer, { data: kline }),
                         //layer(笔Layer, { data: get笔Index(kline), color: 0xffff00 }),
                         //layer(线段Layer, { data: get线段(get笔Index(kline)), color: 0xaa0000 }),
+                        layer(LineLayer, { data: M5, color: 0x666666 }),
+                        layer(LineLayer, { data: M10, color: 0x666666 }),
+                        layer(LineLayer, { data: M25, color: 0xffffff }),
+                        layer(LineLayer, { data: M50, color: 0xffffff }),
                     ]
                 },
                 {

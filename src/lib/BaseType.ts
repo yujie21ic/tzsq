@@ -4,46 +4,17 @@ export namespace BaseType {
 
     export type Omit<T, K extends string> = Pick<T, Exclude<keyof T, K>>
 
-
-    
     export const HopexSymbolDic = {
         'BTCUSDT': {},
         'ETHUSDT': {},
-        'ETCUSDT': {},
         'LTCUSDT': {},
-        'BCHUSDT': {},
-        'BSVUSDT': {},
-        'XRPUSDT': {},
-        'EOSUSDT': {},
     }
     export type HopexSymbol = keyof typeof HopexSymbolDic
     export const HopexSymbolArr = keys(HopexSymbolDic)
 
 
-    //IX
-    export const IXSymbolDic = {
-        'BTCUSD': {},
-    }
-    export type IXSymbol = keyof typeof IXSymbolDic
-    export const IXSymbolArr = keys(IXSymbolDic)
-
-
-    //Bitfinex
-    export const BitfinexSymbolDic = {
-        'BTCUSD': {},
-    }
-    export type BitfinexSymbol = keyof typeof BitfinexSymbolDic
-    export const BitfinexSymbolArr = keys(BitfinexSymbolDic)
- 
-
-
     export type BitmexSymbol = 'ETHUSD' | 'XBTUSD'
-    export type BinanceSymbol = 'btcusdt' | 'ethusdt' //ws小写  http大写  卧槽
-
-    export type FCoinSymbol = 'btcusdt' | 'ethusdt'
-
-
-
+    export type BinanceSymbol = 'btcusdt' | 'ethudst' //DB 还用
 
     export type Side = 'Buy' | 'Sell'
 
@@ -129,5 +100,5 @@ export namespace BaseType {
 
     export type 成交性质Type = '双开' | '双平' | '多换' | '空换' | '多平' | '空平' | '空开' | '多开' | '不知道'
 
-  
+
 } 

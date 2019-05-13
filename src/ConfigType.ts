@@ -6,15 +6,13 @@ export type ConfigType = {
     orderServer?: {
         [name: string]: {
             cookie: string
-            hopexCookie: string
-            fcoinCookie: string
+            hopexCookie: string 
         }
     } 
     account?: {
         [name: string]: {
             cookie: string
-            hopexCookie: string
-            fcoinCookie: string
+            hopexCookie: string 
             计分板倍数?: number
         }
     }

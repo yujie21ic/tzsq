@@ -4,7 +4,7 @@ import { 指标 } from '../指标/指标'
 import { toRange } from '../lib/F/toRange'
 import { is连续几根全亮 } from '../lib/F/is连续几根全亮'
 import { timeID } from '../lib/F/timeID'
-import { get买卖 } from '../指标/买卖' 
+import { get买卖 } from '../指标/买卖'
 import { formatDate } from '../lib/F/formatDate'
 import { mapObjIndexed } from '../lib/F/mapObjIndexed'
 import { ______CTP__config } from './______CTP__config'
@@ -38,60 +38,6 @@ export class RealDataBase {
     static 单位时间 = 500
 
     删除历史() {
-        // const length = Math.min(
-
-        //     //hopex
-        //     this.jsonSync.rawData.hopex.BTCUSDT.data.length,
-        //     this.jsonSync.rawData.hopex.BTCUSDT.orderBook.length,
-
-        //     this.jsonSync.rawData.hopex.ETHUSDT.data.length,
-        //     this.jsonSync.rawData.hopex.ETHUSDT.orderBook.length,
-
-        //     //bitmex
-        //     this.jsonSync.rawData.bitmex.XBTUSD.data.length,
-        //     this.jsonSync.rawData.bitmex.XBTUSD.orderBook.length,
-
-        //     this.jsonSync.rawData.bitmex.ETHUSD.data.length,
-        //     this.jsonSync.rawData.bitmex.ETHUSD.orderBook.length,
-
-        //     //binance
-        //     this.jsonSync.rawData.binance.btcusdt.data.length,
-        //     this.jsonSync.rawData.binance.btcusdt.orderBook.length,
-
-        //     this.jsonSync.rawData.binance.ethusdt.data.length,
-        //     this.jsonSync.rawData.binance.ethusdt.orderBook.length,
-        // )
-
-
-        // if (length > 120 * 60) {
-
-        //     const deleteCount = 120 * 30
-        //     this.jsonSync.rawData.startTick += deleteCount
-
-        //     //hopex
-        //     this.jsonSync.rawData.hopex.BTCUSDT.data.splice(0, deleteCount)
-        //     this.jsonSync.rawData.hopex.BTCUSDT.orderBook.splice(0, deleteCount)
-
-        //     this.jsonSync.rawData.hopex.ETHUSDT.data.splice(0, deleteCount)
-        //     this.jsonSync.rawData.hopex.ETHUSDT.orderBook.splice(0, deleteCount)
-
-        //     //bitmex
-        //     this.jsonSync.rawData.bitmex.XBTUSD.data.splice(0, deleteCount)
-        //     this.jsonSync.rawData.bitmex.XBTUSD.orderBook.splice(0, deleteCount)
-
-        //     this.jsonSync.rawData.bitmex.ETHUSD.data.splice(0, deleteCount)
-        //     this.jsonSync.rawData.bitmex.ETHUSD.orderBook.splice(0, deleteCount)
-
-        //     //binance
-        //     this.jsonSync.rawData.binance.btcusdt.data.splice(0, deleteCount)
-        //     this.jsonSync.rawData.binance.btcusdt.orderBook.splice(0, deleteCount)
-
-        //     this.jsonSync.rawData.binance.ethusdt.data.splice(0, deleteCount)
-        //     this.jsonSync.rawData.binance.ethusdt.orderBook.splice(0, deleteCount)
-
-        //     this.重新初始化() //卡死？
-        // }
-
 
     }
 
@@ -105,20 +51,10 @@ export class RealDataBase {
             startTick: 0,//tick的  1m的开始 没有对齐
             ctp: mapObjIndexed(createItem, ______CTP__config),
             hopex: mapObjIndexed(createItem, BaseType.HopexSymbolDic),
-            fcoin: {
-                btcusdt: createItem(),
-                ethusdt: createItem(),
-            },
             bitmex: {
                 XBTUSD: createItem(),
                 ETHUSD: createItem(),
             },
-            binance: {
-                btcusdt: createItem(),
-                ethusdt: createItem(),
-            },
-            ix: mapObjIndexed(createItem, BaseType.IXSymbolDic),
-            bitfinex: mapObjIndexed(createItem, BaseType.BitfinexSymbolDic),
         }
     )
 
@@ -1214,15 +1150,12 @@ export class RealDataBase {
     }
 
 
-    private item = (symbol: BaseType.BitmexSymbol, binanceSymbol: BaseType.BinanceSymbol, hopexSymbol: BaseType.HopexSymbol, fcoinSymbol: BaseType.FCoinSymbol) => {
+    private item = (symbol: BaseType.BitmexSymbol, hopexSymbol: BaseType.HopexSymbol) => {
 
-        const binance = this.item2(this.data.binance[binanceSymbol], true)
 
         const bitmex = this.item2(this.data.bitmex[symbol], true)
 
         const hopex = this.item2(this.data.hopex[hopexSymbol], true)
-
-        const fcoin = this.item2(this.data.fcoin[fcoinSymbol], true)
 
 
 
@@ -1324,7 +1257,7 @@ export class RealDataBase {
                 { name: 'bm折返 >', value: bitmex.价格_最高60[i] - bitmex.价格[i] > (bitmex.折返率[i] - 1) },
                 { name: 'hp折返 <', value: hopex.价格_最高60[i] - hopex.价格[i] < (bitmex.折返率[i] * 0.5) },
             ]
-        ) 
+        )
 
 
         const bitmex__摸顶抄底_平仓 = (type: '摸顶' | '抄底') => 指标.map(
@@ -1406,37 +1339,31 @@ export class RealDataBase {
             bitmex_hopex_下跌相对差价macd,
 
             bitmex_信号_追涨,
-            bitmex_信号_追跌, 
+            bitmex_信号_追跌,
 
             hopex_信号_抄底,
             hopex_信号_摸顶,
 
             期货30秒内成交量: () => this.get期货多少秒内成交量__万为单位(symbol, 30),
 
-            binance,
             bitmex,
             hopex,
-            fcoin,
         }
     }
 
     dataExt = {
-        XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT', 'btcusdt'),
-        ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
+        XBTUSD: this.item('XBTUSD', 'BTCUSDT'),
+        ETHUSD: this.item('ETHUSD', 'ETHUSDT'),
         ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
         hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
-        ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),
-        bitfinex: mapObjIndexed((v, k) => this.item2(this.data.bitfinex[k], false), BaseType.IXSymbolDic),
     }
 
     重新初始化 = () => {
         this.dataExt = {
-            XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT', 'btcusdt'),
-            ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
+            XBTUSD: this.item('XBTUSD', 'BTCUSDT'),
+            ETHUSD: this.item('ETHUSD', 'ETHUSDT'),
             ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
             hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
-            ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),
-            bitfinex: mapObjIndexed((v, k) => this.item2(this.data.bitfinex[k], false), BaseType.IXSymbolDic),
         }
     }
 

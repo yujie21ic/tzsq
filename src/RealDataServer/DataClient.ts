@@ -122,12 +122,7 @@ export namespace DataClient {
             this.data.bitmex.XBTUSD.data = []
             this.data.bitmex.ETHUSD.data = []
             this.data.bitmex.XBTUSD.orderBook = []
-            this.data.bitmex.ETHUSD.orderBook = []
-
-            this.data.binance.btcusdt.data = []
-            this.data.binance.ethusdt.data = []
-            this.data.binance.btcusdt.orderBook = []
-            this.data.binance.ethusdt.orderBook = []
+            this.data.bitmex.ETHUSD.orderBook = [] 
 
             this.data.hopex.BTCUSDT.data = []
             this.data.hopex.ETHUSDT.data = []
@@ -149,12 +144,7 @@ export namespace DataClient {
             this.重新初始化()
 
 
-            //binance 没有盘口
-            this.data.binance.btcusdt.data = await this.get500msKLine('btcusdt', startTime, endTime)
-            this.重新初始化()
-
-            this.data.binance.ethusdt.data = await this.get500msKLine('ethusdt', startTime, endTime)
-            this.重新初始化()
+         
 
 
             //hopex
@@ -226,12 +216,7 @@ export namespace DataClient {
             this.data.bitmex.XBTUSD.data = []
             this.data.bitmex.ETHUSD.data = []
             this.data.bitmex.XBTUSD.orderBook = []
-            this.data.bitmex.ETHUSD.orderBook = []
-
-            this.data.binance.btcusdt.data = []
-            this.data.binance.ethusdt.data = []
-            this.data.binance.btcusdt.orderBook = []
-            this.data.binance.ethusdt.orderBook = []
+            this.data.bitmex.ETHUSD.orderBook = [] 
 
             this.data.hopex.BTCUSDT.data = []
             this.data.hopex.ETHUSDT.data = []
