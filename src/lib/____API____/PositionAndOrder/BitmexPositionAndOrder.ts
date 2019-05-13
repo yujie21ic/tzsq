@@ -9,7 +9,7 @@ import { BitMEXWS } from '../BitMEX/BitMEXWS'
 import { RealData__Server } from '../../../RealDataServer/RealData__Server'
 import { toCacheFunc } from '../../F/toCacheFunc'
 import { PositionAndOrder, PositionAndOrderTask } from './PositionAndOrder'
-import { HopexHTTP } from '../HopexHTTP' 
+import { HopexHTTP } from '../HopexHTTP'
 import { mapObjIndexed } from '../../F/mapObjIndexed'
 import { typeObjectParse } from '../../F/typeObjectParse'
 import { safeJSONParse } from '../../F/safeJSONParse'
@@ -58,7 +58,6 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
     private cookie: string
     private hopexCookie: string
-    private fcoinCookie: string
 
     log: (text: string) => void
     private ws: BitMEXWS
@@ -182,14 +181,13 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
 
 
-    constructor(p: { accountName: string, cookie: string, hopexCookie: string, fcoinCookie: string }) {
+    constructor(p: { accountName: string, cookie: string, hopexCookie: string }) {
         this.cookie = p.cookie
         this.hopexCookie = p.hopexCookie
-        this.fcoinCookie = p.fcoinCookie
 
         if (this.hopexCookie !== '') {
             this.hopex_轮询()
-        } 
+        }
 
         this.ws = new BitMEXWS(p.cookie, [
             //private

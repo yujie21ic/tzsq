@@ -21,7 +21,6 @@ if (config.orderServer !== undefined) {
             accountName: k,
             cookie: v.cookie,
             hopexCookie: v.hopexCookie,
-            fcoinCookie: v.fcoinCookie,
         })
         account.runTask('bitmex_btc_网格_1', new BTC网格交易())
         account.runTask('bitmex_btc_网格_2', new BTC网格交易())
