@@ -1,0 +1,1 @@
+npm run ws_test

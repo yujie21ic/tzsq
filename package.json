@@ -17,7 +17,8 @@
     "start": "concurrently \"tsc -w\" \"ts-node ./src/RealDataServer\" \"electron ./build/main.js\"",
     "start1": "tsc -w",
     "start2": "ts-node ./src/RealDataServer",
-    "start3": "electron ./build/main.js"
+    "start3": "electron ./build/main.js",
+    "ws_test": "ts-node ./src/ws_test"
   },
   "devDependencies": {
     "@types/chai": "^4.1.5",
