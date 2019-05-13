@@ -7,12 +7,7 @@ export namespace BaseType {
     export const HopexSymbolDic = {
         'BTCUSDT': {},
         'ETHUSDT': {},
-        'ETCUSDT': {},
         'LTCUSDT': {},
-        'BCHUSDT': {},
-        'BSVUSDT': {},
-        'XRPUSDT': {},
-        'EOSUSDT': {},
     }
     export type HopexSymbol = keyof typeof HopexSymbolDic
     export const HopexSymbolArr = keys(HopexSymbolDic)
