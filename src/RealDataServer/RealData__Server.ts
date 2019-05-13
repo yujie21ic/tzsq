@@ -6,7 +6,6 @@ import { BitmexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/Bi
 import { HopexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
 import { CTPTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/CTPTradeAndOrderBook'
-import { FCoinTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/FCoinTradeAndOrderBook'
 import { BitfinexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/BitfinexTradeAndOrderBook'
 
 export class RealData__Server extends RealDataBase {
@@ -17,18 +16,15 @@ export class RealData__Server extends RealDataBase {
     private bitmex = new BitmexTradeAndOrderBook()
     private binance = new BinanceTradeAndOrderBook()
     private bitfinex = new BitfinexTradeAndOrderBook()    
-    private hopex = new HopexTradeAndOrderBook()
-    private fcoin = new FCoinTradeAndOrderBook()
+    private hopex = new HopexTradeAndOrderBook() 
 
     _binance = false
     _bitmex = false
     _hopex = false
-    _fcoin = false
     onTitle = (p: {
         binance: boolean
         bitmex: boolean
         hopex: boolean
-        fcoin: boolean
     }) => { }
 
     private on着笔Dic = Object.create(null) as {
@@ -255,7 +251,6 @@ export class RealData__Server extends RealDataBase {
             binance: this._binance,
             bitmex: this._bitmex,
             hopex: this._hopex,
-            fcoin: this._fcoin,
         })
 
 
@@ -272,12 +267,6 @@ export class RealData__Server extends RealDataBase {
 
         this.hopex.statusObservable.subscribe(v => {
             this._hopex = v.isConnected
-            onTitle()
-        })
-
-
-        this.fcoin.statusObservable.subscribe(v => {
-            this._fcoin = v.isConnected
             onTitle()
         })
 
@@ -447,33 +436,7 @@ export class RealData__Server extends RealDataBase {
                 }
             })
         })
-
-
-
-        this.fcoin.tradeObservable.subscribe(({ symbol, timestamp, price, side, size }) => {
-            this.on着笔({
-                key: 'fcoin_' + symbol,
-                xxxxxxxx: this.jsonSync.data.fcoin[symbol],
-                timestamp,
-                price,
-                side,
-                size,
-            })
-        })
-
-
-        this.fcoin.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
-            this.on盘口({
-                key: 'fcoin_' + symbol,
-                xxxxxxxx: this.jsonSync.data.fcoin[symbol].orderBook,
-                timestamp,
-                orderBook: {
-                    id: Math.floor(timestamp / RealDataBase.单位时间),
-                    buy,
-                    sell,
-                }
-            })
-        })
+        
 
 
     }
