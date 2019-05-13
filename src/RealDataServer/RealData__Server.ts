@@ -1,7 +1,6 @@
 import * as WebSocket from 'ws'
 import { BaseType } from '../lib/BaseType'
 import { Sampling } from '../lib/F/Sampling'
-import { BinanceTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/BinanceTradeAndOrderBook'
 import { BitmexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/BitmexTradeAndOrderBook'
 import { HopexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
@@ -13,16 +12,13 @@ export class RealData__Server extends RealDataBase {
     private wss?: WebSocket.Server
     private wsDic = new Map<WebSocket, boolean>()
 
-    private bitmex = new BitmexTradeAndOrderBook()
-    private binance = new BinanceTradeAndOrderBook()
-    private bitfinex = new BitfinexTradeAndOrderBook()    
-    private hopex = new HopexTradeAndOrderBook() 
+    private bitmex = new BitmexTradeAndOrderBook() 
+    private bitfinex = new BitfinexTradeAndOrderBook()
+    private hopex = new HopexTradeAndOrderBook()
 
-    _binance = false
     _bitmex = false
     _hopex = false
-    onTitle = (p: {
-        binance: boolean
+    onTitle = (p: { 
         bitmex: boolean
         hopex: boolean
     }) => { }
@@ -248,7 +244,6 @@ export class RealData__Server extends RealDataBase {
         }
 
         const onTitle = () => this.onTitle({
-            binance: this._binance,
             bitmex: this._bitmex,
             hopex: this._hopex,
         })
@@ -256,12 +251,6 @@ export class RealData__Server extends RealDataBase {
 
         this.bitmex.statusObservable.subscribe(v => {
             this._bitmex = v.isConnected
-            onTitle()
-        })
-
-
-        this.binance.statusObservable.subscribe(v => {
-            this._binance = v.isConnected
             onTitle()
         })
 
@@ -354,32 +343,7 @@ export class RealData__Server extends RealDataBase {
                 }
             })
         })
-
-        this.binance.tradeObservable.subscribe(({ symbol, timestamp, price, side, size }) => {
-            this.on着笔({
-                key: 'binance_' + symbol,
-                xxxxxxxx: this.jsonSync.data.binance[symbol],
-                timestamp,
-                price,
-                side,
-                size,
-            })
-        })
-
-
-        this.binance.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
-            this.on盘口({
-                key: 'binance_' + symbol,
-                xxxxxxxx: this.jsonSync.data.binance[symbol].orderBook,
-                timestamp,
-                orderBook: {
-                    id: Math.floor(timestamp / RealDataBase.单位时间),
-                    buy,
-                    sell,
-                }
-            })
-
-        }) 
+        
 
 
         //bitfinex
@@ -436,7 +400,7 @@ export class RealData__Server extends RealDataBase {
                 }
             })
         })
-        
+
 
 
     }
