@@ -37,61 +37,7 @@ const createItem = () => ({
 export class RealDataBase {
     static 单位时间 = 500
 
-    删除历史() {
-        // const length = Math.min(
-
-        //     //hopex
-        //     this.jsonSync.rawData.hopex.BTCUSDT.data.length,
-        //     this.jsonSync.rawData.hopex.BTCUSDT.orderBook.length,
-
-        //     this.jsonSync.rawData.hopex.ETHUSDT.data.length,
-        //     this.jsonSync.rawData.hopex.ETHUSDT.orderBook.length,
-
-        //     //bitmex
-        //     this.jsonSync.rawData.bitmex.XBTUSD.data.length,
-        //     this.jsonSync.rawData.bitmex.XBTUSD.orderBook.length,
-
-        //     this.jsonSync.rawData.bitmex.ETHUSD.data.length,
-        //     this.jsonSync.rawData.bitmex.ETHUSD.orderBook.length,
-
-        //     //binance
-        //     this.jsonSync.rawData.binance.btcusdt.data.length,
-        //     this.jsonSync.rawData.binance.btcusdt.orderBook.length,
-
-        //     this.jsonSync.rawData.binance.ethusdt.data.length,
-        //     this.jsonSync.rawData.binance.ethusdt.orderBook.length,
-        // )
-
-
-        // if (length > 120 * 60) {
-
-        //     const deleteCount = 120 * 30
-        //     this.jsonSync.rawData.startTick += deleteCount
-
-        //     //hopex
-        //     this.jsonSync.rawData.hopex.BTCUSDT.data.splice(0, deleteCount)
-        //     this.jsonSync.rawData.hopex.BTCUSDT.orderBook.splice(0, deleteCount)
-
-        //     this.jsonSync.rawData.hopex.ETHUSDT.data.splice(0, deleteCount)
-        //     this.jsonSync.rawData.hopex.ETHUSDT.orderBook.splice(0, deleteCount)
-
-        //     //bitmex
-        //     this.jsonSync.rawData.bitmex.XBTUSD.data.splice(0, deleteCount)
-        //     this.jsonSync.rawData.bitmex.XBTUSD.orderBook.splice(0, deleteCount)
-
-        //     this.jsonSync.rawData.bitmex.ETHUSD.data.splice(0, deleteCount)
-        //     this.jsonSync.rawData.bitmex.ETHUSD.orderBook.splice(0, deleteCount)
-
-        //     //binance
-        //     this.jsonSync.rawData.binance.btcusdt.data.splice(0, deleteCount)
-        //     this.jsonSync.rawData.binance.btcusdt.orderBook.splice(0, deleteCount)
-
-        //     this.jsonSync.rawData.binance.ethusdt.data.splice(0, deleteCount)
-        //     this.jsonSync.rawData.binance.ethusdt.orderBook.splice(0, deleteCount)
-
-        //     this.重新初始化() //卡死？
-        // }
-
+    删除历史() { 
 
     }
 
@@ -108,10 +54,6 @@ export class RealDataBase {
             bitmex: {
                 XBTUSD: createItem(),
                 ETHUSD: createItem(),
-            },
-            binance: {
-                btcusdt: createItem(),
-                ethusdt: createItem(),
             },
             bitfinex: mapObjIndexed(createItem, BaseType.BitfinexSymbolDic),
         }
@@ -1209,9 +1151,8 @@ export class RealDataBase {
     }
 
 
-    private item = (symbol: BaseType.BitmexSymbol, binanceSymbol: BaseType.BinanceSymbol, hopexSymbol: BaseType.HopexSymbol) => {
+    private item = (symbol: BaseType.BitmexSymbol, hopexSymbol: BaseType.HopexSymbol) => {
 
-        const binance = this.item2(this.data.binance[binanceSymbol], true)
 
         const bitmex = this.item2(this.data.bitmex[symbol], true)
 
@@ -1406,15 +1347,14 @@ export class RealDataBase {
 
             期货30秒内成交量: () => this.get期货多少秒内成交量__万为单位(symbol, 30),
 
-            binance,
             bitmex,
             hopex,
         }
     }
 
     dataExt = {
-        XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT'),
-        ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT'),
+        XBTUSD: this.item('XBTUSD', 'BTCUSDT'),
+        ETHUSD: this.item('ETHUSD', 'ETHUSDT'),
         ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
         hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
         bitfinex: mapObjIndexed((v, k) => this.item2(this.data.bitfinex[k], false), BaseType.BitfinexSymbolDic),
@@ -1422,8 +1362,8 @@ export class RealDataBase {
 
     重新初始化 = () => {
         this.dataExt = {
-            XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT'),
-            ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT'),
+            XBTUSD: this.item('XBTUSD', 'BTCUSDT'),
+            ETHUSD: this.item('ETHUSD', 'ETHUSDT'),
             ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
             hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
             bitfinex: mapObjIndexed((v, k) => this.item2(this.data.bitfinex[k], false), BaseType.BitfinexSymbolDic),

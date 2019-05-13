@@ -101,7 +101,7 @@ export class _________________TickBase {
             this.nowChart === '波动_测试' ? Math.max(d.bitmex.波动_测试.累计买.length) - 1 :
                 this.nowChart === 'ctp波动_测试' ? Math.max(d2.ctp.rb1910.波动_测试.累计买.length) - 1 :
                     this.nowChart.indexOf('CTP') !== -1 ? Math.max(this.real.dataExt.ctp.TA909.价格.length, this.real.dataExt.ctp.TA909.盘口.length) - 1 :
-                        Math.max(d.binance.价格.length, d.hopex.价格.length, d.bitmex.价格.length, d.bitmex.买.盘口.length, d.bitmex.卖.盘口.length) - 1
+                        Math.max(d.hopex.价格.length, d.bitmex.价格.length, d.bitmex.买.盘口.length, d.bitmex.卖.盘口.length) - 1
 
 
         const left = Math.max(0, right - this.showCount)
