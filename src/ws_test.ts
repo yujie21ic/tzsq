@@ -1,4 +1,4 @@
-import { WebSocketClient } from "./lib/F/WebSocketClient";
+import { WebSocketClient } from './lib/F/WebSocketClient'
 
 let a = new WebSocketClient({
     name: 'test',
