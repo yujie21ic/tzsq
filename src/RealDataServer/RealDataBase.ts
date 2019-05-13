@@ -4,7 +4,7 @@ import { 指标 } from '../指标/指标'
 import { toRange } from '../lib/F/toRange'
 import { is连续几根全亮 } from '../lib/F/is连续几根全亮'
 import { timeID } from '../lib/F/timeID'
-import { get买卖 } from '../指标/买卖' 
+import { get买卖 } from '../指标/买卖'
 import { formatDate } from '../lib/F/formatDate'
 import { mapObjIndexed } from '../lib/F/mapObjIndexed'
 import { ______CTP__config } from './______CTP__config'
@@ -105,10 +105,6 @@ export class RealDataBase {
             startTick: 0,//tick的  1m的开始 没有对齐
             ctp: mapObjIndexed(createItem, ______CTP__config),
             hopex: mapObjIndexed(createItem, BaseType.HopexSymbolDic),
-            fcoin: {
-                btcusdt: createItem(),
-                ethusdt: createItem(),
-            },
             bitmex: {
                 XBTUSD: createItem(),
                 ETHUSD: createItem(),
@@ -1214,15 +1210,13 @@ export class RealDataBase {
     }
 
 
-    private item = (symbol: BaseType.BitmexSymbol, binanceSymbol: BaseType.BinanceSymbol, hopexSymbol: BaseType.HopexSymbol, fcoinSymbol: BaseType.FCoinSymbol) => {
+    private item = (symbol: BaseType.BitmexSymbol, binanceSymbol: BaseType.BinanceSymbol, hopexSymbol: BaseType.HopexSymbol) => {
 
         const binance = this.item2(this.data.binance[binanceSymbol], true)
 
         const bitmex = this.item2(this.data.bitmex[symbol], true)
 
         const hopex = this.item2(this.data.hopex[hopexSymbol], true)
-
-        const fcoin = this.item2(this.data.fcoin[fcoinSymbol], true)
 
 
 
@@ -1324,7 +1318,7 @@ export class RealDataBase {
                 { name: 'bm折返 >', value: bitmex.价格_最高60[i] - bitmex.价格[i] > (bitmex.折返率[i] - 1) },
                 { name: 'hp折返 <', value: hopex.价格_最高60[i] - hopex.价格[i] < (bitmex.折返率[i] * 0.5) },
             ]
-        ) 
+        )
 
 
         const bitmex__摸顶抄底_平仓 = (type: '摸顶' | '抄底') => 指标.map(
@@ -1406,7 +1400,7 @@ export class RealDataBase {
             bitmex_hopex_下跌相对差价macd,
 
             bitmex_信号_追涨,
-            bitmex_信号_追跌, 
+            bitmex_信号_追跌,
 
             hopex_信号_抄底,
             hopex_信号_摸顶,
@@ -1416,13 +1410,12 @@ export class RealDataBase {
             binance,
             bitmex,
             hopex,
-            fcoin,
         }
     }
 
     dataExt = {
-        XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT', 'btcusdt'),
-        ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
+        XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT'),
+        ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT'),
         ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
         hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
         ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),
@@ -1431,8 +1424,8 @@ export class RealDataBase {
 
     重新初始化 = () => {
         this.dataExt = {
-            XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT', 'btcusdt'),
-            ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT', 'ethusdt'),
+            XBTUSD: this.item('XBTUSD', 'btcusdt', 'BTCUSDT'),
+            ETHUSD: this.item('ETHUSD', 'ethusdt', 'ETHUSDT'),
             ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
             hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
             ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),

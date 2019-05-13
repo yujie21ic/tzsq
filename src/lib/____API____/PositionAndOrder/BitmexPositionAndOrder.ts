@@ -9,8 +9,7 @@ import { BitMEXWS } from '../BitMEX/BitMEXWS'
 import { RealData__Server } from '../../../RealDataServer/RealData__Server'
 import { toCacheFunc } from '../../F/toCacheFunc'
 import { PositionAndOrder, PositionAndOrderTask } from './PositionAndOrder'
-import { HopexHTTP } from '../HopexHTTP'
-import { FCoinHTTP } from '../FCoinHTTP'
+import { HopexHTTP } from '../HopexHTTP' 
 import { mapObjIndexed } from '../../F/mapObjIndexed'
 import { typeObjectParse } from '../../F/typeObjectParse'
 import { safeJSONParse } from '../../F/safeJSONParse'
@@ -183,113 +182,6 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private async fcoin_仓位_轮询() {
-        while (true) {
-            const { data } = await FCoinHTTP.getBalances(this.fcoinCookie)
-
-            if (data !== undefined) {
-                const arr = data.data.leveraged_account_resp_list
-
-                let 仓位数量 = 0
-                let 开仓均价 = 0
-
-                arr.forEach(v => {
-                    if (v.leveraged_account_type === 'btcusdt') {
-                        仓位数量 = Number(v.available_base_currency_amount.split(',').join(''))
-                        开仓均价 = Number(v.available_quote_currency_amount.split(',').join(''))
-                    }
-                })
-
-                if (this.jsonSync.rawData.market.fcoin.btcusdt.仓位数量 !== 仓位数量) this.jsonSync.data.market.fcoin.btcusdt.仓位数量.____set(仓位数量)
-                if (this.jsonSync.rawData.market.fcoin.btcusdt.开仓均价 !== 开仓均价) this.jsonSync.data.market.fcoin.btcusdt.开仓均价.____set(开仓均价)
-
-            } else {
-
-                if (isNaN(this.jsonSync.rawData.market.fcoin.btcusdt.仓位数量) === false) this.jsonSync.data.market.fcoin.btcusdt.仓位数量.____set(NaN)
-                if (isNaN(this.jsonSync.rawData.market.fcoin.btcusdt.开仓均价) === false) this.jsonSync.data.market.fcoin.btcusdt.开仓均价.____set(NaN)
-            }
-            await sleep(1000)
-        }
-    }
-
-    private async fcoin_委托_轮询() {
-        while (true) {
-            const { data } = await FCoinHTTP.getActiveOrders(this.fcoinCookie, { symbol: 'btcusdt' })
-
-            if (data !== undefined) {
-                const arr: BaseType.Order[] = data.data.map(v => ({
-                    type: '限价' as '限价',
-                    timestamp: v.created_at,
-                    id: v.id,
-                    side: (v.type === 'buy_limit' ? 'Buy' : 'Sell') as BaseType.Side,
-                    cumQty: Number(v.filled_amount.split(',').join('')),
-                    orderQty: Number(v.amount.split(',').join('')),
-                    price: Number(v.price),
-                }))
-
-                const id1Arr = arr.map(v => v.id).sort().join(',')
-                const id2Arr = this.jsonSync.rawData.market.fcoin.btcusdt.委托列表.map(v => v.id).sort().join(',')
-
-                if (id1Arr !== id2Arr) {
-                    this.jsonSync.data.market.fcoin.btcusdt.委托列表.____set(arr)
-                }
-
-            } else {
-                if (this.jsonSync.rawData.market.fcoin.btcusdt.委托列表.length !== 0) {
-                    this.jsonSync.data.market.fcoin.btcusdt.委托列表.____set([])
-                }
-            }
-            await sleep(1000)
-        }
-    }
-
-
-    private async fcoin_轮询() {
-        this.fcoin_仓位_轮询()
-        this.fcoin_委托_轮询()
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     constructor(p: { accountName: string, cookie: string, hopexCookie: string, fcoinCookie: string }) {
         this.cookie = p.cookie
         this.hopexCookie = p.hopexCookie
@@ -297,11 +189,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
 
         if (this.hopexCookie !== '') {
             this.hopex_轮询()
-        }
-
-        if (this.fcoinCookie !== '') {
-            this.fcoin_轮询()
-        }
+        } 
 
         this.ws = new BitMEXWS(p.cookie, [
             //private
