@@ -1,8 +1,9 @@
 import { WebSocketClient } from './lib/F/WebSocketClient'
 
 let a = new WebSocketClient({
+    ss: true,
     name: 'test',
-    url: 'wss://ws.ix.com/v1/deal/FUTURE_BTCUSD',
+    url: 'wss://api.hopex.com/ws',
 })
 
 a.onData = () => {
