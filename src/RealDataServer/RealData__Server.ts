@@ -4,16 +4,14 @@ import { Sampling } from '../lib/F/Sampling'
 import { BitmexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/BitmexTradeAndOrderBook'
 import { HopexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
-import { CTPTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/CTPTradeAndOrderBook'
-import { BitfinexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/BitfinexTradeAndOrderBook'
+import { CTPTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/CTPTradeAndOrderBook' 
 
 export class RealData__Server extends RealDataBase {
 
     private wss?: WebSocket.Server
     private wsDic = new Map<WebSocket, boolean>()
 
-    private bitmex = new BitmexTradeAndOrderBook() 
-    private bitfinex = new BitfinexTradeAndOrderBook()
+    private bitmex = new BitmexTradeAndOrderBook()  
     private hopex = new HopexTradeAndOrderBook()
 
     _bitmex = false
@@ -345,32 +343,7 @@ export class RealData__Server extends RealDataBase {
         })
         
 
-
-        //bitfinex
-        this.bitfinex.tradeObservable.subscribe(({ symbol, timestamp, price, side, size }) => {
-            this.on着笔({
-                key: 'bitfinex_' + symbol,
-                xxxxxxxx: this.jsonSync.data.bitfinex[symbol],
-                timestamp,
-                price,
-                side,
-                size,
-            })
-        })
-
-
-        this.bitfinex.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
-            this.on盘口({
-                key: 'bitfinex_' + symbol,
-                xxxxxxxx: this.jsonSync.data.bitfinex[symbol].orderBook,
-                timestamp,
-                orderBook: {
-                    id: Math.floor(timestamp / RealDataBase.单位时间),
-                    buy,
-                    sell,
-                }
-            })
-        })
+ 
 
 
 

@@ -3,8 +3,6 @@ import { keys } from 'ramda'
 export namespace BaseType {
 
     export type Omit<T, K extends string> = Pick<T, Exclude<keyof T, K>>
-
-
     
     export const HopexSymbolDic = {
         'BTCUSDT': {},
@@ -17,23 +15,10 @@ export namespace BaseType {
         'EOSUSDT': {},
     }
     export type HopexSymbol = keyof typeof HopexSymbolDic
-    export const HopexSymbolArr = keys(HopexSymbolDic)
-
-    //Bitfinex
-    export const BitfinexSymbolDic = {
-        'BTCUSD': {},
-    }
-    export type BitfinexSymbol = keyof typeof BitfinexSymbolDic
-    export const BitfinexSymbolArr = keys(BitfinexSymbolDic)
- 
+    export const HopexSymbolArr = keys(HopexSymbolDic)   
 
 
     export type BitmexSymbol = 'ETHUSD' | 'XBTUSD'
-    export type BinanceSymbol = 'btcusdt' | 'ethusdt' //ws小写  http大写  卧槽
-
-    export type FCoinSymbol = 'btcusdt' | 'ethusdt'
-
-
 
 
     export type Side = 'Buy' | 'Sell'

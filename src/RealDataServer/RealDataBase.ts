@@ -37,7 +37,7 @@ const createItem = () => ({
 export class RealDataBase {
     static 单位时间 = 500
 
-    删除历史() { 
+    删除历史() {
 
     }
 
@@ -55,7 +55,6 @@ export class RealDataBase {
                 XBTUSD: createItem(),
                 ETHUSD: createItem(),
             },
-            bitfinex: mapObjIndexed(createItem, BaseType.BitfinexSymbolDic),
         }
     )
 
@@ -1357,7 +1356,6 @@ export class RealDataBase {
         ETHUSD: this.item('ETHUSD', 'ETHUSDT'),
         ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
         hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
-        bitfinex: mapObjIndexed((v, k) => this.item2(this.data.bitfinex[k], false), BaseType.BitfinexSymbolDic),
     }
 
     重新初始化 = () => {
@@ -1366,7 +1364,6 @@ export class RealDataBase {
             ETHUSD: this.item('ETHUSD', 'ETHUSDT'),
             ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
             hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
-            bitfinex: mapObjIndexed((v, k) => this.item2(this.data.bitfinex[k], false), BaseType.BitfinexSymbolDic),
         }
     }
 
