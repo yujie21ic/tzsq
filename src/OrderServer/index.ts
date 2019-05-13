@@ -96,7 +96,7 @@ server.func.下单 = async req => {
     }
 
     const getOrderPrice = () =>
-        account.realData.getOrderPrice({
+        account._________________这里改成只需要bitmex的最新盘口.getOrderPrice({
             symbol: req.symbol,
             side: req.side,
             type: req.type,
@@ -106,7 +106,7 @@ server.func.下单 = async req => {
     const getPrice = req.最低_最高 ?
         () => {
             const price = getOrderPrice()
-            const { high, low } = account.realData.get期货多少秒内最高最低(req.symbol, 5)
+            const { high, low } = account._________________这里改成只需要bitmex的最新盘口.get期货多少秒内最高最低(req.symbol, 5)
             if (req.side === 'Buy') {
                 return Math.min(price, low)
             } else {

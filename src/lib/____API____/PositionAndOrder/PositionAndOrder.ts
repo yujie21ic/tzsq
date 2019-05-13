@@ -49,7 +49,7 @@ export interface PositionAndOrder {
 
     get本地维护仓位数量(symbol: BaseType.BitmexSymbol): number
 
-    realData: RealDataBase
+    _________________这里改成只需要bitmex的最新盘口: RealDataBase
 
     //hopex_API
 

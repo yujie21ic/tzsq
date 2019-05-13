@@ -665,7 +665,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     )
 
 
-    realData = __realData__()
+    _________________这里改成只需要bitmex的最新盘口 = __realData__()
 
     // private async task1(task: PositionAndOrderTask) {
     //     while (true) {
@@ -698,7 +698,7 @@ export class BitmexPositionAndOrder implements PositionAndOrder {
     runTask(name: string, task: PositionAndOrderTask) {
         this.taskDic.set(name, task)
 
-        this.realData.onTitle = obj => {
+        this._________________这里改成只需要bitmex的最新盘口.onTitle = obj => {
             this.log(JSON.stringify(obj))
         }
         this.ws.filledObservable.subscribe(v => task.onFilled(v))
