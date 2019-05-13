@@ -19,15 +19,6 @@ export namespace BaseType {
     export type HopexSymbol = keyof typeof HopexSymbolDic
     export const HopexSymbolArr = keys(HopexSymbolDic)
 
-
-    //IX
-    export const IXSymbolDic = {
-        'BTCUSD': {},
-    }
-    export type IXSymbol = keyof typeof IXSymbolDic
-    export const IXSymbolArr = keys(IXSymbolDic)
-
-
     //Bitfinex
     export const BitfinexSymbolDic = {
         'BTCUSD': {},
