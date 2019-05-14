@@ -1,5 +1,6 @@
 import { BaseType } from '../lib/BaseType'
 import { mapObjIndexed } from '../lib/F/mapObjIndexed'
+import { timeID } from '../lib/F/timeID';
 
 
 export class MiniRealData {
@@ -24,7 +25,18 @@ export class MiniRealData {
             size: number;
         }[]
     }) => {
-        //TODO
+        const pk = this.dic[p.symbol]
+        const id = timeID._1s.toID(p.timestamp)
+
+        if (pk.length > 0 && pk[pk.length - 1].id === id) {
+            pk[pk.length - 1] = { id, buy: p.buy, sell: p.sell }
+        } else {
+            pk.push({ id, buy: p.buy, sell: p.sell })
+        }
+
+        if (pk.length > 30) {
+            pk.shift()
+        }
     }
 
 
