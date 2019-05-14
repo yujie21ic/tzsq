@@ -1,6 +1,6 @@
 import { BaseType } from '../lib/BaseType'
 import { mapObjIndexed } from '../lib/F/mapObjIndexed'
-import { timeID } from '../lib/F/timeID';
+import { timeID } from '../lib/F/timeID'
 
 
 export class MiniRealData {
