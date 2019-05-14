@@ -11,7 +11,7 @@ import { Button } from './lib/UI/Button'
 import { HopexHTTP } from './lib/____API____/HopexHTTP'
 import { realTickClient, 提醒 } from './实盘__提醒'
 import { lastNumber } from './lib/F/lastNumber'
-import { PositionAndOrder } from './lib/____API____/PositionAndOrder/PositionAndOrder'
+import { PositionAndOrder } from './OrderServer/PositionAndOrder'
 import { 任务遥控器 } from './任务遥控器'
 
 

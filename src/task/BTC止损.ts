@@ -1,4 +1,4 @@
-import { PositionAndOrderTask, PositionAndOrder } from '../lib/____API____/PositionAndOrder/PositionAndOrder'
+import { PositionAndOrderTask, PositionAndOrder } from '../OrderServer/PositionAndOrder'
 import { BaseType } from '../lib/BaseType'
 import { to价格对齐 } from '../lib/F/to价格对齐'
 import { sleep } from '../lib/F/sleep'

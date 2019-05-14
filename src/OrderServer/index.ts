@@ -1,6 +1,6 @@
 import { JSONRPCServer } from '../lib/F/JSONRPC'
 import { funcList } from './funcList'
-import { PositionAndOrder } from '../lib/____API____/PositionAndOrder/PositionAndOrder'
+import { PositionAndOrder } from './PositionAndOrder'
 import * as WebSocket from 'ws'
 import { config } from '../config'
 import { typeObjectParse } from '../lib/F/typeObjectParse'
