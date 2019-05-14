@@ -14,7 +14,7 @@ export namespace BaseType {
 
 
     export type BitmexSymbol = 'ETHUSD' | 'XBTUSD'
-    export type BinanceSymbol = 'btcusdt' | 'ethudst' //DB 还用
+    export type BinanceSymbol = 'btcusdt' | 'ethusdt' //DB 还用
 
     export type Side = 'Buy' | 'Sell'
 
