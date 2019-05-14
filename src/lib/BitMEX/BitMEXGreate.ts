@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import * as R from 'ramda'
-import { JSONRequest } from '../../F/JSONRequest'
-import { config } from '../../../config'
+import { JSONRequest } from '../F/JSONRequest'
+import { config } from '../../config'
 
 const BR = '\n'
 const BR2 = BR + BR
@@ -78,7 +78,7 @@ const run = async () => {
 
 
 
-    fs.writeFileSync('./src/lib/____API____/BitMEX/BitMEXMessage.ts', `
+    fs.writeFileSync('./src/lib/BitMEX/BitMEXMessage.ts', `
 //greate by https://www.bitmex.com/api/explorer/swagger.json
 
 export namespace BitMEXMessage {${
@@ -89,13 +89,13 @@ export namespace BitMEXMessage {${
 }`)
 
 
-    fs.writeFileSync('./src/lib/____API____/BitMEX/BitMEXHTTP.ts', `
+    fs.writeFileSync('./src/lib/BitMEX/BitMEXHTTP.ts', `
 //greate by https://www.bitmex.com/api/explorer/swagger.json
 
 import { BitMEXMessage } from './BitMEXMessage'
-import { queryStringStringify } from '../../F/queryStringStringify'
-import { JSONRequest } from '../../F/JSONRequest'
-import { config } from '../../../config'
+import { queryStringStringify } from '../F/queryStringStringify'
+import { JSONRequest } from '../F/JSONRequest'
+import { config } from '../../config'
 
 const f = async <T>(obj: { method: string, path: string, cookie: string, req: any }) => {
 

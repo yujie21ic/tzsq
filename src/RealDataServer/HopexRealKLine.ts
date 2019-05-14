@@ -1,7 +1,7 @@
-import { JSONRequest } from '../F/JSONRequest'
-import { queryStringStringify } from '../F/queryStringStringify'
-import { timeID } from '../F/timeID'
-import { sleep } from '../F/sleep'
+import { JSONRequest } from '../lib/F/JSONRequest'
+import { queryStringStringify } from '../lib/F/queryStringStringify'
+import { timeID } from '../lib/F/timeID'
+import { sleep } from '../lib/F/sleep'
 
 const toS = (n: number) => Math.floor(n / 1000)
 

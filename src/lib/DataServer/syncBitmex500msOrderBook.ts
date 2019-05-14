@@ -2,7 +2,7 @@ import { Sampling } from '../F/Sampling'
 import { BaseType } from '../BaseType'
 import { DB } from './DB'
 import { timeID } from '../F/timeID'
-import { BitMEXWS } from '../____API____/BitMEX/BitMEXWS'
+import { BitMEXWS } from '../BitMEX/BitMEXWS'
 
 const 盘口map = (v: any) => ({
     price: Number(v[0]),

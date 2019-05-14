@@ -3,7 +3,7 @@ import { SyncKLine } from './SyncKLine'
 import { DB } from './DB'
 import { timeID } from '../F/timeID'
 import { sleep } from '../F/sleep'
-import { BitMEXHTTP } from '../____API____/BitMEX/BitMEXHTTP'
+import { BitMEXHTTP } from '../BitMEX/BitMEXHTTP'
 import { toRange } from '../F/toRange'
 
 

@@ -2,9 +2,9 @@
 //greate by https://www.bitmex.com/api/explorer/swagger.json
 
 import { BitMEXMessage } from './BitMEXMessage'
-import { queryStringStringify } from '../../F/queryStringStringify'
-import { JSONRequest } from '../../F/JSONRequest'
-import { config } from '../../../config'
+import { queryStringStringify } from '../F/queryStringStringify'
+import { JSONRequest } from '../F/JSONRequest'
+import { config } from '../../config'
 
 const f = async <T>(obj: { method: string, path: string, cookie: string, req: any }) => {
 
