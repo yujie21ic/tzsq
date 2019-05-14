@@ -31,6 +31,19 @@ export const funcList = {
         res: false,
     },
 
+
+    //
+    hopex_BTCUSDT_下单: {
+        req: {
+            cookie: '', //??????
+            side: '' as BaseType.Side,
+            size: 0,
+        },
+        res: false,
+    },
+
+
+
     set_任务_开关: {
         req: {
             cookie: '',
