@@ -21,14 +21,7 @@ export interface PositionAndOrderTask {
     参数: any
 
     on参数更新?: () => void
-
-
     run(self: PositionAndOrder): void
-
-    // onTick(self: PositionAndOrder): boolean | Promise<boolean>
-    // onHopexTick(self: PositionAndOrder): boolean | Promise<boolean>
-
-
     onFilled(p: {
         symbol: BaseType.BitmexSymbol
         side: BaseType.Side
@@ -37,7 +30,6 @@ export interface PositionAndOrderTask {
         type: '限价' | '限价只减仓' | '止损' | '强平'
     }): void
 }
-
 
 const symbol = () => ({
     委托列表: [] as BaseType.Order[],
@@ -73,11 +65,8 @@ export const createJSONSync = () =>
 
 
 let callID = 0
-
 const 重试几次 = 10
 const 重试休息多少毫秒 = 10
-
-
 
 export class PositionAndOrder implements PositionAndOrder {
 
@@ -586,9 +575,6 @@ export class PositionAndOrder implements PositionAndOrder {
     runTask(name: string, task: PositionAndOrderTask) {
         this.taskDic.set(name, task)
 
-        this._________________这里改成只需要bitmex的最新盘口.onTitle = obj => {
-            this.log(JSON.stringify(obj))
-        }
         this.ws.filledObservable.subscribe(v => task.onFilled(v))
 
         task.run(this)
