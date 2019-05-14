@@ -1,10 +1,10 @@
 import * as WebSocket from 'ws'
 import { BaseType } from '../lib/BaseType'
 import { Sampling } from '../lib/F/Sampling'
-import { BitmexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/BitmexTradeAndOrderBook'
-import { HopexTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/HopexTradeAndOrderBook'
+import { BitmexTradeAndOrderBook } from './BitmexTradeAndOrderBook'
+import { HopexTradeAndOrderBook } from './HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
-import { CTPTradeAndOrderBook } from '../lib/____API____/TradeAndOrderBook/CTPTradeAndOrderBook' 
+import { CTPTradeAndOrderBook } from './CTPTradeAndOrderBook' 
 
 export class RealData__Server extends RealDataBase {
 

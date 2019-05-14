@@ -2,7 +2,7 @@ import { Sampling } from '../F/Sampling'
 import { BaseType } from '../BaseType'
 import { DB } from './DB'
 import { timeID } from '../F/timeID'
-import { HopexTradeAndOrderBook } from '../____API____/TradeAndOrderBook/HopexTradeAndOrderBook'
+import { HopexTradeAndOrderBook } from '../../RealDataServer/HopexTradeAndOrderBook'
 
 //重复
 let samplingDic: { [symbol: string]: Sampling<BaseType.KLine> }

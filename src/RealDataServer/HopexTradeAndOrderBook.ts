@@ -1,8 +1,8 @@
 import { TradeAndOrderBook } from './TradeAndOrderBook'
-import { BaseType } from '../../BaseType'
-import { config } from '../../../config'
-import { WebSocketClient } from '../../F/WebSocketClient'
-import { mapObjIndexed } from '../../F/mapObjIndexed'
+import { BaseType } from '../lib/BaseType'
+import { config } from '../config'
+import { WebSocketClient } from '../lib/F/WebSocketClient'
+import { mapObjIndexed } from '../lib/F/mapObjIndexed'
 
 type Frame = {
     method: 'orderbook.update'
