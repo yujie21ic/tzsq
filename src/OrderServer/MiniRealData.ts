@@ -11,9 +11,22 @@ export class MiniRealData {
 
     }
 
-    in = () => {
+
+    in = (p: {
+        symbol: BaseType.BitmexSymbol
+        timestamp: number
+        buy: {
+            price: number;
+            size: number;
+        }[]
+        sell: {
+            price: number;
+            size: number;
+        }[]
+    }) => {
 
     }
+
 
     getOrderPrice = ({ symbol, side, type, 位置 }: { symbol: BaseType.BitmexSymbol, side: BaseType.Side, type: 'taker' | 'maker', 位置: number }) => {
         const pk = this.dic[symbol]

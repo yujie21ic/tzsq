@@ -12,7 +12,12 @@ import { HopexHTTP } from './HopexHTTP'
 import { mapObjIndexed } from '../lib/F/mapObjIndexed'
 import { typeObjectParse } from '../lib/F/typeObjectParse'
 import { safeJSONParse } from '../lib/F/safeJSONParse'
+import { MiniRealData } from './MiniRealData'
 
+const 盘口map = (v: any) => ({
+    price: Number(v[0]),
+    size: Number(v[1]),
+})
 
 export interface PositionAndOrderTask {
 
@@ -209,7 +214,8 @@ export class PositionAndOrder implements PositionAndOrder {
             { theme: 'position', filter: 'XBTUSD' },
             { theme: 'order', filter: 'XBTUSD' },
             //public
-            //盘口
+            { theme: 'orderBook10', filter: 'XBTUSD' },
+            { theme: 'orderBook10', filter: 'ETHUSD' },
         ])
 
         this.ws.onStatusChange = () => {
@@ -234,6 +240,15 @@ export class PositionAndOrder implements PositionAndOrder {
             else if (frame.table === 'order') {
                 this.bitmex_初始化.委托 = true
                 this.updateOrder()
+            }
+            else if (frame.table === 'orderBook10' && (frame.action === 'partial' || frame.action === 'update')) {
+                const { symbol, bids, asks, timestamp } = frame.data[0]
+                this.miniRealData.in({
+                    symbol: symbol as BaseType.BitmexSymbol,
+                    timestamp: new Date(timestamp).getTime(),
+                    buy: bids.map(盘口map).slice(0, 5),
+                    sell: asks.map(盘口map).slice(0, 5),
+                })
             }
         }
     }
@@ -569,6 +584,8 @@ export class PositionAndOrder implements PositionAndOrder {
 
 
     _________________这里改成只需要bitmex的最新盘口 = __realData__()
+
+    miniRealData = new MiniRealData()
 
     private taskDic = new Map<string, PositionAndOrderTask>()
 
