@@ -1,20 +1,22 @@
 import { BaseType } from '../lib/BaseType'
+import { mapObjIndexed } from '../lib/F/mapObjIndexed'
+
 
 export class MiniRealData {
 
-    private arr: BaseType.OrderBook[] = [] //1秒1个
+    //1秒1个
+    private dic = mapObjIndexed(() => [] as BaseType.OrderBook[], BaseType.BitmexSymbolDic)
 
     constructor() {
 
     }
-
 
     in = () => {
 
     }
 
     getOrderPrice = ({ symbol, side, type, 位置 }: { symbol: BaseType.BitmexSymbol, side: BaseType.Side, type: 'taker' | 'maker', 位置: number }) => {
-        const pk = this.arr
+        const pk = this.dic[symbol]
 
         if (pk.length < 1) return NaN
         const p = pk[pk.length - 1]
@@ -38,7 +40,7 @@ export class MiniRealData {
 
 
     get期货多少秒内最高最低(symbol: BaseType.BitmexSymbol, second: number) {
-        const data = this.arr
+        const data = this.dic[symbol]
 
         let high = NaN
         let low = NaN
@@ -46,15 +48,15 @@ export class MiniRealData {
         if (data.length >= second) {
             for (let i = data.length - 1; i >= data.length - second; i--) {
                 if (isNaN(high)) {
-                    high = data[i].high
+                    high = data[i].sell[0].price
                 } else {
-                    high = Math.max(high, data[i].high)
+                    high = Math.max(high, data[i].sell[0].price)
                 }
 
                 if (isNaN(low)) {
-                    low = data[i].low
+                    low = data[i].buy[0].price
                 } else {
-                    low = Math.max(low, data[i].low)
+                    low = Math.max(low, data[i].buy[0].price)
                 }
             }
         }

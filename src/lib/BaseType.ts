@@ -13,7 +13,16 @@ export namespace BaseType {
     export const HopexSymbolArr = keys(HopexSymbolDic)
 
 
-    export type BitmexSymbol = 'ETHUSD' | 'XBTUSD'
+
+    export const BitmexSymbolDic = {
+        'XBTUSD': {},
+        'ETHUSD': {},
+    }
+    export type BitmexSymbol = keyof typeof BitmexSymbolDic
+    export const BitmexSymbolArr = keys(BitmexSymbolDic) 
+
+
+
     export type BinanceSymbol = 'btcusdt' | 'ethusdt' //DB 还用
 
     export type Side = 'Buy' | 'Sell'
