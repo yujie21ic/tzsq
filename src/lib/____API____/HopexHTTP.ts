@@ -1,6 +1,6 @@
 import { BaseType } from '../BaseType'
 import { JSONRequest } from '../F/JSONRequest'
-import { config } from '../../config'
+//import { config } from '../../config'
 import { queryStringStringify } from '../F/queryStringStringify'
 
 const header = {
@@ -14,7 +14,7 @@ const f = <T>(p: { cookie?: string, url: string, param?: any }) =>
         url: p.url,
         method: p.param ? 'POST' : 'GET',
         body: p.param ? { param: p.param } : undefined,
-        ss: config.ss,
+        ss: false,//config.ss,
         headers: p.cookie ?
             {
                 ...header,
