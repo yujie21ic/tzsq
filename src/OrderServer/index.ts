@@ -1,6 +1,6 @@
 import { JSONRPCServer } from '../lib/F/JSONRPC'
 import { funcList } from './funcList'
-import { BitmexPositionAndOrder } from '../lib/____API____/PositionAndOrder/BitmexPositionAndOrder'
+import { PositionAndOrder } from '../lib/____API____/PositionAndOrder/PositionAndOrder'
 import * as WebSocket from 'ws'
 import { config } from '../config'
 import { typeObjectParse } from '../lib/F/typeObjectParse'
@@ -14,10 +14,10 @@ import { BTC止损 } from '../task/BTC止损'
 
 //运行的账户
 //cookie --> Account
-const accountDic = new Map<string, BitmexPositionAndOrder>()
+const accountDic = new Map<string, PositionAndOrder>()
 if (config.orderServer !== undefined) {
     kvs(config.orderServer).forEach(({ k, v }) => {
-        const account = new BitmexPositionAndOrder({
+        const account = new PositionAndOrder({
             accountName: k,
             cookie: v.cookie,
             hopexCookie: v.hopexCookie,
