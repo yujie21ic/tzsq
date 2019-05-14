@@ -6,8 +6,6 @@ import { logToFile } from '../lib/F/logToFile'
 import { keys } from 'ramda'
 import { JSONSync } from '../lib/F/JSONSync'
 import { BitMEXWS } from '../lib/BitMEX/BitMEXWS'
-import { RealData__Server } from '../RealDataServer/RealData__Server'
-import { toCacheFunc } from '../lib/F/toCacheFunc'
 import { HopexHTTP } from './HopexHTTP'
 import { mapObjIndexed } from '../lib/F/mapObjIndexed'
 import { typeObjectParse } from '../lib/F/typeObjectParse'
@@ -582,9 +580,6 @@ export class PositionAndOrder implements PositionAndOrder {
         (cookie, p) => BitMEXHTTP.Order.cancel(cookie, { orderID: JSON.stringify(p.orderID) })
     )
 
-
-    _________________这里改成只需要bitmex的最新盘口 = __realData__()
-
     miniRealData = new MiniRealData()
 
     private taskDic = new Map<string, PositionAndOrderTask>()
@@ -632,5 +627,3 @@ export class PositionAndOrder implements PositionAndOrder {
         this.jsonSync.data.任务.____set(arr)
     }
 }
-
-const __realData__ = toCacheFunc(() => new RealData__Server(false))

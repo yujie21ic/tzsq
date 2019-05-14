@@ -24,7 +24,7 @@ export class MiniRealData {
             size: number;
         }[]
     }) => {
-
+        //TODO
     }
 
 
@@ -74,6 +74,26 @@ export class MiniRealData {
             }
         }
         return { high, low }
+    }
+
+    getBuy1Price(symbol: BaseType.BitmexSymbol) {
+        const pk = this.dic[symbol]
+
+        if (pk.length < 1) return NaN
+
+        const p = pk[pk.length - 1]
+
+        return p.buy[0].price
+    }
+
+    getSell1Price(symbol: BaseType.BitmexSymbol) {
+        const pk = this.dic[symbol]
+
+        if (pk.length < 1) return NaN
+
+        const p = pk[pk.length - 1]
+
+        return p.sell[0].price
     }
 
 }
