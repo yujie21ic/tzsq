@@ -1356,6 +1356,7 @@ export class RealDataBase {
         XBTUSD: this.item('XBTUSD', 'BTCUSDT'),
         ETHUSD: this.item('ETHUSD', 'ETHUSDT'),
         ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
+        bitmex: mapObjIndexed((v, k) => this.item2(this.data.bitmex[k], false), BaseType.BitmexSymbolDic),
         hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
         ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),
     }
@@ -1365,6 +1366,7 @@ export class RealDataBase {
             XBTUSD: this.item('XBTUSD', 'BTCUSDT'),
             ETHUSD: this.item('ETHUSD', 'ETHUSDT'),
             ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
+            bitmex: mapObjIndexed((v, k) => this.item2(this.data.bitmex[k], false), BaseType.BitmexSymbolDic),
             hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
             ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),
         }
