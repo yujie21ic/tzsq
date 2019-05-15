@@ -2,6 +2,9 @@ import { BaseType } from '../lib/BaseType'
 
 export const funcList = {
 
+    //bitmex才需要服务器下单模式  重试很多遍
+    //hopex代理就行了
+
     取消委托: {
         req: {
             cookie: '',
@@ -30,19 +33,6 @@ export const funcList = {
         },
         res: false,
     },
-
-
-    //
-    hopex_BTCUSDT_下单: {
-        req: {
-            cookie: '', //??????
-            side: '' as BaseType.Side,
-            size: 0,
-        },
-        res: false,
-    },
-
-
 
     set_任务_开关: {
         req: {
