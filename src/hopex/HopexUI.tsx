@@ -2,9 +2,22 @@ import * as React from 'react'
 import { Table } from '../lib/UI/Table'
 import { Button } from '../lib/UI/Button'
 import { HopexHTTP } from './HopexHTTP'
+import { config } from '../config'
+import { kvs } from '../lib/F/kvs'
 
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
+
+const obj = config.hopex || {}
+const datasource = kvs(obj).map(v => ({
+    id: v.k,
+    下单数量: v.v.下单数量,
+    偏移: v.v.偏移,
+}))
+
+const 仓位数量 = 2000
+const 开仓均价 = 8000
+const 下单数量 = 1
 
 export class HopexUI extends React.Component<{ 倍数: number }> {
 
@@ -17,7 +30,7 @@ export class HopexUI extends React.Component<{ 倍数: number }> {
     }
 
     render() {
-        const 下单数量 = 1
+
 
         return <div
             style={{
@@ -30,42 +43,33 @@ export class HopexUI extends React.Component<{ 倍数: number }> {
                 userSelect: 'none',
                 cursor: 'default'
             }}>
-            <h1>hopex BTCUSDT</h1>
+            <p>hopex BTCUSDT</p>
             <Table
-                dataSource={[
-                    {
-                        id: 1,
-                        x: 111,
-                    },
-                    {
-                        id: 2,
-                        x: 1222,
-                    },
-                ]}
+                dataSource={datasource}
                 columns={[
                     {
                         title: '账号',
-                        width: '20%',
+                        width: '30%',
                         render: v =>
                             <p style={{ color: '#49a965' }}>
-                                1
+                                {v.id}
                             </p>
                     },
                     {
                         title: '仓位',
                         width: '50%',
                         render: v =>
-                            <p style={{ color: '#49a965' }}>
-                                xxxxxxxyyyy
+                            <p>
+                                <span style={{ color: 仓位数量 < 0 ? RED : GREEN }}>{仓位数量 + '@'}</span><span style={{ color: 'black' }}>{开仓均价}</span>
                             </p>
                     },
                     {
                         title: '权益',
-                        width: '30%',
+                        width: '20%',
                         render: v =>
                             <p style={{ color: '#e56546' }}>
-                                200.3
-                        </p>
+                                8000
+                            </p>
                     },
                 ]}
                 rowKey={v => v.id}
