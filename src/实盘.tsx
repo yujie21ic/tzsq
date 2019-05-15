@@ -13,7 +13,7 @@ import { realTickClient, 提醒 } from './实盘__提醒'
 import { lastNumber } from './lib/F/lastNumber'
 import { PositionAndOrder } from './OrderServer/PositionAndOrder'
 import { 任务遥控器 } from './任务遥控器'
-
+import { HopexUI } from './hopex/HopexUI'
 
 
 const account = config.account![windowExt.accountName]
@@ -27,7 +27,7 @@ type XXX = PositionAndOrder['jsonSync']['rawData']['market']['bitmex']['XBTUSD']
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
 
-export const Table = (p: {
+export const OrderTable = (p: {
     委托列表: BaseType.Order[]
     side: BaseType.Side
     取消f: (id: string) => void
@@ -315,8 +315,9 @@ export class 交易 extends React.Component {
 
         window.addEventListener('keydown', e => {
 
-            if (e.keyCode === 112) this.选项卡 = true
-            if (e.keyCode === 113) this.选项卡 = false
+            if (e.keyCode === 112) this.选项卡 = 1
+            if (e.keyCode === 113) this.选项卡 = 2
+            if (e.keyCode === 114) this.选项卡 = 3
 
 
             if (e.keyCode >= 49 && e.keyCode <= 52) {
@@ -340,7 +341,7 @@ export class 交易 extends React.Component {
     }
 
 
-    选项卡 = true
+    选项卡 = 1
 
     render() {
         return <div style={{ backgroundColor: '#24292d' }}>
@@ -349,7 +350,7 @@ export class 交易 extends React.Component {
                 <a style={{ fontSize: 16, color: '#666666' }} href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a>
             </div>
 
-            <div hidden={!this.选项卡}
+            <div hidden={this.选项卡 !== 1}
                 style={{
                     backgroundColor: '#24292d',
                     margin: 'auto auto',
@@ -366,7 +367,11 @@ export class 交易 extends React.Component {
                 <任务遥控器 />
             </div>
 
-            <div hidden={this.选项卡}>
+            <div hidden={this.选项卡 !== 2}>
+                <HopexUI />
+            </div>
+
+            <div hidden={this.选项卡 !== 3}>
                 <提醒 />
             </div>
 
