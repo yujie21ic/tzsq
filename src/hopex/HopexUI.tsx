@@ -65,7 +65,7 @@ export class HopexUI extends React.Component<{ 倍数: number }> {
                 columns={[
                     {
                         title: '账号',
-                        width: '30%',
+                        width: '20%',
                         render: v =>
                             <p style={{ color: '#49a965' }}>
                                 {v.id}
@@ -83,13 +83,10 @@ export class HopexUI extends React.Component<{ 倍数: number }> {
                     },
                     {
                         title: '权益',
-                        width: '20%',
-                        render: v => {
-                            const { 权益 } = v.client.symbol['BTCUSDT']
-                            return <p style={{ color: 'black' }}>
-                                {权益}
-                            </p>
-                        }
+                        width: '30%',
+                        render: v => <p style={{ color: 'black' }}>
+                            {v.client.权益}
+                        </p>
                     },
                 ]}
                 rowKey={v => v.id}

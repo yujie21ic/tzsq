@@ -7,19 +7,24 @@ export class HopexClient {
 
     初始化 = {
         仓位: false,
-        委托: false,
+        //委托: false,
     }
 
-    symbol = mapObjIndexed(() => ({ 仓位数量: 0, 开仓均价: 0, 权益: 0 }), BaseType.HopexSymbolDic)
+    symbol = mapObjIndexed(() => ({
+        仓位数量: 0,
+        开仓均价: 0,
+    }), BaseType.HopexSymbolDic)
+
+    权益 = ''
 
     private cookie = ''
 
     constructor(cookie: string) {
         this.cookie = cookie
-        this.hopex_轮询()
+        this.轮询()
     }
 
-    private async hopex_仓位_轮询() {
+    private async 仓位_轮询() {
         while (true) {
             const { data } = await HopexHTTP.getPositions(this.cookie)
             if (data !== undefined) {
@@ -38,14 +43,32 @@ export class HopexClient {
         }
     }
 
-    // private async hopex_委托_轮询() {
+    private async 权益_轮询() {
+        while (true) {
+            const { data } = await HopexHTTP.get权益(this.cookie)
+            if (data !== undefined) {
+                if (data.data !== undefined && data.data.detail !== undefined) {
+                    data.data.detail.forEach(v => {
+                        if (v.assetName === 'USDT') {
+                            this.权益 = Number(v.totalWealthLegal.replace('USD', '')).toFixed(2)
+                        }
+                    })
+                }
+            } else {
+                this.初始化.仓位 = false
+            }
+            await sleep(1000)
+        }
+    }
+
+    // private async 委托_轮询() {
     //     while (true) {
     //         const __obj__ = mapObjIndexed(() => [] as BaseType.Order[], BaseType.HopexSymbolDic)
     //         const 止损data = (await HopexHTTP.getConditionOrders(this.cookie)).data
     //         const 委托data = (await HopexHTTP.getOpenOrders(this.cookie)).data
 
     //         if (止损data !== undefined && 委托data !== undefined) {
-    //             this.hopex_初始化.委托 = true
+    //             this.初始化.委托 = true
 
     //             if (止损data.data !== undefined) {
     //                 const result = 止损data.data ? 止损data.data.result || [] : []
@@ -90,17 +113,18 @@ export class HopexClient {
     //             })
 
     //         } else {
-    //             this.hopex_初始化.委托 = false
-    //             this.log('hopex_初始化.委托 = false')
+    //             this.初始化.委托 = false
+    //             this.log('初始化.委托 = false')
     //         }
     //         await sleep(1000)
     //     }
     // }
 
 
-    private async hopex_轮询() {
-        this.hopex_仓位_轮询()
-        // this.hopex_委托_轮询()
+    private async 轮询() {
+        this.仓位_轮询()
+        this.权益_轮询()
+        // this.委托_轮询()
     }
 
 }

@@ -143,4 +143,17 @@ export const HopexHTTP = {
                 taskStatusList: ['1'],
             },
         }),
+
+    get权益: async (cookie: string) =>
+        f<{
+            data?: {
+                detail?: {
+                    assetName: 'USDT' | 'BTC' | 'ETH'
+                    totalWealthLegal: string
+                }[]
+            }
+        }>({
+            cookie,
+            url: 'https://web.hopex.com/api/v1/gateway/Trade/NewSummary?lang=zh-CN&fetchAllAsset=true&culture=zh-CN',
+        }),
 }
