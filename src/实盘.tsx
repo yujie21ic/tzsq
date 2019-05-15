@@ -368,7 +368,7 @@ export class 交易 extends React.Component {
             </div>
 
             <div hidden={this.选项卡 !== 2}>
-                <HopexUI />
+                <HopexUI 倍数={this.倍数} />
             </div>
 
             <div hidden={this.选项卡 !== 3}>
