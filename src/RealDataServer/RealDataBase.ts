@@ -51,6 +51,7 @@ export class RealDataBase {
             startTick: 0,//tick的  1m的开始 没有对齐
             ctp: mapObjIndexed(createItem, ______CTP__config),
             hopex: mapObjIndexed(createItem, BaseType.HopexSymbolDic),
+            ix: mapObjIndexed(createItem, BaseType.IXSymbolDic),
             bitmex: {
                 XBTUSD: createItem(),
                 ETHUSD: createItem(),

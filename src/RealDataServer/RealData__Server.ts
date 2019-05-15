@@ -4,19 +4,21 @@ import { Sampling } from '../lib/F/Sampling'
 import { BitmexTradeAndOrderBook } from './BitmexTradeAndOrderBook'
 import { HopexTradeAndOrderBook } from './HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
-import { CTPTradeAndOrderBook } from './CTPTradeAndOrderBook' 
+import { CTPTradeAndOrderBook } from './CTPTradeAndOrderBook'
+import { IXTradeAndOrderBook } from './IXTradeAndOrderBook'
 
 export class RealData__Server extends RealDataBase {
 
     private wss?: WebSocket.Server
     private wsDic = new Map<WebSocket, boolean>()
 
-    private bitmex = new BitmexTradeAndOrderBook()  
+    private bitmex = new BitmexTradeAndOrderBook()
     private hopex = new HopexTradeAndOrderBook()
+    private ix = new IXTradeAndOrderBook()
 
     _bitmex = false
     _hopex = false
-    onTitle = (p: { 
+    onTitle = (p: {
         bitmex: boolean
         hopex: boolean
     }) => { }
@@ -341,9 +343,9 @@ export class RealData__Server extends RealDataBase {
                 }
             })
         })
-        
 
- 
+
+
 
 
 
@@ -365,6 +367,33 @@ export class RealData__Server extends RealDataBase {
             this.on盘口({
                 key: 'hopex_' + symbol,
                 xxxxxxxx: this.jsonSync.data.hopex[symbol].orderBook,
+                timestamp,
+                orderBook: {
+                    id: Math.floor(timestamp / RealDataBase.单位时间),
+                    buy,
+                    sell,
+                }
+            })
+        })
+
+
+        //ix
+        this.ix.tradeObservable.subscribe(({ symbol, timestamp, price, side, size }) => {
+            this.on着笔({
+                key: 'ix_' + symbol,
+                xxxxxxxx: this.jsonSync.data.ix[symbol],
+                timestamp,
+                price,
+                side,
+                size,
+            })
+        })
+
+
+        this.ix.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
+            this.on盘口({
+                key: 'ix_' + symbol,
+                xxxxxxxx: this.jsonSync.data.ix[symbol].orderBook,
                 timestamp,
                 orderBook: {
                     id: Math.floor(timestamp / RealDataBase.单位时间),

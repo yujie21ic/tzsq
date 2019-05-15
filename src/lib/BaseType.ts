@@ -13,13 +13,19 @@ export namespace BaseType {
     export const HopexSymbolArr = keys(HopexSymbolDic)
 
 
-
     export const BitmexSymbolDic = {
         'XBTUSD': {},
         'ETHUSD': {},
     }
     export type BitmexSymbol = keyof typeof BitmexSymbolDic
-    export const BitmexSymbolArr = keys(BitmexSymbolDic) 
+    export const BitmexSymbolArr = keys(BitmexSymbolDic)
+
+
+    export const IXSymbolDic = {
+        'BTCUSD': {}
+    }
+    export type IXSymbol = keyof typeof IXSymbolDic
+    export const IXSymbolArr = keys(IXSymbolDic)
 
 
 
