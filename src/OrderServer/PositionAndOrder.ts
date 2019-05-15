@@ -54,14 +54,7 @@ export const createJSONSync = () =>
         }[],
         market: {
             hopex: mapObjIndexed(symbol, BaseType.HopexSymbolDic),
-            fcoin: {
-                btcusdt: symbol(),
-                ethusdt: symbol(),
-            },
-            bitmex: {
-                XBTUSD: symbol(),
-                ETHUSD: symbol(),
-            },
+            bitmex: mapObjIndexed(symbol, BaseType.BitmexSymbolDic),
         }
     })
 
