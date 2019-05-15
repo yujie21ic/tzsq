@@ -4,20 +4,36 @@ import { Button } from '../lib/UI/Button'
 import { HopexHTTP } from './HopexHTTP'
 import { config } from '../config'
 import { kvs } from '../lib/F/kvs'
+import { HopexClient } from './HopexClient'
 
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
 
-const obj = config.hopex || {}
-const datasource = kvs(obj).map(v => ({
+const datasource = kvs(config.hopex || {}).map(v => ({
     id: v.k,
     下单数量: v.v.下单数量,
     偏移: v.v.偏移,
+    client: new HopexClient(v.v.cookie),
 }))
 
-const 仓位数量 = 2000
-const 开仓均价 = 8000
-const 下单数量 = 1
+const buy = () => HopexHTTP.taker(`hopexCookie`, {
+    symbol: 'BTCUSDT',
+    side: 'Buy',
+    size: 1,
+})
+
+const sell = () => HopexHTTP.taker(`hopexCookie`, {
+    symbol: 'BTCUSDT',
+    side: 'Sell',
+    size: 1,
+})
+
+const close = () => HopexHTTP.taker(`hopexCookie`, {
+    symbol: 'BTCUSDT',
+    side: 'Sell',
+    size: 1,
+})
+
 
 export class HopexUI extends React.Component<{ 倍数: number }> {
 
@@ -43,7 +59,7 @@ export class HopexUI extends React.Component<{ 倍数: number }> {
                 userSelect: 'none',
                 cursor: 'default'
             }}>
-            <p>hopex BTCUSDT</p>
+            <p>hopex BTCUSDT {this.props.倍数}倍</p>
             <Table
                 dataSource={datasource}
                 columns={[
@@ -58,18 +74,22 @@ export class HopexUI extends React.Component<{ 倍数: number }> {
                     {
                         title: '仓位',
                         width: '50%',
-                        render: v =>
-                            <p>
+                        render: v => {
+                            const { 仓位数量, 开仓均价 } = v.client.symbol['BTCUSDT']
+                            return <p>
                                 <span style={{ color: 仓位数量 < 0 ? RED : GREEN }}>{仓位数量 + '@'}</span><span style={{ color: 'black' }}>{开仓均价}</span>
                             </p>
+                        }
                     },
                     {
                         title: '权益',
                         width: '20%',
-                        render: v =>
-                            <p style={{ color: '#e56546' }}>
-                                8000
+                        render: v => {
+                            const { 权益 } = v.client.symbol['BTCUSDT']
+                            return <p style={{ color: 'black' }}>
+                                {权益}
                             </p>
+                        }
                     },
                 ]}
                 rowKey={v => v.id}
@@ -86,34 +106,16 @@ export class HopexUI extends React.Component<{ 倍数: number }> {
                     style={{ width: '50%' }}>
                     <Button
                         bgColor={GREEN}
-                        text={-下单数量 + ''}
-                        left={() => HopexHTTP.taker(`hopexCookie`, {
-                            symbol: 'BTCUSDT',
-                            side: 'Buy',
-                            size: 下单数量,
-                        })}
-                        right={() => HopexHTTP.taker(`hopexCookie`, {
-                            symbol: 'BTCUSDT',
-                            side: 'Buy',
-                            size: 下单数量,
-                        })}
+                        text={'Buy ' + this.props.倍数 + '倍'}
+                        left={buy}
                     />
                 </div>
                 <div
                     style={{ width: '50%' }}>
                     <Button
                         bgColor={RED}
-                        text={-下单数量 + ''}
-                        left={() => HopexHTTP.taker(`hopexCookie`, {
-                            symbol: 'BTCUSDT',
-                            side: 'Sell',
-                            size: 下单数量,
-                        })}
-                        right={() => HopexHTTP.taker(`hopexCookie`, {
-                            symbol: 'BTCUSDT',
-                            side: 'Sell',
-                            size: 下单数量,
-                        })}
+                        text={'Sell ' + this.props.倍数 + '倍'}
+                        left={sell}
                     />
                 </div>
             </div>
@@ -123,16 +125,7 @@ export class HopexUI extends React.Component<{ 倍数: number }> {
             <Button
                 bgColor='#666666'
                 text='市价全平'
-                left={() => HopexHTTP.taker(`hopexCookie`, {
-                    symbol: 'BTCUSDT',
-                    side: 'Sell',
-                    size: 下单数量,
-                })}
-                right={() => HopexHTTP.taker(`hopexCookie`, {
-                    symbol: 'BTCUSDT',
-                    side: 'Sell',
-                    size: 下单数量,
-                })}
+                left={close}
             />
         </div >
     }
