@@ -14,7 +14,12 @@ export const JSONRequest = <T>({
     url: string
     method?: string
     body?: any //string的话 不编码
-    ss?: boolean
+    ss?: boolean | {
+        socksHost: string
+        socksPort: number
+        socksUsername: string
+        socksPassword: string
+    }
     headers?: { [key: string]: string }
 }) => new Promise<{
     error?: JSONRequestError
@@ -31,15 +36,20 @@ export const JSONRequest = <T>({
             ...headers
         },
         url,
-        method
+        method,
+        // rejectUnauthorized: false,
     }
 
     if (ss) {
-        requestOptions.agentClass = Agent
-        requestOptions.agentOptions = {
-            socksHost: '127.0.0.1',
-            socksPort: 1080
-        } as any
+        if (ss === true) {
+            requestOptions.agentClass = Agent
+            requestOptions.agentOptions = {
+                socksHost: '127.0.0.1',
+                socksPort: 1080
+            } as any
+        } else {
+            requestOptions.agentOptions = ss as any
+        }
     }
 
     if (body !== undefined) {

@@ -1,3 +1,5 @@
+import { JSONRequest } from "./lib/F/JSONRequest";
+
 // import { 回测PositionAndOrder } from './lib/____API____/PositionAndOrder/回测PositionAndOrder'
 // import { XBTUSD摸顶抄底追涨追跌 } from './XBTUSD摸顶抄底追涨追跌'
 
@@ -26,3 +28,20 @@
 
 
 // p.runTask(new XBTUSD摸顶抄底追涨追跌())
+
+console.log('xxxxxxxxxxxx')
+JSONRequest({
+    url: 'https://www.baidu.com/s?ie=utf-8&f=3&rsv_bp=1&rsv_idx=1&tn=baidu&wd=ip138%E6%9F%A5%E8%AF%A2&rsv_pq=caea138300026a8b&rsv_t=ec7bP6FsujrRtSzhs%2BfSz6sUD%2BrXlWvUwastubR4BGnIq1ahbYMrmtFqgcw&rqlang=cn&rsv_enter=1&rsv_sug3=5&rsv_sug1=3&rsv_sug7=101&rsv_sug2=0&prefixsug=ip1%2526lt%253B&rsp=0&inputT=1113&rsv_sug4=1686&rsv_sug=1',
+    method: 'GET',
+    ss: {
+        socksHost: '123.207.23.18',
+        socksPort: 23128,
+        socksUsername: 'wgwhngqrp0',
+        socksPassword: 'bvnwtpmqwc',
+    },
+    headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
+    }
+}).then(res => {
+    console.log(res)
+})
