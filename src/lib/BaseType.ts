@@ -4,6 +4,17 @@ export namespace BaseType {
 
     export type Omit<T, K extends string> = Pick<T, Exclude<keyof T, K>>
 
+
+    //bitmex
+    export const BitmexSymbolDic = {
+        'XBTUSD': {},
+        'ETHUSD': {},
+    }
+    export type BitmexSymbol = keyof typeof BitmexSymbolDic
+    export const BitmexSymbolArr = keys(BitmexSymbolDic)
+
+
+    //hopex
     export const HopexSymbolDic = {
         'BTCUSDT': {},
         'ETHUSDT': {},
@@ -13,14 +24,7 @@ export namespace BaseType {
     export const HopexSymbolArr = keys(HopexSymbolDic)
 
 
-    export const BitmexSymbolDic = {
-        'XBTUSD': {},
-        'ETHUSD': {},
-    }
-    export type BitmexSymbol = keyof typeof BitmexSymbolDic
-    export const BitmexSymbolArr = keys(BitmexSymbolDic)
-
-
+    //ix
     export const IXSymbolDic = {
         'BTCUSD': {}
     }
@@ -29,6 +33,7 @@ export namespace BaseType {
 
 
 
+    //
     export type BinanceSymbol = 'btcusdt' | 'ethusdt' //DB 还用
 
     export type Side = 'Buy' | 'Sell'
