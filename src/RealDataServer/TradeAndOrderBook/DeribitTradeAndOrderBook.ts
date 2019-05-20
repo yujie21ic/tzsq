@@ -19,8 +19,8 @@ type Frame = {
             result: {
                 instrument: 'BTC-PERPETUAL' | 'ETH-PERPETUAL'
                 tstamp: number
-                ask: Order[]
-                bid: Order[]
+                asks: Order[]
+                bids: Order[]
             }
         }
         |
@@ -108,14 +108,15 @@ export class DeribitTradeAndOrderBook extends TradeAndOrderBook<BaseType.Deribit
             data.notifications.forEach(v => {
                 if (v.message === 'order_book_event') {
                     const item = v.result
+                    console.log('item',item)
                     this.orderBookObservable.next({
                         symbol: item.instrument === 'BTC-PERPETUAL' ? 'BTC_PERPETUAL' : 'ETH_PERPETUAL',
                         timestamp: item.tstamp,
-                        buy: item.bid.map(v => ({
+                        buy: item.bids.map(v => ({
                             price: v.price,
                             size: v.amount,//<------------------------
                         })).slice(0, 5),
-                        sell: item.ask.map(v => ({
+                        sell: item.asks.map(v => ({
                             price: v.price,
                             size: v.amount,//<------------------------
                         })).slice(0, 5),
