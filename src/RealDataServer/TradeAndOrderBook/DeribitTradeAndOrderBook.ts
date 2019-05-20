@@ -4,8 +4,9 @@ import { WebSocketClient } from '../../lib/F/WebSocketClient'
 import { config } from '../../config'
 import { createHash } from 'crypto'
 
-const KEY = 'aa'
-const SEC = 'bb'
+
+const AccessKey = '6DyqXnNq9Ufxr'
+const AccessSecret = 'PRBFU6OORBVDPVYFRDKGPDLJQTCFFXGS'
 
 const serialize = (m: any) =>
     Object.keys(m)
@@ -21,12 +22,12 @@ const sig = (action: string, obj: any) => {
         serialize({
             ...obj,
             _: time,
-            _ackey: KEY,
-            _acsec: SEC,
+            _ackey: AccessKey,
+            _acsec: AccessSecret,
             _action: action,
         })
     )
-    const sig = `${KEY}.${time}.${hash.digest('base64')}`
+    const sig = `${AccessKey}.${time}.${hash.digest('base64')}`
     return sig
 }
 
