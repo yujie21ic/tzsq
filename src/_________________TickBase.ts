@@ -48,18 +48,17 @@ export class _________________TickBase {
 
 
         chartInit(FPS, element, () => {
-            const d = this.real.dataExt[this.nowTickSymbol]
             const d2 = this.real.dataExt
 
             const { left, right } = this.getLeftRight()
 
             const xArr = this.nowChart.indexOf('CTP') !== -1 ? d2.ctp.TA909.时间 :
                 this.nowChart === 'ctp波动_测试' ? d2.ctp.rb1910.波动_测试.时间 :
-                    this.nowChart === '波动_测试' ? d.bitmex.波动_测试.时间 : d.bitmex.时间
+                    this.nowChart === '波动_测试' ? d2.bitmex.XBTUSD.波动_测试.时间 : d2.bitmex.XBTUSD.时间
 
             const xStrArr = this.nowChart.indexOf('CTP') !== -1 ? d2.ctp.TA909.时间str :
                 this.nowChart === 'ctp波动_测试' ? d2.ctp.rb1910.波动_测试.时间str :
-                    this.nowChart === '波动_测试' ? d.bitmex.波动_测试.时间str : d.bitmex.时间str
+                    this.nowChart === '波动_测试' ? d2.bitmex.XBTUSD.波动_测试.时间str : d2.bitmex.XBTUSD.时间str
 
             return {
                 title: this.title + ' ' + this.nowTickSymbol + '  ' + ((right - left) / (1000 / RealDataBase.单位时间)) + '秒',
@@ -84,7 +83,7 @@ export class _________________TickBase {
                 },
                 left,
                 right,
-                items: Tick行情____config[this.nowChart](d, this.real.dataExt)
+                items: Tick行情____config[this.nowChart]('废弃', this.real.dataExt)
             }
         })
     }
@@ -94,14 +93,13 @@ export class _________________TickBase {
 
     //getLeftRight______________删掉 ————————————————————DataClient 直接模拟
     getLeftRight() {
-        const d = this.real.dataExt[this.nowTickSymbol]
         const d2 = this.real.dataExt
 
-        let right = //this.nowChart === '着笔' ? Math.max(d.bitmex.着笔.price.length) - 1 :
-            this.nowChart === '波动_测试' ? Math.max(d.bitmex.波动_测试.累计买.length) - 1 :
+        let right = //this.nowChart === '着笔' ? Math.max(d2.bitmex.XBTUSD.着笔.price.length) - 1 :
+            this.nowChart === '波动_测试' ? Math.max(d2.bitmex.XBTUSD.波动_测试.累计买.length) - 1 :
                 this.nowChart === 'ctp波动_测试' ? Math.max(d2.ctp.rb1910.波动_测试.累计买.length) - 1 :
                     this.nowChart.indexOf('CTP') !== -1 ? Math.max(this.real.dataExt.ctp.TA909.价格.length, this.real.dataExt.ctp.TA909.盘口.length) - 1 :
-                        Math.max(d.hopex.价格.length, d.bitmex.价格.length, d.bitmex.买.盘口.length, d.bitmex.卖.盘口.length) - 1
+                        Math.max(d2.hopex.BTCUSDT.价格.length, d2.bitmex.XBTUSD.价格.length, d2.bitmex.XBTUSD.买.盘口.length, d2.bitmex.XBTUSD.卖.盘口.length) - 1
 
 
         const left = Math.max(0, right - this.showCount)
