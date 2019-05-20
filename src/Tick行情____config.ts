@@ -8,7 +8,7 @@ import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
 import { 笔Layer } from './lib/Chart/Layer/笔Layer'
 import { get笔Index, get线段, 合并后的K线 } from './指标/缠中说禅'
 import { 线段Layer } from './lib/Chart/Layer/线段Layer'
-import { 合并后的Layer } from './lib/Chart/Layer/合并后的Layer' 
+import { 合并后的Layer } from './lib/Chart/Layer/合并后的Layer'
 
 
 
@@ -163,7 +163,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                                 `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
                                 `hopex:${lastNumber(d2.ETHUSD.hopex.价格).toFixed(2)}  ` +
                                 `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
-                                `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
+                                `期货30秒内成交量:${d2.期货30秒内成交量('XBTUSD').toFixed(2)}万   ` +
                                 `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
                             color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
                         })
@@ -272,7 +272,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                                 `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
                                 `hopex:${lastNumber(d2.ETHUSD.hopex.价格).toFixed(2)}  ` +
                                 `bitmex:${lastNumber(d.bitmex.价格).toFixed(2)}      ` +
-                                `期货30秒内成交量:${d.期货30秒内成交量().toFixed(2)}万   ` +
+                                `期货30秒内成交量:${d2.期货30秒内成交量('XBTUSD').toFixed(2)}万   ` +
                                 `期货波动率:${lastNumber(d.bitmex.价格_波动率30).toFixed(2)}`,
                             color: d === d2.XBTUSD ? BTC颜色 : ETH颜色,
                         })
@@ -292,30 +292,30 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
         ]
     }),
-  
-            // [
-            //     {
-            //         layerList: [
-            //             layer(ZeroLayer, { color: 0xaaaaaa }),
 
-            //             layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
-            //             layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-            //             //layer(LineLayer, { data: d.bitmex.卖.净成交量_累加10, color: ETH颜色 }),
-            //             //layer(LineLayer, { data: d.bitmex.买.净成交量_累加10, color: BTC颜色 }),
-            //             //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
-            //             layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
-            //         ]
-            //     },
-            // ],
+    // [
+    //     {
+    //         layerList: [
+    //             layer(ZeroLayer, { color: 0xaaaaaa }),
+
+    //             layer(LineLayer, { data: d.bitmex.买.成交量, color: 买颜色 }),
+    //             layer(LineLayer, { data: d.bitmex.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
+    //             //layer(LineLayer, { data: d.bitmex.卖.净成交量_累加10, color: ETH颜色 }),
+    //             //layer(LineLayer, { data: d.bitmex.买.净成交量_累加10, color: BTC颜色 }),
+    //             //layer(LineLayer, { data: d.期货.净成交量均线10, color: ETH颜色 }),
+    //             layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
+    //         ]
+    //     },
+    // ],
 
 
-            // {
-            //     layerList: [
-            //         layer(LineLayer, { data: d.期货.买.盘口, color: 买颜色 }),
-            //         layer(LineLayer, { data: d.期货.卖.盘口, color: 卖颜色 }),
-            //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
-            //     ]
-            // },
+    // {
+    //     layerList: [
+    //         layer(LineLayer, { data: d.期货.买.盘口, color: 买颜色 }),
+    //         layer(LineLayer, { data: d.期货.卖.盘口, color: 卖颜色 }),
+    //         layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
+    //     ]
+    // },
 
     // 实盘fcoin手动: (d, d2) => ({
     //     heightList: [0.2, 0.2, 0.5, 0.1],
