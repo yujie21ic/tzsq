@@ -5,12 +5,15 @@ import { toRange } from '../lib/F/toRange'
 import { timeID } from '../lib/F/timeID'
 import { get买卖 } from '../指标/买卖'
 import { formatDate } from '../lib/F/formatDate'
-import { mapObjIndexed } from '../lib/F/mapObjIndexed' 
+import { mapObjIndexed } from '../lib/F/mapObjIndexed'
 import { CTPTradeAndOrderBook } from './TradeAndOrderBook/CTPTradeAndOrderBook'
 import { BitmexTradeAndOrderBook } from './TradeAndOrderBook/BitmexTradeAndOrderBook'
 import { HopexTradeAndOrderBook } from './TradeAndOrderBook/HopexTradeAndOrderBook'
 import { IXTradeAndOrderBook } from './TradeAndOrderBook/IXTradeAndOrderBook'
 import { TradeAndOrderBook } from './TradeAndOrderBook/TradeAndOrderBook'
+import { DeribitTradeAndOrderBook } from './TradeAndOrderBook/DeribitTradeAndOrderBook'
+
+
 
 const createItem = () => ({
     // 着笔: [] as BaseType.着笔[], 
@@ -44,6 +47,7 @@ export class RealDataBase {
             hopex: mapObjIndexed(createItem, BaseType.HopexSymbolDic),
             ix: mapObjIndexed(createItem, BaseType.IXSymbolDic),
             bitmex: mapObjIndexed(createItem, BaseType.BitmexSymbolDic),
+            deribit: mapObjIndexed(createItem, BaseType.DeribitSymbolDic),
         }
     )
 
@@ -66,6 +70,7 @@ export class RealDataBase {
         bitmex: mapObjIndexed((v, k) => this.item2(this.data.bitmex[k], false), BaseType.BitmexSymbolDic),
         hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
         ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),
+        deribit: mapObjIndexed((v, k) => this.item2(this.data.deribit[k], false), BaseType.DeribitSymbolDic),
     })
 
     dataExt = this.CREATE()
@@ -77,6 +82,7 @@ export class RealDataBase {
         new BitmexTradeAndOrderBook(),
         new HopexTradeAndOrderBook(),
         new IXTradeAndOrderBook(),
+        new DeribitTradeAndOrderBook(),
     ] as TradeAndOrderBook<any>[]
     //________________________________________________________________________________________________//
 
