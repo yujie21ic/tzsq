@@ -43,7 +43,6 @@ export class RealDataBase {
         const bitmex = this.item2(this.data.bitmex[symbol], true)
         const hopex = this.item2(this.data.hopex[hopexSymbol], true)
 
-
         const hopex_bitmex_差价 = 指标.map(() => Math.min(hopex.价格.length, bitmex.价格.length), i => hopex.价格[i] - bitmex.价格[i])
         const hopex_bitmex_差价均线 = 指标.SMA(hopex_bitmex_差价, 300, RealDataBase.单位时间)
         const hopex_bitmex_相对差价 = 指标.map(() => Math.min(hopex.价格.length, bitmex.价格.length), i => hopex_bitmex_差价[i] - hopex_bitmex_差价均线[i])

@@ -70,16 +70,16 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 numberColor: ETH颜色,
                 layerList: [
                     layer(ZeroLayer, { color: ETH颜色 }),
-                    layer(LineLayer, { data: d2.XBTUSD.bitmex.tick力量指数60, color: ETH颜色 }),
+                    layer(LineLayer, { data: d2.bitmex.XBTUSD.tick力量指数60, color: ETH颜色 }),
                 ]
             },],
             {
                 layerList: [
-                    layer(LineLayer, { data: d2.XBTUSD.bitmex.盘口卖1加被吃的, color: 幽灵卖颜色 }),
-                    layer(LineLayer, { data: d2.XBTUSD.bitmex.卖.盘口1, color: 卖颜色1 }),
+                    layer(LineLayer, { data: d2.bitmex.XBTUSD.盘口卖1加被吃的, color: 幽灵卖颜色 }),
+                    layer(LineLayer, { data: d2.bitmex.XBTUSD.卖.盘口1, color: 卖颜色1 }),
                     layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d2.XBTUSD.bitmex.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
-                    layer(LineLayer, { data: d2.XBTUSD.bitmex.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d2.bitmex.XBTUSD.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
+                    layer(LineLayer, { data: d2.bitmex.XBTUSD.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
                 ]
             }
         ]
@@ -128,7 +128,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 // {
                 //     numberColor: 0x000000,
                 //     layerList: [
-                //         layer(LineLayer, { data: d2.ETHUSD.bitmex.价格, color: bitmexETH颜色 }),
+                //         layer(LineLayer, { data: d2.bitmex.ETHUSD.价格, color: bitmexETH颜色 }),
                 //     ]
                 // },
                 {
@@ -151,7 +151,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 {
                     numberColor: 0x000000,
                     layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+                        layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
                         layer(TextLayer, {
                             text:
                                 `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
@@ -260,7 +260,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 {
                     numberColor: 0x000000,
                     layerList: [
-                        layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+                        layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
                         layer(TextLayer, {
                             text:
                                 `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
@@ -356,7 +356,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: 0x000000,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
@@ -411,7 +411,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //         ],
     //         {
     //             layerList: [
-    //                 layer(信号Layer, { data: d2.XBTUSD.bitmex.着笔涨跌, color: 0xaaaaaa }),
+    //                 layer(信号Layer, { data: d2.bitmex.XBTUSD.着笔涨跌, color: 0xaaaaaa }),
     //             ]
     //         }
     //         // [
@@ -502,7 +502,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: 0x000000,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
@@ -533,7 +533,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //         ],
     //         {
     //             layerList: [
-    //                 layer(信号Layer, { data: d2.XBTUSD.bitmex.着笔涨跌, color: 0xaaaaaa }),
+    //                 layer(信号Layer, { data: d2.bitmex.XBTUSD.着笔涨跌, color: 0xaaaaaa }),
     //             ]
     //         }
     //         // [
@@ -601,14 +601,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //                 numberColor: 波动率颜色,
     //                 layerList: [
     //                     layer(ZeroLayer, { color: 波动率颜色 }),
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.tick力量指数60, color: 波动率颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.tick力量指数60, color: 波动率颜色 }),
     //                 ]
     //             },
 
     //             {
     //                 numberColor: 0x000000,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
@@ -699,7 +699,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: 波动率颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.tick力量指数12, color: 波动率颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.tick力量指数12, color: 波动率颜色 }),
     //                 ]
     //             },
     //             {
@@ -713,7 +713,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `买1  :${(lastNumber(d.bitmex.买.盘口1) / 10000).toFixed(2)}万  ` +
@@ -817,7 +817,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -900,7 +900,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -981,7 +981,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
 
     //                     layer(TextLayer, {
     //                         text:
@@ -1062,7 +1062,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -1144,7 +1144,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -1212,7 +1212,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -1290,7 +1290,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
 
     //                     layer(TextLayer, {
     //                         text:
@@ -1365,7 +1365,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -1437,7 +1437,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -1525,7 +1525,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -1595,7 +1595,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //         [{
     //             numberColor: BTC颜色,
     //             layerList: [
-    //                 layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                 layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                 //layer(LineLayer, { data: d2.XBTUSD.期货.最低价10, color: 波动率颜色 }),
     //                 // layer(LineLayer, { data: d2.XBTUSD.期货.价格均线60, color: 0xffffff }),
     //             ]
@@ -1654,8 +1654,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.下跌.价差, color: 波动率颜色 }),
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格_波动率30, color: 石青 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.下跌.价差, color: 波动率颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格_波动率30, color: 石青 }),
     //                 ]
     //             },
     //             // {
@@ -1679,7 +1679,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //                 numberColor: BTC颜色,
     //                 yCoordinate: '对数',
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.下跌.动力, color: ETH颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.下跌.动力, color: ETH颜色 }),
     //                 ]
     //             },
 
@@ -1693,7 +1693,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //         [{
     //             numberColor: BTC颜色,
     //             layerList: [
-    //                 layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                 layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                 // layer(LineLayer, { data: d2.XBTUSD.期货.最高价10, color: 波动率颜色 }),
     //                 // layer(LineLayer, { data: d2.XBTUSD.期货.价格均线60, color: 0xffffff }),
     //             ]
@@ -1724,7 +1724,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.上涨.价差, color: 波动率颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.上涨.价差, color: 波动率颜色 }),
     //                 ]
     //             },
 
@@ -1738,7 +1738,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //                 numberColor: BTC颜色,
     //                 yCoordinate: '对数',
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.上涨.动力, color: ETH颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.上涨.动力, color: ETH颜色 }),
     //                 ]
     //             },
 
@@ -1775,7 +1775,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
 
     //                     layer(TextLayer, {
     //                         text:
@@ -1816,7 +1816,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -1865,7 +1865,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
 
     //                     layer(TextLayer, {
     //                         text:
@@ -1908,7 +1908,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -1954,7 +1954,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -2016,7 +2016,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -2077,7 +2077,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -2117,7 +2117,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                     layer(TextLayer, {
     //                         text:
     //                             `hopex:${lastNumber(d2.XBTUSD.hopex.价格).toFixed(2)}  ` +
@@ -2161,8 +2161,8 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.下跌.x秒内极值点价格, color: 0xffffff }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.下跌.x秒内极值点价格, color: 0xffffff }),
     //                     layer(LineLayer, { data: d.bitmex.价格_最低60, color: 波动率颜色 }),
     //                     layer(TextLayer, {
     //                         text:
@@ -2646,7 +2646,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //         [{
     //             numberColor: BTC颜色,
     //             layerList: [
-    //                 layer(LineLayer, { data: d2.XBTUSD.bitmex.着笔.price, color: BTC颜色 }),
+    //                 layer(LineLayer, { data: d2.bitmex.XBTUSD.着笔.price, color: BTC颜色 }),
     //             ]
     //         },
     //         {
@@ -2660,7 +2660,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
     //         {
     //             layerList: [
-    //                 layer(LineLayer, { data: d2.XBTUSD.bitmex.着笔.size, color: 0xffffff }),
+    //                 layer(LineLayer, { data: d2.bitmex.XBTUSD.着笔.size, color: 0xffffff }),
     //             ]
     //         },
     //     ]
@@ -2673,10 +2673,10 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             {
                 numberColor: BTC颜色,
                 layerList: [
-                    layer(KLineLayer, { data: d2.XBTUSD.bitmex.KLine }),
-                    layer(笔Layer, { data: get笔Index(d2.XBTUSD.bitmex.KLine), color: 0xffff00 }),
-                    layer(线段Layer, { data: get线段(get笔Index(d2.XBTUSD.bitmex.KLine)), color: 0xaa0000 }),
-                    layer(合并后的Layer, { data: 合并后的K线(d2.XBTUSD.bitmex.KLine), color: 0xffff00 }),
+                    layer(KLineLayer, { data: d2.bitmex.XBTUSD.KLine }),
+                    layer(笔Layer, { data: get笔Index(d2.bitmex.XBTUSD.KLine), color: 0xffff00 }),
+                    layer(线段Layer, { data: get线段(get笔Index(d2.bitmex.XBTUSD.KLine)), color: 0xaa0000 }),
+                    layer(合并后的Layer, { data: 合并后的K线(d2.bitmex.XBTUSD.KLine), color: 0xffff00 }),
                 ]
             },
             {
@@ -2801,7 +2801,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
     //             {
     //                 numberColor: BTC颜色,
     //                 layerList: [
-    //                     layer(LineLayer, { data: d2.XBTUSD.bitmex.价格, color: BTC颜色 }),
+    //                     layer(LineLayer, { data: d2.bitmex.XBTUSD.价格, color: BTC颜色 }),
     //                 ]
     //             },
     //             {

@@ -43,11 +43,11 @@ export class 提醒 extends React.Component {
 
     step = () => {
         //_______________________________布林带提醒_______________________________
-        const 上轨 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._60s_.布林带.上轨)
-        const 下轨 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex._60s_.布林带.下轨)
-        const 收盘价 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex.收盘价)
+        const 上轨 = lastNumber(realTickClient.dataExt.bitmex.XBTUSD._60s_.布林带.上轨)
+        const 下轨 = lastNumber(realTickClient.dataExt.bitmex.XBTUSD._60s_.布林带.下轨)
+        const 收盘价 = lastNumber(realTickClient.dataExt.bitmex.XBTUSD.收盘价)
 
-        const hopex收盘价 = lastNumber(realTickClient.dataExt.XBTUSD.hopex.收盘价)
+        const hopex收盘价 = lastNumber(realTickClient.dataExt.hopex.BTCUSDT.收盘价)
 
 
         this.setAndSpeak(
@@ -113,18 +113,18 @@ export class 提醒 extends React.Component {
 
 
         const volum = realTickClient.get期货多少秒内成交量__万为单位('XBTUSD', 15)
-        const 波动率 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex.价格_波动率30)
+        const 波动率 = lastNumber(realTickClient.dataExt.bitmex.XBTUSD.价格_波动率30)
         this.setAndSpeak(
             '比 特 币 成交量',
             volum,
             v => volum > 1000 && 波动率 >= 0.1
         )
-        const 买盘 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex.买.盘口)
-        const 卖盘 = lastNumber(realTickClient.dataExt.XBTUSD.bitmex.卖.盘口)
+        const 买盘 = lastNumber(realTickClient.dataExt.bitmex.XBTUSD.买.盘口)
+        const 卖盘 = lastNumber(realTickClient.dataExt.bitmex.XBTUSD.卖.盘口)
         this.setAndSpeak(
             '比 特 币 盘口大量',
             volum,
-            v => 买盘 > 2000*10000 || 卖盘>2000*10000
+            v => 买盘 > 2000 * 10000 || 卖盘 > 2000 * 10000
 
         )
 
@@ -157,7 +157,7 @@ export class 提醒 extends React.Component {
             >
                 {`超短小于 ${this.小于等于}`}
             </a>
-            <br/>
+            <br />
             <a
                 style={{ fontSize: 20, color: 'yellow' }}
                 href='#'
@@ -173,7 +173,7 @@ export class 提醒 extends React.Component {
             >
                 {`中线小于 <= ${this.中线小于等于}`}
             </a>
-            <br/>
+            <br />
             <a
                 style={{ fontSize: 20, color: 'yellow' }}
                 href='#'
@@ -205,7 +205,7 @@ export class 提醒 extends React.Component {
             >
                 {`超短大于 ${this.大于等于}`}
             </a>
-            <br/>
+            <br />
             <a
                 style={{ fontSize: 20, color: 'yellow' }}
                 href='#'
@@ -221,7 +221,7 @@ export class 提醒 extends React.Component {
             >
                 {`中线大于 ${this.中线大于等于}`}
             </a>
-            <br/>
+            <br />
             <a
                 style={{ fontSize: 20, color: 'yellow' }}
                 href='#'
