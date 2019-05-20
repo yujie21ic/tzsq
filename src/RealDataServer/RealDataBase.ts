@@ -1,8 +1,7 @@
 import { JSONSync } from '../lib/F/JSONSync'
 import { BaseType } from '../lib/BaseType'
 import { 指标 } from '../指标/指标'
-import { toRange } from '../lib/F/toRange'
-import { is连续几根全亮 } from '../lib/F/is连续几根全亮'
+import { toRange } from '../lib/F/toRange' 
 import { timeID } from '../lib/F/timeID'
 import { get买卖 } from '../指标/买卖'
 import { formatDate } from '../lib/F/formatDate'
@@ -1367,102 +1366,6 @@ export class RealDataBase {
             hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
             ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),
         }
-    }
-
-    getOrderPrice = ({ symbol, side, type, 位置 }: { symbol: BaseType.BitmexSymbol, side: BaseType.Side, type: 'taker' | 'maker', 位置: number }) => {
-        const pk = this.dataExt[symbol].bitmex.盘口
-
-        if (pk.length < 1) return NaN
-        const p = pk[pk.length - 1]
-
-        if (side === 'Buy') {
-            if (type === 'taker') {
-                return p.sell[位置] ? p.sell[位置].price : NaN
-            } else {
-                return p.buy[位置] ? p.buy[位置].price : NaN
-            }
-        } else if (side === 'Sell') {
-            if (type === 'taker') {
-                return p.buy[位置] ? p.buy[位置].price : NaN
-            } else {
-                return p.sell[位置] ? p.sell[位置].price : NaN
-            }
-        } else {
-            return NaN
-        }
-    }
-
-
-    getHopexOrderPrice = ({ symbol, side, type, 位置 }: { symbol: 'XBTUSD' | 'ETHUSD', side: BaseType.Side, type: 'taker' | 'maker', 位置: number }) => {
-        const pk = this.dataExt[symbol].hopex.盘口
-
-        if (pk.length < 1) return NaN
-        const p = pk[pk.length - 1]
-
-        if (side === 'Buy') {
-            if (type === 'taker') {
-                return p.sell[位置] ? p.sell[位置].price : NaN
-            } else {
-                return p.buy[位置] ? p.buy[位置].price : NaN
-            }
-        } else if (side === 'Sell') {
-            if (type === 'taker') {
-                return p.buy[位置] ? p.buy[位置].price : NaN
-            } else {
-                return p.sell[位置] ? p.sell[位置].price : NaN
-            }
-        } else {
-            return NaN
-        }
-    }
-
-
-
-    摸顶抄底_反向信号_平仓 = (market: 'bitmex' | 'hopex') => {
-        const realData = this
-        const up = market === 'bitmex' ? realData.dataExt.XBTUSD.bitmex.信号_摸顶 : realData.dataExt.XBTUSD.hopex_信号_摸顶
-        const down = market === 'bitmex' ? realData.dataExt.XBTUSD.bitmex.信号_抄底 : realData.dataExt.XBTUSD.hopex_信号_抄底
-
-        if (up.length > 2 && up[up.length - 1].every(v => v.value) && up[up.length - 2].every(v => v.value)) {
-            return { 信号side: 'Sell' as 'Sell' }
-        }
-        else if (down.length > 2 && down[down.length - 1].every(v => v.value) && down[down.length - 2].every(v => v.value)) {
-            return { 信号side: 'Buy' as 'Buy' }
-        }
-        else {
-            return { 信号side: 'none' as 'none' }
-        }
-    }
-
-    get信号灯Type = (market: 'bitmex' | 'hopex') => {
-        const realData = this
-        if (is连续几根全亮(3, market === 'bitmex' ? realData.dataExt.XBTUSD.bitmex.信号_摸顶 : realData.dataExt.XBTUSD.hopex_信号_摸顶)) {
-            return '摸顶'
-        }
-        else if (is连续几根全亮(3, market === 'bitmex' ? realData.dataExt.XBTUSD.bitmex.信号_抄底 : realData.dataExt.XBTUSD.hopex_信号_抄底)) {
-            return '抄底'
-        }
-        else if (market === 'bitmex' && is连续几根全亮(1, realData.dataExt.XBTUSD.bitmex_信号_追涨)) {
-            return '追涨'
-        }
-        else if (market === 'bitmex' && is连续几根全亮(1, realData.dataExt.XBTUSD.bitmex_信号_追跌)) {
-            return '追跌'
-        } else {
-            return 'none'
-        }
-    }
-
-
-    is摸顶_下跌平仓 = (market: 'bitmex' | 'hopex') =>
-        is连续几根全亮(2, market === 'bitmex' ?
-            this.dataExt.XBTUSD.bitmex_信号_摸顶_下跌平仓 :
-            this.dataExt.XBTUSD.hopex_信号_摸顶_下跌平仓
-        )
-
-    is抄底_上涨平仓 = (market: 'bitmex' | 'hopex') =>
-        is连续几根全亮(2, market === 'bitmex' ?
-            this.dataExt.XBTUSD.bitmex_信号_抄底_上涨平仓 :
-            this.dataExt.XBTUSD.hopex_信号_抄底_上涨平仓
-        )
+    } 
 
 }
