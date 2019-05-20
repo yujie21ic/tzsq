@@ -1,18 +1,20 @@
 import { JSONSync } from '../lib/F/JSONSync'
 import { BaseType } from '../lib/BaseType'
 import { 指标 } from '../指标/指标'
-import { toRange } from '../lib/F/toRange' 
+import { toRange } from '../lib/F/toRange'
 import { timeID } from '../lib/F/timeID'
 import { get买卖 } from '../指标/买卖'
 import { formatDate } from '../lib/F/formatDate'
 import { mapObjIndexed } from '../lib/F/mapObjIndexed'
 import { ______CTP__config } from './______CTP__config'
+import { CTPTradeAndOrderBook } from './CTPTradeAndOrderBook'
+import { BitmexTradeAndOrderBook } from './BitmexTradeAndOrderBook'
+import { HopexTradeAndOrderBook } from './HopexTradeAndOrderBook'
+import { IXTradeAndOrderBook } from './IXTradeAndOrderBook'
+import { TradeAndOrderBook } from './TradeAndOrderBook'
 
 const createItem = () => ({
-    // 着笔: [] as BaseType.着笔[],
-
-
-
+    // 着笔: [] as BaseType.着笔[], 
 
 
     //合起来 ???????
@@ -34,6 +36,109 @@ const createItem = () => ({
 })
 
 export class RealDataBase {
+
+
+    private item = (symbol: BaseType.BitmexSymbol, hopexSymbol: BaseType.HopexSymbol) => {
+
+        const bitmex = this.item2(this.data.bitmex[symbol], true)
+        const hopex = this.item2(this.data.hopex[hopexSymbol], true)
+
+
+        const hopex_bitmex_差价 = 指标.map(() => Math.min(hopex.价格.length, bitmex.价格.length), i => hopex.价格[i] - bitmex.价格[i])
+        const hopex_bitmex_差价均线 = 指标.SMA(hopex_bitmex_差价, 300, RealDataBase.单位时间)
+        const hopex_bitmex_相对差价 = 指标.map(() => Math.min(hopex.价格.length, bitmex.价格.length), i => hopex_bitmex_差价[i] - hopex_bitmex_差价均线[i])
+
+
+
+        const bitmex_hopex_上涨差价 = 指标.map(() => Math.min(bitmex.价格_最高60.length, hopex.价格.length), i => bitmex.价格_最高60[i] - hopex.价格[i])
+        const bitmex_hopex_下跌差价 = 指标.map(() => Math.min(bitmex.价格_最低60.length, hopex.价格.length), i => bitmex.价格_最低60[i] - hopex.价格[i])
+
+        const bitmex_hopex_上涨差价均线 = 指标.SMA(bitmex_hopex_上涨差价, 360, RealDataBase.单位时间)
+        const bitmex_hopex_下跌差价均线 = 指标.SMA(bitmex_hopex_下跌差价, 360, RealDataBase.单位时间)
+
+        const bitmex_hopex_上涨相对价差 = 指标.map(() => Math.min(bitmex_hopex_上涨差价.length, bitmex_hopex_上涨差价均线.length), i => bitmex_hopex_上涨差价[i] - bitmex_hopex_上涨差价均线[i])
+        const bitmex_hopex_下跌相对价差 = 指标.map(() => Math.min(bitmex_hopex_下跌差价.length, bitmex_hopex_下跌差价均线.length), i => bitmex_hopex_下跌差价[i] - bitmex_hopex_下跌差价均线[i])
+
+        const bitmex_hopex_上涨相对差价均线 = 指标.SMA(bitmex_hopex_上涨相对价差, 10, RealDataBase.单位时间)
+        const bitmex_hopex_下跌相对价差均线 = 指标.SMA(bitmex_hopex_下跌相对价差, 10, RealDataBase.单位时间)
+
+        const bitmex_hopex_上涨相对差价macd = 指标.macd(bitmex_hopex_上涨相对价差, RealDataBase.单位时间)
+        const bitmex_hopex_下跌相对差价macd = 指标.macd(bitmex_hopex_下跌相对价差, RealDataBase.单位时间)
+        const hopex_价格_macd = 指标.macd(hopex.价格, RealDataBase.单位时间)
+
+
+
+        return {
+            hopex_bitmex_差价,
+            hopex_bitmex_相对差价,
+
+            hopex_价格_macd,
+            bitmex_hopex_上涨差价,
+            bitmex_hopex_下跌差价,
+
+            bitmex_hopex_上涨差价均线,
+            bitmex_hopex_下跌差价均线,
+
+            bitmex_hopex_上涨相对价差,
+            bitmex_hopex_下跌相对价差,
+
+            bitmex_hopex_上涨相对差价均线,
+            bitmex_hopex_下跌相对价差均线,
+            binance_bitmex_差价均线: hopex_bitmex_差价均线,
+
+            bitmex_hopex_上涨相对差价macd,
+            bitmex_hopex_下跌相对差价macd,
+
+            期货30秒内成交量: () => this.get期货多少秒内成交量__万为单位(symbol, 30),
+
+            bitmex,
+            hopex,
+        }
+    }
+
+
+
+    //________________________________________________________________________________________________//
+    jsonSync = new JSONSync(
+        {
+            startTick: 0,//tick的  1m的开始 没有对齐
+            ctp: mapObjIndexed(createItem, ______CTP__config),
+            hopex: mapObjIndexed(createItem, BaseType.HopexSymbolDic),
+            ix: mapObjIndexed(createItem, BaseType.IXSymbolDic),
+            bitmex: mapObjIndexed(createItem, BaseType.BitmexSymbolDic),
+        }
+    )
+    dataExt = {
+        XBTUSD: this.item('XBTUSD', 'BTCUSDT'),
+        ETHUSD: this.item('ETHUSD', 'ETHUSDT'),
+        ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
+        bitmex: mapObjIndexed((v, k) => this.item2(this.data.bitmex[k], false), BaseType.BitmexSymbolDic),
+        hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
+        ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),
+    }
+
+    重新初始化 = () => {
+        this.dataExt = {
+            XBTUSD: this.item('XBTUSD', 'BTCUSDT'),
+            ETHUSD: this.item('ETHUSD', 'ETHUSDT'),
+            ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
+            bitmex: mapObjIndexed((v, k) => this.item2(this.data.bitmex[k], false), BaseType.BitmexSymbolDic),
+            hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
+            ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),
+        }
+    }
+    getTradeAndOrderBookArr = () => [
+        new CTPTradeAndOrderBook(),
+        new BitmexTradeAndOrderBook(),
+        new HopexTradeAndOrderBook(),
+        new IXTradeAndOrderBook(),
+    ] as TradeAndOrderBook<any>[]
+    //________________________________________________________________________________________________//
+
+ 
+
+
+
     static 单位时间 = 500
 
     删除历史() {
@@ -45,15 +150,6 @@ export class RealDataBase {
     }
 
 
-    jsonSync = new JSONSync(
-        {
-            startTick: 0,//tick的  1m的开始 没有对齐
-            ctp: mapObjIndexed(createItem, ______CTP__config),
-            hopex: mapObjIndexed(createItem, BaseType.HopexSymbolDic),
-            ix: mapObjIndexed(createItem, BaseType.IXSymbolDic),
-            bitmex: mapObjIndexed(createItem, BaseType.BitmexSymbolDic),
-        }
-    )
 
 
     get期货多少秒内最高最低(symbol: BaseType.BitmexSymbol, second: number) {
@@ -200,7 +296,7 @@ export class RealDataBase {
             DIF: 映射回500ms(300 * 2, _300s_.macd.DIF),
             DEM: 映射回500ms(300 * 2, _300s_.macd.DEM),
             OSC: 映射回500ms(300 * 2, _300s_.macd.OSC),
-        } 
+        }
 
         盘口算价格 = false
 
@@ -715,7 +811,7 @@ export class RealDataBase {
         const 实时成交量 = 指标.map(() => Math.min(上涨.累计成交量.length, 下跌.累计成交量.length, 上涨_下跌_横盘.length), i => 上涨_下跌_横盘[i] === '上涨' ? 上涨.累计成交量[i] : 下跌.累计成交量[i])
         const 实时与标准成交量之差 = 指标.map(() => Math.min(累计成交量阈值.length, 实时成交量.length), i => (实时成交量[i] - 累计成交量阈值[i]))
         const 实时与标准成交量之差macd = 指标.macd(实时与标准成交量之差, RealDataBase.单位时间)
- 
+
 
 
         const [双开, 双平, 多换, 空换, 多平, 空平, 空开, 多开] = ['双开', '双平', '多换', '空换', '多平', '空平', '空开', '多开'].map(v =>
@@ -764,7 +860,7 @@ export class RealDataBase {
             _12s_macd,
             _13s_布林,
             _60s_macd,
-            _300s_macd, 
+            _300s_macd,
 
             时间str,
             波动_测试,
@@ -807,7 +903,7 @@ export class RealDataBase {
             阻力3涨,
             阻力3跌,
             真空信号涨,
-            真空信号跌, 
+            真空信号跌,
 
             价格_最高60,
             价格_最低60,
@@ -816,84 +912,4 @@ export class RealDataBase {
             被动_卖均价_300,
         }
     }
-
-
-    private item = (symbol: BaseType.BitmexSymbol, hopexSymbol: BaseType.HopexSymbol) => {
-
-        const bitmex = this.item2(this.data.bitmex[symbol], true)
-        const hopex = this.item2(this.data.hopex[hopexSymbol], true)
-
-
-        const hopex_bitmex_差价 = 指标.map(() => Math.min(hopex.价格.length, bitmex.价格.length), i => hopex.价格[i] - bitmex.价格[i])
-        const hopex_bitmex_差价均线 = 指标.SMA(hopex_bitmex_差价, 300, RealDataBase.单位时间)
-        const hopex_bitmex_相对差价 = 指标.map(() => Math.min(hopex.价格.length, bitmex.价格.length), i => hopex_bitmex_差价[i] - hopex_bitmex_差价均线[i])
-
-
-
-        const bitmex_hopex_上涨差价 = 指标.map(() => Math.min(bitmex.价格_最高60.length, hopex.价格.length), i => bitmex.价格_最高60[i] - hopex.价格[i])
-        const bitmex_hopex_下跌差价 = 指标.map(() => Math.min(bitmex.价格_最低60.length, hopex.价格.length), i => bitmex.价格_最低60[i] - hopex.价格[i])
-
-        const bitmex_hopex_上涨差价均线 = 指标.SMA(bitmex_hopex_上涨差价, 360, RealDataBase.单位时间)
-        const bitmex_hopex_下跌差价均线 = 指标.SMA(bitmex_hopex_下跌差价, 360, RealDataBase.单位时间)
-
-        const bitmex_hopex_上涨相对价差 = 指标.map(() => Math.min(bitmex_hopex_上涨差价.length, bitmex_hopex_上涨差价均线.length), i => bitmex_hopex_上涨差价[i] - bitmex_hopex_上涨差价均线[i])
-        const bitmex_hopex_下跌相对价差 = 指标.map(() => Math.min(bitmex_hopex_下跌差价.length, bitmex_hopex_下跌差价均线.length), i => bitmex_hopex_下跌差价[i] - bitmex_hopex_下跌差价均线[i])
-
-        const bitmex_hopex_上涨相对差价均线 = 指标.SMA(bitmex_hopex_上涨相对价差, 10, RealDataBase.单位时间)
-        const bitmex_hopex_下跌相对价差均线 = 指标.SMA(bitmex_hopex_下跌相对价差, 10, RealDataBase.单位时间)
-
-        const bitmex_hopex_上涨相对差价macd = 指标.macd(bitmex_hopex_上涨相对价差, RealDataBase.单位时间)
-        const bitmex_hopex_下跌相对差价macd = 指标.macd(bitmex_hopex_下跌相对价差, RealDataBase.单位时间)
-        const hopex_价格_macd = 指标.macd(hopex.价格, RealDataBase.单位时间)
- 
-
-
-        return {
-            hopex_bitmex_差价,
-            hopex_bitmex_相对差价,  
-
-            hopex_价格_macd,
-            bitmex_hopex_上涨差价,
-            bitmex_hopex_下跌差价,
-
-            bitmex_hopex_上涨差价均线,
-            bitmex_hopex_下跌差价均线,
-
-            bitmex_hopex_上涨相对价差,
-            bitmex_hopex_下跌相对价差,
-
-            bitmex_hopex_上涨相对差价均线,
-            bitmex_hopex_下跌相对价差均线,
-            binance_bitmex_差价均线: hopex_bitmex_差价均线,
-
-            bitmex_hopex_上涨相对差价macd,
-            bitmex_hopex_下跌相对差价macd, 
-
-            期货30秒内成交量: () => this.get期货多少秒内成交量__万为单位(symbol, 30),
-
-            bitmex,
-            hopex,
-        }
-    }
-
-    dataExt = {
-        XBTUSD: this.item('XBTUSD', 'BTCUSDT'),
-        ETHUSD: this.item('ETHUSD', 'ETHUSDT'),
-        ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
-        bitmex: mapObjIndexed((v, k) => this.item2(this.data.bitmex[k], false), BaseType.BitmexSymbolDic),
-        hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
-        ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),
-    }
-
-    重新初始化 = () => {
-        this.dataExt = {
-            XBTUSD: this.item('XBTUSD', 'BTCUSDT'),
-            ETHUSD: this.item('ETHUSD', 'ETHUSDT'),
-            ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
-            bitmex: mapObjIndexed((v, k) => this.item2(this.data.bitmex[k], false), BaseType.BitmexSymbolDic),
-            hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
-            ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),
-        }
-    } 
-
 }

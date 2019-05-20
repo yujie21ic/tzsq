@@ -1,24 +1,14 @@
 import * as WebSocket from 'ws'
 import { BaseType } from '../lib/BaseType'
 import { Sampling } from '../lib/F/Sampling'
-import { BitmexTradeAndOrderBook } from './BitmexTradeAndOrderBook'
-import { HopexTradeAndOrderBook } from './HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
-import { CTPTradeAndOrderBook } from './CTPTradeAndOrderBook'
-import { IXTradeAndOrderBook } from './IXTradeAndOrderBook'
-import { TradeAndOrderBook } from './TradeAndOrderBook'
 
 export class RealData__Server extends RealDataBase {
 
     private wss?: WebSocket.Server
     private wsDic = new Map<WebSocket, boolean>()
 
-    private tradeAndOrderBookArr: TradeAndOrderBook<any>[] = [
-        new CTPTradeAndOrderBook(),
-        new BitmexTradeAndOrderBook(),
-        new HopexTradeAndOrderBook(),
-        new IXTradeAndOrderBook(),
-    ]
+    private tradeAndOrderBookArr = super.getTradeAndOrderBookArr()
 
     onTitle = (str: string) => { }
 
@@ -250,7 +240,7 @@ export class RealData__Server extends RealDataBase {
                 const str = JSON.stringify(op)
                 this.wsDic.forEach((_, ws) => {
                     try { ws.send(str) } catch (error) { }
-                }) 
+                })
             }
         )
 
