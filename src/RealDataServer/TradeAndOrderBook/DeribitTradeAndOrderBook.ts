@@ -107,8 +107,7 @@ export class DeribitTradeAndOrderBook extends TradeAndOrderBook<BaseType.Deribit
 
             data.notifications.forEach(v => {
                 if (v.message === 'order_book_event') {
-                    const item = v.result
-                    console.log('item',item)
+                    const item = v.result 
                     this.orderBookObservable.next({
                         symbol: item.instrument === 'BTC-PERPETUAL' ? 'BTC_PERPETUAL' : 'ETH_PERPETUAL',
                         timestamp: item.tstamp,
