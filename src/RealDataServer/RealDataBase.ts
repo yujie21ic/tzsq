@@ -200,58 +200,7 @@ export class RealDataBase {
             DIF: 映射回500ms(300 * 2, _300s_.macd.DIF),
             DEM: 映射回500ms(300 * 2, _300s_.macd.DEM),
             OSC: 映射回500ms(300 * 2, _300s_.macd.OSC),
-        }
-
-        //着笔
-        // （当前时间-这个价位开始的时间）*1（上涨）
-        // （当前时间-这个价位开始的时间）*-1（下跌）
-        // 然后相加这个价位笔的加权计算，最终是正数，就是上涨，负数就是下跌
-        // const 着笔 = {
-        //     timestamp: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].timestamp),
-        //     _500ms_id: 指标.map(() => xxx.着笔.length, i => timeID._500ms.toID(xxx.着笔[i].timestamp)),
-        //     price: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].price),
-        //     side: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].side),
-        //     size: 指标.map(() => xxx.着笔.length, i => xxx.着笔[i].size),
-        //     涨跌: 指标.map(() => xxx.着笔.length, i => {
-        //         let c = 0
-        //         for (let k = i; k >= Math.max(0, i - 50); k--) {
-        //             if (xxx.着笔[k].price === xxx.着笔[k].buy1) {
-        //                 c += (i - k)
-        //             }
-        //             else if (xxx.着笔[k].price === xxx.着笔[k].sell1) {
-        //                 c -= (i - k)
-        //             }
-        //             else {
-        //                 break
-        //             }
-        //         }
-        //         return c > 0 ? 1 : -1
-        //     }),
-        // }
-
-
-
-
-        //500ms
-
-        // const 着笔涨跌 = 指标.map(
-        //     () => data.length - 10,
-        //     i => {
-        //         let n = 0
-
-        //         for (let k = 着笔._500ms_id.length - 1; k >= 0; k--) {
-        //             if (着笔._500ms_id[k] === data[i].id) {
-        //                 n = 着笔.涨跌[k]
-        //                 break
-        //             }
-        //         }
-
-        //         return [
-        //             { name: '涨', value: n === 1, color: 0x0E6655 },
-        //             { name: '跌', value: n === -1, color: 0x943126 },
-
-        //         ]
-        //     })
+        } 
 
         盘口算价格 = false
 
