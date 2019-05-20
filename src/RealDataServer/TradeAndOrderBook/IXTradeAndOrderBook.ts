@@ -1,7 +1,7 @@
 import { TradeAndOrderBook } from './TradeAndOrderBook'
-import { config } from '../config'
-import { WebSocketClient } from '../lib/F/WebSocketClient'
-import { BaseType } from '../lib/BaseType'
+import { config } from '../../config'
+import { WebSocketClient } from '../../lib/F/WebSocketClient'
+import { BaseType } from '../../lib/BaseType'
 
 
 type 着笔 = {

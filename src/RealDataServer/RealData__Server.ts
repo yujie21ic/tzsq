@@ -2,7 +2,7 @@ import * as WebSocket from 'ws'
 import { BaseType } from '../lib/BaseType'
 import { Sampling } from '../lib/F/Sampling'
 import { RealDataBase } from './RealDataBase'
-import { TradeAndOrderBook } from './TradeAndOrderBook'
+import { TradeAndOrderBook } from './TradeAndOrderBook/TradeAndOrderBook'
 
 export class RealData__Server extends RealDataBase {
 

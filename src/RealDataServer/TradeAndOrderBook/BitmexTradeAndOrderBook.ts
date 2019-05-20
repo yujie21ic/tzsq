@@ -1,6 +1,6 @@
 import { TradeAndOrderBook } from './TradeAndOrderBook'
-import { BitMEXWS } from '../lib/BitMEX/BitMEXWS'
-import { BaseType } from '../lib/BaseType'
+import { BitMEXWS } from '../../lib/BitMEX/BitMEXWS'
+import { BaseType } from '../../lib/BaseType'
 
 const 盘口map = (v: any) => ({
     price: Number(v[0]),
