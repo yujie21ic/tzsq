@@ -52,10 +52,7 @@ export class RealDataBase {
             ctp: mapObjIndexed(createItem, ______CTP__config),
             hopex: mapObjIndexed(createItem, BaseType.HopexSymbolDic),
             ix: mapObjIndexed(createItem, BaseType.IXSymbolDic),
-            bitmex: {
-                XBTUSD: createItem(),
-                ETHUSD: createItem(),
-            },
+            bitmex: mapObjIndexed(createItem, BaseType.BitmexSymbolDic),
         }
     )
 

@@ -6,22 +6,20 @@ import { HopexTradeAndOrderBook } from './HopexTradeAndOrderBook'
 import { RealDataBase } from './RealDataBase'
 import { CTPTradeAndOrderBook } from './CTPTradeAndOrderBook'
 import { IXTradeAndOrderBook } from './IXTradeAndOrderBook'
+import { TradeAndOrderBook } from './TradeAndOrderBook'
 
 export class RealData__Server extends RealDataBase {
 
     private wss?: WebSocket.Server
     private wsDic = new Map<WebSocket, boolean>()
 
-    private bitmex = new BitmexTradeAndOrderBook()
-    private hopex = new HopexTradeAndOrderBook()
-    private ix = new IXTradeAndOrderBook()
+    private tradeAndOrderBookArr: TradeAndOrderBook<any>[] = [
+        new BitmexTradeAndOrderBook(),
+        new HopexTradeAndOrderBook(),
+        new IXTradeAndOrderBook(),
+    ]
 
-    _bitmex = false
-    _hopex = false
-    onTitle = (p: {
-        bitmex: boolean
-        hopex: boolean
-    }) => { }
+    onTitle = (str: string) => { }
 
     private on着笔Dic = Object.create(null) as {
         [symbol: string]: Sampling<BaseType.KLine>
@@ -84,24 +82,6 @@ export class RealData__Server extends RealDataBase {
         if (this.data.startTick === 0) {
             this.jsonSync.data.startTick.____set(tick)
         }
-
-        //着笔
-        //本地 ws 服务 才要
-        // if (this.wsServer && p.key === 'bitmex_XBTUSD') {
-        //     const { orderBook } = this.jsonSync.rawData.bitmex.XBTUSD
-        //     if (orderBook.length > 0) {
-        //         p.xxxxxxxx.着笔.____push({
-        //             side: p.side,
-        //             size: p.size,
-        //             price: p.price,
-        //             buy1: orderBook[orderBook.length - 1].buy.length > 0 ? orderBook[orderBook.length - 1].buy[0].price : NaN,
-        //             sell1: orderBook[orderBook.length - 1].sell.length > 0 ? orderBook[orderBook.length - 1].sell[0].price : NaN,
-        //             timestamp: p.timestamp,
-        //         })
-        //     }
-        // }
-
-
 
         //吃单情况
         if (p.xxxxxxxx.吃单情况.____get().length === 0) {
@@ -229,7 +209,7 @@ export class RealData__Server extends RealDataBase {
 
     private ctp = new CTPTradeAndOrderBook()
 
-    // private wsServer: boolean
+    // private wsServer: boolean 
 
     constructor(wsServer = true) {
         super()
@@ -243,20 +223,15 @@ export class RealData__Server extends RealDataBase {
             this.wss = new WebSocket.Server({ port: 6666 })
         }
 
-        const onTitle = () => this.onTitle({
-            bitmex: this._bitmex,
-            hopex: this._hopex,
-        })
 
+        let xxx: { [key: string]: boolean } = {}
+        const onTitle = () => this.onTitle(JSON.stringify(xxx))
 
-        this.bitmex.statusObservable.subscribe(v => {
-            this._bitmex = v.isConnected
-            onTitle()
-        })
-
-        this.hopex.statusObservable.subscribe(v => {
-            this._hopex = v.isConnected
-            onTitle()
+        this.tradeAndOrderBookArr.forEach(vv => {
+            vv.statusObservable.subscribe(v => {
+                xxx[vv.name] = v.isConnected
+                onTitle()
+            })
         })
 
 
@@ -319,91 +294,32 @@ export class RealData__Server extends RealDataBase {
         })
 
 
-        //run期货
-        this.bitmex.tradeObservable.subscribe(({ symbol, timestamp, side, size, price }) => {
-            this.on着笔({
-                key: 'bitmex_' + symbol,
-                xxxxxxxx: this.jsonSync.data.bitmex[symbol],
-                timestamp,
-                side: side as BaseType.Side,
-                size,
-                price,
+        this.tradeAndOrderBookArr.forEach(v => {
+            v.tradeObservable.subscribe(({ symbol, timestamp, side, size, price }) => {
+                this.on着笔({
+                    key: v.name + '_' + symbol,
+                    xxxxxxxx: this.jsonSync.data[v.name as 'bitmex'][symbol as 'XBTUSD'],
+                    timestamp,
+                    side: side as BaseType.Side,
+                    size,
+                    price,
+                })
+
+            })
+
+            v.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
+                this.on盘口({
+                    key: v.name + '_' + symbol,
+                    xxxxxxxx: this.jsonSync.data[v.name as 'bitmex'][symbol as 'XBTUSD'].orderBook,
+                    timestamp,
+                    orderBook: {
+                        id: Math.floor(timestamp / RealDataBase.单位时间),
+                        buy,
+                        sell,
+                    }
+                })
             })
         })
-
-        this.bitmex.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
-            this.on盘口({
-                key: 'bitmex_' + symbol,
-                xxxxxxxx: this.jsonSync.data.bitmex[symbol].orderBook,
-                timestamp,
-                orderBook: {
-                    id: Math.floor(timestamp / RealDataBase.单位时间),
-                    buy,
-                    sell,
-                }
-            })
-        })
-
-
-
-
-
-
-        //
-
-        this.hopex.tradeObservable.subscribe(({ symbol, timestamp, price, side, size }) => {
-            this.on着笔({
-                key: 'hopex_' + symbol,
-                xxxxxxxx: this.jsonSync.data.hopex[symbol],
-                timestamp,
-                price,
-                side,
-                size,
-            })
-        })
-
-
-        this.hopex.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
-            this.on盘口({
-                key: 'hopex_' + symbol,
-                xxxxxxxx: this.jsonSync.data.hopex[symbol].orderBook,
-                timestamp,
-                orderBook: {
-                    id: Math.floor(timestamp / RealDataBase.单位时间),
-                    buy,
-                    sell,
-                }
-            })
-        })
-
-
-        //ix
-        this.ix.tradeObservable.subscribe(({ symbol, timestamp, price, side, size }) => {
-            this.on着笔({
-                key: 'ix_' + symbol,
-                xxxxxxxx: this.jsonSync.data.ix[symbol],
-                timestamp,
-                price,
-                side,
-                size,
-            })
-        })
-
-
-        this.ix.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
-            this.on盘口({
-                key: 'ix_' + symbol,
-                xxxxxxxx: this.jsonSync.data.ix[symbol].orderBook,
-                timestamp,
-                orderBook: {
-                    id: Math.floor(timestamp / RealDataBase.单位时间),
-                    buy,
-                    sell,
-                }
-            })
-        })
-
-
 
     }
 }

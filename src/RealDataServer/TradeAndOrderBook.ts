@@ -3,6 +3,8 @@ import { Subject } from 'rxjs'
 
 export class TradeAndOrderBook<T extends string = string> {
 
+    name = ''
+
     statusObservable = new Subject<{
         isConnected: boolean
     }>()

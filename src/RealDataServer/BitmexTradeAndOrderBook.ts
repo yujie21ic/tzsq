@@ -18,6 +18,8 @@ export class BitmexTradeAndOrderBook extends TradeAndOrderBook<BaseType.BitmexSy
         // { theme: 'tradeBin1m', filter: 'ETHUSD' },
     ])
 
+    name = 'bitmex'
+
     constructor() {
         super()
 

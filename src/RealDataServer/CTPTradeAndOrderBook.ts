@@ -18,6 +18,8 @@ export class CTPTradeAndOrderBook extends TradeAndOrderBook<string>{
         } | undefined
     }
 
+    name = 'ctp'
+
 
     run() {
         this.statusObservable.next({ isConnected: true })

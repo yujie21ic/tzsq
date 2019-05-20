@@ -44,6 +44,8 @@ export class IXTradeAndOrderBook extends TradeAndOrderBook<BaseType.IXSymbol> {
         url: `wss://ws.ix.com/v1/orderbook/FUTURE_BTCUSD/0/1/5`,
     })
 
+    name = 'ix'
+
     constructor() {
         super()
 

@@ -104,6 +104,8 @@ const createItem = () => ({
 
 export class HopexTradeAndOrderBook extends TradeAndOrderBook<BaseType.HopexSymbol> {
 
+    name = 'hopex'
+
     private wsArr = BaseType.HopexSymbolArr.map(symbol =>
         ({
             symbol,
