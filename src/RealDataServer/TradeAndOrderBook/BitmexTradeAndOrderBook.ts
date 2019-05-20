@@ -1,6 +1,6 @@
 import { TradeAndOrderBook } from './TradeAndOrderBook'
-import { BitMEXWS } from '../lib/BitMEX/BitMEXWS'
-import { BaseType } from '../lib/BaseType'
+import { BitMEXWS } from '../../lib/BitMEX/BitMEXWS'
+import { BaseType } from '../../lib/BaseType'
 
 const 盘口map = (v: any) => ({
     price: Number(v[0]),
@@ -17,6 +17,8 @@ export class BitmexTradeAndOrderBook extends TradeAndOrderBook<BaseType.BitmexSy
         // { theme: 'tradeBin1m', filter: 'XBTUSD' },
         // { theme: 'tradeBin1m', filter: 'ETHUSD' },
     ])
+
+    name = 'bitmex'
 
     constructor() {
         super()

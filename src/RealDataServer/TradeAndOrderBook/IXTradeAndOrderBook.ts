@@ -1,7 +1,7 @@
 import { TradeAndOrderBook } from './TradeAndOrderBook'
-import { config } from '../config'
-import { WebSocketClient } from '../lib/F/WebSocketClient'
-import { BaseType } from '../lib/BaseType'
+import { config } from '../../config'
+import { WebSocketClient } from '../../lib/F/WebSocketClient'
+import { BaseType } from '../../lib/BaseType'
 
 
 type 着笔 = {
@@ -43,6 +43,8 @@ export class IXTradeAndOrderBook extends TradeAndOrderBook<BaseType.IXSymbol> {
         ss: config.ss,
         url: `wss://ws.ix.com/v1/orderbook/FUTURE_BTCUSD/0/1/5`,
     })
+
+    name = 'ix'
 
     constructor() {
         super()
