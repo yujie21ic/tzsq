@@ -20,11 +20,12 @@ export class DeribitTradeAndOrderBook extends TradeAndOrderBook<BaseType.BitmexS
             if (this.ws.isConnected) {
                 this.ws.sendJSON({
                     'id': 1234,
-                    'action': '/api/v1/public/getorderbook',
+                    'action': '/api/v1/private/subscribe',
                     'arguments': {
-                        'instrument': ['futures'],
+                        'instrument': ['BTC-PERPETUAL'],
                         'event': ['order_book', 'trade'],
                     },
+                    'sig': '??????????????????????????????',
                 })
             }
         }
