@@ -14,6 +14,7 @@ export class RealData__Server extends RealDataBase {
     private wsDic = new Map<WebSocket, boolean>()
 
     private tradeAndOrderBookArr: TradeAndOrderBook<any>[] = [
+        new CTPTradeAndOrderBook(),
         new BitmexTradeAndOrderBook(),
         new HopexTradeAndOrderBook(),
         new IXTradeAndOrderBook(),
@@ -207,17 +208,10 @@ export class RealData__Server extends RealDataBase {
         this.on盘口Dic[p.key].in2(p.orderBook)
     }
 
-    private ctp = new CTPTradeAndOrderBook()
-
-    // private wsServer: boolean 
-
     constructor(wsServer = true) {
         super()
 
-        // this.wsServer = wsServer
-
-        this.重新初始化()//<-----------fix 
-
+        this.重新初始化()//<-----------fix  
 
         if (wsServer) {
             this.wss = new WebSocket.Server({ port: 6666 })
@@ -256,43 +250,9 @@ export class RealData__Server extends RealDataBase {
                 const str = JSON.stringify(op)
                 this.wsDic.forEach((_, ws) => {
                     try { ws.send(str) } catch (error) { }
-                })
-
-                //const d = this.dataExt.XBTUSD.期货.信号_下跌
-                //console.log(d.length, d.length > 0 ? d[d.length - 1].map(v => v.value ? 'O' : '_').join('') : '')
+                }) 
             }
         )
-
-        //
-        this.ctp.run()
-        this.ctp.tradeObservable.subscribe(({ symbol, timestamp, side, size, price, 成交性质 }) => {
-            //if (symbol === 'rb1910')
-            this.on着笔({
-                key: 'ctp_' + symbol,
-                xxxxxxxx: this.jsonSync.data.ctp[symbol as 'rb1910'],
-                timestamp,
-                side: side as BaseType.Side,
-                size,
-                price,
-                成交性质,
-            })
-        })
-
-        this.ctp.orderBookObservable.subscribe(({ symbol, timestamp, buy, sell }) => {
-            ``
-            //if (symbol === 'rb1910')
-            this.on盘口({
-                key: 'ctp_' + symbol,
-                xxxxxxxx: this.jsonSync.data.ctp[symbol as 'rb1910'].orderBook,
-                timestamp,
-                orderBook: {
-                    id: Math.floor(timestamp / RealDataBase.单位时间),
-                    buy,
-                    sell,
-                }
-            })
-        })
-
 
         this.tradeAndOrderBookArr.forEach(v => {
             v.tradeObservable.subscribe(({ symbol, timestamp, side, size, price }) => {

@@ -21,7 +21,8 @@ export class CTPTradeAndOrderBook extends TradeAndOrderBook<string>{
     name = 'ctp'
 
 
-    run() {
+    constructor() {
+        super()
         this.statusObservable.next({ isConnected: true })
 
         this.udpServer.on('message', message => {
