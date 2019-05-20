@@ -17,6 +17,8 @@ export class DeribitTradeAndOrderBook extends TradeAndOrderBook<BaseType.BitmexS
         super()
 
         this.ws.onStatusChange = () => {
+            this.statusObservable.next({ isConnected: this.ws.isConnected })
+
             if (this.ws.isConnected) {
                 this.ws.sendJSON({
                     'id': 1234,
