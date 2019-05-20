@@ -183,18 +183,18 @@ class Tick复盘 extends _________________TickBase {
 
     c = 0
     getLeftRight() {
-        const d = this.real.dataExt[this.nowTickSymbol]
+        // const d = this.real.dataExt[this.nowTickSymbol]
 
-            ; (window as any)['d'] = d
+        //     ; (window as any)['d'] = d
 
         const d2 = this.real.dataExt
 
         let right2 =
-            //this.nowChart === '着笔' ? Math.max(d.bitmex.着笔.price.length) - 1 :
-            this.nowChart === '波动_测试' ? Math.max(d.bitmex.波动_测试.累计买.length) - 1 :
+            //this.nowChart === '着笔' ? Math.max(d2.bitmex.XBTUSD.着笔.price.length) - 1 :
+            this.nowChart === '波动_测试' ? Math.max(d2.bitmex.XBTUSD.波动_测试.累计买.length) - 1 :
                 this.nowChart === 'ctp波动_测试' ? Math.max(d2.ctp.rb1910.波动_测试.累计买.length) - 1 :
                     this.nowChart.indexOf('CTP') !== -1 ? Math.max(this.real.dataExt.ctp.rb1910.价格.length, this.real.dataExt.ctp.rb1910.盘口.length) - 1 :
-                        Math.max(d.hopex.价格.length, d.bitmex.价格.length, d.bitmex.买.盘口.length, d.bitmex.卖.盘口.length) - 1
+                        Math.max(d2.hopex.BTCUSDT.价格.length, d2.bitmex.XBTUSD.价格.length, d2.bitmex.XBTUSD.买.盘口.length, d2.bitmex.XBTUSD.卖.盘口.length) - 1
 
 
 

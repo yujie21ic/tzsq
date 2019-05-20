@@ -35,13 +35,13 @@ export class IXTradeAndOrderBook extends TradeAndOrderBook<BaseType.IXSymbol> {
     private 着笔ws = new WebSocketClient({
         name: 'IXTradeAndOrderBook 着笔ws',
         ss: config.ss,
-        url: `wss://ws.ix.com/v1/deal/FUTURE_BTCUSD`,
+        url: 'wss://ws.ix.com/v1/deal/FUTURE_BTCUSD',
     })
 
     private 盘口ws = new WebSocketClient({
         name: 'IXTradeAndOrderBook 盘口ws',
         ss: config.ss,
-        url: `wss://ws.ix.com/v1/orderbook/FUTURE_BTCUSD/0/1/5`,
+        url: 'wss://ws.ix.com/v1/orderbook/FUTURE_BTCUSD/0/1/5',
     })
 
     name = 'ix'

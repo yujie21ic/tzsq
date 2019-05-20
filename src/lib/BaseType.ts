@@ -14,6 +14,15 @@ export namespace BaseType {
     export const BitmexSymbolArr = keys(BitmexSymbolDic)
 
 
+    //deribit
+    export const DeribitSymbolDic = {
+        'BTC_PERPETUAL': {},
+        'ETH_PERPETUAL': {},
+    }
+    export type DeribitSymbol = keyof typeof DeribitSymbolDic
+    export const DeribitSymbolArr = keys(DeribitSymbolDic)
+
+
     //hopex
     export const HopexSymbolDic = {
         'BTCUSDT': {},

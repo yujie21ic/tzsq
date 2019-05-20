@@ -6,6 +6,10 @@ import { showWindow } from './windowExt'
 
 
 const menu = Menu.buildFromTemplate([
+  {
+    label: '测试',
+    click: () => showWindow('测试', {}),
+  },
   ...kvs(config.account || {}).map(v => ({
     label: v.k,
     submenu: [
