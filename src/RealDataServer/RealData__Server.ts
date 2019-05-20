@@ -2,13 +2,14 @@ import * as WebSocket from 'ws'
 import { BaseType } from '../lib/BaseType'
 import { Sampling } from '../lib/F/Sampling'
 import { RealDataBase } from './RealDataBase'
+import { TradeAndOrderBook } from './TradeAndOrderBook'
 
 export class RealData__Server extends RealDataBase {
 
     private wss?: WebSocket.Server
     private wsDic = new Map<WebSocket, boolean>()
 
-    private tradeAndOrderBookArr = super.getTradeAndOrderBookArr()
+    private tradeAndOrderBookArr: TradeAndOrderBook<any>[]
 
     onTitle = (str: string) => { }
 
@@ -200,6 +201,8 @@ export class RealData__Server extends RealDataBase {
 
     constructor(wsServer = true) {
         super()
+
+        this.tradeAndOrderBookArr = super.getTradeAndOrderBookArr()
 
         this.重新初始化()//<-----------fix  
 
