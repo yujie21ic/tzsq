@@ -202,8 +202,11 @@ export class PositionAndOrder implements PositionAndOrder {
         this.ws = new BitMEXWS(p.cookie, [
             //private
             { theme: 'margin' },
+            //
             { theme: 'position', filter: 'XBTUSD' },
             { theme: 'order', filter: 'XBTUSD' },
+            { theme: 'position', filter: 'ETHUSD' },
+            { theme: 'order', filter: 'ETHUSD' },
             //public
             { theme: 'orderBook10', filter: 'XBTUSD' },
             { theme: 'orderBook10', filter: 'ETHUSD' },
@@ -489,11 +492,12 @@ export class PositionAndOrder implements PositionAndOrder {
 
 
     stop = this.DDOS调用<{
+        symbol: BaseType.BitmexSymbol
         side: BaseType.Side
         price: number
     }>(
         (cookie, p) => BitMEXHTTP.Order.new(cookie, {
-            symbol: 'XBTUSD', //<-----------------------
+            symbol: p.symbol,
             ordType: 'Stop',
             stopPx: p.price,
             orderQty: 100000,

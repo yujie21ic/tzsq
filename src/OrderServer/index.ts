@@ -9,7 +9,7 @@ import { kvs } from '../lib/F/kvs'
 import { toRange } from '../lib/F/toRange'
 import { toBuySellPriceFunc } from '../lib/F/toBuySellPriceFunc'
 import { BTC网格交易 } from '../task/BTC网格交易'
-import { BTC止损 } from '../task/BTC止损'
+import { Bitmex止损 } from '../task/Bitmex止损'
 
 
 //运行的账户
@@ -22,9 +22,10 @@ if (config.orderServer !== undefined) {
             cookie: v.cookie,
             hopexCookie: v.hopexCookie,
         })
-        account.runTask('bitmex_btc_网格_1', new BTC网格交易())
-        account.runTask('bitmex_btc_网格_2', new BTC网格交易())
-        account.runTask('bitmex_btc_止损', new BTC止损())
+        account.runTask('bitmex_BTC_网格_1', new BTC网格交易())
+        account.runTask('bitmex_BTC_网格_2', new BTC网格交易())
+        account.runTask('bitmex_BTC_止损', new Bitmex止损('XBTUSD'))
+        account.runTask('bitmex_ETH_止损', new Bitmex止损('ETHUSD'))
         accountDic.set(v.cookie, account) //key is cookie 
     })
 } else {

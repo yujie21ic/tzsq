@@ -363,6 +363,7 @@ export class 交易 extends React.Component {
                     cursor: 'default'
                 }}>
                 <Item market='bitmex' symbol='XBTUSD' data={() => orderClient.jsonSync.rawData.market.bitmex.XBTUSD} 位置={this.位置} 倍数={this.倍数} />
+                <Item market='bitmex' symbol='ETHUSD' data={() => orderClient.jsonSync.rawData.market.bitmex.ETHUSD} 位置={this.位置} 倍数={this.倍数} />
                 <Item market='hopex' symbol='BTCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.BTCUSDT} 位置={this.位置} 倍数={this.倍数} />
                 <任务遥控器 />
             </div>

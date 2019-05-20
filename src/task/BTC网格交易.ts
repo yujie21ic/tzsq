@@ -98,6 +98,7 @@ export class BTC网格交易 implements PositionAndOrderTask {
         if (this.参数.止损价格 !== 0) {
             if (止损委托.length === 0) {
                 return self.stop({
+                    symbol: 'XBTUSD',
                     side: 止损side,
                     price: this.参数.止损价格,
                 })

@@ -4,7 +4,7 @@ import { to价格对齐 } from '../lib/F/to价格对齐'
 import { sleep } from '../lib/F/sleep'
 
 
-export class BTC止损 implements PositionAndOrderTask {
+export class Bitmex止损 implements PositionAndOrderTask {
 
     开关 = false
     参数type = {
@@ -28,6 +28,12 @@ export class BTC止损 implements PositionAndOrderTask {
 
     }
 
+    private symbol: BaseType.BitmexSymbol
+
+    constructor(symbol: BaseType.BitmexSymbol) {
+        this.symbol = symbol
+    }
+
     private async run1(self: PositionAndOrder) {
         while (true) {
             if (this.开关) {
@@ -47,12 +53,13 @@ export class BTC止损 implements PositionAndOrderTask {
 
     onTick(self: PositionAndOrder) {
 
-        const 止损点 = (this.参数.A ? 5 : 0) + (this.参数.B ? 5 : 0) + (this.参数.C ? 5 : 0) + (this.参数.D ? 5 : 0) + (this.参数.E ? 5 : 0)
+        const 开关数 = (this.参数.A ? 1 : 0) + (this.参数.B ? 1 : 0) + (this.参数.C ? 1 : 0) + (this.参数.D ? 1 : 0) + (this.参数.E ? 1 : 0)
 
-        const { 仓位数量, 开仓均价, 委托列表 } = self.jsonSync.rawData.market.bitmex.XBTUSD
+        const 止损点 = 开关数 * (this.symbol === 'XBTUSD' ? 5 : 0.2)
+
+        const { 仓位数量, 开仓均价, 委托列表 } = self.jsonSync.rawData.market.bitmex[this.symbol]
 
         const 止损委托 = 委托列表.filter(v => v.type === '止损')
-
 
         if (止损点 === 0) {
             if (止损委托.length !== 0) {
@@ -72,7 +79,11 @@ export class BTC止损 implements PositionAndOrderTask {
         //没有止损 
         if (止损委托.length === 0) {
             if (仓位数量 !== 0) {
-                return self.stop({ side, price: 止损价格, })
+                return self.stop({
+                    symbol: this.symbol,
+                    side,
+                    price: 止损价格,
+                })
             }
             else {
                 return false
