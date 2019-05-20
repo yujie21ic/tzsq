@@ -202,7 +202,7 @@ export class RealData__Server extends RealDataBase {
     constructor(wsServer = true) {
         super()
 
-        this.tradeAndOrderBookArr = super.getTradeAndOrderBookArr()
+        this.tradeAndOrderBookArr = this.getTradeAndOrderBookArr()
 
         this.重新初始化()//<-----------fix  
 
