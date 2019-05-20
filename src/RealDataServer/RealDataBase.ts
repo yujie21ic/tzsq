@@ -5,8 +5,7 @@ import { toRange } from '../lib/F/toRange'
 import { timeID } from '../lib/F/timeID'
 import { get买卖 } from '../指标/买卖'
 import { formatDate } from '../lib/F/formatDate'
-import { mapObjIndexed } from '../lib/F/mapObjIndexed'
-import { ______CTP__config } from './______CTP__config'
+import { mapObjIndexed } from '../lib/F/mapObjIndexed' 
 import { CTPTradeAndOrderBook } from './TradeAndOrderBook/CTPTradeAndOrderBook'
 import { BitmexTradeAndOrderBook } from './TradeAndOrderBook/BitmexTradeAndOrderBook'
 import { HopexTradeAndOrderBook } from './TradeAndOrderBook/HopexTradeAndOrderBook'
@@ -41,7 +40,7 @@ export class RealDataBase {
     jsonSync = new JSONSync(
         {
             startTick: 0,//tick的  1m的开始 没有对齐
-            ctp: mapObjIndexed(createItem, ______CTP__config),
+            ctp: mapObjIndexed(createItem, BaseType.CTPSymbolDic),
             hopex: mapObjIndexed(createItem, BaseType.HopexSymbolDic),
             ix: mapObjIndexed(createItem, BaseType.IXSymbolDic),
             bitmex: mapObjIndexed(createItem, BaseType.BitmexSymbolDic),
@@ -63,7 +62,7 @@ export class RealDataBase {
 
     CREATE = () => ({
         期货30秒内成交量: (symbol: BaseType.BitmexSymbol) => this.get期货多少秒内成交量__万为单位(symbol, 30),
-        ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), ______CTP__config),
+        ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), BaseType.CTPSymbolDic),
         bitmex: mapObjIndexed((v, k) => this.item2(this.data.bitmex[k], false), BaseType.BitmexSymbolDic),
         hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
         ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),

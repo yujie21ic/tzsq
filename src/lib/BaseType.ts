@@ -23,6 +23,16 @@ export namespace BaseType {
     export type HopexSymbol = keyof typeof HopexSymbolDic
     export const HopexSymbolArr = keys(HopexSymbolDic)
 
+    //ctp
+    export const CTPSymbolDic = {
+        'rb1910': {},
+        'TA909': {},
+        'i1909': {},
+        'MA909': {},
+        'SR909': {},
+    }
+    export type CTPSymbol = keyof typeof CTPSymbolDic
+    export const CTPSymbolArr = keys(CTPSymbolDic)
 
     //ix
     export const IXSymbolDic = {
