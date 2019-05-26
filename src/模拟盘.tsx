@@ -6,6 +6,7 @@ import { Button } from './lib/UI/Button'
 import { HopexRealKLine } from './RealDataServer/HopexRealKLine'
 import { RealKLineChart } from './RealKLineChart'
 import { _________________TickBase } from './_________________TickBase'
+import { Table } from './lib/UI/Table'
 
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
@@ -38,7 +39,11 @@ class 交易 extends React.Component {
 
         const 下单数量 = (config.下单数量 || 100) * this.倍数
 
-        return <div style={{ backgroundColor: '#24292d' }}>
+        const arr = new Array(100).fill(0).map(v => (
+            { id: 1, 仓位数量: 11, 开仓均价: 8000, 收益: -3 }
+        ))
+
+        return <div>
             <div
                 style={{
                     backgroundColor: '#24292d',
@@ -90,6 +95,40 @@ class 交易 extends React.Component {
                         </div>
                     </div>
                 </div >
+            </div>
+
+            <div style={{ height: 500 }}>
+                <Table
+                    dataSource={arr}
+                    columns={[
+                        {
+                            title: '时间',
+                            width: '20%',
+                            render: v =>
+                                <p style={{ color: '#49a965' }}>
+                                    {v.id}
+                                </p>
+                        },
+                        {
+                            title: '仓位',
+                            width: '50%',
+                            render: v => {
+                                const { 仓位数量, 开仓均价 } = v
+                                return <p>
+                                    <span style={{ color: 仓位数量 < 0 ? RED : GREEN }}>{仓位数量 + '@'}</span><span style={{ color: 'black' }}>{开仓均价}</span>
+                                </p>
+                            }
+                        },
+                        {
+                            title: '收益',
+                            width: '30%',
+                            render: v => <p style={{ color: 'black' }}>
+                                {111}
+                            </p>
+                        },
+                    ]}
+                    rowKey={v => v.id}
+                />
             </div>
         </div>
     }
