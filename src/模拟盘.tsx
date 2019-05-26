@@ -151,7 +151,7 @@ class 交易 extends React.Component {
                         },
                         {
                             title: '收益',
-                            render: v => <p style={{ color: v.收益 < 0 ? RED : GREEN }}>
+                            render: v => <p style={{ color: v.这次赚了 ? GREEN : RED }}>
                                 {v.收益.toFixed(2)}
                             </p>
                         },

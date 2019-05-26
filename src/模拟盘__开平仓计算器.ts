@@ -1,7 +1,7 @@
 export class 模拟盘__开平仓计算器 {
     private id = 1
 
-    arr: { id: number, 时间: number, 仓位数量: number, 开仓均价: number, 收益: number }[] = []
+    arr: { id: number, 时间: number, 仓位数量: number, 开仓均价: number, 收益: number, 这次赚了: boolean }[] = []
     仓位数量 = 0
     开仓均价 = 0
     收益 = 0
@@ -14,6 +14,7 @@ export class 模拟盘__开平仓计算器 {
             仓位数量: this.仓位数量,
             开仓均价: this.开仓均价,
             收益: this.收益,
+            这次赚了: this.收益 > (this.arr.length > 0 ? this.arr[this.arr.length - 1].收益 : 0),
         })
 
         //开仓
