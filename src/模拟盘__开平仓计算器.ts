@@ -38,7 +38,13 @@ export class 模拟盘__开平仓计算器 {
 
             //减仓
             this.收益 -= 减仓数量_u * 0.0005
-            this.收益 += 0 //!!!!!!!!!!!!!!!!!
+            const 亏盈 = (Math.max(this.开仓均价, p.price) / Math.min(this.开仓均价, p.price) - 1) * 减仓数量_u
+            if ((p.size > 0 && p.price > this.开仓均价) || (p.size < 0 && p.price < this.开仓均价)) {
+                this.收益 += 亏盈
+            } else {
+                this.收益 -= 亏盈
+            }
+
 
             this.仓位数量 += this.仓位数量 > 0 ? -减仓数量_u : 减仓数量_u
             if (this.仓位数量 === 0) this.开仓均价 = 0
