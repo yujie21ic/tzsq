@@ -114,24 +114,7 @@ class Item extends React.Component<{ symbol: string, data: () => XXX, 位置: nu
                     <Button
                         bgColor={GREEN}
                         text={下单数量 + ' 买' + (this.props.位置 + 1)}
-                        left={() => rpc.下单({
-                            cookie,
-                            symbol: this.props.symbol as BaseType.BitmexSymbol,
-                            type: 'maker',
-                            side: 'Buy',
-                            size: 下单数量,
-                            位置: this.props.位置,
-                            最低_最高: false,
-                        })}
-                        right={() => rpc.下单({
-                            cookie,
-                            symbol: this.props.symbol as BaseType.BitmexSymbol,
-                            type: 'taker',
-                            side: 'Buy',
-                            size: 下单数量,
-                            位置: this.props.位置,
-                            最低_最高: false,
-                        })}
+                        onClick={() => alert('TODO')}
                     />
                 </div>
 
@@ -142,28 +125,10 @@ class Item extends React.Component<{ symbol: string, data: () => XXX, 位置: nu
                     <Button
                         bgColor={RED}
                         text={-下单数量 + ' 卖' + (this.props.位置 + 1)}
-                        left={() => rpc.下单({
-                            cookie,
-                            symbol: this.props.symbol as BaseType.BitmexSymbol,
-                            type: 'maker',
-                            side: 'Sell',
-                            size: 下单数量,
-                            位置: this.props.位置,
-                            最低_最高: false,
-                        })}
-                        right={() => rpc.下单({
-                            cookie,
-                            symbol: this.props.symbol as BaseType.BitmexSymbol,
-                            type: 'taker',
-                            side: 'Sell',
-                            size: 下单数量,
-                            位置: this.props.位置,
-                            最低_最高: false,
-                        })}
+                        onClick={() => alert('TODO')}
                     />
                 </div>
             </div>
-
         </div >
     }
 }
@@ -171,11 +136,9 @@ class Item extends React.Component<{ symbol: string, data: () => XXX, 位置: nu
 
 
 export class 交易 extends React.Component {
-
     //state
     位置 = 0
     倍数 = 1
-
 
     componentWillMount() {
 
@@ -223,7 +186,6 @@ export class 交易 extends React.Component {
                     userSelect: 'none',
                     cursor: 'default'
                 }}>
-                <h1>现在是真实下单</h1>
                 <Item symbol='XBTUSD' data={() => orderClient.jsonSync.rawData.market.bitmex.XBTUSD} 位置={this.位置} 倍数={this.倍数} />
             </div>
         </div>
