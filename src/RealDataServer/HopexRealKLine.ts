@@ -137,7 +137,7 @@ export class HopexRealKLineHistory extends HopexRealKLineBase {
                         this.temp = false
                         this.onFirstLoad()
                     }
-                    if (this.kline.length > 60) await sleep(500 / this.speed)
+                    if (this.kline.length > 600) await sleep(500 / this.speed)
                 }
             }
         })
