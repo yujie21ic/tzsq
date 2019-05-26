@@ -22,8 +22,8 @@ const menu = Menu.buildFromTemplate([
     label: v.k,
     submenu: [
       {
-        label: `计分板`,
-        click: () => showWindow('计分板', { accountName: v.k })
+        label: `资金曲线`,
+        click: () => showWindow('资金曲线', { accountName: v.k })
       },
       {
         label: `实盘`,
