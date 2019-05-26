@@ -112,6 +112,7 @@ export class HopexRealKLineHistory extends HopexRealKLineBase {
             })
 
             if (ret.data) {
+                console.log(ret.data.length)
                 for (let i = 0; i < ret.data.length; i++) {
                     const v = ret.data[i]
                     const id = timeID._60s.toID(timeID._500ms.toTimestamp(v.id))
@@ -136,7 +137,7 @@ export class HopexRealKLineHistory extends HopexRealKLineBase {
                         this.temp = false
                         this.onFirstLoad()
                     }
-                    await sleep(500 / this.speed)
+                    if (this.kline.length > 60) await sleep(500 / this.speed)
                 }
             }
         })
