@@ -18,10 +18,6 @@ const menu = Menu.buildFromTemplate([
         click: () => showWindow('HopexKLine', { accountName: v.k })
       },
       {
-        label: `盘口`,
-        click: () => showWindow('盘口', { accountName: v.k })
-      },
-      {
         label: `计分板`,
         click: () => showWindow('计分板', { accountName: v.k })
       },
