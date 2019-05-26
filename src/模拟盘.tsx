@@ -1,143 +1,17 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { _________________TickBase } from './_________________TickBase'
 import { theme } from './lib/Chart/theme'
-import { OrderClient } from './OrderServer/OrderClient'
 import { config } from './config'
-import { BaseType } from './lib/BaseType'
-import { windowExt } from './windowExt'
 import { Button } from './lib/UI/Button'
-import { PositionAndOrder } from './OrderServer/PositionAndOrder'
 import { HopexRealKLine } from './RealDataServer/HopexRealKLine'
 import { RealKLineChart } from './RealKLineChart'
-
-const account = config.account![windowExt.accountName]
-const { cookie } = account
-const orderClient = new OrderClient(account.cookie)
-const rpc = OrderClient.rpc.func
-
-type XXX = PositionAndOrder['jsonSync']['rawData']['market']['bitmex']['XBTUSD']
+import { _________________TickBase } from './_________________TickBase'
 
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
 
-class Item extends React.Component<{ symbol: string, data: () => XXX, 位置: number, 倍数: number }> {
+class 交易 extends React.Component {
 
-    get仓位() {
-        const { 仓位数量, 开仓均价 } = this.props.data()
-        if (仓位数量 !== 0) {
-            return <span><span style={{ color: 仓位数量 < 0 ? RED : GREEN }}>{String(仓位数量)}</span>@<span>{String(开仓均价)}</span></span>
-        } else {
-            return undefined
-        }
-    }
-
-    render() {
-        const { 仓位数量 } = this.props.data()
-        const 下单数量 = (config.下单数量 || 100) * this.props.倍数
-        // 
-        const 委托列表 = this.props.data().委托列表
-        const 委托 = {
-            id: '',
-            side: '' as BaseType.Side,
-            cumQty: 0,      //成交数量
-            orderQty: 0,    //委托数量
-            price: 0,
-        }
-        const x = 委托列表.find(v => v.type !== '止损')
-        if (x === undefined) {
-            委托.id = ''
-        } else {
-            委托.cumQty = x.cumQty
-            委托.id = x.id
-            委托.orderQty = x.orderQty
-            委托.price = x.price
-            委托.side = x.side
-        }
-
-        let 止损价格 = 0
-        const y = 委托列表.find(v => v.type === '止损')
-        if (y === undefined) {
-            止损价格 = 0
-        } else {
-            止损价格 = y.price
-        }
-
-
-        const get止损 = () => {
-            if (止损价格 === 0) {
-                return undefined
-            } else {
-                return 止损价格
-            }
-        }
-
-        const get委托 = () => {
-            if (委托.id !== '') {
-                const { id, side, cumQty, orderQty, price } = 委托
-                return <a
-                    href='#'
-                    style={{ color: 'white' }}
-                    onClick={() => rpc.取消委托({ cookie, orderID: [id] })}
-                >
-                    <span style={{ color: side === 'Sell' ? RED : GREEN }}>{cumQty}/{orderQty}</span>
-                    <span>@{price}</span>
-                </a>
-            } else {
-                return undefined
-            }
-        }
-
-
-        return <div>
-            <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'left',
-            }}>
-                <p style={{ color: '#cc66ff' }}>{this.props.symbol} {仓位数量 !== 0 ? <a
-                    href='#'
-                    style={{ color: RED }}
-                    onClick={() => rpc.市价平仓({ cookie, symbol: this.props.symbol as BaseType.BitmexSymbol })}
-                >市价平仓</a> : undefined} </p>
-                <p>仓位:{this.get仓位()}</p>
-                <p>止损:{get止损()}</p>
-                <p>委托:{get委托()}</p>
-            </div>
-            <div style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center'
-            }}>
-                <div
-                    style={{ width: '50%' }}>
-                    <Button
-                        bgColor={GREEN}
-                        text={下单数量 + ' 买' + (this.props.位置 + 1)}
-                        onClick={() => alert('TODO')}
-                    />
-                </div>
-
-                <div
-                    style={{
-                        width: '50%'
-                    }}>
-                    <Button
-                        bgColor={RED}
-                        text={-下单数量 + ' 卖' + (this.props.位置 + 1)}
-                        onClick={() => alert('TODO')}
-                    />
-                </div>
-            </div>
-        </div >
-    }
-}
-
-
-
-export class 交易 extends React.Component {
-    //state
-    位置 = 0
     倍数 = 1
 
     componentWillMount() {
@@ -149,30 +23,21 @@ export class 交易 extends React.Component {
         f()
 
         window.addEventListener('keydown', e => {
-
-
             if (e.keyCode >= 49 && e.keyCode <= 52) {
                 this.倍数 = e.keyCode - 48
             }
-
             if (e.keyCode === 192) {
                 this.倍数 = 0.5
             }
-
-
-            if (e.keyCode === 65) {// a left
-                if (this.位置 > 0) this.位置--
-            }
-
-            if (e.keyCode === 68) {//d right
-                if (this.位置 < 4) this.位置++
-            }
-
         })
     }
 
 
     render() {
+        let 仓位数量 = 12345
+
+        const 下单数量 = (config.下单数量 || 100) * this.倍数
+
         return <div style={{ backgroundColor: '#24292d' }}>
             <div
                 style={{
@@ -186,9 +51,59 @@ export class 交易 extends React.Component {
                     userSelect: 'none',
                     cursor: 'default'
                 }}>
-                <Item symbol='XBTUSD' data={() => orderClient.jsonSync.rawData.market.bitmex.XBTUSD} 位置={this.位置} 倍数={this.倍数} />
+                <div>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'left',
+                    }}>
+                        <p style={{ color: '#cc66ff' }}>BTC{仓位数量 !== 0 ? <a
+                            href='#'
+                            style={{ color: RED }}
+                            onClick={() => alert('TODO')}
+                        >市价平仓</a> : undefined} </p>
+                        <p>仓位:{this.get仓位()}</p>
+                    </div>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'center'
+                    }}>
+                        <div
+                            style={{ width: '50%' }}>
+                            <Button
+                                bgColor={GREEN}
+                                text={String(下单数量)}
+                                onClick={() => alert('TODO')}
+                            />
+                        </div>
+
+                        <div
+                            style={{
+                                width: '50%'
+                            }}>
+                            <Button
+                                bgColor={RED}
+                                text={String(-下单数量)}
+                                onClick={() => alert('TODO')}
+                            />
+                        </div>
+                    </div>
+                </div >
             </div>
         </div>
+    }
+
+
+    get仓位() {
+        let 仓位数量 = 1234
+        let 开仓均价 = 8000
+
+        if (仓位数量 !== 0) {
+            return <span><span style={{ color: 仓位数量 < 0 ? RED : GREEN }}>{String(仓位数量)}</span>@<span>{String(开仓均价)}</span></span>
+        } else {
+            return undefined
+        }
     }
 }
 
@@ -210,3 +125,36 @@ class 模拟盘 extends React.Component {
 }
 
 ReactDOM.render(<模拟盘 />, document.querySelector('#root'))
+
+
+
+
+
+//开平 计算器
+
+/*
+
+marketOrder(side: Side, count: number) {
+    this.entryPrice = (this.entryPrice * Math.abs(this.myPosition) + this.lastPrice * count) / (Math.abs(this.myPosition) + count)
+
+    if (side == 'Buy') {
+        this.myPosition += count
+    } else {
+        this.myPosition -= count
+    }
+
+    if (this.maxPosition < Math.abs(this.myPosition)) {
+        this.maxPosition = Math.abs(this.myPosition)
+    }
+}
+
+
+marketCloseAll() {
+    const 盈利 = this.myPosition * (1 / this.entryPrice - 1 / this.lastPrice)
+    this.myPosition = 0
+    this.entryPrice = 0
+    this.accumulatedProfit += 盈利
+    this.closePositionTimes += 1
+}
+
+*/
