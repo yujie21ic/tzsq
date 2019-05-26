@@ -12,7 +12,7 @@ const orderClient = new OrderClient(config.account![windowExt.accountName].cooki
 chartInit(60, document.querySelector('#root') as HTMLElement, () => {
     const { wallet } = orderClient.jsonSync.rawData
     const xStrArr = wallet.map(v => new Date(v.time).toLocaleString())
-    const arr = wallet.map(v => v.total)
+    const arr = wallet.map(v => v.total / 100000)
 
     return {
         xStrArr,
