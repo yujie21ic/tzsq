@@ -1,4 +1,4 @@
-import { chartInit, layer, getIndex } from './lib/Chart'
+import { chartInit, layer } from './lib/Chart'
 import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
 import { formatDate } from './lib/F/formatDate'
 import { timeID } from './lib/F/timeID'
@@ -6,11 +6,7 @@ import { theme } from './lib/Chart/theme'
 import { toRange } from './lib/F/toRange'
 import { HopexRealKLine } from './RealDataServer/HopexRealKLine'
 import { 指标 } from './指标/指标'
-import { 竖线Layer } from './lib/Chart/Layer/竖线Layer'
 import { LineLayer } from './lib/Chart/Layer/LineLayer'
-
-
-const colorTable = [0x777777, 0xccff00, 0xcc66ff]
 
 
 theme.右边空白 = 0
@@ -23,48 +19,6 @@ const M10 = 指标.SMA(close, 10, 1000)
 const M25 = 指标.SMA(close, 25, 1000)
 const M50 = 指标.SMA(close, 50, 1000)
 
-const 开始点竖线: boolean[] = []
-let 力度Arr: { 多: ArrayLike<number>, 空: ArrayLike<number>, 净: ArrayLike<number> }[] = []
-
-const 更新力度 = () => {
-    力度Arr = []
-
-    for (let index = 0; index < 开始点竖线.length; index++) {
-        if (开始点竖线[index] === true) {
-
-            const 多 = 指标.map2({}, (arr: number[]) => {
-                const length = real.kline.length
-                for (let i = Math.max(0, arr.length - 1); i < length; i++) {
-                    const 当前力度 = Math.max(0, real.kline[i].close - real.kline[i].open) //<-------
-                    if (i === index) {
-                        arr[i] = 当前力度
-                    } else {
-                        arr[i] = 当前力度 + (i === 0 ? NaN : arr[i - 1])
-                    }
-
-                }
-            })
-
-            const 空 = 指标.map2({}, (arr: number[]) => {
-                const length = real.kline.length
-                for (let i = Math.max(0, arr.length - 1); i < length; i++) {
-                    const 当前力度 = Math.max(0, real.kline[i].open - real.kline[i].close) //<-------
-                    if (i === index) {
-                        arr[i] = 当前力度
-                    } else {
-                        arr[i] = 当前力度 + (i === 0 ? NaN : arr[i - 1])
-                    }
-                }
-            })
-
-
-            const 净 = 指标.map(() => Math.min(多.length, 空.length), i => 多[i] - 空[i])
-
-            力度Arr.push({ 多, 空, 净 })
-        }
-    }
-
-}
 
 
 let left = 200
@@ -103,11 +57,10 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
         left: left,
         right: right,
         items: {
-            heightList: [0.6, 0.4],
+            heightList: [1],
             items: [
                 {
                     layerList: [
-                        layer(竖线Layer, { data: 开始点竖线, color: 0x555522 }),
                         layer(KLineLayer, { data: kline }),
                         //layer(笔Layer, { data: get笔Index(kline), color: 0xffff00 }),
                         //layer(线段Layer, { data: get线段(get笔Index(kline)), color: 0xaa0000 }),
@@ -116,11 +69,6 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
                         layer(LineLayer, { data: M25, color: 0xffffff }),
                         layer(LineLayer, { data: M50, color: 0xffffff }),
                     ]
-                },
-                {
-                    layerList: 力度Arr.map((v, i) =>
-                        layer(LineLayer, { data: v.净, color: colorTable[Math.min(colorTable.length - 1, i)] })
-                    )
                 },
             ]
         }
@@ -165,11 +113,6 @@ window.onmousedown = e => {
         startX = e.clientX
         startLeft = left
         startRight = right
-    }
-    if (e.button === 2) {
-        const index = getIndex()
-        开始点竖线[index] = !开始点竖线[index]
-        更新力度()
     }
 }
 
