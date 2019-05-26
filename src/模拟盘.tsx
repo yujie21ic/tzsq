@@ -10,6 +10,8 @@ import { Table } from './lib/UI/Table'
 import { 模拟盘__开平仓计算器 } from './模拟盘__开平仓计算器'
 import { timeID } from './lib/F/timeID'
 import { reverse } from 'ramda'
+import { layer } from './lib/Chart'
+import { LineLayer } from './lib/Chart/Layer/LineLayer'
 
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
@@ -35,10 +37,13 @@ const getPrice = () => {
     }
 }
 
+const xxx = new 模拟盘__开平仓计算器()
+let spaceIsDown = false
+
+
 class 交易 extends React.Component {
 
     倍数 = 1
-    xxx = new 模拟盘__开平仓计算器()
 
     componentWillMount() {
 
@@ -55,6 +60,11 @@ class 交易 extends React.Component {
             if (e.keyCode === 192) {
                 this.倍数 = 0.5
             }
+            if (e.keyCode === 32) spaceIsDown = true
+        })
+
+        window.addEventListener('keyup', e => {
+            if (e.keyCode === 32) spaceIsDown = false
         })
     }
 
@@ -63,7 +73,7 @@ class 交易 extends React.Component {
 
         const 下单数量 = (config.下单数量 || 100) * this.倍数
 
-        const arr = reverse(this.xxx.arr)
+        const arr = reverse(xxx.arr)
 
         return <div>
             <div
@@ -84,13 +94,13 @@ class 交易 extends React.Component {
                         flexDirection: 'column',
                         justifyContent: 'left',
                     }}>
-                        <p style={{ color: '#cc66ff' }}>BTC{this.xxx.仓位数量 !== 0 ? <a
+                        <p style={{ color: '#cc66ff' }}>BTC{xxx.仓位数量 !== 0 ? <a
                             href='#'
                             style={{ color: RED }}
-                            onClick={() => this.xxx.order({
+                            onClick={() => xxx.order({
                                 time: getTime(),
                                 price: getPrice(),
-                                size: -this.xxx.仓位数量,
+                                size: -xxx.仓位数量,
                             })}
                         >市价平仓</a> : undefined} </p>
                         <p>仓位:{this.get仓位()}</p>
@@ -105,7 +115,7 @@ class 交易 extends React.Component {
                             <Button
                                 bgColor={GREEN}
                                 text={String(下单数量)}
-                                onClick={() => this.xxx.order({
+                                onClick={() => xxx.order({
                                     time: getTime(),
                                     price: getPrice(),
                                     size: 下单数量,
@@ -120,7 +130,7 @@ class 交易 extends React.Component {
                             <Button
                                 bgColor={RED}
                                 text={String(-下单数量)}
-                                onClick={() => this.xxx.order({
+                                onClick={() => xxx.order({
                                     time: getTime(),
                                     price: getPrice(),
                                     size: -下单数量,
@@ -166,8 +176,8 @@ class 交易 extends React.Component {
 
 
     get仓位() {
-        if (this.xxx.仓位数量 !== 0) {
-            return <span><span style={{ color: this.xxx.仓位数量 < 0 ? RED : GREEN }}>{String(this.xxx.仓位数量)}</span>@<span>{this.xxx.开仓均价.toFixed(2)}</span></span>
+        if (xxx.仓位数量 !== 0) {
+            return <span><span style={{ color: xxx.仓位数量 < 0 ? RED : GREEN }}>{String(xxx.仓位数量)}</span>@<span>{xxx.开仓均价.toFixed(2)}</span></span>
         } else {
             return undefined
         }
@@ -179,7 +189,33 @@ class 模拟盘 extends React.Component {
 
     initChart = (element: HTMLElement | null) => {
         if (element) {
-            RealKLineChart(element, real)
+            RealKLineChart(element, real, () => {
+
+                if (spaceIsDown === false) return undefined
+
+
+                const xStrArr = xxx.arr.map(v => new Date(v.时间).toLocaleString())
+                const arr = xxx.arr.map(v => v.收益)
+
+                return {
+                    xStrArr,
+                    显示y: () => undefined,
+                    left: 0,
+                    right: xStrArr.length - 1,
+                    items: {
+                        heightList: [1],
+                        items: [
+                            {
+                                layerList: [
+                                    layer(LineLayer, { data: arr, color: 0xffffff }),
+                                ]
+                            },
+                        ]
+                    }
+                }
+
+
+            })
         }
     }
 
