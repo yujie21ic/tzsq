@@ -4,13 +4,13 @@ import { formatDate } from './lib/F/formatDate'
 import { timeID } from './lib/F/timeID'
 import { theme } from './lib/Chart/theme'
 import { toRange } from './lib/F/toRange'
-import { HopexRealKLine } from './RealDataServer/HopexRealKLine'
+import { HopexRealKLineBase } from './RealDataServer/HopexRealKLine'
 import { 指标 } from './指标/指标'
 import { LineLayer } from './lib/Chart/Layer/LineLayer'
 import { BarLayer } from './lib/Chart/Layer/BarLayer'
 
 
-export const RealKLineChart = (element: HTMLElement, real: HopexRealKLine) => {
+export const RealKLineChart = (element: HTMLElement, real: HopexRealKLineBase) => {
 
     const timeArr = 指标.map(() => real.kline.length, i => new Date(timeID._60s.toTimestamp(real.kline[i].id)).toLocaleString())
 
@@ -44,7 +44,7 @@ export const RealKLineChart = (element: HTMLElement, real: HopexRealKLine) => {
             right = kline.length + 5
         }
 
-        return { 
+        return {
             xStrArr: timeArr,
             显示y: v => {
                 const time = (kline[0] ? timeID._60s.toTimestamp(kline[0].id) : 0) + v * 1000 * 60
