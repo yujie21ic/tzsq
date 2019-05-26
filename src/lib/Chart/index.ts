@@ -4,7 +4,6 @@ import { Coordinate } from './Coordinate'
 import { theme } from './theme'
 import { Crosshairs } from './Crosshairs'
 import { Viewport, To } from './type'
-import { setWindowTitle } from '../F/setWindowTitle'
 
 const 坐标刻度 = new Coordinate()
 const layerContainer = new Container()
@@ -32,7 +31,6 @@ type Item = {
 }
 
 let dataSourceFunc: () => {
-    title: string
 
     显示y: (v: number) => string | undefined
     xStrArr: ArrayLike<string>
@@ -100,8 +98,6 @@ export const chartInit = (FPS: number, element: HTMLElement, func: typeof dataSo
 
 
 
-let lastTitle = ''
-
 
 //
 const layerCache = new Map<LayerClass<any>, Layer<any>[]>()
@@ -140,12 +136,7 @@ const pushLayer = (layer: Layer<any>) => {
 const chartRender = () => {
     if (dataSourceFunc === undefined) return
 
-    let { title, xStrArr, 显示y, left, right, items } = dataSourceFunc()
-
-    if (lastTitle !== title) {
-        lastTitle = title
-        setWindowTitle(title)
-    }
+    let { xStrArr, 显示y, left, right, items } = dataSourceFunc()    
 
     const width = document.body.clientWidth - theme.右边空白 - theme.RIGHT_WIDTH
     const height = document.body.clientHeight - theme.BOTTOM_HEIGHT

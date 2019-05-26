@@ -114,8 +114,7 @@ chartInit(60, document.querySelector('#root') as HTMLElement, () => {
     const 成交买 = arr.map(v => -v.buySize)
     const 成交卖 = arr.map(v => v.sellSize)
 
-    return {
-        title: nowSymbol,
+    return { 
         xStrArr: 时间str,
         显示y: v => {
             const time = (arr[0] ? timeID._60s.toTimestamp(arr[0].id) : 0) + v * 1000 * 60

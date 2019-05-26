@@ -21,7 +21,7 @@ const buttonStyle = style({
 export class Button extends React.Component<{
     bgColor: string
     text: string
-    left: () => Promise<{
+    left?: () => Promise<{
         error?: JSONRequestError
         data?: any
         msg?: string
@@ -31,6 +31,7 @@ export class Button extends React.Component<{
         data?: any
         msg?: string
     }>
+    onClick?: () => void
 }, { loading: boolean, 上一次失败信息: string }> {
 
     componentWillMount() {
@@ -73,10 +74,15 @@ export class Button extends React.Component<{
                 cursor: this.state.loading ? 'not-allowed' : 'pointer',
             }}
             onMouseDown={this.state.loading ? undefined : e => {
-                if (e.button === 0) {
-                    this.callFunc(this.props.left)
-                } else if (e.button === 2) {
-                    this.callFunc(this.props.right ? this.props.right : this.props.left)
+                if (this.props.left !== undefined) {
+                    if (e.button === 0) {
+                        this.callFunc(this.props.left)
+                    } else if (e.button === 2) {
+                        this.callFunc(this.props.right ? this.props.right : this.props.left)
+                    }
+                }
+                if (this.props.onClick !== undefined) {
+                    this.props.onClick()
                 }
             }}
         >{this.state.上一次失败信息 !== '' ? this.state.上一次失败信息 : this.props.text}</div>

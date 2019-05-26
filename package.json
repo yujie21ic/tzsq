@@ -14,11 +14,7 @@
     "real_data_server": "ts-node ./src/RealDataServer",
     "ui": "electron ./build/main.js",
     "packager": "electron-packager . APP --overwrite --platform=win32 --arch=ia32 --out=release-builds --electron-version=2.0.5 --ignore=./src",
-    "start": "concurrently \"tsc -w\" \"ts-node ./src/RealDataServer\" \"electron ./build/main.js\"",
-    "start1": "tsc -w",
-    "start2": "ts-node ./src/RealDataServer",
-    "start3": "electron ./build/main.js",
-    "ws_test": "ts-node ./src/ws_test"
+    "start": "concurrently \"tsc -w\" \"ts-node ./src/RealDataServer\" \"electron ./build/main.js\""
   },
   "devDependencies": {
     "@types/chai": "^4.1.5",

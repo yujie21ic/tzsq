@@ -7,14 +7,11 @@ import { config } from './config'
 import { BaseType } from './lib/BaseType'
 import { windowExt } from './windowExt'
 import { Button } from './lib/UI/Button'
-//import { Switch } from '@material-ui/core'
 import { HopexHTTP } from './hopex/HopexHTTP'
 import { realTickClient, 提醒 } from './实盘__提醒'
 import { lastNumber } from './lib/F/lastNumber'
 import { PositionAndOrder } from './OrderServer/PositionAndOrder'
 import { 任务遥控器 } from './任务遥控器'
-import { HopexUI } from './hopex/HopexUI'
-
 
 const account = config.account![windowExt.accountName]
 const { cookie, hopexCookie } = account
@@ -317,7 +314,6 @@ export class 交易 extends React.Component {
 
             if (e.keyCode === 112) this.选项卡 = 1
             if (e.keyCode === 113) this.选项卡 = 2
-            if (e.keyCode === 114) this.选项卡 = 3
 
 
             if (e.keyCode >= 49 && e.keyCode <= 52) {
@@ -369,10 +365,6 @@ export class 交易 extends React.Component {
             </div>
 
             <div hidden={this.选项卡 !== 2}>
-                <HopexUI 倍数={this.倍数} />
-            </div>
-
-            <div hidden={this.选项卡 !== 3}>
                 <提醒 />
             </div>
 
