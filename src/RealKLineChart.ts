@@ -44,8 +44,7 @@ export const RealKLineChart = (element: HTMLElement, real: HopexRealKLine) => {
             right = kline.length + 5
         }
 
-        return {
-            title: '',
+        return { 
             xStrArr: timeArr,
             显示y: v => {
                 const time = (kline[0] ? timeID._60s.toTimestamp(kline[0].id) : 0) + v * 1000 * 60

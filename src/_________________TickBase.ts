@@ -60,8 +60,7 @@ export class _________________TickBase {
                 this.nowChart === 'ctp波动_测试' ? d2.ctp.rb1910.波动_测试.时间str :
                     this.nowChart === '波动_测试' ? d2.bitmex.XBTUSD.波动_测试.时间str : d2.bitmex.XBTUSD.时间str
 
-            return {
-                title: this.title + ' ' + this.nowTickSymbol + '  ' + ((right - left) / (1000 / RealDataBase.单位时间)) + '秒',
+            return { 
                 xStrArr,
                 显示y: v => {
                     if (this.nowChart === '波动_测试') return undefined
