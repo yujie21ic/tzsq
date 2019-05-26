@@ -9,7 +9,7 @@ import { dialog } from './lib/UI/dialog'
 const { cookie } = config.account![windowExt.accountName]
 const orderClient = new OrderClient(cookie)
 
-export class 任务遥控器 extends React.Component {
+export class 实盘__任务遥控器 extends React.Component {
 
     折叠dic = new Map<string, boolean>()
 

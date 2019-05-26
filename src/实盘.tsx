@@ -11,7 +11,7 @@ import { HopexHTTP } from './hopex/HopexHTTP'
 import { realTickClient, 提醒 } from './实盘__提醒'
 import { lastNumber } from './lib/F/lastNumber'
 import { PositionAndOrder } from './OrderServer/PositionAndOrder'
-import { 任务遥控器 } from './任务遥控器'
+import { 实盘__任务遥控器 } from './实盘__任务遥控器'
 
 const account = config.account![windowExt.accountName]
 const { cookie, hopexCookie } = account
@@ -361,7 +361,7 @@ export class 交易 extends React.Component {
                 <Item market='bitmex' symbol='XBTUSD' data={() => orderClient.jsonSync.rawData.market.bitmex.XBTUSD} 位置={this.位置} 倍数={this.倍数} />
                 <Item market='bitmex' symbol='ETHUSD' data={() => orderClient.jsonSync.rawData.market.bitmex.ETHUSD} 位置={this.位置} 倍数={this.倍数} />
                 {/* <Item market='hopex' symbol='BTCUSDT' data={() => orderClient.jsonSync.rawData.market.hopex.BTCUSDT} 位置={this.位置} 倍数={this.倍数} /> */}
-                <任务遥控器 />
+                <实盘__任务遥控器 />
             </div>
 
             <div hidden={this.选项卡 !== 2}>
