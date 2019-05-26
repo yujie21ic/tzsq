@@ -1,3 +1,11 @@
-//import { DeribitTradeAndOrderBook } from "./RealDataServer/TradeAndOrderBook/DeribitTradeAndOrderBook";
+import { WebSocketClient } from './lib/F/WebSocketClient'
 
-//const x = new DeribitTradeAndOrderBook()
+let a = new WebSocketClient({
+    ss: true,
+    name: 'test',
+    url: 'wss://api.hopex.com/ws',
+})
+
+a.onData = () => {
+
+}

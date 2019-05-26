@@ -10,20 +10,20 @@ const menu = Menu.buildFromTemplate([
     label: '测试',
     click: () => showWindow('测试', {}),
   },
+  {
+    label: 'HopexKLine',
+    click: () => showWindow('HopexKLine', {})
+  },
+  {
+    label: '复盘',
+    click: () => showWindow('复盘', {})
+  },
   ...kvs(config.account || {}).map(v => ({
     label: v.k,
     submenu: [
       {
-        label: 'HopexKLine',
-        click: () => showWindow('HopexKLine', { accountName: v.k })
-      },
-      {
         label: `计分板`,
         click: () => showWindow('计分板', { accountName: v.k })
-      },
-      {
-        label: '复盘',
-        click: () => showWindow('复盘', { accountName: v.k })
       },
       {
         label: `实盘`,
