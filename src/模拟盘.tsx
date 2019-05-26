@@ -7,13 +7,36 @@ import { HopexRealKLine } from './RealDataServer/HopexRealKLine'
 import { RealKLineChart } from './RealKLineChart'
 import { _________________TickBase } from './_________________TickBase'
 import { Table } from './lib/UI/Table'
+import { 模拟盘__开平仓计算器 } from './模拟盘__开平仓计算器'
+import { timeID } from './lib/F/timeID'
+import { reverse } from 'ramda'
 
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
 
+const real = new HopexRealKLine()
+
+const getTime = () => {
+    if (real.kline.length > 0) {
+        return timeID._60s.toTimestamp(real.kline[real.kline.length - 1].id)
+    } else {
+        return NaN
+    }
+}
+
+//没有分买1 卖1 了
+const getPrice = () => {
+    if (real.kline.length > 0) {
+        return real.kline[real.kline.length - 1].close
+    } else {
+        return NaN
+    }
+}
+
 class 交易 extends React.Component {
 
     倍数 = 1
+    xxx = new 模拟盘__开平仓计算器()
 
     componentWillMount() {
 
@@ -35,13 +58,10 @@ class 交易 extends React.Component {
 
 
     render() {
-        let 仓位数量 = 12345
 
         const 下单数量 = (config.下单数量 || 100) * this.倍数
 
-        const arr = new Array(100).fill(0).map(v => (
-            { id: 1, 仓位数量: 11, 开仓均价: 8000, 收益: -3 }
-        ))
+        const arr = reverse(this.xxx.arr)
 
         return <div>
             <div
@@ -62,10 +82,14 @@ class 交易 extends React.Component {
                         flexDirection: 'column',
                         justifyContent: 'left',
                     }}>
-                        <p style={{ color: '#cc66ff' }}>BTC{仓位数量 !== 0 ? <a
+                        <p style={{ color: '#cc66ff' }}>BTC{this.xxx.仓位数量 !== 0 ? <a
                             href='#'
                             style={{ color: RED }}
-                            onClick={() => alert('TODO')}
+                            onClick={() => this.xxx.order({
+                                time: getTime(),
+                                price: getPrice(),
+                                size: -this.xxx.仓位数量,
+                            })}
                         >市价平仓</a> : undefined} </p>
                         <p>仓位:{this.get仓位()}</p>
                     </div>
@@ -79,7 +103,11 @@ class 交易 extends React.Component {
                             <Button
                                 bgColor={GREEN}
                                 text={String(下单数量)}
-                                onClick={() => alert('TODO')}
+                                onClick={() => this.xxx.order({
+                                    time: getTime(),
+                                    price: getPrice(),
+                                    size: 下单数量,
+                                })}
                             />
                         </div>
 
@@ -90,7 +118,11 @@ class 交易 extends React.Component {
                             <Button
                                 bgColor={RED}
                                 text={String(-下单数量)}
-                                onClick={() => alert('TODO')}
+                                onClick={() => this.xxx.order({
+                                    time: getTime(),
+                                    price: getPrice(),
+                                    size: -下单数量,
+                                })}
                             />
                         </div>
                     </div>
@@ -103,27 +135,24 @@ class 交易 extends React.Component {
                     columns={[
                         {
                             title: '时间',
-                            width: '20%',
                             render: v =>
                                 <p style={{ color: '#49a965' }}>
-                                    {v.id}
+                                    {new Date(v.时间).toLocaleTimeString()}
                                 </p>
                         },
                         {
                             title: '仓位',
-                            width: '50%',
                             render: v => {
                                 const { 仓位数量, 开仓均价 } = v
                                 return <p>
-                                    <span style={{ color: 仓位数量 < 0 ? RED : GREEN }}>{仓位数量 + '@'}</span><span style={{ color: 'black' }}>{开仓均价}</span>
+                                    <span style={{ color: 仓位数量 < 0 ? RED : GREEN }}>{仓位数量 + '@'}</span><span style={{ color: 'black' }}>{开仓均价.toFixed(2)}</span>
                                 </p>
                             }
                         },
                         {
                             title: '收益',
-                            width: '30%',
-                            render: v => <p style={{ color: 'black' }}>
-                                {111}
+                            render: v => <p style={{ color: v.收益 < 0 ? RED : GREEN }}>
+                                {v.收益.toFixed(2)}
                             </p>
                         },
                     ]}
@@ -135,11 +164,8 @@ class 交易 extends React.Component {
 
 
     get仓位() {
-        let 仓位数量 = 1234
-        let 开仓均价 = 8000
-
-        if (仓位数量 !== 0) {
-            return <span><span style={{ color: 仓位数量 < 0 ? RED : GREEN }}>{String(仓位数量)}</span>@<span>{String(开仓均价)}</span></span>
+        if (this.xxx.仓位数量 !== 0) {
+            return <span><span style={{ color: this.xxx.仓位数量 < 0 ? RED : GREEN }}>{String(this.xxx.仓位数量)}</span>@<span>{this.xxx.开仓均价.toFixed(2)}</span></span>
         } else {
             return undefined
         }
@@ -151,7 +177,7 @@ class 模拟盘 extends React.Component {
 
     initChart = (element: HTMLElement | null) => {
         if (element) {
-            RealKLineChart(element, new HopexRealKLine())
+            RealKLineChart(element, real)
         }
     }
 
@@ -163,37 +189,4 @@ class 模拟盘 extends React.Component {
     }
 }
 
-ReactDOM.render(<模拟盘 />, document.querySelector('#root'))
-
-
-
-
-
-//开平 计算器
-
-/*
-
-marketOrder(side: Side, count: number) {
-    this.entryPrice = (this.entryPrice * Math.abs(this.myPosition) + this.lastPrice * count) / (Math.abs(this.myPosition) + count)
-
-    if (side == 'Buy') {
-        this.myPosition += count
-    } else {
-        this.myPosition -= count
-    }
-
-    if (this.maxPosition < Math.abs(this.myPosition)) {
-        this.maxPosition = Math.abs(this.myPosition)
-    }
-}
-
-
-marketCloseAll() {
-    const 盈利 = this.myPosition * (1 / this.entryPrice - 1 / this.lastPrice)
-    this.myPosition = 0
-    this.entryPrice = 0
-    this.accumulatedProfit += 盈利
-    this.closePositionTimes += 1
-}
-
-*/
+ReactDOM.render(<模拟盘 />, document.querySelector('#root')) 
