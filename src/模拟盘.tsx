@@ -133,25 +133,6 @@ class Item extends React.Component<{ symbol: string, data: () => XXX, 位置: nu
                             最低_最高: false,
                         })}
                     />
-
-                    <br />
-
-                    <Button
-                        bgColor={GREEN}
-                        text={'5秒最低 买' + (this.props.位置 + 1)}
-                        left={() => rpc.下单({
-                            cookie,
-                            symbol: this.props.symbol as BaseType.BitmexSymbol,
-                            type: 'maker',
-                            side: 'Buy',
-                            size: 下单数量,
-                            位置: this.props.位置,
-                            最低_最高: true,
-                        })}
-                    />
-                    {/* <Table 委托列表={委托列表} side='Buy' 取消f={id => {
-                                    rpc.取消委托({ cookie, orderID: [id] })
-                                }} /> */}
                 </div>
 
                 <div
@@ -180,23 +161,6 @@ class Item extends React.Component<{ symbol: string, data: () => XXX, 位置: nu
                             最低_最高: false,
                         })}
                     />
-                    <br />
-                    <Button
-                        bgColor={RED}
-                        text={'5秒最高 卖' + (this.props.位置 + 1)}
-                        left={() => rpc.下单({
-                            cookie,
-                            symbol: this.props.symbol as BaseType.BitmexSymbol,
-                            type: 'maker',
-                            side: 'Sell',
-                            size: 下单数量,
-                            位置: this.props.位置,
-                            最低_最高: true,
-                        })}
-                    />
-                    {/* <Table 委托列表={委托列表} side='Sell' 取消f={id => {
-                                    rpc.取消委托({ cookie, orderID: [id] })
-                                }} /> */}
                 </div>
             </div>
 
