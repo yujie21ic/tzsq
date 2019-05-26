@@ -117,7 +117,7 @@ export class 提醒 extends React.Component {
         this.setAndSpeak(
             '比 特 币 成交量',
             volum,
-            v => volum > 1000 && 波动率 >= 0.1
+            v => volum > 500 && 波动率 >= 0.1
         )
         const 买盘 = lastNumber(realTickClient.dataExt.bitmex.XBTUSD.买.盘口)
         const 卖盘 = lastNumber(realTickClient.dataExt.bitmex.XBTUSD.卖.盘口)
