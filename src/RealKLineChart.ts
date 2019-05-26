@@ -10,7 +10,7 @@ import { LineLayer } from './lib/Chart/Layer/LineLayer'
 import { BarLayer } from './lib/Chart/Layer/BarLayer'
 
 
-export const RealKLineChart = (real: HopexRealKLine) => {
+export const RealKLineChart = (element: HTMLElement, real: HopexRealKLine) => {
 
     const timeArr = 指标.map(() => real.kline.length, i => new Date(timeID._60s.toTimestamp(real.kline[i].id)).toLocaleString())
 
@@ -34,7 +34,7 @@ export const RealKLineChart = (real: HopexRealKLine) => {
         right = real.kline.length
     }
 
-    chartInit(60, document.querySelector('#root') as HTMLElement, () => {
+    chartInit(60, element, () => {
 
         const kline = real.kline
 
@@ -45,7 +45,7 @@ export const RealKLineChart = (real: HopexRealKLine) => {
         }
 
         return {
-            title: 'HopexKLine',
+            title: '',
             xStrArr: timeArr,
             显示y: v => {
                 const time = (kline[0] ? timeID._60s.toTimestamp(kline[0].id) : 0) + v * 1000 * 60

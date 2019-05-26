@@ -29,6 +29,10 @@ const menu = Menu.buildFromTemplate([
         label: `实盘`,
         click: () => showWindow('实盘', { accountName: v.k })
       },
+      {
+        label: `模拟盘`,
+        click: () => showWindow('模拟盘', { accountName: v.k })
+      },
     ]
   })),
   { type: 'separator' },
