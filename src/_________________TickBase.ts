@@ -1,10 +1,10 @@
-import { chartInit } from './lib/Chart'
+import { chartInit } from './Chart'
 import { RealDataBase } from './RealDataServer/RealDataBase'
-import { formatDate } from './lib/F/formatDate'
-import { dialog } from './lib/UI/dialog'
+import { formatDate } from './F/formatDate'
+import { dialog } from './UI/dialog'
 import { Tick行情____config } from './Tick行情____config'
 import { keys } from 'ramda'
-import { BaseType } from './lib/BaseType'
+import { BaseType } from './BaseType'
 
 
 const 显示秒 = [250, 50, 150, 500, 1000, 2000, 3600, 7200, 20000]

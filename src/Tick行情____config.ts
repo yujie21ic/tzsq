@@ -1,14 +1,14 @@
 import { RealDataBase } from './RealDataServer/RealDataBase'
-import { layer, LayerItem } from './lib/Chart'
-import { LineLayer } from './lib/Chart/Layer/LineLayer'
-import { TextLayer, LeftTextLayer } from './lib/Chart/Layer/TextLayer'
-import { lastNumber } from './lib/F/lastNumber'
-import { ZeroLayer } from './lib/Chart/Layer/ZeroLayer'
-import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
-import { 笔Layer } from './lib/Chart/Layer/笔Layer'
+import { layer, LayerItem } from './Chart'
+import { LineLayer } from './Chart/Layer/LineLayer'
+import { TextLayer, LeftTextLayer } from './Chart/Layer/TextLayer'
+import { lastNumber } from './F/lastNumber'
+import { ZeroLayer } from './Chart/Layer/ZeroLayer'
+import { KLineLayer } from './Chart/Layer/KLineLayer'
+import { 笔Layer } from './Chart/Layer/笔Layer'
 import { get笔Index, get线段, 合并后的K线 } from './指标/缠中说禅'
-import { 线段Layer } from './lib/Chart/Layer/线段Layer'
-import { 合并后的Layer } from './lib/Chart/Layer/合并后的Layer'
+import { 线段Layer } from './Chart/Layer/线段Layer'
+import { 合并后的Layer } from './Chart/Layer/合并后的Layer'
 
 
 

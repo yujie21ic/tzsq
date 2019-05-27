@@ -1,9 +1,9 @@
 import { config } from './config'
 import { OrderClient } from './OrderServer/OrderClient'
 import { windowExt } from './windowExt'
-import { chartInit, layer } from './lib/Chart'
-import { LineLayer } from './lib/Chart/Layer/LineLayer'
-import { theme } from './lib/Chart/theme'
+import { chartInit, layer } from './Chart'
+import { LineLayer } from './Chart/Layer/LineLayer'
+import { theme } from './Chart/theme'
 
 theme.右边空白 = 0
 

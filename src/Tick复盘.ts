@@ -1,16 +1,16 @@
 import { DataClient } from './RealDataServer/DataClient'
 import { _________________TickBase } from './_________________TickBase'
-import { registerCommand } from './lib/UI/registerCommand'
+import { registerCommand } from './UI/registerCommand'
 import { windowExt } from './windowExt'
 import { RealDataBase } from './RealDataServer/RealDataBase'
-import { theme } from './lib/Chart/theme'
+import { theme } from './Chart/theme'
 
 import * as csv_parse from 'csv-parse'
 import * as fs from 'fs'
-import { fix浮点 } from './lib/F/fix浮点'
-import { BaseType } from './lib/BaseType'
-import { timeID } from './lib/F/timeID'
-import { get成交性质 } from './lib/F/get成交性质'
+import { fix浮点 } from './F/fix浮点'
+import { BaseType } from './BaseType'
+import { timeID } from './F/timeID'
+import { get成交性质 } from './F/get成交性质'
 
 theme.右边空白 = 0
 

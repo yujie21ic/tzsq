@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { DataClient } from './RealDataServer/DataClient'
-import { lastNumber } from './lib/F/lastNumber'
-import { mapObjIndexed } from './lib/F/mapObjIndexed'
-import { dialog } from './lib/UI/dialog'
+import { lastNumber } from './F/lastNumber'
+import { mapObjIndexed } from './F/mapObjIndexed'
+import { dialog } from './UI/dialog'
 
 const dic = new Map<string, number>()
 

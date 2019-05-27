@@ -1,13 +1,13 @@
-import { chartInit, layer } from './lib/Chart'
-import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
-import { formatDate } from './lib/F/formatDate'
-import { timeID } from './lib/F/timeID'
-import { theme } from './lib/Chart/theme'
-import { toRange } from './lib/F/toRange'
+import { chartInit, layer } from './Chart'
+import { KLineLayer } from './Chart/Layer/KLineLayer'
+import { formatDate } from './F/formatDate'
+import { timeID } from './F/timeID'
+import { theme } from './Chart/theme'
+import { toRange } from './F/toRange'
 import { HopexRealKLineBase } from './RealDataServer/HopexRealKLine'
 import { 指标 } from './指标/指标'
-import { LineLayer } from './lib/Chart/Layer/LineLayer'
-import { BarLayer } from './lib/Chart/Layer/BarLayer'
+import { LineLayer } from './Chart/Layer/LineLayer'
+import { BarLayer } from './Chart/Layer/BarLayer'
 
 
 export const RealKLineChart = (element: HTMLElement, real: HopexRealKLineBase, tmp?: () => any) => {

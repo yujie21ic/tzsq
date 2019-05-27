@@ -1,6 +1,6 @@
 import * as path from 'path'
 import { app, Menu, Tray } from 'electron'
-import { kvs } from './lib/F/kvs'
+import { kvs } from './F/kvs'
 import { config } from './config'
 import { showWindow } from './windowExt'
 

@@ -1,6 +1,6 @@
-import { typeObjectParse } from './lib/F/typeObjectParse'
-import { BaseType } from './lib/BaseType'
-import { base64 } from './lib/F/base64'
+import { typeObjectParse } from './F/typeObjectParse'
+import { BaseType } from './BaseType'
+import { base64 } from './F/base64'
 import { BrowserWindow, remote } from 'electron'
 import * as path from 'path'
 

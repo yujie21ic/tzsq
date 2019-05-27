@@ -1,4 +1,4 @@
-import { BaseType } from '../../lib/BaseType'
+import { BaseType } from '../../BaseType'
 
 export const DBServer__funcList = {
     //K线

@@ -1,24 +1,24 @@
-import { chartInit, layer, getIndex } from './lib/Chart'
-import { KLineLayer } from './lib/Chart/Layer/KLineLayer'
-import { BarLayer } from './lib/Chart/Layer/BarLayer'
-import { BaseType } from './lib/BaseType'
-import { formatDate } from './lib/F/formatDate'
-import { DBClient } from './lib/DataServer/DBClient'
-import { dialog } from './lib/UI/dialog'
-import { timeID } from './lib/F/timeID'
-import { theme } from './lib/Chart/theme'
-import { toRange } from './lib/F/toRange'
+import { chartInit, layer, getIndex } from './Chart'
+import { KLineLayer } from './Chart/Layer/KLineLayer'
+import { BarLayer } from './Chart/Layer/BarLayer'
+import { BaseType } from './BaseType'
+import { formatDate } from './F/formatDate'
+import { DBClient } from './DataServer/DBClient'
+import { dialog } from './UI/dialog'
+import { timeID } from './F/timeID'
+import { theme } from './Chart/theme'
+import { toRange } from './F/toRange'
 import { showWindow } from './windowExt'
 import { 指标 } from './指标/指标'
-import { LineLayer } from './lib/Chart/Layer/LineLayer'
+import { LineLayer } from './Chart/Layer/LineLayer'
 
 theme.右边空白 = 0
 
 
 // import { get笔Index, 合并后的K线, get线段 } from './RealDataServer/缠中说禅'
-// import { 线段Layer } from './lib/Chart/Layer/线段Layer'
-// import { 合并后的Layer } from './lib/Chart/Layer/合并后的Layer'
-// import { 笔Layer } from './lib/Chart/Layer/笔Layer'
+// import { 线段Layer } from './Chart/Layer/线段Layer'
+// import { 合并后的Layer } from './Chart/Layer/合并后的Layer'
+// import { 笔Layer } from './Chart/Layer/笔Layer'
 
 let nowSymbol: BaseType.BitmexSymbol = 'XBTUSD'
 

@@ -1,6 +1,6 @@
 import { 指标 } from './指标'
 import { RealDataBase } from '../RealDataServer/RealDataBase'
-import { BaseType } from '../lib/BaseType'
+import { BaseType } from '../BaseType'
 import { sum } from 'ramda'
 
 const 买卖 = (p: {

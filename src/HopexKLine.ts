@@ -1,4 +1,4 @@
-import { theme } from './lib/Chart/theme'
+import { theme } from './Chart/theme'
 import { HopexRealKLine } from './RealDataServer/HopexRealKLine'
 import { RealKLineChart } from './RealKLineChart'
 

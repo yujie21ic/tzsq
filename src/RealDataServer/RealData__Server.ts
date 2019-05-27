@@ -1,6 +1,6 @@
 import * as WebSocket from 'ws'
-import { BaseType } from '../lib/BaseType'
-import { Sampling } from '../lib/F/Sampling'
+import { BaseType } from '../BaseType'
+import { Sampling } from '../F/Sampling'
 import { RealDataBase } from './RealDataBase'
 import { TradeAndOrderBook } from './TradeAndOrderBook/TradeAndOrderBook'
 

@@ -1,7 +1,7 @@
-import { BaseType } from '../lib/BaseType'
-import { JSONRequest } from '../lib/F/JSONRequest'
+import { BaseType } from '../BaseType'
+import { JSONRequest } from '../F/JSONRequest'
 //import { config } from '../../config'
-import { queryStringStringify } from '../lib/F/queryStringStringify'
+import { queryStringStringify } from '../F/queryStringStringify'
 
 const header = {
     Origin: 'https://www.hopex.com',

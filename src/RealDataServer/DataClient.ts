@@ -1,13 +1,13 @@
 import { RealDataBase } from './RealDataBase'
-import { WebSocketClient } from '../lib/F/WebSocketClient'
-import { deepMapNullToNaN } from '../lib/F/deepMapNullToNaN'
+import { WebSocketClient } from '../F/WebSocketClient'
+import { deepMapNullToNaN } from '../F/deepMapNullToNaN'
 import { config } from '../config'
-import { BaseType } from '../lib/BaseType'
-import { DBClient } from '../lib/DataServer/DBClient'
-import { timeID } from '../lib/F/timeID'
-import { PKClient } from '../lib/DataServer/PKClient'
-import { DBServer } from '../lib/DataServer/DBServer'
-import { PKServer } from '../lib/DataServer/PKServer'
+import { BaseType } from '../BaseType'
+import { DBClient } from '../DataServer/DBClient'
+import { timeID } from '../F/timeID'
+import { PKClient } from '../DataServer/PKClient'
+import { DBServer } from '../DataServer/DBServer'
+import { PKServer } from '../DataServer/PKServer'
 
 export namespace DataClient {
 

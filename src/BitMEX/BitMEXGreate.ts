@@ -78,7 +78,7 @@ const run = async () => {
 
 
 
-    fs.writeFileSync('./src/lib/BitMEX/BitMEXMessage.ts', `
+    fs.writeFileSync('./src/BitMEX/BitMEXMessage.ts', `
 //greate by https://www.bitmex.com/api/explorer/swagger.json
 
 export namespace BitMEXMessage {${
@@ -89,7 +89,7 @@ export namespace BitMEXMessage {${
 }`)
 
 
-    fs.writeFileSync('./src/lib/BitMEX/BitMEXHTTP.ts', `
+    fs.writeFileSync('./src/BitMEX/BitMEXHTTP.ts', `
 //greate by https://www.bitmex.com/api/explorer/swagger.json
 
 import { BitMEXMessage } from './BitMEXMessage'

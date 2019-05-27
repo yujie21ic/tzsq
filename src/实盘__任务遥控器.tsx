@@ -3,8 +3,8 @@ import { config } from './config'
 import { windowExt } from './windowExt'
 import { OrderClient } from './OrderServer/OrderClient'
 import { Switch } from '@material-ui/core'
-import { kvs } from './lib/F/kvs'
-import { dialog } from './lib/UI/dialog'
+import { kvs } from './F/kvs'
+import { dialog } from './UI/dialog'
 
 const { cookie } = config.account![windowExt.accountName]
 const orderClient = new OrderClient(cookie)

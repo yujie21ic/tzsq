@@ -1,4 +1,4 @@
-import { BaseType } from '../../lib/BaseType'
+import { BaseType } from '../../BaseType'
 import { Subject } from 'rxjs'
 
 export class TradeAndOrderBook<T extends string = string> {

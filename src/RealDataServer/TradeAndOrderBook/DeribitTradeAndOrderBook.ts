@@ -1,6 +1,6 @@
 import { TradeAndOrderBook } from './TradeAndOrderBook'
-import { BaseType } from '../../lib/BaseType'
-import { WebSocketClient } from '../../lib/F/WebSocketClient'
+import { BaseType } from '../../BaseType'
+import { WebSocketClient } from '../../F/WebSocketClient'
 import { config } from '../../config'
 import { createHash } from 'crypto'
 

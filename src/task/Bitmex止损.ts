@@ -1,7 +1,7 @@
 import { PositionAndOrderTask, PositionAndOrder } from '../OrderServer/PositionAndOrder'
-import { BaseType } from '../lib/BaseType'
-import { to价格对齐 } from '../lib/F/to价格对齐'
-import { sleep } from '../lib/F/sleep'
+import { BaseType } from '../BaseType'
+import { to价格对齐 } from '../F/to价格对齐'
+import { sleep } from '../F/sleep'
 
 
 export class Bitmex止损 implements PositionAndOrderTask {
