@@ -1,10 +1,10 @@
-import { BaseType } from '../BaseType'
+import { BaseType } from '../../BaseType'
 import { range } from 'ramda'
-import { PositionAndOrder } from '../OrderServer/PositionAndOrder'
-import { PositionAndOrderTask } from '../OrderServer/PositionAndOrder'
-import { to价格对齐 } from '../F/to价格对齐'
-import { sleep } from '../F/sleep'
-import { typeObjectParse } from '../F/typeObjectParse'
+import { PositionAndOrder } from '../PositionAndOrder'
+import { PositionAndOrderTask } from '../PositionAndOrder'
+import { to价格对齐 } from '../../F/to价格对齐'
+import { sleep } from '../../F/sleep'
+import { typeObjectParse } from '../../F/typeObjectParse'
 
 const 参数type = {
     网格大小: 0.5,

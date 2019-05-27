@@ -8,8 +8,8 @@ import { safeJSONParse } from '../F/safeJSONParse'
 import { kvs } from '../F/kvs'
 import { toRange } from '../F/toRange'
 import { toBuySellPriceFunc } from '../F/toBuySellPriceFunc'
-import { BTC网格交易 } from '../task/BTC网格交易'
-import { Bitmex止损 } from '../task/Bitmex止损'
+import { BTC网格交易 } from './task/BTC网格交易'
+import { Bitmex止损 } from './task/Bitmex止损'
 
 
 //运行的账户
