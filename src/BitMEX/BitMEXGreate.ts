@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import * as R from 'ramda'
 import { JSONRequest } from '../F/JSONRequest'
-import { config } from '../../config'
+import { config } from '../config'
 
 const BR = '\n'
 const BR2 = BR + BR
@@ -95,7 +95,7 @@ export namespace BitMEXMessage {${
 import { BitMEXMessage } from './BitMEXMessage'
 import { queryStringStringify } from '../F/queryStringStringify'
 import { JSONRequest } from '../F/JSONRequest'
-import { config } from '../../config'
+import { config } from '../config'
 
 const f = async <T>(obj: { method: string, path: string, cookie: string, req: any }) => {
 

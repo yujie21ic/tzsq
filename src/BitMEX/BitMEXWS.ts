@@ -1,6 +1,6 @@
 import { WebSocketClient } from '../F/WebSocketClient'
 import { BitMEXMessage } from '../BitMEX/BitMEXMessage'
-import { config } from '../../config'
+import { config } from '../config'
 import { BaseType } from '../BaseType'
 import { Subject } from 'rxjs'
 

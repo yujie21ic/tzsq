@@ -2,7 +2,7 @@ import { BaseType } from '../BaseType'
 import { DB } from './DB'
 import { JSONRequest } from '../F/JSONRequest'
 import { sleep } from '../F/sleep'
-import { config } from '../../config'
+import { config } from '../config'
 import { queryStringStringify } from '../F/queryStringStringify'
 
 export const syncBinanceTrades = async (
