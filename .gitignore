@@ -7,7 +7,4 @@ package-lock.json
 build 
 
 src/config.ts
-db/*
-
-
-*.txt
+db/* 
