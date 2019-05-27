@@ -12,21 +12,7 @@ export type ConfigType = {
     account?: {
         [name: string]: {
             cookie: string
-            hopexCookie: string
-            计分板倍数?: number
-        }
-    }
-    hopex?: {
-        [name: string]: {
-            cookie: string
-            代理: {
-                socksHost: string
-                socksPort: number
-                socksUsername: string
-                socksPassword: string
-            }
-            下单数量: number
-            偏移: number
+            hopexCookie: string 
         }
     }
 } 
