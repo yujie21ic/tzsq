@@ -11,7 +11,7 @@ import { HopexTradeAndOrderBook } from './TradeAndOrderBook/HopexTradeAndOrderBo
 import { IXTradeAndOrderBook } from './TradeAndOrderBook/IXTradeAndOrderBook'
 import { TradeAndOrderBook } from './TradeAndOrderBook/TradeAndOrderBook'
 import { DeribitTradeAndOrderBook } from './TradeAndOrderBook/DeribitTradeAndOrderBook'
-import values from 'ramda/es/values'
+import { kvs } from '../F/kvs'
 
 const createItem = () => ({
     data: [] as BaseType.KLine[],
@@ -56,9 +56,9 @@ export class RealDataBase {
     删除历史() {
         const arr: any[] = []
 
-        values(this.jsonSync.rawData).forEach(v => {
+        kvs(this.jsonSync.rawData).forEach(({ v }) => {
             if (typeof v !== 'number') {
-                values(v).forEach(v => arr.push(v))
+                kvs(v).forEach(({ v }) => arr.push(v))
             }
         })
 
