@@ -11,6 +11,7 @@ import { HopexTradeAndOrderBook } from './TradeAndOrderBook/HopexTradeAndOrderBo
 import { IXTradeAndOrderBook } from './TradeAndOrderBook/IXTradeAndOrderBook'
 import { TradeAndOrderBook } from './TradeAndOrderBook/TradeAndOrderBook'
 import { DeribitTradeAndOrderBook } from './TradeAndOrderBook/DeribitTradeAndOrderBook'
+import values from 'ramda/es/values'
 
 const createItem = () => ({
     data: [] as BaseType.KLine[],
@@ -52,7 +53,35 @@ export class RealDataBase {
         new DeribitTradeAndOrderBook(),
     ] as TradeAndOrderBook<any>[]
 
-    删除历史() { }
+    删除历史() {
+        const arr: any[] = []
+
+        values(this.jsonSync.rawData).forEach(v => {
+            if (typeof v !== 'number') {
+                values(v).forEach(v => arr.push(v))
+            }
+        })
+
+        let length = Math.min(arr[0].data.length, arr[0].orderBook.length)
+        arr.forEach(v => {
+            length = Math.min(length, Math.min(v.data.length, v.orderBook.length))
+        })
+
+
+        if (length > 120 * 60) {
+
+            const deleteCount = 120 * 30
+            this.jsonSync.rawData.startTick += deleteCount
+
+            arr.forEach(v => {
+                v.data.splice(0, deleteCount)
+                v.orderBook.splice(0, deleteCount)
+            })
+
+            this.重新初始化() //卡死？
+        }
+
+    }
     //________________________________________________________________________________________________//
 
     static 单位时间 = 500
