@@ -5,7 +5,7 @@ import { timeID } from '../F/timeID'
 import { get买卖 } from '../指标/买卖'
 import { formatDate } from '../F/formatDate'
 import { mapObjIndexed } from '../F/mapObjIndexed'
-// import { CTPTradeAndOrderBook } from './TradeAndOrderBook/CTPTradeAndOrderBook'
+import { CTPTradeAndOrderBook } from './TradeAndOrderBook/CTPTradeAndOrderBook'
 import { BitmexTradeAndOrderBook } from './TradeAndOrderBook/BitmexTradeAndOrderBook'
 import { HopexTradeAndOrderBook } from './TradeAndOrderBook/HopexTradeAndOrderBook'
 import { IXTradeAndOrderBook } from './TradeAndOrderBook/IXTradeAndOrderBook'
@@ -24,7 +24,7 @@ export class RealDataBase {
     jsonSync = new JSONSync(
         {
             startTick: 0,
-            // ctp: mapObjIndexed(createItem, BaseType.CTPSymbolDic),
+            ctp: mapObjIndexed(createItem, BaseType.CTPSymbolDic),
             hopex: mapObjIndexed(createItem, BaseType.HopexSymbolDic),
             ix: mapObjIndexed(createItem, BaseType.IXSymbolDic),
             bitmex: mapObjIndexed(createItem, BaseType.BitmexSymbolDic),
@@ -34,7 +34,7 @@ export class RealDataBase {
 
     CREATE = () => ({
         期货30秒内成交量: (symbol: BaseType.BitmexSymbol) => this.get期货多少秒内成交量__万为单位(symbol, 30),
-        // ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), BaseType.CTPSymbolDic),
+        ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), BaseType.CTPSymbolDic),
         bitmex: mapObjIndexed((v, k) => this.item2(this.data.bitmex[k], false), BaseType.BitmexSymbolDic),
         hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
         ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),
@@ -46,7 +46,7 @@ export class RealDataBase {
     重新初始化 = () => this.dataExt = this.CREATE()
 
     getTradeAndOrderBookArr = () => [
-        // new CTPTradeAndOrderBook(),
+        new CTPTradeAndOrderBook(),
         new BitmexTradeAndOrderBook(),
         new HopexTradeAndOrderBook(),
         new IXTradeAndOrderBook(),
@@ -56,8 +56,8 @@ export class RealDataBase {
     删除历史() {
         const arr: any[] = []
 
-        kvs(this.jsonSync.rawData).forEach(({ k, v }) => {
-            if (typeof v !== 'number') {
+        kvs(this.jsonSync.rawData).forEach(({ k, v }: any) => {
+            if (k !== 'startTick' && k !== 'ctp') {
                 kvs(v).forEach(({ v }) => arr.push(v))
             }
         })
