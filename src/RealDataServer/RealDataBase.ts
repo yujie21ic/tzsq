@@ -59,33 +59,7 @@ export class RealDataBase {
     get data() {
         return this.jsonSync.rawData
     }
-
-    get期货多少秒内最高最低(symbol: BaseType.BitmexSymbol, second: number) {
-        second = second * (1000 / RealDataBase.单位时间)
-
-        const data = this.data.bitmex[symbol].data
-
-        let high = NaN
-        let low = NaN
-
-        if (data.length >= second) {
-            for (let i = data.length - 1; i >= data.length - second; i--) {
-                if (isNaN(high)) {
-                    high = data[i].high
-                } else {
-                    high = Math.max(high, data[i].high)
-                }
-
-                if (isNaN(low)) {
-                    low = data[i].low
-                } else {
-                    low = Math.max(low, data[i].low)
-                }
-            }
-        }
-        return { high, low }
-    }
-
+ 
     get期货多少秒内成交量__万为单位(symbol: BaseType.BitmexSymbol, second: number) {
         second = second * (1000 / RealDataBase.单位时间)
         let volume = 0
@@ -116,45 +90,12 @@ export class RealDataBase {
             (orderBook[i].buy && orderBook[i].buy.length > 0 && orderBook[i].sell && orderBook[i].sell.length > 0) ?
                 ((orderBook[i].buy[0].price + orderBook[i].sell[0].price) / 2) : NaN)
 
-
-
         const 价格 = 盘口算价格 ? 盘口价格 : 收盘价
 
         const 时间 = 指标.map(() => data.length, i => timeID._500ms.toTimestamp(data[i].id))
 
         const 时间str = 指标.map(() => 时间.length, i => formatDate(new Date(时间[i]), v => `${v.hh}:${v.mm}:${v.ss}:${v.msmsms}`))
         const 价格macd = 指标.macd(价格, RealDataBase.单位时间)
-
-
-
-        const 被动_卖均价_300 = 指标.map(() => Math.min(data.length, 卖.盘口1价.length), i => {
-            if (i >= 600) {
-                let sum = 0
-                let vol = 0
-                for (let k = i - 600; k <= i; k++) {
-                    vol += data[k].buySize
-                    sum += data[k].buySize * 卖.盘口1价[k]
-                }
-                return sum / vol
-            } else {
-                return NaN
-            }
-        })
-
-        const 被动_买均价_300 = 指标.map(() => Math.min(data.length, 买.盘口1价.length), i => {
-            if (i >= 600) {
-                let sum = 0
-                let vol = 0
-                for (let k = i - 600; k <= i; k++) {
-                    vol += data[k].sellSize
-                    sum += data[k].sellSize * 买.盘口1价[k]
-                }
-                return sum / vol
-            } else {
-                return NaN
-            }
-        })
-
 
         const KLine = 指标.map(() => data.length, i => ({
             open: data[i].open,
@@ -249,8 +190,6 @@ export class RealDataBase {
             价格_最高60,
             价格_最低60,
             价格_最高60_价差,
-            被动_买均价_300,
-            被动_卖均价_300,
         }
     }
 }

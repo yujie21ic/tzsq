@@ -42,10 +42,7 @@ export class 提醒 extends React.Component {
     }
 
     step = () => {
-        //_______________________________布林带提醒_______________________________
-        const 上轨 = lastNumber(realTickClient.dataExt.bitmex.XBTUSD._60s_.布林带.上轨)
-        const 下轨 = lastNumber(realTickClient.dataExt.bitmex.XBTUSD._60s_.布林带.下轨)
-        const 收盘价 = lastNumber(realTickClient.dataExt.bitmex.XBTUSD.收盘价)
+        //_______________________________布林带提醒_______________________________  
 
         const hopex收盘价 = lastNumber(realTickClient.dataExt.hopex.BTCUSDT.收盘价)
 
@@ -82,17 +79,7 @@ export class 提醒 extends React.Component {
             v => hopex收盘价 <= this.关键点小于等于
         )
 
-        this.setAndSpeak(
-            '收盘价 大于 上轨 ',
-            收盘价 - 上轨,
-            v => 收盘价 > 上轨
-        )
-
-        this.setAndSpeak(
-            '收盘价 小于 下轨 ',
-            下轨 - 收盘价,
-            v => 收盘价 < 下轨
-        )
+       
 
         //________________________________________________________________________
 
