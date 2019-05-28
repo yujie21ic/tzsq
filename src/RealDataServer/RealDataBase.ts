@@ -402,9 +402,7 @@ export class RealDataBase {
         const 价格_均线60 = 指标.SMA(价格, 60, RealDataBase.单位时间)
         const 价格均线价差 = 指标.map(() => Math.min(价格_均线300.length, 价格_均线120.length), i => 价格_均线120[i] - 价格_均线300[i])
 
-        const bitmex_价格_macd = 指标.macd带参数(价格, 36, 78, 27, RealDataBase.单位时间)
-
-        const 价格_波动率15 = 指标.波动率(价格, 15, RealDataBase.单位时间)
+        const bitmex_价格_macd = 指标.macd带参数(价格, 36, 78, 27, RealDataBase.单位时间) 
         const 价格_波动率30 = 指标.波动率(价格, 30, RealDataBase.单位时间)
         const 价格_波动率60 = 指标.波动率(价格, 60, RealDataBase.单位时间)
         const 价格_波动率300 = 指标.波动率(价格, 300, RealDataBase.单位时间)
@@ -422,340 +420,19 @@ export class RealDataBase {
         const 净成交量abs_累加5 = 指标.累加(净成交量abs, 5, RealDataBase.单位时间)
         const 净成交量abs_macd = 指标.macd(净成交量abs原始, RealDataBase.单位时间)
 
-       
-        //上涨_下跌
-        //const 上涨_下跌 = 指标.lazyMapCache(() => Math.min(买.净成交量_累加60.length), i => 买.净成交量_累加60[i] >= 0 ? '上涨' : '下跌')
-        const 上涨_下跌_横盘 = 指标.map(
-            () => Math.min(买.净成交量_累加60.length),
-            i => {
-                if (买.净成交量_累加60[i] >= 10 * 10000) {
-                    return '上涨'
-                } else if (买.净成交量_累加60[i] <= -10 * 10000) {
-                    return '下跌'
-                } else {
-                    return '横盘'
-                }
-            })
-        const 上涨_下跌_横盘追涨追跌专用 = 指标.map(
-            () => Math.min(买.净成交量_累加60.length),
-            i => {
-                if (买.净成交量_累加60[i] >= -10 * 10000) {
-                    return '上涨'
-                } else if (买.净成交量_累加60[i] <= 10 * 10000) {
-                    return '下跌'
-                } else {
-                    return '横盘'
-                }
-            })
+
+
 
         //
         const 价格_最高60 = 指标.最高(价格, 60, RealDataBase.单位时间)
         const 价格_最低60 = 指标.最低(价格, 60, RealDataBase.单位时间)
         const 价格_最高60_价差 = 指标.map(() => Math.min(买.成交量.length, 卖.成交量.length), i => 价格_最高60[i] - 价格[i])
 
+ 
 
 
-        //________________上涨_下跌_分开_的 全用这个 返回______________________
-        //引用 统一 上涨.xxx 下跌.xxx
-
-
-        const 上涨_下跌_分开_的 = (type: '上涨' | '下跌') => {
-
-            const 累计成交量 = 指标.map2({ 累计成交量: NaN }, (arr: number[], ext) => {
-                const length = Math.min(上涨_下跌_横盘.length, 买.成交量.length, 卖.成交量.length)
-                for (let i = Math.max(0, arr.length - 1); i < length; i++) {
-                    if (上涨_下跌_横盘[i] === type) {
-                        if (isNaN(ext.累计成交量)) {
-                            ext.累计成交量 = 0
-                        }
-                        if (i !== length - 1) {
-                            ext.累计成交量 += (type === '上涨' ? 买.成交量[i] - 卖.成交量[i] : 卖.成交量[i] - 买.成交量[i])   //最后一个重新计算
-                        }
-                    } else {
-                        ext.累计成交量 = NaN
-                    }
-                    arr[i] = ext.累计成交量 + (type === '上涨' ? 买.成交量[i] - 卖.成交量[i] : 卖.成交量[i] - 买.成交量[i])
-                }
-            })
-
-            const 价差 = 指标.map2({ 起点价格: NaN }, (arr: number[], ext) => {
-                const length = Math.min(上涨_下跌_横盘.length, 价格_最高60.length, 价格_最低60.length)
-                for (let i = Math.max(0, arr.length - 1); i < length; i++) {//最高价10 最低价10 一样长
-                    if (上涨_下跌_横盘[i] === type) {
-                        if (isNaN(ext.起点价格)) {
-                            ext.起点价格 = 价格[i]    //最后一个重新计算   不用
-                        }
-                    } else {
-                        ext.起点价格 = NaN
-                    }
-
-                    if (isNaN(ext.起点价格)) {
-                        arr[i] = NaN
-                    }
-                    else if (type === '上涨') {
-                        arr[i] = 价格_最高60[i] - ext.起点价格
-                    }
-                    else if (type === '下跌') {
-                        arr[i] = ext.起点价格 - 价格_最低60[i]
-                    }
-                }
-            })
-
-            const 动力 = 指标.map(
-                () => Math.min(累计成交量.length, 价差.length),
-                i => toRange({ min: 30 * 10000, max: 130 * 10000, value: 累计成交量[i] / Math.max(1, 价差[i]) }) //最小除以1
-            )
-
-
-            const 动态时间_x秒 = 指标.map(
-                () => Math.min(价差.length),
-                i => toRange({ min: 15, max: 20, value: 价差[i] / 10 }),
-            )
-            const 动态时间_小y秒 = 指标.map(
-                () => Math.min(价差.length),
-                i => toRange({ min: 3, max: 10, value: 价差[i] / 14 }),
-            )
-
-            const 动态时间_y秒 = 指标.map(
-                () => Math.min(价差.length),
-                i => toRange({ min: 4, max: 10, value: 价差[i] / 12 }),
-            )
-
-            const 动态时间_y秒大 = 指标.map(
-                () => Math.min(价差.length),
-                i => toRange({ min: 6, max: 15, value: 价差[i] / 6 }),
-            )
-
-            const x秒内极值点价格 = 指标.map(
-                () => Math.min(动态时间_x秒.length, 价格.length),
-                i => {
-
-                    //1秒2根
-                    const x根 = 动态时间_x秒[i] * 2
-
-                    let 极值点 = 价格[i]
-
-                    for (let k = i; k > Math.max(-1, i - x根); k--) {
-                        极值点 = (type === '上涨' ? Math.max : Math.min)(极值点, 价格[k])
-                    }
-
-                    return 极值点
-                }
-            )
-            // const x秒内极值点价格 = type === '上涨' ?指标.最高(价格, lastNumber(动态时间_x秒), RealDataBase.单位时间):指标.最低(价格, lastNumber(动态时间_x秒), RealDataBase.单位时间)
-            const 价差走平hopex = 指标.map(
-                () => Math.min(动态时间_小y秒.length, 价格.length, x秒内极值点价格.length),
-                i => {
-                    //1秒2根
-                    const y根 = 动态时间_小y秒[i] * 2
-                    if (isNaN(y根)) return false
-                    const 极值 = x秒内极值点价格[Math.max(0, i - y根 + 1)]
-                    for (let k = i; k > Math.max(-1, i - y根); k--) {
-                        if (type === '上涨' && 价格[k] > (极值 + (价差[i] > 50 ? 1 : 0))) {//继续创新高
-                            return false
-                        }
-
-                        if (type === '下跌' && 价格[k] < (极值 - (价差[i] > 50 ? 1 : 0))) {//继续创新低
-                            return false
-                        }
-                    }
-                    return true
-                }
-            )
-
-            //y秒
-            const 价差走平 = 指标.map(
-                () => Math.min(动态时间_y秒.length, 价格.length, x秒内极值点价格.length),
-                i => {
-                    //1秒2根
-                    const y根 = 动态时间_y秒[i] * 2
-                    if (isNaN(y根)) return false
-                    const 极值 = x秒内极值点价格[Math.max(0, i - y根 + 1)]
-                    for (let k = i; k > Math.max(-1, i - y根); k--) {
-                        if (type === '上涨' && 价格[k] > (极值 + (价差[i] > 50 ? 1 : 0))) {//继续创新高
-                            return false
-                        }
-
-                        if (type === '下跌' && 价格[k] < (极值 - (价差[i] > 50 ? 1 : 0))) {//继续创新低
-                            return false
-                        }
-                    }
-                    return true
-                }
-            )
-            const 价差走平4s = 指标.map(
-                () => Math.min(价格.length, x秒内极值点价格.length),
-                i => {
-                    //1秒2根
-                    const y根 = 4 * 2
-                    if (isNaN(y根)) return false
-                    const 极值 = x秒内极值点价格[Math.max(0, i - y根 + 1)]
-                    for (let k = i; k > Math.max(-1, i - y根); k--) {
-                        if (type === '上涨' && 价格[k] > 极值) {//继续创新高
-                            return false
-                        }
-
-                        if (type === '下跌' && 价格[k] < 极值) {//继续创新低
-                            return false
-                        }
-                    }
-                    return true
-                }
-            )
-            // const 当前价格与极值关系 = 指标.lazyMapCache(
-            //     () => Math.min(价格.length, 价格_最高15.length, 价格_最低15.length),
-            //     i => {
-            //         // if (type === '上涨' && 价格[i] - 价格_最高15[i]<=0) {
-            //         //     return true
-            //         // }else{
-            //         // if (type === '下跌' && ) {
-            //         //     return true
-            //         // }
-            //         return 价格[i] - 价格_最低15[i] >= 0
-            //         //}
-            //         //return false
-            //     }
-            // )
-            const 价差走平大 = 指标.map(
-                () => Math.min(动态时间_y秒大.length, 价格.length, x秒内极值点价格.length),
-                i => {
-                    //1秒2根
-                    const y根 = 动态时间_y秒大[i] * 2
-                    if (isNaN(y根)) return false
-                    const 极值 = x秒内极值点价格[Math.max(0, i - y根 + 1)]
-                    for (let k = i; k > Math.max(-1, i - y根); k--) {
-                        if (type === '上涨' && 价格[k] > (极值 + (价差[i] > 50 ? 1 : 0))) {//继续创新高
-                            return false
-                        }
-
-                        if (type === '下跌' && 价格[k] < (极值 - (价差[i] > 50 ? 1 : 0))) {//继续创新低
-                            return false
-                        }
-                    }
-                    return true
-                }
-            )
-
-
-
-            const 震荡指数 = 指标.map(
-                () => Math.min(价差.length, 价格_波动率15.length),
-                i => 价差[i] > 2 ? toRange({ min: 0.01, max: 10, value: 价格_波动率15[i] / 价差[i] }) : NaN
-            )
-
-
-            const 震荡指数_最高30 = 指标.map(
-                () => Math.min(价差.length, 价格_波动率15.length),
-                i => {
-                    let 最高 = 震荡指数[i]
-
-                    for (let k = i; k > Math.max(-1, k - 30 * 2); k--) {
-                        const v = 震荡指数[k]
-                        if (isNaN(v)) {
-                            break
-                        } else {
-                            最高 = Math.max(最高, v)
-                        }
-                    }
-
-                    return 最高
-                }
-            )
-
-
-
-            return {
-                累计成交量,
-                价差,
-                动力,
-                //动力波动率: __波动率(动力),
-                动态时间_小y秒,
-                动态时间_x秒,
-                动态时间_y秒,
-                x秒内极值点价格,
-                价差走平hopex,
-                价差走平,
-                价差走平大,
-                价差走平4s,
-                // 当前价格与极值关系,
-
-                震荡指数,
-                震荡指数_最高30,
-            }
-        }
-
-
-        const 上涨 = 上涨_下跌_分开_的('上涨')
-        const 下跌 = 上涨_下跌_分开_的('下跌')
-
-
-
-        //起点  结束 点  要专门 封装起来！！！！！！！！！！！
-        //________________________________________________FFFFFFFFFFFFFFFFFFFFFFF________________________________________________
-        const 价格差_除以时间 = 指标.map2({ 起点index: NaN, 起点Type: 'none' as '上涨' | '下跌' }, (arr: number[], ext) => {
-            const length = Math.min(上涨_下跌_横盘.length, 上涨.价差.length, 下跌.价差.length)
-
-            let 上涨下跌价差 = (xx: '上涨' | '下跌') => xx === '上涨' ? 上涨.价差 : 下跌.价差 //每个地方都不同！！！！
-
-
-            for (let i = Math.max(0, arr.length - 1); i < length; i++) {
-                //开始
-                if (isNaN(ext.起点index) || ext.起点index === length - 1) {   //最后一个重新计算  
-                    const xxxxxxxxxxx = 上涨_下跌_横盘[i]
-                    if (xxxxxxxxxxx !== '横盘' && 上涨下跌价差(xxxxxxxxxxx)[i] >= 2) { //<---------------------------------------------------
-                        ext.起点index = i
-                        ext.起点Type = xxxxxxxxxxx
-                    }
-                }
-                //结束
-                else {
-                    if (上涨下跌价差(ext.起点Type)[i] >= 200 || 上涨_下跌_横盘[i] !== ext.起点Type) { //<---------------------------------------------------
-                        ext.起点index = NaN
-                    }
-                }
-
-
-                let a = i - ext.起点index
-                if (a === 0) a = NaN
-                if (a >= 120) a = 120
-                arr[i] = isNaN(ext.起点index) === false && 上涨下跌价差(ext.起点Type)[i] >= 4 ? toRange({ min: 0.01, max: 10, value: 上涨下跌价差(ext.起点Type)[i] / a }) : NaN  //除以根数 
-                //<---------------------------------------------------
-            }
-        })
-
-        const 价格速度_macd = 指标.macd(价格差_除以时间, RealDataBase.单位时间)
-
-        const 震荡指数 = 指标.map(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length, 价格_波动率30.length), i => {
-            const 上涨下跌价差 = (上涨_下跌_横盘[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i]
-            return 上涨下跌价差 > 2 ? toRange({ min: 0.01, max: 10, value: 价格_波动率30[i] / 上涨下跌价差 }) : NaN
-        })
-
-        const 震荡指数_macd = 指标.macd(震荡指数, RealDataBase.单位时间)
-
-        const 动态价格秒数 = 指标.map(
-            () => Math.min(价格.length, 上涨.价差.length, 下跌.价差.length),
-            i => toRange({ min: 15, max: 25, value: ((上涨_下跌_横盘[i] === '上涨' ? 上涨.价差 : 下跌.价差)[i] / 5) }) ,
-        )
         const 动态价格_均线 = 指标.SMA(价格, 7, RealDataBase.单位时间)
-        const 动态价格_均线方差 = 指标.map(() => Math.min(动态价格_均线.length, 价格.length), i => {
-            let sum = 0
-            for (let n = (价格.length - 动态价格秒数[i] * 2); n < 价格.length; n++) {
-                sum = sum + Math.pow((价格[n] - 动态价格_均线[i]), 2)
-            }
-            let 方差 = Math.sqrt(sum / (7 * 2))
-            return 方差
-        })
-        const 动态价格_均线方差macd = 指标.macd(动态价格_均线方差, RealDataBase.单位时间)
 
-        const 绝对价差 = 指标.map(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length), i => 上涨_下跌_横盘[i] === '上涨' ? 上涨.价差[i] : 下跌.价差[i])
-        //_______________________________________________________________________________________________________________________________//
-
-
-        //????????????????
-        const 累计成交量阈值 = 指标.map(() => Math.min(上涨.价差.length, 下跌.价差.length, 上涨_下跌_横盘.length), i => 上涨_下跌_横盘[i] === '上涨' ? 150 * 10000 * 上涨.价差[i] + 300 * 10000 : 150 * 10000 * 下跌.价差[i] + 300 * 10000)
-        const 实时成交量 = 指标.map(() => Math.min(上涨.累计成交量.length, 下跌.累计成交量.length, 上涨_下跌_横盘.length), i => 上涨_下跌_横盘[i] === '上涨' ? 上涨.累计成交量[i] : 下跌.累计成交量[i])
-        const 实时与标准成交量之差 = 指标.map(() => Math.min(累计成交量阈值.length, 实时成交量.length), i => (实时成交量[i] - 累计成交量阈值[i]))
-        const 实时与标准成交量之差macd = 指标.macd(实时与标准成交量之差, RealDataBase.单位时间)
 
 
 
@@ -814,38 +491,23 @@ export class RealDataBase {
 
             价格均线价差,
             价格_均线120,
-            价格_波动率60,
-            动态价格_均线方差macd,
-            动态价格_均线方差,
-            动态价格_均线,
-            实时与标准成交量之差macd,
-            实时与标准成交量之差,
-            价格速度_macd,
-            累计成交量阈值,
+            价格_波动率60, 
+            动态价格_均线, 
             成交性质,
             KLine,
-            净成交量abs_累加5,
-            绝对价差,
+            净成交量abs_累加5, 
             买,
-            卖,
-            震荡指数_macd,
-            震荡指数,
+            卖, 
             收盘价,
             盘口: orderBook,
             时间,
             价格_波动率300,
-            折返率,
-
-            价格差_除以时间,
-            上涨_下跌_横盘,
-            上涨_下跌_横盘追涨追跌专用,
+            折返率, 
             价格_均线300,
-            净成交量abs_macd,
-            上涨,
-            下跌,
+            净成交量abs_macd, 
             价格,
             价格_波动率30,
-           
+
 
             价格_最高60,
             价格_最低60,
