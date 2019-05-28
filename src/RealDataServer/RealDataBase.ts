@@ -16,25 +16,8 @@ import { DeribitTradeAndOrderBook } from './TradeAndOrderBook/DeribitTradeAndOrd
 
 
 const createItem = () => ({
-    // 着笔: [] as BaseType.着笔[], 
-
-
-    //合起来 ???????
     data: [] as BaseType.KLine[],
-
     orderBook: [] as BaseType.OrderBook[],
-
-    //最后一个被吃的价  和  量
-    吃单情况: [] as {
-        买: {
-            价: number
-            被吃量: number
-        },
-        卖: {
-            价: number
-            被吃量: number
-        }
-    }[],
 })
 
 export class RealDataBase {
@@ -50,19 +33,6 @@ export class RealDataBase {
             deribit: mapObjIndexed(createItem, BaseType.DeribitSymbolDic),
         }
     )
-
-    // private item = (symbol: BaseType.BitmexSymbol, hopexSymbol: BaseType.HopexSymbol) => {
-    //     const bitmex = this.item2(this.data.bitmex[symbol], true)
-    //     const hopex = this.item2(this.data.hopex[hopexSymbol], true)
-    //     const hopex_bitmex_差价 = 指标.map(() => Math.min(hopex.价格.length, bitmex.价格.length), i => hopex.价格[i] - bitmex.价格[i])
-    //     const hopex_bitmex_差价均线 = 指标.SMA(hopex_bitmex_差价, 300, RealDataBase.单位时间)
-    //     const hopex_bitmex_相对差价 = 指标.map(() => Math.min(hopex.价格.length, bitmex.价格.length), i => hopex_bitmex_差价[i] - hopex_bitmex_差价均线[i])
-    //     return {
-    //         hopex_bitmex_相对差价,
-    //         bitmex,
-    //         hopex,
-    //     }
-    // }
 
     CREATE = () => ({
         期货30秒内成交量: (symbol: BaseType.BitmexSymbol) => this.get期货多少秒内成交量__万为单位(symbol, 30),
@@ -145,19 +115,8 @@ export class RealDataBase {
 
 
     private item2(xxx: {
-        //着笔: BaseType.着笔[]
         data: BaseType.KLine[]
         orderBook: BaseType.OrderBook[]
-        吃单情况: {
-            买: {
-                价: number;
-                被吃量: number;
-            };
-            卖: {
-                价: number;
-                被吃量: number;
-            };
-        }[]
     }, 盘口算价格: boolean) {
         盘口算价格 = false
         const { data, orderBook } = xxx
@@ -207,8 +166,8 @@ export class RealDataBase {
             } else {
                 return NaN
             }
-        }) 
-          
+        })
+
 
         const KLine = 指标.map(() => data.length, i => ({
             open: data[i].open,
@@ -236,7 +195,7 @@ export class RealDataBase {
         const 价格_波动率60 = 指标.波动率(价格, 60, RealDataBase.单位时间)
         const 价格_波动率300 = 指标.波动率(价格, 300, RealDataBase.单位时间)
 
-       
+
 
         const 折返率 = 指标.map(() => 价格_波动率30.length, i => toRange({ min: 4, max: 15, value: 价格_波动率30[i] / 10 }))
 
@@ -264,34 +223,21 @@ export class RealDataBase {
 
 
         return {
-            吃单情况: xxx.吃单情况,
-
-
-            吃单情况_买_被吃量: 指标.map(() => xxx.吃单情况.length, i => xxx.吃单情况[i].买.被吃量),
-            吃单情况_卖_被吃量: 指标.map(() => xxx.吃单情况.length, i => xxx.吃单情况[i].卖.被吃量),
-
-            盘口买1加被吃的: 指标.map(() => Math.min(买.盘口1.length, xxx.吃单情况.length), i => 买.盘口1[i] + xxx.吃单情况[i].买.被吃量),
-            盘口卖1加被吃的: 指标.map(() => Math.min(卖.盘口1.length, xxx.吃单情况.length), i => 卖.盘口1[i] + xxx.吃单情况[i].卖.被吃量),
-
-            盘口买加主动买: 指标.map(() => Math.min(买.盘口1.length, xxx.吃单情况.length), i => 买.盘口1[i] + xxx.吃单情况[i].卖.被吃量),
-            盘口卖加主动卖: 指标.map(() => Math.min(卖.盘口1.length, xxx.吃单情况.length), i => 卖.盘口1[i] + xxx.吃单情况[i].买.被吃量),
-
             价格乘以ln净成交量: 指标.map(() => Math.min(收盘价.length, 买.成交量_累加60.length), i => 收盘价[i] * Math.log(买.净成交量_累加60[i])),
             价格乘以ln主动买: 指标.map(() => Math.min(收盘价.length, 买.成交量_累加60.length), i => 收盘价[i] * Math.log(买.成交量_累加60[i])),
             价格乘以ln主动卖: 指标.map(() => Math.min(收盘价.length, 卖.成交量_累加60.length), i => 收盘价[i] * Math.log(卖.成交量_累加60[i])),
-
-
+            
             价格_均线13,
             价格_均线34,
             价格_均线20,
             价格_均线89,
             价格_均线144,
             价格_均线12,
-            价格_均线60, 
+            价格_均线60,
             价格macd,
-            bitmex_价格_macd, 
+            bitmex_价格_macd,
 
-            时间str,  
+            时间str,
 
             价格均线价差,
             价格_均线120,

@@ -28,10 +28,7 @@ type ItemFunc = (d: '废弃', d2: D2) => {
 
 
 const ETH颜色 = 0xaaaa00
-const BTC颜色 = 0xcc66ff
-
-const 幽灵买颜色 = 0x666666
-const 幽灵卖颜色 = 0x666666
+const BTC颜色 = 0xcc66ff 
 
 const 买颜色 = 0x0E6655
 const 买颜色1 = 0x16A085
@@ -51,7 +48,7 @@ const LTC颜色 = 0x6d3939
 //const 黑色 = 0x000000
 
 
-export const Tick行情____config: { [key in string]: ItemFunc } = { 
+export const Tick行情____config: { [key in string]: ItemFunc } = {
 
     实盘手动: (d, d2) => ({
         heightList: [0.2, 0.8],
@@ -423,31 +420,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
         ]
     }),
-    '螺纹成交量2': (d, d2) => ({
-        heightList: [1],
-        items: [
-            [
-                {
-                    layerList: [
-                        layer(ZeroLayer, { color: 0xaaaaaa }),
-                        layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
-                        layer(LineLayer, { data: d2.ctp.rb1910.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
-                        layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
-                        layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
-                        layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口1, color: 卖颜色1 }),
-                    ]
-                },
-                {
-                    numberColor: BTC颜色,
-                    layerList: [
-                        layer(LineLayer, { data: d2.ctp.rb1910.价格, color: BTC颜色 }),
-                    ]
-                },
 
-            ],
-
-        ]
-    }),
     'CTP_螺纹': (d, d2) => ({
         heightList: [0.2, 0.8],
         items: [
