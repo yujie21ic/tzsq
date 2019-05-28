@@ -1,4 +1,3 @@
-//只有最高最低价信息
 type HighLow = {
     high: number
     low: number
@@ -11,18 +10,19 @@ const 包含处理 = (f: (a: number, b: number) => number) =>
     (a: HighLow, b: HighLow) =>
         ({
             high: f(a.high, b.high),
-            low: f(a.low, b.low)
+            low: f(a.low, b.low),
         })
 const 向上处理 = 包含处理(Math.max)
 const 向下处理 = 包含处理(Math.min)
 
-//非包含关系的3根K线完全分类   (参数只能是非包含关系的3根K线) 
-const get非包含K线分类 = (a: HighLow, b: HighLow, c: HighLow) => {
+const 非包含关系的3根K线完全分类 = (a: HighLow, b: HighLow, c: HighLow) => {
     const [k1, k2, k3] = [a.high, b.high, c.high]
     return k2 > k1 ? (k3 > k2 ? '上升K线' : '顶分型') : (k3 < k2 ? '下降K线' : '底分型')
 }
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+//什么鬼？？？？？？？？？？
 const K线包含处理 = (arr: HighLow[]) => {
     if (arr.length <= 1) return arr
 
@@ -53,9 +53,10 @@ const K线包含处理 = (arr: HighLow[]) => {
     return ret
 }
 
-const 笔的顶底需要隔几根K线 = 3  //小周期3  大周期2 (合并后的K线的 index 用后面那个) 
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+const 笔的顶底需要隔几根K线 = 3  //小周期3  大周期2 (合并后的K线的 index 用后面那个) 
+//什么鬼？？？？？？？？？？？？？？？？？
 export const 合并后的K线 = (arr2: ArrayLike<HighLow>) => {
     const arr: HighLow[] = []
     for (let i = 0; i < arr2.length; i++)arr.push(arr2[i])
@@ -110,7 +111,7 @@ export const get笔Index = (arr2: ArrayLike<HighLow>) => {
     let ret: { index: number, type: '顶分型' | '底分型', value: number }[] = []
 
     for (let i = 1; i < arr1.length - 1; i++) {
-        const type = get非包含K线分类(arr1[i - 1].value, arr1[i].value, arr1[i + 1].value)
+        const type = 非包含关系的3根K线完全分类(arr1[i - 1].value, arr1[i].value, arr1[i + 1].value)
         if (type === '顶分型' || type === '底分型') {
             if (ret.length === 0) {
                 ret.push({
