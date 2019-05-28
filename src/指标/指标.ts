@@ -7,17 +7,8 @@ export namespace 指标 {
         const DEM = EMA(DIF, 9, 单位时间)
         const OSC = map(() => Math.min(DIF.length, DEM.length), i => DIF[i] - DEM[i])
         return { DIF, DEM, OSC }
-    }
-
-    export const macd带参数 = (arr: ArrayLike<number>, 快均线: number, 慢均线: number, 平滑周期: number, 单位时间: number) => {
-        const _12 = EMA(arr, 快均线, 单位时间)
-        const _26 = EMA(arr, 慢均线, 单位时间)
-        const DIF = map(() => Math.min(_12.length, _26.length), i => _12[i] - _26[i])
-        const DEM = EMA(DIF, 平滑周期, 单位时间)
-        const OSC = map(() => Math.min(DIF.length, DEM.length), i => DIF[i] - DEM[i])
-        return { DIF, DEM, OSC }
-    }
-
+    } 
+    
     export const 布林带 = (arr: ArrayLike<number>, 单位时间: number) => {
 
         const _20时间段的标准差 = 标准差(arr, 20, 单位时间)

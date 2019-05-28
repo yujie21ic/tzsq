@@ -1,7 +1,6 @@
 import { JSONSync } from '../F/JSONSync'
 import { BaseType } from '../BaseType'
 import { 指标 } from '../指标/指标'
-import { toRange } from '../F/toRange'
 import { timeID } from '../F/timeID'
 import { get买卖 } from '../指标/买卖'
 import { formatDate } from '../F/formatDate'
@@ -54,12 +53,12 @@ export class RealDataBase {
     ] as TradeAndOrderBook<any>[]
     //________________________________________________________________________________________________//
 
-    static 单位时间 = 500 
+    static 单位时间 = 500
 
     get data() {
         return this.jsonSync.rawData
     }
- 
+
     get期货多少秒内成交量__万为单位(symbol: BaseType.BitmexSymbol, second: number) {
         second = second * (1000 / RealDataBase.单位时间)
         let volume = 0
@@ -118,14 +117,10 @@ export class RealDataBase {
         const 价格_均线60 = 指标.SMA(价格, 60, RealDataBase.单位时间)
         const 价格均线价差 = 指标.map(() => Math.min(价格_均线300.length, 价格_均线120.length), i => 价格_均线120[i] - 价格_均线300[i])
 
-        const bitmex_价格_macd = 指标.macd带参数(价格, 36, 78, 27, RealDataBase.单位时间)
+
         const 价格_波动率30 = 指标.波动率(价格, 30, RealDataBase.单位时间)
         const 价格_波动率60 = 指标.波动率(价格, 60, RealDataBase.单位时间)
         const 价格_波动率300 = 指标.波动率(价格, 300, RealDataBase.单位时间)
-
-
-
-        const 折返率 = 指标.map(() => 价格_波动率30.length, i => toRange({ min: 4, max: 15, value: 价格_波动率30[i] / 10 }))
 
         //净成交量abs
         const 净成交量abs = 指标.map(() => Math.min(买.成交量.length, 卖.成交量.length), i => 买.成交量[i] - 卖.成交量[i])
@@ -163,7 +158,6 @@ export class RealDataBase {
             价格_均线12,
             价格_均线60,
             价格macd,
-            bitmex_价格_macd,
 
             时间str,
 
@@ -180,7 +174,6 @@ export class RealDataBase {
             盘口: orderBook,
             时间,
             价格_波动率300,
-            折返率,
             价格_均线300,
             净成交量abs_macd,
             价格,
