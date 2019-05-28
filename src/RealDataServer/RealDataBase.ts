@@ -13,8 +13,6 @@ import { IXTradeAndOrderBook } from './TradeAndOrderBook/IXTradeAndOrderBook'
 import { TradeAndOrderBook } from './TradeAndOrderBook/TradeAndOrderBook'
 import { DeribitTradeAndOrderBook } from './TradeAndOrderBook/DeribitTradeAndOrderBook'
 
-
-
 const createItem = () => ({
     data: [] as BaseType.KLine[],
     orderBook: [] as BaseType.OrderBook[],
@@ -25,7 +23,7 @@ export class RealDataBase {
     //________________________________________________________________________________________________//
     jsonSync = new JSONSync(
         {
-            startTick: 0,//tick的  1m的开始 没有对齐
+            startTick: 0,
             ctp: mapObjIndexed(createItem, BaseType.CTPSymbolDic),
             hopex: mapObjIndexed(createItem, BaseType.HopexSymbolDic),
             ix: mapObjIndexed(createItem, BaseType.IXSymbolDic),
@@ -56,22 +54,11 @@ export class RealDataBase {
     ] as TradeAndOrderBook<any>[]
     //________________________________________________________________________________________________//
 
-
-
-
-
-    static 单位时间 = 500
-
-    删除历史() {
-
-    }
+    static 单位时间 = 500 
 
     get data() {
         return this.jsonSync.rawData
     }
-
-
-
 
     get期货多少秒内最高最低(symbol: BaseType.BitmexSymbol, second: number) {
         second = second * (1000 / RealDataBase.单位时间)
@@ -226,7 +213,7 @@ export class RealDataBase {
             价格乘以ln净成交量: 指标.map(() => Math.min(收盘价.length, 买.成交量_累加60.length), i => 收盘价[i] * Math.log(买.净成交量_累加60[i])),
             价格乘以ln主动买: 指标.map(() => Math.min(收盘价.length, 买.成交量_累加60.length), i => 收盘价[i] * Math.log(买.成交量_累加60[i])),
             价格乘以ln主动卖: 指标.map(() => Math.min(收盘价.length, 卖.成交量_累加60.length), i => 收盘价[i] * Math.log(卖.成交量_累加60[i])),
-            
+
             价格_均线13,
             价格_均线34,
             价格_均线20,
