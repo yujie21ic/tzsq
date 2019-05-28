@@ -207,94 +207,8 @@ export class RealDataBase {
             } else {
                 return NaN
             }
-        })
-
-
-
-        //
-        const __波动_测试 = 指标.map2({ index: 0, lastPrice: NaN }, (arr: {
-            价格: number
-            买1价: number
-            卖1价: number
-            时间: number
-            时间str: string
-            持续秒: number
-            累计买: number
-            累计卖: number
-        }[], ext) => {
-            while (ext.index < Math.min(盘口价格.length - 1, 买.成交量.length - 1)) {//延迟一个显示  先
-
-                const { buy, sell } = orderBook[ext.index]
-                const 买1价 = buy.length > 0 ? buy[0].price : NaN
-                const 卖1价 = sell.length > 0 ? sell[0].price : NaN
-
-                if (ext.lastPrice !== 盘口价格[ext.index]) {
-                    ext.lastPrice = 盘口价格[ext.index]
-                    arr.push({
-                        价格: 盘口价格[ext.index],
-                        买1价,
-                        卖1价,
-                        时间: 时间[ext.index],
-                        时间str: new Date(时间[ext.index]).toLocaleString(),
-                        持续秒: 0.5,
-                        累计买: 买.成交量[ext.index],
-                        累计卖: 卖.成交量[ext.index],
-                    })
-                } else {
-                    arr[arr.length - 1] = ({
-                        价格: arr[arr.length - 1].价格,
-                        买1价,
-                        卖1价,
-                        时间: arr[arr.length - 1].时间,
-                        时间str: arr[arr.length - 1].时间str,
-                        持续秒: arr[arr.length - 1].持续秒 + 0.5,
-                        累计买: arr[arr.length - 1].累计买 + 买.成交量[ext.index],
-                        累计卖: arr[arr.length - 1].累计卖 + 卖.成交量[ext.index],
-                    })
-                }
-                ext.index++
-            }
-        })
-
-        const 波动_测试_净成交量 = 指标.map(() => __波动_测试.length, i => __波动_测试[i].累计买 - __波动_测试[i].累计卖)
-        const 波动_测试_净成交量_累加10 = 指标.累加(波动_测试_净成交量, 10, 1000)
-
-        const 波动_测试 = {
-            价格: 指标.map(() => __波动_测试.length, i => __波动_测试[i].价格),
-            时间: 指标.map(() => __波动_测试.length, i => __波动_测试[i].时间),
-            时间str: 指标.map(() => __波动_测试.length, i => __波动_测试[i].时间str),
-            持续秒: 指标.map(() => __波动_测试.length, i => __波动_测试[i].持续秒),
-            累计买: 指标.map(() => __波动_测试.length, i => __波动_测试[i].累计买),
-            累计卖: 指标.map(() => __波动_测试.length, i => __波动_测试[i].累计卖),
-            净成交量: 波动_测试_净成交量,
-            净成交量_累加10: 波动_测试_净成交量_累加10,
-            买均价_10: 指标.map(() => __波动_测试.length, i => {
-                if (i >= 9) {
-                    let sum = 0
-                    let vol = 0
-                    for (let k = i - 9; k <= i; k++) {
-                        vol += __波动_测试[k].累计买
-                        sum += __波动_测试[k].累计买 * __波动_测试[k].卖1价
-                    }
-                    return sum / vol
-                } else {
-                    return NaN
-                }
-            }),
-            卖均价_10: 指标.map(() => __波动_测试.length, i => {
-                if (i >= 9) {
-                    let sum = 0
-                    let vol = 0
-                    for (let k = i - 9; k <= i; k++) {
-                        vol += __波动_测试[k].累计卖
-                        sum += __波动_测试[k].累计卖 * __波动_测试[k].买1价
-                    }
-                    return sum / vol
-                } else {
-                    return NaN
-                }
-            }),
-        }
+        }) 
+          
 
         const KLine = 指标.map(() => data.length, i => ({
             open: data[i].open,
@@ -377,10 +291,7 @@ export class RealDataBase {
             价格macd,
             bitmex_价格_macd, 
 
-            时间str,
-            波动_测试,
-
-
+            时间str,  
 
             价格均线价差,
             价格_均线120,
