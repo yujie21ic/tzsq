@@ -68,9 +68,9 @@ export class RealDataBase {
         })
 
 
-        if (length > 120 * 60) {
+        if (length > 50000 * 2) {
 
-            const deleteCount = 120 * 30
+            const deleteCount = 25000 * 2
             this.jsonSync.rawData.startTick += deleteCount
 
             arr.forEach(v => {
