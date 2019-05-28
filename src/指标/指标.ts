@@ -7,8 +7,8 @@ export namespace 指标 {
         const DEM = EMA(DIF, 9, 单位时间)
         const OSC = map(() => Math.min(DIF.length, DEM.length), i => DIF[i] - DEM[i])
         return { DIF, DEM, OSC }
-    } 
-    
+    }
+
     export const 布林带 = (arr: ArrayLike<number>, 单位时间: number) => {
 
         const _20时间段的标准差 = 标准差(arr, 20, 单位时间)
@@ -29,10 +29,6 @@ export namespace 指标 {
     }
 
 
-    let 最后更新数据时间 = NaN  //实盘 一直更新 
-    let xxxxx = 0
-    export const 回测setTime = () => 最后更新数据时间 = xxxxx++
-
     export const map = <T>(
         getLength: () => number,
         getValue: (i: number) => T,
@@ -40,7 +36,6 @@ export namespace 指标 {
 
         const cache = [] as (T | undefined)[] //任意索引缓存 不需要连续
         let lastLength = 0
-        let lastTime = NaN
 
         const get = (_: any, key: any): any => {
             if (key === 'length') {
@@ -53,10 +48,6 @@ export namespace 指标 {
                 //有缓存
                 if (cache[index] !== undefined) {
                     if (index !== lastLength - 1) return cache[index]
-
-                    if (lastTime === 最后更新数据时间) return cache[index]
-
-                    lastTime = 最后更新数据时间
                 }
 
                 //计算
@@ -72,44 +63,6 @@ export namespace 指标 {
 
         return new Proxy({}, { get })
     }
-
-
-    //批量计算
-    //不访问 .length 直接 访问 [i] 会有问题
-    export const map2 = <T, EXT>(
-        ext: EXT,
-        f: (arr: T[], ext: EXT) => void
-    ): ArrayLike<T> => {
-
-        const cache = [] as T[]
-        let lastLength = 0
-        let lastTime = NaN
-
-        const getLength = () => {
-            f(cache, ext)
-            lastLength = cache.length
-            return lastLength
-        }
-
-        const get = (_: any, key: any): any => {
-            if (key === 'length') {
-                return getLength()
-            } else {
-                //索引
-                const index = parseInt(String(key))
-
-                if (index === lastLength - 1 && lastTime !== 最后更新数据时间) {
-                    lastTime = 最后更新数据时间
-                    getLength()
-                }
-
-                return cache[index]
-            }
-        }
-
-        return new Proxy({}, { get })
-    }
-
 
 
     const 指标 = (f: (p: {
@@ -230,146 +183,5 @@ export namespace 指标 {
         }
         return n
     })
-
-
-    export const 阻力3 = (p: {
-        price: ArrayLike<number>
-        volumeBuy: ArrayLike<number>
-        volumeSell: ArrayLike<number>
-    }): {
-        type: '最开始的平' | '涨' | '跌'
-        开始点价格: number
-        成交量累计: number
-        价钱增量: number
-        阻力: number
-    }[] => {
-
-        const cache: {
-            type: '最开始的平' | '涨' | '跌'
-            开始点价格: number
-            成交量累计: number
-            价钱增量: number
-            阻力: number
-        }[] = []
-
-        const 初始化涨 = (i: number) => {
-            const 开始点价格 = p.price[i - 1]
-            const 成交量累计 = p.volumeBuy[i]
-            const 价钱增量 = Math.abs(p.price[i] - 开始点价格)
-            cache[i] = {
-                type: '涨',
-                开始点价格,
-                成交量累计,
-                价钱增量,
-                阻力: Math.min(成交量累计 / 价钱增量, 10000000),
-            }
-        }
-
-        const 继续涨 = (i: number) => {
-            const { 开始点价格 } = cache[i - 1]
-            const 成交量累计 = cache[i - 1].成交量累计 + p.volumeBuy[i]
-            const 价钱增量 = Math.abs(p.price[i] - 开始点价格)
-            cache[i] = {
-                type: '涨',
-                开始点价格,
-                成交量累计,
-                价钱增量,
-                阻力: Math.min(成交量累计 / 价钱增量, 10000000),
-            }
-        }
-
-        const 初始化跌 = (i: number) => {
-            const 开始点价格 = p.price[i - 1]
-            const 成交量累计 = -p.volumeSell[i]
-            const 价钱增量 = Math.abs(p.price[i] - 开始点价格)
-            cache[i] = {
-                type: '跌',
-                开始点价格,
-                成交量累计,
-                价钱增量,
-                阻力: Math.max(成交量累计 / 价钱增量, -10000000),
-            }
-        }
-
-        const 继续跌 = (i: number) => {
-            const { 开始点价格 } = cache[i - 1]
-            const 成交量累计 = cache[i - 1].成交量累计 - p.volumeSell[i]
-            const 价钱增量 = Math.abs(p.price[i] - 开始点价格)
-            cache[i] = {
-                type: '跌',
-                开始点价格,
-                成交量累计,
-                价钱增量,
-                阻力: Math.max(成交量累计 / 价钱增量, -10000000),
-            }
-        }
-
-        const get = (_: any, key: any): any => {
-            const length = Math.min(p.price.length, p.volumeBuy.length, p.volumeSell.length)
-
-            if (key === 'length') {
-                return length
-            } else {
-                key = parseInt(String(key))
-                if (key < cache.length - 1) return cache[key]
-
-                for (let i = Math.max(0, cache.length - 1); i <= key; i++) {
-                    if (i === 0) {
-                        cache[i] = {
-                            type: '最开始的平',
-                            开始点价格: NaN,
-                            成交量累计: NaN,
-                            价钱增量: NaN,
-                            阻力: NaN,
-                        }
-                    } else {
-
-                        if (cache[i - 1].type === '最开始的平') {
-                            if (p.price[i] > p.price[i - 1]) {
-                                初始化涨(i)
-                            } else if (p.price[i] < p.price[i - 1]) {
-                                初始化跌(i)
-                            } else {
-                                cache[i] = {
-                                    type: '最开始的平',
-                                    开始点价格: NaN,
-                                    成交量累计: NaN,
-                                    价钱增量: NaN,
-                                    阻力: NaN,
-                                }
-                            }
-                        }
-                        else if (cache[i - 1].type === '涨') {
-                            (p.price[i] < p.price[i - 1] ? 初始化跌 : 继续涨)(i)
-                        }
-                        else if (cache[i - 1].type === '跌') {
-                            (p.price[i] > p.price[i - 1] ? 初始化涨 : 继续跌)(i)
-                        }
-                    }
-                }
-
-                return cache[key]
-            }
-        }
-        return new Proxy({}, { get })
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
