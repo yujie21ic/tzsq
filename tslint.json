@@ -1,6 +1,5 @@
 {
     "rules": {
-        "______": "const 统一表示 引用不可变的意思",
         "triple-equals": true,
         "no-var-keyword": true,
         "no-conditional-assignment": true,
