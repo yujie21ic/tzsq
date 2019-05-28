@@ -106,7 +106,13 @@ server.func.下单 = async req => {
     const getPrice = req.最低_最高 ?
         () => {
             const price = getOrderPrice()
-            const { high, low } = account.miniRealData.get期货多少秒内最高最低(req.symbol, 5)
+
+            let { high, low } = account.miniRealData.get期货多少秒内最高最低(req.symbol, 5)
+
+            //多一跳
+            high -= req.symbol === 'XBTUSD' ? 0.5 : 0.05
+            low += req.symbol === 'XBTUSD' ? 0.5 : 0.05
+
             if (req.side === 'Buy') {
                 return Math.min(price, low)
             } else {
