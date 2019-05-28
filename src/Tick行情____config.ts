@@ -51,39 +51,7 @@ const LTC颜色 = 0x6d3939
 //const 黑色 = 0x000000
 
 
-export const Tick行情____config: { [key in string]: ItemFunc } = {
-
-
-
-
-    xxxxxxxxxxxxx: (d, d2) => ({
-        heightList: [0.5, 0.5],
-        items: [
-            [{
-                layerList: [
-                    layer(LineLayer, { data: d2.bitmex.XBTUSD.被动_买均价_300, color: 买颜色 }),
-                    layer(LineLayer, { data: d2.bitmex.XBTUSD.被动_卖均价_300, color: 卖颜色 }),
-                    layer(LineLayer, { data: d2.bitmex.XBTUSD.收盘价, color: 0xffffff }),
-                ]
-            },
-            {
-                numberColor: ETH颜色,
-                layerList: [
-                    layer(ZeroLayer, { color: ETH颜色 }),
-                    layer(LineLayer, { data: d2.bitmex.XBTUSD.tick力量指数60, color: ETH颜色 }),
-                ]
-            },],
-            {
-                layerList: [
-                    layer(LineLayer, { data: d2.bitmex.XBTUSD.盘口卖1加被吃的, color: 幽灵卖颜色 }),
-                    layer(LineLayer, { data: d2.bitmex.XBTUSD.卖.盘口1, color: 卖颜色1 }),
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d2.bitmex.XBTUSD.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
-                    layer(LineLayer, { data: d2.bitmex.XBTUSD.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
-                ]
-            }
-        ]
-    }), 
+export const Tick行情____config: { [key in string]: ItemFunc } = { 
 
     实盘手动: (d, d2) => ({
         heightList: [0.2, 0.8],
@@ -92,7 +60,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
                     layer(LineLayer, { data: d2.bitmex.XBTUSD.买.盘口, color: 买颜色 }),
-                    layer(LineLayer, { data: d2.bitmex.XBTUSD.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }), 
+                    layer(LineLayer, { data: d2.bitmex.XBTUSD.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
                     layer(LineLayer, { data: d2.bitmex.XBTUSD.买.净盘口_均线3, color: ETH颜色 }),
                     layer(TextLayer, {
                         text:
@@ -109,7 +77,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layerList: [
                         layer(LineLayer, { data: d2.hopex.LTCUSDT.价格, color: LTC颜色 }),
                     ]
-                }, 
+                },
                 {
                     numberColor: 净成交量颜色,
                     numberX: 100,
@@ -156,7 +124,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 },
 
 
-            ], 
+            ],
 
         ]
     }),
@@ -167,7 +135,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 layerList: [
                     layer(ZeroLayer, { color: 0xaaaaaa }),
                     layer(LineLayer, { data: d2.bitmex.XBTUSD.买.盘口, color: 买颜色 }),
-                    layer(LineLayer, { data: d2.bitmex.XBTUSD.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }), 
+                    layer(LineLayer, { data: d2.bitmex.XBTUSD.卖.盘口, color: 卖颜色, 临时参数: '变成负数' }),
                     layer(LineLayer, { data: d2.bitmex.XBTUSD.买.净盘口_均线3, color: ETH颜色 }),
                     layer(TextLayer, {
                         text:
@@ -179,7 +147,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 ]
             },
             [
-               
+
                 {
                     numberColor: 净成交量颜色,
                     numberX: 100,
@@ -226,7 +194,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 },
 
 
-            ], 
+            ],
 
         ]
     }),
@@ -250,11 +218,11 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 ]
             },
             [
-                
+
                 {
                     numberColor: 石青,
                     layerList: [
-                        layer(LineLayer, { data:d2.bitmex.ETHUSD.价格, color:  石青}),
+                        layer(LineLayer, { data: d2.bitmex.ETHUSD.价格, color: 石青 }),
                     ]
                 },
                 // {
@@ -266,7 +234,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 //     ]
                 // },
 
-              
+
 
                 {
                     numberColor: 0x000000,
@@ -441,9 +409,9 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     layerList: [
                         layer(ZeroLayer, { color: 0xaaaaaa }),
                         layer(LineLayer, { data: d2.ctp.rb1910.买.买成交量累加, color: 买颜色 }),
-                        layer(LineLayer, { data: d2.ctp.rb1910.买.卖成交量累加, color: 卖颜色 }), 
+                        layer(LineLayer, { data: d2.ctp.rb1910.买.卖成交量累加, color: 卖颜色 }),
                     ]
-                }, 
+                },
                 {
                     numberColor: BTC颜色,
                     layerList: [
@@ -451,7 +419,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     ]
                 },
 
-            ], 
+            ],
 
         ]
     }),
@@ -461,14 +429,14 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             [
                 {
                     layerList: [
-                        layer(ZeroLayer, { color: 0xaaaaaa }), 
+                        layer(ZeroLayer, { color: 0xaaaaaa }),
                         layer(LineLayer, { data: d2.ctp.rb1910.盘口买1加被吃的, color: 幽灵买颜色, 临时参数: '变成负数' }),
                         layer(LineLayer, { data: d2.ctp.rb1910.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
                         layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
                         layer(LineLayer, { data: d2.ctp.rb1910.盘口卖1加被吃的, color: 幽灵卖颜色 }),
                         layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口1, color: 卖颜色1 }),
                     ]
-                }, 
+                },
                 {
                     numberColor: BTC颜色,
                     layerList: [
@@ -476,7 +444,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                     ]
                 },
 
-            ], 
+            ],
 
         ]
     }),
@@ -485,23 +453,23 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         items: [
             {
                 layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }), 
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
                     layer(LineLayer, { data: d2.ctp.rb1910.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
-                    layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }), 
+                    layer(LineLayer, { data: d2.ctp.rb1910.买.净盘口_均线3, color: ETH颜色 }),
                     layer(LineLayer, { data: d2.ctp.rb1910.卖.盘口1, color: 卖颜色1 }),
                 ]
             },
             [
                 {
-                    layerList: [ 
+                    layerList: [
                         layer(LineLayer, { data: d2.ctp.rb1910.买.买成交量累加, color: 买颜色 }),
-                        layer(LineLayer, { data: d2.ctp.rb1910.买.卖成交量累加, color: 卖颜色 }), 
+                        layer(LineLayer, { data: d2.ctp.rb1910.买.卖成交量累加, color: 卖颜色 }),
                     ]
                 },
                 {
                     layerList: [
-                        layer(ZeroLayer, { color: ETH颜色 }), 
-                        layer(LineLayer, { data: d2.ctp.rb1910.买.净成交量_累加300, color: 净成交量颜色 }), 
+                        layer(ZeroLayer, { color: ETH颜色 }),
+                        layer(LineLayer, { data: d2.ctp.rb1910.买.净成交量_累加300, color: 净成交量颜色 }),
                     ]
                 },
 
@@ -527,23 +495,23 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         items: [
             {
                 layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }), 
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
                     layer(LineLayer, { data: d2.ctp.TA909.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
-                    layer(LineLayer, { data: d2.ctp.TA909.买.净盘口_均线3, color: ETH颜色 }),  
+                    layer(LineLayer, { data: d2.ctp.TA909.买.净盘口_均线3, color: ETH颜色 }),
                     layer(LineLayer, { data: d2.ctp.TA909.卖.盘口1, color: 卖颜色1 }),
                 ]
             },
             [
                 {
-                    layerList: [ 
+                    layerList: [
                         layer(LineLayer, { data: d2.ctp.TA909.买.买成交量累加, color: 买颜色 }),
-                        layer(LineLayer, { data: d2.ctp.TA909.买.卖成交量累加, color: 卖颜色 }), 
+                        layer(LineLayer, { data: d2.ctp.TA909.买.卖成交量累加, color: 卖颜色 }),
                     ]
                 },
                 {
                     layerList: [
-                        layer(ZeroLayer, { color: 0xaaaaaa }), 
-                        layer(LineLayer, { data: d2.ctp.TA909.买.净成交量_累加300, color: 净成交量颜色 }), 
+                        layer(ZeroLayer, { color: 0xaaaaaa }),
+                        layer(LineLayer, { data: d2.ctp.TA909.买.净成交量_累加300, color: 净成交量颜色 }),
                     ]
                 },
 
@@ -569,23 +537,23 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         items: [
             {
                 layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }), 
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
                     layer(LineLayer, { data: d2.ctp.i1909.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
-                    layer(LineLayer, { data: d2.ctp.i1909.买.净盘口_均线3, color: ETH颜色 }), 
+                    layer(LineLayer, { data: d2.ctp.i1909.买.净盘口_均线3, color: ETH颜色 }),
                     layer(LineLayer, { data: d2.ctp.i1909.卖.盘口1, color: 卖颜色1 }),
                 ]
             },
             [
                 {
-                    layerList: [ 
+                    layerList: [
                         layer(LineLayer, { data: d2.ctp.i1909.买.买成交量累加, color: 买颜色 }),
-                        layer(LineLayer, { data: d2.ctp.i1909.买.卖成交量累加, color: 卖颜色 }), 
+                        layer(LineLayer, { data: d2.ctp.i1909.买.卖成交量累加, color: 卖颜色 }),
                     ]
                 },
                 {
                     layerList: [
-                        layer(ZeroLayer, { color: 0xaaaaaa }), 
-                        layer(LineLayer, { data: d2.ctp.i1909.买.净成交量_累加300, color: 净成交量颜色 }), 
+                        layer(ZeroLayer, { color: 0xaaaaaa }),
+                        layer(LineLayer, { data: d2.ctp.i1909.买.净成交量_累加300, color: 净成交量颜色 }),
                     ]
                 },
 
@@ -611,23 +579,23 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         items: [
             {
                 layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }), 
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
                     layer(LineLayer, { data: d2.ctp.MA909.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
-                    layer(LineLayer, { data: d2.ctp.MA909.买.净盘口_均线3, color: ETH颜色 }), 
+                    layer(LineLayer, { data: d2.ctp.MA909.买.净盘口_均线3, color: ETH颜色 }),
                     layer(LineLayer, { data: d2.ctp.MA909.卖.盘口1, color: 卖颜色1 }),
                 ]
             },
             [
                 {
-                    layerList: [ 
+                    layerList: [
                         layer(LineLayer, { data: d2.ctp.MA909.买.买成交量累加, color: 买颜色 }),
-                        layer(LineLayer, { data: d2.ctp.MA909.买.卖成交量累加, color: 卖颜色 }), 
+                        layer(LineLayer, { data: d2.ctp.MA909.买.卖成交量累加, color: 卖颜色 }),
                     ]
                 },
                 {
                     layerList: [
-                        layer(ZeroLayer, { color: 0xaaaaaa }), 
-                        layer(LineLayer, { data: d2.ctp.MA909.买.净成交量_累加300, color: 净成交量颜色 }), 
+                        layer(ZeroLayer, { color: 0xaaaaaa }),
+                        layer(LineLayer, { data: d2.ctp.MA909.买.净成交量_累加300, color: 净成交量颜色 }),
                     ]
                 },
 
@@ -653,23 +621,23 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
         items: [
             {
                 layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }), 
+                    layer(ZeroLayer, { color: 0xaaaaaa }),
                     layer(LineLayer, { data: d2.ctp.SR909.买.盘口1, color: 买颜色1, 临时参数: '变成负数' }),
-                    layer(LineLayer, { data: d2.ctp.SR909.买.净盘口_均线3, color: ETH颜色 }), 
+                    layer(LineLayer, { data: d2.ctp.SR909.买.净盘口_均线3, color: ETH颜色 }),
                     layer(LineLayer, { data: d2.ctp.SR909.卖.盘口1, color: 卖颜色1 }),
                 ]
             },
             [
                 {
-                    layerList: [ 
+                    layerList: [
                         layer(LineLayer, { data: d2.ctp.SR909.买.买成交量累加, color: 买颜色 }),
-                        layer(LineLayer, { data: d2.ctp.SR909.买.卖成交量累加, color: 卖颜色 }), 
+                        layer(LineLayer, { data: d2.ctp.SR909.买.卖成交量累加, color: 卖颜色 }),
                     ]
                 },
                 {
                     layerList: [
-                        layer(ZeroLayer, { color: 0xaaaaaa }), 
-                        layer(LineLayer, { data: d2.ctp.SR909.买.净成交量_累加300, color: 净成交量颜色 }), 
+                        layer(ZeroLayer, { color: 0xaaaaaa }),
+                        layer(LineLayer, { data: d2.ctp.SR909.买.净成交量_累加300, color: 净成交量颜色 }),
                     ]
                 },
 
@@ -689,7 +657,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
             ],
 
         ]
-    }), 
+    }),
 
     '3D 测试': (d, d2) => ({
         heightList: [0.4, 0.4, 0.2],
@@ -719,7 +687,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 ]
             },
         ]
-    }), 
+    }),
 
 
 } 

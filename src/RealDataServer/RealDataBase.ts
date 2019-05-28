@@ -164,91 +164,6 @@ export class RealDataBase {
 
         const 收盘价 = 指标.map(() => data.length, i => data[i].close)
 
-        const 映射到其他周期 = (n: number) => 指标.map(
-            () => {
-                if (data.length === 0) return 0
-                const 多出 = n - data[0].id % n
-                return Math.ceil(data.length / n) + 多出 === n ? 0 : 1
-            },
-            i => {
-                const 多出 = n - data[0].id % n
-                const index = Math.min(data.length - 1, 多出 + i * n - 1)
-                return data[index]
-            }
-        )
-
-        const 映射回500ms = <T>(n: number, arr: ArrayLike<T>) => 指标.map(
-            () => data.length,
-            i => {
-                const 多出 = n - data[0].id % n
-                const index = Math.ceil((i - 多出) / n)
-                return arr[index]
-            }
-        )
-
-
-
-        const 映射到其他周期_close = (n: number) => {
-            const arr = 映射到其他周期(n)
-            return 指标.map(() => arr.length, i => arr[i].close)
-        }
-
-        const _20s价格 = 映射到其他周期_close(20 * 2)
-        const _12s价格 = 映射到其他周期_close(12 * 2)
-        const _13s价格 = 映射到其他周期_close(13 * 2)
-        const _60s价格 = 映射到其他周期_close(60 * 2)
-        const _300s价格 = 映射到其他周期_close(300 * 2)
-
-        const _12s_ = {
-            macd: 指标.macd(_12s价格, 1000),
-            布林带: 指标.布林带(_12s价格, 1000),
-        }
-        const _13s_ = {
-            布林带: 指标.布林带(_13s价格, 1000),
-        }
-        const _20s_ = {
-            布林带: 指标.布林带(_20s价格, 1000),
-        }
-
-
-        const _60s_ = {
-            macd: 指标.macd(_60s价格, 1000),
-            布林带: 指标.布林带(_60s价格, 1000),
-        }
-
-        const _300s_ = {
-            macd: 指标.macd(_300s价格, 1000),
-            布林带: 指标.布林带(_300s价格, 1000),
-        }
-
-        const _12s_macd = {
-            DIF: 映射回500ms(12 * 2, _12s_.macd.DIF),
-            DEM: 映射回500ms(12 * 2, _12s_.macd.DEM),
-            OSC: 映射回500ms(12 * 2, _12s_.macd.OSC),
-        }
-        const _20s_布林 = {
-            上轨: 映射回500ms(20 * 2, _20s_.布林带.上轨),
-            中轨: 映射回500ms(20 * 2, _20s_.布林带.中轨),
-            下轨: 映射回500ms(20 * 2, _20s_.布林带.下轨),
-        }
-        const _13s_布林 = {
-            上轨: 映射回500ms(13 * 2, _13s_.布林带.上轨),
-            中轨: 映射回500ms(13 * 2, _13s_.布林带.中轨),
-            下轨: 映射回500ms(13 * 2, _13s_.布林带.下轨),
-        }
-
-        const _60s_macd = {
-            DIF: 映射回500ms(60 * 2, _60s_.macd.DIF),
-            DEM: 映射回500ms(60 * 2, _60s_.macd.DEM),
-            OSC: 映射回500ms(60 * 2, _60s_.macd.OSC),
-        }
-
-        const _300s_macd = {
-            DIF: 映射回500ms(300 * 2, _300s_.macd.DIF),
-            DEM: 映射回500ms(300 * 2, _300s_.macd.DEM),
-            OSC: 映射回500ms(300 * 2, _300s_.macd.OSC),
-        }
-
         盘口算价格 = false
 
         const 盘口价格 = 指标.map(() => orderBook.length, i =>
@@ -402,14 +317,12 @@ export class RealDataBase {
         const 价格_均线60 = 指标.SMA(价格, 60, RealDataBase.单位时间)
         const 价格均线价差 = 指标.map(() => Math.min(价格_均线300.length, 价格_均线120.length), i => 价格_均线120[i] - 价格_均线300[i])
 
-        const bitmex_价格_macd = 指标.macd带参数(价格, 36, 78, 27, RealDataBase.单位时间) 
+        const bitmex_价格_macd = 指标.macd带参数(价格, 36, 78, 27, RealDataBase.单位时间)
         const 价格_波动率30 = 指标.波动率(价格, 30, RealDataBase.单位时间)
         const 价格_波动率60 = 指标.波动率(价格, 60, RealDataBase.单位时间)
         const 价格_波动率300 = 指标.波动率(价格, 300, RealDataBase.单位时间)
 
-        const tick力量指数12 = 指标.map(() => Math.min(_12s_macd.DIF.length, 买.净成交量_累加12.length), i => (买.净成交量_累加12[i] / 100000) * _12s_macd.OSC[i])
-        const tick力量指数60 = 指标.map(() => Math.min(_60s_macd.DIF.length, 买.净成交量_累加60.length), i => (买.净成交量_累加60[i] / 100000) * _60s_macd.OSC[i])
-
+       
 
         const 折返率 = 指标.map(() => 价格_波动率30.length, i => toRange({ min: 4, max: 15, value: 价格_波动率30[i] / 10 }))
 
@@ -420,17 +333,10 @@ export class RealDataBase {
         const 净成交量abs_累加5 = 指标.累加(净成交量abs, 5, RealDataBase.单位时间)
         const 净成交量abs_macd = 指标.macd(净成交量abs原始, RealDataBase.单位时间)
 
-
-
-
         //
         const 价格_最高60 = 指标.最高(价格, 60, RealDataBase.单位时间)
         const 价格_最低60 = 指标.最低(价格, 60, RealDataBase.单位时间)
         const 价格_最高60_价差 = 指标.map(() => Math.min(买.成交量.length, 卖.成交量.length), i => 价格_最高60[i] - 价格[i])
-
- 
-
-
         const 动态价格_均线 = 指标.SMA(价格, 7, RealDataBase.单位时间)
 
 
@@ -457,8 +363,6 @@ export class RealDataBase {
             盘口卖加主动卖: 指标.map(() => Math.min(卖.盘口1.length, xxx.吃单情况.length), i => 卖.盘口1[i] + xxx.吃单情况[i].买.被吃量),
 
             价格乘以ln净成交量: 指标.map(() => Math.min(收盘价.length, 买.成交量_累加60.length), i => 收盘价[i] * Math.log(买.净成交量_累加60[i])),
-            // 价格乘以ln主动买: 指标.map(() => Math.min(收盘价.length, xxx.吃单情况.length), i => 收盘价[i] * Math.log(xxx.吃单情况[i].卖.被吃量)),
-            // 价格乘以ln主动卖: 指标.map(() => Math.min(收盘价.length, xxx.吃单情况.length), i => 收盘价[i] * Math.log(xxx.吃单情况[i].买.被吃量)),
             价格乘以ln主动买: 指标.map(() => Math.min(收盘价.length, 买.成交量_累加60.length), i => 收盘价[i] * Math.log(买.成交量_累加60[i])),
             价格乘以ln主动卖: 指标.map(() => Math.min(收盘价.length, 卖.成交量_累加60.length), i => 收盘价[i] * Math.log(卖.成交量_累加60[i])),
 
@@ -469,20 +373,9 @@ export class RealDataBase {
             价格_均线89,
             价格_均线144,
             价格_均线12,
-            价格_均线60,
-            tick力量指数60,
-            tick力量指数12,
+            价格_均线60, 
             价格macd,
-            // 着笔,
-            // 着笔涨跌,
-            bitmex_价格_macd,
-
-            _60s_,
-            _20s_布林,
-            _12s_macd,
-            _13s_布林,
-            _60s_macd,
-            _300s_macd,
+            bitmex_价格_macd, 
 
             时间str,
             波动_测试,
@@ -491,20 +384,20 @@ export class RealDataBase {
 
             价格均线价差,
             价格_均线120,
-            价格_波动率60, 
-            动态价格_均线, 
+            价格_波动率60,
+            动态价格_均线,
             成交性质,
             KLine,
-            净成交量abs_累加5, 
+            净成交量abs_累加5,
             买,
-            卖, 
+            卖,
             收盘价,
             盘口: orderBook,
             时间,
             价格_波动率300,
-            折返率, 
+            折返率,
             价格_均线300,
-            净成交量abs_macd, 
+            净成交量abs_macd,
             价格,
             价格_波动率30,
 
