@@ -422,13 +422,7 @@ export class RealDataBase {
         const 净成交量abs_累加5 = 指标.累加(净成交量abs, 5, RealDataBase.单位时间)
         const 净成交量abs_macd = 指标.macd(净成交量abs原始, RealDataBase.单位时间)
 
-        //阻力3
-        const __阻力3 = 指标.阻力3({ price: 价格, volumeBuy: 买.成交量, volumeSell: 卖.成交量, })
-        const 阻力3涨 = 指标.map(() => __阻力3.length, i => Math.max(0, __阻力3[i].阻力))
-        const 阻力3跌 = 指标.map(() => __阻力3.length, i => Math.min(0, __阻力3[i].阻力))
-        const 真空信号涨 = 指标.map(() => 价格.length, i => (__阻力3[i].阻力 < 150000) && __阻力3[i].阻力 > 0 && __阻力3[i].价钱增量 >= toRange({ min: 4, max: 12, value: 价格_波动率30[i] / 10 }))
-        const 真空信号跌 = 指标.map(() => 价格.length, i => (__阻力3[i].阻力 > -150000) && __阻力3[i].阻力 < 0 && __阻力3[i].价钱增量 >= toRange({ min: 4, max: 12, value: 价格_波动率30[i] / 10 }))
-
+       
         //上涨_下跌
         //const 上涨_下跌 = 指标.lazyMapCache(() => Math.min(买.净成交量_累加60.length), i => 买.净成交量_累加60[i] >= 0 ? '上涨' : '下跌')
         const 上涨_下跌_横盘 = 指标.map(
@@ -851,10 +845,7 @@ export class RealDataBase {
             下跌,
             价格,
             价格_波动率30,
-            阻力3涨,
-            阻力3跌,
-            真空信号涨,
-            真空信号跌,
+           
 
             价格_最高60,
             价格_最低60,
