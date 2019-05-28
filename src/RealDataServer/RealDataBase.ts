@@ -51,6 +51,8 @@ export class RealDataBase {
         new IXTradeAndOrderBook(),
         new DeribitTradeAndOrderBook(),
     ] as TradeAndOrderBook<any>[]
+
+    删除历史() { }
     //________________________________________________________________________________________________//
 
     static 单位时间 = 500

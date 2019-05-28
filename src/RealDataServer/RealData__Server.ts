@@ -20,44 +20,9 @@ export class RealData__Server extends RealDataBase {
     private on着笔(p: {
         key: string
         xxxxxxxx: {
-            // 着笔: {
-            //     ____push: (v: BaseType.着笔) => void
-            // },
             data: {
                 ____push: (v: BaseType.KLine) => void
                 ____updateLast: (v: BaseType.KLine) => void
-            },
-            吃单情况: {
-                ____get: () => {
-                    买: {
-                        价: number
-                        被吃量: number
-                    },
-                    卖: {
-                        价: number
-                        被吃量: number
-                    }
-                }[]
-                ____push: (v: {
-                    买: {
-                        价: number
-                        被吃量: number
-                    },
-                    卖: {
-                        价: number
-                        被吃量: number
-                    }
-                }) => void
-                ____updateLast: (v: {
-                    买: {
-                        价: number
-                        被吃量: number
-                    },
-                    卖: {
-                        价: number
-                        被吃量: number
-                    }
-                }) => void
             },
 
         }
@@ -74,48 +39,7 @@ export class RealData__Server extends RealDataBase {
         if (this.data.startTick === 0) {
             this.jsonSync.data.startTick.____set(tick)
         }
-
-        //吃单情况
-        if (p.xxxxxxxx.吃单情况.____get().length === 0) {
-            p.xxxxxxxx.吃单情况.____push({
-                买: {
-                    价: NaN,
-                    被吃量: 0,
-                },
-                卖: {
-                    价: NaN,
-                    被吃量: 0,
-                }
-            })
-        }
-
-        //
-        while (p.xxxxxxxx.吃单情况.____get().length < tick - this.jsonSync.rawData.startTick + 1) {
-            const arr = p.xxxxxxxx.吃单情况.____get()
-            p.xxxxxxxx.吃单情况.____push(arr[arr.length - 1])
-        }
-
-        //
-        const arr = p.xxxxxxxx.吃单情况.____get()
-        const item = {
-            买: {
-                价: arr[arr.length - 1].买.价,
-                被吃量: arr[arr.length - 1].买.被吃量,
-            },
-            卖: {
-                价: arr[arr.length - 1].卖.价,
-                被吃量: arr[arr.length - 1].卖.被吃量,
-            }
-        }
-        const xx = p.side === 'Sell' ? item.买 : item.卖
-        if (xx.价 !== p.price) xx.被吃量 = 0
-        xx.被吃量 += p.size
-        xx.价 = p.price
-        p.xxxxxxxx.吃单情况.____updateLast(item)
-
-
-
-
+ 
 
         //500ms
         if (this.on着笔Dic[p.key] === undefined) {
