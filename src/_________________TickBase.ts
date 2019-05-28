@@ -52,9 +52,9 @@ export class _________________TickBase {
 
             const { left, right } = this.getLeftRight()
 
-            const xArr = this.nowChart.indexOf('CTP') !== -1 ? d2.ctp.TA909.时间 : d2.bitmex.XBTUSD.时间
+            const xArr = d2.bitmex.XBTUSD.时间
 
-            const xStrArr = this.nowChart.indexOf('CTP') !== -1 ? d2.ctp.TA909.时间str : d2.bitmex.XBTUSD.时间str
+            const xStrArr = d2.bitmex.XBTUSD.时间str
 
             return {
                 xStrArr,
@@ -90,9 +90,7 @@ export class _________________TickBase {
     getLeftRight() {
         const d2 = this.real.dataExt
 
-        let right = //this.nowChart === '着笔' ? Math.max(d2.bitmex.XBTUSD.着笔.price.length) - 1 : 
-            this.nowChart.indexOf('CTP') !== -1 ? Math.max(this.real.dataExt.ctp.TA909.价格.length, this.real.dataExt.ctp.TA909.盘口.length) - 1 :
-                Math.max(d2.hopex.BTCUSDT.价格.length, d2.bitmex.XBTUSD.价格.length, d2.bitmex.XBTUSD.买.盘口.length, d2.bitmex.XBTUSD.卖.盘口.length) - 1
+        let right = Math.max(d2.hopex.BTCUSDT.价格.length, d2.bitmex.XBTUSD.价格.length, d2.bitmex.XBTUSD.买.盘口.length, d2.bitmex.XBTUSD.卖.盘口.length) - 1
 
 
         const left = Math.max(0, right - this.showCount)
