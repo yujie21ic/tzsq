@@ -3,15 +3,12 @@
   "version": "1.0.0",
   "main": "build/main.js",
   "scripts": {
+    "i": "install-app-deps",
+    "test": "mocha -r ts-node/register src/*/*-test.ts",
     "greate": "node --max_old_space_size=8192 -r ts-node/register ./src/BitMEX/BitMEXGreate",
     "order_server": "node --max_old_space_size=8192 -r ts-node/register ./src/OrderServer",
     "db_server": "node --max_old_space_size=8192 -r ts-node/register ./src/DataServer/DBServer__index",
     "pk_server": "node --max_old_space_size=8192 -r ts-node/register ./src/DataServer/PKServer__index",
-    "test": "mocha -r ts-node/register src/*/*-test.ts",
-    "i": "install-app-deps",
-    "w": "tsc -w",
-    "bt": "ts-node ./src/回测",
-    "real_data_server": "ts-node ./src/RealDataServer",
     "start": "concurrently \"tsc -w\" \"ts-node ./src/RealDataServer\" \"electron ./build/main.js\""
   },
   "devDependencies": {
