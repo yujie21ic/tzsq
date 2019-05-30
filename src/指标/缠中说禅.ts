@@ -156,6 +156,10 @@ const 递归 = (笔: {
 }[], 笔的顶底需要隔几根K线: number) => {
     const 上: HighLow[] = []
     const 下: HighLow[] = []
+
+    let dic1: { [key: number]: number } = {}
+    let dic2: { [key: number]: number } = {}
+
     笔.forEach((v, i) => {
         if (i !== 0) {
             if (v.type === '顶分型') {
@@ -164,6 +168,8 @@ const 递归 = (笔: {
                     high: v.value,
                     low: 笔[i - 1].value,
                 })
+                dic1[笔[i - 1].index] = i
+                dic2[i] = 笔[i - 1].index
             }
             else if (v.type === '底分型') {
                 下.push({
@@ -171,6 +177,8 @@ const 递归 = (笔: {
                     high: 笔[i - 1].value,
                     low: v.value,
                 })
+                dic1[笔[i - 1].index] = i
+                dic2[i] = 笔[i - 1].index
             }
         }
     })
@@ -179,7 +187,11 @@ const 递归 = (笔: {
     const 底分型 = get分型(K线包含处理(上)).filter(v => v.type === '底分型')
     const 分型 = [...顶分型, ...底分型].sort((a, b) => a.index - b.index)
 
+    分型.forEach(v => v.index = dic1[v.index])
+
     const 线段 = get笔(分型, 笔的顶底需要隔几根K线)
+
+    线段.forEach(v => v.index = dic2[v.index])
 
     return 线段
 }
