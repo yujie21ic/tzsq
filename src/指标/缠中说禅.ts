@@ -97,6 +97,16 @@ const get笔 = (arr1: ArrayLike<{ index: number, type: '顶分型' | '底分型'
                         value: arr1[i].value
                     })
                 }
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                else if (ret.length >= 2 && arr1[i].value < ret[ret.length - 2].value) {
+                    ret.pop()
+                    ret[ret.length - 1] = {
+                        index: arr1[i].index,
+                        type,
+                        value: arr1[i].value
+                    }
+                }
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             }
             else if (type === '顶分型' && arr1[i].value > ret[ret.length - 1].value) {
                 if (arr1[i].index > ret[ret.length - 1].index + 笔的顶底需要隔几根K线) {
@@ -106,6 +116,16 @@ const get笔 = (arr1: ArrayLike<{ index: number, type: '顶分型' | '底分型'
                         value: arr1[i].value
                     })
                 }
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                else if (ret.length >= 2 && arr1[i].value > ret[ret.length - 2].value) {
+                    ret.pop()
+                    ret[ret.length - 1] = {
+                        index: arr1[i].index,
+                        type,
+                        value: arr1[i].value
+                    }
+                }
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             }
         } else {
             if (type === '底分型' && arr1[i].value < ret[ret.length - 1].value) {
