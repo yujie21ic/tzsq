@@ -75,8 +75,8 @@ const get分型 = (arr: ArrayLike<HighLow>) => {
 }
 
 
-const 笔的顶底需要隔几根K线 = 0//3  //不考虑包含关系，至少有3根（包括3根）以上K线 
-const get笔 = (arr1: ArrayLike<{ index: number, type: '顶分型' | '底分型', value: number }>) => {
+//不考虑包含关系，至少有3根（包括3根）以上K线 
+const get笔 = (arr1: ArrayLike<{ index: number, type: '顶分型' | '底分型', value: number }>, 笔的顶底需要隔几根K线: number) => {
     let ret: { index: number, type: '顶分型' | '底分型', value: number }[] = []
 
     for (let i = 0; i < arr1.length; i++) {
@@ -109,21 +109,17 @@ const get笔 = (arr1: ArrayLike<{ index: number, type: '顶分型' | '底分型'
             }
         } else {
             if (type === '底分型' && arr1[i].value < ret[ret.length - 1].value) {
-                if (arr1[i].index > ret[ret.length - 1].index + 笔的顶底需要隔几根K线) {
-                    ret[ret.length - 1] = {
-                        index: arr1[i].index,
-                        type,
-                        value: arr1[i].value
-                    }
+                ret[ret.length - 1] = {
+                    index: arr1[i].index,
+                    type,
+                    value: arr1[i].value
                 }
             }
             else if (type === '顶分型' && arr1[i].value > ret[ret.length - 1].value) {
-                if (arr1[i].index > ret[ret.length - 1].index + 笔的顶底需要隔几根K线) {
-                    ret[ret.length - 1] = {
-                        index: arr1[i].index,
-                        type,
-                        value: arr1[i].value
-                    }
+                ret[ret.length - 1] = {
+                    index: arr1[i].index,
+                    type,
+                    value: arr1[i].value
                 }
             }
         }
@@ -137,7 +133,7 @@ const 递归 = (笔: {
     index: number
     type: '顶分型' | '底分型'
     value: number
-}[]) => {
+}[], 笔的顶底需要隔几根K线: number) => {
     const 上: HighLow[] = []
     const 下: HighLow[] = []
     笔.forEach((v, i) => {
@@ -163,7 +159,7 @@ const 递归 = (笔: {
     const 底分型 = get分型(K线包含处理(上)).filter(v => v.type === '底分型')
     const 分型 = [...顶分型, ...底分型].sort((a, b) => a.index - b.index)
 
-    const 线段 = get笔(分型)
+    const 线段 = get笔(分型, 笔的顶底需要隔几根K线)
 
     return 线段
 }
@@ -177,9 +173,9 @@ export const getXXX = (arr3: { high: number, low: number }[]) => {
         low: v.low,
     }))
 
-    const 笔1 = get笔(get分型(K线包含处理(arr2)))
-    const 笔2 = 递归(笔1)
-    const 笔3 = 递归(笔2)
+    const 笔1 = get笔(get分型(K线包含处理(arr2)), 3)
+    const 笔2 = 递归(笔1, 2)
+    const 笔3 = 递归(笔2, 1)
 
     return [笔1, 笔2, 笔3]
 } 
