@@ -10,14 +10,14 @@ const is包含关系 = (a: HighLow, b: HighLow) =>
 
 const 向上处理 = (a: HighLow, b: HighLow) =>
     ({
-        index: Math.max(a.index, b.index),
+        index: a.high === b.high ? Math.max(a.index, b.index) : a.high > b.high ? a.index : b.index,
         high: Math.max(a.high, b.high),
         low: Math.max(a.low, b.low),
     })
 
 const 向下处理 = (a: HighLow, b: HighLow) =>
     ({
-        index: Math.max(a.index, b.index),
+        index: a.low === b.low ? Math.max(a.index, b.index) : a.low < b.low ? a.index : b.index,
         high: Math.min(a.high, b.high),
         low: Math.min(a.low, b.low),
     })
@@ -59,67 +59,114 @@ const K线包含处理 = (arr: ArrayLike<HighLow>) => {
     return ret.filter(v => v !== '包含到下一根了') as ArrayLike<HighLow>
 }
 
-
-const 笔的顶底需要隔几根K线 = 3  //不考虑包含关系，至少有3根（包括3根）以上K线 
-const get笔 = (arr1: ArrayLike<HighLow>) => {
+const get分型 = (arr: ArrayLike<HighLow>) => {
     let ret: { index: number, type: '顶分型' | '底分型', value: number }[] = []
-
-    for (let i = 1; i < arr1.length - 1; i++) {
-        const type = 非包含关系的3根K线完全分类(arr1[i - 1], arr1[i], arr1[i + 1])
+    for (let i = 1; i < arr.length - 1; i++) {
+        const type = 非包含关系的3根K线完全分类(arr[i - 1], arr[i], arr[i + 1])
         if (type === '顶分型' || type === '底分型') {
-            if (ret.length === 0) {
-                ret.push({
-                    index: arr1[i].index,
-                    type,
-                    value: type === '顶分型' ? arr1[i].high : arr1[i].low
-                })
-            }
-            else if (type !== ret[ret.length - 1].type) {
-                if (type === '底分型' && arr1[i].low < ret[ret.length - 1].value) {
-                    if (arr1[i].index > ret[ret.length - 1].index + 笔的顶底需要隔几根K线) {
-                        ret.push({
-                            index: arr1[i].index,
-                            type,
-                            value: arr1[i].low
-                        })
-                    }
-                }
-                else if (type === '顶分型' && arr1[i].high > ret[ret.length - 1].value) {
-                    if (arr1[i].index > ret[ret.length - 1].index + 笔的顶底需要隔几根K线) {
-                        ret.push({
-                            index: arr1[i].index,
-                            type,
-                            value: arr1[i].high
-                        })
-                    }
-                }
-            } else {
-                if (type === '底分型' && arr1[i].low < ret[ret.length - 1].value) {
-                    if (arr1[i].index > ret[ret.length - 1].index + 笔的顶底需要隔几根K线) {
-                        ret[ret.length - 1] = {
-                            index: arr1[i].index,
-                            type,
-                            value: arr1[i].low
-                        }
-                    }
-                }
-                else if (type === '顶分型' && arr1[i].high > ret[ret.length - 1].value) {
-                    if (arr1[i].index > ret[ret.length - 1].index + 笔的顶底需要隔几根K线) {
-                        ret[ret.length - 1] = {
-                            index: arr1[i].index,
-                            type,
-                            value: arr1[i].high
-                        }
-                    }
-                }
-            }
-
+            ret.push({
+                index: arr[i].index,
+                type: type,
+                value: type === '顶分型' ? arr[i].high : arr[i].low,
+            })
         }
     }
     return ret
 }
 
 
+const 笔的顶底需要隔几根K线 = 0//3  //不考虑包含关系，至少有3根（包括3根）以上K线 
+const get笔 = (arr1: ArrayLike<{ index: number, type: '顶分型' | '底分型', value: number }>) => {
+    let ret: { index: number, type: '顶分型' | '底分型', value: number }[] = []
+
+    for (let i = 0; i < arr1.length; i++) {
+        const type = arr1[i].type
+        if (ret.length === 0) {
+            ret.push({
+                index: arr1[i].index,
+                type,
+                value: arr1[i].value,
+            })
+        }
+        else if (type !== ret[ret.length - 1].type) {
+            if (type === '底分型' && arr1[i].value < ret[ret.length - 1].value) {
+                if (arr1[i].index > ret[ret.length - 1].index + 笔的顶底需要隔几根K线) {
+                    ret.push({
+                        index: arr1[i].index,
+                        type,
+                        value: arr1[i].value
+                    })
+                }
+            }
+            else if (type === '顶分型' && arr1[i].value > ret[ret.length - 1].value) {
+                if (arr1[i].index > ret[ret.length - 1].index + 笔的顶底需要隔几根K线) {
+                    ret.push({
+                        index: arr1[i].index,
+                        type,
+                        value: arr1[i].value
+                    })
+                }
+            }
+        } else {
+            if (type === '底分型' && arr1[i].value < ret[ret.length - 1].value) {
+                if (arr1[i].index > ret[ret.length - 1].index + 笔的顶底需要隔几根K线) {
+                    ret[ret.length - 1] = {
+                        index: arr1[i].index,
+                        type,
+                        value: arr1[i].value
+                    }
+                }
+            }
+            else if (type === '顶分型' && arr1[i].value > ret[ret.length - 1].value) {
+                if (arr1[i].index > ret[ret.length - 1].index + 笔的顶底需要隔几根K线) {
+                    ret[ret.length - 1] = {
+                        index: arr1[i].index,
+                        type,
+                        value: arr1[i].value
+                    }
+                }
+            }
+        }
+    }
+    return ret
+}
+
+
+
+const 递归 = (笔: {
+    index: number
+    type: '顶分型' | '底分型'
+    value: number
+}[]) => {
+    const 上: HighLow[] = []
+    const 下: HighLow[] = []
+    笔.forEach((v, i) => {
+        if (i !== 0) {
+            if (v.type === '顶分型') {
+                上.push({
+                    index: 笔[i - 1].index,
+                    high: v.value,
+                    low: 笔[i - 1].value,
+                })
+            }
+            else if (v.type === '底分型') {
+                下.push({
+                    index: 笔[i - 1].index,
+                    high: 笔[i - 1].value,
+                    low: v.value,
+                })
+            }
+        }
+    })
+
+    const 顶分型 = get分型(K线包含处理(下)).filter(v => v.type === '顶分型')
+    const 底分型 = get分型(K线包含处理(上)).filter(v => v.type === '底分型')
+    const 分型 = [...顶分型, ...底分型].sort((a, b) => a.index - b.index)
+
+    const 线段 = get笔(分型)
+
+    return 线段
+}
 
 
 
@@ -130,32 +177,9 @@ export const getXXX = (arr3: { high: number, low: number }[]) => {
         low: v.low,
     }))
 
-    const 笔 = get笔(K线包含处理(arr2))
+    const 笔1 = get笔(get分型(K线包含处理(arr2)))
+    const 笔2 = 递归(笔1)
+    const 笔3 = 递归(笔2)
 
-    const 上: HighLow[] = []
-    const 下: HighLow[] = []
-    笔.forEach((v, i) => {
-        if (i !== 0) {
-            if (v.type === '顶分型') {
-                上.push({
-                    index: v.index,
-                    high: v.value,
-                    low: 笔[i - 1].value,
-                })
-            }
-            else if (v.type === '底分型') {
-                下.push({
-                    index: v.index,
-                    high: 笔[i - 1].value,
-                    low: v.value,
-                })
-            }
-        }
-    })
-    const 包含上 = K线包含处理(上)
-    const 包含下 = K线包含处理(下)
-    const 线段1 = get笔(包含上)
-    const 线段2 = get笔(包含下)
-
-    return [笔, 线段1, 线段2]
+    return [笔1, 笔2, 笔3]
 } 
