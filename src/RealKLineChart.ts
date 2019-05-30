@@ -8,6 +8,9 @@ import { HopexRealKLineBase } from './RealDataServer/HopexRealKLine'
 import { 指标 } from './指标/指标'
 import { LineLayer } from './Chart/Layer/LineLayer'
 import { BarLayer } from './Chart/Layer/BarLayer'
+import { 笔Layer } from './Chart/Layer/笔Layer'
+import { get笔Index, get线段 } from './指标/缠中说禅'
+import { 线段Layer } from './Chart/Layer/线段Layer'
 
 
 export const RealKLineChart = (element: HTMLElement, real: HopexRealKLineBase, tmp?: () => any) => {
@@ -62,24 +65,24 @@ export const RealKLineChart = (element: HTMLElement, real: HopexRealKLineBase, t
             left: left,
             right: right,
             items: {
-                heightList: [0.6, 0.4],
+                heightList: [0.7, 0.3],
                 items: [
                     {
                         layerList: [
                             layer(KLineLayer, { data: kline }),
-                            //layer(笔Layer, { data: get笔Index(kline), color: 0xffff00 }),
-                            //layer(线段Layer, { data: get线段(get笔Index(kline)), color: 0xaa0000 }),
-                            layer(LineLayer, { data: M5, color: 0x666666 }),
-                            layer(LineLayer, { data: M10, color: 0x666666 }),
-                            layer(LineLayer, { data: M25, color: 0xffffff }),
-                            layer(LineLayer, { data: M50, color: 0xffffff }),
+                            layer(笔Layer, { data: get笔Index(kline), color: 0xffff00 }),
+                            layer(线段Layer, { data: get线段(get笔Index(kline)), color: 0xaa0000 }),
+                            // layer(LineLayer, { data: M5, color: 0x666666 }),
+                            // layer(LineLayer, { data: M10, color: 0x666666 }),
+                            // layer(LineLayer, { data: M25, color: 0xffffff }),
+                            // layer(LineLayer, { data: M50, color: 0xffffff }),
                         ]
                     },
                     {
                         layerList: [
+                            layer(BarLayer, { data: macd.OSC, color: 0xaaaaaa }),
                             layer(LineLayer, { data: macd.DIF, color: 0xffff00 }),
-                            layer(LineLayer, { data: macd.DEM, color: 0xaaaa00 }),
-                            layer(BarLayer, { data: macd.OSC, color: 0xeeeeee }),
+                            layer(LineLayer, { data: macd.DEM, color: 0xff0000 }),
                         ]
                     },
                 ]
