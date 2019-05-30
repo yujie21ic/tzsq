@@ -34,9 +34,9 @@ export class RealDataBase {
 
     CREATE = () => ({
         期货30秒内成交量: (symbol: BaseType.BitmexSymbol) => this.get期货多少秒内成交量__万为单位(symbol, 30),
-        ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], true), BaseType.CTPSymbolDic),
+        ctp: mapObjIndexed((v, k) => this.item2(this.data.ctp[k], false), BaseType.CTPSymbolDic),
         bitmex: mapObjIndexed((v, k) => this.item2(this.data.bitmex[k], false), BaseType.BitmexSymbolDic),
-        hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
+        hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], true), BaseType.HopexSymbolDic),
         ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),
         deribit: mapObjIndexed((v, k) => this.item2(this.data.deribit[k], false), BaseType.DeribitSymbolDic),
     })
@@ -113,8 +113,6 @@ export class RealDataBase {
         const { data, orderBook } = xxx
 
         const 收盘价 = 指标.map(() => data.length, i => data[i].close)
-
-        盘口算价格 = false
 
         const 盘口价格 = 指标.map(() => orderBook.length, i =>
             (orderBook[i].buy && orderBook[i].buy.length > 0 && orderBook[i].sell && orderBook[i].sell.length > 0) ?
