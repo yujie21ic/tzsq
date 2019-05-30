@@ -3,12 +3,7 @@ import { layer, LayerItem } from './Chart'
 import { LineLayer } from './Chart/Layer/LineLayer'
 import { TextLayer, LeftTextLayer } from './Chart/Layer/TextLayer'
 import { lastNumber } from './F/lastNumber'
-import { ZeroLayer } from './Chart/Layer/ZeroLayer'
-import { KLineLayer } from './Chart/Layer/KLineLayer'
-import { 笔Layer } from './Chart/Layer/笔Layer'
-import { get笔Index, get线段, 合并后的K线 } from './指标/缠中说禅'
-import { 线段Layer } from './Chart/Layer/线段Layer'
-import { 合并后的Layer } from './Chart/Layer/合并后的Layer'
+import { ZeroLayer } from './Chart/Layer/ZeroLayer' 
 
 
 
@@ -28,7 +23,7 @@ type ItemFunc = (d: '废弃', d2: D2) => {
 
 
 const ETH颜色 = 0xaaaa00
-const BTC颜色 = 0xcc66ff 
+const BTC颜色 = 0xcc66ff
 
 const 买颜色 = 0x0E6655
 const 买颜色1 = 0x16A085
@@ -631,36 +626,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
 
         ]
     }),
-
-    '3D 测试': (d, d2) => ({
-        heightList: [0.4, 0.4, 0.2],
-        items: [
-            {
-                numberColor: BTC颜色,
-                layerList: [
-                    layer(KLineLayer, { data: d2.bitmex.XBTUSD.KLine }),
-                    layer(笔Layer, { data: get笔Index(d2.bitmex.XBTUSD.KLine), color: 0xffff00 }),
-                    layer(线段Layer, { data: get线段(get笔Index(d2.bitmex.XBTUSD.KLine)), color: 0xaa0000 }),
-                    layer(合并后的Layer, { data: 合并后的K线(d2.bitmex.XBTUSD.KLine), color: 0xffff00 }),
-                ]
-            },
-            {
-                layerList: [
-                    layer(ZeroLayer, { color: 0xaaaaaa }),
-                    layer(LineLayer, { data: d2.bitmex.XBTUSD.买.成交量, color: 买颜色 }),
-                    layer(LineLayer, { data: d2.bitmex.XBTUSD.卖.成交量, color: 卖颜色, 临时参数: '变成负数' }),
-                    layer(TextLayer, { text: '成交量买 成交量卖      ', color: 0xffff00 })
-                ]
-            },
-            {
-                layerList: [
-                    layer(LineLayer, { data: d2.bitmex.XBTUSD.买.盘口, color: 买颜色 }),
-                    layer(LineLayer, { data: d2.bitmex.XBTUSD.卖.盘口, color: 卖颜色 }),
-                    layer(TextLayer, { text: '盘口买 盘口卖      ', color: 0xffff00 })
-                ]
-            },
-        ]
-    }),
+ 
 
 
 } 
