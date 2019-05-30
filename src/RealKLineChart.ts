@@ -9,7 +9,7 @@ import { 指标 } from './指标/指标'
 import { LineLayer } from './Chart/Layer/LineLayer'
 import { BarLayer } from './Chart/Layer/BarLayer'
 import { 笔Layer } from './Chart/Layer/笔Layer'
-import { get笔Index } from './指标/缠中说禅'
+import { getXXX } from './指标/缠中说禅'
 
 export const RealKLineChart = (element: HTMLElement, real: HopexRealKLineBase, tmp?: () => any) => {
 
@@ -50,6 +50,8 @@ export const RealKLineChart = (element: HTMLElement, real: HopexRealKLineBase, t
             if (x) return x
         }
 
+        const x = getXXX(kline)
+
         return {
             xStrArr: timeArr,
             显示y: v => {
@@ -68,7 +70,9 @@ export const RealKLineChart = (element: HTMLElement, real: HopexRealKLineBase, t
                     {
                         layerList: [
                             layer(KLineLayer, { data: kline }),
-                            layer(笔Layer, { data: get笔Index(kline), color: 0xffff00 }),
+                            layer(笔Layer, { data: x[0], color: 0xffff00 }),
+                            layer(笔Layer, { data: x[1], color: 0xff0000 }),
+                            layer(笔Layer, { data: x[2], color: 0xffffff }),
                             // layer(LineLayer, { data: M5, color: 0x666666 }),
                             // layer(LineLayer, { data: M10, color: 0x666666 }),
                             // layer(LineLayer, { data: M25, color: 0xffffff }),
