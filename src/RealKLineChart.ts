@@ -9,19 +9,17 @@ import { 指标 } from './指标/指标'
 import { LineLayer } from './Chart/Layer/LineLayer'
 import { BarLayer } from './Chart/Layer/BarLayer'
 import { 笔Layer } from './Chart/Layer/笔Layer'
-import { get笔Index, get线段 } from './指标/缠中说禅'
-import { 线段Layer } from './Chart/Layer/线段Layer'
-
+import { get笔Index } from './指标/缠中说禅'
 
 export const RealKLineChart = (element: HTMLElement, real: HopexRealKLineBase, tmp?: () => any) => {
 
     const timeArr = 指标.map(() => real.kline.length, i => new Date(timeID._60s.toTimestamp(real.kline[i].id)).toLocaleString())
 
     const close = 指标.map(() => real.kline.length, i => real.kline[i].close)
-    const M5 = 指标.SMA(close, 5, 1000)
-    const M10 = 指标.SMA(close, 10, 1000)
-    const M25 = 指标.SMA(close, 25, 1000)
-    const M50 = 指标.SMA(close, 50, 1000)
+    // const M5 = 指标.SMA(close, 5, 1000)
+    // const M10 = 指标.SMA(close, 10, 1000)
+    // const M25 = 指标.SMA(close, 25, 1000)
+    // const M50 = 指标.SMA(close, 50, 1000)
     const macd = 指标.macd(close, 1000)
 
 
@@ -71,7 +69,6 @@ export const RealKLineChart = (element: HTMLElement, real: HopexRealKLineBase, t
                         layerList: [
                             layer(KLineLayer, { data: kline }),
                             layer(笔Layer, { data: get笔Index(kline), color: 0xffff00 }),
-                            layer(线段Layer, { data: get线段(get笔Index(kline)), color: 0xaa0000 }),
                             // layer(LineLayer, { data: M5, color: 0x666666 }),
                             // layer(LineLayer, { data: M10, color: 0x666666 }),
                             // layer(LineLayer, { data: M25, color: 0xffffff }),
