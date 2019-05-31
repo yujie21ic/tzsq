@@ -25,7 +25,7 @@ if (config.orderServer !== undefined) {
         account.runTask('bitmex_BTC_网格_2', new BTC网格交易())
         account.runTask('bitmex_BTC_止损', new Bitmex止损('XBTUSD'))
         account.runTask('bitmex_ETH_止损', new Bitmex止损('ETHUSD'))
-        accountDic.set(v.cookie, account) //key is cookie 
+        accountDic.set(v.cookie, account)
     })
 } else {
     console.log('运行的账户 没有设置')
