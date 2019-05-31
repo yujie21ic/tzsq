@@ -10,6 +10,8 @@ const 盘口map = (v: any) => ({
 
 export class BinanceTradeAndOrderBook extends TradeAndOrderBook<BaseType.BinanceSymbol> {
 
+    name = 'binance'
+
     private ws = new WebSocketClient({
         name: 'BinanceTradeAndOrderBook',
         ss: config.ss,
