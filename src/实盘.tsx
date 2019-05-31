@@ -59,7 +59,7 @@ class Item extends React.Component<{ market: 'bitmex' | 'hopex', symbol: string,
     get仓位() {
         const { 仓位数量, 开仓均价 } = this.props.data()
         if (仓位数量 !== 0) {
-            return <span><span style={{ color: 仓位数量 < 0 ? RED : GREEN }}>{String(仓位数量)}</span>@<span>{String(开仓均价)}</span></span>
+            return <span><span style={{ color: 仓位数量 < 0 ? RED : GREEN }}>{String(仓位数量)}</span>@<span>{开仓均价.toFixed(2)}</span></span>
         } else {
             return undefined
         }
