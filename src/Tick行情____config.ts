@@ -82,7 +82,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 {
                     numberColor: 石青,
                     layerList: [
-                        layer(LineLayer, { data: d2.hopex.ETHUSDT.价格, color: 石青 }),
+                        layer(LineLayer, { data: d2.binance.ethusdt.价格, color: 石青 }),
                     ]
                 },
 
@@ -111,7 +111,7 @@ export const Tick行情____config: { [key in string]: ItemFunc } = {
                 {
                     numberColor: BTC颜色,
                     layerList: [
-                        layer(LineLayer, { data: d2.hopex.BTCUSDT.价格, color: ETH颜色 }),
+                        layer(LineLayer, { data: d2.binance.btcusdt.价格, color: ETH颜色 }),
                     ]
                 },
 
