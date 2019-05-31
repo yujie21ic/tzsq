@@ -5,14 +5,12 @@ export type ConfigType = {
     下单数量?: number
     orderServer?: {
         [name: string]: {
-            cookie: string
-            hopexCookie: string
+            cookie: string 
         }
     }
     account?: {
         [name: string]: {
-            cookie: string
-            hopexCookie: string 
+            cookie: string 
         }
     }
 } 

@@ -128,3 +128,64 @@
 //     }
 
 // }
+
+
+
+
+
+
+
+
+
+
+this.props.market === 'hopex' ?
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'center'
+                    }}>
+                        <div
+                            style={{ width: '50%' }}>
+                            <Button
+                                bgColor={GREEN}
+                                text={下单数量 + ''}
+                                left={() => HopexHTTP.maker(hopexCookie, {
+                                    symbol: this.props.symbol as BaseType.HopexSymbol,
+                                    price: lastNumber(realTickClient.dataExt.hopex[this.props.symbol as BaseType.HopexSymbol].买.盘口1价),
+                                    side: 'Buy',
+                                    size: 下单数量,
+                                })}
+                                right={() => HopexHTTP.taker(hopexCookie, {
+                                    symbol: this.props.symbol as BaseType.HopexSymbol,
+                                    side: 'Buy',
+                                    size: 下单数量,
+                                })}
+                            />
+                            {/* <Table 委托列表={委托列表} side='Buy' 取消f={id => {
+                                    HopexHTTP.cancel(hopexCookie, { orderID: Number(id), contractCode: this.props.symbol as BaseType.HopexSymbol })
+                                }} /> */}
+                        </div>
+                        <div
+                            style={{ width: '50%' }}>
+                            <Button
+                                bgColor={RED}
+                                text={-下单数量 + ''}
+                                left={() => HopexHTTP.maker(hopexCookie, {
+                                    symbol: this.props.symbol as BaseType.HopexSymbol,
+                                    price: lastNumber(realTickClient.dataExt.hopex[this.props.symbol as BaseType.HopexSymbol].卖.盘口1价),
+                                    side: 'Sell',
+                                    size: 下单数量,
+                                })}
+                                right={() => HopexHTTP.taker(hopexCookie, {
+                                    symbol: this.props.symbol as BaseType.HopexSymbol,
+                                    side: 'Sell',
+                                    size: 下单数量,
+                                })}
+                            />
+                            {/* <Table 委托列表={委托列表} side='Sell' 取消f={id => {
+                                    HopexHTTP.cancel(hopexCookie, { orderID: Number(id), contractCode: this.props.symbol as BaseType.HopexSymbol })
+                                }} /> */}
+                        </div>
+                    </div>
+
+                    :

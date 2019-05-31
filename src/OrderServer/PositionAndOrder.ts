@@ -6,7 +6,6 @@ import { logToFile } from '../F/logToFile'
 import { keys } from 'ramda'
 import { JSONSync } from '../F/JSONSync'
 import { BitMEXWS } from '../BitMEX/BitMEXWS'
-import { HopexHTTP } from './HopexHTTP'
 import { mapObjIndexed } from '../F/mapObjIndexed'
 import { typeObjectParse } from '../F/typeObjectParse'
 import { safeJSONParse } from '../F/safeJSONParse'
@@ -53,7 +52,6 @@ export const createJSONSync = () =>
             参数: string
         }[],
         market: {
-            hopex: mapObjIndexed(symbol, BaseType.HopexSymbolDic),
             bitmex: mapObjIndexed(symbol, BaseType.BitmexSymbolDic),
         }
     })
@@ -64,10 +62,9 @@ let callID = 0
 const 重试几次 = 10
 const 重试休息多少毫秒 = 10
 
-export class PositionAndOrder implements PositionAndOrder {
+export class PositionAndOrder {
 
     private cookie: string
-    private hopexCookie: string
 
     log: (text: string) => void
     private ws: BitMEXWS
@@ -85,119 +82,9 @@ export class PositionAndOrder implements PositionAndOrder {
         委托: false,
     }
 
-    hopex_初始化 = {
-        仓位: false,
-        委托: false,
-    }
 
-    private async hopex_仓位_轮询() {
-        while (true) {
-            const __obj__ = mapObjIndexed(() => ({ 仓位数量: 0, 开仓均价: 0, }), BaseType.HopexSymbolDic)
-            const { data } = await HopexHTTP.getPositions(this.hopexCookie)
-            if (data !== undefined) {
-                this.hopex_初始化.仓位 = true
-
-                const arr = data.data || []
-                arr.forEach(v => {
-                    if (__obj__[v.contractCode] !== undefined) {//!!!!!!!!!!!!!!!!!!!!!!
-                        __obj__[v.contractCode].仓位数量 = Number(v.positionQuantity.split(',').join(''))
-                        __obj__[v.contractCode].开仓均价 = v.entryPriceD
-                    }
-                })
-
-                BaseType.HopexSymbolArr.forEach(symbol => {
-                    if (this.jsonSync.rawData.market.hopex[symbol].仓位数量 !== __obj__[symbol].仓位数量) {
-                        this.jsonSync.data.market.hopex[symbol].仓位数量.____set(__obj__[symbol].仓位数量)
-                        this.log(`hopex ${symbol} 仓位数量: + ${__obj__[symbol].仓位数量}`)
-                    }
-                    if (this.jsonSync.rawData.market.hopex[symbol].开仓均价 !== __obj__[symbol].开仓均价) {
-                        this.jsonSync.data.market.hopex[symbol].开仓均价.____set(__obj__[symbol].开仓均价)
-                        this.log(`hopex ${symbol} 开仓均价: + ${__obj__[symbol].开仓均价}`)
-                    }
-                })
-
-            } else {
-                this.hopex_初始化.仓位 = false
-                this.log('hopex_初始化.仓位 = false')
-            }
-            await sleep(1000)
-        }
-    }
-
-    private async hopex_委托_轮询() {
-        while (true) {
-            const __obj__ = mapObjIndexed(() => [] as BaseType.Order[], BaseType.HopexSymbolDic)
-            const 止损data = (await HopexHTTP.getConditionOrders(this.hopexCookie)).data
-            const 委托data = (await HopexHTTP.getOpenOrders(this.hopexCookie)).data
-
-            if (止损data !== undefined && 委托data !== undefined) {
-                this.hopex_初始化.委托 = true
-
-                if (止损data.data !== undefined) {
-                    const result = 止损data.data ? 止损data.data.result || [] : []
-                    result.forEach(v => {
-                        if (v.taskStatusD === '未触发') {
-                            if (__obj__[v.contractCode] !== undefined)
-                                __obj__[v.contractCode].push({
-                                    type: '止损',
-                                    timestamp: v.timestamp,
-                                    id: String(v.taskId),
-                                    side: v.taskTypeD === '买入止损' ? 'Buy' : 'Sell',
-                                    cumQty: 0,
-                                    orderQty: 100000,
-                                    price: Number(v.trigPrice.split(',').join('')),
-                                })
-                        }
-                    })
-                }
-                if (委托data.data !== undefined) {
-                    委托data.data.forEach(v => {
-                        if (__obj__[v.contractCode] !== undefined)
-                            __obj__[v.contractCode].push({
-                                type: '限价',
-                                timestamp: new Date(v.ctime).getTime(),
-                                id: String(v.orderId),
-                                side: v.side === '2' ? 'Buy' : 'Sell',
-                                cumQty: Number(v.fillQuantity.split(',').join('')),
-                                orderQty: Number(v.leftQuantity.split(',').join('')),
-                                price: Number(v.orderPrice.split(',').join('')),
-                            })
-                    })
-                }
-
-                BaseType.HopexSymbolArr.forEach(symbol => {
-                    const id1Arr = __obj__[symbol].map(v => v.id).sort().join(',')
-                    const id2Arr = this.jsonSync.rawData.market.hopex[symbol].委托列表.map(v => v.id).sort().join(',')
-
-                    if (id1Arr !== id2Arr) {
-                        this.jsonSync.data.market.hopex[symbol].委托列表.____set(__obj__[symbol])
-                        this.log('hopex ' + symbol + '止损:' + (__obj__[symbol].length > 0 ? __obj__[symbol][0].price : '无'))
-                    }
-                })
-
-            } else {
-                this.hopex_初始化.委托 = false
-                this.log('hopex_初始化.委托 = false')
-            }
-            await sleep(1000)
-        }
-    }
-
-
-    private async hopex_轮询() {
-        this.hopex_仓位_轮询()
-        this.hopex_委托_轮询()
-    }
-
-
-
-    constructor(p: { accountName: string, cookie: string, hopexCookie: string }) {
+    constructor(p: { accountName: string, cookie: string }) {
         this.cookie = p.cookie
-        this.hopexCookie = p.hopexCookie
-
-        if (this.hopexCookie !== '') {
-            this.hopex_轮询()
-        }
 
         this.ws = new BitMEXWS(p.cookie, [
             //private
@@ -258,8 +145,6 @@ export class PositionAndOrder implements PositionAndOrder {
             }
         })
     }
-
-
 
     private updatePosition() {
         ['XBTUSD' as 'XBTUSD', 'ETHUSD' as 'ETHUSD'].forEach(symbol => {
@@ -345,37 +230,6 @@ export class PositionAndOrder implements PositionAndOrder {
         })
     }
 
-    hopex_taker = async (p: { symbol: BaseType.HopexSymbol, size: number, side: BaseType.Side }) => {
-        this.log(`hopex_taker ${p.side} ${p.size}`)
-        const b = (await HopexHTTP.taker(this.hopexCookie, p)).error === undefined
-        this.log(`hopex_taker ${b ? '成功' : '失败'}`)
-        if (b) {
-            this.hopex_初始化.仓位 = false
-        }
-        return b
-    }
-
-    hopex_stop = async (p: { symbol: BaseType.HopexSymbol, side: BaseType.Side, price: number }) => {
-        this.log(`hopex_stop ${p.side} ${p.price}`)
-        const b = (await HopexHTTP.stop(this.hopexCookie, p)).error === undefined
-        this.log(`hopex_stop ${b ? '成功' : '失败'}`)
-        if (b) {
-            this.hopex_初始化.委托 = false
-        }
-        return b
-    }
-
-    hopex_cancel = async (p: { symbol: BaseType.HopexSymbol, orderID: string }) => {
-        const b = (await HopexHTTP.cancel(this.hopexCookie, {
-            orderID: Number(p.orderID),
-            contractCode: p.symbol,
-        })).error === undefined
-        this.log(`hopex_cancel ${b ? '成功' : '失败'}`)
-        if (b) {
-            this.hopex_初始化.委托 = false
-        }
-        return b
-    }
 
     private DDOS调用 = <P extends any>(f: (cookie: string, p: P) => Promise<{ error?: JSONRequestError, data?: any }>) =>
         async (p: P) => {

@@ -7,14 +7,12 @@ import { config } from './config'
 import { BaseType } from './BaseType'
 import { windowExt } from './windowExt'
 import { Button } from './UI/Button'
-import { HopexHTTP } from './OrderServer/HopexHTTP'
 import { realTickClient, 提醒 } from './实盘__提醒'
-import { lastNumber } from './F/lastNumber'
 import { PositionAndOrder } from './OrderServer/PositionAndOrder'
 import { 实盘__任务遥控器 } from './实盘__任务遥控器'
 
 const account = config.account![windowExt.accountName]
-const { cookie, hopexCookie } = account
+const { cookie } = account
 const orderClient = new OrderClient(account.cookie)
 const rpc = OrderClient.rpc.func
 
@@ -140,154 +138,103 @@ class Item extends React.Component<{ market: 'bitmex' | 'hopex', symbol: string,
                 <p>委托:{get委托()}</p>
             </div>
 
-            {
-                this.props.market === 'hopex' ?
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'center'
-                    }}>
-                        <div
-                            style={{ width: '50%' }}>
-                            <Button
-                                bgColor={GREEN}
-                                text={下单数量 + ''}
-                                left={() => HopexHTTP.maker(hopexCookie, {
-                                    symbol: this.props.symbol as BaseType.HopexSymbol,
-                                    price: lastNumber(realTickClient.dataExt.hopex[this.props.symbol as BaseType.HopexSymbol].买.盘口1价),
-                                    side: 'Buy',
-                                    size: 下单数量,
-                                })}
-                                right={() => HopexHTTP.taker(hopexCookie, {
-                                    symbol: this.props.symbol as BaseType.HopexSymbol,
-                                    side: 'Buy',
-                                    size: 下单数量,
-                                })}
-                            />
-                            {/* <Table 委托列表={委托列表} side='Buy' 取消f={id => {
-                                    HopexHTTP.cancel(hopexCookie, { orderID: Number(id), contractCode: this.props.symbol as BaseType.HopexSymbol })
-                                }} /> */}
-                        </div>
-                        <div
-                            style={{ width: '50%' }}>
-                            <Button
-                                bgColor={RED}
-                                text={-下单数量 + ''}
-                                left={() => HopexHTTP.maker(hopexCookie, {
-                                    symbol: this.props.symbol as BaseType.HopexSymbol,
-                                    price: lastNumber(realTickClient.dataExt.hopex[this.props.symbol as BaseType.HopexSymbol].卖.盘口1价),
-                                    side: 'Sell',
-                                    size: 下单数量,
-                                })}
-                                right={() => HopexHTTP.taker(hopexCookie, {
-                                    symbol: this.props.symbol as BaseType.HopexSymbol,
-                                    side: 'Sell',
-                                    size: 下单数量,
-                                })}
-                            />
-                            {/* <Table 委托列表={委托列表} side='Sell' 取消f={id => {
-                                    HopexHTTP.cancel(hopexCookie, { orderID: Number(id), contractCode: this.props.symbol as BaseType.HopexSymbol })
-                                }} /> */}
-                        </div>
-                    </div>
 
-                    :
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'center'
-                    }}>
-                        <div
-                            style={{ width: '50%' }}>
-                            <Button
-                                bgColor={GREEN}
-                                text={下单数量 + ' 买' + (this.props.位置 + 1)}
-                                left={() => rpc.下单({
-                                    cookie,
-                                    symbol: this.props.symbol as BaseType.BitmexSymbol,
-                                    type: 'maker',
-                                    side: 'Buy',
-                                    size: 下单数量,
-                                    位置: this.props.位置,
-                                    最低_最高: false,
-                                })}
-                                right={() => rpc.下单({
-                                    cookie,
-                                    symbol: this.props.symbol as BaseType.BitmexSymbol,
-                                    type: 'taker',
-                                    side: 'Buy',
-                                    size: 下单数量,
-                                    位置: this.props.位置,
-                                    最低_最高: false,
-                                })}
-                            />
 
-                            <br />
+            <div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center'
+            }}>
+                <div
+                    style={{ width: '50%' }}>
+                    <Button
+                        bgColor={GREEN}
+                        text={下单数量 + ' 买' + (this.props.位置 + 1)}
+                        left={() => rpc.下单({
+                            cookie,
+                            symbol: this.props.symbol as BaseType.BitmexSymbol,
+                            type: 'maker',
+                            side: 'Buy',
+                            size: 下单数量,
+                            位置: this.props.位置,
+                            最低_最高: false,
+                        })}
+                        right={() => rpc.下单({
+                            cookie,
+                            symbol: this.props.symbol as BaseType.BitmexSymbol,
+                            type: 'taker',
+                            side: 'Buy',
+                            size: 下单数量,
+                            位置: this.props.位置,
+                            最低_最高: false,
+                        })}
+                    />
 
-                            <Button
-                                bgColor={GREEN}
-                                text={'5秒最低 买' + (this.props.位置 + 1)}
-                                left={() => rpc.下单({
-                                    cookie,
-                                    symbol: this.props.symbol as BaseType.BitmexSymbol,
-                                    type: 'maker',
-                                    side: 'Buy',
-                                    size: 下单数量,
-                                    位置: this.props.位置,
-                                    最低_最高: true,
-                                })}
-                            />
-                            {/* <Table 委托列表={委托列表} side='Buy' 取消f={id => {
+                    <br />
+
+                    <Button
+                        bgColor={GREEN}
+                        text={'5秒最低 买' + (this.props.位置 + 1)}
+                        left={() => rpc.下单({
+                            cookie,
+                            symbol: this.props.symbol as BaseType.BitmexSymbol,
+                            type: 'maker',
+                            side: 'Buy',
+                            size: 下单数量,
+                            位置: this.props.位置,
+                            最低_最高: true,
+                        })}
+                    />
+                    {/* <Table 委托列表={委托列表} side='Buy' 取消f={id => {
                                     rpc.取消委托({ cookie, orderID: [id] })
                                 }} /> */}
-                        </div>
+                </div>
 
-                        <div
-                            style={{
-                                width: '50%'
-                            }}>
-                            <Button
-                                bgColor={RED}
-                                text={-下单数量 + ' 卖' + (this.props.位置 + 1)}
-                                left={() => rpc.下单({
-                                    cookie,
-                                    symbol: this.props.symbol as BaseType.BitmexSymbol,
-                                    type: 'maker',
-                                    side: 'Sell',
-                                    size: 下单数量,
-                                    位置: this.props.位置,
-                                    最低_最高: false,
-                                })}
-                                right={() => rpc.下单({
-                                    cookie,
-                                    symbol: this.props.symbol as BaseType.BitmexSymbol,
-                                    type: 'taker',
-                                    side: 'Sell',
-                                    size: 下单数量,
-                                    位置: this.props.位置,
-                                    最低_最高: false,
-                                })}
-                            />
-                            <br />
-                            <Button
-                                bgColor={RED}
-                                text={'5秒最高 卖' + (this.props.位置 + 1)}
-                                left={() => rpc.下单({
-                                    cookie,
-                                    symbol: this.props.symbol as BaseType.BitmexSymbol,
-                                    type: 'maker',
-                                    side: 'Sell',
-                                    size: 下单数量,
-                                    位置: this.props.位置,
-                                    最低_最高: true,
-                                })}
-                            />
-                            {/* <Table 委托列表={委托列表} side='Sell' 取消f={id => {
+                <div
+                    style={{
+                        width: '50%'
+                    }}>
+                    <Button
+                        bgColor={RED}
+                        text={-下单数量 + ' 卖' + (this.props.位置 + 1)}
+                        left={() => rpc.下单({
+                            cookie,
+                            symbol: this.props.symbol as BaseType.BitmexSymbol,
+                            type: 'maker',
+                            side: 'Sell',
+                            size: 下单数量,
+                            位置: this.props.位置,
+                            最低_最高: false,
+                        })}
+                        right={() => rpc.下单({
+                            cookie,
+                            symbol: this.props.symbol as BaseType.BitmexSymbol,
+                            type: 'taker',
+                            side: 'Sell',
+                            size: 下单数量,
+                            位置: this.props.位置,
+                            最低_最高: false,
+                        })}
+                    />
+                    <br />
+                    <Button
+                        bgColor={RED}
+                        text={'5秒最高 卖' + (this.props.位置 + 1)}
+                        left={() => rpc.下单({
+                            cookie,
+                            symbol: this.props.symbol as BaseType.BitmexSymbol,
+                            type: 'maker',
+                            side: 'Sell',
+                            size: 下单数量,
+                            位置: this.props.位置,
+                            最低_最高: true,
+                        })}
+                    />
+                    {/* <Table 委托列表={委托列表} side='Sell' 取消f={id => {
                                     rpc.取消委托({ cookie, orderID: [id] })
                                 }} /> */}
-                        </div>
-                    </div>
-            }
+                </div>
+            </div>
         </div >
     }
 }

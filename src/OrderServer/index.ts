@@ -20,7 +20,6 @@ if (config.orderServer !== undefined) {
         const account = new PositionAndOrder({
             accountName: k,
             cookie: v.cookie,
-            hopexCookie: v.hopexCookie,
         })
         account.runTask('bitmex_BTC_网格_1', new BTC网格交易())
         account.runTask('bitmex_BTC_网格_2', new BTC网格交易())
@@ -195,6 +194,4 @@ server.func.set_任务_参数 = async req => {
     account.set_任务_参数(req)
 
     return false
-}
-
-console.log('运行中...   记得 客户端 打开量化 ...')
+} 
