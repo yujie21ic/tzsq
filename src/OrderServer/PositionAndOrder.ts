@@ -155,11 +155,11 @@ export class PositionAndOrder {
                     const { 仓位数量, 开仓均价, 强平价格 } = this.jsonSync.data.market.bitmex[symbol]
                     const raw = this.jsonSync.rawData.market.bitmex[symbol]
                     if (item !== undefined) {
-                        if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== Number(item.avgCostPrice) || raw.强平价格 !== Number(item.liquidationPrice)) {
+                        if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== Number(item.avgEntryPrice) || raw.强平价格 !== Number(item.liquidationPrice)) {
                             仓位数量.____set(item.currentQty)
-                            开仓均价.____set(Number(item.avgCostPrice)) //<---------------------------null to 0
+                            开仓均价.____set(Number(item.avgEntryPrice)) //<---------------------------null to 0
                             强平价格.____set(Number(item.liquidationPrice)) //null to 0
-                            this.log(`仓位更新: ${symbol} 仓位数量:${item.currentQty} 强平价格:${item.liquidationPrice}  本地维护仓位数量:${this.ws.仓位数量.get(symbol)}  开仓均价:${item.avgCostPrice}`)
+                            this.log(`仓位更新: ${symbol} 仓位数量:${item.currentQty} 强平价格:${item.liquidationPrice}  本地维护仓位数量:${this.ws.仓位数量.get(symbol)}  开仓均价:${item.avgEntryPrice}`)
                         }
                     } else {
                         if (raw.仓位数量 !== 0 || raw.开仓均价 !== 0 || raw.强平价格 !== 0) {
