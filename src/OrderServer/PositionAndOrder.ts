@@ -91,10 +91,12 @@ export class PositionAndOrder {
             //private
             { theme: 'margin' },
             //
-            { theme: 'position', filter: 'XBTUSD' },
-            { theme: 'order', filter: 'XBTUSD' },
-            { theme: 'position', filter: 'ETHUSD' },
-            { theme: 'order', filter: 'ETHUSD' },
+            { theme: 'position' },
+            { theme: 'order' },
+            // { theme: 'position', filter: 'ETHUSD' },
+            // { theme: 'order', filter: 'ETHUSD' }, //这样订阅2次 服务器返回有问题
+
+
             //public
             { theme: 'orderBook10', filter: 'XBTUSD' },
             { theme: 'orderBook10', filter: 'ETHUSD' },
