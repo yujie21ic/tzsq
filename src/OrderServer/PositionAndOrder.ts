@@ -42,6 +42,7 @@ const symbol = () => ({
 
 export const createJSONSync = () =>
     new JSONSync({
+        ws: false,
         wallet: [] as {
             time: number
             total: number
@@ -100,6 +101,7 @@ export class PositionAndOrder {
         ])
 
         this.ws.onStatusChange = () => {
+            this.jsonSync.data.ws.____set(this.ws.isConnected)
             this.bitmex_初始化 = {
                 仓位: false,
                 委托: false,

@@ -289,9 +289,19 @@ export class 交易 extends React.Component {
     render() {
         return <div style={{ backgroundColor: '#24292d' }}>
 
-            <div hidden={orderClient.isConnected}>
-                <a style={{ fontSize: 16, color: '#666666' }} href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a>
-            </div>
+            {
+                orderClient.isConnected ?
+                    orderClient.jsonSync.rawData.ws ? null :
+                        <div>
+                            <a style={{ fontSize: 16, color: '#666666' }} href='#'  ><h1>服务器连接中</h1></a>
+                        </div> :
+                    <div>
+                        <a style={{ fontSize: 16, color: '#666666' }} href='#' onClick={() => location.reload()}><h1>连接中_点击刷新</h1></a>
+                    </div>
+            }
+
+
+
 
             <div hidden={this.选项卡 !== 1}
                 style={{
