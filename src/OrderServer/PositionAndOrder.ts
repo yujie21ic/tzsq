@@ -155,7 +155,7 @@ export class PositionAndOrder {
                     const { 仓位数量, 开仓均价, 强平价格 } = this.jsonSync.data.market.bitmex[symbol]
                     const raw = this.jsonSync.rawData.market.bitmex[symbol]
                     if (item !== undefined) {
-                        if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== item.avgCostPrice || raw.强平价格 !== item.liquidationPrice) {
+                        if (raw.仓位数量 !== item.currentQty || raw.开仓均价 !== Number(item.avgCostPrice) || raw.强平价格 !== Number(item.liquidationPrice)) {
                             仓位数量.____set(item.currentQty)
                             开仓均价.____set(Number(item.avgCostPrice)) //<---------------------------null to 0
                             强平价格.____set(Number(item.liquidationPrice)) //null to 0
