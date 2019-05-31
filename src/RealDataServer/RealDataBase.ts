@@ -12,6 +12,7 @@ import { IXTradeAndOrderBook } from './TradeAndOrderBook/IXTradeAndOrderBook'
 import { TradeAndOrderBook } from './TradeAndOrderBook/TradeAndOrderBook'
 import { DeribitTradeAndOrderBook } from './TradeAndOrderBook/DeribitTradeAndOrderBook'
 import { kvs } from '../F/kvs'
+import { BinanceTradeAndOrderBook } from './TradeAndOrderBook/BinanceTradeAndOrderBook'
 
 const createItem = () => ({
     data: [] as BaseType.KLine[],
@@ -53,6 +54,7 @@ export class RealDataBase {
         new HopexTradeAndOrderBook(),
         new IXTradeAndOrderBook(),
         new DeribitTradeAndOrderBook(),
+        new BinanceTradeAndOrderBook(),
     ] as TradeAndOrderBook<any>[]
 
     删除历史() {
