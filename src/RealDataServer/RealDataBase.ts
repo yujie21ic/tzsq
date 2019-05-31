@@ -29,6 +29,7 @@ export class RealDataBase {
             ix: mapObjIndexed(createItem, BaseType.IXSymbolDic),
             bitmex: mapObjIndexed(createItem, BaseType.BitmexSymbolDic),
             deribit: mapObjIndexed(createItem, BaseType.DeribitSymbolDic),
+            binance: mapObjIndexed(createItem, BaseType.BinanceSymbolDic),
         }
     )
 
@@ -39,6 +40,7 @@ export class RealDataBase {
         hopex: mapObjIndexed((v, k) => this.item2(this.data.hopex[k], false), BaseType.HopexSymbolDic),
         ix: mapObjIndexed((v, k) => this.item2(this.data.ix[k], false), BaseType.IXSymbolDic),
         deribit: mapObjIndexed((v, k) => this.item2(this.data.deribit[k], false), BaseType.DeribitSymbolDic),
+        binance: mapObjIndexed((v, k) => this.item2(this.data.binance[k], false), BaseType.BinanceSymbolDic),
     })
 
     dataExt = this.CREATE()

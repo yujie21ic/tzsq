@@ -32,6 +32,15 @@ export namespace BaseType {
     export type HopexSymbol = keyof typeof HopexSymbolDic
     export const HopexSymbolArr = keys(HopexSymbolDic)
 
+    //binance
+    export const BinanceSymbolDic = {
+        'btcusdt': {},
+        'ethusdt': {},
+    }
+    export type BinanceSymbol = keyof typeof BinanceSymbolDic
+    export const BinanceSymbolArr = keys(BinanceSymbolDic)
+
+
     //ctp
     export const CTPSymbolDic = {
         'rb1910': {},
@@ -51,9 +60,6 @@ export namespace BaseType {
     export const IXSymbolArr = keys(IXSymbolDic)
 
 
-
-    //
-    export type BinanceSymbol = 'btcusdt' | 'ethusdt' //DB 还用
 
     export type Side = 'Buy' | 'Sell'
 
