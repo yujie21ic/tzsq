@@ -8,18 +8,10 @@ export class Bitmex止损 implements PositionAndOrderTask {
 
     开关 = false
     参数type = {
-        A: false,
-        B: false,
-        C: false,
-        D: false,
-        E: false,
+        止损: 0,
     }
     参数 = {
-        A: false,
-        B: false,
-        C: false,
-        D: false,
-        E: false,
+        止损: 0,
     }
 
     on参数更新?: () => void
@@ -53,9 +45,7 @@ export class Bitmex止损 implements PositionAndOrderTask {
 
     onTick(self: PositionAndOrder) {
 
-        const 开关数 = (this.参数.A ? 1 : 0) + (this.参数.B ? 1 : 0) + (this.参数.C ? 1 : 0) + (this.参数.D ? 1 : 0) + (this.参数.E ? 1 : 0)
-
-        const 止损点 = 开关数 * (this.symbol === 'XBTUSD' ? 5 : 0.2)
+        const 止损点 = this.参数.止损
 
         const { 仓位数量, 开仓均价, 委托列表 } = self.jsonSync.rawData.market.bitmex[this.symbol]
 
