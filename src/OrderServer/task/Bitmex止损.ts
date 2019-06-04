@@ -51,13 +51,13 @@ export class Bitmex止损 implements PositionAndOrderTask {
 
         const 止损委托 = 委托列表.filter(v => v.type === '止损')
 
-        if (止损点 === 0) {
-            if (止损委托.length !== 0) {
-                return self.cancel({ orderID: 止损委托.map(v => v.id) })
-            } else {
-                return false
-            }
-        }
+        // if (止损点 === 0) {
+        //     if (止损委托.length !== 0) {
+        //         return self.cancel({ orderID: 止损委托.map(v => v.id) })
+        //     } else {
+        //         return false
+        //     }
+        // }
 
         const side = 仓位数量 > 0 ? 'Sell' : 'Buy'
         const 止损价格 = to价格对齐({
