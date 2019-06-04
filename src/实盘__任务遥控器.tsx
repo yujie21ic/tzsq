@@ -49,9 +49,17 @@ const StyledSlider = withStyles({
     jumped: {},
 })(Slider)
 
-const CustomizedSlider = () => {
+const CustomizedSlider = (props: {
+    xxx: {
+        min: number
+        max: number
+        step: number
+    }
+    value: number,
+    onMouseUp: (value: number) => void
+}) => {
     const classes = useStyles()
-    const [value, setValue] = React.useState(50)
+    const [value, setValue] = React.useState(props.value)
 
 
     return (
@@ -59,11 +67,16 @@ const CustomizedSlider = () => {
             <p>{value}</p>
             <br />
             <StyledSlider
-                min={-10}
-                max={100}
-                step={10}
+                min={props.xxx.min}
+                max={props.xxx.max}
+                step={props.xxx.step}
                 value={value}
                 aria-labelledby='label'
+                onMouseUp={
+                    () => {
+                        props.onMouseUp(value)
+                    }
+                }
                 onChange={(event, newValue) => {
                     setValue(newValue)
                 }} />
@@ -114,7 +127,33 @@ export class 实盘__任务遥控器 extends React.Component {
     }
 
     renderItem = (名字: string, key: string, value: any) => {
-        if (typeof value === 'boolean') {
+        if (key === '止损') {//<------------------------------------------
+            let xxx = {
+                min: 0,
+                max: 0,
+                step: 0,
+            }
+            if (名字 === 'bitmex_BTC_止损') {//<------------------------------------------
+                xxx = {
+                    min: -10,
+                    max: 100,
+                    step: 10,
+                }
+            }
+            if (名字 === 'bitmex_ETH_止损') {//<------------------------------------------
+                xxx = {
+                    min: -0.5,
+                    max: 5,
+                    step: 0.5,
+                }
+            }
+
+            return <div>
+                {String(value)}
+                <CustomizedSlider xxx={xxx} value={value} onMouseUp={v => this.set_任务_参数(名字, key, Number(v))} />
+            </div>
+        }
+        else if (typeof value === 'boolean') {
             return <Switch checked={value} onChange={() => this.set_任务_参数(名字, key, !value)} />
         }
         else if (typeof value === 'number') {
@@ -140,12 +179,6 @@ export class 实盘__任务遥控器 extends React.Component {
             >
                 {String(value)}
             </a>
-        }
-        else if (key === '止损') {
-            return <div>
-                {String(value)}
-                <CustomizedSlider />
-            </div>
         }
         else {
             return String(value)
