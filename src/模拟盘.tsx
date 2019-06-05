@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom'
 import { theme } from './Chart/theme'
 import { config } from './config'
 import { Button } from './UI/Button'
-import { HopexRealKLine, HopexRealKLineHistory, HopexRealKLineBase } from './RealDataServer/HopexRealKLine'
+import { HopexRealKLineHistory } from './RealDataServer/RealKLine/HopexRealKLine'
 import { RealKLineChart } from './RealKLineChart'
 import { _________________TickBase } from './_________________TickBase'
 import { Table } from './UI/Table'
@@ -17,8 +17,7 @@ const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
 
 
-let real: HopexRealKLineBase = new HopexRealKLine()
-real = new HopexRealKLineHistory()
+let real = new HopexRealKLineHistory()
 
 const getTime = () => {
     if (real.kline.length > 0) {

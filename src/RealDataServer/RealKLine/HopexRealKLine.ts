@@ -1,29 +1,15 @@
-import { JSONRequest } from '../F/JSONRequest'
-import { queryStringStringify } from '../F/queryStringStringify'
-import { timeID } from '../F/timeID'
-import { sleep } from '../F/sleep'
-import { registerCommand } from '../UI/registerCommand'
-import { DBClient } from '../DataServer/DBClient'
+import { JSONRequest } from '../../F/JSONRequest'
+import { queryStringStringify } from '../../F/queryStringStringify'
+import { timeID } from '../../F/timeID'
+import { sleep } from '../../F/sleep'
+import { registerCommand } from '../../UI/registerCommand'
+import { DBClient } from '../../DataServer/DBClient'
+import { RealKLineBase } from './RealKLineBase'
 
 const toS = (n: number) => Math.floor(n / 1000)
 
-type KL = {
-    id: number
-    open: number
-    high: number
-    low: number
-    close: number
-}
 
-
-
-export class HopexRealKLineBase {
-    readonly kline: KL[] = []
-    onFirstLoad = () => { }
-}
-
-
-export class HopexRealKLine extends HopexRealKLineBase {
+export class HopexRealKLine extends RealKLineBase {
 
     private load = async () => {
 
@@ -89,7 +75,7 @@ export class HopexRealKLine extends HopexRealKLineBase {
     }
 }
 
-export class HopexRealKLineHistory extends HopexRealKLineBase {
+export class HopexRealKLineHistory extends RealKLineBase {
 
 
     private temp = true
