@@ -9,7 +9,8 @@
     "order_server": "node --max_old_space_size=8192 -r ts-node/register ./src/OrderServer",
     "db_server": "node --max_old_space_size=8192 -r ts-node/register ./src/DataServer/DBServer__index",
     "pk_server": "node --max_old_space_size=8192 -r ts-node/register ./src/DataServer/PKServer__index",
-    "start": "concurrently \"tsc -w\" \"ts-node ./src/RealDataServer\" \"electron ./build/main.js\""
+    "start": "concurrently \"tsc -w\" \"ts-node ./src/RealDataServer\" \"electron ./build/main.js\"",
+    "w":"tsc -w"
   },
   "devDependencies": {
     "@types/chai": "^4.1.5",
