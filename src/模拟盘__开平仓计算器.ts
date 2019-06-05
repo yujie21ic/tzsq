@@ -48,7 +48,7 @@ export class 模拟盘__开平仓计算器 {
 
 
             this.仓位数量 += this.仓位数量 > 0 ? -减仓数量_u : 减仓数量_u
-            if (this.仓位数量 === 0) this.开仓均价 = 0
+            if (this.仓位数量 === 0) this.开仓均价 = p.price //this.开仓均价 = 0
             push()
 
             //反手开仓
