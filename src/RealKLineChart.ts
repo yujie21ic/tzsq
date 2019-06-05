@@ -16,10 +16,10 @@ export const RealKLineChart = (element: HTMLElement, real: RealKLineBase, tmp?: 
     const timeArr = 指标.map(() => real.kline.length, i => new Date(timeID._60s.toTimestamp(real.kline[i].id)).toLocaleString())
 
     const close = 指标.map(() => real.kline.length, i => real.kline[i].close)
-    // const M5 = 指标.SMA(close, 5, 1000)
-    // const M10 = 指标.SMA(close, 10, 1000)
-    // const M25 = 指标.SMA(close, 25, 1000)
-    // const M50 = 指标.SMA(close, 50, 1000)
+    const M5 = 指标.SMA(close, 5, 1000)
+    const M10 = 指标.SMA(close, 10, 1000)
+    const M25 = 指标.SMA(close, 25, 1000)
+    const M50 = 指标.SMA(close, 50, 1000)
     const macd = 指标.macd(close, 1000)
 
 
@@ -73,10 +73,10 @@ export const RealKLineChart = (element: HTMLElement, real: RealKLineBase, tmp?: 
                             layer(笔Layer, { data: x[0], color: 0xffff00 }),
                             layer(笔Layer, { data: x[1], color: 0xff0000 }),
                             layer(笔Layer, { data: x[2], color: 0xffffff }),
-                            // layer(LineLayer, { data: M5, color: 0x666666 }),
-                            // layer(LineLayer, { data: M10, color: 0x666666 }),
-                            // layer(LineLayer, { data: M25, color: 0xffffff }),
-                            // layer(LineLayer, { data: M50, color: 0xffffff }),
+                            layer(LineLayer, { data: M5, color: 0x666666 }),
+                            layer(LineLayer, { data: M10, color: 0x666666 }),
+                            layer(LineLayer, { data: M25, color: 0xffffff }),
+                            layer(LineLayer, { data: M50, color: 0xffffff }),
                         ]
                     },
                     {
@@ -124,7 +124,7 @@ export const RealKLineChart = (element: HTMLElement, real: RealKLineBase, tmp?: 
     }
 
     window.onmousedown = e => {
-        if (e.button === 0) {
+        if (e.button === 0 && e.clientX < document.body.clientWidth - theme.右边空白) {
             isDown = true
             startX = e.clientX
             startLeft = left

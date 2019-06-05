@@ -12,6 +12,7 @@ import { timeID } from './F/timeID'
 import { reverse } from 'ramda'
 import { layer } from './Chart'
 import { LineLayer } from './Chart/Layer/LineLayer'
+import { CustomizedSlider } from './UI/CustomizedSlider'
 
 const RED = 'rgba(229, 101, 70, 1)'
 const GREEN = 'rgba(72, 170, 101, 1)'
@@ -49,6 +50,17 @@ class 交易 extends React.Component {
         const f = () => {
             requestAnimationFrame(f)
             this.forceUpdate()
+
+            if (
+                (xxx.仓位数量 > 0 && getPrice() < xxx.开仓均价 - this.止损) ||
+                (xxx.仓位数量 < 0 && getPrice() > xxx.开仓均价 + this.止损)
+            ) {
+                xxx.order({
+                    time: getTime(),
+                    price: getPrice(),
+                    size: -xxx.仓位数量,
+                })
+            }
         }
         f()
 
@@ -67,6 +79,7 @@ class 交易 extends React.Component {
         })
     }
 
+    止损 = 10
 
     render() {
 
@@ -93,6 +106,8 @@ class 交易 extends React.Component {
                         flexDirection: 'column',
                         justifyContent: 'left',
                     }}>
+                        <p>止损</p>
+                        <CustomizedSlider xxx={{ min: -10, max: 100, step: 10 }} value={this.止损} onChange={v => this.止损 = v} />
                         <p style={{ color: '#cc66ff' }}>BTC{xxx.仓位数量 !== 0 ? <a
                             href='#'
                             style={{ color: RED }}
