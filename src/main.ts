@@ -11,8 +11,8 @@ const menu = Menu.buildFromTemplate([
     click: () => showWindow('测试', {}),
   },
   {
-    label: 'HopexKLine',
-    click: () => showWindow('HopexKLine', {})
+    label: '实时K线',
+    click: () => showWindow('实时K线', {})
   },
   {
     label: '复盘',
