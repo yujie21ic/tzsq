@@ -15,8 +15,8 @@ import { Bitmex止损 } from './task/Bitmex止损'
 //运行的账户
 //cookie --> Account
 const accountDic = new Map<string, PositionAndOrder>()
-if (config.orderServer !== undefined) {
-    kvs(config.orderServer).forEach(({ k, v }) => {
+if (config.account !== undefined) {
+    kvs(config.account).forEach(({ k, v }) => {
         const account = new PositionAndOrder({
             accountName: k,
             cookie: v.cookie,
