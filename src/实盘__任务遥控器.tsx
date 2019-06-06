@@ -4,7 +4,7 @@ import { windowExt } from './windowExt'
 import { OrderClient } from './OrderServer/OrderClient'
 import { Switch } from '@material-ui/core'
 import { kvs } from './F/kvs'
-import { dialog } from './UI/dialog' 
+import { dialog } from './UI/dialog'
 import { CustomizedSlider } from './UI/CustomizedSlider'
 
 
@@ -134,8 +134,8 @@ export class 实盘__任务遥控器 extends React.Component {
 
                     {this.折叠dic.get(v.名字) ?
                         kvs(JSON.parse(v.参数)).map(p =>
-                            <div key={p.k}>
-                                {p.k}:{this.renderItem(v.名字, p.k, p.v)}
+                            <div key={String(p.k)}>
+                                {p.k}:{this.renderItem(v.名字, String(p.k), p.v)}
                             </div>
                         ) : ''
                     }
